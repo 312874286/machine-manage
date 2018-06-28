@@ -146,8 +146,11 @@ export const getRouterData = (app) => {
     '/setting/disease': {
       component: dynamicWrapper(app, ['settings/disease'], () => import('../routes/Setting/Disease')),
     },
-    '/customer/users': {
+    '/pointLocationManage/users': {
       component: dynamicWrapper(app, ['customer/users', 'log/log'], () => import('../routes/Customer/Users')),
+    },
+    '/pointLocationManage/index': {
+      component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'rule'], () => import('../routes/pointLocationManage/Index')),
     },
     '/customer/record': {
       component: dynamicWrapper(app, ['customer/record', 'log/log'], () => import('../routes/Customer/Record')),

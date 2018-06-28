@@ -379,7 +379,7 @@ const proxy = {
   },
   'POST /authent/login': (req, res) => {
     const { name, password, auto, type } = req.body;
-    if (password === '888888' && name === 'admin') {
+    if (password === 'admin' && name === 'admin') {
       const data = {
         token: 'sasdnjaoisdjoiasdjaoisd',
         user: {
@@ -472,8 +472,8 @@ const proxy = {
           },
           {
             functionId: 'a18',
-            functionDepict: '档案',
-            functionPath: 'record',
+            functionDepict: '点位管理',
+            functionPath: 'index',
             parentId: 'a16',
             functionLevel: 2,
           },
@@ -2827,6 +2827,16 @@ const proxy = {
         }
       }
     });
+  },
+  'GET /api/rule': getRule,
+  'POST /api/rule': {
+    $params: {
+      pageSize: {
+        desc: '分页',
+        exp: 2,
+      },
+    },
+    $body: postRule,
   },
 };
 

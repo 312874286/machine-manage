@@ -71,6 +71,8 @@ function handlehandleCostumStatus(response) {
       return response.json();
     } else if (resp.code === 10) {
       return response.json();
+    } else if (resp.list) {
+      return response.json();
     } else {
       notification.error({
         message: '请求错误',

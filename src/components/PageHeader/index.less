@@ -3,7 +3,7 @@
 .pageHeader {
   background: @component-background;
   padding: 16px 32px 0 32px;
-  border-bottom: @border-width-base @border-style-base @border-color-split;
+  //border-bottom: @border-width-base @border-style-base @border-color-split;
 
   .detail {
     display: flex;
@@ -14,12 +14,22 @@
   }
 
   .breadcrumb {
-    margin-bottom: 16px;
+    //margin-bottom: 16px;
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    height: 64px;
+    line-height: 64px;
+    padding-left: 23px;
+    bottom: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    background: #fff;
   }
 
   .tabs {
     margin: 0 0 -17px -8px;
-
     :global {
       .ant-tabs-bar {
         border-bottom: @border-width-base @border-style-base @border-color-split;

@@ -5,6 +5,13 @@
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  .breadcrumb {
+    padding-left: 300px;
+  }
 }
 
 :global {
@@ -37,8 +44,8 @@
 }
 
 .right {
-  float: right;
-  height: 100%;
+  position: fixed;
+  right: 0;
   .action {
     cursor: pointer;
     padding: 0 12px;

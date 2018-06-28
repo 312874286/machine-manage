@@ -24,6 +24,7 @@ export default class HeaderSearch extends PureComponent {
   state = {
     searchMode: false,
     value: '',
+    headerSearchBg: ''
   };
   componentWillUnmount() {
     clearTimeout(this.timeout);
@@ -63,6 +64,7 @@ export default class HeaderSearch extends PureComponent {
       <span
         className={classNames(className, styles.headerSearch)}
         onClick={this.enterSearchMode}
+        style={this.state.searchMode ? {'background': 'rgba(239,239,239,1)' } : {}}
       >
         <Icon type="search" key="Icon" />
         <AutoComplete

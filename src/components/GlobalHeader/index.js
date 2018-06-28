@@ -1,4 +1,5 @@
-import React, { PureComponent } from 'react';
+import React, {createElement, PureComponent} from 'react';
+import PropTypes from 'prop-types';
 import { Layout, Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -40,10 +41,11 @@ export default class GlobalHeader extends PureComponent {
     });
     return groupBy(newNotices, 'type');
   }
+
   render() {
     const {
       currentUser, collapsed, fetchingNotices, isMobile, logo,
-      onNoticeVisibleChange, onMenuClick, onNoticeClear,
+      onNoticeVisibleChange, onMenuClick, onNoticeClear
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
@@ -54,7 +56,9 @@ export default class GlobalHeader extends PureComponent {
         <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
       </Menu>
     );
-    // const noticeData = this.getNoticeData();
+
+    // 面包屑
+    const noticeData = this.getNoticeData();
     return (
       <Header className={styles.header}>
         {isMobile && (
@@ -68,7 +72,7 @@ export default class GlobalHeader extends PureComponent {
           ]
         )}
         <div className={styles.right}>
-          {/* <HeaderSearch
+          <HeaderSearch
             className={`${styles.action} ${styles.search}`}
             placeholder="站内搜索"
             dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
@@ -108,7 +112,7 @@ export default class GlobalHeader extends PureComponent {
               emptyText="你已完成所有待办"
               emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
             />
-          </NoticeIcon> */}
+          </NoticeIcon>
           {currentUser.userName ? (
             <Dropdown overlay={menu}>
               <span className={`${styles.action} ${styles.account}`}>
