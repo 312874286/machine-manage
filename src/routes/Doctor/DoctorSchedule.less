@@ -1,0 +1,149 @@
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
+.calendar {
+     :global {
+        .fc-day {
+            cursor: pointer;
+        }
+        .fc-event,
+        .fc-event-dot {
+            border-color: #40a9ff;
+            background-color: #40a9ff;
+        }
+        .fc-day-grid-event .fc-content{
+          white-space: pre-wrap;
+        }
+        .fc-button {
+            line-height: 1.5;
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 0 15px;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            position: relative;
+            color: rgba(0, 0, 0, 0.65);
+            background-color: #fff;
+            border-color: #d9d9d9;
+            font-size: 16px;
+            height: 40px;
+        }
+        .fc-button,
+        .fc-button,
+        .fc-button:focus {
+            outline: 0;
+        }
+        .fc-button,
+        .fc-button:active,
+        .fc-button:focus {
+            outline: 0;
+        }
+        .fc-button:not([disabled]):hover {
+            text-decoration: none;
+        }
+        .fc-button:not([disabled]):active {
+            outline: 0;
+            -webkit-transition: none;
+            transition: none;
+        }
+        .fc-button.disabled,
+        .fc-button[disabled] {
+            cursor: not-allowed;
+        }
+        .fc-button.disabled>*,
+        .fc-button[disabled]>* {
+            pointer-events: none;
+        }
+        .fc-button:hover,
+        .fc-button:focus {
+            color: #40a9ff;
+            background-color: #fff;
+            border-color: #40a9ff;
+        }
+        .fc-button:active,
+        .fc-button.active {
+            color: #096dd9;
+            background-color: #fff;
+            border-color: #096dd9;
+        }
+        .fc-button.disabled,
+        .fc-button[disabled],
+        .fc-button.disabled:hover,
+        .fc-button[disabled]:hover,
+        .fc-button.disabled:focus,
+        .fc-button[disabled]:focus,
+        .fc-button.disabled:active,
+        .fc-button[disabled]:active,
+        .fc-button.disabled.active,
+        .fc-button[disabled].active {
+            color: rgba(0, 0, 0, 0.25);
+            background-color: #f5f5f5;
+            border-color: #d9d9d9;
+        }
+        .fc-button:hover,
+        .fc-button:focus,
+        .fc-button:active,
+        .fc-button.active {
+            background: #fff;
+        }
+        .fc-button>i,
+        .fc-button>span {
+            pointer-events: none;
+        }
+        .fc-state-down:after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            bottom: -1px;
+            right: -1px;
+            border-radius: inherit;
+            border: 0 solid #1890ff;
+            opacity: 0.4;
+            -webkit-animation: buttonEffect .4s;
+            animation: buttonEffect .4s;
+            display: block;
+        }
+        @-webkit-keyframes buttonEffect {
+            to {
+                opacity: 0;
+                top: -6px;
+                left: -6px;
+                bottom: -6px;
+                right: -6px;
+                border-width: 6px;
+            }
+        }
+        @keyframes buttonEffect {
+            to {
+                opacity: 0;
+                top: -6px;
+                left: -6px;
+                bottom: -6px;
+                right: -6px;
+                border-width: 6px;
+            }
+        }
+    }
+}
+
+ :global {
+    .ant-list-item.selected {
+        font-weight: 600;
+        background: #40a9ff;
+        a {
+            color: #fff !important;
+        }
+    }
+}
