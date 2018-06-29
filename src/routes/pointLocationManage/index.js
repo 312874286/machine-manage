@@ -135,7 +135,7 @@ export default class pointLocationList extends PureComponent {
       },
     }).then( (res) => {
       this.setState({
-        options: res
+        options: res,
       })
     });
   }
