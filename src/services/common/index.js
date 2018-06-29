@@ -10,3 +10,11 @@ export async function uploadFile({ params, restParams }) {
   file.append('file', params.file);
   return fetch.postFile(api.uploadFile, { restParams, body: file });
 }
+export async function getProvinceCityAreaTradeArea({ params, restParams }) {
+  console.log('restParams', restParams)
+  return fetch.post(api.getProvinceCityAreaTradeArea, {
+    body: JSON.stringify(params),
+    restParams,
+  });
+}
+

@@ -4,6 +4,7 @@ const api = map({
   // 根据省份获取城市[GET][Param:parentCode]
   getCitysByProvince: '/merchant/open/getDistrictObj.json?parentCode={parentCode}',
   uploadFile: '/fileUpload/upload?fileType={fileType}',
+  getProvinceCityAreaTradeArea: '/api/getProvinceCityAreaTradeArea',
 });
 
 export default api;

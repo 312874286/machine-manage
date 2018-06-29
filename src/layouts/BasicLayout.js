@@ -165,7 +165,7 @@ class BasicLayout extends React.PureComponent {
           onCollapse={this.handleMenuCollapse}
         />
         <Layout>
-          <Header style={{ padding: 0, position: 'fixed', width: '100%', zIndex: 999 }}>
+          <Header style={{ padding: 0, position: 'fixed', width: '100%', zIndex: 999, height: '68px', lineHeight: '68px', background: '#fff' }}>
             <GlobalHeader
               logo={logo}
               currentUser={currentUser}

@@ -91,7 +91,9 @@ export default class SiderMenu extends PureComponent {
     if (/^https?:\/\//.test(itemPath)) {
       return (
         <a href={itemPath} target={target}>
-          {icon}<span>{name}</span>
+          <span style={{'width': '6px', 'background': item.color, 'height': '40px', 'left': 0, 'position': 'absolute'}}></span>
+          {icon}
+          <span>{name}</span>
         </a>
       );
     }
@@ -102,6 +104,7 @@ export default class SiderMenu extends PureComponent {
         replace={itemPath === this.props.location.pathname}
         onClick={this.props.isMobile ? () => { this.props.onCollapse(true); } : undefined}
       >
+        <span style={{'width': '6px', 'background': item.color, 'height': '40px', 'left': 0, 'position': 'absolute'}}></span>
         {icon}<span>{name}</span>
       </Link>
     );
@@ -116,6 +119,7 @@ export default class SiderMenu extends PureComponent {
           title={
             item.icon ? (
               <span>
+                <span style={{'width': '6px', 'background': item.color, 'height': '40px', 'left': 0, 'position': 'absolute'}}></span>
                 {getIcon(item.icon)}
                 <span>{item.name}</span>
               </span>
@@ -211,7 +215,7 @@ export default class SiderMenu extends PureComponent {
         collapsed={collapsed}
         breakpoint="md"
         onCollapse={onCollapse}
-        width={256}
+        width={180}
         className={styles.sider}
       >
         <div className={styles.logo} key="logo">

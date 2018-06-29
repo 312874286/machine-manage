@@ -400,7 +400,8 @@ const proxy = {
             parentId: null,
             functionLevel: 1,
             functionIcon: '',
-            icon: 'safety'
+            icon: 'safety',
+            color: '#ff4c72'
           }, {
             functionId: 'ba1',
             functionDepict: '账号管理',
@@ -462,6 +463,7 @@ const proxy = {
             parentId: null,
             functionLevel: 1,
             icon: 'form',
+            color: '#ffd322'
           },
           {
             functionId: 'a17',
@@ -2837,6 +2839,48 @@ const proxy = {
       },
     },
     $body: postRule,
+  },
+  'POST /api/getProvinceCityAreaTradeArea': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [{
+        "code": "100000000",
+        "parentCode": null,
+        "name": "北京市",
+        "provice": "北京市",
+        "city": null,
+        "district": null,
+        "circle": null,
+        "level": 2
+      }, {
+        "code": "100100000",
+        "parentCode": "100000000",
+        "name": "北京市",
+        "provice": "北京市",
+        "city": "北京市",
+        "district": null,
+        "circle": null,
+        "level": 2
+      }, {
+        "code": "100101000",
+        "parentCode": "100100000",
+        "name": "东城区",
+        "provice": "北京市",
+        "city": "北京市",
+        "district": "东城区",
+        "circle": null,
+        "level": 2
+      }, {
+        "code": "100101001",
+        "parentCode": "100101000",
+        "name": "王府井",
+        "provice": "北京市",
+        "city": "北京市",
+        "district": "东城区",
+        "circle": "王府井",
+        "level": 2
+      }]
+    })
   },
 };
 

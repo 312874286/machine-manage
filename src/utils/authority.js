@@ -33,6 +33,7 @@ function parseMenuData(source, pid) {
             name: item.functionDepict,
             path: item.functionPath,
             icon: item.icon,
+            color: item.color,
           };
           if (item.functionIcon) {
             menu.icon = item.functionIcon;
