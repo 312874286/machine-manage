@@ -2882,6 +2882,87 @@ const proxy = {
       }]
     })
   },
+  'POST /merchant/pointLocationManage/save': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GET /merchant/pointLocationManage/pointLocationLists': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": 5780000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100100000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "张三",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 0,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001"
+        }, {
+          "id": 5790000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100101000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "李四",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 1,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001"
+        }, {
+          "id": 5700000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100000000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "王五",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 2,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001"
+        }, {
+          "id": 1230000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100101001', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "哈哈",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 3,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001"
+        },
+      ]
+    });
+  },
 };
 
 // export default noProxy ? {

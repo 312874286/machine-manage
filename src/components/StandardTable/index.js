@@ -42,82 +42,28 @@ class StandardTable extends PureComponent {
 
   render() {
     const { selectedRowKeys, totalCallNo } = this.state;
-    const { data: { list, pagination }, loading } = this.props;
+    const { data, page, loading, onEditClick, onLogClick, onDelClick } = this.props;
     const status = ['关闭', '运行中', '已上线', '异常'];
-
-    // const columns = [
-    //   {
-    //     title: '规则编号',
-    //     dataIndex: 'no',
-    //   },
-    //   {
-    //     title: '描述',
-    //     dataIndex: 'description',
-    //   },
-    //   {
-    //     title: '服务调用次数',
-    //     dataIndex: 'callNo',
-    //     sorter: true,
-    //     align: 'right',
-    //     render: val => `${val} 万`,
-    //   },
-    //   {
-    //     title: '状态',
-    //     dataIndex: 'status',
-    //     filters: [
-    //       {
-    //         text: status[0],
-    //         value: 0,
-    //       },
-    //       {
-    //         text: status[1],
-    //         value: 1,
-    //       },
-    //       {
-    //         text: status[2],
-    //         value: 2,
-    //       },
-    //       {
-    //         text: status[3],
-    //         value: 3,
-    //       },
-    //     ],
-    //     render(val) {
-    //       return <Badge status={statusMap[val]} text={status[val]} />;
-    //     },
-    //   },
-    //   {
-    //     title: '更新时间',
-    //     dataIndex: 'updatedAt',
-    //     sorter: true,
-    //     render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    //   },
-    //   {
-    //     title: '操作',
-    //     render: () => (
-    //       <Fragment>
-    //         <a href="">配置</a>
-    //         <Divider type="vertical" />
-    //         <a href="">订阅警报</a>
-    //       </Fragment>
-    //     ),
-    //   },
-    // ];
     const columns = [
       {
         title: '编号ID',
+        width: 200,
         dataIndex: 'no',
+        fixed: 'left',
       },
       {
         title: '所属省市区商圈',
-        dataIndex: 'provinceCityAreaTradearea',
+        width: 200,
+        dataIndex: 'provinceCityAreaTradeArea',
       },
       {
         title: '商场',
+        width: 100,
         dataIndex: 'shopPlace',
       },
       {
         title: '状态',
+        width: 100,
         dataIndex: 'status',
         filters: [
           {
@@ -144,39 +90,46 @@ class StandardTable extends PureComponent {
       },
       {
         title: '运营人',
+        width: 100,
         dataIndex: 'operator',
       },
       {
         title: '手机号',
+        width: 150,
         dataIndex: 'phoneNo',
       },
       {
         title: '更新时间',
         dataIndex: 'updatedAt',
+        width: 200,
         sorter: true,
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
+        fixed: 'right',
         title: '操作',
-        render: () => (
+        render: (text, item) => (
           <Fragment>
-            <a href="">配置</a>
+            <a onClick={() => onEditClick(item)}>编辑</a>
             <Divider type="vertical" />
-            <a href="">订阅警报</a>
+            <a onClick={() => onLogClick(item)}>日志</a>
             <Divider type="vertical" />
-            <a href="">编辑</a>
-            <Divider type="vertical" />
-            <a href="">删除</a>
+            <a onClick={() => onDelClick(item)}>删除</a>
           </Fragment>
         ),
       },
     ];
+    // const paginationProps = {
+    //   showSizeChanger: true,
+    //   showQuickJumper: true,
+    //   ...page,
+    // };
     const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      ...pagination,
+      showTotal: (total) => {
+        return `共${total}条数据  每页${page.pageSize}条`;
+      },
+      ...page,
     };
-
     const rowSelection = {
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
@@ -184,7 +137,6 @@ class StandardTable extends PureComponent {
         disabled: record.disabled,
       }),
     };
-
     return (
       <div className={styles.standardTable}>
         <div className={styles.tableAlert}>
@@ -192,8 +144,8 @@ class StandardTable extends PureComponent {
             message={(
               <div>
                 已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
-                服务调用总计 <span style={{ fontWeight: 600 }}>{totalCallNo}</span> 万
-                <a onClick={this.cleanSelectedKeys} style={{ marginLeft: 24 }}>清空</a>
+                {/*服务调用总计 <span style={{ fontWeight: 600 }}>{totalCallNo}</span> 万*/}
+                {/*<a onClick={this.cleanSelectedKeys} style={{ marginLeft: 24 }}>清空</a>*/}
               </div>
             )}
             type="info"
@@ -202,12 +154,13 @@ class StandardTable extends PureComponent {
         </div>
         <Table
           loading={loading}
-          rowKey={record => record.key}
+          rowKey={record => record.id}
           rowSelection={rowSelection}
-          dataSource={list}
+          dataSource={data}
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
+          scroll={{ x: 1250 }}
         />
       </div>
     );

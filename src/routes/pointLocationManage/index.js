@@ -22,8 +22,9 @@ import {
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
 import styles from './Index.less';
+import LogModal from '../../components/LogModal';
+
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -36,73 +37,71 @@ const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange } = props;
-    const okHandle = () => {
-      form.validateFields((err, fieldsValue) => {
-        if (err) return;
-        form.resetFields();
-        handleAdd(fieldsValue);
-      });
+    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading } = props;
+    // const okHandle = () => {
+    //   form.validateFields((err, fieldsValue) => {
+    //     if (err) return;
+    //     form.resetFields();
+    //     handleAdd(fieldsValue);
+    //   });
+    // };
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
     };
     return (
       <Modal
-        title="新建点位"
+        title={getFieldDecorator('number') ? '编辑点位' : '新建点位'}
         visible={modalVisible}
-        onOk={okHandle}
+        onOk={handleAdd}
         onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch} layout="inline">
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={24} sm={24}>
-              <FormItem label="省市区商圈">
-                {form.getFieldDecorator('provinceCityAreaTrade', {
-                  rules: [{ required: true, message: '省市区商圈' }],
-                })(
-                  <Cascader
-                    options={insertOptions}
-                    loadData={loadData}
-                    onChange={onChange}
-                    changeOnSelect
-                  />
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={24} sm={24}>
-              <FormItem label="商场名称">
-                {form.getFieldDecorator('shopName', {
-                  rules: [{ required: true, message: '请输入商场名称' }],
-                })(<Input placeholder="请输入商场" />)}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={24} sm={24}>
-              <FormItem label="运营人员">
-                {form.getFieldDecorator('operator', {
-                  rules: [{ required: true, message: '请输入运营人员' }],
-                })(<Input placeholder="请输入运营人" />)}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={24} sm={24}>
-              <FormItem label="手机号码">
-                {form.getFieldDecorator('number', {
-                  rules: [{ required: true, message: '请输入手机号码' }],
-                })(<Input placeholder="请输入手机" />)}
-              </FormItem>
-            </Col>
-          </Row>
+        <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="省市区商圈">
+            {getFieldDecorator('provinceCityAreaTrade', {
+              rules: [{ required: true, message: '省市区商圈' }],
+            })(
+              <Cascader
+                options={insertOptions}
+                loadData={loadData}
+                onChange={onChange}
+                changeOnSelect
+              />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="商场名称">
+            {getFieldDecorator('shopName', {
+              rules: [{ required: true, message: '请输入商场名称' }],
+            })(<Input placeholder="请输入商场" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="运营人员">
+            {getFieldDecorator('operator', {
+              rules: [{ required: true, message: '请输入运营人员' }],
+            })(<Input placeholder="请输入运营人" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="手机号码">
+            {getFieldDecorator('number', {
+              rules: [{ required: true, message: '请输入手机号码' }],
+            })(<Input placeholder="请输入手机" />)}
+          </FormItem>
         </Form>
       </Modal>
     );
 });
-@connect(({ common, rule, loading }) => ({
+@connect(({ common, rule, loading, pointLocationManage, log }) => ({
   common,
   rule,
+  pointLocationManage,
   loading: loading.models.rule,
+  log,
 }))
 @Form.create()
 export default class pointLocationList extends PureComponent {
@@ -113,19 +112,24 @@ export default class pointLocationList extends PureComponent {
     formValues: {},
     id: '',
     options: '',
+    editModalConfirmLoading: false,
+    pageNo: 1,
+    keyword: '',
+    modalData: {},
+    logModalVisible: false,
+    logModalLoading: false,
+    logId: '',
+    logModalPageNo: 1,
   };
   componentWillMount() {
     // 查询省
-    this.getList();
+    this.getAreaList();
   }
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'rule/fetch',
-    });
+    this.getLists();
   }
-  // 获取列表
-  getList = () => {
+  // 获取城市列表
+  getAreaList = () => {
     this.props.dispatch({
       type: 'common/getProvinceCityAreaTradeArea',
       payload: {
@@ -136,9 +140,22 @@ export default class pointLocationList extends PureComponent {
     }).then( (res) => {
       this.setState({
         options: res,
-      })
+      });
     });
   }
+  // 获取点位管理列表
+  getLists = () => {
+    this.props.dispatch({
+      type: 'pointLocationManage/getPointLocationList',
+      payload: {
+        restParams: {
+          pageNo: this.state.pageNo,
+          keyword: this.state.keyword,
+        },
+      },
+    });
+  }
+  // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
@@ -158,10 +175,12 @@ export default class pointLocationList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-
-    dispatch({
-      type: 'rule/fetch',
-      payload: params,
+    const { current } = pagination;
+    // console.log('params', params)
+    this.setState({
+      pageNo: current,
+    }, () => {
+      this.getLists();
     });
   };
 
@@ -217,21 +236,16 @@ export default class pointLocationList extends PureComponent {
 
   handleSearch = e => {
     e.preventDefault();
-
     const { dispatch, form } = this.props;
-
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
-
       this.setState({
         formValues: values,
       });
-
       dispatch({
         type: 'rule/fetch',
         payload: values,
@@ -244,21 +258,52 @@ export default class pointLocationList extends PureComponent {
       modalVisible: !!flag,
     });
   };
-
-  handleAdd = fields => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'rule/add',
-      payload: {
-        description: fields.desc,
-      },
-    });
-
-    message.success('添加成功');
+  // 编辑modal 编辑事件
+  handleEditClick = (item) => {
     this.setState({
-      modalVisible: false,
+      modalVisible: true,
+      modalData: item,
     });
-  };
+    this.setModalData(item);
+  }
+  // 设置modal 数据
+  setModalData = (data) => {
+    this.form.setFieldsValue({
+      shopName: data.shopPlace || '',
+      operator: data.operator || '',
+      number: data.phoneNo || '',
+      provinceCityAreaTrade: data.provinceCityAreaTrade || '',
+    });
+  }
+  // 新增modal确认事件 开始
+  saveFormRef = (form) => {
+    this.form = form;
+  }
+  // 编辑modal 确认事件
+  handleAdd = () => {
+    this.setState({
+      editModalConfirmLoading: true,
+    });
+    this.form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      const params = { ...values };
+      this.props.dispatch({
+        type: 'pointLocationManage/savePointLocation',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        this.getLists();
+        this.setState({
+          editModalConfirmLoading: false,
+          modalVisible: false,
+        });
+      });
+    });
+  }
+  // 新增modal确认事件 结束
   // 四级联动开始
   onChange = (value, selectedOptions) => {
     // 当前选中的value[3]商圈
@@ -280,7 +325,50 @@ export default class pointLocationList extends PureComponent {
       this.setState({
         options: [...this.state.options],
       });
-    })
+    });
+  }
+  // 四级联动结束
+  // 日志相关
+  getLogList = () => {
+    this.props.dispatch({
+      type: 'log/getLogList',
+      payload: {
+        restParams: {
+          code: this.state.logId,
+          pageNo: this.state.logModalPageNo,
+          type: 1020403,
+        },
+      },
+    }).then(() => {
+      this.setState({
+        logModalLoading: false,
+      });
+    });
+  }
+
+  handleLogClick = (data) => {
+    this.setState({
+      logModalVisible: !!data,
+      logModalLoading: true,
+      logId: data.id,
+    }, () => {
+      this.getLogList();
+    });
+  }
+
+  logModalHandleCancel = () => {
+    this.setState({
+      logModalVisible: false,
+    });
+  }
+
+  logModalhandleTableChange = (pagination) => {
+    const { current } = pagination;
+    this.setState({
+      logModalPageNo: current,
+    }, () => {
+      this.getLogList();
+    });
   }
   renderAdvancedForm() {
     const { form } = this.props;
@@ -328,10 +416,11 @@ export default class pointLocationList extends PureComponent {
   }
   render() {
     const {
-      rule: { data },
+      pointLocationManage: { list, page },
       loading,
+      log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData } = this.state;
     const columns = [
       {
         title: '编号ID',
@@ -437,14 +526,35 @@ export default class pointLocationList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={list}
+              page={page}
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
+              onLogClick={this.handleLogClick}
+              // handleTableChange={this.handleTableChange}
+              onEditClick={this.handleEditClick}
             />
           </div>
         </Card>
-        <CreateForm {...parentMethods} modalVisible={modalVisible} insertOptions={this.state.options} loadData={this.loadData} onChange={this.onChange}/>
+        <CreateForm
+          {...parentMethods}
+          ref={this.saveFormRef}
+          modalVisible={modalVisible}
+          insertOptions={this.state.options}
+          loadData={this.loadData}
+          onChange={this.onChange}
+          editModalConfirmLoading={editModalConfirmLoading}
+          modalData={modalData}
+        />
+        <LogModal
+          data={logList}
+          page={logPage}
+          loding={this.state.logModalLoading}
+          logVisible={this.state.logModalVisible}
+          logHandleCancel={this.logModalHandleCancel}
+          logModalhandleTableChange={this.logModalhandleTableChange}
+        />
       </PageHeaderLayout>
     );
   }

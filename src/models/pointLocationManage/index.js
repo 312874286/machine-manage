@@ -1,6 +1,6 @@
 import {
-  getPatientList,
-  savePatient,
+  getPointLocationList,
+  savePointLocation,
 } from '../../services/pointLocationManage/index';
 
 export default {
@@ -12,15 +12,15 @@ export default {
   },
 
   effects: {
-    *getPatientList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(getPatientList, { restParams });
+    *getPointLocationList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getPointLocationList, { restParams });
       yield put({
         type: 'saveList',
         payload: response,
       });
     },
-    *savePatient({ payload: { params } }, { call, put }) {
-      const response = yield call(savePatient, { params });
+    *savePointLocation({ payload: { params } }, { call, put }) {
+      const response = yield call(savePointLocation, { params });
       return response;
     },
   },
