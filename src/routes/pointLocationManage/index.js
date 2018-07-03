@@ -312,17 +312,22 @@ export default class pointLocationList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
-    this.setState({
-      editModalConfirmLoading: true,
-    });
     this.form.validateFields((err, values) => {
       if (err) {
         return;
       }
-      // editPointLocation
-      const params = { ...values };
+      this.setState({
+        editModalConfirmLoading: true,
+        modalData: {},
+      });
+      let url = 'pointLocationManage/savePointLocation';
+      let params = { ...values };
+      if (this.state.modalData) {
+        url = 'pointLocationManage/editPointLocation';
+        params = { ...values, id: this.state.modalData.id };
+      }
       this.props.dispatch({
-        type: 'pointLocationManage/savePointLocation',
+        type: url,
         payload: {
           params,
         },
