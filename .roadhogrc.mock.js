@@ -2963,6 +2963,12 @@ const proxy = {
       ]
     });
   },
+  'POST /merchant/pointLocationManage/updatePointLocation': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /merchant/pointLocationManage/deletePointLocation': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
 };
 
 // export default noProxy ? {

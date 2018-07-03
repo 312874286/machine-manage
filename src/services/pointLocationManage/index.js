@@ -14,3 +14,15 @@ export async function getPointLocationList({ params, restParams }) {
     restParams,
   });
 }
+
+export async function editPointLocation({ params }) {
+  return fetch.post(api.updatePointLocation, {
+    body: stringify(params),
+  });
+}
+
+export async function delPointLocation({ params }) {
+  return fetch.post(api.deletePointLocation, {
+    body: stringify(params),
+  });
+}

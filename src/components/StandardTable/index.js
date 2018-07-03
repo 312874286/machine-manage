@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import moment from 'moment';
-import { Table, Alert, Badge, Divider } from 'antd';
+import { Table, Alert, Badge, Divider, Popconfirm } from 'antd';
 import styles from './index.less';
 
 const statusMap = ['default', 'processing', 'success', 'error'];
@@ -39,7 +39,6 @@ class StandardTable extends PureComponent {
   cleanSelectedKeys = () => {
     this.handleRowSelectChange([], []);
   }
-
   render() {
     const { selectedRowKeys, totalCallNo } = this.state;
     const { data, page, loading, onEditClick, onLogClick, onDelClick } = this.props;
@@ -53,7 +52,7 @@ class StandardTable extends PureComponent {
       },
       {
         title: '所属省市区商圈',
-        width: 200,
+        width: 300,
         dataIndex: 'provinceCityAreaTradeArea',
       },
       {
@@ -114,7 +113,9 @@ class StandardTable extends PureComponent {
             <Divider type="vertical" />
             <a onClick={() => onLogClick(item)}>日志</a>
             <Divider type="vertical" />
-            <a onClick={() => onDelClick(item)}>删除</a>
+            <Popconfirm title="确定要删除吗" onConfirm={() => onDelClick(item)} okText="Yes" cancelText="No">
+              <a>删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },
@@ -160,7 +161,7 @@ class StandardTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: 1250 }}
+          scroll={{ x: 1350 }}
         />
       </div>
     );

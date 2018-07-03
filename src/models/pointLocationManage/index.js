@@ -1,7 +1,4 @@
-import {
-  getPointLocationList,
-  savePointLocation,
-} from '../../services/pointLocationManage/index';
+import { getPointLocationList, savePointLocation, editPointLocation, delPointLocation } from '../../services/pointLocationManage/index';
 
 export default {
   namespace: 'pointLocationManage',
@@ -21,6 +18,14 @@ export default {
     },
     *savePointLocation({ payload: { params } }, { call, put }) {
       const response = yield call(savePointLocation, { params });
+      return response;
+    },
+    *editPointLocation({ payload: { params } }, { call }) {
+      const response = yield call(editPointLocation, { params });
+      return response;
+    },
+    *delPointLocation({ payload: { params } }, { call }) {
+      const response = yield call(delPointLocation, { params });
       return response;
     },
   },

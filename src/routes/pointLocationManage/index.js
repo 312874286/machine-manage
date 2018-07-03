@@ -252,12 +252,34 @@ export default class pointLocationList extends PureComponent {
       });
     });
   };
-
-  handleModalVisible = flag => {
+  // 添加modal 添加事件
+  handleModalVisible = (flag) => {
     this.setState({
       modalVisible: !!flag,
     });
+    this.setModalData();
   };
+  // 删除modal 删除事件
+  handleDelClick = (item) => {
+    this.setState({
+      editModalConfirmLoading: true,
+    });
+    if (item) {
+      const params = { id: item.id };
+      this.props.dispatch({
+        type: 'pointLocationManage/delPointLocation',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        message.success('Click on Yes');
+        this.getLists();
+        this.setState({
+          editModalConfirmLoading: false,
+        });
+      });
+    } else return false;
+  }
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
     this.setState({
@@ -268,12 +290,21 @@ export default class pointLocationList extends PureComponent {
   }
   // 设置modal 数据
   setModalData = (data) => {
-    this.form.setFieldsValue({
-      shopName: data.shopPlace || '',
-      operator: data.operator || '',
-      number: data.phoneNo || '',
-      provinceCityAreaTrade: data.provinceCityAreaTrade || '',
-    });
+    if (data) {
+      this.form.setFieldsValue({
+        shopName: data.shopPlace || '',
+        operator: data.operator || '',
+        number: data.phoneNo || '',
+        provinceCityAreaTrade: data.provinceCityAreaTrade || '',
+      });
+    } else {
+      this.form.setFieldsValue({
+        shopName: '',
+        operator: '',
+        number: '',
+        provinceCityAreaTrade: '',
+      });
+    }
   }
   // 新增modal确认事件 开始
   saveFormRef = (form) => {
@@ -288,6 +319,7 @@ export default class pointLocationList extends PureComponent {
       if (err) {
         return;
       }
+      // editPointLocation
       const params = { ...values };
       this.props.dispatch({
         type: 'pointLocationManage/savePointLocation',
@@ -534,6 +566,7 @@ export default class pointLocationList extends PureComponent {
               onLogClick={this.handleLogClick}
               // handleTableChange={this.handleTableChange}
               onEditClick={this.handleEditClick}
+              onDelClick={this.handleDelClick}
             />
           </div>
         </Card>
