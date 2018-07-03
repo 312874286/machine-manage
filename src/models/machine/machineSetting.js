@@ -1,7 +1,7 @@
 import { getMachineSettingList, saveMachineSetting, editMachineSetting, delMachineSetting } from '../../services/machine/machineSetting';
 
 export default {
-  namespace: 'MachineSetting',
+  namespace: 'machineSetting',
   state: {
     list: [],
     page: {},

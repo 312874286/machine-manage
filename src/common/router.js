@@ -149,9 +149,42 @@ export const getRouterData = (app) => {
     '/pointLocationManage/users': {
       component: dynamicWrapper(app, ['customer/users', 'log/log'], () => import('../routes/Customer/Users')),
     },
-    '/pointLocationManage/index': {
-      component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'rule', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // '/authorityManage/index': {
+    //   component: dynamicWrapper(app, ['authorityManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    '/machine/point-setting': {
+      component: dynamicWrapper(app, ['machine/pointSetting', 'log/log', 'common'], () => import('../routes/Machine/PointSetting')),
     },
+    '/machine/machine-setting': {
+      component: dynamicWrapper(app, ['machine/machineSetting', 'log/log', 'common'], () => import('../routes/Machine/MachineSetting')),
+    },
+    // '/machineManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/channelManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/merchantManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/activityManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/gameManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/goodsManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/userManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/orderManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
+    // '/aisleManage/index': {
+    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
+    // },
     '/customer/record': {
       component: dynamicWrapper(app, ['customer/record', 'log/log'], () => import('../routes/Customer/Record')),
     },

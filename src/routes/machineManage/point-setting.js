@@ -22,7 +22,7 @@ import {
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './Index.less';
+import styles from './point-setting.less';
 import LogModal from '../../components/LogModal';
 
 
@@ -70,6 +70,7 @@ const CreateForm = Form.create()(
               rules: [{ required: true, message: '省市区商圈' }],
             })(
               <Cascader
+                placeholder="请选择"
                 options={insertOptions}
                 loadData={loadData}
                 onChange={onChange}
@@ -96,9 +97,8 @@ const CreateForm = Form.create()(
       </Modal>
     );
 });
-@connect(({ common, rule, loading, pointLocationManage, log }) => ({
+@connect(({ common, loading, pointLocationManage, log }) => ({
   common,
-  rule,
   pointLocationManage,
   loading: loading.models.rule,
   log,
@@ -183,7 +183,7 @@ export default class pointLocationList extends PureComponent {
       this.getLists();
     });
   };
-
+  // 重置
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -191,7 +191,7 @@ export default class pointLocationList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
+      type: '',
       payload: {},
     });
   };
@@ -202,7 +202,7 @@ export default class pointLocationList extends PureComponent {
       expandForm: !expandForm,
     });
   };
-
+  // 批量
   handleMenuClick = e => {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
@@ -212,7 +212,7 @@ export default class pointLocationList extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'rule/remove',
+          type: '',
           payload: {
             no: selectedRows.map(row => row.no).join(','),
           },
@@ -233,22 +233,24 @@ export default class pointLocationList extends PureComponent {
       selectedRows: rows,
     });
   };
-
+  // 搜索
   handleSearch = e => {
     e.preventDefault();
-    const { dispatch, form } = this.props;
+    const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
+      // const values = {
+      //   ...fieldsValue,
+      //   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      // };
+      // this.setState({
+      //   formValues: values,
+      // });
       this.setState({
-        formValues: values,
-      });
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
+        pageNo: 1,
+        keyword: fieldsValue.keyword,
+      }, () => {
+        this.getLists();
       });
     });
   };
@@ -415,8 +417,9 @@ export default class pointLocationList extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
             <FormItem label="省市区商圈">
-              {getFieldDecorator('status')(
+              {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
+                  placeholder="请选择"
                   options={this.state.options}
                   loadData={this.loadData}
                   onChange={this.onChange}
@@ -427,7 +430,7 @@ export default class pointLocationList extends PureComponent {
           </Col>
           <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('number')(<Input placeholder="请输入商场、运营人、手机" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
