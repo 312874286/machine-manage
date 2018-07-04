@@ -158,9 +158,9 @@ export const getRouterData = (app) => {
     '/machine/machine-setting': {
       component: dynamicWrapper(app, ['machine/machineSetting', 'log/log', 'common'], () => import('../routes/Machine/MachineSetting')),
     },
-    // '/machineManage/index': {
-    //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
-    // },
+    '/channel': {
+      component: dynamicWrapper(app, ['channel/channelSetting', 'log/log'], () => import('../routes/Channel/ChannelSetting')),
+    },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },

@@ -23,7 +23,7 @@ import {
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './PointSetting.less';
+import styles from './ChannelSetting.less';
 import LogModal from '../../components/LogModal';
 
 
@@ -38,7 +38,7 @@ const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -59,53 +59,35 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={getFieldDecorator('mobile') ? '编辑点位' : '新建点位'}
+        title={getFieldDecorator('channelCode') ? '编辑渠道' : '新建渠道'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="省市区商圈">
-            {getFieldDecorator('provinceCityAreaTrade', {
-              rules: [{ required: true, message: '省市区商圈' }],
-            })(
-              <Cascader
-                placeholder="请选择"
-                options={insertOptions}
-                loadData={loadData}
-                onChange={onChange}
-                changeOnSelect
-              />
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="商场名称">
-            {getFieldDecorator('mall', {
-              rules: [{ required: true, message: '请输入商场名称' }],
+          <FormItem {...formItemLayout} label="渠道编码">
+            {getFieldDecorator('channelCode', {
+              rules: [{ required: true, message: '请输入渠道编码' }],
             })(<Input placeholder="请输入商场" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="运营人员">
-            {getFieldDecorator('manager', {
-              rules: [{ required: true, message: '请输入运营人员' }],
-            })(<Input placeholder="请输入运营人" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="手机号码">
-            {getFieldDecorator('mobile', {
-              rules: [{ required: true, message: '请输入手机号码' }],
-            })(<Input placeholder="请输入手机" />)}
+          <FormItem {...formItemLayout} label="渠道名称">
+            {getFieldDecorator('channelName', {
+              rules: [{ required: true, message: '请输入渠道名称' }],
+            })(<Input placeholder="请输入渠道名称" />)}
           </FormItem>
         </Form>
       </Modal>
     );
 });
-@connect(({ common, loading, pointSetting, log }) => ({
+@connect(({ common, loading, channelSetting, log }) => ({
   common,
-  pointSetting,
+  channelSetting,
   loading: loading.models.rule,
   log,
 }))
 @Form.create()
-export default class PointSettingList extends PureComponent {
+export default class channelSettingList extends PureComponent {
   state = {
     modalVisible: false,
     expandForm: false,
@@ -121,39 +103,18 @@ export default class PointSettingList extends PureComponent {
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
-    code: '',
   };
-  componentWillMount() {
-    // 查询省
-  }
   componentDidMount() {
-    this.getAreaList();
     this.getLists();
-  }
-  // 获取城市列表
-  getAreaList = () => {
-    this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
-      payload: {
-        restParams: {
-          code: this.state.code,
-        },
-      },
-    }).then( (res) => {
-      this.setState({
-        options: res,
-      });
-    });
   }
   // 获取点位管理列表
   getLists = () => {
     this.props.dispatch({
-      type: 'pointSetting/getPointSettingList',
+      type: 'channelSetting/getChannelSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
-          code: this.state.code,
         },
       },
     });
@@ -252,7 +213,6 @@ export default class PointSettingList extends PureComponent {
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword,
-        code: fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1],
       }, () => {
         this.getLists();
       });
@@ -274,7 +234,7 @@ export default class PointSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'pointSetting/delPointSetting',
+        type: 'channelSetting/delChannelSetting',
         payload: {
           params,
         },
@@ -293,32 +253,19 @@ export default class PointSettingList extends PureComponent {
       modalVisible: true,
       modalData: item,
     });
-    this.props.dispatch({
-      type: 'pointSetting/getPointSettingDetail',
-      payload: {
-        restParams: {
-          id: item.id,
-        },
-      },
-    }).then((res) => {
-      this.setModalData(res.data);
-    });
+    this.setModalData(item);
   }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        mall: data.mall || '',
-        manager: data.manager || '',
-        mobile: data.mobile || '',
-        provinceCityAreaTrade: data.provinceCityAreaTrade || '',
+        channelCode: data.channelCode || '',
+        channelName: data.channelName || '',
       });
     } else {
       this.form.setFieldsValue({
-        mall: '',
-        manager: '',
-        mobile: '',
-        provinceCityAreaTrade: '',
+        channelCode: '',
+        channelName: '',
       });
     }
   }
@@ -336,10 +283,10 @@ export default class PointSettingList extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'pointSetting/savePointSetting';
+      let url = 'channelSetting/saveChannelSetting';
       let params = { ...values };
       if (this.state.modalData.id) {
-        url = 'pointSetting/editPointSetting';
+        url = 'channelSetting/editChannelSetting';
         params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -357,34 +304,6 @@ export default class PointSettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
-  // 四级联动开始
-  onChange = (value, selectedOptions) => {
-    // 当前选中的value[3]商圈
-    console.log(value, selectedOptions);
-  }
-  loadData = (selectedOptions) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-    this.setState({
-      code: targetOption.value,
-    }, () => {
-      this.props.dispatch({
-        type: 'common/getProvinceCityAreaTradeArea',
-        payload: {
-          restParams: {
-            code: targetOption.value,
-          },
-        },
-      }).then( (res) => {
-        targetOption.loading = false;
-        targetOption.children = res
-        this.setState({
-          options: [...this.state.options],
-        });
-      });
-    });
-  }
-  // 四级联动结束
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -434,19 +353,6 @@ export default class PointSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem label="省市区商圈">
-              {getFieldDecorator('provinceCityAreaTrade')(
-                <Cascader
-                  placeholder="请选择"
-                  options={this.state.options}
-                  loadData={this.loadData}
-                  onChange={this.onChange}
-                  changeOnSelect
-                />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={9} sm={24}>
             <FormItem label="关键字">
               {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机" />)}
             </FormItem>
@@ -474,32 +380,27 @@ export default class PointSettingList extends PureComponent {
   }
   render() {
     const {
-      pointSetting: { list, page },
+      channelSetting: { list, page },
       loading,
       log: { logList, logPage },
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData } = this.state;
     const columns = [
       {
-        title: '编号ID',
+        title: '渠道ID',
         width: 200,
         dataIndex: 'id',
         fixed: 'left',
       },
       {
-        title: '所属省市区商圈',
-        width: 300,
-        dataIndex: 'areaCode',
+        title: '渠道编码',
+        width: 200,
+        dataIndex: 'channelCode',
       },
       {
-        title: '商场',
-        width: 100,
-        dataIndex: 'mall',
-      },
-      {
-        title: '状态',
-        width: 100,
-        dataIndex: 'state',
+        title: '渠道状态',
+        width: 200,
+        dataIndex: 'isDelete',
         filters: [
           {
             text: status[0],
@@ -524,29 +425,11 @@ export default class PointSettingList extends PureComponent {
         },
       },
       {
-        title: '运营人',
+        title: '渠道名称',
         width: 100,
-        dataIndex: 'manager',
+        dataIndex: 'channelName',
       },
       {
-        title: '手机号',
-        width: 150,
-        dataIndex: 'mobile',
-      },
-      {
-        title: '备注描述',
-        width: 150,
-        dataIndex: 'remark',
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'updatedAt',
-        width: 200,
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        fixed: 'right',
         title: '操作',
         render: (text, item) => (
           <Fragment>
@@ -603,6 +486,7 @@ export default class PointSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
+              scrollX={700}
             />
           </div>
         </Card>

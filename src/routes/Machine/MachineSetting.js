@@ -19,12 +19,15 @@ import {
   Badge,
   Divider,
   Radio,
+  Popconfirm,
+  Tag,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './MachineSetting.less';
 import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
+import {area} from "../../common/config/area";
 
 
 const FormItem = Form.Item;
@@ -39,7 +42,7 @@ const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, handleTags,} = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, handleTags, modalData } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -82,14 +85,10 @@ const CreateForm = Form.create()(
               rules: [{ required: true, message: '请选择点位' }],
             })(<Input placeholder="请选择点位" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="标签名称">
-            {getFieldDecorator('tag', {
-              rules: [{ required: true, message: '请输入标签名称' }],
-            })(<Input placeholder="请输入标签名称" />)}
-          </FormItem>
           <FormItem {...formItemLayout} label="机器状态">
             {getFieldDecorator('status', {
               rules: [{ required: true, message: '请选择机器状态' }],
+              initialValue: '1',
             })(
               <RadioGroup>
                 <Radio value="0">不可用</Radio>
@@ -100,6 +99,7 @@ const CreateForm = Form.create()(
           <FormItem {...formItemLayout} label="机器标签">
             {getFieldDecorator('tags', {
               rules: [{ required: true, message: '请填写机器标签' }],
+              initialValue: { tags: modalData.tags, },
             })(
               <EditableTagGroup
                 handleTags={handleTags}
@@ -133,29 +133,9 @@ export default class machineSettingList extends PureComponent {
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
-    tags: '',
   };
-  componentWillMount() {
-    // 查询省
-    this.getAreaList();
-  }
   componentDidMount() {
     this.getLists();
-  }
-  // 获取城市列表
-  getAreaList = () => {
-    this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
-      payload: {
-        restParams: {
-          id: this.state.id,
-        },
-      },
-    }).then( (res) => {
-      this.setState({
-        options: res,
-      });
-    });
   }
   // 获取点位管理列表
   getLists = () => {
@@ -272,6 +252,7 @@ export default class machineSettingList extends PureComponent {
   handleModalVisible = (flag) => {
     this.setState({
       modalVisible: !!flag,
+      modalData: {},
     });
     this.setModalData();
   };
@@ -298,6 +279,8 @@ export default class machineSettingList extends PureComponent {
   }
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
+    item.tags = item.tag.split('，');
+    console.log('handleEditClick', item)
     this.setState({
       modalVisible: true,
       modalData: item,
@@ -308,17 +291,19 @@ export default class machineSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        shopName: data.shopPlace || '',
-        operator: data.operator || '',
-        number: data.phoneNo || '',
-        provinceCityAreaTrade: data.provinceCityAreaTrade || '',
+        machine_id: data.machine_id || '',
+        machine_name: data.machine_name || '',
+        locale_id: data.locale_id || '',
+        tag: data.tag,
+        status: data.status,
       });
     } else {
       this.form.setFieldsValue({
-        shopName: '',
-        operator: '',
-        number: '',
-        provinceCityAreaTrade: '',
+        machine_id: '',
+        machine_name: '',
+        locale_id: '',
+        tag: '',
+        status: '',
       });
     }
   }
@@ -338,7 +323,7 @@ export default class machineSettingList extends PureComponent {
       });
       let url = 'machineSetting/saveMachineSetting';
       let params = { ...values };
-      if (this.state.modalData) {
+      if (this.state.modalData.id) {
         url = 'machineSetting/editMachineSetting';
         params = { ...values, id: this.state.modalData.id };
       }
@@ -359,9 +344,8 @@ export default class machineSettingList extends PureComponent {
   // 新增modal确认事件 结束
   // tag设置开始
   handleTags = (val) => {
-    console.log('val', val)
     this.setState({
-      tags: val,
+      modalData: { tags: val },
     });
   }
   // tag设置结束
@@ -415,7 +399,7 @@ export default class machineSettingList extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入机器ID、机器名称、标签" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -462,6 +446,14 @@ export default class machineSettingList extends PureComponent {
       {
         title: '标签名称',
         dataIndex: 'tag',
+        // render(val) {
+        //   let tags = val.split('，')
+        //   tags.map((item) => {
+        //     return (
+        //       <Tag>{item}</Tag>
+        //     );
+        //   });
+        // },
       },
       {
         title: '状态',
@@ -510,16 +502,17 @@ export default class machineSettingList extends PureComponent {
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
+        fixed: 'right',
         title: '操作',
-        render: () => (
+        render: (text, item) => (
           <Fragment>
-            <a href="">配置</a>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
-            <a href="">订阅警报</a>
+            <a onClick={() => this.handleLogClick(item)}>日志</a>
             <Divider type="vertical" />
-            <a href="">编辑</a>
-            <Divider type="vertical" />
-            <a href="">删除</a>
+            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
+              <a>删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },
@@ -566,10 +559,7 @@ export default class machineSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              onLogClick={this.handleLogClick}
-              // handleTableChange={this.handleTableChange}
-              onEditClick={this.handleEditClick}
-              onDelClick={this.handleDelClick}
+              scrollX={1250}
             />
           </div>
         </Card>

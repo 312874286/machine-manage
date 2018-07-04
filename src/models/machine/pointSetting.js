@@ -1,4 +1,4 @@
-import { getPointSettingList, savePointSetting, editPointSetting, delPointSetting } from '../../services/machine/pointSetting';
+import { getPointSettingList, savePointSetting, getPointSettingDetail, editPointSetting, delPointSetting } from '../../services/machine/pointSetting';
 
 export default {
   namespace: 'pointSetting',
@@ -15,6 +15,10 @@ export default {
         type: 'saveList',
         payload: response,
       });
+    },
+    *getPointSettingDetail({ payload: { restParams } }, { call }) {
+      const response = yield call(getPointSettingDetail, { restParams });
+      return response;
     },
     *savePointSetting({ payload: { params } }, { call }) {
       const response = yield call(savePointSetting, { params });

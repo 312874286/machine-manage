@@ -2,12 +2,31 @@ import React, { PureComponent } from 'react';
 import { Tag, Input, Tooltip, Icon } from 'antd';
 
 class EditableTagGroup extends PureComponent {
+  constructor(props) {
+    super(props);
+
+  }
   state = {
-    tags: [],
     inputVisible: false,
     inputValue: '',
+    tags: [],
   };
-
+  componentWillReceiveProps(nextProps) {
+    const { value, } = nextProps;
+    if (value.tags) {
+      this.setState({
+        tags: value.tags,
+      });
+    }
+  }
+  componentDidMount() {
+    const { value, } = this.props;
+    if (value.tags) {
+      this.setState({
+        tags: value.tags,
+      });
+    }
+  }
   handleClose = (removedTag) => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     console.log(tags);

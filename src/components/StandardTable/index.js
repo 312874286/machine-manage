@@ -41,85 +41,85 @@ class StandardTable extends PureComponent {
   }
   render() {
     const { selectedRowKeys, totalCallNo } = this.state;
-    const { data, page, loading, onEditClick, onLogClick, onDelClick } = this.props;
+    const { data, page, loading, scrollX, columns } = this.props;
     const status = ['关闭', '运行中', '已上线', '异常'];
-    const columns = [
-      {
-        title: '编号ID',
-        width: 200,
-        dataIndex: 'no',
-        fixed: 'left',
-      },
-      {
-        title: '所属省市区商圈',
-        width: 300,
-        dataIndex: 'provinceCityAreaTradeArea',
-      },
-      {
-        title: '商场',
-        width: 100,
-        dataIndex: 'shopPlace',
-      },
-      {
-        title: '状态',
-        width: 100,
-        dataIndex: 'status',
-        filters: [
-          {
-            text: status[0],
-            value: 0,
-          },
-          {
-            text: status[1],
-            value: 1,
-          },
-          {
-            text: status[2],
-            value: 2,
-          },
-          {
-            text: status[3],
-            value: 3,
-          },
-        ],
-        onFilter: (value, record) => record.status.toString() === value,
-        render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
-      },
-      {
-        title: '运营人',
-        width: 100,
-        dataIndex: 'operator',
-      },
-      {
-        title: '手机号',
-        width: 150,
-        dataIndex: 'phoneNo',
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'updatedAt',
-        width: 200,
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        fixed: 'right',
-        title: '操作',
-        render: (text, item) => (
-          <Fragment>
-            <a onClick={() => onEditClick(item)}>编辑</a>
-            <Divider type="vertical" />
-            <a onClick={() => onLogClick(item)}>日志</a>
-            <Divider type="vertical" />
-            <Popconfirm title="确定要删除吗" onConfirm={() => onDelClick(item)} okText="Yes" cancelText="No">
-              <a>删除</a>
-            </Popconfirm>
-          </Fragment>
-        ),
-      },
-    ];
+    // const columns = [
+    //   {
+    //     title: '编号ID',
+    //     width: 200,
+    //     dataIndex: 'no',
+    //     fixed: 'left',
+    //   },
+    //   {
+    //     title: '所属省市区商圈',
+    //     width: 300,
+    //     dataIndex: 'provinceCityAreaTradeArea',
+    //   },
+    //   {
+    //     title: '商场',
+    //     width: 100,
+    //     dataIndex: 'shopPlace',
+    //   },
+    //   {
+    //     title: '状态',
+    //     width: 100,
+    //     dataIndex: 'status',
+    //     filters: [
+    //       {
+    //         text: status[0],
+    //         value: 0,
+    //       },
+    //       {
+    //         text: status[1],
+    //         value: 1,
+    //       },
+    //       {
+    //         text: status[2],
+    //         value: 2,
+    //       },
+    //       {
+    //         text: status[3],
+    //         value: 3,
+    //       },
+    //     ],
+    //     onFilter: (value, record) => record.status.toString() === value,
+    //     render(val) {
+    //       return <Badge status={statusMap[val]} text={status[val]} />;
+    //     },
+    //   },
+    //   {
+    //     title: '运营人',
+    //     width: 100,
+    //     dataIndex: 'operator',
+    //   },
+    //   {
+    //     title: '手机号',
+    //     width: 150,
+    //     dataIndex: 'phoneNo',
+    //   },
+    //   {
+    //     title: '更新时间',
+    //     dataIndex: 'updatedAt',
+    //     width: 200,
+    //     sorter: true,
+    //     render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    //   },
+    //   {
+    //     fixed: 'right',
+    //     title: '操作',
+    //     render: (text, item) => (
+    //       <Fragment>
+    //         <a onClick={() => onEditClick(item)}>编辑</a>
+    //         <Divider type="vertical" />
+    //         <a onClick={() => onLogClick(item)}>日志</a>
+    //         <Divider type="vertical" />
+    //         <Popconfirm title="确定要删除吗" onConfirm={() => onDelClick(item)} okText="Yes" cancelText="No">
+    //           <a>删除</a>
+    //         </Popconfirm>
+    //       </Fragment>
+    //     ),
+    //   },
+    // ];
     // const paginationProps = {
     //   showSizeChanger: true,
     //   showQuickJumper: true,
@@ -161,7 +161,7 @@ class StandardTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: 1350 }}
+          scroll={{ x: scrollX ? scrollX : 1500 }}
         />
       </div>
     );

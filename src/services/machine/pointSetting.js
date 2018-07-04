@@ -8,9 +8,14 @@ export async function savePointSetting({ params }) {
   });
 }
 
-export async function getPointSettingList({ params, restParams }) {
+export async function getPointSettingList({ restParams }) {
   return fetch.get(api.getPointSettingList, {
-    body: JSON.stringify(params),
+    restParams,
+  });
+}
+
+export async function getPointSettingDetail({ restParams }) {
+  return fetch.get(api.getPointSettingDetail, {
     restParams,
   });
 }

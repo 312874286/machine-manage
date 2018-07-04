@@ -2708,7 +2708,7 @@ const proxy = {
     },
     $body: postRule,
   },
-  'POST /api/getProvinceCityAreaTradeArea': (req, res) => {
+  'GET /admin/area/list': (req, res) => {
     res.send({
       "code": 0,
       "data": [{
@@ -2750,14 +2750,95 @@ const proxy = {
       }]
     })
   },
-  'POST /merchant/pointLocationManage/save': (req, res) => {
+  'POST /locale/add': (req, res) => {
     res.send({
       "code": 0,
       "data": '',
       "msg": '成功',
     });
   },
-  'GET /merchant/pointLocationManage/pointLocationLists': (req, res) => {
+  'GET /locale/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [{
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+      }]
+    });
+  },
+  'GET /locale/detail': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": {
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+        province: 100000,
+        city: 100000,
+        district: 100000,
+        circle: '其他'
+      }
+    });
+  },
+  'POST /locale/update': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /locale/delete': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /machine/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GEt /machine/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -2787,7 +2868,8 @@ const proxy = {
           "status": 0,
           "shopPlace": 1,
           "unionid": null,
-          "merchantId": "1001"
+          "merchantId": "1001",
+          "tag": "tag1，tag2，tag3"
         }, {
           "id": 5790000000,
           "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
@@ -2800,7 +2882,8 @@ const proxy = {
           "status": 1,
           "shopPlace": 1,
           "unionid": null,
-          "merchantId": "1001"
+          "merchantId": "1001",
+          "tag": "tag4，tag5，tag6"
         }, {
           "id": 5700000000,
           "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
@@ -2813,7 +2896,8 @@ const proxy = {
           "status": 2,
           "shopPlace": 1,
           "unionid": null,
-          "merchantId": "1001"
+          "merchantId": "1001",
+          "tag": "tag7，tag8，tag9"
         }, {
           "id": 1230000000,
           "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
@@ -2826,15 +2910,107 @@ const proxy = {
           "status": 3,
           "shopPlace": 1,
           "unionid": null,
-          "merchantId": "1001"
+          "merchantId": "1001",
+          "tag": "tag10，tag12，tag13"
         },
       ]
     });
   },
-  'POST /merchant/pointLocationManage/updatePointLocation': (req, res) => {
+  'POST /machine/update': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'POST /merchant/pointLocationManage/deletePointLocation': (req, res) => {
+  'POST /machine/delete': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /channel/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GET /channel/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": 5780000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100100000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "张三",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 0,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag1，tag2，tag3"
+        }, {
+          "id": 5790000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100101000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "李四",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 1,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag4，tag5，tag6"
+        }, {
+          "id": 5700000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100000000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "王五",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 2,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag7，tag8，tag9"
+        }, {
+          "id": 1230000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100101001', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "哈哈",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 3,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag10，tag12，tag13"
+        },
+      ]
+    });
+  },
+  'POST /channel/update': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /channel/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
 };

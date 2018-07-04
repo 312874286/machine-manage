@@ -10,7 +10,6 @@ export async function saveMachineSetting({ params }) {
 
 export async function getMachineSettingList({ params, restParams }) {
   return fetch.get(api.getMachineSettingList, {
-    body: JSON.stringify(params),
     restParams,
   });
 }
