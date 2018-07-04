@@ -434,7 +434,7 @@ const proxy = {
           {
             functionId: 'a6',
             functionDepict: '项目管理',
-            functionPath: 'game',
+            functionPath: 'game2',
             parentId: null,
             functionLevel: 1,
             functionIcon: 'form',
@@ -507,21 +507,21 @@ const proxy = {
           {
             functionId: 'a15',
             functionDepict: '权限管理',
-            functionPath: 'wechat-push',
+            functionPath: 'wechat-push1',
             parentId: 'a13',
             functionLevel: 2,
           },
           {
             functionId: 'a16',
             functionDepict: '部门管理',
-            functionPath: 'wechat-push',
+            functionPath: 'wechat-push2',
             parentId: 'a13',
             functionLevel: 2,
           },
           {
             functionId: 'a17',
             functionDepict: '员工管理',
-            functionPath: 'wechat-push',
+            functionPath: 'wechat-push3',
             parentId: 'a13',
             functionLevel: 2,
           },
