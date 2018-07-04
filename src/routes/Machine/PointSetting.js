@@ -489,7 +489,7 @@ export default class PointSettingList extends PureComponent {
       {
         title: '所属省市区商圈',
         width: 300,
-        dataIndex: 'areaCode',
+        dataIndex: 'areaName',
       },
       {
         title: '商场',
