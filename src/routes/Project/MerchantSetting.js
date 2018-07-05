@@ -319,7 +319,7 @@ export default class merchantSettingList extends PureComponent {
       });
       let url = 'merchantSetting/saveMerchantSetting';
       let params = { ...values };
-      if (this.state.modalType) {
+      if (this.state.modalData.id) {
         url = 'merchantSetting/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
@@ -488,6 +488,21 @@ export default class merchantSettingList extends PureComponent {
         },
       },
       {
+        title: '新建时间',
+        dataIndex: 'createTime',
+        width: 200,
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '更新时间',
+        dataIndex: 'updateTime',
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        fixed: 'right',
+        width: 150,
         title: '操作',
         render: (text, item) => (
           <Fragment>
