@@ -8,6 +8,13 @@ export async function AccountLogin(params) {
   });
 }
 
+
+export async function DDAccountLogin(params) {
+  return request.post(api.ddlogin, {
+    body: stringify(params),
+  });
+}
+
 export async function ResetPassword(params) {
   return request.post(api.resetPassword, {
     body: stringify(params),

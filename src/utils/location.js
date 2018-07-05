@@ -17,3 +17,18 @@ export function getQueryDatas(search) {
   }
   return result;
 }
+
+export function getUrlParams() {
+  let url = window.location.search;
+  url = decodeURI(url);
+  let strs = [];
+  const theRequest = {};
+  if (url.indexOf('?') !== -1) {
+    const str = url.substr(1);
+    strs = str.split('&');
+    for (let i = 0; i < strs.length; i++) {
+      theRequest[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1]);
+    }
+  }
+  return theRequest;
+}

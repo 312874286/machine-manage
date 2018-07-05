@@ -377,9 +377,11 @@ const proxy = {
       }, msg: '成功'
     });
   },
-  'POST /authent/login': (req, res) => {
-    const { name, password, auto, type } = req.body;
-    if (password === 'admin' && name === 'admin') {
+  'POST /dd/login': (req, res) => {
+    const { name, password, auto, type, code } = req.body;
+    // if (password === 'admin' && name === 'admin') {
+    console.log('code==== ', code);
+    if(code) {
       const data = {
         token: 'sasdnjaoisdjoiasdjaoisd',
         user: {
@@ -394,7 +396,7 @@ const proxy = {
         },
         functions: [
           {
-            functionId: 'a1',
+            id: 'a1',
             functionDepict: '货机管理',
             functionPath: 'machine',
             parentId: null,
@@ -403,28 +405,28 @@ const proxy = {
             color: '#ffd322'
           },
           {
-            functionId: 'a2',
+            id: 'a2',
             functionDepict: '机器管理',
             functionPath: 'machine-setting',
             parentId: 'a1',
             functionLevel: 2,
           },
           {
-            functionId: 'a3',
+            id: 'a3',
             functionDepict: '货道管理',
             functionPath: 'aisle',
             parentId: 'a1',
             functionLevel: 2,
           },
           {
-            functionId: 'a4',
+            id: 'a4',
             functionDepict: '点位管理',
             functionPath: 'point-setting',
             parentId: 'a1',
             functionLevel: 2,
           },
           {
-            functionId: 'a5',
+            id: 'a5',
             functionDepict: '游戏管理',
             functionPath: 'game',
             parentId: null,
@@ -432,7 +434,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a6',
+            id: 'a6',
             functionDepict: '项目管理',
             functionPath: 'game2',
             parentId: null,
@@ -440,7 +442,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a7',
+            id: 'a7',
             functionDepict: '渠道管理',
             functionPath: 'channel',
             parentId: 'a6',
@@ -448,7 +450,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a8',
+            id: 'a8',
             functionDepict: '商户管理',
             functionPath: 'merchant',
             parentId: 'a6',
@@ -456,7 +458,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a9',
+            id: 'a9',
             functionDepict: '活动管理',
             functionPath: 'activity',
             parentId: 'a6',
@@ -465,7 +467,7 @@ const proxy = {
           },
 
           {
-            functionId: 'a10',
+            id: 'a10',
             functionDepict: '商品管理',
             functionPath: 'goods',
             parentId: null,
@@ -473,7 +475,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a11',
+            id: 'a11',
             functionDepict: '订单管理',
             functionPath: 'order',
             parentId: null,
@@ -481,7 +483,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a12',
+            id: 'a12',
             functionDepict: '用户信息',
             functionPath: 'user',
             parentId: null,
@@ -489,7 +491,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a13',
+            id: 'a13',
             functionDepict: '角色权限',
             functionPath: 'authorityManage',
             parentId: null,
@@ -498,28 +500,28 @@ const proxy = {
             color: '#ff4c72'
           },
           {
-            functionId: 'a14',
+            id: 'a14',
             functionDepict: '角色管理',
             functionPath: 'account',
             parentId: 'a13',
             functionLevel: 2,
           },
           {
-            functionId: 'a15',
+            id: 'a15',
             functionDepict: '权限管理',
             functionPath: 'wechat-push1',
             parentId: 'a13',
             functionLevel: 2,
           },
           {
-            functionId: 'a16',
+            id: 'a16',
             functionDepict: '部门管理',
             functionPath: 'wechat-push2',
             parentId: 'a13',
             functionLevel: 2,
           },
           {
-            functionId: 'a17',
+            id: 'a17',
             functionDepict: '员工管理',
             functionPath: 'wechat-push3',
             parentId: 'a13',
@@ -528,7 +530,6 @@ const proxy = {
         ]
       };
       res.send({
-        type,
         code: 0,
         data,
         msg: '成功',

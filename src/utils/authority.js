@@ -50,7 +50,10 @@ function parseMenuData(source, pid) {
 
 function setMenus(data) {
   if (data) {
-    setSessionData('siteMenu', parseMenuData(data));
+    const functionList = data.map((item) => {
+      return { ...item, functionId: item.id };
+    });
+    setSessionData('siteMenu', parseMenuData(functionList));
   }
 }
 

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "prestart": "cat ./src/environments/environment.mock.js > ./src/environments/environment.js ",
-    "start": "cross-env DISABLE_ESLINT=true roadhog dev",
+    "start": "cross-env DISABLE_ESLINT=true PORT=80 roadhog dev",
     "prestart:dev": "cat ./src/environments/environment.dev.js > ./src/environments/environment.js ",
     "start:dev": "cross-env ESLINT=none roadhog dev",
     "prestart:test": "cat ./src/environments/environment.test.js > ./src/environments/environment.js ",

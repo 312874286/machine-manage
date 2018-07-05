@@ -1,5 +1,8 @@
-import { AccountLogin, ResetPassword, DoResetPassword } from '../../services/user/login';
+import { AccountLogin, ResetPassword, DoResetPassword, DDAccountLogin } from '../../services/user/login';
 import { setLogin, setLogout } from '../../utils/authority';
+import environment from '../../environments/environment';
+
+const { frontHost } = environment;
 
 export default {
   namespace: 'login',
@@ -18,8 +21,23 @@ export default {
       });
       if (response.code === 0) {
         setLogin(response.data);
-        window.location.reload();
+        // window.location.reload();
+        window.location.replace(frontHost);
+        // window.location.href = frontHost;
       }
+    },
+    *ddlogin({ payload }, { call, put }) {
+      const response = yield call(DDAccountLogin, payload);
+      yield put({
+        type: 'loginReducer',
+        payload: response,
+      });
+      console.log(response);
+      if (response.code === 0) {
+        setLogin(response.data);
+        // window.location.reload();
+      }
+      window.location.replace(frontHost);
     },
     *logout(_, { put, select }) {
       // TODO
