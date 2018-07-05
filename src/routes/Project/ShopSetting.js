@@ -310,7 +310,7 @@ export default class shopSettingList extends PureComponent {
       });
       let url = 'shopSetting/saveShopSetting';
       let params = { ...values };
-      if (this.state.modalType) {
+      if (this.state.modalData.id) {
         url = 'shopSetting/editShopSetting';
         params = { ...values, id: this.state.modalData.id };
       }

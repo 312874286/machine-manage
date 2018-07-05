@@ -281,7 +281,7 @@ export default class channelSettingList extends PureComponent {
       });
       let url = 'channelSetting/saveChannelSetting';
       let params = { ...values };
-      if (this.state.modalType) {
+      if (this.state.modalData.id) {
         url = 'channelSetting/editChannelSetting';
         params = { ...values, id: this.state.modalData.id };
       }

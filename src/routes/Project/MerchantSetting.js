@@ -319,7 +319,7 @@ export default class merchantSettingList extends PureComponent {
       });
       let url = 'merchantSetting/saveMerchantSetting';
       let params = { ...values };
-      if (this.state.modalType) {
+      if (this.state.modalData.id) {
         url = 'merchantSetting/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
