@@ -514,37 +514,22 @@ const proxy = {
           {
             functionId: 'a16',
             functionDepict: '权限管理',
-<<<<<<< HEAD
             functionPath: 'wechat-push1',
             parentId: 'a14',
-=======
-            functionPath: 'jurisdiction',
-            parentId: 'a13',
->>>>>>> 894e2ef7caf655e746772ac64197a35016c28315
             functionLevel: 2,
           },
           {
             functionId: 'a17',
             functionDepict: '部门管理',
-<<<<<<< HEAD
             functionPath: 'wechat-push2',
             parentId: 'a14',
-=======
-            functionPath: 'department',
-            parentId: 'a13',
->>>>>>> 894e2ef7caf655e746772ac64197a35016c28315
             functionLevel: 2,
           },
           {
             functionId: 'a18',
             functionDepict: '员工管理',
-<<<<<<< HEAD
             functionPath: 'wechat-push3',
             parentId: 'a14',
-=======
-            functionPath: 'staff',
-            parentId: 'a13',
->>>>>>> 894e2ef7caf655e746772ac64197a35016c28315
             functionLevel: 2,
           },
         ]
@@ -2819,17 +2804,22 @@ const proxy = {
         "prePage": 1
       },
       "data": [{
-        areCode: null,
+        areaCode: "120202001",
+        areaName: "河北省唐山市路北区",
+        circle: null,
+        city: null,
         createId: "",
-        createTime: "2018-07-04 16:55:27",
+        createTime: "2018-07-05 11:20:48",
+        district: null,
         id: "0be2a58e4e9845f8b4dd55acabaad3f3",
         isDelete: 0,
-        mall: "汉光百货",
+        mall: "汉光百货45557888",
         manager: "王小二",
         mobile: "15688886666",
+        province: null,
         remark: "欢迎光临",
         updateId: "",
-        updateTime: "2018-07-04 16:55:27",
+        updateTime: "2018-07-05 11:20:48",
       }]
     });
   },
@@ -2837,35 +2827,23 @@ const proxy = {
     res.send({
       "msg": "成功",
       "code": 0,
-      "page": {
-        "pageSize": 20,
-        "currentResult": 0,
-        "totalPage": 1,
-        "pageNo": 1,
-        "totalCount": 25,
-        "list": null,
-        "firstResult": 0,
-        "firstPage": true,
-        "lastPage": true,
-        "nextPage": 1,
-        "prePage": 1
-      },
       "data": {
-        areCode: null,
+        areaCode: "100101001",
+        areaName: null,
+        circle: "100101001",
+        city: "100100000",
         createId: "",
-        createTime: "2018-07-04 16:55:27",
-        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        createTime: "2018-07-05 18:14:41",
+        district: "100101000",
+        id: "169e57b0c274400d8f7b066d92189eed",
         isDelete: 0,
-        mall: "汉光百货",
-        manager: "王小二",
-        mobile: "15688886666",
-        remark: "欢迎光临",
+        mall: "434534545",
+        manager: "4355555555",
+        mobile: "16619757554",
+        province: "100000000",
+        remark: "第三方的观点是",
         updateId: "",
-        updateTime: "2018-07-04 16:55:27",
-        province: 100000,
-        city: 100000,
-        district: 100000,
-        circle: '其他'
+        updateTime: "2018-07-05 18:14:41"
       }
     });
   },
@@ -2992,62 +2970,15 @@ const proxy = {
       },
       "data": [
         {
-          "id": 5780000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100100000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "张三",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 0,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag1，tag2，tag3"
-        }, {
-          "id": 5790000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100101000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "李四",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 1,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag4，tag5，tag6"
-        }, {
-          "id": 5700000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100000000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "王五",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 2,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag7，tag8，tag9"
-        }, {
-          "id": 1230000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100101001', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "哈哈",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 3,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag10，tag12，tag13"
-        },
+          channelCode: "108980980980809089",
+          channelName: "自供应566789",
+          createId: "",
+          createTime: "2018-07-05 14:47:09",
+          id: "1",
+          isDelete: 0,
+          updateId: "",
+          updateTime: "2018-07-05 14:47:09",
+        }
       ]
     });
   },
@@ -3182,17 +3113,17 @@ const proxy = {
         "prePage": 1
       },
       "data": [{
-        areCode: null,
-        createId: "",
-        createTime: "2018-07-04 16:55:27",
-        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        brandName: "时代的",
+        channelId: "哇哈哈哇哈哈哈哈",
+        createId: null,
+        createTime: "2018-07-05 17:54:12",
+        id: "1",
         isDelete: 0,
-        mall: "汉光百货",
-        manager: "王小二",
-        mobile: "15688886666",
-        remark: "欢迎光临",
-        updateId: "",
-        updateTime: "2018-07-04 16:55:27",
+        merchantCode: "1000010000000",
+        merchantName: "伊利",
+        originFlag: "钱钱钱",
+        updateId: null,
+        updateTime: "2018-07-05 17:54:12",
       }]
     });
   },
@@ -3264,62 +3195,17 @@ const proxy = {
       },
       "data": [
         {
-          "id": 5780000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100100000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "张三",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 0,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag1，tag2，tag3"
-        }, {
-          "id": 5790000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100101000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "李四",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 1,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag4，tag5，tag6"
-        }, {
-          "id": 5700000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100000000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "王五",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 2,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag7，tag8，tag9"
-        }, {
-          "id": 1230000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100101001', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "哈哈",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 3,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag10，tag12，tag13"
-        },
+          createId: "1",
+          createTime: "2018-07-05 18:43:09",
+          id: "1",
+          isDelete: 0,
+          remark: null,
+          sellerId: "伊利",
+          shopCode: "10000@XXXAXX",
+          shopName: "天猫小米旗舰店",
+          updateId: "",
+          updateTime: "2018-07-05 18:43:09",
+        }
       ]
     });
   },
@@ -3365,103 +3251,18 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'GET /system/user/list': (req, res) => {
-    res.send(
-      {
-        "msg": "成功",
-        "code": 0,
-        "page": {
-        "pageSize": 20,
-        "currentResult": 0,
-        "totalPage": 1,
-        "pageNo": 1,
-        "totalCount": 2,
-        "list": null,
-        "firstResult": 0,
-        "firstPage": true,
-        "lastPage": true,
-        "nextPage": 1,
-        "prePage": 1
-        },
-        "data": [
-        {
-        "id": "2f8e7c92cccb46aba2f86646dcba0565",
-        "userId": "1553444821337801",
-        "name": "叶勤康",
-        "mobile": "18910628406",
-        "email": "",
-        "orgEmail": null,
-        "position": "",
-        "avatar": "",
-        "createTime": "2018-07-03 18:15:13",
-        "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
-        },
-        {
-        "id": "da267e278b2b4f6c934351b956d1f3f0",
-        "userId": "09672669152299397",
-        "name": "KARA",
-        "mobile": "18610567983",
-        "email": "",
-        "orgEmail": null,
-        "position": "",
-        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
-        "createTime": "2018-07-03 18:15:13",
-        "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
-        }
-        ]
-        }
-    )
-  },
-  'GET /accountsystem/user/list': (req, res) => {
-    res.send(
-      {
-        "msg": "成功",
-        "code": 0,
-        "page": {
-        "pageSize": 20,
-        "currentResult": 0,
-        "totalPage": 1,
-        "pageNo": 1,
-        "totalCount": 2,
-        "list": null,
-        "firstResult": 0,
-        "firstPage": true,
-        "lastPage": true,
-        "nextPage": 1,
-        "prePage": 1
-        },
-        "data": [
-        {
-        "id": "2f8e7c92cccb46aba2f86646dcba0565",
-        "userId": "1553444821337801",
-        "name": "叶勤康",
-        "mobile": "18910628406",
-        "email": "",
-        "orgEmail": null,
-        "position": "",
-        "avatar": "",
-        "createTime": "2018-07-03 18:15:13",
-        "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
-        },
-        {
-        "id": "da267e278b2b4f6c934351b956d1f3f0",
-        "userId": "09672669152299397",
-        "name": "KARA",
-        "mobile": "18610567983",
-        "email": "",
-        "orgEmail": null,
-        "position": "",
-        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
-        "createTime": "2018-07-03 18:15:13",
-        "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
-        }
-        ]
-        }
-    )
+  'GET /account/getTestList': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": [{
+      key: '1',
+      name: '胡彦斌',
+      age: 32,
+      address: '西湖区湖底公园1号'
+    }, {
+      key: '2',
+      name: '胡彦祖',
+      age: 42,
+      address: '西湖区湖底公园1号'
+    }]})
   },
 };
 

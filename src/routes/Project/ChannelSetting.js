@@ -421,6 +421,21 @@ export default class channelSettingList extends PureComponent {
         dataIndex: 'channelName',
       },
       {
+        title: '新建时间',
+        dataIndex: 'createTime',
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '更新时间',
+        dataIndex: 'updateTime',
+        width: 200,
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        fixed: 'right',
+        width: 150,
         title: '操作',
         render: (text, item) => (
           <Fragment>
