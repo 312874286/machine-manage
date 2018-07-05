@@ -18,7 +18,7 @@ export default {
     },
     *getPointSettingDetail({ payload: { restParams } }, { call }) {
       const response = yield call(getPointSettingDetail, { restParams });
-      return response;
+      return response.data;
     },
     *savePointSetting({ payload: { params } }, { call }) {
       const response = yield call(savePointSetting, { params });

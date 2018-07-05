@@ -38,7 +38,7 @@ const status = ['关闭', '运行中', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -59,7 +59,7 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={getFieldDecorator('mobile') ? '编辑点位' : '新建点位'}
+        title={!modalType ? '编辑点位' : '新建点位'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
@@ -69,6 +69,7 @@ const CreateForm = Form.create()(
           <FormItem {...formItemLayout} label="省市区商圈">
             {getFieldDecorator('provinceCityAreaTrade', {
               rules: [{ required: true, message: '省市区商圈' }],
+              // initialValue: { defaultValue },
             })(
               <Cascader
                 placeholder="请选择"
@@ -112,6 +113,7 @@ export default class PointSettingList extends PureComponent {
     selectedRows: [],
     formValues: {},
     id: '',
+    defaultValue: {},
     options: '',
     editModalConfirmLoading: false,
     pageNo: 1,
@@ -122,6 +124,7 @@ export default class PointSettingList extends PureComponent {
     logId: '',
     logModalPageNo: 1,
     code: '',
+    modalType: true,
   };
   componentWillMount() {
     // 查询省
@@ -263,6 +266,7 @@ export default class PointSettingList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       modalData: {},
+      modalType: true
     });
     this.setModalData();
   };
@@ -292,6 +296,7 @@ export default class PointSettingList extends PureComponent {
     this.setState({
       modalVisible: true,
       modalData: item,
+      modalType: false,
     });
     this.props.dispatch({
       type: 'pointSetting/getPointSettingDetail',
@@ -301,17 +306,89 @@ export default class PointSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      this.setModalData(res.data);
+      if (res.province) {
+        let province, provinceIndex, cityIndex, { city, district, circle } = res;
+        // all 省
+        this.props.dispatch({
+          type: 'common/getProvinceCityAreaTradeArea',
+          payload: {
+            restParams: {
+              code: '',
+            },
+          },
+        }).then((provinceRes) => {
+          province = provinceRes; // 所有省
+          // 市
+          this.props.dispatch({
+            type: 'common/getProvinceCityAreaTradeArea',
+            payload: {
+              restParams: {
+                code: res.province,
+              },
+            },
+          }).then((cityRes) => {
+            for (let i = 0; i < province.length; i++) {
+              // console.log(province[i].value === res.province, province[i].value, res.province, i)
+              if (province[i].value === res.province) {
+                provinceIndex = i
+                province[i].children = cityRes;
+              }
+            }
+            // 区
+            this.props.dispatch({
+              type: 'common/getProvinceCityAreaTradeArea',
+              payload: {
+                restParams: {
+                  code: city,
+                },
+              },
+            }).then((districtRes) => {
+              let arr = province[provinceIndex].children
+              for (let i = 0; i < arr.length; i++) {
+                if (arr[i].value === city) {
+                  cityIndex = i
+                  arr[i].children = districtRes;
+                }
+              }
+              // 区
+              this.props.dispatch({
+                type: 'common/getProvinceCityAreaTradeArea',
+                payload: {
+                  restParams: {
+                    code: district,
+                  },
+                },
+              }).then((circleRes) => {
+                let arr = province[provinceIndex].children[cityIndex].children
+                for (let i = 0; i < arr.length; i++) {
+                  if (arr[i].value === district) {
+                    arr[i].children = circleRes;
+                  }
+                }
+                console.log('province', province)
+                // 商圈
+                this.setState({
+                  options: province,
+                  defaultValue: [res.province, city, district, circle],
+                }, () => {
+                  this.setModalData(res);
+                });
+              });
+            });
+          });
+        });
+      }
     });
   }
   // 设置modal 数据
   setModalData = (data) => {
+    console.log('data', data, this.state.defaultValue)
     if (data) {
       this.form.setFieldsValue({
         mall: data.mall || '',
         manager: data.manager || '',
         mobile: data.mobile || '',
-        provinceCityAreaTrade: data.provinceCityAreaTrade || '',
+        provinceCityAreaTrade: this.state.defaultValue,
       });
     } else {
       this.form.setFieldsValue({
@@ -342,6 +419,8 @@ export default class PointSettingList extends PureComponent {
         url = 'pointSetting/editPointSetting';
         params = { ...values, id: this.state.modalData.id };
       }
+      params.areaCode = params.provinceCityAreaTrade[params.provinceCityAreaTrade.length - 1]
+      console.log('params', params)
       this.props.dispatch({
         type: url,
         payload: {
@@ -478,7 +557,7 @@ export default class PointSettingList extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options } = this.state;
     const columns = [
       {
         title: '编号ID',
@@ -610,11 +689,12 @@ export default class PointSettingList extends PureComponent {
           {...parentMethods}
           ref={this.saveFormRef}
           modalVisible={modalVisible}
-          insertOptions={this.state.options}
+          insertOptions={options}
           loadData={this.loadData}
           onChange={this.onChange}
           editModalConfirmLoading={editModalConfirmLoading}
           modalData={modalData}
+          modalType={modalType}
         />
         <LogModal
           data={logList}
