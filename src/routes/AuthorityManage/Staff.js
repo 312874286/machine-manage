@@ -1,30 +1,42 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button } from 'antd';
+import { Card, Table, Col, Row, Button, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-@connect(({ account }) => ({ account }))
-export default class Account extends PureComponent {
+@connect(({ staff }) => ({ staff }))
+export default class Staff extends PureComponent {
   state = {
+    userName: '',
   }
   componentDidMount = () => {
-    this.getAccountSystemUserList();
+    this.getSystemUserList();
+  }
+  onChange = (e) => {
+    this.setState({ userName: e.target.value });
+    // console.log(111,e.target.value,this);
+  }
+  onFindData = (e) => {
+    this.getSystemUserList();
+    console.log(this, e, this.state.userName);
   }
   onToAuthorization = (record) => {
     console.log(record, this);
   }
-  getAccountSystemUserList = () => {
+  getSystemUserList = () => {
     this.props.dispatch({
-      type: 'account/getAccountSystemUserList',
+      type: 'staff/getSystemUserList',
       payload: {
         restParams: {
-          keyword: '',
+          keyword: this.state.userName,
         },
       },
     });
   }
+  handleTableChange = (pagination, filters, sorter) => {
+    console.log(pagination, filters, sorter);
+  }
   render() {
-    const { account: { list, page } } = this.props;
+    const { staff: { list, page } } = this.props;
     // console.log(111,list,page);
     const columns = [
       {
@@ -65,6 +77,16 @@ export default class Account extends PureComponent {
     };
     return (
       <PageHeaderLayout>
+        <Card>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={9} sm={24}>
+              <Input placeholder="姓名" onChange={this.onChange} />
+            </Col>
+            <Col md={6} sm={24}>
+              <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
+            </Col>
+          </Row>
+        </Card>
         <Card>
           <Table
             dataSource={list}

@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import { Card, Table, Button } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-@connect(({ account }) => ({ account }))
-export default class Account extends PureComponent {
+@connect(({ department }) => ({ department }))
+export default class Department extends PureComponent {
   state = {
   }
   componentDidMount = () => {
@@ -15,7 +15,7 @@ export default class Account extends PureComponent {
   }
   getAccountSystemUserList = () => {
     this.props.dispatch({
-      type: 'account/getAccountSystemUserList',
+      type: 'department/getAccountSystemUserList',
       payload: {
         restParams: {
           keyword: '',
@@ -24,7 +24,7 @@ export default class Account extends PureComponent {
     });
   }
   render() {
-    const { account: { list, page } } = this.props;
+    const { department: { list, page } } = this.props;
     // console.log(111,list,page);
     const columns = [
       {
