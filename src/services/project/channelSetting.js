@@ -1,5 +1,5 @@
 import { stringify } from 'qs';
-import fetch from '../../utils/fetch';
+import fetch from '../../utils/fetch/index';
 import api from './api';
 
 export async function saveChannelSetting({ params }) {
@@ -11,6 +11,12 @@ export async function saveChannelSetting({ params }) {
 export async function getChannelSettingList({ params, restParams }) {
   return fetch.get(api.getChannelSettingList, {
     body: JSON.stringify(params),
+    restParams,
+  });
+}
+
+export async function getChannelSettingDetail({ restParams }) {
+  return fetch.get(api.getChannelSettingDetail, {
     restParams,
   });
 }

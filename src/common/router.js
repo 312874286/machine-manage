@@ -158,8 +158,14 @@ export const getRouterData = (app) => {
     '/machine/machine-setting': {
       component: dynamicWrapper(app, ['machine/machineSetting', 'log/log', 'common'], () => import('../routes/Machine/MachineSetting')),
     },
-    '/channel': {
-      component: dynamicWrapper(app, ['channel/channelSetting', 'log/log'], () => import('../routes/Channel/ChannelSetting')),
+    '/project/channel': {
+      component: dynamicWrapper(app, ['project/channelSetting', 'log/log'], () => import('../routes/Project/ChannelSetting')),
+    },
+    '/project/merchant': {
+      component: dynamicWrapper(app, ['project/merchantSetting', 'log/log'], () => import('../routes/Project/MerchantSetting')),
+    },
+    '/project/shop': {
+      component: dynamicWrapper(app, ['project/shopSetting', 'log/log'], () => import('../routes/Project/ShopSetting')),
     },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),

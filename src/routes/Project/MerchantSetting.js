@@ -18,38 +18,27 @@ import {
   message,
   Badge,
   Divider,
-  Radio,
-  Popconfirm,
-  Tag,
+  Cascader,
+  Popconfirm
 } from 'antd';
-import StandardTable from '../../components/StandardTable';
+import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './MachineSetting.less';
-import LogModal from '../../components/LogModal';
-import EditableTagGroup from '../../components/Tag';
-import {area} from "../../common/config/area";
+import styles from './MerchantSetting.less';
+import LogModal from '../../components/LogModal/index';
 
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const statusMap = ['processing', 'default', 'success', 'error'];
+const status = ['运行中', '关闭', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, handleTags, modalData } = props;
-    // const okHandle = () => {
-    //   form.validateFields((err, fieldsValue) => {
-    //     if (err) return;
-    //     form.resetFields();
-    //     handleAdd(fieldsValue);
-    //   });
-    // };
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, channelLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -63,90 +52,100 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={getFieldDecorator('machine_id') ? '编辑机器' : '新建机器'}
+        title={!modalType ? '编辑商户' : '新建商户'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="机器ID">
-            {getFieldDecorator('machine_id', {
-              rules: [{ required: true, message: '请输入机器ID' }],
-            })(<Input placeholder="请输入机器ID" />)}
+          <FormItem {...formItemLayout} label="商户编码">
+            {getFieldDecorator('merchantCode', {
+              rules: [{ required: true, message: '请输入商户编码' }],
+            })(<Input placeholder="请输入商户编码" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="机器名称">
-            {getFieldDecorator('machine_name', {
-              rules: [{ required: true, message: '请输入机器名称' }],
-            })(<Input placeholder="请输入机器名称" />)}
+          <FormItem {...formItemLayout} label="商户名称">
+            {getFieldDecorator('merchantName', {
+              rules: [{ required: true, message: '请输入商户名称' }],
+            })(<Input placeholder="请输入商户名称" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择点位">
-            {getFieldDecorator('locale_id', {
-              rules: [{ required: true, message: '请选择点位' }],
-            })(<Input placeholder="请选择点位" />)}
+          <FormItem {...formItemLayout} label="品牌名称">
+            {getFieldDecorator('brandName', {
+              rules: [{ required: true, message: '请输入品牌名称' }],
+            })(<Input placeholder="请输入商户编码" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="机器状态">
-            {getFieldDecorator('status', {
-              rules: [{ required: true, message: '请选择机器状态' }],
-              initialValue: '1',
+          <FormItem {...formItemLayout} label="原始标示">
+            {getFieldDecorator('originFlag', {
+              rules: [{ required: true, message: '请输入原始标示' }],
+            })(<Input placeholder="请输入商户名称" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择渠道">
+            {getFieldDecorator('channelId', {
+              rules: [{ required: true, message: '请选择渠道' }],
             })(
-              <RadioGroup>
-                <Radio value="0">不可用</Radio>
-                <Radio value="1">可用</Radio>
-              </RadioGroup>
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="机器标签">
-            {getFieldDecorator('tags', {
-              rules: [{ required: true, message: '请填写机器标签' }],
-              initialValue: { tags: modalData.tags },
-            })(
-              <EditableTagGroup
-                handleTags={handleTags}
-              />
+              <Select placeholder="请选择">
+                {channelLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.channelName}</Option>
+                  );
+                })}
+              </Select>
             )}
           </FormItem>
         </Form>
       </Modal>
     );
 });
-@connect(({ common, loading, machineSetting, log }) => ({
+@connect(({ common, loading, merchantSetting, log }) => ({
   common,
-  machineSetting,
+  merchantSetting,
   loading: loading.models.rule,
   log,
 }))
 @Form.create()
-export default class machineSettingList extends PureComponent {
+export default class merchantSettingList extends PureComponent {
   state = {
     modalVisible: false,
-    expandForm: false,
     selectedRows: [],
     formValues: {},
-    id: '',
-    options: '',
     editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
+    channelId: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
+    modalType: true,
+    channelLists: [],
   };
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'machineSetting/getMachineSettingList',
+      type: 'merchantSetting/getMerchantSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
+          code: this.state.channelId,
         },
       },
+    });
+    this.props.dispatch({
+      type: 'merchantSetting/getChannelsList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      // const arr = { id: -1, channelName: '请选择' }
+      // res.unshift(arr)
+      this.setState({
+        channelLists: res,
+      });
     });
   }
   // 分页
@@ -179,21 +178,15 @@ export default class machineSettingList extends PureComponent {
   };
   // 重置
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const { form } = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
-    });
-    dispatch({
-      type: '',
-      payload: {},
-    });
-  };
-
-  toggleForm = () => {
-    const { expandForm } = this.state;
-    this.setState({
-      expandForm: !expandForm,
+      pageNo: 1,
+      keyword: '',
+      channelId: '',
+    }, () => {
+      this.getLists();
     });
   };
   // 批量
@@ -233,16 +226,10 @@ export default class machineSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      // const values = {
-      //   ...fieldsValue,
-      //   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      // };
-      // this.setState({
-      //   formValues: values,
-      // });
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword,
+        channelId: fieldsValue.channelId,
       }, () => {
         this.getLists();
       });
@@ -253,6 +240,7 @@ export default class machineSettingList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       modalData: {},
+      modalType: true,
     });
     this.setModalData();
   };
@@ -264,12 +252,12 @@ export default class machineSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'machineSetting/delMachineSetting',
+        type: 'merchantSetting/delMerchantSetting',
         payload: {
           params,
         },
       }).then(() => {
-        message.success('Click on Yes');
+        // message.success('Click on Yes');
         this.getLists();
         this.setState({
           editModalConfirmLoading: false,
@@ -279,30 +267,39 @@ export default class machineSettingList extends PureComponent {
   }
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
-    item.tags = item.tag.split('，');
-    console.log('handleEditClick', item)
     this.setState({
       modalVisible: true,
       modalData: item,
+      modalType: false,
     });
-    this.setModalData(item);
+    this.props.dispatch({
+      type: 'merchantSetting/getMerchantSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setModalData(res);
+    });
   }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        machine_id: data.machine_id || '',
-        machine_name: data.machine_name || '',
-        locale_id: data.locale_id || '',
-        tag: data.tag,
-        status: data.status,
+        merchantCode: data.merchantCode || undefined,
+        merchantName: data.merchantName || undefined,
+        brandName: data.brandName || undefined,
+        originFlag: data.originFlag || undefined,
+        channelId: data.channelId || undefined,
       });
     } else {
       this.form.setFieldsValue({
-        machine_id: '',
-        machine_name: '',
-        locale_id: '',
-        tag: '',
+        merchantCode: undefined,
+        merchantName: undefined,
+        brandName: undefined,
+        originFlag: undefined,
+        channelId: undefined,
       });
     }
   }
@@ -320,10 +317,10 @@ export default class machineSettingList extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'machineSetting/saveMachineSetting';
+      let url = 'merchantSetting/saveMerchantSetting';
       let params = { ...values };
-      if (this.state.modalData.id) {
-        url = 'machineSetting/editMachineSetting';
+      if (this.state.modalType) {
+        url = 'merchantSetting/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -341,13 +338,6 @@ export default class machineSettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
-  // tag设置开始
-  handleTags = (val) => {
-    this.setState({
-      modalData: { tags: val },
-    });
-  }
-  // tag设置结束
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -392,13 +382,27 @@ export default class machineSettingList extends PureComponent {
   }
   renderAdvancedForm() {
     const { form } = this.props;
+    const { channelLists } = this.state;
     const { getFieldDecorator } = form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
+            <FormItem label="选择渠道">
+              {getFieldDecorator('channelId')(
+                <Select placeholder="请选择">
+                  {channelLists.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.channelName}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入机器ID、机器名称、标签" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入商户编码、商户名称、渠道编码" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -417,46 +421,49 @@ export default class machineSettingList extends PureComponent {
       </Form>
     );
   }
-  // 四级联动结束
-  renderForm() {
-    const { expandForm } = this.state;
-    return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
-  }
   render() {
     const {
-      machineSetting: { list, page },
+      merchantSetting: { list, page },
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists } = this.state;
     const columns = [
+      // {
+      //   title: '商户ID',
+      //   width: 200,
+      //   dataIndex: 'id',
+      //   fixed: 'left',
+      // },
       {
-        title: '机器ID',
-        dataIndex: 'machine_id',
+        title: '商户编码',
+        width: 150,
+        dataIndex: 'merchantCode',
       },
       {
-        title: '机器名称',
-        dataIndex: 'machine_name',
+        title: '商户名称',
+        width: 150,
+        dataIndex: 'merchantName',
       },
       {
-        title: '所属点位',
-        dataIndex: 'locale_id',
+        title: '所属渠道',
+        width: 150,
+        dataIndex: 'channelId',
       },
       {
-        title: '标签名称',
-        dataIndex: 'tag',
-        // render(val) {
-        //   let tags = val.split('，')
-        //   tags.map((item) => {
-        //     return (
-        //       <Tag>{item}</Tag>
-        //     );
-        //   });
-        // },
+        title: '原始标示',
+        width: 150,
+        dataIndex: 'brandName',
       },
       {
-        title: '状态',
-        dataIndex: 'status',
+        title: '品牌名称',
+        width: 150,
+        dataIndex: 'originFlag',
+      },
+      {
+        title: '商户状态',
+        width: 150,
+        dataIndex: 'isDelete',
         filters: [
           {
             text: status[0],
@@ -481,34 +488,13 @@ export default class machineSettingList extends PureComponent {
         },
       },
       {
-        title: '创建人员',
-        dataIndex: 'create_id',
-      },
-      {
-        title: '创建时间',
-        dataIndex: 'create_time',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '更新人员',
-        dataIndex: 'update_id',
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'update_time',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        fixed: 'right',
         title: '操作',
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             <Divider type="vertical" />
+            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
+            {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
               <a>删除</a>
             </Popconfirm>
@@ -558,7 +544,7 @@ export default class machineSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1250}
+              scrollX={700}
             />
           </div>
         </Card>
@@ -566,9 +552,9 @@ export default class machineSettingList extends PureComponent {
           {...parentMethods}
           ref={this.saveFormRef}
           modalVisible={modalVisible}
-          handleTags={this.handleTags}
           editModalConfirmLoading={editModalConfirmLoading}
-          modalData={modalData}
+          modalType={modalType}
+          channelLists={channelLists}
         />
         <LogModal
           data={logList}

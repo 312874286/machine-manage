@@ -1,4 +1,4 @@
-import { getChannelSettingList, saveChannelSetting, editChannelSetting, delChannelSetting } from '../../services/channel/channelSetting';
+import { getChannelSettingList, getChannelSettingDetail, saveChannelSetting, editChannelSetting, delChannelSetting } from '../../services/project/channelSetting';
 
 export default {
   namespace: 'channelSetting',
@@ -15,6 +15,10 @@ export default {
         type: 'saveList',
         payload: response,
       });
+    },
+    *getChannelSettingDetail({ payload: { restParams } }, { call }) {
+      const response = yield call(getChannelSettingDetail, { restParams });
+      return response.data;
     },
     *saveChannelSetting({ payload: { params } }, { call }) {
       const response = yield call(saveChannelSetting, { params });

@@ -19,7 +19,7 @@ import {
   Badge,
   Divider,
   Cascader,
-  Popconfirm
+  Popconfirm,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -28,17 +28,18 @@ import LogModal from '../../components/LogModal';
 
 
 const FormItem = Form.Item;
+const { TextArea } = Input
 const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const statusMap = ['processing', 'default', 'success', 'error'];
+const status = ['运行中', '关闭', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType, verifyPhone, verifyString } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -68,7 +69,9 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="省市区商圈">
             {getFieldDecorator('provinceCityAreaTrade', {
-              rules: [{ required: true, message: '省市区商圈' }],
+              rules: [{ required: true, message: '省市区商圈' }, {
+                validator: verifyString,
+              }],
               // initialValue: { defaultValue },
             })(
               <Cascader
@@ -92,8 +95,15 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="手机号码">
             {getFieldDecorator('mobile', {
-              rules: [{ required: true, message: '请输入手机号码' }],
+              rules: [{ required: true, message: '请输入手机号码' }, {
+                validator: verifyPhone,
+              }],
             })(<Input placeholder="请输入手机" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="备注描述">
+            {getFieldDecorator('remark', {
+              rules: [{ required: true, message: '请输入备注描述' }],
+            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
       </Modal>
@@ -161,6 +171,22 @@ export default class PointSettingList extends PureComponent {
       },
     });
   }
+  // 验证
+  verifyPhone = (rule, value, callback) => {
+    const reg = /^[1][3,4,5,6,7,8][0-9]{9}$/;
+    if (!reg.test(value)) {
+      callback('请填写正确的手机号码');
+    } else {
+      callback();
+    }
+  }
+  verifyString = (rule, value, callback) => {
+    if (value.length < 4) {
+      callback('请填写完整的省市区商圈');
+    } else {
+      callback();
+    }
+  }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -212,9 +238,7 @@ export default class PointSettingList extends PureComponent {
   handleMenuClick = e => {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
-
     if (!selectedRows) return;
-
     switch (e.key) {
       case 'remove':
         dispatch({
@@ -266,7 +290,7 @@ export default class PointSettingList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       modalData: {},
-      modalType: true
+      modalType: true,
     });
     this.setModalData();
   };
@@ -283,7 +307,7 @@ export default class PointSettingList extends PureComponent {
           params,
         },
       }).then(() => {
-        message.success('Click on Yes');
+        // message.success('Click on Yes');
         this.getLists();
         this.setState({
           editModalConfirmLoading: false,
@@ -306,6 +330,7 @@ export default class PointSettingList extends PureComponent {
         },
       },
     }).then((res) => {
+      // 回显省市区商圈数据源
       if (res.province) {
         let province, provinceIndex, cityIndex, { city, district, circle } = res;
         // all 省
@@ -365,7 +390,6 @@ export default class PointSettingList extends PureComponent {
                     arr[i].children = circleRes;
                   }
                 }
-                console.log('province', province)
                 // 商圈
                 this.setState({
                   options: province,
@@ -382,13 +406,13 @@ export default class PointSettingList extends PureComponent {
   }
   // 设置modal 数据
   setModalData = (data) => {
-    console.log('data', data, this.state.defaultValue)
     if (data) {
       this.form.setFieldsValue({
         mall: data.mall || '',
         manager: data.manager || '',
         mobile: data.mobile || '',
         provinceCityAreaTrade: this.state.defaultValue,
+        remark: data.remark || '',
       });
     } else {
       this.form.setFieldsValue({
@@ -396,6 +420,7 @@ export default class PointSettingList extends PureComponent {
         manager: '',
         mobile: '',
         provinceCityAreaTrade: '',
+        remark: '',
       });
     }
   }
@@ -420,14 +445,17 @@ export default class PointSettingList extends PureComponent {
         params = { ...values, id: this.state.modalData.id };
       }
       params.areaCode = params.provinceCityAreaTrade[params.provinceCityAreaTrade.length - 1]
-      console.log('params', params)
       this.props.dispatch({
         type: url,
         payload: {
           params,
         },
       }).then(() => {
-        this.getLists();
+        this.setState({
+          code: '',
+        }, () => {
+          this.getLists();
+        })
         this.setState({
           editModalConfirmLoading: false,
           modalVisible: false,
@@ -439,7 +467,7 @@ export default class PointSettingList extends PureComponent {
   // 四级联动开始
   onChange = (value, selectedOptions) => {
     // 当前选中的value[3]商圈
-    console.log(value, selectedOptions);
+    // console.log(value, selectedOptions);
   }
   loadData = (selectedOptions) => {
     const targetOption = selectedOptions[selectedOptions.length - 1];
@@ -559,12 +587,12 @@ export default class PointSettingList extends PureComponent {
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options } = this.state;
     const columns = [
-      {
-        title: '编号ID',
-        width: 200,
-        dataIndex: 'id',
-        fixed: 'left',
-      },
+      // {
+      //   title: '编号ID',
+      //   width: 200,
+      //   dataIndex: 'id',
+      //   fixed: 'left',
+      // },
       {
         title: '所属省市区商圈',
         width: 300,
@@ -578,7 +606,7 @@ export default class PointSettingList extends PureComponent {
       {
         title: '状态',
         width: 100,
-        dataIndex: 'state',
+        dataIndex: 'isDelete',
         filters: [
           {
             text: status[0],
@@ -630,8 +658,8 @@ export default class PointSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.handleLogClick(item)}>日志</a>
+            {/*<Divider type="vertical" />*/}
+            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             <Divider type="vertical" />
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
               <a>删除</a>
@@ -695,6 +723,8 @@ export default class PointSettingList extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalData={modalData}
           modalType={modalType}
+          verifyPhone={this.verifyPhone}
+          verifyString={this.verifyString}
         />
         <LogModal
           data={logList}
