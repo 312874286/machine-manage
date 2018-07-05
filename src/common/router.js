@@ -101,54 +101,54 @@ export const getRouterData = (app) => {
     // '/user/register-result': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     // },
-    '/user/reset-password': {
-      component: dynamicWrapper(app, ['user/login'], () => import('../routes/User/ResetPassword')),
-    },
-    '/user/reset-password-result/:account': {
-      component: dynamicWrapper(app, [], () => import('../routes/User/ResetPasswordResult')),
-    },
-    '/user/do-reset-password': {
-      component: dynamicWrapper(app, ['user/login'], () => import('../routes/User/DoResetPassword')),
-    },
-    '/user/do-reset-password-result': {
-      component: dynamicWrapper(app, [], () => import('../routes/User/DoResetPasswordResult')),
-    },
-    '/user/password/reset': {
-      component: dynamicWrapper(app, ['user/login'], () => import('../routes/User/ResetPasswordHandle')),
-    },
-    '/setting/wechat-push': {
-      component: dynamicWrapper(app, ['settings/wechatPush', 'log/log'], () => import('../routes/Setting/WechatPush')),
-    },
-    '/setting/wechat-relation': {
-      component: dynamicWrapper(app, ['settings/wechatRelation'], () => import('../routes/Setting/WechatRelation')),
-    },
-    '/setting/merchants-basic': {
-      component: dynamicWrapper(app, ['settings/merchantsBasic'], () => import('../routes/Setting/MerchantsBasic')),
-    },
-    '/setting/doctor-wall': {
-      component: dynamicWrapper(app, ['settings/doctorWall'], () => import('../routes/Setting/DoctorWall')),
-    },
+    // '/user/reset-password': {
+    //   component: dynamicWrapper(app, ['user/login'], () => import('../routes/User/ResetPassword')),
+    // },
+    // '/user/reset-password-result/:account': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/User/ResetPasswordResult')),
+    // },
+    // '/user/do-reset-password': {
+    //   component: dynamicWrapper(app, ['user/login'], () => import('../routes/User/DoResetPassword')),
+    // },
+    // '/user/do-reset-password-result': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/User/DoResetPasswordResult')),
+    // },
+    // '/user/password/reset': {
+    //   component: dynamicWrapper(app, ['user/login'], () => import('../routes/User/ResetPasswordHandle')),
+    // },
+    // '/setting/wechat-push': {
+    //   component: dynamicWrapper(app, ['settings/wechatPush', 'log/log'], () => import('../routes/Setting/WechatPush')),
+    // },
+    // '/setting/wechat-relation': {
+    //   component: dynamicWrapper(app, ['settings/wechatRelation'], () => import('../routes/Setting/WechatRelation')),
+    // },
+    // '/setting/merchants-basic': {
+    //   component: dynamicWrapper(app, ['settings/merchantsBasic'], () => import('../routes/Setting/MerchantsBasic')),
+    // },
+    // '/setting/doctor-wall': {
+    //   component: dynamicWrapper(app, ['settings/doctorWall'], () => import('../routes/Setting/DoctorWall')),
+    // },
     // '/setting/account': {
     //   component: dynamicWrapper(app, ['settings/account'], () => import('../routes/Setting/Account')),
     // },
     // '/setting/role': {
     //   component: dynamicWrapper(app, ['settings/account'], () => import('../routes/Setting/Roles')),
     // },
-    '/setting/alert-manage': {
-      component: dynamicWrapper(app, ['settings/alertManage', 'log/log'], () => import('../routes/Setting/AlertManage')),
-    },
-    '/setting/data/doctor-skill-manage': {
-      component: dynamicWrapper(app, ['settings/doctorSkillManage'], () => import('../routes/Setting/DoctorSkillManage')),
-    },
-    '/setting/data/doctor-config-manage': {
-      component: dynamicWrapper(app, ['settings/doctorConfigManage'], () => import('../routes/Setting/DoctorConfigManage')),
-    },
-    '/setting/disease': {
-      component: dynamicWrapper(app, ['settings/disease'], () => import('../routes/Setting/Disease')),
-    },
-    '/pointLocationManage/users': {
-      component: dynamicWrapper(app, ['customer/users', 'log/log'], () => import('../routes/Customer/Users')),
-    },
+    // '/setting/alert-manage': {
+    //   component: dynamicWrapper(app, ['settings/alertManage', 'log/log'], () => import('../routes/Setting/AlertManage')),
+    // },
+    // '/setting/data/doctor-skill-manage': {
+    //   component: dynamicWrapper(app, ['settings/doctorSkillManage'], () => import('../routes/Setting/DoctorSkillManage')),
+    // },
+    // '/setting/data/doctor-config-manage': {
+    //   component: dynamicWrapper(app, ['settings/doctorConfigManage'], () => import('../routes/Setting/DoctorConfigManage')),
+    // },
+    // '/setting/disease': {
+    //   component: dynamicWrapper(app, ['settings/disease'], () => import('../routes/Setting/Disease')),
+    // },
+    // '/pointLocationManage/users': {
+    //   component: dynamicWrapper(app, ['customer/users', 'log/log'], () => import('../routes/Customer/Users')),
+    // },
     // '/authorityManage/index': {
     //   component: dynamicWrapper(app, ['authorityManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },
@@ -191,66 +191,66 @@ export const getRouterData = (app) => {
     // '/aisleManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },
-    '/customer/record': {
-      component: dynamicWrapper(app, ['customer/record', 'log/log'], () => import('../routes/Customer/Record')),
-    },
-    '/doctor/list': {
-      component: dynamicWrapper(app, ['doctor/doctorList'], () => import('../routes/Doctor/DoctorList')),
-    },
-    '/doctor/detail/:id?': {
-      component: dynamicWrapper(app, ['doctor/doctorDetail'], () => import('../routes/Doctor/DoctorDetail')),
-    },
-    '/doctor/price-manage': {
-      component: dynamicWrapper(app, ['doctor/priceManage'], () => import('../routes/Doctor/PriceManage')),
-    },
-    '/doctor/commission': {
-      component: dynamicWrapper(app, ['doctor/commission', 'log/log'], () => import('../routes/Doctor/Commission')),
-    },
-    '/doctor/schedule': {
-      component: dynamicWrapper(app, ['doctor/doctorSchedule'], () => import('../routes/Doctor/DoctorSchedule')),
-    },
-    '/doctor/skill': {
-      component: dynamicWrapper(app, ['doctor/skill'], () => import('../routes/Doctor/Skill')),
-    },
-    '/doctor/doctor-online': {
-      component: dynamicWrapper(app, ['doctor/doctorOnline'], () => import('../routes/Doctor/DoctorOnline')),
-    },
-    '/order/order': {
-      component: dynamicWrapper(app, ['order/order', 'log/log'], () => import('../routes/Order/Order')),
-    },
-    '/order/child-disease': {
-      component: dynamicWrapper(app, ['order/childDisease', 'log/log'], () => import('../routes/Order/ChildDisease')),
-    },
-    '/content/outpatient': {
-      component: dynamicWrapper(app, ['content/outpatient', 'log/log'], () => import('../routes/Content/Outpatient')),
-    },
-    '/content/suggest': {
-      component: dynamicWrapper(app, ['content/suggest'], () => import('../routes/Content/Suggest')),
-    },
-    '/content/question': {
-      component: dynamicWrapper(app, ['content/question'], () => import('../routes/Content/Question')),
-    },
-    '/content/inspection-report': {
-      component: dynamicWrapper(app, ['content/inspectionReport', 'common'], () => import('../routes/Content/InspectionReport')),
-    },
-    '/contract/manage': {
-      component: dynamicWrapper(app, ['contract/manage', 'log/log'], () => import('../routes/Contract/Contract')),
-    },
-    '/finacial/withdrawals': {
-      component: dynamicWrapper(app, ['finacial/withdrawals'], () => import('../routes/Financial/WithdrawalList')),
-    },
-    '/da/order-service': {
-      component: dynamicWrapper(app, ['da/orderService'], () => import('../routes/DA/OrderService')),
-    },
-    '/goods/service/operation-item': {
-      component: dynamicWrapper(app, ['goods/operationItem', 'log/log'], () => import('../routes/Goods/OperationItem')),
-    },
-    '/goods/service/service-item': {
-      component: dynamicWrapper(app, ['goods/serviceItem', 'log/log', 'goods/operationItem'], () => import('../routes/Goods/ServiceItem')),
-    },
-    '/goods/rule/compositing': {
-      component: dynamicWrapper(app, ['goods/compositing', 'log/log', 'goods/serviceItem'], () => import('../routes/Goods/Compositing')),
-    },
+    // '/customer/record': {
+    //   component: dynamicWrapper(app, ['customer/record', 'log/log'], () => import('../routes/Customer/Record')),
+    // },
+    // '/doctor/list': {
+    //   component: dynamicWrapper(app, ['doctor/doctorList'], () => import('../routes/Doctor/DoctorList')),
+    // },
+    // '/doctor/detail/:id?': {
+    //   component: dynamicWrapper(app, ['doctor/doctorDetail'], () => import('../routes/Doctor/DoctorDetail')),
+    // },
+    // '/doctor/price-manage': {
+    //   component: dynamicWrapper(app, ['doctor/priceManage'], () => import('../routes/Doctor/PriceManage')),
+    // },
+    // '/doctor/commission': {
+    //   component: dynamicWrapper(app, ['doctor/commission', 'log/log'], () => import('../routes/Doctor/Commission')),
+    // },
+    // '/doctor/schedule': {
+    //   component: dynamicWrapper(app, ['doctor/doctorSchedule'], () => import('../routes/Doctor/DoctorSchedule')),
+    // },
+    // '/doctor/skill': {
+    //   component: dynamicWrapper(app, ['doctor/skill'], () => import('../routes/Doctor/Skill')),
+    // },
+    // '/doctor/doctor-online': {
+    //   component: dynamicWrapper(app, ['doctor/doctorOnline'], () => import('../routes/Doctor/DoctorOnline')),
+    // },
+    // '/order/order': {
+    //   component: dynamicWrapper(app, ['order/order', 'log/log'], () => import('../routes/Order/Order')),
+    // },
+    // '/order/child-disease': {
+    //   component: dynamicWrapper(app, ['order/childDisease', 'log/log'], () => import('../routes/Order/ChildDisease')),
+    // },
+    // '/content/outpatient': {
+    //   component: dynamicWrapper(app, ['content/outpatient', 'log/log'], () => import('../routes/Content/Outpatient')),
+    // },
+    // '/content/suggest': {
+    //   component: dynamicWrapper(app, ['content/suggest'], () => import('../routes/Content/Suggest')),
+    // },
+    // '/content/question': {
+    //   component: dynamicWrapper(app, ['content/question'], () => import('../routes/Content/Question')),
+    // },
+    // '/content/inspection-report': {
+    //   component: dynamicWrapper(app, ['content/inspectionReport', 'common'], () => import('../routes/Content/InspectionReport')),
+    // },
+    // '/contract/manage': {
+    //   component: dynamicWrapper(app, ['contract/manage', 'log/log'], () => import('../routes/Contract/Contract')),
+    // },
+    // '/finacial/withdrawals': {
+    //   component: dynamicWrapper(app, ['finacial/withdrawals'], () => import('../routes/Financial/WithdrawalList')),
+    // },
+    // '/da/order-service': {
+    //   component: dynamicWrapper(app, ['da/orderService'], () => import('../routes/DA/OrderService')),
+    // },
+    // '/goods/service/operation-item': {
+    //   component: dynamicWrapper(app, ['goods/operationItem', 'log/log'], () => import('../routes/Goods/OperationItem')),
+    // },
+    // '/goods/service/service-item': {
+    //   component: dynamicWrapper(app, ['goods/serviceItem', 'log/log', 'goods/operationItem'], () => import('../routes/Goods/ServiceItem')),
+    // },
+    // '/goods/rule/compositing': {
+    //   component: dynamicWrapper(app, ['goods/compositing', 'log/log', 'goods/serviceItem'], () => import('../routes/Goods/Compositing')),
+    // },
     '/authorityManage/account': {
       component: dynamicWrapper(app, ['authorityManage/account'], () => import('../routes/AuthorityManage/Account')),
     },

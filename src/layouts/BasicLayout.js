@@ -92,9 +92,9 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '燕麦小饼干';
+    let title = 'erp管理系统';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 燕麦小饼干`;
+      title = `${routerData[pathname].name} - erp管理系统`;
     }
     return title;
   }
@@ -109,7 +109,7 @@ class BasicLayout extends React.PureComponent {
       urlParams.searchParams.delete('redirect');
       window.history.replaceState(null, 'redirect', urlParams.href);
     } else {
-      return redirectData && redirectData.length > 0 && redirectData[0].to || '';
+      return (redirectData && redirectData.length > 0) ? redirectData[0].to : '';
     }
     return redirect;
   }
@@ -208,14 +208,14 @@ class BasicLayout extends React.PureComponent {
             <GlobalFooter
               links={[
                 {
-                  key: '燕麦小饼干',
-                  title: '燕麦小饼干',
+                  key: 'erp管理系统',
+                  title: 'erp管理系统',
                   href: 'http://www.pinwheelmedical.com/',
                   blankTarget: true,
                 }]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2018 燕麦小饼干
+                  Copyright <Icon type="copyright" /> 2018 erp管理系统
                 </div>
               }
             />

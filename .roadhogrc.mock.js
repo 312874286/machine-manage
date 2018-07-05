@@ -386,7 +386,7 @@ const proxy = {
         token: 'sasdnjaoisdjoiasdjaoisd',
         user: {
           userId: 'asdasdasd',
-          userName: 'admin',
+          name: 'admin',
           userMobile: '15811174709',
           userEmail: 'zhanglonglong@pinwheelmedical.com',
           userType: 0,

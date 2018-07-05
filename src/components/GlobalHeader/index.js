@@ -1,4 +1,4 @@
-import React, {createElement, PureComponent} from 'react';
+import React, { createElement, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Layout, Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider } from 'antd';
 import moment from 'moment';
@@ -45,7 +45,7 @@ export default class GlobalHeader extends PureComponent {
   render() {
     const {
       currentUser, collapsed, fetchingNotices, isMobile, logo,
-      onNoticeVisibleChange, onMenuClick, onNoticeClear
+      onNoticeVisibleChange, onMenuClick, onNoticeClear,
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
@@ -113,11 +113,11 @@ export default class GlobalHeader extends PureComponent {
               emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
             />
           </NoticeIcon>
-          {currentUser.userName ? (
+          {currentUser.name ? (
             <Dropdown overlay={menu}>
               <span className={`${styles.action} ${styles.account}`}>
                 {/* <Avatar size="small" className={styles.avatar} src={require('../../assets/images/avatar/male.png')} /> */}
-                <span className={styles.name}>{currentUser.userName}</span>
+                <span className={styles.name}>{currentUser.name}</span>
               </span>
             </Dropdown>
           ) : <Spin size="small" style={{ marginLeft: 8 }} />}
