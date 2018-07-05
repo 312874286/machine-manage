@@ -52,11 +52,14 @@ export default class LoginPage extends Component {
       // const origin = event.origin;
       const redirectUri = `https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=${appId}&response_type=code&scope=snsapi_login&state=ERP_QR_LOGIN&redirect_uri=${frontHost}&loginTmpCode=${loginTmpCode}`;
       window.location.href = redirectUri;
+      console.log(redirectUri);
     };
 
     if (typeof window.addEventListener !== 'undefined') {
+      console.log('addEventListener')
       window.addEventListener('message', hanndleMessage, false);
     } else if (typeof window.attachEvent !== 'undefined') {
+      console.log('attachEvent')
       window.attachEvent('onmessage', hanndleMessage);
     }
   }

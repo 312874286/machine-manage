@@ -517,16 +517,16 @@ export default class shopSettingList extends PureComponent {
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
-              {selectedRows.length > 0 && (
-                <span>
-                  <Button>批量操作</Button>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown>
-                </span>
-              )}
+              {/*{selectedRows.length > 0 && (*/}
+                {/*<span>*/}
+                  {/*<Button>批量操作</Button>*/}
+                  {/*<Dropdown overlay={menu}>*/}
+                    {/*<Button>*/}
+                      {/*更多操作 <Icon type="down" />*/}
+                    {/*</Button>*/}
+                  {/*</Dropdown>*/}
+                {/*</span>*/}
+              {/*)}*/}
             </div>
             <StandardTable
               selectedRows={selectedRows}

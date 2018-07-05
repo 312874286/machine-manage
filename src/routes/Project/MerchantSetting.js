@@ -462,7 +462,6 @@ export default class merchantSettingList extends PureComponent {
       },
       {
         title: '商户状态',
-        width: 150,
         dataIndex: 'isDelete',
         filters: [
           {
@@ -487,19 +486,19 @@ export default class merchantSettingList extends PureComponent {
           return <Badge status={statusMap[val]} text={status[val]} />;
         },
       },
-      {
-        title: '新建时间',
-        dataIndex: 'createTime',
-        width: 200,
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
+      // {
+      //   title: '新建时间',
+      //   dataIndex: 'createTime',
+      //   width: 200,
+      //   sorter: true,
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
+      // {
+      //   title: '更新时间',
+      //   dataIndex: 'updateTime',
+      //   sorter: true,
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
       {
         fixed: 'right',
         width: 150,
@@ -540,16 +539,16 @@ export default class merchantSettingList extends PureComponent {
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
-              {selectedRows.length > 0 && (
-                <span>
-                  <Button>批量操作</Button>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown>
-                </span>
-              )}
+              {/*{selectedRows.length > 0 && (*/}
+                {/*<span>*/}
+                  {/*<Button>批量操作</Button>*/}
+                  {/*<Dropdown overlay={menu}>*/}
+                    {/*<Button>*/}
+                      {/*更多操作 <Icon type="down" />*/}
+                    {/*</Button>*/}
+                  {/*</Dropdown>*/}
+                {/*</span>*/}
+              {/*)}*/}
             </div>
             <StandardTable
               selectedRows={selectedRows}
