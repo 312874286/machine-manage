@@ -10,14 +10,14 @@ export default {
     *getTestList({ payload: { restParams } }, { call, put }) {
       const response = yield call(getTestList, { restParams });
       yield put({
-        type: 'getTestList',
+        type: 'getTestListBackData',
         payload: response,
       });
     },
   },
 
   reducers: {
-    getTestList(state, { payload: { data } }) {
+    getTestListBackData(state, { payload: { data } }) {
       return {
         ...state,
         dataSource: data,

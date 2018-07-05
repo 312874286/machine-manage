@@ -128,12 +128,12 @@ export const getRouterData = (app) => {
     '/setting/doctor-wall': {
       component: dynamicWrapper(app, ['settings/doctorWall'], () => import('../routes/Setting/DoctorWall')),
     },
-    '/setting/account': {
-      component: dynamicWrapper(app, ['settings/account'], () => import('../routes/Setting/Account')),
-    },
-    '/setting/role': {
-      component: dynamicWrapper(app, ['settings/account'], () => import('../routes/Setting/Roles')),
-    },
+    // '/setting/account': {
+    //   component: dynamicWrapper(app, ['settings/account'], () => import('../routes/Setting/Account')),
+    // },
+    // '/setting/role': {
+    //   component: dynamicWrapper(app, ['settings/account'], () => import('../routes/Setting/Roles')),
+    // },
     '/setting/alert-manage': {
       component: dynamicWrapper(app, ['settings/alertManage', 'log/log'], () => import('../routes/Setting/AlertManage')),
     },
