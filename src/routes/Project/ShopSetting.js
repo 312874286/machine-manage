@@ -21,10 +21,10 @@ import {
   Cascader,
   Popconfirm
 } from 'antd';
-import StandardTable from '../../components/StandardTable';
+import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './ChannelSetting.less';
-import LogModal from '../../components/LogModal';
+import styles from './ShopSetting.less';
+import LogModal from '../../components/LogModal/index';
 
 
 const FormItem = Form.Item;
@@ -33,19 +33,12 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const statusMap = ['processing', 'default', 'success', 'error'];
+const status = ['运行中', '关闭', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading } = props;
-    // const okHandle = () => {
-    //   form.validateFields((err, fieldsValue) => {
-    //     if (err) return;
-    //     form.resetFields();
-    //     handleAdd(fieldsValue);
-    //   });
-    // };
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -59,64 +52,89 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={getFieldDecorator('channelCode') ? '编辑渠道' : '新建渠道'}
+        title={modalType ? '编辑店铺' : '新建店铺'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="渠道编码">
-            {getFieldDecorator('channelCode', {
-              rules: [{ required: true, message: '请输入渠道编码' }],
-            })(<Input placeholder="请输入商场" />)}
+          <FormItem {...formItemLayout} label="店铺编码">
+            {getFieldDecorator('shopCode', {
+              rules: [{ required: true, message: '请输入店铺编码' }],
+            })(<Input placeholder="请输入店铺编码" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="渠道名称">
-            {getFieldDecorator('channelName', {
-              rules: [{ required: true, message: '请输入渠道名称' }],
-            })(<Input placeholder="请输入渠道名称" />)}
+          <FormItem {...formItemLayout} label="店铺名称">
+            {getFieldDecorator('shopName', {
+              rules: [{ required: true, message: '请输入店铺名称' }],
+            })(<Input placeholder="请输入店铺名称" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择商户">
+            {getFieldDecorator('sellerId', {
+              rules: [{ required: true, message: '请选择商户' }],
+            })(
+              <Select placeholder="请选择">
+                {merchantLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                  );
+                })}
+              </Select>
+            )}
           </FormItem>
         </Form>
       </Modal>
     );
 });
-@connect(({ common, loading, channelSetting, log }) => ({
+@connect(({ common, loading, shopSetting, log }) => ({
   common,
-  channelSetting,
+  shopSetting,
   loading: loading.models.rule,
   log,
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class shopSettingList extends PureComponent {
   state = {
     modalVisible: false,
     expandForm: false,
     selectedRows: [],
     formValues: {},
-    id: '',
-    options: '',
     editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
+    code: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
+    modalType: true,
+    merchantLists: [],
   };
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'shopSetting/getShopSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
+          code: this.state.code,
         },
       },
+    });
+    this.props.dispatch({
+      type: 'shopSetting/getMerchantsList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        merchantLists: res,
+      });
     });
   }
   // 分页
@@ -203,16 +221,10 @@ export default class channelSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      // const values = {
-      //   ...fieldsValue,
-      //   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      // };
-      // this.setState({
-      //   formValues: values,
-      // });
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword,
+        code: fieldsValue.code,
       }, () => {
         this.getLists();
       });
@@ -223,6 +235,7 @@ export default class channelSettingList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       modalData: {},
+      modalType: false,
     });
     this.setModalData();
   };
@@ -234,12 +247,12 @@ export default class channelSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'channelSetting/delChannelSetting',
+        type: 'shopSetting/delShopSetting',
         payload: {
           params,
         },
       }).then(() => {
-        message.success('Click on Yes');
+        // message.success('Click on Yes');
         this.getLists();
         this.setState({
           editModalConfirmLoading: false,
@@ -252,20 +265,32 @@ export default class channelSettingList extends PureComponent {
     this.setState({
       modalVisible: true,
       modalData: item,
+      modalType: true,
     });
-    this.setModalData(item);
+    this.props.dispatch({
+      type: 'shopSetting/getShopSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setModalData(res);
+    });
   }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        channelCode: data.channelCode || '',
-        channelName: data.channelName || '',
+        shopCode: data.shopCode || '',
+        shopName: data.shopName || '',
+        sellerId: data.sellerId || '',
       });
     } else {
       this.form.setFieldsValue({
-        channelCode: '',
-        channelName: '',
+        shopCode: undefined,
+        shopName: undefined,
+        sellerId: undefined,
       });
     }
   }
@@ -283,10 +308,10 @@ export default class channelSettingList extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'channelSetting/saveChannelSetting';
+      let url = 'shopSetting/saveShopSetting';
       let params = { ...values };
-      if (this.state.modalData.id) {
-        url = 'channelSetting/editChannelSetting';
+      if (this.state.modalType) {
+        url = 'shopSetting/editShopSetting';
         params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -349,57 +374,67 @@ export default class channelSettingList extends PureComponent {
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
+    const { merchantLists } = this.state;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
+            <FormItem label="选择商户">
+              {getFieldDecorator('code')(
+                <Select placeholder="请选择">
+                  {merchantLists.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入店铺编码、店铺名称" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <span style={{ float: 'right' }}>
-               <FormItem>
-                  <Button onClick={this.handleFormReset}>
-                    重置
-                  </Button>
-                  <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
-                    查询
-                  </Button>
-               </FormItem>
+              <FormItem>
+                <Button onClick={this.handleFormReset}>
+                 重置
+                </Button>
+                <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
+                 查询
+                </Button>
+              </FormItem>
             </span>
           </Col>
         </Row>
       </Form>
     );
   }
-  // 四级联动结束
-  renderForm() {
-    const { expandForm } = this.state;
-    return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
-  }
   render() {
-    const {
-      channelSetting: { list, page },
-      loading,
-      log: { logList, logPage },
-    } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData } = this.state;
+    const { shopSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists } = this.state;
     const columns = [
+      // {
+      //   title: '店铺ID',
+      //   width: 200,
+      //   dataIndex: 'id',
+      //   fixed: 'left',
+      // },
       {
-        title: '渠道ID',
-        width: 200,
-        dataIndex: 'id',
-        fixed: 'left',
+        title: '店铺编码',
+        width: 150,
+        dataIndex: 'shopCode',
       },
       {
-        title: '渠道编码',
+        title: '所属商户',
         width: 200,
-        dataIndex: 'channelCode',
+        dataIndex: 'sellerId',
       },
       {
-        title: '渠道状态',
-        width: 200,
+        title: '店铺状态',
+        width: 150,
         dataIndex: 'isDelete',
         filters: [
           {
@@ -425,9 +460,9 @@ export default class channelSettingList extends PureComponent {
         },
       },
       {
-        title: '渠道名称',
-        width: 100,
-        dataIndex: 'channelName',
+        title: '店铺名称',
+        width: 200,
+        dataIndex: 'shopName',
       },
       {
         title: '操作',
@@ -435,8 +470,8 @@ export default class channelSettingList extends PureComponent {
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleLogClick(item)}>日志</a>
-            <Divider type="vertical" />
+            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
+            {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
               <a>删除</a>
             </Popconfirm>
@@ -494,11 +529,9 @@ export default class channelSettingList extends PureComponent {
           {...parentMethods}
           ref={this.saveFormRef}
           modalVisible={modalVisible}
-          insertOptions={this.state.options}
-          loadData={this.loadData}
-          onChange={this.onChange}
           editModalConfirmLoading={editModalConfirmLoading}
-          modalData={modalData}
+          modalType={modalType}
+          merchantLists={merchantLists}
         />
         <LogModal
           data={logList}

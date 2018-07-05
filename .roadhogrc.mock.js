@@ -436,7 +436,7 @@ const proxy = {
           {
             id: 'a6',
             functionDepict: '项目管理',
-            functionPath: 'game2',
+            functionPath: 'project',
             parentId: null,
             functionLevel: 1,
             functionIcon: 'form',
@@ -465,9 +465,16 @@ const proxy = {
             functionLevel: 2,
             functionIcon: 'form',
           },
-
           {
-            id: 'a10',
+            functionId: 'a10',
+            functionDepict: '店铺管理',
+            functionPath: 'shop',
+            parentId: 'a6',
+            functionLevel: 2,
+            functionIcon: 'form',
+          },
+          {
+            functionId: 'a11',
             functionDepict: '商品管理',
             functionPath: 'goods',
             parentId: null,
@@ -475,7 +482,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            id: 'a11',
+            functionId: 'a12',
             functionDepict: '订单管理',
             functionPath: 'order',
             parentId: null,
@@ -483,7 +490,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            id: 'a12',
+            functionId: 'a13',
             functionDepict: '用户信息',
             functionPath: 'user',
             parentId: null,
@@ -491,7 +498,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            id: 'a13',
+            functionId: 'a14',
             functionDepict: '角色权限',
             functionPath: 'authorityManage',
             parentId: null,
@@ -500,28 +507,28 @@ const proxy = {
             color: '#ff4c72'
           },
           {
-            id: 'a14',
+            functionId: 'a15',
             functionDepict: '角色管理',
             functionPath: 'account',
-            parentId: 'a13',
+            parentId: 'a14',
             functionLevel: 2,
           },
           {
-            id: 'a15',
+            functionId: 'a16',
             functionDepict: '权限管理',
             functionPath: 'jurisdiction',
             parentId: 'a13',
             functionLevel: 2,
           },
           {
-            id: 'a16',
+            functionId: 'a17',
             functionDepict: '部门管理',
             functionPath: 'department',
             parentId: 'a13',
             functionLevel: 2,
           },
           {
-            id: 'a17',
+            functionId: 'a18',
             functionDepict: '员工管理',
             functionPath: 'staff',
             parentId: 'a13',
@@ -2773,14 +2780,14 @@ const proxy = {
       }]
     })
   },
-  'POST /locale/add': (req, res) => {
+  'POST /machine/locale/add': (req, res) => {
     res.send({
       "code": 0,
       "data": '',
       "msg": '成功',
     });
   },
-  'GET /locale/list': (req, res) => {
+  'GET /machine/locale/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -2812,7 +2819,7 @@ const proxy = {
       }]
     });
   },
-  'GET /locale/detail': (req, res) => {
+  'GET /machine/locale/detail': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -2848,10 +2855,10 @@ const proxy = {
       }
     });
   },
-  'POST /locale/update': (req, res) => {
+  'POST /machine/locale/update': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'POST /locale/delete': (req, res) => {
+  'POST /machine/locale/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
   'POST /machine/add': (req, res) => {
@@ -2945,14 +2952,14 @@ const proxy = {
   'POST /machine/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'POST /channel/add': (req, res) => {
+  'POST /project/channel/add': (req, res) => {
     res.send({
       "code": 0,
       "data": '',
       "msg": '成功',
     });
   },
-  'GET /channel/list': (req, res) => {
+  'GET /project/channel/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -3030,10 +3037,318 @@ const proxy = {
       ]
     });
   },
-  'POST /channel/update': (req, res) => {
+  'GET /project/channel/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [{
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+      }]
+    });
+  },
+  'GET /project/merchant/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [{
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+      }]
+    });
+  },
+  'GET /project/channel/detail': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": {
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+        province: 100000,
+        city: 100000,
+        district: 100000,
+        circle: '其他'
+      }
+    });
+  },
+  'POST /project/channel/update': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'POST /channel/delete': (req, res) => {
+  'POST /project/channel/delete': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/merchant/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GET /project/merchant/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [{
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+      }]
+    });
+  },
+  'GET /project/merchant/detail': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": {
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+        province: 100000,
+        city: 100000,
+        district: 100000,
+        circle: '其他'
+      }
+    });
+  },
+  'POST /project/merchant/update': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/merchant/delete': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/shops/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GET /project/shops/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": 5780000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100100000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "张三",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 0,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag1，tag2，tag3"
+        }, {
+          "id": 5790000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100101000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "李四",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 1,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag4，tag5，tag6"
+        }, {
+          "id": 5700000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100000000', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "王五",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 2,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag7，tag8，tag9"
+        }, {
+          "id": 1230000000,
+          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
+          "phoneNo": "18515894141",
+          "provinceCityAreaTradeArea": ['100100000', '100101001', '100100000', '100100000'],
+          "nickName": null,
+          "headImgUrl": null,
+          "operator": "哈哈",
+          "updatedAt": "2017-08-03 16:13:35",
+          "status": 3,
+          "shopPlace": 1,
+          "unionid": null,
+          "merchantId": "1001",
+          "tag": "tag10，tag12，tag13"
+        },
+      ]
+    });
+  },
+  'GET /project/shops/detail': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": {
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+        province: 100000,
+        city: 100000,
+        district: 100000,
+        circle: '其他'
+      }
+    });
+  },
+  'POST /project/shops/update': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
   'GET /system/user/list': (req, res) => {
