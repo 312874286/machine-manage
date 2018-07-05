@@ -1,25 +1,25 @@
-import { getAccountSystemUserList } from '../../services/authorityManage/account';
+import { getSystemUserList } from '../../services/authorityManage/staff';
 
 export default {
-  namespace: 'account',
+  namespace: 'staff',
   state: {
     list: [],
     page: {},
   },
 
   effects: {
-    *getAccountSystemUserList({ payload: { restParams } }, { call, put }) {
+    *getSystemUserList({ payload: { restParams } }, { call, put }) {
     //   console.log('*getSystemUserList::');
-      const response = yield call(getAccountSystemUserList, { restParams });
+      const response = yield call(getSystemUserList, { restParams });
       yield put({
-        type: 'getAccountSystemUserListBack',
+        type: 'getSystemUserListBack',
         payload: response,
       });
     },
   },
 
   reducers: {
-    getAccountSystemUserListBack(state, { payload: { data, page } }) {
+    getSystemUserListBack(state, { payload: { data, page } }) {
     //   console.log(2222,data,page);
       return {
         ...state,

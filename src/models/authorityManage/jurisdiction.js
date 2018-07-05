@@ -1,7 +1,7 @@
-import { getAccountSystemUserList } from '../../services/authorityManage/account';
+import { getAccountSystemUserList } from '../../services/authorityManage/jurisdiction';
 
 export default {
-  namespace: 'account',
+  namespace: 'jurisdiction',
   state: {
     list: [],
     page: {},

@@ -514,22 +514,37 @@ const proxy = {
           {
             functionId: 'a16',
             functionDepict: '权限管理',
+<<<<<<< HEAD
             functionPath: 'wechat-push1',
             parentId: 'a14',
+=======
+            functionPath: 'jurisdiction',
+            parentId: 'a13',
+>>>>>>> 894e2ef7caf655e746772ac64197a35016c28315
             functionLevel: 2,
           },
           {
             functionId: 'a17',
             functionDepict: '部门管理',
+<<<<<<< HEAD
             functionPath: 'wechat-push2',
             parentId: 'a14',
+=======
+            functionPath: 'department',
+            parentId: 'a13',
+>>>>>>> 894e2ef7caf655e746772ac64197a35016c28315
             functionLevel: 2,
           },
           {
             functionId: 'a18',
             functionDepict: '员工管理',
+<<<<<<< HEAD
             functionPath: 'wechat-push3',
             parentId: 'a14',
+=======
+            functionPath: 'staff',
+            parentId: 'a13',
+>>>>>>> 894e2ef7caf655e746772ac64197a35016c28315
             functionLevel: 2,
           },
         ]
@@ -3350,18 +3365,103 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'GET /account/getTestList': (req, res) => {
-    res.send({"msg":"成功","code":0, "data": [{
-      key: '1',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号'
-    }, {
-      key: '2',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号'
-    }]})
+  'GET /system/user/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 2,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "2f8e7c92cccb46aba2f86646dcba0565",
+        "userId": "1553444821337801",
+        "name": "叶勤康",
+        "mobile": "18910628406",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        },
+        {
+        "id": "da267e278b2b4f6c934351b956d1f3f0",
+        "userId": "09672669152299397",
+        "name": "KARA",
+        "mobile": "18610567983",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        }
+        ]
+        }
+    )
+  },
+  'GET /accountsystem/user/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 2,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "2f8e7c92cccb46aba2f86646dcba0565",
+        "userId": "1553444821337801",
+        "name": "叶勤康",
+        "mobile": "18910628406",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        },
+        {
+        "id": "da267e278b2b4f6c934351b956d1f3f0",
+        "userId": "09672669152299397",
+        "name": "KARA",
+        "mobile": "18610567983",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        }
+        ]
+        }
+    )
   },
 };
 
