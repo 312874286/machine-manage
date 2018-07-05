@@ -248,6 +248,15 @@ export const getRouterData = (app) => {
     '/authorityManage/account': {
       component: dynamicWrapper(app, ['authorityManage/account'], () => import('../routes/AuthorityManage/Account')),
     },
+    '/authorityManage/staff': {
+      component: dynamicWrapper(app, ['authorityManage/staff'], () => import('../routes/AuthorityManage/Staff')),
+    },
+    '/authorityManage/jurisdiction': {
+      component: dynamicWrapper(app, ['authorityManage/jurisdiction'], () => import('../routes/AuthorityManage/Jurisdiction')),
+    },
+    '/authorityManage/department': {
+      component: dynamicWrapper(app, ['authorityManage/department'], () => import('../routes/AuthorityManage/Department')),
+    },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
