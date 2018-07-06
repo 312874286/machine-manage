@@ -1,24 +1,29 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button } from 'antd';
+import { Card, Table, Button, Row, Col, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 @connect(({ jurisdiction }) => ({ jurisdiction }))
 export default class Jurisdiction extends PureComponent {
   state = {
+    userName: '',
   }
   componentDidMount = () => {
-    this.getAccountSystemUserList();
+    this.getSystemFunctionList();
   }
   onToAuthorization = (record) => {
     console.log(record, this);
   }
-  getAccountSystemUserList = () => {
+  onFindData = (e) => {
+    this.getSystemFunctionList();
+    console.log(this, e, this.state.userName);
+  }
+  getSystemFunctionList = () => {
     this.props.dispatch({
-      type: 'jurisdiction/getAccountSystemUserList',
+      type: 'jurisdiction/getSystemFunctionList',
       payload: {
         restParams: {
-          keyword: '',
+          keyword: this.state.userName,
         },
       },
     });
@@ -28,32 +33,29 @@ export default class Jurisdiction extends PureComponent {
     // console.log(111,list,page);
     const columns = [
       {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
+        title: '权限名称',
+        dataIndex: 'functionDepict',
+        key: 'functionDepict',
       }, {
-        title: '员工手机',
-        dataIndex: 'mobile',
-        key: 'mobile',
+        title: '归属权限',
+        dataIndex: 'parentName',
+        key: 'parentName',
       }, {
-        title: '邮箱',
-        dataIndex: 'orgEmail',
-        key: 'orgEmail',
+        title: '权限地址',
+        dataIndex: 'functionPath',
+        key: 'functionPath',
       }, {
-        title: '创建时间',
-        dataIndex: 'createTime',
-        key: 'createTime',
+        title: '权限等级',
+        dataIndex: 'functionLevel',
+        key: 'functionLevel',
       }, {
-        title: '部门名称',
-        dataIndex: 'deptName',
-        key: 'deptName',
+        title: '图标',
+        dataIndex: 'functionIcon',
+        key: 'functionIcon',
       }, {
-        title: '授权',
-        dataIndex: '',
-        key: '',
-        render: (record) => {
-          return <Button type="primary" onClick={this.onToAuthorization.bind(this, record)}>授权</Button>;
-        },
+        title: '颜色',
+        dataIndex: 'color',
+        key: 'color',
       },
     ];
     // const { userName } = this.state;
@@ -65,6 +67,16 @@ export default class Jurisdiction extends PureComponent {
     };
     return (
       <PageHeaderLayout>
+        <Card>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={9} sm={24}>
+              <Input placeholder="权限名称、权限归属名称" onChange={this.onChange} />
+            </Col>
+            <Col md={6} sm={24}>
+              <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
+            </Col>
+          </Row>
+        </Card>
         <Card>
           <Table
             dataSource={list}

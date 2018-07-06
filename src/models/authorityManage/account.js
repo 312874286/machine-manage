@@ -1,4 +1,4 @@
-import { getAccountSystemUserList } from '../../services/authorityManage/account';
+import { getSystemRoleList, getSystemFunctionAll } from '../../services/authorityManage/account';
 
 export default {
   namespace: 'account',
@@ -8,19 +8,21 @@ export default {
   },
 
   effects: {
-    *getAccountSystemUserList({ payload: { restParams } }, { call, put }) {
-    //   console.log('*getSystemUserList::');
-      const response = yield call(getAccountSystemUserList, { restParams });
+    *getSystemRoleList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemRoleList, { restParams });
       yield put({
-        type: 'getAccountSystemUserListBack',
+        type: 'getSystemRoleListBack',
         payload: response,
       });
+    },
+    *getSystemFunctionAll({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemFunctionAll, { restParams });
+      return response;
     },
   },
 
   reducers: {
-    getAccountSystemUserListBack(state, { payload: { data, page } }) {
-    //   console.log(2222,data,page);
+    getSystemRoleListBack(state, { payload: { data, page } }) {
       return {
         ...state,
         list: data,

@@ -1,24 +1,29 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button } from 'antd';
+import { Card, Table, Button, Row, Col, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 @connect(({ department }) => ({ department }))
 export default class Department extends PureComponent {
   state = {
+    userName: '',
   }
   componentDidMount = () => {
-    this.getAccountSystemUserList();
+    this.getSystemDeptList();
   }
   onToAuthorization = (record) => {
     console.log(record, this);
   }
-  getAccountSystemUserList = () => {
+  onFindData = (e) => {
+    this.getSystemDeptList();
+    console.log(this, e, this.state.userName);
+  }
+  getSystemDeptList = () => {
     this.props.dispatch({
-      type: 'department/getAccountSystemUserList',
+      type: 'department/getSystemDeptList',
       payload: {
         restParams: {
-          keyword: '',
+          keyword: this.state.userName,
         },
       },
     });
@@ -28,25 +33,13 @@ export default class Department extends PureComponent {
     // console.log(111,list,page);
     const columns = [
       {
-        title: '姓名',
+        title: '部门名称',
         dataIndex: 'name',
         key: 'name',
       }, {
-        title: '员工手机',
+        title: '上级部门',
         dataIndex: 'mobile',
         key: 'mobile',
-      }, {
-        title: '邮箱',
-        dataIndex: 'orgEmail',
-        key: 'orgEmail',
-      }, {
-        title: '创建时间',
-        dataIndex: 'createTime',
-        key: 'createTime',
-      }, {
-        title: '部门名称',
-        dataIndex: 'deptName',
-        key: 'deptName',
       }, {
         title: '授权',
         dataIndex: '',
@@ -65,6 +58,16 @@ export default class Department extends PureComponent {
     };
     return (
       <PageHeaderLayout>
+        <Card>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={9} sm={24}>
+              <Input placeholder="角色姓名" onChange={this.onChange} />
+            </Col>
+            <Col md={6} sm={24}>
+              <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
+            </Col>
+          </Row>
+        </Card>
         <Card>
           <Table
             dataSource={list}

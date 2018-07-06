@@ -8,3 +8,14 @@ export async function getSystemUserList({ params, restParams }) {
     restParams,
   });
 }
+
+export async function getSystemRoleAll({ params }) {
+  return fetch.get(api.getSystemRoleAll, {
+  });
+}
+
+export async function getSystemUserAuth({ params, restParams }) {
+  return fetch.get(api.getSystemUserAuth, {
+    restParams,
+  });
+}

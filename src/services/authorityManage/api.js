@@ -4,6 +4,12 @@ import { map } from '../../utils/fetch/api';
 const api = map({
   getSystemUserList: '/system/user/list?keyword={keyword}',
   getAccountSystemUserList: '/accountsystem/user/list?keyword={keyword}',
+  getSystemRoleList: '/system/role/list?keyword={keyword}',
+  getSystemDeptList: '/system/dept/list?keyword={keyword}',
+  getSystemFunctionList: '/system/function/list?keyword={keyword}',
+  getSystemRoleAll: '/system/role/all',
+  getSystemUserAuth: '/system/user/auth?userId={userId}&roleIds={roleIds}',
+  getSystemFunctionAll: '/system/function/all',
 });
 
 export default api;
