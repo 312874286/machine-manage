@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Row,
   Col,
@@ -8,44 +7,35 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
   Menu,
-  InputNumber,
   DatePicker,
   Modal,
-  message,
-  Badge,
   Divider,
-  Cascader,
-  Popconfirm
+  Popconfirm,
+  Upload,
+  Icon,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './ChannelSetting.less';
+import styles from './GoodsSetting.less';
 import LogModal from '../../components/LogModal/index';
+import moment from "moment/moment";
+import {message} from "antd/lib/index";
 
 
 const FormItem = Form.Item;
+const { TextArea } = Input
 const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['processing', 'default', 'success', 'error'];
-const status = ['运行中', '关闭', '已上线', '异常'];
+const RangePicker = DatePicker.RangePicker;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType } = props;
-    // const okHandle = () => {
-    //   form.validateFields((err, fieldsValue) => {
-    //     if (err) return;
-    //     form.resetFields();
-    //     handleAdd(fieldsValue);
-    //   });
-    // };
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, handleUpload,normFile,  previewVisible, previewImage, fileList, handlePreview, handleChange, handleCancel } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -57,65 +47,204 @@ const CreateForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
     return (
       <Modal
-        title={!modalType ? '编辑渠道' : '新建渠道'}
+        title={modalType ? '编辑商品' : '新建商品'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="渠道编码">
-            {getFieldDecorator('channelCode', {
-              rules: [{ required: true, message: '请输入渠道编码' }],
-            })(<Input placeholder="请输入商场" />)}
+          <FormItem {...formItemLayout} label="商品编码">
+            {getFieldDecorator('code', {
+              rules: [{ required: true, message: '请输入商品编码' }],
+            })(<Input placeholder="请输入商品编码" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="渠道名称">
-            {getFieldDecorator('channelName', {
-              rules: [{ required: true, message: '请输入渠道名称' }],
-            })(<Input placeholder="请输入渠道名称" />)}
+          <FormItem {...formItemLayout} label="商品名称">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: '请输入商品名称' }],
+            })(<Input placeholder="请输入商品名称" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="图片缩略图">
+            {getFieldDecorator('img', {
+              valuePropName: 'filelist',
+              getValueFromEvent: normFile,
+            })(
+              <div className="clearfix">
+                <Upload
+                  customRequest={(params) => { handleUpload(params, 2); }}
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                >
+                  {fileList.length >= 3 ? null : uploadButton}
+                </Upload>
+                <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                  <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                </Modal>
+              </div>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="商品价格">
+            {getFieldDecorator('price', {
+              rules: [{ required: true, message: '请输入商品价格' }],
+            })(<Input placeholder="请输入商品价格" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择商户">
+            {getFieldDecorator('sellerId', {
+              rules: [{ required: true, message: '请选择商户' }],
+            })(
+              <Select placeholder="请选择">
+                {merchantLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="备注描述">
+            {getFieldDecorator('remark', {
+              rules: [{ required: true, message: '请输入备注描述' }],
+            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
       </Modal>
     );
 });
-@connect(({ common, loading, channelSetting, log }) => ({
+@connect(({ common, loading, goodsSetting, log }) => ({
   common,
-  channelSetting,
+  goodsSetting,
   loading: loading.models.rule,
   log,
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class goodsSettingList extends PureComponent {
   state = {
     modalVisible: false,
+    expandForm: false,
     selectedRows: [],
     formValues: {},
-    id: '',
     editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
+    code: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
     modalType: true,
+    merchantLists: [],
+    previewVisible: false,
+    previewImage: '',
+    fileList: [],
   };
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'goodsSetting/getGoodsSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
+          code: this.state.code,
         },
       },
+    });
+    this.props.dispatch({
+      type: 'goodsSetting/getMerchantsList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        merchantLists: res,
+      });
+    });
+  }
+  // 上传图片
+  normFile = (e) => {
+    console.log('Upload event:', e, e.fileList);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  }
+  handleCancel = () => this.setState({ previewVisible: false })
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  handleChange = (info) => {
+    console.log('fileList', info)
+    let fileList = info.fileList;
+
+    // 1. Limit the number of uploaded files
+    //    Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-1);
+
+    // 2. read from response and show file link
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.url;
+      }
+      return file;
+    });
+
+    // 3. filter successfully uploaded files according to response from server
+    fileList = fileList.filter((file) => {
+      if (file.response) {
+        return file.response.status === 'success';
+      }
+      return true;
+    });
+
+    this.setState({ fileList });
+  }
+  handleUpload = ({ file, onError, onSuccess }, fileType) => {
+    const { dispatch } = this.props;
+    // const nowFile = [...this.state.processFile];
+    // nowFile.push(file);
+    // this.setState({
+    //   processFile: nowFile,
+    // });
+    console.log('file', file)
+    dispatch({
+      type: 'common/upload',
+      payload: {
+        params: { file },
+        restParams: { fileType },
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        onSuccess(resp, file);
+        message.success('上传成功');
+      }
+    }).catch((e) => {
+      onError(e);
+    }).finally(() => {
+      const removeFile = [...this.state.processFile];
+      removeFile.splice(removeFile.findIndex(f => f === file), 1);
+      this.setState({
+        processFile: removeFile,
+      });
     });
   }
   // 分页
@@ -148,14 +277,21 @@ export default class channelSettingList extends PureComponent {
   };
   // 重置
   handleFormReset = () => {
-    const { form } = this.props;
+    const { form, dispatch } = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
-      pageNo: 1,
-      keyword: '',
-    }, () => {
-      this.getLists();
+    });
+    dispatch({
+      type: '',
+      payload: {},
+    });
+  };
+
+  toggleForm = () => {
+    const { expandForm } = this.state;
+    this.setState({
+      expandForm: !expandForm,
     });
   };
   // 批量
@@ -197,7 +333,8 @@ export default class channelSettingList extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        keyword: fieldsValue.keyword,
+        code: fieldsValue.code,
       }, () => {
         this.getLists();
       });
@@ -220,7 +357,7 @@ export default class channelSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'channelSetting/delChannelSetting',
+        type: 'goodsSetting/delGoodSetting',
         payload: {
           params,
         },
@@ -241,7 +378,7 @@ export default class channelSettingList extends PureComponent {
       modalType: true,
     });
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingDetail',
+      type: 'goodsSetting/getGoodSettingDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -255,13 +392,19 @@ export default class channelSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        channelCode: data.channelCode || '',
-        channelName: data.channelName || '',
+        name: data.name || '',
+        sellerId: data.sellerId || undefined,
+        shopId: data.shopId || undefined,
+        rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
+        remark: data.remark || undefined,
       });
     } else {
       this.form.setFieldsValue({
-        channelCode: '',
-        channelName: '',
+        name: undefined,
+        sellerId: undefined,
+        shopId: undefined,
+        remark: undefined,
+        rangeTime: undefined,
       });
     }
   }
@@ -271,19 +414,23 @@ export default class channelSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
-    this.form.validateFields((err, values) => {
+    this.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
+      let params = {
+        ...fieldsValue,
+        img2: undefined,
+        img: this.state.fileList[0],
+      };
       this.setState({
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'channelSetting/saveChannelSetting';
-      let params = { ...values };
+      let url = 'goodsSetting/saveGoodsSetting';
       if (this.state.modalData.id) {
-        url = 'channelSetting/editChannelSetting';
-        params = { ...values, id: this.state.modalData.id };
+        url = 'goodsSetting/editGoodsSetting';
+        params = { ...params, id: this.state.modalData.id };
       }
       this.props.dispatch({
         type: url,
@@ -345,24 +492,38 @@ export default class channelSettingList extends PureComponent {
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
+    const { merchantLists } = this.state;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
+            <FormItem label="选择商户">
+              {getFieldDecorator('code')(
+                <Select placeholder="请选择">
+                  {merchantLists.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入渠道编码、渠道名称" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入商品编码、商品名称" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <span style={{ float: 'right' }}>
-               <FormItem>
-                  <Button onClick={this.handleFormReset}>
-                    重置
-                  </Button>
-                  <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
-                    查询
-                  </Button>
-               </FormItem>
+              <FormItem>
+                <Button onClick={this.handleFormReset}>
+                 重置
+                </Button>
+                <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
+                 查询
+                </Button>
+              </FormItem>
             </span>
           </Col>
         </Row>
@@ -370,54 +531,41 @@ export default class channelSettingList extends PureComponent {
     );
   }
   render() {
-    const {
-      channelSetting: { list, page },
-      loading,
-      log: { logList, logPage },
-    } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
+    const { goodsSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = this.state;
     const columns = [
-      // {
-      //   title: '渠道ID',
-      //   width: 200,
-      //   dataIndex: 'id',
-      //   fixed: 'left',
-      // },
       {
-        title: '渠道编码',
+        title: '商品编码',
         // width: 200,
-        dataIndex: 'channelCode',
+        dataIndex: 'code',
       },
-      // {
-      //   title: '渠道状态',
-      //   width: 200,
-      //   dataIndex: 'isDelete',
-      //   filters: [
-      //     {
-      //       text: status[0],
-      //       value: 0,
-      //     },
-      //     {
-      //       text: status[1],
-      //       value: 1,
-      //     },
-      //     {
-      //       text: status[2],
-      //       value: 2,
-      //     },
-      //     {
-      //       text: status[3],
-      //       value: 3,
-      //     },
-      //   ],
-      //   onFilter: (value, record) => record.status.toString() === value,
-      //   render(val) {
-      //     return <Badge status={statusMap[val]} text={status[val]} />;
-      //   },
-      // },
       {
-        title: '渠道名称',
-        dataIndex: 'channelName',
+        title: '商品名称',
+        // width: 200,
+        dataIndex: 'name',
+      },
+      {
+        title: '所属商户',
+        // width: 200,
+        dataIndex: 'sellerId',
+      },
+      {
+        title: '图片缩略图',
+        // width: 200,
+        dataIndex: 'img',
+        render(val) {
+          return <img src={val}  />;
+        },
+      },
+      {
+        title: '商品价格',
+        // width: 200,
+        dataIndex: 'price',
+      },
+      {
+        title: '备注',
+        // width: 150,
+        dataIndex: 'remark',
       },
       {
         fixed: 'right',
@@ -426,9 +574,9 @@ export default class channelSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             <Divider type="vertical" />
+            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
+            {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
               <a className={styles.delete}>删除</a>
             </Popconfirm>
@@ -478,7 +626,7 @@ export default class channelSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={500}
+              scrollX={700}
             />
           </div>
         </Card>
@@ -488,6 +636,16 @@ export default class channelSettingList extends PureComponent {
           modalVisible={modalVisible}
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
+          merchantLists={merchantLists}
+          shopsLists={shopsLists}
+          normFile={this.normFile}
+          previewVisible={this.state.previewVisible}
+          previewImage={this.state.previewImage}
+          fileList={this.state.fileList}
+          handlePreview={this.handlePreview}
+          handleChange={this.handleChange}
+          handleCancel={this.handleCancel}
+          handleUpload={this.handleUpload}
         />
         <LogModal
           data={logList}

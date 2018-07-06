@@ -434,6 +434,14 @@ const proxy = {
             functionIcon: 'form',
           },
           {
+            id: 'a19',
+            functionDepict: '游戏管理',
+            functionPath: 'game',
+            parentId: 'a5',
+            functionLevel: 1,
+            functionIcon: 'form',
+          },
+          {
             id: 'a6',
             functionDepict: '项目管理',
             functionPath: 'project',

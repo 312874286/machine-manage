@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Row,
   Col,
@@ -8,42 +7,38 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
   Menu,
-  InputNumber,
   DatePicker,
   Modal,
-  message,
-  Badge,
   Divider,
-  Cascader,
-  Popconfirm
+  Popconfirm,
+  InputNumber,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './ShopSetting.less';
+import styles from './GameSetting.less';
 import LogModal from '../../components/LogModal/index';
+import moment from "moment/moment";
 
 
 const FormItem = Form.Item;
+const { TextArea } = Input
 const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['processing', 'default', 'success', 'error'];
-const status = ['运行中', '关闭', '已上线', '异常'];
+const RangePicker = DatePicker.RangePicker;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, activityLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -52,22 +47,17 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={modalType ? '编辑店铺' : '新建店铺'}
+        title={modalType ? '编辑游戏' : '新建游戏'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="店铺编码">
-            {getFieldDecorator('shopCode', {
-              rules: [{ required: true, message: '请输入店铺编码' }],
-            })(<Input placeholder="请输入店铺编码" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="店铺名称">
-            {getFieldDecorator('shopName', {
-              rules: [{ required: true, message: '请输入店铺名称' }],
-            })(<Input placeholder="请输入店铺名称" />)}
+          <FormItem {...formItemLayout} label="游戏名称">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: '请输入游戏名称' }],
+            })(<Input placeholder="请输入游戏名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
             {getFieldDecorator('sellerId', {
@@ -82,18 +72,84 @@ const CreateForm = Form.create()(
               </Select>
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="选择店铺">
+            {getFieldDecorator('shopId', {
+              rules: [{ required: true, message: '请选择店铺' }],
+            })(
+              <Select placeholder="请选择">
+                {shopsLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.shopName}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择活动">
+            {getFieldDecorator('activityId', {
+              rules: [{ required: true, message: '请选择活动' }],
+            })(
+              <Select placeholder="请选择">
+                {activityLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="游戏版本">
+            {getFieldDecorator('version', {
+              rules: [{ required: true, message: '请输入游戏版本' }],
+            })(<Input placeholder="请输入游戏版本" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="点72版本">
+            {getFieldDecorator('versionInno72', {
+              rules: [{ required: true, message: '请输入点72版本' }],
+            })(<Input placeholder="请输入点72版本" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="奖池所对应的ID">
+            {getFieldDecorator('interactId', {
+              rules: [{ required: true, message: '请输入商家设定的奖池所对应的ID' }],
+            })(<Input placeholder="请输入商家设定的奖池所对应的ID" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="每天最大参与次数">
+            {getFieldDecorator('maxParticipancePerDay', {
+              rules: [{ required: true, message: '请输入每天最大参与次数(-1表示不限制数量)' }],
+            })(<InputNumber placeholder="请输入每天最大参与次数(-1表示不限制数量)" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="最大参与次数">
+            {getFieldDecorator('maxParticipanceTotal', {
+              rules: [{ required: true, message: '请输入最大参与次数(-1表示不限制数量)' }],
+            })(<InputNumber placeholder="请输入最大参与次数(-1表示不限制数量)" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="每天最大奖品数量">
+            {getFieldDecorator('maxPrizePerDay', {
+              rules: [{ required: true, message: '请输入每天最大奖品数量(-1表示不限制数量)' }],
+            })(<InputNumber placeholder="请输入每天最大奖品数量(-1表示不限制数量)" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="最大奖品数量">
+            {getFieldDecorator('maxPrizeTotal', {
+              rules: [{ required: true, message: '请输入最大奖品数量(-1表示不限制数量)' }],
+            })(<InputNumber placeholder="请输入最大奖品数量(-1表示不限制数量)" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="备注描述">
+            {getFieldDecorator('remark', {
+              rules: [{ required: true, message: '请输入备注描述' }],
+            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+          </FormItem>
         </Form>
       </Modal>
     );
 });
-@connect(({ common, loading, shopSetting, log }) => ({
+@connect(({ common, loading, gameSetting, log }) => ({
   common,
-  shopSetting,
+  gameSetting,
   loading: loading.models.rule,
   log,
 }))
 @Form.create()
-export default class shopSettingList extends PureComponent {
+export default class gameSettingList extends PureComponent {
   state = {
     modalVisible: false,
     expandForm: false,
@@ -110,6 +166,8 @@ export default class shopSettingList extends PureComponent {
     logModalPageNo: 1,
     modalType: true,
     merchantLists: [],
+    shopsLists: [],
+    activityLists: [],
   };
   componentDidMount() {
     this.getLists();
@@ -117,7 +175,7 @@ export default class shopSettingList extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'shopSetting/getShopSettingList',
+      type: 'gameSetting/getGameSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
@@ -127,13 +185,35 @@ export default class shopSettingList extends PureComponent {
       },
     });
     this.props.dispatch({
-      type: 'shopSetting/getMerchantsList',
+      type: 'gameSetting/getMerchantsList',
       payload: {
         restParams: {},
       },
     }).then((res) => {
       this.setState({
         merchantLists: res,
+      });
+    });
+    // shopsLists
+    this.props.dispatch({
+      type: 'gameSetting/getShopsList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        shopsLists: res,
+      });
+    });
+    // activityLists
+    this.props.dispatch({
+      type: 'gameSetting/getActivityList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        activityLists: res,
       });
     });
   }
@@ -223,7 +303,7 @@ export default class shopSettingList extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        keyword: fieldsValue.keyword,
         code: fieldsValue.code ? fieldsValue.code : '',
       }, () => {
         this.getLists();
@@ -247,7 +327,7 @@ export default class shopSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'shopSetting/delShopSetting',
+        type: 'gameSetting/delGameSetting',
         payload: {
           params,
         },
@@ -268,7 +348,7 @@ export default class shopSettingList extends PureComponent {
       modalType: true,
     });
     this.props.dispatch({
-      type: 'shopSetting/getShopSettingDetail',
+      type: 'gameSetting/getGameSettingDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -282,15 +362,22 @@ export default class shopSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        shopCode: data.shopCode || '',
-        shopName: data.shopName || '',
-        sellerId: data.sellerId || '',
+        ...data,
       });
     } else {
       this.form.setFieldsValue({
-        shopCode: undefined,
-        shopName: undefined,
+        name: undefined,
         sellerId: undefined,
+        shopId: undefined,
+        version: undefined,
+        versionInno72: undefined,
+        remark: undefined,
+        interactId: undefined,
+        maxParticipancePerDay: undefined,
+        maxParticipanceTotal: undefined,
+        maxPrizePerDay: undefined,
+        maxPrizeTotal: undefined,
+        activityId: undefined,
       });
     }
   }
@@ -300,19 +387,21 @@ export default class shopSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
-    this.form.validateFields((err, values) => {
+    this.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
+      let params = {
+        ...fieldsValue,
+      };
       this.setState({
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'shopSetting/saveShopSetting';
-      let params = { ...values };
+      let url = 'gameSetting/saveGameSetting';
       if (this.state.modalData.id) {
-        url = 'shopSetting/editShopSetting';
-        params = { ...values, id: this.state.modalData.id };
+        url = 'gameSetting/editGameSetting';
+        params = { ...params, id: this.state.modalData.id };
       }
       this.props.dispatch({
         type: url,
@@ -378,22 +467,22 @@ export default class shopSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
-            <FormItem label="选择商户">
-              {getFieldDecorator('code')(
-                <Select placeholder="请选择">
-                  {merchantLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.merchantName}</Option>
-                    );
-                  })}
-                </Select>
-              )}
-            </FormItem>
-          </Col>
+          {/*<Col md={9} sm={24}>*/}
+            {/*<FormItem label="选择商户">*/}
+              {/*{getFieldDecorator('code')(*/}
+                {/*<Select placeholder="请选择">*/}
+                  {/*{merchantLists.map((item) => {*/}
+                    {/*return (*/}
+                      {/*<Option value={item.id} key={item.id}>{item.merchantName}</Option>*/}
+                    {/*);*/}
+                  {/*})}*/}
+                {/*</Select>*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
           <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入店铺编码、店铺名称" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入游戏名称" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -413,29 +502,67 @@ export default class shopSettingList extends PureComponent {
     );
   }
   render() {
-    const { shopSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists } = this.state;
+    const { gameSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, activityLists } = this.state;
     const columns = [
-      // {
-      //   title: '店铺ID',
-      //   width: 200,
-      //   dataIndex: 'id',
-      //   fixed: 'left',
-      // },
       {
-        title: '店铺编码',
-        // width: 150,
-        dataIndex: 'shopCode',
+        title: '游戏名称',
+        width: 150,
+        dataIndex: 'name',
       },
       {
         title: '所属商户',
-        // width: 200,
+        width: 100,
         dataIndex: 'sellerId',
       },
       {
-        title: '店铺名称',
-        // width: 200,
-        dataIndex: 'shopName',
+        title: '所属店铺',
+        width: 100,
+        dataIndex: 'shopId',
+      },
+      {
+        title: '所属活动',
+        width: 100,
+        dataIndex: 'activityId',
+      },
+      {
+        title: '版本',
+        width: 100,
+        dataIndex: 'version',
+      },
+      {
+        title: '点72版本',
+        width: 100,
+        dataIndex: 'versionInno72',
+      },
+      {
+        title: '奖池所对应的ID',
+        width: 150,
+        dataIndex: 'interactId',
+      },
+      {
+        title: '每天最大参与次数',
+        width: 150,
+        dataIndex: 'maxParticipancePerDay',
+      },
+      {
+        title: '最大参与次数',
+        width: 150,
+        dataIndex: 'maxParticipanceTotal',
+      },
+      {
+        title: '每天最大奖品数量',
+        width: 150,
+        dataIndex: 'maxPrizePerDay',
+      },
+      {
+        title: '最大奖品数量',
+        width: 150,
+        dataIndex: 'maxPrizeTotal',
+      },
+      {
+        title: '备注描述',
+        dataIndex: 'remark',
       },
       {
         fixed: 'right',
@@ -496,7 +623,7 @@ export default class shopSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={700}
+              scrollX={1700}
             />
           </div>
         </Card>
@@ -507,6 +634,8 @@ export default class shopSettingList extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
           merchantLists={merchantLists}
+          shopsLists={shopsLists}
+          activityLists={activityLists}
         />
         <LogModal
           data={logList}

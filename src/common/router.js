@@ -167,6 +167,15 @@ export const getRouterData = (app) => {
     '/project/shop': {
       component: dynamicWrapper(app, ['project/shopSetting', 'log/log'], () => import('../routes/Project/ShopSetting')),
     },
+    '/project/activity': {
+      component: dynamicWrapper(app, ['project/activitySetting', 'log/log'], () => import('../routes/Project/ActivitySetting')),
+    },
+    '/game/game': {
+      component: dynamicWrapper(app, ['game/gameSetting', 'log/log'], () => import('../routes/Game/GameSetting')),
+    },
+    '/goods/goods': {
+      component: dynamicWrapper(app, ['goods/goodsSetting', 'log/log', 'common'], () => import('../routes/Goods/GoodsSetting')),
+    },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },

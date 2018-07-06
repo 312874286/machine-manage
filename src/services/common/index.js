@@ -11,7 +11,7 @@ export async function uploadFile({ params, restParams }) {
   file.append('file', params.file);
   return fetch.postFile(api.uploadFile, { restParams, body: file });
 }
-export async function getProvinceCityAreaTradeArea({ params, restParams }) {
+export async function getProvinceCityAreaTradeArea({ restParams }) {
   return fetch.get(api.getProvinceCityAreaTradeArea, {
     restParams,
   });
