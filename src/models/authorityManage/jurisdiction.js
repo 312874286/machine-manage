@@ -1,4 +1,4 @@
-import { getAccountSystemUserList } from '../../services/authorityManage/jurisdiction';
+import { getSystemFunctionList } from '../../services/authorityManage/jurisdiction';
 
 export default {
   namespace: 'jurisdiction',
@@ -8,19 +8,17 @@ export default {
   },
 
   effects: {
-    *getAccountSystemUserList({ payload: { restParams } }, { call, put }) {
-    //   console.log('*getSystemUserList::');
-      const response = yield call(getAccountSystemUserList, { restParams });
+    *getSystemFunctionList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemFunctionList, { restParams });
       yield put({
-        type: 'getAccountSystemUserListBack',
+        type: 'getSystemFunctionListBack',
         payload: response,
       });
     },
   },
 
   reducers: {
-    getAccountSystemUserListBack(state, { payload: { data, page } }) {
-    //   console.log(2222,data,page);
+    getSystemFunctionListBack(state, { payload: { data, page } }) {
       return {
         ...state,
         list: data,

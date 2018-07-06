@@ -1,4 +1,4 @@
-import { getSystemUserList } from '../../services/authorityManage/staff';
+import { getSystemUserList, getSystemRoleAll, getSystemUserAuth } from '../../services/authorityManage/staff';
 
 export default {
   namespace: 'staff',
@@ -9,18 +9,32 @@ export default {
 
   effects: {
     *getSystemUserList({ payload: { restParams } }, { call, put }) {
-    //   console.log('*getSystemUserList::');
       const response = yield call(getSystemUserList, { restParams });
       yield put({
         type: 'getSystemUserListBack',
         payload: response,
       });
     },
+    *getSystemRoleAll({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemRoleAll, { restParams });
+      return response;
+      // yield put({
+      //   type: 'getSystemRoleAllBack',
+      //   payload: response,
+      // });
+    },
+    *getSystemUserAuth({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemUserAuth, { restParams });
+      return response;
+      // yield put({
+      //   type: 'getSystemRoleAllBack',
+      //   payload: response,
+      // });
+    },
   },
 
   reducers: {
     getSystemUserListBack(state, { payload: { data, page } }) {
-    //   console.log(2222,data,page);
       return {
         ...state,
         list: data,

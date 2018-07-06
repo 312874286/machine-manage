@@ -1,4 +1,4 @@
-import { getAccountSystemUserList } from '../../services/authorityManage/department';
+import { getSystemDeptList } from '../../services/authorityManage/department';
 
 export default {
   namespace: 'department',
@@ -8,19 +8,17 @@ export default {
   },
 
   effects: {
-    *getAccountSystemUserList({ payload: { restParams } }, { call, put }) {
-    //   console.log('*getSystemUserList::');
-      const response = yield call(getAccountSystemUserList, { restParams });
+    *getSystemDeptList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemDeptList, { restParams });
       yield put({
-        type: 'getAccountSystemUserListBack',
+        type: 'getSystemDeptListBack',
         payload: response,
       });
     },
   },
 
   reducers: {
-    getAccountSystemUserListBack(state, { payload: { data, page } }) {
-    //   console.log(2222,data,page);
+    getSystemDeptListBack(state, { payload: { data, page } }) {
       return {
         ...state,
         list: data,

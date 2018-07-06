@@ -474,7 +474,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a10',
+            id: 'a10',
             functionDepict: '店铺管理',
             functionPath: 'shop',
             parentId: 'a6',
@@ -482,7 +482,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a11',
+            id: 'a11',
             functionDepict: '商品管理',
             functionPath: 'goods',
             parentId: null,
@@ -490,7 +490,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a12',
+            id: 'a12',
             functionDepict: '订单管理',
             functionPath: 'order',
             parentId: null,
@@ -498,7 +498,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a13',
+            id: 'a13',
             functionDepict: '用户信息',
             functionPath: 'user',
             parentId: null,
@@ -506,7 +506,7 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            functionId: 'a14',
+            id: 'a14',
             functionDepict: '角色权限',
             functionPath: 'authorityManage',
             parentId: null,
@@ -515,31 +515,31 @@ const proxy = {
             color: '#ff4c72'
           },
           {
-            functionId: 'a15',
+            id: 'a15',
             functionDepict: '角色管理',
             functionPath: 'account',
             parentId: 'a14',
             functionLevel: 2,
           },
           {
-            functionId: 'a16',
+            id: 'a16',
             functionDepict: '权限管理',
             functionPath: 'jurisdiction',
-            parentId: 'a13',
+            parentId: 'a14',
             functionLevel: 2,
           },
           {
-            functionId: 'a17',
+            id: 'a17',
             functionDepict: '部门管理',
             functionPath: 'department',
-            parentId: 'a13',
+            parentId: 'a14',
             functionLevel: 2,
           },
           {
-            functionId: 'a18',
+            id: 'a18',
             functionDepict: '员工管理',
             functionPath: 'staff',
-            parentId: 'a13',
+            parentId: 'a14',
             functionLevel: 2,
           },
         ]
@@ -3260,18 +3260,394 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'GET /account/getTestList': (req, res) => {
-    res.send({"msg":"成功","code":0, "data": [{
-      key: '1',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号'
-    }, {
-      key: '2',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号'
-    }]})
+  'GET /accountsystem/user/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 2,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "2f8e7c92cccb46aba2f86646dcba0565",
+        "userId": "1553444821337801",
+        "name": "叶勤康",
+        "mobile": "18910628406",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        },
+        {
+        "id": "da267e278b2b4f6c934351b956d1f3f0",
+        "userId": "09672669152299397",
+        "name": "KARA",
+        "mobile": "18610567983",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        }
+        ]
+        }
+    )
+  },
+  'GET /system/user/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 2,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "2f8e7c92cccb46aba2f86646dcba0565",
+        "userId": "1553444821337801",
+        "name": "叶勤康",
+        "mobile": "18910628406",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        },
+        {
+        "id": "da267e278b2b4f6c934351b956d1f3f0",
+        "userId": "09672669152299397",
+        "name": "KARA",
+        "mobile": "18610567983",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        }
+        ]
+        }
+    )
+  },
+  'GET /system/role/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 2,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "1019616312fd408c800f6bed5020b474",
+        "name": "超级管理员",
+        "auths": "机器管理,商户管理,渠道管理,点位管理,货机管理,店铺管理,项目管理,活动管理"
+        },
+        {
+        "id": "2787ec11def64f489db14ef246db265a",
+        "name": "超级管理员",
+        "auths": "活动管理"
+        }
+        ]
+        }
+    )
+  },
+  'GET /system/dept/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 4,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "1",
+        "name": "北京点七二创意互动传媒文化有限公司",
+        "seq": 0,
+        "parentId": null,
+        "parentName": null
+        },
+        {
+        "id": "69571888",
+        "name": "渠道运营部",
+        "seq": 0,
+        "parentId": "1",
+        "parentName": "北京点七二创意互动传媒文化有限公司"
+        },
+        {
+        "id": "69554954",
+        "name": "业务创意部",
+        "seq": 1,
+        "parentId": "1",
+        "parentName": "北京点七二创意互动传媒文化有限公司"
+        },
+        {
+        "id": "69711248",
+        "name": "研发部",
+        "seq": 3,
+        "parentId": "1",
+        "parentName": "北京点七二创意互动传媒文化有限公司"
+        }
+        ]
+        }
+    )
+  },
+  'GET /system/function/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 4,
+        "list": null,
+        "firstPage": true,
+        "lastPage": true,
+        "firstResult": 0,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "4",
+        "functionDepict": "项目管理",
+        "functionPath": "project",
+        "parentId": null,
+        "functionLevel": 1,
+        "functionIcon": "form",
+        "color": "#ffd322",
+        "parentName": null
+        },
+        {
+        "id": "5",
+        "functionDepict": "渠道管理",
+        "functionPath": "channel",
+        "parentId": "4",
+        "functionLevel": 2,
+        "functionIcon": null,
+        "color": null,
+        "parentName": "项目管理"
+        },
+        {
+        "id": "6",
+        "functionDepict": "商户管理",
+        "functionPath": "merchant",
+        "parentId": "4",
+        "functionLevel": 2,
+        "functionIcon": null,
+        "color": null,
+        "parentName": "项目管理"
+        },
+        {
+        "id": "7",
+        "functionDepict": "店铺管理",
+        "functionPath": "shop",
+        "parentId": "4",
+        "functionLevel": 2,
+        "functionIcon": null,
+        "color": null,
+        "parentName": "项目管理"
+        }
+        ]
+        }
+    )
+  },
+  'GET /system/role/all': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": [
+        {
+        "id": "1019616312fd408c800f6bed5020b474",
+        "name": "超级管理员",
+        "auths": null
+        },
+        {
+        "id": "2787ec11def64f489db14ef246db265a",
+        "name": "超级管理员",
+        "auths": null
+        }
+        ],
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/user/auth': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/function/all': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": {
+        "title": "机器管理系统",
+        "id": "XX",
+        "children": [
+        {
+        "title": "货机管理",
+        "id": "1",
+        "children": [
+        {
+        "title": "机器管理",
+        "id": "2",
+        "children": null
+        },
+        {
+        "title": "点位管理",
+        "id": "3",
+        "children": null
+        }
+        ]
+        },
+        {
+        "title": "订单管理",
+        "id": "12",
+        "children": [
+        {
+        "title": "订单管理",
+        "id": "13",
+        "children": null
+        }
+        ]
+        },
+        {
+        "title": "商品管理",
+        "id": "14",
+        "children": [
+        {
+        "title": "商品管理",
+        "id": "11",
+        "children": null
+        }
+        ]
+        },
+        {
+        "title": "系统管理",
+        "id": "15",
+        "children": [
+        {
+        "title": "员工管理",
+        "id": "16",
+        "children": null
+        },
+        {
+        "title": "部门管理",
+        "id": "17",
+        "children": null
+        },
+        {
+        "title": "权限管理",
+        "id": "18",
+        "children": null
+        },
+        {
+        "title": "角色管理",
+        "id": "19",
+        "children": null
+        }
+        ]
+        },
+        {
+        "title": "项目管理",
+        "id": "4",
+        "children": [
+        {
+        "title": "渠道管理",
+        "id": "5",
+        "children": null
+        },
+        {
+        "title": "商户管理",
+        "id": "6",
+        "children": null
+        },
+        {
+        "title": "店铺管理",
+        "id": "7",
+        "children": null
+        },
+        {
+        "title": "活动管理",
+        "id": "8",
+        "children": null
+        }
+        ]
+        },
+        {
+        "title": "游戏管理",
+        "id": "9",
+        "children": [
+        {
+        "title": "游戏管理",
+        "id": "10",
+        "children": null
+        }
+        ]
+        }
+        ]
+        },
+        "msg": "成功"
+        }
+    )
   },
 };
 
