@@ -595,41 +595,41 @@ export default class PointSettingList extends PureComponent {
       // },
       {
         title: '所属省市区商圈',
-        width: 300,
+        // width: 200,
         dataIndex: 'areaName',
       },
       {
         title: '商场',
-        width: 100,
+        // width: 200,
         dataIndex: 'mall',
       },
-      {
-        title: '状态',
-        width: 100,
-        dataIndex: 'isDelete',
-        filters: [
-          {
-            text: status[0],
-            value: 0,
-          },
-          {
-            text: status[1],
-            value: 1,
-          },
-          {
-            text: status[2],
-            value: 2,
-          },
-          {
-            text: status[3],
-            value: 3,
-          },
-        ],
-        onFilter: (value, record) => record.status.toString() === value,
-        render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
-      },
+      // {
+      //   title: '状态',
+      //   width: 100,
+      //   dataIndex: 'isDelete',
+      //   filters: [
+      //     {
+      //       text: status[0],
+      //       value: 0,
+      //     },
+      //     {
+      //       text: status[1],
+      //       value: 1,
+      //     },
+      //     {
+      //       text: status[2],
+      //       value: 2,
+      //     },
+      //     {
+      //       text: status[3],
+      //       value: 3,
+      //     },
+      //   ],
+      //   onFilter: (value, record) => record.status.toString() === value,
+      //   render(val) {
+      //     return <Badge status={statusMap[val]} text={status[val]} />;
+      //   },
+      // },
       {
         title: '运营人',
         width: 100,
@@ -642,25 +642,11 @@ export default class PointSettingList extends PureComponent {
       },
       {
         title: '备注描述',
-        width: 150,
         dataIndex: 'remark',
       },
       {
-        title: '新建时间',
-        dataIndex: 'createTime',
-        width: 200,
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
         fixed: 'right',
-        width: 150,
+        width: 200,
         title: '操作',
         render: (text, item) => (
           <Fragment>

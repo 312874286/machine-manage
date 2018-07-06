@@ -424,58 +424,18 @@ export default class shopSettingList extends PureComponent {
       // },
       {
         title: '店铺编码',
-        width: 150,
+        // width: 150,
         dataIndex: 'shopCode',
       },
       {
         title: '所属商户',
-        width: 200,
+        // width: 200,
         dataIndex: 'sellerId',
       },
       {
-        title: '店铺状态',
-        width: 150,
-        dataIndex: 'isDelete',
-        filters: [
-          {
-            text: status[0],
-            value: 0,
-          },
-          {
-            text: status[1],
-            value: 1,
-          },
-          {
-            text: status[2],
-            value: 2,
-          },
-          {
-            text: status[3],
-            value: 3,
-          },
-        ],
-        onFilter: (value, record) => record.status.toString() === value,
-        render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
-      },
-      {
         title: '店铺名称',
-        width: 200,
+        // width: 200,
         dataIndex: 'shopName',
-      },
-      {
-        title: '新建时间',
-        dataIndex: 'createTime',
-        width: 200,
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         fixed: 'right',

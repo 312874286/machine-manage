@@ -385,53 +385,39 @@ export default class channelSettingList extends PureComponent {
       // },
       {
         title: '渠道编码',
-        width: 200,
+        // width: 200,
         dataIndex: 'channelCode',
       },
-      {
-        title: '渠道状态',
-        width: 200,
-        dataIndex: 'isDelete',
-        filters: [
-          {
-            text: status[0],
-            value: 0,
-          },
-          {
-            text: status[1],
-            value: 1,
-          },
-          {
-            text: status[2],
-            value: 2,
-          },
-          {
-            text: status[3],
-            value: 3,
-          },
-        ],
-        onFilter: (value, record) => record.status.toString() === value,
-        render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
-      },
+      // {
+      //   title: '渠道状态',
+      //   width: 200,
+      //   dataIndex: 'isDelete',
+      //   filters: [
+      //     {
+      //       text: status[0],
+      //       value: 0,
+      //     },
+      //     {
+      //       text: status[1],
+      //       value: 1,
+      //     },
+      //     {
+      //       text: status[2],
+      //       value: 2,
+      //     },
+      //     {
+      //       text: status[3],
+      //       value: 3,
+      //     },
+      //   ],
+      //   onFilter: (value, record) => record.status.toString() === value,
+      //   render(val) {
+      //     return <Badge status={statusMap[val]} text={status[val]} />;
+      //   },
+      // },
       {
         title: '渠道名称',
-        width: 200,
         dataIndex: 'channelName',
-      },
-      {
-        title: '新建时间',
-        dataIndex: 'createTime',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        width: 200,
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         fixed: 'right',
@@ -492,7 +478,7 @@ export default class channelSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={700}
+              scrollX={500}
             />
           </div>
         </Card>

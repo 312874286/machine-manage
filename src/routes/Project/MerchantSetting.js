@@ -437,68 +437,28 @@ export default class merchantSettingList extends PureComponent {
       // },
       {
         title: '商户编码',
-        width: 150,
+        // width: 150,
         dataIndex: 'merchantCode',
       },
       {
         title: '商户名称',
-        width: 150,
+        // width: 150,
         dataIndex: 'merchantName',
       },
       {
         title: '所属渠道',
-        width: 150,
+        // width: 150,
         dataIndex: 'channelId',
       },
       {
         title: '原始标示',
-        width: 150,
+        // width: 150,
         dataIndex: 'brandName',
       },
       {
         title: '品牌名称',
-        width: 150,
         dataIndex: 'originFlag',
       },
-      {
-        title: '商户状态',
-        dataIndex: 'isDelete',
-        filters: [
-          {
-            text: status[0],
-            value: 0,
-          },
-          {
-            text: status[1],
-            value: 1,
-          },
-          {
-            text: status[2],
-            value: 2,
-          },
-          {
-            text: status[3],
-            value: 3,
-          },
-        ],
-        onFilter: (value, record) => record.status.toString() === value,
-        render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
-      },
-      // {
-      //   title: '新建时间',
-      //   dataIndex: 'createTime',
-      //   width: 200,
-      //   sorter: true,
-      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      // },
-      // {
-      //   title: '更新时间',
-      //   dataIndex: 'updateTime',
-      //   sorter: true,
-      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      // },
       {
         fixed: 'right',
         width: 150,
