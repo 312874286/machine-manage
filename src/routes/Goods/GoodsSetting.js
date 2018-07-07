@@ -15,6 +15,7 @@ import {
   Popconfirm,
   Upload,
   Icon,
+  InputNumber
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -22,6 +23,7 @@ import styles from './GoodsSetting.less';
 import LogModal from '../../components/LogModal/index';
 import moment from "moment/moment";
 import {message} from "antd/lib/index";
+import domain from "../../common/config/domain"
 
 
 const FormItem = Form.Item;
@@ -35,7 +37,7 @@ const RangePicker = DatePicker.RangePicker;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, handleUpload,normFile,  previewVisible, previewImage, fileList, handlePreview, handleChange, handleCancel } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -74,8 +76,8 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="图片缩略图">
             {getFieldDecorator('img', {
+              rules: [{ required: true, message: '' }],
               valuePropName: 'filelist',
-              getValueFromEvent: normFile,
             })(
               <div className="clearfix">
                 <Upload
@@ -85,10 +87,10 @@ const CreateForm = Form.create()(
                   onPreview={handlePreview}
                   onChange={handleChange}
                 >
-                  {fileList.length >= 3 ? null : uploadButton}
+                  {fileList.length > 1 ? null : uploadButton}
                 </Upload>
                 <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-                  <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                  {/*<img alt="example" style={{ width: '100%' }} src={previewImage} />*/}
                 </Modal>
               </div>
             )}
@@ -96,7 +98,7 @@ const CreateForm = Form.create()(
           <FormItem {...formItemLayout} label="商品价格">
             {getFieldDecorator('price', {
               rules: [{ required: true, message: '请输入商品价格' }],
-            })(<Input placeholder="请输入商品价格" />)}
+            })(<InputNumber placeholder="请输入商品价格" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
             {getFieldDecorator('sellerId', {
@@ -113,7 +115,6 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="备注描述">
             {getFieldDecorator('remark', {
-              rules: [{ required: true, message: '请输入备注描述' }],
             })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
@@ -175,57 +176,28 @@ export default class goodsSettingList extends PureComponent {
     });
   }
   // 上传图片
-  normFile = (e) => {
-    console.log('Upload event:', e, e.fileList);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  }
   handleCancel = () => this.setState({ previewVisible: false })
 
   handlePreview = (file) => {
-    this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true,
-    });
+    // this.setState({
+    //   previewImage: file.url || file.thumbUrl,
+    //   previewVisible: true,
+    // });
   }
 
   handleChange = (info) => {
-    console.log('fileList', info)
+    console.log()
     let fileList = info.fileList;
-
-    // 1. Limit the number of uploaded files
-    //    Only to show two recent uploaded files, and old ones will be replaced by the new
     fileList = fileList.slice(-1);
-
-    // 2. read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response.url;
       }
       return file;
     });
-
-    // 3. filter successfully uploaded files according to response from server
-    fileList = fileList.filter((file) => {
-      if (file.response) {
-        return file.response.status === 'success';
-      }
-      return true;
-    });
-
-    this.setState({ fileList });
   }
   handleUpload = ({ file, onError, onSuccess }, fileType) => {
     const { dispatch } = this.props;
-    // const nowFile = [...this.state.processFile];
-    // nowFile.push(file);
-    // this.setState({
-    //   processFile: nowFile,
-    // });
-    console.log('file', file)
     dispatch({
       type: 'common/upload',
       payload: {
@@ -234,22 +206,26 @@ export default class goodsSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
+        console.log('resp', resp)
+        this.setState({
+          fileList: [{
+            uid: -2,
+            name: 'xxx.png',
+            status: 'done',
+            url: domain.url + resp.data,
+            data: resp.data,
+          }],
+        });
         onSuccess(resp, file);
         message.success('上传成功');
       }
     }).catch((e) => {
       onError(e);
     }).finally(() => {
-      const removeFile = [...this.state.processFile];
-      removeFile.splice(removeFile.findIndex(f => f === file), 1);
-      this.setState({
-        processFile: removeFile,
-      });
     });
   }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
     const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -378,7 +354,7 @@ export default class goodsSettingList extends PureComponent {
       modalType: true,
     });
     this.props.dispatch({
-      type: 'goodsSetting/getGoodSettingDetail',
+      type: 'goodsSetting/getGoodsSettingDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -391,20 +367,19 @@ export default class goodsSettingList extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
+      this.setState({
+        fileList: [{
+          uid: -1,
+          name: 'xxx.png',
+          status: 'done',
+          url: data.img,
+        }],
+      });
       this.form.setFieldsValue({
-        name: data.name || '',
-        sellerId: data.sellerId || undefined,
-        shopId: data.shopId || undefined,
-        rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
-        remark: data.remark || undefined,
+        ...data,
       });
     } else {
       this.form.setFieldsValue({
-        name: undefined,
-        sellerId: undefined,
-        shopId: undefined,
-        remark: undefined,
-        rangeTime: undefined,
       });
     }
   }
@@ -420,8 +395,7 @@ export default class goodsSettingList extends PureComponent {
       }
       let params = {
         ...fieldsValue,
-        img2: undefined,
-        img: this.state.fileList[0],
+        img: this.state.fileList[0].data,
       };
       this.setState({
         editModalConfirmLoading: true,
@@ -554,7 +528,7 @@ export default class goodsSettingList extends PureComponent {
         // width: 200,
         dataIndex: 'img',
         render(val) {
-          return <img src={val}  />;
+          return <img src={val}  style={{ width: '80px' }} />;
         },
       },
       {
