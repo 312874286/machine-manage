@@ -36,6 +36,7 @@ export default class Staff extends PureComponent {
       type: 'staff/getSystemUserList',
       payload: {
         restParams: {
+          keyword: this.state.userName,
         },
       },
     });

@@ -3252,55 +3252,6 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'GET /accountsystem/user/list': (req, res) => {
-    res.send(
-      {
-        "msg": "成功",
-        "code": 0,
-        "page": {
-        "pageSize": 20,
-        "currentResult": 0,
-        "totalPage": 1,
-        "pageNo": 1,
-        "totalCount": 2,
-        "list": null,
-        "firstResult": 0,
-        "firstPage": true,
-        "lastPage": true,
-        "nextPage": 1,
-        "prePage": 1
-        },
-        "data": [
-        {
-        "id": "2f8e7c92cccb46aba2f86646dcba0565",
-        "userId": "1553444821337801",
-        "name": "叶勤康",
-        "mobile": "18910628406",
-        "email": "",
-        "orgEmail": null,
-        "position": "",
-        "avatar": "",
-        "createTime": "2018-07-03 18:15:13",
-        "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
-        },
-        {
-        "id": "da267e278b2b4f6c934351b956d1f3f0",
-        "userId": "09672669152299397",
-        "name": "KARA",
-        "mobile": "18610567983",
-        "email": "",
-        "orgEmail": null,
-        "position": "",
-        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
-        "createTime": "2018-07-03 18:15:13",
-        "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
-        }
-        ]
-        }
-    )
-  },
   'GET /system/user/list': (req, res) => {
     res.send(
       {
@@ -3637,6 +3588,36 @@ const proxy = {
         }
         ]
         },
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/role/add': (req, res) => {
+    res.send(
+      {
+
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/role/update': (req, res) => {
+    res.send(
+      {
+
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/role/delete': (req, res) => {
+    res.send(
+      {
+
+        "code": 0,
+        "data": null,
         "msg": "成功"
         }
     )

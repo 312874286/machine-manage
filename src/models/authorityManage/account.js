@@ -1,4 +1,4 @@
-import { getSystemRoleList, getSystemFunctionAll } from '../../services/authorityManage/account';
+import { getSystemRoleList, getSystemFunctionAll, getSystemRoleAdd, getSystemRoleUpdate, getSystemRoleDelete } from '../../services/authorityManage/account';
 
 export default {
   namespace: 'account',
@@ -17,6 +17,18 @@ export default {
     },
     *getSystemFunctionAll({ payload: { restParams } }, { call, put }) {
       const response = yield call(getSystemFunctionAll, { restParams });
+      return response;
+    },
+    *getSystemRoleAdd({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemRoleAdd, { restParams });
+      return response;
+    },
+    *getSystemRoleUpdate({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemRoleUpdate, { restParams });
+      return response;
+    },
+    *getSystemRoleDelete({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemRoleDelete, { restParams });
       return response;
     },
   },
