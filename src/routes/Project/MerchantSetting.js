@@ -228,8 +228,8 @@ export default class merchantSettingList extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword,
-        channelId: fieldsValue.channelId,
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        channelId: fieldsValue.channelId ? fieldsValue.channelId : '',
       }, () => {
         this.getLists();
       });
@@ -470,7 +470,7 @@ export default class merchantSettingList extends PureComponent {
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a>删除</a>
+              <a className={styles.delete}>删除</a>
             </Popconfirm>
           </Fragment>
         ),

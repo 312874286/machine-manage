@@ -434,6 +434,14 @@ const proxy = {
             functionIcon: 'form',
           },
           {
+            id: 'a19',
+            functionDepict: '游戏管理',
+            functionPath: 'game',
+            parentId: 'a5',
+            functionLevel: 1,
+            functionIcon: 'form',
+          },
+          {
             id: 'a6',
             functionDepict: '项目管理',
             functionPath: 'project',
@@ -3252,6 +3260,316 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
+<<<<<<< HEAD
+=======
+  'POST /project/activity/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GET /project/activity/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          createId: null,
+          createTime: "2018-07-06 12:08:12",
+          endTime: "2018-08-02 11:50:50",
+          id: "b61980f55b284fdb99d41346123a605f",
+          isDelete: 0,
+          name: "erret",
+          remark: "wuwuwuuwuwuwu",
+          sellerId: "伊利",
+          shopId: "wefewfwef",
+          startTime: null,
+          updateId: null,
+          updateTime: "2018-07-06 12:11:09",
+        }
+      ]
+    });
+  },
+  'GET /project/activity/detail': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": {
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+        province: 100000,
+        city: 100000,
+        district: 100000,
+        circle: '其他'
+      }
+    });
+  },
+  'POST /project/activity/update': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/activity/delete': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/game/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GET /project/game/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          activityId: "618大促销",
+          createId: "",
+          createTime: "2018-07-06 14:26:40",
+          id: "fbdafe1eb2e94179ba0b57eae0cc3e26",
+          interactId: "324",
+          isDelete: 0,
+          maxParticipancePerDay: 23,
+          maxParticipanceTotal: 345,
+          maxPrizePerDay: 43578,
+          maxPrizeTotal: 3456789,
+          name: "324234",
+          remark: "wer",
+          sellerId: "名称1",
+          shopId: "324234",
+          updateId: "",
+          updateTime: "2018-07-06 14:26:40",
+          version: "23432",
+          versionInno72: "234",
+        }
+      ]
+    });
+  },
+  'GET /project/game/detail': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": {
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+        province: 100000,
+        city: 100000,
+        district: 100000,
+        circle: '其他'
+      }
+    });
+  },
+  'POST /project/game/update': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/game/delete': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/goods/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": '',
+      "msg": '成功',
+    });
+  },
+  'GET /project/goods/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          code: "10000222XXX",
+          createId: "",
+          createTime: "2018-07-06 16:26:46",
+          id: "2a7e460b7d8149ffb110d947446597e9",
+          img: "1",
+          isDelete: null,
+          name: null,
+          price: 0.99,
+          remark: "0.99",
+          sellerId: "伊利",
+          updateId: "",
+          updateTime: "2018-07-06 16:26:46"
+        }
+      ]
+    });
+  },
+  'GET /project/goods/detail': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": {
+        areCode: null,
+        createId: "",
+        createTime: "2018-07-04 16:55:27",
+        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
+        isDelete: 0,
+        mall: "汉光百货",
+        manager: "王小二",
+        mobile: "15688886666",
+        remark: "欢迎光临",
+        updateId: "",
+        updateTime: "2018-07-04 16:55:27",
+        province: 100000,
+        city: 100000,
+        district: 100000,
+        circle: '其他'
+      }
+    });
+  },
+  'POST /project/goods/update': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'POST /project/goods/delete': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
+  'GET /accountsystem/user/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 2,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "2f8e7c92cccb46aba2f86646dcba0565",
+        "userId": "1553444821337801",
+        "name": "叶勤康",
+        "mobile": "18910628406",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        },
+        {
+        "id": "da267e278b2b4f6c934351b956d1f3f0",
+        "userId": "09672669152299397",
+        "name": "KARA",
+        "mobile": "18610567983",
+        "email": "",
+        "orgEmail": null,
+        "position": "",
+        "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
+        "createTime": "2018-07-03 18:15:13",
+        "isDelete": 0,
+        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        }
+        ]
+        }
+    )
+  },
+>>>>>>> b1b5adb8a923cc9cb1209ae2f7785d3513b80a29
   'GET /system/user/list': (req, res) => {
     res.send(
       {

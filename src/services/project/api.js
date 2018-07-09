@@ -19,6 +19,12 @@ const api = map({
   updateShopSetting: '/project/shops/update',
   deleteShopSetting: '/project/shops/delete',
   getShopSettingDetail: '/project/shops/detail?id={id}',
+  getActivitySettingList: '/project/activity/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  saveActivitySetting: '/project/activity/add',
+  updateActivitySetting: '/project/activity/update',
+  deleteActivitySetting: '/project/activity/delete',
+  getActivitySettingDetail: '/project/activity/detail?id={id}',
+  getShopsList: '/project/shops/getList',
 });
 
 export default api;

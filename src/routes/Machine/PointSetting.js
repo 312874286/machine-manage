@@ -39,7 +39,7 @@ const status = ['运行中', '关闭', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType, verifyPhone, verifyString } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType, verifyPhone, verifyString, verifyTrim } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -85,12 +85,16 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="商场名称">
             {getFieldDecorator('mall', {
-              rules: [{ required: true, message: '请输入商场名称' }],
+              rules: [{ required: true, message: '请输入商场名称' }, {
+                validator: verifyTrim,
+              }],
             })(<Input placeholder="请输入商场" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="运营人员">
             {getFieldDecorator('manager', {
-              rules: [{ required: true, message: '请输入运营人员' }],
+              rules: [{ required: true, message: '请输入运营人员' }, {
+                validator: verifyTrim,
+              }],
             })(<Input placeholder="请输入运营人" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="手机号码">
@@ -187,6 +191,14 @@ export default class PointSettingList extends PureComponent {
       callback();
     }
   }
+  verifyTrim = (rule, value, callback) => {
+    let v = value.replace(/(^\s*)|(\s*$)/g, '')
+    if (v === '') {
+      callback('不可输入空格');
+    } else {
+      callback();
+    }
+  }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -217,14 +229,14 @@ export default class PointSettingList extends PureComponent {
   };
   // 重置
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const { form } = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
-    });
-    dispatch({
-      type: '',
-      payload: {},
+      pageNo: 1,
+      keyword: '',
+    }, () => {
+      this.getLists();
     });
   };
 
@@ -278,8 +290,8 @@ export default class PointSettingList extends PureComponent {
       // });
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword,
-        code: fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1],
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        code: fieldsValue.provinceCityAreaTrade ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
       }, () => {
         this.getLists();
       });
@@ -430,21 +442,25 @@ export default class PointSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
-    this.form.validateFields((err, values) => {
+    this.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
+      const provinceCityAreaTradeTmp = fieldsValue.provinceCityAreaTrade
+      let params = {
+        ...fieldsValue,
+        provinceCityAreaTrade: undefined,
+        areaCode: provinceCityAreaTradeTmp[provinceCityAreaTradeTmp.length - 1],
+      };
       this.setState({
         editModalConfirmLoading: true,
         modalData: {},
       });
       let url = 'pointSetting/savePointSetting';
-      let params = { ...values };
       if (this.state.modalData.id) {
         url = 'pointSetting/editPointSetting';
-        params = { ...values, id: this.state.modalData.id };
+        params = { ...params, id: this.state.modalData.id };
       }
-      params.areaCode = params.provinceCityAreaTrade[params.provinceCityAreaTrade.length - 1]
       this.props.dispatch({
         type: url,
         payload: {
@@ -482,7 +498,7 @@ export default class PointSettingList extends PureComponent {
             code: targetOption.value,
           },
         },
-      }).then( (res) => {
+      }).then((res) => {
         targetOption.loading = false;
         targetOption.children = res
         this.setState({
@@ -587,12 +603,6 @@ export default class PointSettingList extends PureComponent {
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options } = this.state;
     const columns = [
-      // {
-      //   title: '编号ID',
-      //   width: 200,
-      //   dataIndex: 'id',
-      //   fixed: 'left',
-      // },
       {
         title: '所属省市区商圈',
         // width: 200,
@@ -603,33 +613,6 @@ export default class PointSettingList extends PureComponent {
         // width: 200,
         dataIndex: 'mall',
       },
-      // {
-      //   title: '状态',
-      //   width: 100,
-      //   dataIndex: 'isDelete',
-      //   filters: [
-      //     {
-      //       text: status[0],
-      //       value: 0,
-      //     },
-      //     {
-      //       text: status[1],
-      //       value: 1,
-      //     },
-      //     {
-      //       text: status[2],
-      //       value: 2,
-      //     },
-      //     {
-      //       text: status[3],
-      //       value: 3,
-      //     },
-      //   ],
-      //   onFilter: (value, record) => record.status.toString() === value,
-      //   render(val) {
-      //     return <Badge status={statusMap[val]} text={status[val]} />;
-      //   },
-      // },
       {
         title: '运营人',
         width: 100,
@@ -655,7 +638,7 @@ export default class PointSettingList extends PureComponent {
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             <Divider type="vertical" />
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a>删除</a>
+              <a className={styles.delete}>删除</a>
             </Popconfirm>
           </Fragment>
         ),
@@ -718,6 +701,7 @@ export default class PointSettingList extends PureComponent {
           modalType={modalType}
           verifyPhone={this.verifyPhone}
           verifyString={this.verifyString}
+          verifyTrim={this.verifyTrim}
         />
         <LogModal
           data={logList}
