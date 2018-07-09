@@ -3259,7 +3259,10 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0756276410880b439984be06794792c73a80bbdf
   'POST /project/activity/add': (req, res) => {
     res.send({
       "code": 0,
