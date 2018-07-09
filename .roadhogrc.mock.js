@@ -438,8 +438,7 @@ const proxy = {
             functionDepict: '游戏管理',
             functionPath: 'game',
             parentId: 'a5',
-            functionLevel: 1,
-            functionIcon: 'form',
+            functionLevel: 2,
           },
           {
             id: 'a6',
@@ -3260,8 +3259,7 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-<<<<<<< HEAD
-=======
+
   'POST /project/activity/add': (req, res) => {
     res.send({
       "code": 0,
@@ -3520,6 +3518,9 @@ const proxy = {
   'POST /project/goods/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
+  'GET /order/list': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
+  },
   'GET /accountsystem/user/list': (req, res) => {
     res.send(
       {
@@ -3569,7 +3570,6 @@ const proxy = {
         }
     )
   },
->>>>>>> b1b5adb8a923cc9cb1209ae2f7785d3513b80a29
   'GET /system/user/list': (req, res) => {
     res.send(
       {

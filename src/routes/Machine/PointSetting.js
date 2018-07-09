@@ -176,7 +176,7 @@ export default class PointSettingList extends PureComponent {
   }
   // 验证
   verifyPhone = (rule, value, callback) => {
-    const reg = /^[1][3,4,5,6,7,8][0-9]{9}$/;
+    const reg = /^[1][0-9][0-9]{9}$/;
     if (!reg.test(value)) {
       callback('请填写正确的手机号码');
     } else {

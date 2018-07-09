@@ -177,7 +177,7 @@ const GameForm = Form.create()(
           <FormItem {...formItemLayout} label="设置机器">
             {getFieldDecorator('machine', {
               rules: [{ required: true, message: '请选择设置机器' }],
-              // initialValue: plainOptions,
+              initialValue: plainOptions,
             })(<CheckboxGroup options={plainOptions} onChange={onChange} />)}
           </FormItem>
         </Form>
@@ -438,12 +438,18 @@ export default class gameSettingList extends PureComponent {
   }
   // 新增modal确认事件 结束
   // 设置机器开始
+  onChange = (checkedValues) => {
+    this.setState({
+      gameVisible: true,
+      plainOptions: checkedValues,
+    });
+  }
   setMachineClick = (item) => {
     let plainOptions = [{ label: 'Apple', value: 'Apple' },
       { label: 'Pear', value: 'Pear' },
       { label: 'Orange', value: 'Orange' }]
     this.form.setFieldsValue({
-      machine: plainOptions,
+      machine: ['Apple', 'Pear', 'Orange'],
     });
     this.setState({
       gameVisible: true,
@@ -693,6 +699,7 @@ export default class gameSettingList extends PureComponent {
           plainOptions={plainOptions}
           gameVisible={gameVisible}
           editMachineModalConfirmLoading={editMachineModalConfirmLoading}
+          onChange={this.onChange}
         />
         <LogModal
           data={logList}

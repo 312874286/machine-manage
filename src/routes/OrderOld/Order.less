@@ -1,11 +1,13 @@
-@import '../../../node_modules/antd/lib/style/themes/default.less';
-@import '../../utils/utils.less';
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
+
+
+
 
 .tableList {
   .tableListOperator {
     margin-bottom: 16px;
     button {
-      //width: 100%;
       margin-right: 8px;
     }
   }
@@ -34,22 +36,8 @@
     white-space: nowrap;
     margin-bottom: 24px;
   }
-  button {
-    width: 126px;
-  }
-  .serach {
-    border: rgba(245, 75, 48, 1);
-    .ant-btn-primary:hover, .ant-btn-primary:focus {
-      border: rgba(245, 75, 48, 1);
-    }
-  }
 }
-.delete {
-  color: red;
-}
-table tr:nth-child(odd) {
-  //background: #ffe8e4;
-}
+
 @media screen and (max-width: @screen-lg) {
   .tableListForm :global(.ant-form-item) {
     margin-right: 24px;

@@ -1,5 +1,5 @@
 const environment = {
-  host: 'http://172.16.18.240:8880',
+  host: 'http://192.168.33.248:30110',
   appId: 'dingoa25um8bzdtan7hjgw',
   frontHost: 'http://erp.72solo.com',
 };

@@ -176,6 +176,9 @@ export const getRouterData = (app) => {
     '/goods/goods': {
       component: dynamicWrapper(app, ['goods/goodsSetting', 'log/log', 'common'], () => import('../routes/Goods/GoodsSetting')),
     },
+    '/order/order': {
+      component: dynamicWrapper(app, ['order/order', 'log/log', 'common'], () => import('../routes/Order/Order')),
+    },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },

@@ -37,7 +37,7 @@ const RangePicker = DatePicker.RangePicker;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -90,7 +90,7 @@ const CreateForm = Form.create()(
                   {fileList.length > 1 ? null : uploadButton}
                 </Upload>
                 <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-                  {/*<img alt="example" style={{ width: '100%' }} src={previewImage} />*/}
+                  <img alt="example" style={{ width: '100%' }} src={previewImage} />
                 </Modal>
               </div>
             )}
@@ -179,10 +179,10 @@ export default class goodsSettingList extends PureComponent {
   handleCancel = () => this.setState({ previewVisible: false })
 
   handlePreview = (file) => {
-    // this.setState({
-    //   previewImage: file.url || file.thumbUrl,
-    //   previewVisible: true,
-    // });
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
   }
 
   handleChange = (info) => {
@@ -309,8 +309,8 @@ export default class goodsSettingList extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword,
-        code: fieldsValue.code,
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        code: fieldsValue.code ? fieldsValue.code : '',
       }, () => {
         this.getLists();
       });
@@ -379,7 +379,9 @@ export default class goodsSettingList extends PureComponent {
         ...data,
       });
     } else {
-      this.form.setFieldsValue({
+      this.form.resetFields();
+      this.setState({
+        fileList: [],
       });
     }
   }
