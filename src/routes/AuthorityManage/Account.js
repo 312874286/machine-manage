@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, Tree } from 'antd';
+import { Card, Table, Button, Row, Col, Input, Modal, Tree, message, Popconfirm } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+
 
 const { TreeNode } = Tree;
 // const treeData = [{
@@ -50,12 +51,68 @@ export default class Account extends PureComponent {
     checkedKeys: [],
     selectedKeys: [],
     treeData: [],
+    addUserName: '',
+    clickType: 0,
+    currentSelectID: '',
   }
   componentDidMount = () => {
     this.getSystemRoleList();
   }
-  onToAuthorization = (record) => {
+  onToEdit = (record) => {
+    this.setState({
+      clickType: 2,
+      addUserName: record.name,
+      currentSelectID: record.id,
+    });
+    this.props.dispatch({
+      type: 'account/getSystemFunctionAll',
+      payload: {
+        restParams: {
+        },
+      },
+    }).then((res) => {
+      const { code, data } = res;
+      // if(!code) return;
+      const otherdata = data.children;
+      for (const i in otherdata) {
+        if (otherdata[i].children) {
+          this.bianlijson(otherdata[i].children);
+        }
+        otherdata[i].key = otherdata[i].id;
+      }
+
+      console.log(otherdata);
+      // treeData = data;
+      this.setState({
+        treeData: otherdata,
+      });
+    });
+    this.setState({
+      visible: true,
+    });
     console.log(record, this);
+  }
+  onToDel = (record) => {
+    this.props.dispatch({
+      type: 'account/getSystemRoleDelete',
+      payload: {
+        restParams: {
+          id: record.id,
+        },
+      },
+    }).then((res) => {
+      const { code, msg } = res;
+      if (code === 0) {
+        message.success(msg);
+        this.getSystemRoleList();
+      } else {
+        message.error(msg);
+      }
+    });
+    console.log('onToDel::');
+  }
+  onComnfirmCancel = (record) => {
+    console.log('onComnfirmCancel::');
   }
   onFindData = (e) => {
     this.getSystemRoleList();
@@ -78,6 +135,9 @@ export default class Account extends PureComponent {
     console.log('onSelect', info);
     this.setState({ selectedKeys });
   }
+  onAddChange = (e) => {
+    this.setState({ addUserName: e.target.value });
+  }
   getSystemRoleList = () => {
     this.props.dispatch({
       type: 'account/getSystemRoleList',
@@ -89,6 +149,9 @@ export default class Account extends PureComponent {
     });
   }
   handleModalAdd = (e) => {
+    this.setState({
+      clickType: 1,
+    });
     this.props.dispatch({
       type: 'account/getSystemFunctionAll',
       payload: {
@@ -125,9 +188,60 @@ export default class Account extends PureComponent {
     }
   }
   hideOKModal = (e) => {
-    this.setState({
-      visible: false,
-    });
+    if (this.state.clickType === 1) {
+      // let postdata = {};
+      // postdata.name = 'dd';
+      // postdata.auths = [];
+      this.props.dispatch({
+        type: 'account/getSystemRoleAdd',
+        payload: {
+          restParams: {
+            name: this.state.addUserName,
+            auths: JSON.stringify(this.state.checkedKeys),
+          },
+        },
+      }).then((res) => {
+        const { code, msg } = res;
+        if (code === 0) {
+          message.success(msg);
+          this.setState({
+            visible: false,
+          });
+          this.getSystemRoleList();
+        } else {
+          message.error(msg);
+        }
+        
+      });
+    } else if (this.state.clickType === 2) {
+      // let postdata = {};
+      // postdata.name = 'dd';
+      // postdata.auths = [];
+      console.log(this.state.currentSelectID, this.state.addUserName);
+      this.props.dispatch({
+        type: 'account/getSystemRoleUpdate',
+        payload: {
+          restParams: {
+            id: this.state.currentSelectID,
+            name: this.state.addUserName,
+            auths: JSON.stringify(this.state.checkedKeys),
+          },
+        },
+      }).then((res) => {
+        const { code, msg } = res;
+        if (code === 0) {
+          message.success(msg);
+          this.setState({
+            visible: false,
+          });
+          this.getSystemRoleList();
+        } else {
+          message.error(msg);
+        }
+      });
+    }
+    
+    
   }
   hideCancelModal = (e) => {
     this.setState({
@@ -147,7 +261,7 @@ export default class Account extends PureComponent {
     });
   }
   render() {
-    const { treeData } = this.state;
+    const { treeData, addUserName } = this.state;
     const { account: { list, page } } = this.props;
     // console.log(111,list,page);
     const columns = [
@@ -166,9 +280,11 @@ export default class Account extends PureComponent {
         render: (record) => {
           return (
             <div>
-              <Button type="primary" onClick={this.onToAuthorization.bind(this, record)}>修改</Button>
+              <Button type="primary" onClick={this.onToEdit.bind(this, record)}>修改</Button>
               &nbsp;&nbsp;
-              <Button type="danger" onClick={this.onToAuthorization.bind(this, record)}>删除</Button>
+              <Popconfirm title="是否删除?" onConfirm={this.onToDel.bind(this, record)} onCancel={this.onComnfirmCancel.bind(this)} okText="删除" cancelText="取消">
+                <Button type="danger">删除</Button>
+              </Popconfirm>
             </div>
           );
         },
@@ -218,7 +334,7 @@ export default class Account extends PureComponent {
               角色名称
             </Col>
             <Col md={15} sm={24}>
-              <Input />
+              <Input onChange={this.onAddChange.bind(this)} value={addUserName} />
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>

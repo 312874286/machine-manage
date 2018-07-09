@@ -18,6 +18,10 @@ export default class Department extends PureComponent {
     this.getSystemDeptList();
     console.log(this, e, this.state.userName);
   }
+  onChange = (e) => {
+    this.setState({ userName: e.target.value });
+    // console.log(111,e.target.value,this);
+  }
   getSystemDeptList = () => {
     this.props.dispatch({
       type: 'department/getSystemDeptList',
@@ -40,13 +44,6 @@ export default class Department extends PureComponent {
         title: '上级部门',
         dataIndex: 'mobile',
         key: 'mobile',
-      }, {
-        title: '授权',
-        dataIndex: '',
-        key: '',
-        render: (record) => {
-          return <Button type="primary" onClick={this.onToAuthorization.bind(this, record)}>授权</Button>;
-        },
       },
     ];
     // const { userName } = this.state;

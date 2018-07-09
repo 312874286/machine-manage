@@ -3260,6 +3260,8 @@ const proxy = {
   'POST /project/shops/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
+<<<<<<< HEAD
+=======
   'POST /project/activity/add': (req, res) => {
     res.send({
       "code": 0,
@@ -3567,6 +3569,7 @@ const proxy = {
         }
     )
   },
+>>>>>>> b1b5adb8a923cc9cb1209ae2f7785d3513b80a29
   'GET /system/user/list': (req, res) => {
     res.send(
       {
@@ -3903,6 +3906,36 @@ const proxy = {
         }
         ]
         },
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/role/add': (req, res) => {
+    res.send(
+      {
+
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/role/update': (req, res) => {
+    res.send(
+      {
+
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/role/delete': (req, res) => {
+    res.send(
+      {
+
+        "code": 0,
+        "data": null,
         "msg": "成功"
         }
     )

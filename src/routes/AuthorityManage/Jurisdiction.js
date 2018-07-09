@@ -18,6 +18,10 @@ export default class Jurisdiction extends PureComponent {
     this.getSystemFunctionList();
     console.log(this, e, this.state.userName);
   }
+  onChange = (e) => {
+    this.setState({ userName: e.target.value });
+    // console.log(111,e.target.value,this);
+  }
   getSystemFunctionList = () => {
     this.props.dispatch({
       type: 'jurisdiction/getSystemFunctionList',
