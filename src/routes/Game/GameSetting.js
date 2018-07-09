@@ -14,6 +14,7 @@ import {
   Divider,
   Popconfirm,
   InputNumber,
+  Checkbox
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -25,6 +26,7 @@ import moment from "moment/moment";
 const FormItem = Form.Item;
 const { TextArea } = Input
 const { Option } = Select;
+const CheckboxGroup = Checkbox.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -142,6 +144,46 @@ const CreateForm = Form.create()(
       </Modal>
     );
 });
+const GameForm = Form.create()(
+  (props) => {
+    const { form, gameVisible, MachineAdd, MachineHandleModalVisible, editMachineModalConfirmLoading, plainOptions, onChange } = props;
+    // const okHandle = () => {
+    //   form.validateFields((err, fieldsValue) => {
+    //     if (err) return;
+    //     form.resetFields();
+    //     handleAdd(fieldsValue);
+    //   });
+    // };
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title="设置机器"
+        visible={gameVisible}
+        onOk={MachineAdd}
+        onCancel={() => MachineHandleModalVisible()}
+        confirmLoading={editMachineModalConfirmLoading}
+      >
+        <Form>
+          <FormItem {...formItemLayout} label="设置机器">
+            {getFieldDecorator('machine', {
+              rules: [{ required: true, message: '请选择设置机器' }],
+              // initialValue: plainOptions,
+            })(<CheckboxGroup options={plainOptions} onChange={onChange} />)}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, gameSetting, log }) => ({
   common,
   gameSetting,
@@ -168,6 +210,9 @@ export default class gameSettingList extends PureComponent {
     merchantLists: [],
     shopsLists: [],
     activityLists: [],
+    gameVisible: false,
+    editMachineModalConfirmLoading: false,
+    plainOptions: [],
   };
   componentDidMount() {
     this.getLists();
@@ -264,32 +309,6 @@ export default class gameSettingList extends PureComponent {
       expandForm: !expandForm,
     });
   };
-  // 批量
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-
-    if (!selectedRows) return;
-
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: '',
-          payload: {
-            no: selectedRows.map(row => row.no).join(','),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -418,6 +437,32 @@ export default class gameSettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
+  // 设置机器开始
+  setMachineClick = (item) => {
+    let plainOptions = [{ label: 'Apple', value: 'Apple' },
+      { label: 'Pear', value: 'Pear' },
+      { label: 'Orange', value: 'Orange' }]
+    this.form.setFieldsValue({
+      machine: plainOptions,
+    });
+    this.setState({
+      gameVisible: true,
+      plainOptions: plainOptions,
+    });
+  }
+  saveMachineFormRef = (form) => {
+    console.log('form', form)
+    this.MachineForm = form;
+  }
+  MachineAdd = () => {
+    console.log('1234');
+  }
+  MachineHandleModalVisible = () => {
+    this.setState({
+      gameVisible: false,
+    });
+  }
+  // 设置机器结束
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -503,7 +548,7 @@ export default class gameSettingList extends PureComponent {
   }
   render() {
     const { gameSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, activityLists } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, activityLists, gameVisible, editMachineModalConfirmLoading, plainOptions } = this.state;
     const columns = [
       {
         title: '游戏名称',
@@ -566,7 +611,7 @@ export default class gameSettingList extends PureComponent {
       },
       {
         fixed: 'right',
-        width: 150,
+        width: 200,
         title: '操作',
         render: (text, item) => (
           <Fragment>
@@ -577,6 +622,8 @@ export default class gameSettingList extends PureComponent {
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
               <a className={styles.delete}>删除</a>
             </Popconfirm>
+            <Divider type="vertical" />
+            <a onClick={() => this.setMachineClick(item)}>设置机器</a>
           </Fragment>
         ),
       },
@@ -589,10 +636,13 @@ export default class gameSettingList extends PureComponent {
       </Menu>
     );
     const parentMethods = {
-      handleAdd: this.handleAdd,
+      handleAdd: this.MachineAdd,
       handleModalVisible: this.handleModalVisible,
     };
-
+    const gameSetMachineMethods = {
+      MachineAdd: this.MachineAdd,
+      MachineHandleModalVisible: this.MachineHandleModalVisible,
+    };
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -636,6 +686,13 @@ export default class gameSettingList extends PureComponent {
           merchantLists={merchantLists}
           shopsLists={shopsLists}
           activityLists={activityLists}
+        />
+        <GameForm
+          {...gameSetMachineMethods}
+          ref={this.saveFormRef}
+          plainOptions={plainOptions}
+          gameVisible={gameVisible}
+          editMachineModalConfirmLoading={editMachineModalConfirmLoading}
         />
         <LogModal
           data={logList}

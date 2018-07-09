@@ -126,7 +126,6 @@ export default class PointSettingList extends PureComponent {
     expandForm: false,
     selectedRows: [],
     formValues: {},
-    id: '',
     defaultValue: {},
     options: '',
     editModalConfirmLoading: false,
