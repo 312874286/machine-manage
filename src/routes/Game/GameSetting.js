@@ -245,7 +245,11 @@ export default class gameSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        ...data,
+        // ...data,
+        name: data.name || undefined,
+        version: data.version || undefined,
+        versionInno72: data.versionInno72 || undefined,
+        remark: data.remark || undefined,
       });
     } else {
       this.form.setFieldsValue({
@@ -258,7 +262,7 @@ export default class gameSettingList extends PureComponent {
   }
 
   // 编辑modal 确认事件
-  handleAdd = () => {
+  MachineAdd = () => {
     this.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;

@@ -21,8 +21,11 @@ import {
   Cascader,
   Popconfirm,
   Tree,
+  Radio,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
+import GoodsWrappedDynamicFieldSet from '../../components/GoodsDynamicFieldSet';
+import DiscountWrappedDynamicFieldSet from '../../components/DiscountDynamincFieldSet';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ScheduleSetting.less';
 import LogModal from '../../components/LogModal';
@@ -31,6 +34,7 @@ import LogModal from '../../components/LogModal';
 const FormItem = Form.Item;
 const { TextArea } = Input
 const { Option } = Select;
+const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -43,7 +47,7 @@ const TreeNode = Tree.TreeNode;
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType,
-      verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName
+      verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName, selectStatus,
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -70,6 +74,7 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
+        width={800}
       >
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="选择活动">
@@ -111,7 +116,27 @@ const CreateForm = Form.create()(
               </Select>
             )}
           </FormItem>
+          <FormItem label="填写商品信息">
+          </FormItem>
+          <FormItem {...formItemLayout} label="商品/优惠券">
+            {getFieldDecorator('status', {
+              rules: [{ required: true, message: '请选择商品/优惠券' }],
+              initialValue: '0',
+            })(
+              <RadioGroup onChange={onChange}>
+                <Radio value="0">商品</Radio>
+                <Radio value="1">优惠券</Radio>
+              </RadioGroup>
+            )}
+          </FormItem>
+          <FormItem>
+          </FormItem>
         </Form>
+        {(selectStatus === '0') ? (
+          <GoodsWrappedDynamicFieldSet />
+        ) : (
+          <DiscountWrappedDynamicFieldSet />
+        )}
       </Modal>
     );
 });
@@ -199,6 +224,7 @@ export default class ScheduleSettingList extends PureComponent {
     checkedKeys: [],
     selectedKeys: [],
     editMachineEditModalConfirmLoading: false,
+    selectStatus: '0',
   };
   componentWillMount() {
     // 查询省
@@ -485,10 +511,6 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 新增modal确认事件 结束
   // 四级联动开始
-  onChange = (value, selectedOptions) => {
-    // 当前选中的value[3]商圈
-    // console.log(value, selectedOptions);
-  }
   loadData = (selectedOptions) => {
     const targetOption = selectedOptions[selectedOptions.length - 1];
     targetOption.loading = true;
@@ -613,10 +635,6 @@ export default class ScheduleSettingList extends PureComponent {
         editMachineModalVisible: false,
       });
     });
-    // console.log(this.uniq(this.state.selectCityName), ...new Set(this.state.selectCityName));
-    // this.setState({
-    //   selectCityName,
-    // });
   }
   uniq = (array) => {
     let temp = [];
@@ -649,6 +667,13 @@ export default class ScheduleSettingList extends PureComponent {
     this.selectMachineform = form;
   }
   // tree结束
+  // 动态添加开始
+  onRadioChange = (e) => {
+    this.setState({
+      selectStatus: e.target.value,
+    });
+  }
+  // 动态添加结束
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -791,11 +816,12 @@ export default class ScheduleSettingList extends PureComponent {
           {...parentMethods}
           ref={this.saveFormRef}
           modalVisible={modalVisible}
-          insertOptions={options}
-          loadData={this.loadData}
-          onChange={this.onChange}
+          // insertOptions={options}
+          // loadData={this.loadData}
+          onChange={this.onRadioChange}
+          selectStatus={this.state.selectStatus}
           editModalConfirmLoading={editModalConfirmLoading}
-          modalData={modalData}
+          // modalData={modalData}
           modalType={modalType}
           verifyPhone={this.verifyPhone}
           verifyString={this.verifyString}

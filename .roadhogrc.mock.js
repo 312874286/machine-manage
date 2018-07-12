@@ -3299,6 +3299,42 @@ const proxy = {
       }]
     });
   },
+  'GET /project/activity/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        createId: "1",
+        createTime: "2018-07-05 18:43:09",
+        id: "1",
+        isDelete: 0,
+        remark: null,
+        sellerId: "1",
+        shopCode: "10000@XXXAXX",
+        shopName: "天猫小米旗舰店",
+        updateId: "",
+        updateTime: "2018-07-05 18:43:09",
+      }]
+    });
+  },
+  'GET /game/game/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        createId: "1",
+        createTime: "2018-07-05 18:43:09",
+        id: "1",
+        isDelete: 0,
+        remark: null,
+        sellerId: "1",
+        shopCode: "10000@XXXAXX",
+        shopName: "天猫小米旗舰店",
+        updateId: "",
+        updateTime: "2018-07-05 18:43:09",
+      }]
+    });
+  },
   'GET /project/channel/detail': (req, res) => {
     res.send({
       "msg": "成功",
@@ -3597,7 +3633,7 @@ const proxy = {
       "msg": '成功',
     });
   },
-  'GET /project/game/list': (req, res) => {
+  'GET /game/game/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -3638,7 +3674,7 @@ const proxy = {
       ]
     });
   },
-  'GET /project/game/detail': (req, res) => {
+  'GET /game/game/detail': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -3674,10 +3710,10 @@ const proxy = {
       }
     });
   },
-  'POST /project/game/update': (req, res) => {
+  'POST /game/game/update': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'POST /project/game/delete': (req, res) => {
+  'POST /game/game/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
   'POST /project/goods/add': (req, res) => {
