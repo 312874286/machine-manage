@@ -19,3 +19,11 @@ export async function getSystemUserAuth({ params, restParams }) {
     restParams,
   });
 }
+
+export async function getSystemUserQueryUserRoles({ params, restParams }) {
+  return fetch.get(api.getSystemUserQueryUserRoles, {
+    restParams,
+  });
+}
+
+

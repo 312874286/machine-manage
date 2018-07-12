@@ -439,6 +439,7 @@ const proxy = {
             functionPath: 'game',
             parentId: 'a5',
             functionLevel: 2,
+            functionIcon: 'form',
           },
           {
             id: 'a6',
@@ -3882,7 +3883,8 @@ const proxy = {
         "avatar": "",
         "createTime": "2018-07-03 18:15:13",
         "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        "deptName": "北京点七二创意互动传媒文化有限公司|",
+        "roles": "管理员",
         },
         {
         "id": "da267e278b2b4f6c934351b956d1f3f0",
@@ -3895,7 +3897,8 @@ const proxy = {
         "avatar": "https://static.dingtalk.com/media/lADPACOG83LQT67NBNrNBNo_1242_1242.jpg",
         "createTime": "2018-07-03 18:15:13",
         "isDelete": 0,
-        "deptName": "北京点七二创意互动传媒文化有限公司|"
+        "deptName": "北京点七二创意互动传媒文化有限公司|",
+        "roles": "管理员2",
         }
         ]
         }
@@ -4082,6 +4085,16 @@ const proxy = {
       {
         "code": 0,
         "data": {
+        "functions": [
+        "11",
+        "13",
+        "3",
+        "14",
+        "1",
+        "2",
+        "12"
+        ],
+        "tree": {
         "title": "机器管理系统",
         "id": "XX",
         "children": [
@@ -4154,6 +4167,11 @@ const proxy = {
         "id": "4",
         "children": [
         {
+        "title": "活动排期",
+        "id": "20",
+        "children": null
+        },
+        {
         "title": "渠道管理",
         "id": "5",
         "children": null
@@ -4187,6 +4205,7 @@ const proxy = {
         ]
         }
         ]
+        }
         },
         "msg": "成功"
         }
@@ -4218,6 +4237,26 @@ const proxy = {
 
         "code": 0,
         "data": null,
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /system/user/queryUserRoles': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": [
+        {
+        "id": "2f035d75048c4dfcb1ed82c8b3b64f05",
+        "userId": "ef93e290f7854ccdb88bbbd217438c31",
+        "roleId": "2787ec11def64f489db14ef246db265a"
+        },
+        {
+        "id": "5d4504d31ad0473a92ced2bf336144ae",
+        "userId": "ef93e290f7854ccdb88bbbd217438c31",
+        "roleId": "ddcc8a09251a4befafb7188078a5a0c6"
+        }
+        ],
         "msg": "成功"
         }
     )

@@ -8,8 +8,9 @@ export async function getSystemRoleList({ params, restParams }) {
   });
 }
 
-export async function getSystemFunctionAll({ params }) {
+export async function getSystemFunctionAll({ params, restParams }) {
   return fetch.get(api.getSystemFunctionAll, {
+    restParams,
   });
 }
 
