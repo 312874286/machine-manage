@@ -1,4 +1,4 @@
-import { getSystemUserList, getSystemRoleAll, getSystemUserAuth } from '../../services/authorityManage/staff';
+import { getSystemUserList, getSystemRoleAll, getSystemUserAuth, getSystemUserQueryUserRoles } from '../../services/authorityManage/staff';
 
 export default {
   namespace: 'staff',
@@ -25,6 +25,14 @@ export default {
     },
     *getSystemUserAuth({ payload: { restParams } }, { call, put }) {
       const response = yield call(getSystemUserAuth, { restParams });
+      return response;
+      // yield put({
+      //   type: 'getSystemRoleAllBack',
+      //   payload: response,
+      // });
+    },
+    *getSystemUserQueryUserRoles({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getSystemUserQueryUserRoles, { restParams });
       return response;
       // yield put({
       //   type: 'getSystemRoleAllBack',

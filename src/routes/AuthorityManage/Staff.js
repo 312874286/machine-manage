@@ -1,7 +1,46 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Col, Row, Button, Input, Modal, message } from 'antd';
+import { Card, Table, Col, Row, Button, Input, Modal, message, Tree } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+
+const { TreeNode } = Tree;
+
+// var treeData = [{
+//   title: '0-0',
+//   key: '0-0',
+//   children: [{
+//     title: '0-0-0',
+//     key: '0-0-0',
+//     children: [
+//       { title: '0-0-0-0', key: '0-0-0-0' },
+//       { title: '0-0-0-1', key: '0-0-0-1' },
+//       { title: '0-0-0-2', key: '0-0-0-2' },
+//     ],
+//   }, {
+//     title: '0-0-1',
+//     key: '0-0-1',
+//     children: [
+//       { title: '0-0-1-0', key: '0-0-1-0' },
+//       { title: '0-0-1-1', key: '0-0-1-1' },
+//       { title: '0-0-1-2', key: '0-0-1-2' },
+//     ],
+//   }, {
+//     title: '0-0-2',
+//     key: '0-0-2',
+//   }],
+// }, {
+//   title: '0-1',
+//   key: '0-1',
+//   children: [
+//     { title: '0-1-0-0', key: '0-1-0-0' },
+//     { title: '0-1-0-1', key: '0-1-0-1' },
+//     { title: '0-1-0-2', key: '0-1-0-2' },
+//   ],
+// }, {
+//   title: '0-2',
+//   key: '0-2',
+// }];
+
 
 @connect(({ staff }) => ({ staff }))
 export default class Staff extends PureComponent {
@@ -10,7 +49,11 @@ export default class Staff extends PureComponent {
     visible: false,
     allList: [],
     currentUserId: '',
-    selectedRows: [],
+    // selectedRows: [],
+    expandedKeys: [],
+    autoExpandParent: true,
+    checkedKeys: [],
+    selectedKeys: [],
   }
   componentDidMount = () => {
     this.getSystemUserList();
@@ -24,12 +67,38 @@ export default class Staff extends PureComponent {
     console.log(this, e, this.state.userName);
   }
   onToAuthorization = (record) => {
+    this.setState({
+      allList: [],
+    });
+    // treeData = [];
+    // this.state.selectedRows;
     this.getSystemRoleAlls();
     this.setState({
       visible: true,
+      currentUserId: record.id,
     });
-    this.state.currentUserId = record.id;
+    // this.state.currentUserId = record.id;
     console.log(record.id);
+  }
+  onExpand = (expandedKeys) => {
+    console.log('onExpand', expandedKeys);
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  }
+  onCheck = (checkedKeys) => {
+    // this.setState({
+    //   selectedRows: checkedKeys,
+    // });
+    console.log('onCheck', checkedKeys);
+    this.setState({ checkedKeys });
+  }
+  onSelect = (selectedKeys, info) => {
+    console.log('onSelect', info);
+    this.setState({ selectedKeys });
   }
   getSystemUserList = () => {
     this.props.dispatch({
@@ -39,6 +108,40 @@ export default class Staff extends PureComponent {
           keyword: this.state.userName,
         },
       },
+    });
+  }
+  getSystemUserQueryUserRoles = (data_) => {
+
+    var arr = [];
+    for (var i = 0; i < data_.length; i++) {
+      let obj = {};
+      obj.title = data_[i].name;
+      obj.key = data_[i].id;
+      obj.id = data_[i].id;
+      arr.push(obj);
+    }
+
+    this.props.dispatch({
+      type: 'staff/getSystemUserQueryUserRoles',
+      payload: {
+        restParams: {
+          userId: this.state.currentUserId,
+        },
+      },
+    }).then((res) => {
+      const { code, data, msg} = res;
+      let checkedKeysarr = [];
+      for (let i = 0; i < data.length; i++) {
+        checkedKeysarr.push(data[i].roleId);
+      }
+      
+      this.setState({
+        allList: arr,
+      }, () => {
+        this.setState({
+          checkedKeys: checkedKeysarr,
+        });
+      });
     });
   }
   getSystemRoleAlls = () => {
@@ -52,15 +155,22 @@ export default class Staff extends PureComponent {
     }).then((res) => {
       const { code, data } = res;
       // if(!code) return;
-      this.setState({
-        allList: data,
-      });
+      console.log(data);
+      this.getSystemUserQueryUserRoles(data);
+      
     });
   }
   hideOKModal = () => {
+
+    if (this.state.checkedKeys.length === 0) {
+      console.log('请授权::');
+      message.info('请授权');
+      return;
+    }
+
     let arr = [];
-    for (let i = 0; i < this.state.selectedRows.length; i++) {
-      arr.push(this.state.selectedRows[i].id);
+    for (let i = 0; i < this.state.checkedKeys.length; i++) {
+      arr.push(this.state.checkedKeys[i]);
     }
     // JSON.stringify({a:1,b:2})
     // console.log(arr);
@@ -76,13 +186,24 @@ export default class Staff extends PureComponent {
     }).then((res) => {
       const { code, msg } = res;
       if (code !== 0) {
-        message.error(msg);
+        // message.error(msg);
+        const modal = Modal.error({
+          title: '提示',
+          content: msg,
+        });
+        setTimeout(() => modal.destroy(), 2000);
         return;
       }
-      message.success(msg);
+      // message.success(msg);
+      const modal = Modal.success({
+        title: '提示',
+        content: msg,
+      });
+      setTimeout(() => modal.destroy(), 2000);
       this.setState({
         visible: false,
       });
+      this.getSystemUserList();
     });
     console.log('hideOKModal::');
   }
@@ -95,8 +216,21 @@ export default class Staff extends PureComponent {
   handleTableChange = (pagination, filters, sorter) => {
     console.log(pagination, filters, sorter);
   }
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      // console.log(item);
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode {...item} />;
+    });
+  }
   render() {
-    const { allList } = this.state;
+    const { allList, checkedKeys } = this.state;
     const { staff: { list, page } } = this.props;
     // console.log(111, list, page, allList, 222);
     const columns = [
@@ -117,6 +251,10 @@ export default class Staff extends PureComponent {
         dataIndex: 'createTime',
         key: 'createTime',
       }, {
+        title: '角色',
+        dataIndex: 'roles',
+        key: 'roles',
+      }, {
         title: '部门名称',
         dataIndex: 'deptName',
         key: 'deptName',
@@ -136,24 +274,21 @@ export default class Staff extends PureComponent {
       },
       ...page,
     };
-    const columnsPop = [
-      {
-        title: 'id',
-        dataIndex: 'id',
-        key: 'id',
-      },
-      {
-        title: '角色名称',
-        dataIndex: 'name',
-        key: 'name',
-      },
-    ];
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.state.selectedRows = selectedRows;
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
-    };
+    // const columnsPop = [
+    //   {
+    //     title: '角色名称',
+    //     dataIndex: 'name',
+    //     key: 'name',
+    //   },
+    // ];
+    // // console.log(111, this.state.selectedRows);
+    // const rowSelection = {
+    //   onChange: (selectedRowKeys, selectedRows) => {
+    //     this.state.selectedRows = selectedRows;
+    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    //   },
+    // };
+    console.log(111, checkedKeys);
     return (
       <PageHeaderLayout>
         <Modal
@@ -164,17 +299,28 @@ export default class Staff extends PureComponent {
           okText="确认"
           cancelText="取消"
         >
-          <Table
-            dataSource={allList}
-            columns={columnsPop}
-            rowSelection={rowSelection}
-            rowKey="id"
-          />
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={9} sm={24}>
+              角色名称
+            </Col>
+          </Row>
+          <Tree
+            checkable
+            onExpand={this.onExpand}
+            expandedKeys={this.state.expandedKeys}
+            autoExpandParent={this.state.autoExpandParent}
+            onCheck={this.onCheck}
+            checkedKeys={checkedKeys}
+            onSelect={this.onSelect}
+            selectedKeys={this.state.selectedKeys}
+          >
+            {this.renderTreeNodes(allList)}
+          </Tree>
         </Modal>
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
-              <Input placeholder="姓名" onChange={this.onChange} />
+              <Input placeholder="请输入姓名" onChange={this.onChange} />
             </Col>
             <Col md={6} sm={24}>
               <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>

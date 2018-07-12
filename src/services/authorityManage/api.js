@@ -8,10 +8,11 @@ const api = map({
   getSystemFunctionList: '/system/function/list?keyword={keyword}',
   getSystemRoleAll: '/system/role/all',
   getSystemUserAuth: '/system/user/auth?userId={userId}&roleIds={roleIds}',
-  getSystemFunctionAll: '/system/function/all',
+  getSystemFunctionAll: '/system/function/all?roleId={roleId}',
   getSystemRoleAdd: '/system/role/add?name={name}&auths={auths}',
   getSystemRoleUpdate: '/system/role/update?id={id}&name={name}&auths={auths}',
   getSystemRoleDelete: '/system/role/delete?id={id}',
+  getSystemUserQueryUserRoles: '/system/user/queryUserRoles?userId={userId}',
 });
 
 export default api;

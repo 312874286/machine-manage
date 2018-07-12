@@ -68,12 +68,13 @@ export default class Account extends PureComponent {
       type: 'account/getSystemFunctionAll',
       payload: {
         restParams: {
+          roleId: record.id,
         },
       },
     }).then((res) => {
       const { code, data } = res;
-      // if(!code) return;
-      const otherdata = data.children;
+      // console.log(data.functions);
+      const otherdata = data.tree.children;
       for (const i in otherdata) {
         if (otherdata[i].children) {
           this.bianlijson(otherdata[i].children);
@@ -85,6 +86,16 @@ export default class Account extends PureComponent {
       // treeData = data;
       this.setState({
         treeData: otherdata,
+      },() => {
+        if(data.functions === null) {
+          this.setState({
+            checkedKeys: [],
+          });
+        } else {
+          this.setState({
+            checkedKeys: data.functions,
+          });
+        }
       });
     });
     this.setState({
@@ -120,8 +131,7 @@ export default class Account extends PureComponent {
   }
   onExpand = (expandedKeys) => {
     console.log('onExpand', expandedKeys);
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
+    
     this.setState({
       expandedKeys,
       autoExpandParent: false,
@@ -138,6 +148,10 @@ export default class Account extends PureComponent {
   onAddChange = (e) => {
     this.setState({ addUserName: e.target.value });
   }
+  onChange = (e) => {
+    this.setState({ userName: e.target.value });
+    // console.log(111,e.target.value,this);
+  }
   getSystemRoleList = () => {
     this.props.dispatch({
       type: 'account/getSystemRoleList',
@@ -151,17 +165,21 @@ export default class Account extends PureComponent {
   handleModalAdd = (e) => {
     this.setState({
       clickType: 1,
+      addUserName: '',
+      treeData: [],
     });
+    console.log(this.state.addUserName);
     this.props.dispatch({
       type: 'account/getSystemFunctionAll',
       payload: {
         restParams: {
+          roleId: '',
         },
       },
     }).then((res) => {
       const { code, data } = res;
       // if(!code) return;
-      const otherdata = data.children;
+      const otherdata = data.tree.children;
       for (const i in otherdata) {
         if (otherdata[i].children) {
           this.bianlijson(otherdata[i].children);
@@ -173,6 +191,16 @@ export default class Account extends PureComponent {
       // treeData = data;
       this.setState({
         treeData: otherdata,
+      },() => {
+        if(data.functions === null) {
+          this.setState({
+            checkedKeys: [],
+          });
+        } else {
+          this.setState({
+            checkedKeys: data.functions,
+          });
+        }
       });
     });
     this.setState({
@@ -188,6 +216,15 @@ export default class Account extends PureComponent {
     }
   }
   hideOKModal = (e) => {
+    if (this.state.addUserName === '') {
+      message.error('请填写角色名称');
+      return;
+    }
+    console.log(111,this.state.checkedKeys);
+    if (this.state.checkedKeys.length === 0) {
+      message.error('请选择管理');
+      return;
+    }
     if (this.state.clickType === 1) {
       // let postdata = {};
       // postdata.name = 'dd';
@@ -302,7 +339,7 @@ export default class Account extends PureComponent {
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
-              <Input placeholder="角色姓名" onChange={this.onChange} />
+              <Input placeholder="请输入角色名称" onChange={this.onChange} />
             </Col>
             <Col md={6} sm={24}>
               <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
@@ -351,6 +388,7 @@ export default class Account extends PureComponent {
                 checkedKeys={this.state.checkedKeys}
                 onSelect={this.onSelect}
                 selectedKeys={this.state.selectedKeys}
+                
               >
                 {this.renderTreeNodes(treeData)}
               </Tree>
