@@ -3,7 +3,7 @@ import {
   order,
   updateOrder,
   cancelOrder,
-} from '../../services/order/childDisease';
+} from '../../services/orderOld/childDisease';
 
 export default {
   namespace: 'childDisease',

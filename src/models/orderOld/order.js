@@ -1,4 +1,6 @@
-import { getOrderList } from '../../services/order/order';
+import {
+  getOrderList,
+} from '../../services/orderOld/order';
 
 export default {
   namespace: 'order',

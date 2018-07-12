@@ -171,10 +171,9 @@ export default class shopSettingList extends PureComponent {
     form.resetFields();
     this.setState({
       formValues: {},
-    });
-    dispatch({
-      type: '',
-      payload: {},
+      pageNo: 1,
+      keyword: '',
+      code: '',
     });
   };
 

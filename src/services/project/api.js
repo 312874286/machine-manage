@@ -24,7 +24,14 @@ const api = map({
   updateActivitySetting: '/project/activity/update',
   deleteActivitySetting: '/project/activity/delete',
   getActivitySettingDetail: '/project/activity/detail?id={id}',
-  getShopsList: '/project/shops/getList',
+  getShopsList: '/project/shops/getList?sellerId={sellerId}',
+  getScheduleSettingList: '/project/schedule/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  saveScheduleSetting: '/project/schedule/add',
+  updateScheduleSetting: '/project/schedule/update',
+  deleteScheduleSetting: '/project/schedule/delete',
+  getScheduleSettingDetail: '/project/schedule/detail?id={id}',
+  getActivityList: '/project/activity/getList',
+  getGameList: '/game/game/getList',
 });
 
 export default api;

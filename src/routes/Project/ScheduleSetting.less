@@ -1,4 +1,4 @@
-@import '../../../node_modules/antd/lib/style/themes/default.less';
+@import '~antd/lib/style/themes/default.less';
 @import '../../utils/utils.less';
 
 .tableList {
@@ -10,7 +10,9 @@
     }
   }
 }
-
+.delete {
+  color: red;
+}
 .tableListForm {
   :global {
     .ant-form-item {
@@ -43,9 +45,7 @@
       border: rgba(245, 75, 48, 1);
     }
   }
-}
-.delete {
-  color: red;
+
 }
 table tr:nth-child(odd) {
   //background: #ffe8e4;

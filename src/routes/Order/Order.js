@@ -1,95 +1,280 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import {
   Row,
   Col,
   Card,
   Form,
   Input,
-  Button,
-  DatePicker,
   Select,
+  Icon,
+  Button,
+  Dropdown,
+  Menu,
+  InputNumber,
+  DatePicker,
+  Modal,
+  message,
+  Badge,
+  Divider,
+  Cascader,
+  Popconfirm
 } from 'antd';
+import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Order.less';
-import OrderTable from '../../components/Order/orderTable';
-import { orderStatusData, orderTypeData } from '../../common/config/order';
-import LogModal from '../../components/LogModal';
+import LogModal from '../../components/LogModal/index';
 
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+
 const FormItem = Form.Item;
+const { Option } = Select;
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
+const statusMap = ['processing', 'default', 'success', 'error'];
+const status = ['已完成', '未完成', '已上线', '异常'];
 
-
-@connect(({ order, loading, log }) => ({
+const CreateForm = Form.create()(
+  (props) => {
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType } = props;
+    // const okHandle = () => {
+    //   form.validateFields((err, fieldsValue) => {
+    //     if (err) return;
+    //     form.resetFields();
+    //     handleAdd(fieldsValue);
+    //   });
+    // };
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title={!modalType ? '编辑渠道' : '新建渠道'}
+        visible={modalVisible}
+        onOk={handleAdd}
+        onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}
+      >
+        <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="渠道编码">
+            {getFieldDecorator('channelCode', {
+              rules: [{ required: true, message: '请输入渠道编码' }],
+            })(<Input placeholder="请输入商场" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="渠道名称">
+            {getFieldDecorator('channelName', {
+              rules: [{ required: true, message: '请输入渠道名称' }],
+            })(<Input placeholder="请输入渠道名称" />)}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+});
+@connect(({ common, loading, order, log }) => ({
+  common,
   order,
+  loading: loading.models.rule,
   log,
-  loading: loading.models.order,
 }))
 @Form.create()
-export default class Order extends PureComponent {
+export default class orderList extends PureComponent {
   state = {
+    modalVisible: false,
+    selectedRows: [],
+    formValues: {},
+    id: '',
+    editModalConfirmLoading: false,
     pageNo: 1,
-    startDate: '',
-    endDate: '',
-    orderNum: '',
-    orderType: '',
-    status: '',
+    keyword: '',
+    modalData: {},
     logModalVisible: false,
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
+    modalType: true,
   };
-
-  componentDidMount = () => {
-    this.getList();
+  componentDidMount() {
+    this.getLists();
   }
-
   // 获取列表
-  getList = () => {
+  getLists = () => {
     this.props.dispatch({
       type: 'order/getOrderList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          startDate: this.state.startDate,
-          endDate: this.state.endDate,
-          orderNum: this.state.orderNum,
-          orderType: this.state.orderType,
-          status: this.state.status,
+          keyword: this.state.keyword,
         },
       },
     });
   }
-
   // 分页
-  handleTableChange = (pagination) => {
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
     const { current } = pagination;
+    // console.log('params', params)
     this.setState({
       pageNo: current,
     }, () => {
-      this.getList();
+      this.getLists();
+    });
+  };
+  // 重置
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+      pageNo: 1,
+      keyword: '',
+    }, () => {
+      this.getLists();
+    });
+  };
+
+  handleSelectRows = rows => {
+    this.setState({
+      selectedRows: rows,
+    });
+  };
+  // 搜索
+  handleSearch = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      this.setState({
+        pageNo: 1,
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+      }, () => {
+        this.getLists();
+      });
+    });
+  };
+  // 添加modal 添加事件
+  handleModalVisible = (flag) => {
+    this.setState({
+      modalVisible: !!flag,
+      modalData: {},
+      modalType: false,
+    });
+    this.setModalData();
+  };
+  // 删除modal 删除事件
+  handleDelClick = (item) => {
+    this.setState({
+      editModalConfirmLoading: true,
+    });
+    if (item) {
+      const params = { id: item.id };
+      this.props.dispatch({
+        type: 'order/delOrder',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        // message.success('Click on Yes');
+        this.getLists();
+        this.setState({
+          editModalConfirmLoading: false,
+        });
+      });
+    } else return false;
+  }
+  // 编辑modal 编辑事件
+  handleEditClick = (item) => {
+    this.setState({
+      modalVisible: true,
+      modalData: item,
+      modalType: true,
+    });
+    this.props.dispatch({
+      type: 'order/getOrderDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setModalData(res);
     });
   }
-
-  // 搜索
-  handleSearch = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
+  // 设置modal 数据
+  setModalData = (data) => {
+    if (data) {
+      this.form.setFieldsValue({
+        channelCode: data.channelCode || '',
+        channelName: data.channelName || '',
+      });
+    } else {
+      this.form.setFieldsValue({
+        channelCode: '',
+        channelName: '',
+      });
+    }
+  }
+  // 新增modal确认事件 开始
+  saveFormRef = (form) => {
+    this.form = form;
+  }
+  // 编辑modal 确认事件
+  handleAdd = () => {
+    this.form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
       this.setState({
-        startDate: fieldsValue.time ? fieldsValue.time[0].format('YYYY-MM-DD') : '',
-        endDate: fieldsValue.time ? fieldsValue.time[1].format('YYYY-MM-DD') : '',
-        orderNum: fieldsValue.orderNum,
-        orderType: fieldsValue.orderType,
-        status: fieldsValue.status,
-      }, () => {
-        this.getList();
+        editModalConfirmLoading: true,
+        modalData: {},
+      });
+      let url = 'order/saveOrder';
+      let params = { ...values };
+      if (this.state.modalData.id) {
+        url = 'order/editOrder';
+        params = { ...values, id: this.state.modalData.id };
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then(() => {
+        this.getLists();
+        this.setState({
+          editModalConfirmLoading: false,
+          modalVisible: false,
+        });
       });
     });
   }
-
+  // 新增modal确认事件 结束
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -98,6 +283,7 @@ export default class Order extends PureComponent {
         restParams: {
           code: this.state.logId,
           pageNo: this.state.logModalPageNo,
+          type: 1020403,
         },
       },
     }).then(() => {
@@ -131,86 +317,156 @@ export default class Order extends PureComponent {
       this.getLogList();
     });
   }
-
-
+  renderAdvancedForm() {
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={9} sm={24}>
+            <FormItem label="关键字">
+              {getFieldDecorator('keyword')(<Input placeholder="请输入订单编号、订单名称" />)}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <span style={{ float: 'right' }}>
+               <FormItem>
+                  <Button onClick={this.handleFormReset}>
+                    重置
+                  </Button>
+                  <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
+                    查询
+                  </Button>
+               </FormItem>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { order: { list, page }, log: { logList, logPage }, loading } = this.props;
-    const { orderNum, time, orderType, status } = this.state;
+    const {
+      order: { list, page },
+      loading,
+      log: { logList, logPage },
+    } = this.props;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
+    const columns = [
+      // {
+      //   title: '订单编号',
+      //   // width: 100,
+      //   dataIndex: 'id',
+      //   fixed: 'left',
+      // },
+      {
+        title: '用户Id',
+        // width: 200,
+        dataIndex: 'userId',
+      },
+      {
+        title: '渠道名称',
+        dataIndex: 'channelName',
+      },
+      {
+        title: '机器名称',
+        dataIndex: 'machineName',
+      },
+      {
+        title: '游戏名称',
+        dataIndex: 'gameName',
+      },
+      {
+        title: '订单价格',
+        dataIndex: 'orderPrice',
+      },
+      {
+        title: '订单类型',
+        dataIndex: 'orderType',
+      },
+      {
+        title: '支付状态',
+        dataIndex: 'payStatus',
+        filters: [
+          {
+            text: status[0],
+            value: 0,
+          },
+          {
+            text: status[1],
+            value: 1,
+          },
+          {
+            text: status[2],
+            value: 2,
+          },
+          {
+            text: status[3],
+            value: 3,
+          },
+        ],
+        onFilter: (value, record) => record.status.toString() === value,
+        render(val) {
+          return <Badge status={statusMap[val]} text={status[val]} />;
+        },
+      },
+      {
+        title: '下单时间',
+        dataIndex: 'orderTime',
+      }
+    ];
+    // this.state.options = this.props.common.list
+    const menu = (
+      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
+        <Menu.Item key="remove">删除</Menu.Item>
+        <Menu.Item key="approval">批量审批</Menu.Item>
+      </Menu>
+    );
+    const parentMethods = {
+      handleAdd: this.handleAdd,
+      handleModalVisible: this.handleModalVisible,
+    };
 
     return (
       <PageHeaderLayout>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
+          <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
+        </Card>
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
-              <Form onSubmit={this.handleSearch} layout="inline">
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={12}>
-                    <FormItem label="支付时间">
-                      {getFieldDecorator('time', {
-                        initialValue: time,
-                      })(
-                        <RangePicker />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={8} sm={12}>
-                    <FormItem label="订单类型">
-                      {getFieldDecorator('orderType', {
-                        initialValue: orderType,
-                      })(
-                        <Select placeholder="请选择">
-                          {orderTypeData.map((item, index) => {
-                            return <Option key={index} value={item.id}>{item.name}</Option>;
-                          })}
-                          <Option value="">全部</Option>
-                        </Select>
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={8} sm={12}>
-                    <FormItem label="订单状态">
-                      {getFieldDecorator('status', {
-                        initialValue: status,
-                      })(
-                        <Select placeholder="请选择" >
-                          {orderStatusData.map((item, index) => {
-                            return <Option key={index} value={item.id}>{item.name}</Option>
-                          })}
-                          <Option value="">全部</Option>
-                        </Select>
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={12}>
-                    <FormItem label="订单号">
-                      {getFieldDecorator('orderNum', {
-                        initialValue: orderNum,
-                      })(
-                        <Input placeholder="请输入" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={8} sm={12}>
-                    <span className={styles.submitButtons}>
-                      <Button type="primary" htmlType="submit">查询</Button>
-                    </span>
-                  </Col>
-                </Row>
-              </Form>
+            <div className={styles.tableListOperator}>
+              {/*<Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>*/}
+                {/*新建*/}
+              {/*</Button>*/}
+              {/*{selectedRows.length > 0 && (*/}
+                {/*<span>*/}
+                  {/*<Button>批量操作</Button>*/}
+                  {/*<Dropdown overlay={menu}>*/}
+                    {/*<Button>*/}
+                      {/*更多操作 <Icon type="down" />*/}
+                    {/*</Button>*/}
+                  {/*</Dropdown>*/}
+                {/*</span>*/}
+              {/*)}*/}
             </div>
+            <StandardTable
+              selectedRows={selectedRows}
+              loading={loading}
+              data={list}
+              page={page}
+              columns={columns}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
+              scrollX={500}
+            />
           </div>
-
-          <OrderTable
-            loading={loading}
-            data={list}
-            page={page}
-            handleTableChange={this.handleTableChange}
-            onLogClick={this.handleLogClick}
-          />
         </Card>
+        <CreateForm
+          {...parentMethods}
+          ref={this.saveFormRef}
+          modalVisible={modalVisible}
+          editModalConfirmLoading={editModalConfirmLoading}
+          modalType={modalType}
+        />
         <LogModal
           data={logList}
           page={logPage}
@@ -220,6 +476,6 @@ export default class Order extends PureComponent {
           logModalhandleTableChange={this.logModalhandleTableChange}
         />
       </PageHeaderLayout>
-    )
+    );
   }
 }

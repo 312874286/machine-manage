@@ -25,3 +25,10 @@ export async function delMachineSetting({ params }) {
     body: stringify(params),
   });
 }
+
+export async function getPointSettingList({ restParams }) {
+  console.log('restParams', restParams)
+  return fetch.get(api.getPointSettingList, {
+    restParams,
+  });
+}
