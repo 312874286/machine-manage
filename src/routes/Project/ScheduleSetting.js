@@ -23,9 +23,9 @@ import {
   Tree,
   Radio,
 } from 'antd';
-import StandardTable from '../../components/StandardTable';
 import GoodsWrappedDynamicFieldSet from '../../components/GoodsDynamicFieldSet';
 import DiscountWrappedDynamicFieldSet from '../../components/DiscountDynamincFieldSet';
+import ScheduleTable from '../../components/ScheduleTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ScheduleSetting.less';
 import LogModal from '../../components/LogModal';
@@ -673,6 +673,8 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   // 动态添加结束
+  // 日历table操作开始
+  // 日历table操作结束
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -800,15 +802,7 @@ export default class ScheduleSettingList extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            {/*<StandardTable*/}
-              {/*selectedRows={selectedRows}*/}
-              {/*loading={loading}*/}
-              {/*data={list}*/}
-              {/*page={page}*/}
-              {/*columns={columns}*/}
-              {/*onSelectRow={this.handleSelectRows}*/}
-              {/*onChange={this.handleStandardTableChange}*/}
-            {/*/>*/}
+            <ScheduleTable />
           </div>
         </Card>
         <CreateForm
