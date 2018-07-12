@@ -170,6 +170,9 @@ export const getRouterData = (app) => {
     '/project/activity': {
       component: dynamicWrapper(app, ['project/activitySetting', 'log/log'], () => import('../routes/Project/ActivitySetting')),
     },
+    '/project/schedule': {
+      component: dynamicWrapper(app, ['project/scheduleSetting', 'log/log'], () => import('../routes/Project/ScheduleSetting')),
+    },
     '/game/game': {
       component: dynamicWrapper(app, ['game/gameSetting', 'log/log'], () => import('../routes/Game/GameSetting')),
     },

@@ -20,10 +20,11 @@ import {
   Divider,
   Cascader,
   Popconfirm,
+  Tree,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './PointSetting.less';
+import styles from './ScheduleSetting.less';
 import LogModal from '../../components/LogModal';
 
 
@@ -36,10 +37,14 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
+const RangePicker = DatePicker.RangePicker;
+const TreeNode = Tree.TreeNode;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType, verifyPhone, verifyString, verifyTrim } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType,
+      verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName
+    } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -55,72 +60,115 @@ const CreateForm = Form.create()(
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 18 },
       },
     };
     return (
       <Modal
-        title={!modalType ? '编辑点位' : '新建点位'}
+        title={!modalType ? '编辑排期' : '新增排期'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="省市区商圈">
-            {getFieldDecorator('provinceCityAreaTrade', {
-              rules: [{ required: true, message: '省市区商圈' }, {
-                validator: verifyString,
-              }],
-              // initialValue: { defaultValue },
+          <FormItem {...formItemLayout} label="选择活动">
+            {getFieldDecorator('channelId', {
+              rules: [{ required: true, message: '请选择活动' }],
             })(
-              <Cascader
-                placeholder="请选择"
-                options={insertOptions}
-                loadData={loadData}
-                onChange={onChange}
-                changeOnSelect
-              />
+              <Select placeholder="请选择">
+                {activityLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                  );
+                })}
+              </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="商场名称">
-            {getFieldDecorator('mall', {
-              rules: [{ required: true, message: '请输入商场名称' }, {
-                validator: verifyTrim,
-              }],
-            })(<Input placeholder="请输入商场" />)}
+          <FormItem {...formItemLayout} label="选择时间">
+            {getFieldDecorator('rangeTime', {
+              rules: [{ type: 'array', required: true, message: '请选择时间' }],
+            })(
+              <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />
+            )}
           </FormItem>
-          <FormItem {...formItemLayout} label="运营人员">
-            {getFieldDecorator('manager', {
-              rules: [{ required: true, message: '请输入运营人员' }, {
-                validator: verifyTrim,
-              }],
-            })(<Input placeholder="请输入运营人" />)}
+          <FormItem {...formItemLayout} label="选择机器">
+            <div>
+              { selectCityName.length > 0 ? '已选择50台机器，分别位于' + selectCityName.join('、') : '' }
+            </div>
+            <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
           </FormItem>
-          <FormItem {...formItemLayout} label="手机号码">
-            {getFieldDecorator('mobile', {
-              rules: [{ required: true, message: '请输入手机号码' }, {
-                validator: verifyPhone,
-              }],
-            })(<Input placeholder="请输入手机" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="备注描述">
-            {getFieldDecorator('remark', {
-              rules: [{ required: true, message: '请输入备注描述' }],
-            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+          <FormItem {...formItemLayout} label="选择游戏">
+            {getFieldDecorator('channelId', {
+              rules: [{ required: true, message: '请选择游戏' }],
+            })(
+              <Select placeholder="请选择">
+                {gameLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                  );
+                })}
+              </Select>
+            )}
           </FormItem>
         </Form>
       </Modal>
     );
 });
-@connect(({ common, loading, pointSetting, log }) => ({
+const SelectMachineForm = Form.create()(
+  (props) => {
+    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading,
+    renderTreeNodes, treeData, onLoadData, onExpand, expandedKeys, autoExpandParent, checkedKeys, selectedKeys, onCheck, onSelect, } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title="选择机器"
+        visible={editMachineModalVisible}
+        onOk={onEditMachineHandleAddClick}
+        onCancel={() => onEditMachineHandleModalVisibleClick()}
+        confirmLoading={editMachineEditModalConfirmLoading}
+      >
+        <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="选择机器">
+            {getFieldDecorator('machine', {
+              rules: [{ type: 'array', required: true, message: '请选择机器' }],
+            })(
+              <Tree
+                loadData={onLoadData}
+                checkable
+                onExpand={onExpand}
+                expandedKeys={expandedKeys}
+                autoExpandParent={autoExpandParent}
+                onCheck={onCheck}
+                checkedKeys={checkedKeys}
+                onSelect={onSelect}
+                selectedKeys={selectedKeys}
+              >
+                {renderTreeNodes(treeData)}
+              </Tree>
+            )}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+});
+@connect(({ common, loading, scheduleSetting }) => ({
   common,
-  pointSetting,
+  scheduleSetting,
   loading: loading.models.rule,
-  log,
 }))
 @Form.create()
-export default class PointSettingList extends PureComponent {
+export default class ScheduleSettingList extends PureComponent {
   state = {
     modalVisible: false,
     expandForm: false,
@@ -132,19 +180,32 @@ export default class PointSettingList extends PureComponent {
     pageNo: 1,
     keyword: '',
     modalData: {},
-    logModalVisible: false,
-    logModalLoading: false,
-    logId: '',
-    logModalPageNo: 1,
     code: '',
     modalType: true,
+    activityLists: [],
+    gameLists: [],
+
+    editMachineModalVisible: false,
+    confirmLoading: false,
+    treeData: [
+      // { title: 'Expand to load', key: '0' },
+      // { title: 'Expand to load', key: '1' },
+      // { title: 'Tree Node', key: '2', isLeaf: true },
+    ],
+    selectCity: [],
+    selectCityName: [],
+    expandedKeys: [],
+    autoExpandParent: true,
+    checkedKeys: [],
+    selectedKeys: [],
+    editMachineEditModalConfirmLoading: false,
   };
   componentWillMount() {
     // 查询省
   }
   componentDidMount() {
     this.getAreaList();
-    this.getLists();
+    // this.getLists();
   }
   // 获取城市列表
   getAreaList = () => {
@@ -158,13 +219,36 @@ export default class PointSettingList extends PureComponent {
     }).then( (res) => {
       this.setState({
         options: res,
+        treeData: res,
+      });
+    });
+    // activityList
+    this.props.dispatch({
+      type: 'scheduleSetting/activityList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        activityLists: res,
+      });
+    });
+    // gameList
+    this.props.dispatch({
+      type: 'scheduleSetting/gameList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        gameLists: res,
       });
     });
   }
   // 获取点位管理列表
   getLists = () => {
     this.props.dispatch({
-      type: 'pointSetting/getPointSettingList',
+      type: 'scheduleSetting/getScheduleSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
@@ -313,7 +397,7 @@ export default class PointSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'pointSetting/delPointSetting',
+        type: 'scheduleSetting/delScheduleSetting',
         payload: {
           params,
         },
@@ -334,104 +418,24 @@ export default class PointSettingList extends PureComponent {
       modalType: false,
     });
     this.props.dispatch({
-      type: 'pointSetting/getPointSettingDetail',
+      type: 'scheduleSetting/getScheduleSettingDetail',
       payload: {
         restParams: {
           id: item.id,
         },
       },
     }).then((res) => {
-      // 回显省市区商圈数据源
-      if (res.province) {
-        let province, provinceIndex, cityIndex, { city, district, circle } = res;
-        // all 省
-        this.props.dispatch({
-          type: 'common/getProvinceCityAreaTradeArea',
-          payload: {
-            restParams: {
-              code: '',
-            },
-          },
-        }).then((provinceRes) => {
-          province = provinceRes; // 所有省
-          // 市
-          this.props.dispatch({
-            type: 'common/getProvinceCityAreaTradeArea',
-            payload: {
-              restParams: {
-                code: res.province,
-              },
-            },
-          }).then((cityRes) => {
-            for (let i = 0; i < province.length; i++) {
-              // console.log(province[i].value === res.province, province[i].value, res.province, i)
-              if (province[i].value === res.province) {
-                provinceIndex = i
-                province[i].children = cityRes;
-              }
-            }
-            // 区
-            this.props.dispatch({
-              type: 'common/getProvinceCityAreaTradeArea',
-              payload: {
-                restParams: {
-                  code: city,
-                },
-              },
-            }).then((districtRes) => {
-              let arr = province[provinceIndex].children
-              for (let i = 0; i < arr.length; i++) {
-                if (arr[i].value === city) {
-                  cityIndex = i
-                  arr[i].children = districtRes;
-                }
-              }
-              // 区
-              this.props.dispatch({
-                type: 'common/getProvinceCityAreaTradeArea',
-                payload: {
-                  restParams: {
-                    code: district,
-                  },
-                },
-              }).then((circleRes) => {
-                let arr = province[provinceIndex].children[cityIndex].children
-                for (let i = 0; i < arr.length; i++) {
-                  if (arr[i].value === district) {
-                    arr[i].children = circleRes;
-                  }
-                }
-                // 商圈
-                this.setState({
-                  options: province,
-                  defaultValue: [res.province, city, district, circle],
-                }, () => {
-                  this.setModalData(res);
-                });
-              });
-            });
-          });
-        });
-      }
     });
   }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        mall: data.mall || '',
-        manager: data.manager || '',
-        mobile: data.mobile || '',
-        provinceCityAreaTrade: this.state.defaultValue,
-        remark: data.remark || '',
+        rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
       });
     } else {
       this.form.setFieldsValue({
-        mall: '',
-        manager: '',
-        mobile: '',
-        provinceCityAreaTrade: '',
-        remark: '',
+        rangeTime: undefined,
       });
     }
   }
@@ -445,19 +449,20 @@ export default class PointSettingList extends PureComponent {
       if (err) {
         return;
       }
-      const provinceCityAreaTradeTmp = fieldsValue.provinceCityAreaTrade
+      const rangeTimeValue = fieldsValue.rangeTime
       let params = {
         ...fieldsValue,
-        provinceCityAreaTrade: undefined,
-        areaCode: provinceCityAreaTradeTmp[provinceCityAreaTradeTmp.length - 1],
+        rangeTime: undefined,
+        createTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
+        endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
       };
       this.setState({
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'pointSetting/savePointSetting';
+      let url = 'scheduleSetting/saveScheduleSetting';
       if (this.state.modalData.id) {
-        url = 'pointSetting/editPointSetting';
+        url = 'scheduleSetting/editScheduleSetting';
         params = { ...params, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -507,48 +512,143 @@ export default class PointSettingList extends PureComponent {
     });
   }
   // 四级联动结束
-  // 日志相关
-  getLogList = () => {
-    this.props.dispatch({
-      type: 'log/getLogList',
-      payload: {
-        restParams: {
-          code: this.state.logId,
-          pageNo: this.state.logModalPageNo,
-          type: 1020403,
-        },
-      },
-    }).then(() => {
+  // 日历开始
+  range = (start, end) =>  {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+  disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  }
+  disabledDateTime = () => {
+    return {
+      disabledHours: () => range(0, 24).splice(4, 20),
+      disabledMinutes: () => range(30, 60),
+      disabledSeconds: () => [55, 56],
+    };
+  }
+  // 日历结束
+  // tree开始
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode {...item} dataRef={item} />;
+    });
+  }
+  onLoadData = (treeNode) => {
+    return new Promise((resolve) => {
+      if (treeNode.props.children) {
+        resolve();
+        return;
+      }
+      console.log('treeNode.props.dataRef', treeNode.props.dataRef.value, treeNode.props.children)
+      const targetOption = treeNode.props.dataRef;
+      // targetOption.loading = true;
       this.setState({
-        logModalLoading: false,
+        code: targetOption.value,
+      }, () => {
+        this.props.dispatch({
+          type: 'common/getProvinceCityAreaTradeArea',
+          payload: {
+            restParams: {
+              code: targetOption.value,
+              level: targetOption.level,
+            },
+          },
+        }).then((res) => {
+          // targetOption.loading = false;
+          targetOption.children = res
+          console.log('res', res)
+          this.setState({
+            treeData: [...this.state.treeData],
+          });
+          resolve();
+        });
       });
     });
   }
-
-  handleLogClick = (data) => {
+  onExpand = (expandedKeys, node) => {
+    console.log('onExpand展开/收起节点时触发', expandedKeys, node);
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
     this.setState({
-      logModalVisible: !!data,
-      logModalLoading: true,
-      logId: data.id,
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  }
+  onCheck = (checkedKeys, node) => {
+    // .checkedNodes[0].props.dataRef.value
+    console.log('onCheck点击复选框触发', checkedKeys, node);
+    // let node =
+    this.setState({ checkedKeys, selectCity: node.checkedNodes });
+  }
+  onSelect = (selectedKeys, info) => {
+    console.log('onSelect点击树节点触发', info);
+    // this.setState({ selectedKeys });
+  }
+  onEditMachineHandleAddClick = () => {
+    console.log('选择机器确认');
+    let selectCity = this.state.selectCity
+    let selectCityName = [];
+    this.setState({
+      selectCityName: [],
     }, () => {
-      this.getLogList();
+      selectCity.forEach((item) => {
+        let cityName = item.props.dataRef.province;
+        selectCityName.push(cityName);
+      });
+      selectCityName = this.uniq(selectCityName)
+      this.setState({
+        selectCityName,
+        editMachineModalVisible: false,
+      });
     });
+    // console.log(this.uniq(this.state.selectCityName), ...new Set(this.state.selectCityName));
+    // this.setState({
+    //   selectCityName,
+    // });
   }
-
-  logModalHandleCancel = () => {
+  uniq = (array) => {
+    let temp = [];
+    let index = [];
+    let l = array.length;
+    for (var i = 0; i < l; i++) {
+      for (var j = i + 1; j < l; j++) {
+        console.log(array[i] === array[j])
+        if (array[i] === array[j]) {
+          i++;
+          j = i;
+        }
+      }
+      temp.push(array[i]);
+      index.push(i);
+    }
+    return temp;
+  }
+  openSelectMachineModal = () => {
     this.setState({
-      logModalVisible: false,
+      editMachineModalVisible: true,
     });
   }
-
-  logModalhandleTableChange = (pagination) => {
-    const { current } = pagination;
+  onEditMachineHandleModalVisibleClick = () => {
     this.setState({
-      logModalPageNo: current,
-    }, () => {
-      this.getLogList();
+      editMachineModalVisible: false,
     });
   }
+  selectMachineFormRef = (form) => {
+    this.selectMachineform = form;
+  }
+  // tree结束
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -566,11 +666,6 @@ export default class PointSettingList extends PureComponent {
                   changeOnSelect
                 />
               )}
-            </FormItem>
-          </Col>
-          <Col md={9} sm={24}>
-            <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -596,11 +691,10 @@ export default class PointSettingList extends PureComponent {
   }
   render() {
     const {
-      pointSetting: { list, page },
+      scheduleSetting: { list, page },
       loading,
-      log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, gameLists, activityLists } = this.state;
     const columns = [
       {
         title: '所属省市区商圈',
@@ -672,25 +766,25 @@ export default class PointSettingList extends PureComponent {
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
-                {/*<span>*/}
-                  {/*<Button>批量操作</Button>*/}
-                  {/*<Dropdown overlay={menu}>*/}
-                    {/*<Button>*/}
-                      {/*更多操作 <Icon type="down" />*/}
-                    {/*</Button>*/}
-                  {/*</Dropdown>*/}
-                {/*</span>*/}
+              {/*<span>*/}
+              {/*<Button>批量操作</Button>*/}
+              {/*<Dropdown overlay={menu}>*/}
+              {/*<Button>*/}
+              {/*更多操作 <Icon type="down" />*/}
+              {/*</Button>*/}
+              {/*</Dropdown>*/}
+              {/*</span>*/}
               {/*)}*/}
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-            />
+            {/*<StandardTable*/}
+              {/*selectedRows={selectedRows}*/}
+              {/*loading={loading}*/}
+              {/*data={list}*/}
+              {/*page={page}*/}
+              {/*columns={columns}*/}
+              {/*onSelectRow={this.handleSelectRows}*/}
+              {/*onChange={this.handleStandardTableChange}*/}
+            {/*/>*/}
           </div>
         </Card>
         <CreateForm
@@ -706,14 +800,29 @@ export default class PointSettingList extends PureComponent {
           verifyPhone={this.verifyPhone}
           verifyString={this.verifyString}
           verifyTrim={this.verifyTrim}
+          gameLists={gameLists}
+          activityLists={activityLists}
+          disabledDate={this.disabledDate}
+          disabledDateTime={this.disabledDateTime}
+          openSelectMachineModal={this.openSelectMachineModal}
+          selectCityName={this.state.selectCityName}
         />
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
+        <SelectMachineForm
+          ref={this.selectMachineFormRef}
+          editMachineModalVisible={this.state.editMachineModalVisible}
+          onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
+          onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
+          editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
+          renderTreeNodes={this.renderTreeNodes}
+          treeData={this.state.treeData}
+          onLoadData={this.onLoadData}
+          expandedKeys={this.state.expandedKeys}
+          autoExpandParent={this.state.autoExpandParent}
+          checkedKeys={this.state.checkedKeys}
+          selectedKeys={this.state.selectedKeys}
+          onExpand={this.onExpand}
+          onCheck={this.onCheck}
+          onSelect={this.onSelect}
         />
       </PageHeaderLayout>
     );

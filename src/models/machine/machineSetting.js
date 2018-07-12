@@ -1,4 +1,4 @@
-import { getMachineSettingList, saveMachineSetting, editMachineSetting, delMachineSetting } from '../../services/machine/machineSetting';
+import { getMachineSettingList, saveMachineSetting, editMachineSetting, delMachineSetting, getPointSettingList } from '../../services/machine/machineSetting';
 
 export default {
   namespace: 'machineSetting',
@@ -28,8 +28,11 @@ export default {
       const response = yield call(delMachineSetting, { params });
       return response;
     },
+    *getPointSettingList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getPointSettingList, { restParams });
+      return response.data;
+    },
   },
-
   reducers: {
     saveList(state, { payload: { data, page } }) {
       return {

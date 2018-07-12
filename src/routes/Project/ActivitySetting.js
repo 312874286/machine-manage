@@ -13,6 +13,7 @@ import {
   Modal,
   Divider,
   Popconfirm,
+  Badge,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -20,6 +21,14 @@ import styles from './ActivitySetting.less';
 import LogModal from '../../components/LogModal/index';
 import moment from "moment/moment";
 
+// const status = ['全部','未开始', '进行中', '已结束'];
+const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }];
+
+// const statusMap = [100100, 100200, 100300];
+// const prizeTypeStatus = ['商品', '优惠券', '商品+优惠券'];
+
+const statusMap = ['processing', 'default', 'success', 'error'];
+const status = {'100100': '商品', '100200': '优惠券','100300': '商品+优惠券'};
 
 const FormItem = Form.Item;
 const { TextArea } = Input
@@ -32,7 +41,7 @@ const RangePicker = DatePicker.RangePicker;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, onSelect } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -46,7 +55,7 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={modalType ? '编辑活动' : '新建活动'}
+        title={modalType === 'edit' ? '编辑活动' : (modalType === 'add' ? '新建活动' : '查看活动')}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
@@ -61,20 +70,36 @@ const CreateForm = Form.create()(
           <FormItem {...formItemLayout} label="选择商户">
             {getFieldDecorator('sellerId', {
               rules: [{ required: true, message: '请选择商户' }],
-            })(
-              <Select placeholder="请选择">
+            })((modalType === 'edit') ? (
+              <Select placeholder="请选择" disabled>
                 {merchantLists.map((item) => {
                   return (
                     <Option value={item.id} key={item.id}>{item.merchantName}</Option>
                   );
                 })}
               </Select>
-            )}
+              ) : (
+                <Select placeholder="请选择" onSelect={onSelect}>
+                {merchantLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                  );
+                })}
+                </Select>
+            ))}
           </FormItem>
           <FormItem {...formItemLayout} label="选择店铺">
             {getFieldDecorator('shopId', {
               rules: [{ required: true, message: '请选择店铺' }],
-            })(
+            })((modalType === 'edit') ? (
+                <Select placeholder="请选择" disabled>
+                  {shopsLists.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.shopName}</Option>
+                    );
+                  })}
+                </Select>
+              ) : (
               <Select placeholder="请选择">
                 {shopsLists.map((item) => {
                   return (
@@ -82,15 +107,16 @@ const CreateForm = Form.create()(
                   );
                 })}
               </Select>
-            )}
+              )
+              )}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择时间">
-            {getFieldDecorator('rangeTime', {
-              rules: [{ type: 'array', required: true, message: '请选择时间' }],
-            })(
-              <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />
-            )}
-          </FormItem>
+          {/*<FormItem {...formItemLayout} label="选择时间">*/}
+            {/*{getFieldDecorator('rangeTime', {*/}
+              {/*rules: [{ type: 'array', required: true, message: '请选择时间' }],*/}
+            {/*})(*/}
+              {/*<RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />*/}
+            {/*)}*/}
+          {/*</FormItem>*/}
           <FormItem {...formItemLayout} label="备注描述">
             {getFieldDecorator('remark', {
               rules: [{ required: true, message: '请输入备注描述' }],
@@ -100,6 +126,43 @@ const CreateForm = Form.create()(
       </Modal>
     );
 });
+const WatchForm = Form.create()(
+  (props) => {
+    const { watchModalVisible, modalData, handleWatchModalVisible } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title="查看活动"
+        visible={watchModalVisible}
+        onCancel={() => handleWatchModalVisible()}
+        footer={null}
+      >
+        <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="活动名称">
+            <span>{modalData.name}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择商户">
+            <span>{modalData.merchantName}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择店铺">
+            <span>{modalData.shopName}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="备注描述">
+            <span>{modalData.remark}</span>
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, activitySetting, log }) => ({
   common,
   activitySetting,
@@ -122,9 +185,10 @@ export default class activitySettingList extends PureComponent {
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
-    modalType: true,
+    modalType: 'add',
     merchantLists: [],
     shopsLists: [],
+    watchModalVisible: false,
   };
   componentDidMount() {
     this.getLists();
@@ -149,17 +213,6 @@ export default class activitySettingList extends PureComponent {
     }).then((res) => {
       this.setState({
         merchantLists: res,
-      });
-    });
-    // shopsLists
-    this.props.dispatch({
-      type: 'activitySetting/getShopsList',
-      payload: {
-        restParams: {},
-      },
-    }).then((res) => {
-      this.setState({
-        shopsLists: res,
       });
     });
   }
@@ -197,10 +250,11 @@ export default class activitySettingList extends PureComponent {
     form.resetFields();
     this.setState({
       formValues: {},
-    });
-    dispatch({
-      type: '',
-      payload: {},
+      pageNo: 1,
+      keyword: '',
+      code: '',
+    }, () => {
+      this.getLists();
     });
   };
 
@@ -241,6 +295,23 @@ export default class activitySettingList extends PureComponent {
       selectedRows: rows,
     });
   };
+  // onSelect
+  onSelect = (value, option) => {
+    console.log('value', value, option)
+    // shopsLists
+    this.props.dispatch({
+      type: 'activitySetting/getShopsList',
+      payload: {
+        restParams: {
+          sellerId: value,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        shopsLists: res,
+      });
+    });
+  }
   // 搜索
   handleSearch = e => {
     e.preventDefault();
@@ -261,10 +332,16 @@ export default class activitySettingList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       modalData: {},
-      modalType: false,
+      modalType: 'add',
     });
     this.setModalData();
   };
+  handleWatchModalVisible = (flag) => {
+    this.setState({
+      watchModalVisible: !!flag,
+      modalData: {},
+    });
+  }
   // 删除modal 删除事件
   handleDelClick = (item) => {
     this.setState({
@@ -290,8 +367,9 @@ export default class activitySettingList extends PureComponent {
   handleEditClick = (item) => {
     this.setState({
       modalVisible: true,
+      watchModalVisible: false,
       modalData: item,
-      modalType: true,
+      modalType: 'edit',
     });
     this.props.dispatch({
       type: 'activitySetting/getActivitySettingDetail',
@@ -304,6 +382,26 @@ export default class activitySettingList extends PureComponent {
       this.setModalData(res);
     });
   }
+  // handleWatchClick
+  handleWatchClick = (item) => {
+    this.setState({
+      modalVisible: false,
+      watchModalVisible: true,
+      modalType: 'watch',
+    });
+    this.props.dispatch({
+      type: 'activitySetting/getActivitySettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        modalData: res,
+      });
+    });
+  }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
@@ -311,7 +409,7 @@ export default class activitySettingList extends PureComponent {
         name: data.name || '',
         sellerId: data.sellerId || undefined,
         shopId: data.shopId || undefined,
-        rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
+        // rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
         remark: data.remark || undefined,
       });
     } else {
@@ -334,12 +432,12 @@ export default class activitySettingList extends PureComponent {
       if (err) {
         return;
       }
-      const rangeTimeValue = fieldsValue.rangeTime
+      // const rangeTimeValue = fieldsValue.rangeTime
       let params = {
         ...fieldsValue,
-        rangeTime: undefined,
-        createTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm:ss'),
-        endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm:ss'),
+        // rangeTime: undefined,
+        // createTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm:ss'),
+        // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm:ss'),
       };
       this.setState({
         editModalConfirmLoading: true,
@@ -410,36 +508,38 @@ export default class activitySettingList extends PureComponent {
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
-    const { merchantLists } = this.state;
+    const { merchantLists, shopsLists } = this.state;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
-            <FormItem label="选择商户">
-              {getFieldDecorator('code')(
-                <Select placeholder="请选择">
-                  {merchantLists.map((item) => {
+          <Col md={8} sm={24}>
+            <FormItem label="关键字">
+              {getFieldDecorator('keyword')(<Input placeholder="请输入活动编码、活动名称" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="选择活动状态">
+              {getFieldDecorator('shopId', {
+                rules: [{ required: true, message: '请选择活动状态' }],
+              })(
+                <Select placeholder="请选择活动状态">
+                  {ActivityStatus.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
                     );
                   })}
                 </Select>
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
-            <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入活动编码、活动名称" />)}
-            </FormItem>
-          </Col>
           <Col md={6} sm={24}>
             <span style={{ float: 'right' }}>
               <FormItem>
                 <Button onClick={this.handleFormReset}>
-                 重置
+                  重置
                 </Button>
                 <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
-                 查询
+                  查询
                 </Button>
               </FormItem>
             </span>
@@ -450,14 +550,8 @@ export default class activitySettingList extends PureComponent {
   }
   render() {
     const { activitySetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData } = this.state;
     const columns = [
-      // {
-      //   title: '活动ID',
-      //   width: 200,
-      //   dataIndex: 'id',
-      //   fixed: 'left',
-      // },
       {
         title: '活动名称',
         // width: 200,
@@ -466,27 +560,40 @@ export default class activitySettingList extends PureComponent {
       {
         title: '所属商户',
         // width: 200,
-        dataIndex: 'sellerId',
+        dataIndex: 'merchantName',
       },
-      {
-        title: '开始时间',
-        dataIndex: 'createTime',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '结束时间',
-        dataIndex: 'endTime',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
+      // {
+      //   title: '开始时间',
+      //   dataIndex: 'createTime',
+      //   sorter: true,
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
+      // {
+      //   title: '结束时间',
+      //   dataIndex: 'endTime',
+      //   sorter: true,
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
       {
         title: '所属店铺',
         // width: 200,
-        dataIndex: 'shopId',
+        dataIndex: 'shopName',
       },
       {
-        title: '备注',
+        title: '商品/优惠券',
+        // width: 200,
+        dataIndex: 'prizeType',
+        render(val) {
+          return <span>{status[val]}</span>;
+        },
+      },
+      {
+        title: '活动状态',
+        // width: 200,
+        dataIndex: 'state',
+      },
+      {
+        title: '负责人',
         // width: 150,
         dataIndex: 'remark',
       },
@@ -496,6 +603,8 @@ export default class activitySettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
+            <a onClick={() => this.handleWatchClick(item)}>查看</a>
+            <Divider type="vertical" />
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
@@ -561,6 +670,12 @@ export default class activitySettingList extends PureComponent {
           modalType={modalType}
           merchantLists={merchantLists}
           shopsLists={shopsLists}
+          onSelect={this.onSelect}
+        />
+        <WatchForm
+          modalData={modalData}
+          watchModalVisible={watchModalVisible}
+          handleWatchModalVisible={this.handleWatchModalVisible}
         />
         <LogModal
           data={logList}
