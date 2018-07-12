@@ -253,8 +253,6 @@ export default class activitySettingList extends PureComponent {
       pageNo: 1,
       keyword: '',
       code: '',
-    }, () => {
-      this.getLists();
     });
   };
 
@@ -321,7 +319,7 @@ export default class activitySettingList extends PureComponent {
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        code: fieldsValue.code ? fieldsValue.code : '',
+        code: fieldsValue.status ? fieldsValue.status : '',
       }, () => {
         this.getLists();
       });
@@ -519,9 +517,7 @@ export default class activitySettingList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="选择活动状态">
-              {getFieldDecorator('shopId', {
-                rules: [{ required: true, message: '请选择活动状态' }],
-              })(
+              {getFieldDecorator('status')(
                 <Select placeholder="请选择活动状态">
                   {ActivityStatus.map((item) => {
                     return (

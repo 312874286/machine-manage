@@ -344,8 +344,7 @@ export default class ScheduleSettingList extends PureComponent {
       formValues: {},
       pageNo: 1,
       keyword: '',
-    }, () => {
-      this.getLists();
+      code: '',
     });
   };
 

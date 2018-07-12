@@ -158,8 +158,6 @@ export default class gameSettingList extends PureComponent {
       formValues: {},
       keyword: '',
       code: '',
-    }, () => {
-      this.getLists();
     });
   };
 

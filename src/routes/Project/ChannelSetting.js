@@ -154,8 +154,6 @@ export default class channelSettingList extends PureComponent {
       formValues: {},
       pageNo: 1,
       keyword: '',
-    }, () => {
-      this.getLists();
     });
   };
   // 批量

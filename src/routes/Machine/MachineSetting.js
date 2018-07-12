@@ -432,8 +432,8 @@ export default class machineSettingList extends PureComponent {
     form.resetFields();
     this.setState({
       formValues: {},
-    }, () => {
-      this.getLists();
+      pageNo: 1,
+      keyword: '',
     });
   };
 

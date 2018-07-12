@@ -185,8 +185,6 @@ export default class merchantSettingList extends PureComponent {
       pageNo: 1,
       keyword: '',
       channelId: '',
-    }, () => {
-      this.getLists();
     });
   };
   // 批量

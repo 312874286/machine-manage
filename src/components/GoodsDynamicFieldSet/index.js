@@ -1,6 +1,7 @@
-import { Form, Input, Icon, Button } from 'antd';
+import { Form, Input, Icon, Button, Select } from 'antd';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 let uuid = 0;
 class GoodsDynamicFieldSet extends React.Component {
@@ -52,6 +53,7 @@ class GoodsDynamicFieldSet extends React.Component {
 
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
+    const ruleLists = [1, 2, 3, 4, 5]
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -179,7 +181,13 @@ class GoodsDynamicFieldSet extends React.Component {
               message: "Please input passenger's name or delete this field.",
             }],
           })(
-            <Input placeholder="请输入选择规则" style={{ width: '90%', marginRight: 8 }} />
+            <Select placeholder="请输入选择规则" style={{ width: '90%' }}>
+              {ruleLists.map((item) => {
+                return (
+                  <Option value={item} key={item}>{item}</Option>
+                );
+              })}
+            </Select>
           )}
           {keys.length > 1 ? (
             <Icon

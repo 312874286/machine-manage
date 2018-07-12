@@ -257,10 +257,8 @@ export default class goodsSettingList extends PureComponent {
     form.resetFields();
     this.setState({
       formValues: {},
-    });
-    dispatch({
-      type: '',
-      payload: {},
+      keyword: '',
+      code: '',
     });
   };
 
