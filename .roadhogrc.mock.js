@@ -4266,6 +4266,6 @@ const proxy = {
 // export default noProxy ? {
 //   'POST /authent/(.*)': 'http://nb-merchant-service.huerkang.com/merchant_service/authent/',
 // } : delay(proxy, 1000);
-export default noProxy ? {
+  export default noProxy ? {
   'POST /authent/(.*)': 'http://nb-merchant-service.huerkang.com/merchant_service/authent/',
 } : delay({ ...antProxy, ...proxy }, 1000);
