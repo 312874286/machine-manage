@@ -439,10 +439,7 @@ const proxy = {
             functionPath: 'game',
             parentId: 'a5',
             functionLevel: 2,
-<<<<<<< HEAD
             functionIcon: 'form',
-=======
->>>>>>> a162c0a551a3b1e24ae5b5c8efdd4d3584e36911
           },
           {
             id: 'a6',
