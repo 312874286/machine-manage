@@ -765,7 +765,6 @@ const proxy = {
         "nextPage": 1,
         "prePage": 1
       },
-<<<<<<< HEAD
       "data": [
         {
           "id": "b0050d8f8839481682161f42317c2565",
@@ -1002,82 +1001,6 @@ const proxy = {
   },
   'POST /machine/machine/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
-=======
-      "data": [{
-        "id": 5780000000,
-        "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-        "phoneNo": "18515894141",
-        "provinceCityAreaTradeArea": ['100100000', '100100000', '100100000', '100100000'],
-        "nickName": null,
-        "headImgUrl": null,
-        "operator": "张三",
-        "updatedAt": "2017-08-03 16:13:35",
-        "status": 0,
-        "shopPlace": 1,
-        "unionid": null,
-        "merchantId": "1001",
-        "netWork": 1,
-        "tag": "tag1，tag2，tag3"
-      }, {
-        "id": 5790000000,
-        "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-        "phoneNo": "18515894141",
-        "provinceCityAreaTradeArea": ['100100000', '100101000', '100100000', '100100000'],
-        "nickName": null,
-        "headImgUrl": null,
-        "operator": "李四",
-        "updatedAt": "2017-08-03 16:13:35",
-        "status": 1,
-        "shopPlace": 1,
-        "unionid": null,
-        "merchantId": "1001",
-        "netWork": 0,
-        "tag": "tag4，tag5，tag6"
-      }, {
-        "id": 5700000000,
-        "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-        "phoneNo": "18515894141",
-        "provinceCityAreaTradeArea": ['100100000', '100000000', '100100000', '100100000'],
-        "nickName": null,
-        "headImgUrl": null,
-        "operator": "王五",
-        "updatedAt": "2017-08-03 16:13:35",
-        "status": 2,
-        "shopPlace": 1,
-        "unionid": null,
-        "merchantId": "1001",
-        "tag": "tag7，tag8，tag9"
-      }, {
-        "id": 1230000000,
-        "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-        "phoneNo": "18515894141",
-        "provinceCityAreaTradeArea": ['100100000', '100101001', '100100000', '100100000'],
-        "nickName": null,
-        "headImgUrl": null,
-        "operator": "哈哈",
-        "updatedAt": "2017-08-03 16:13:35",
-        "status": 3,
-        "shopPlace": 1,
-        "unionid": null,
-        "merchantId": "1001",
-        "tag": "tag10，tag12，tag13"
-      }, ]
-    });
-  },
-  'POST /machine/update': (req, res) => {
-    res.send({
-      "msg": "成功",
-      "code": 0,
-      "data": ""
-    });
-  },
-  'POST /machine/delete': (req, res) => {
-    res.send({
-      "msg": "成功",
-      "code": 0,
-      "data": ""
-    });
->>>>>>> abcc28c00faf50beb8f246dcb9806b1ea8483a14
   },
   'POST /project/channel/add': (req, res) => {
     res.send({
@@ -2234,7 +2157,6 @@ const proxy = {
       "msg": "成功"
     })
   },
-<<<<<<< HEAD
   'GET /activity/list': (req, res) => {
     res.send({
       "msg": "成功",
@@ -2264,10 +2186,9 @@ const proxy = {
         endTime: '2018-7-16 09:00',
       }]
     });
-=======
+  },
   'GET /game/user/list': (req, res) => {
     res.send({"msg":"成功","code":0,"page":{"pageSize":20,"currentResult":0,"totalPage":1,"pageNo":1,"totalCount":1,"list":null,"firstResult":0,"firstPage":true,"lastPage":true,"nextPage":1,"prePage":1},"data":[{"id":"ddddddd","userNick":"大姐姐","phone":"13454345656","gameUserId":"hjkjhghjkhjk","channelId":"hjjkklllll","channelName":"到年底","channelUserKey":"nnnmm","createTime":1531477140000}]})
->>>>>>> abcc28c00faf50beb8f246dcb9806b1ea8483a14
   }
 };
 
