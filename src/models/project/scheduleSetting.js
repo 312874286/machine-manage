@@ -12,10 +12,11 @@ export default {
   effects: {
     *getScheduleSettingList({ payload: { restParams } }, { call, put }) {
       const response = yield call(getScheduleSettingList, { restParams });
-      yield put({
-        type: 'saveList',
-        payload: response,
-      });
+      return response.data;
+      // yield put({
+      //   type: 'saveList',
+      //   payload: response,
+      // });
     },
     *getScheduleSettingDetail({ payload: { restParams } }, { call }) {
       const response = yield call(getScheduleSettingDetail, { restParams });

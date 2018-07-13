@@ -211,13 +211,15 @@ export default class ScheduleSettingList extends PureComponent {
     selectedKeys: [],
     editMachineEditModalConfirmLoading: false,
     selectStatus: '0',
+
+    dateList: [],
   };
   componentWillMount() {
     // 查询省
   }
   componentDidMount() {
     this.getAreaList();
-    // this.getLists();
+    this.getLists();
   }
   // 获取城市列表
   getAreaList = () => {
@@ -268,6 +270,23 @@ export default class ScheduleSettingList extends PureComponent {
           code: this.state.code,
         },
       },
+    }).then((res) => {
+      console.log('res', res);
+      let activityArr = []
+      if (res.length > 0) {
+        res.forEach((item, index) => {
+          let tmp = { left: '3.5%', top: (25 + (index * 4)) + '%', width: (6 * (index + 1)) + '%', background: 'Green', height: '20px', name: item.activityName, id: item.id }
+          activityArr.push(tmp);
+        })
+        this.setState({
+          dateList: activityArr,
+        }, () => {
+          console.log('activityArr', this.state.dateList);
+        });
+      }
+      // this.setState({
+      //   dateList: res,
+      // });
     });
   }
   // 验证
@@ -788,7 +807,7 @@ export default class ScheduleSettingList extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            <ScheduleTable />
+            <ScheduleTable dateList={this.state.dateList} />
           </div>
         </Card>
         <CreateForm

@@ -3087,14 +3087,14 @@ const proxy = {
   'POST /machine/locale/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'POST /machine/add': (req, res) => {
+  'POST /machine/machine/updateGoodsCount': (req, res) => {
     res.send({
       "code": 0,
       "data": '',
       "msg": '成功',
     });
   },
-  'GEt /machine/list': (req, res) => {
+  'GET /machine/machine/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -3103,7 +3103,7 @@ const proxy = {
         "currentResult": 0,
         "totalPage": 1,
         "pageNo": 1,
-        "totalCount": 25,
+        "totalCount": 9,
         "list": null,
         "firstResult": 0,
         "firstPage": true,
@@ -3113,71 +3113,239 @@ const proxy = {
       },
       "data": [
         {
-          "id": 5780000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100100000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "张三",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 0,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "netWork": 1,
-          "tag": "tag1，tag2，tag3"
-        }, {
-          "id": 5790000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100101000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "李四",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 1,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "netWork": 0,
-          "tag": "tag4，tag5，tag6"
-        }, {
-          "id": 5700000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100000000', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "王五",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 2,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag7，tag8，tag9"
-        }, {
-          "id": 1230000000,
-          "no": "oeofgwbsd5Cl2XYD3tYG9956zLMfrk",
-          "phoneNo": "18515894141",
-          "provinceCityAreaTradeArea": ['100100000', '100101001', '100100000', '100100000'],
-          "nickName": null,
-          "headImgUrl": null,
-          "operator": "哈哈",
-          "updatedAt": "2017-08-03 16:13:35",
-          "status": 3,
-          "shopPlace": 1,
-          "unionid": null,
-          "merchantId": "1001",
-          "tag": "tag10，tag12，tag13"
+          "id": "b0050d8f8839481682161f42317c2565",
+          "machineCode": "1816603071182",
+          "localDesc": "",
+          "netStatus": 0,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null
         },
+        {
+          "id": "123",
+          "machineCode": "1823951070679",
+          "localDesc": "北京市-东城区-王府井-西单商场-1层西侧",
+          "netStatus": 0,
+          "activityName": "618大促销",
+          "channelStatus": "货道3错误2",
+          "goodsStatus": "牛肉面剩余5"
+        },
+        {
+          "id": "947639777c874724a954b1ca47f987f0",
+          "machineCode": "1834003071023",
+          "localDesc": "",
+          "netStatus": 0,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null
+        },
+        {
+          "id": "a6064917a4d7489f9b00d96d88d46489",
+          "machineCode": "1834024071079",
+          "localDesc": "",
+          "netStatus": 1,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null
+        },
+        {
+          "id": "18f05c0c234749c7bf6c60dda9f5092e",
+          "machineCode": "1846698071048",
+          "localDesc": "天津市-南开区--大沽口-2层西侧",
+          "netStatus": 0,
+          "activityName": "7夕欢乐秀",
+          "channelStatus": "货道2错误1,货道1错误2",
+          "goodsStatus": "怡宝款泉水剩余3"
+        },
+        {
+          "id": "85e9773bf4614a18a0038fb55decac0b",
+          "machineCode": "1863398071031",
+          "localDesc": "",
+          "netStatus": 0,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null
+        },
+        {
+          "id": "8389fc95a5324a02a45aabfc6823436d",
+          "machineCode": "1863398071038",
+          "localDesc": "",
+          "netStatus": 1,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null
+        },
+        {
+          "id": "cd449e64307042a09448769f3a21fdc3",
+          "machineCode": "1863398071039",
+          "localDesc": "",
+          "netStatus": 0,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null
+        },
+        {
+          "id": "abddd26aa2d74ddfa207920074c29ddf",
+          "machineCode": "1889824071145",
+          "localDesc": "",
+          "netStatus": 0,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null
+        }
       ]
     });
   },
-  'POST /machine/update': (req, res) => {
+  'GET /machine/machine/channelInfo': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": [
+          {
+            "id": "20285f30f99e4532ac0090c96b0de737",
+            "code": "5",
+            "goodsName": "““",
+            "goodsPrice": 1,
+            "volumeCount": 250,
+            "goodsCount": 2,
+            "workStatus": 0,
+            "reason": null,
+            "isDelete": 0
+          },
+          {
+            "id": "6b1cd14cb3d345e6a24e70eb99f1696c",
+            "code": "2",
+            "goodsName": "““",
+            "goodsPrice": 1,
+            "volumeCount": 100,
+            "goodsCount": 1,
+            "workStatus": 1,
+            "reason": "错误1",
+            "isDelete": 0
+          },
+          {
+            "id": "6fdd19bdb40b4184a287e73c23c82561",
+            "code": "1",
+            "goodsName": "来一杯",
+            "goodsPrice": 0.99,
+            "volumeCount": 50,
+            "goodsCount": 2,
+            "workStatus": 2,
+            "reason": "错误2",
+            "isDelete": 0
+          },
+          {
+            "id": "779f0777671147bda863ebcb94fd9399",
+            "code": "3",
+            "goodsName": "来一杯",
+            "goodsPrice": 0.99,
+            "volumeCount": 150,
+            "goodsCount": 3,
+            "workStatus": 0,
+            "reason": null,
+            "isDelete": 0
+          },
+          {
+            "id": "ccf5672ea2fb474d9a3b90a9c75346c3",
+            "code": "4",
+            "goodsName": "来一杯",
+            "goodsPrice": 0.99,
+            "volumeCount": 200,
+            "goodsCount": 5,
+            "workStatus": 0,
+            "reason": null,
+            "isDelete": 0
+          }
+        ],
+        "msg": "成功"
+      });
+  },
+  'GET /machine/machine/appStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "machineId": "1823951070679",
+        "status": [
+          {
+            "machineId": null,
+            "appPackageName": "com.muwood.chainapp",
+            "versionName": "1.2",
+            "versionCode": 9,
+            "appName": "海链",
+            "appStatus": 0,
+            "appType": 1
+          },
+          {
+            "machineId": null,
+            "appPackageName": "com.detection.inno72.test",
+            "versionName": "1.0",
+            "versionCode": 1,
+            "appName": "测试程序",
+            "appStatus": 0,
+            "appType": 2
+          },
+          {
+            "machineId": null,
+            "appPackageName": "com.detection.inno72.installer",
+            "versionName": null,
+            "versionCode": -1,
+            "appName": "安装器",
+            "appStatus": 0,
+            "appType": 2
+          }
+        ],
+        "createTime": "2018-07-09 16:19:11"
+      },
+      "msg": "成功"
+    });
+  },
+  'GET 	/machine/machine/cutApp': (req, res) => {
+    res.send({
+      "code": 1,
+      "data": null,
+      "msg": "发送失败"
+    })
+  },
+  'GET /machine/machine/installApp': (req, res) => {
+    res.send({
+      "code": 1,
+      "data": null,
+      "msg": "发送失败"
+    })
+  },
+    'GET /machine/machine/machineStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "machineStatus": {
+          "machineId": "1823951070679",
+          "machineDoorStatus": 0,
+          "dropGoodsSwitch": 1,
+          "goodsChannelStatus": "[]",
+          "temperature": null,
+          "temperatureSwitchStatus": 0,
+          "createTime": "2018-07-09 15:44:16"
+        },
+        "systemStatus": {
+          "machineId": "1823951070679",
+          "networkType": "Wi-Fi",
+          "networkOperateName": "未知",
+          "accid": "89860617040040920938",
+          "memoryFree": 4329,
+          "memoryTotle": 5502,
+          "cpu": "0.0%",
+          "sdFree": 4329,
+          "sdTotle": 5502,
+          "ping": "23ms",
+          "createTime": "2018-07-13 14:34:13"
+        }
+      },
+      "msg": "成功"
+    });
+  },
+  'POST /machine/machine/update': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
-  'POST /machine/delete': (req, res) => {
+  'POST /machine/machine/delete': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
   'POST /project/channel/add': (req, res) => {
@@ -3186,6 +3354,83 @@ const proxy = {
       "data": '',
       "msg": '成功',
     });
+  },
+  'GET /machine/machine/channelInfo': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "20285f30f99e4532ac0090c96b0de737",
+          "code": "5",
+          "goodsName": "““",
+          "goodsPrice": 1,
+          "volumeCount": 250,
+          "goodsCount": 2,
+          "workStatus": 0,
+          "reason": null,
+          "isDelete": 0
+        },
+        {
+          "id": "6b1cd14cb3d345e6a24e70eb99f1696c",
+          "code": "2",
+          "goodsName": "““",
+          "goodsPrice": 1,
+          "volumeCount": 100,
+          "goodsCount": 1,
+          "workStatus": 1,
+          "reason": "错误1",
+          "isDelete": 0
+        },
+        {
+          "id": "6fdd19bdb40b4184a287e73c23c82561",
+          "code": "1",
+          "goodsName": "来一杯",
+          "goodsPrice": 0.99,
+          "volumeCount": 50,
+          "goodsCount": 2,
+          "workStatus": 2,
+          "reason": "错误2",
+          "isDelete": 0
+        },
+        {
+          "id": "779f0777671147bda863ebcb94fd9399",
+          "code": "3",
+          "goodsName": "来一杯",
+          "goodsPrice": 0.99,
+          "volumeCount": 150,
+          "goodsCount": 3,
+          "workStatus": 0,
+          "reason": null,
+          "isDelete": 0
+        },
+        {
+          "id": "ccf5672ea2fb474d9a3b90a9c75346c3",
+          "code": "4",
+          "goodsName": "来一杯",
+          "goodsPrice": 0.99,
+          "volumeCount": 200,
+          "goodsCount": 5,
+          "workStatus": 0,
+          "reason": null,
+          "isDelete": 0
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /machine/machine/updateLocale':  (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /machine/machine/deleteChannel':  (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
   },
   'GET /project/channel/list': (req, res) => {
     res.send({
@@ -4261,6 +4506,36 @@ const proxy = {
         }
     )
   },
+  'GET /activity/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 25,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [{
+        id: 1,
+        activityName: "1111111",
+        startTime: '2018-7-13 09:00',
+        endTime: '2018-7-15 09:00',
+      }, {
+        id: 2,
+        activityName: "222222",
+        startTime: '2018-7-15 09:00',
+        endTime: '2018-7-16 09:00',
+      }]
+    });
+  }
 };
 
 // export default noProxy ? {

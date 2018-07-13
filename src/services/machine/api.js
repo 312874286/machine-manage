@@ -7,10 +7,15 @@ const api = map({
   savePointSetting: '/machine/locale/add',
   updatePointSetting: '/machine/locale/update',
   deletePointSetting: '/machine/locale/delete',
-  getMachineSettingList: '/machine/list?pageNo={pageNo}&keyword={keyword}',
-  saveMachineSetting: '/machine/add',
-  updateMachineSetting: '/machine/update',
-  deleteMachineSetting: '/machine/delete',
+  getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&keyword={keyword}',
+  updateGoodsCountMachineSetting: '/machine/machine/updateGoodsCount',
+  updateLocaleMachineSetting: '/machine/machine/updateLocale',
+  deleteChannelMachineSetting: '/machine/machine/deleteChannel',
+  getAisleList: '/machine/machine/channelInfo',
+  getMachineStatus: '/machine/machine/machineStatus?machineId={machineId}',
+  getAppStatus: '/machine/machine/appStatus?machineId={machineId}',
+  cutApp: '/machine/machine/cutApp?machineId={machineId}&appPackageName={appPackageName}',
+  installApp: '/machine/machine/installApp?machineId={machineId}&appPackageName={appPackageName}&url={url}&versionCode={versionCode}',
 });
 
 export default api;
