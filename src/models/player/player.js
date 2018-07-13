@@ -1,7 +1,7 @@
-import { getOrderList, getArea } from '../../services/order/order';
+import { getList } from '../../services/player/player';
 
 export default {
-  namespace: 'order',
+  namespace: 'player',
   state: {
     list: [],
     page: {},
@@ -9,8 +9,8 @@ export default {
   },
 
   effects: {
-    *getOrderList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(getOrderList, { restParams });
+    *getList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getList, { restParams });
       yield put({
         type: 'saveList',
         payload: response,
