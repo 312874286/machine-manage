@@ -23,8 +23,8 @@ import {
   Tree,
   Radio,
 } from 'antd';
-import GoodsWrappedDynamicFieldSet from '../../components/GoodsDynamicFieldSet';
-import DiscountWrappedDynamicFieldSet from '../../components/DiscountDynamincFieldSet';
+import GoodsTableField from '../../components/GoodsTableField';
+import DiscountDynamicField from '../../components/DiscountDynamicField';
 import ScheduleTable from '../../components/ScheduleTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ScheduleSetting.less';
@@ -117,26 +117,12 @@ const CreateForm = Form.create()(
             )}
           </FormItem>
           <FormItem label="填写商品信息">
+            <GoodsTableField />
           </FormItem>
-          <FormItem {...formItemLayout} label="商品/优惠券">
-            {getFieldDecorator('status', {
-              rules: [{ required: true, message: '请选择商品/优惠券' }],
-              initialValue: '0',
-            })(
-              <RadioGroup onChange={onChange}>
-                <Radio value="0">商品</Radio>
-                <Radio value="1">优惠券</Radio>
-              </RadioGroup>
-            )}
-          </FormItem>
-          <FormItem>
+          <FormItem label="填写优惠券信息">
+            <DiscountDynamicField />
           </FormItem>
         </Form>
-        {(selectStatus === '0') ? (
-          <GoodsWrappedDynamicFieldSet />
-        ) : (
-          <DiscountWrappedDynamicFieldSet />
-        )}
       </Modal>
     );
 });

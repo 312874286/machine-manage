@@ -1,6 +1,8 @@
 import { Card, Button } from 'antd';
 import React, { PureComponent } from 'react';
 import moment from 'moment';
+import styles from './index.less';
+
 
 const gridStyle = {
   width: '11%',
@@ -9,31 +11,19 @@ const gridStyle = {
 const gridStyleMarginLeft = {
   width: '11%',
   textAlign: 'center',
-  marginLeft: '6%',
+  // marginLeft: '6%',
 }
 const gridLeftStyle = {
-  width: '6%',
-  textAlign: 'center',
-  position: 'absolute',
-  top: '50%',
+  width: '4%',
+  // textAlign: 'center',
+  // position: 'absolute',
+  // top: '50%',
   height: '150px',
-  marginTop: '-75px',
+  marginTop: '175px',
   border: 0,
   boxShadow: 'none',
   cursor: 'pointer',
 };
-const gridRightStyle = {
-  width: '6%',
-  textAlign: 'center',
-  position: 'absolute',
-  top: '50%',
-  height: '150px',
-  marginTop: '-75px',
-  left: '91%',
-  border: 0,
-  boxShadow: 'none',
-  cursor: 'pointer',
-}
 
 class ScheduleTable extends PureComponent {
   state = {
@@ -42,6 +32,7 @@ class ScheduleTable extends PureComponent {
   }
   componentDidMount() {
     this.initTable();
+    window.addEventListener('scroll', this.orderScroll.bind(this));
   }
   format = (date,str) => {
     let mat = {};
@@ -72,7 +63,9 @@ class ScheduleTable extends PureComponent {
   dateArr = (startDay, endDay) => {
     // const s = '12.31';
     // const e = '1.6';
+    const weekArr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
     const start = startDay.split('-')
+    let w = parseInt(startDay.split('--')[1])
     const end = endDay.split('-')
     const sd = parseInt(start[2]);
     const sm = parseInt(start[1]); // 开始时间的月份
@@ -81,16 +74,33 @@ class ScheduleTable extends PureComponent {
     let dateTwoWeek = []
     if (sm === em) {
       for (let i = 0; i < 15; i++) {
-        let newd = {id: i, value: sm + '月' + (sd + i) + '日'};
+        if (this.state.currentDay === (sd + i)) {
+          this.setState({
+            currentDay: i,
+          });
+        }
+        let newd = {id: i, value: sm + '.' + (sd + i) + '', week: w };
+        w = w + 1
+        if (w === 7) {
+          w = 0;
+        }
         dateTwoWeek.push(newd);
       }
     } else { // 存在跨月
       for (let i = 0; i < 15; i++) {
         if (i < (15 - ed)) {
-          let newd = {id: i, value: sm + '月' + (sd + i) + '日'};
+          let newd = {id: i, value: sm + '.' + (sd + i) + '', week: w};
+          w = w + 1
+          if (w === 7) {
+            w = 0;
+          }
           dateTwoWeek.push(newd);
         } else {
-          let newd = {id: i, value: em + '月' + (ed - (15 - i) + 1) + '日'};
+          let newd = {id: i, value: em + '.' + (ed - (15 - i) + 1) + '', week: w};
+          w = w + 1
+          if (w === 7) {
+            w = 0;
+          }
           dateTwoWeek.push(newd);
         }
       }
@@ -100,38 +110,74 @@ class ScheduleTable extends PureComponent {
   initTable = () => {
     let date = new Date(); // 获取当前时间
     let nowDate = this.format(date, 'yyyy-mm-dd')
-    let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置天数 -7 天
-    let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置天数 +7 天
-    console.log('nowDate', startDay, nowDate, endDay)
-    let dateTwoWeeksArr = this.dateArr(startDay, endDay);
     this.setState({
-      dateTwoWeeksArr,
+      currentDay: parseInt(nowDate.split('-')[2]),
+    }, () => {
+      let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置天数 -7 天
+      let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置天数 +7 天
+      console.log('nowDate', startDay, nowDate, endDay)
+      let dateTwoWeeksArr = this.dateArr(startDay, endDay);
+      this.setState({
+        dateTwoWeeksArr,
+      }, () => {
+        document.getElementById('dateWeek').scrollLeft = 600;
+      });
     });
   }
+  orderScroll() {
+    document.getElementById('dateWeek').scrollLeft = 600;
+  }
+  filterWeek = (value) => {
+    switch (value) {
+      case 0:
+        return '周日'
+        break;
+      case 1:
+        return '周一'
+        break;
+      case 2:
+        return '周二'
+        break;
+      case 3:
+        return '周三'
+        break;
+      case 4:
+        return '周四'
+        break;
+      case 5:
+        return '周五'
+        break;
+      case 6:
+        return '周六'
+        break;
+    }
+  }
   render() {
-    const { dateTwoWeeksArr } = this.state;
+    const { dateTwoWeeksArr, currentDay } = this.state;
     console.log(dateTwoWeeksArr)
     return (
       <Card title="活动排期一览表" style={{overflowX: 'scroll', width: '1200px'}}>
-        <Card.Grid style={gridLeftStyle}>
-          <span>加载更多</span>
-        </Card.Grid>
-        <div style={{overflowX: 'scroll', height: '600px', overflowY: 'hidden', width: '165%', display: 'flex'}} >
-          {dateTwoWeeksArr.map((item) => {
-            return (
-              <Card.Grid value={item.id} key={item.id} style={item.id === 0 ? gridStyleMarginLeft : gridStyle}>
-                <p>{item.value}</p>
-                <p>周日</p>
-                <p style={{height: '500px' }}></p>
-              </Card.Grid>
-            );
-          })}
+        <div style={{width: '165%', display: 'flex'}}>
+          <Card.Grid style={gridLeftStyle}>
+            <span>加载更多</span>
+          </Card.Grid>
+          <div style={{overflowX: 'scroll', height: '600px', overflowY: 'hidden', width: '165%', display: 'flex'}}  id="dateWeek">
+            {dateTwoWeeksArr.map((item) => {
+              return (
+                <Card.Grid value={item.id} key={item.id} className={currentDay === item.id ? styles.currentDay : ''}>
+                  <p>{item.value}</p>
+                  <p>{this.filterWeek(item.week)}</p>
+                  <p style={{height: '500px' }}></p>
+                </Card.Grid>
+              );
+            })}
+          </div>
+          <Card.Grid style={gridLeftStyle}>
+            <span>加载更多</span>
+          </Card.Grid>
         </div>
-        <Card.Grid style={gridRightStyle}>
-          <span>加载更多</span>
-        </Card.Grid>
       </Card>
-    );
+     );
   }
 }
 export default ScheduleTable;
