@@ -317,35 +317,30 @@ const WatchForm = Form.create()(
             <span><Button type="primary" onClick={() => appUpdate(1)}>更新</Button></span>
           </div>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : (machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '')}</span>
+
             <span><Button type="Default" onClick={() => appRefresh()}>刷新</Button></span>
           </div>
         </div>
         <div style={{ background: '#ECECEC', padding: '30px' }}>
           <Row gutter={16}>
-            <Col span={8}>
+            <Col span={12}>
               <Card title="机器状态" bordered={false}>
                 <div>机器门状态：{machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}</div>
                 <div>温度：{machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}</div>
                 <div>掉货开关：{machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}</div>
                 {/*<div>屏幕亮度：{machineDetail.systemStatus ? '111' : '2222'}</div>*/}
                 {/*<div>音量：</div>*/}
+                <div>上次更新时间：{machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}</div>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Card title="硬件状态" bordered={false}>
                 <div>cpu：{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</div>
                 <div>运行内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryTotle ? machineDetail.systemStatus.memoryTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G</div>
                 <div>SD卡内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G </div>
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card title="SIM卡" bordered={false}>
                 <div>运营商：{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}</div>
-                {/*<div>卡号：{}</div>*/}
                 <div>ACC ID: {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}</div>
-                {/*<div>已使用流量：</div>*/}
-                {/*<div>剩余流量：</div>*/}
+                <div>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}</div>
               </Card>
             </Col>
           </Row>
