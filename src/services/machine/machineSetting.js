@@ -60,3 +60,9 @@ export async function installApp({ restParams }) {
     restParams,
   });
 }
+
+export async function machineUpdateInfo({ restParams }) {
+  return fetch.get(api.machineUpdateInfo, {
+    restParams,
+  });
+}

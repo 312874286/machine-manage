@@ -975,7 +975,7 @@ const proxy = {
           "machineDoorStatus": 0,
           "dropGoodsSwitch": 1,
           "goodsChannelStatus": "[]",
-          "temperature": null,
+          // "temperature": null,
           "temperatureSwitchStatus": 0,
           "createTime": "2018-07-09 15:44:16"
         },
@@ -995,6 +995,9 @@ const proxy = {
       },
       "msg": "成功"
     });
+  },
+  'GET /machine/machine/updateInfo': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
   },
   'POST /machine/machine/update': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
@@ -1655,7 +1658,7 @@ const proxy = {
       "msg": '成功',
     });
   },
-  'GET /project/goods/list': (req, res) => {
+  'GET /goods/goods/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,

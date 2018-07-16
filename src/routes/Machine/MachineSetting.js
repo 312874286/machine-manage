@@ -151,7 +151,7 @@ const EditPointForm = Form.create()(
               // mode="multiple"
               // labelInValue
                 showSearch={true}
-                placeholder="Select users"
+                placeholder="请输入点位关键字进行选择"
                 notFoundContent={fetching ? <Spin size="small" /> : null}
                 filterOption={false}
                 onSearch={onSearch}
@@ -314,11 +314,11 @@ const WatchForm = Form.create()(
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>请您先点击更新，获取最新数据</span>
-            <span><Button type="primary" onClick={appUpdate}>更新</Button></span>
+            <span><Button type="primary" onClick={() => appUpdate()}>更新</Button></span>
           </div>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span>上次更新时间：2018.07.15  15:38:30</span>
-            <span><Button type="Default" onClick={appRefresh}>刷新</Button></span>
+            <span>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : (machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '')}</span>
+            <span><Button type="Default" onClick={() => appRefresh()}>刷新</Button></span>
           </div>
         </div>
         <div style={{ background: '#ECECEC', padding: '30px' }}>
@@ -326,7 +326,7 @@ const WatchForm = Form.create()(
             <Col span={8}>
               <Card title="机器状态" bordered={false}>
                 <div>机器门状态：{machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}</div>
-                <div>温度：{machineDetail.machineStatus ? machineDetail.machineStatus.temperature : ''}</div>
+                <div>温度：{machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}</div>
                 <div>掉货开关：{machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}</div>
                 {/*<div>屏幕亮度：{machineDetail.systemStatus ? '111' : '2222'}</div>*/}
                 {/*<div>音量：</div>*/}
@@ -334,16 +334,16 @@ const WatchForm = Form.create()(
             </Col>
             <Col span={8}>
               <Card title="硬件状态" bordered={false}>
-                <div>cpu：{machineDetail.systemStatus ? machineDetail.systemStatus.cpu : ''}</div>
-                <div>运行内存：{machineDetail.systemStatus ? machineDetail.systemStatus.memoryTotle : ''}G 剩余：{machineDetail.systemStatus ? machineDetail.systemStatus.memoryFree : ''}G</div>
-                <div>SD卡内存：{machineDetail.systemStatus ? machineDetail.systemStatus.sdTotle : ''}G 剩余：{machineDetail.systemStatus ? machineDetail.systemStatus.sdFree : ''}G </div>
+                <div>cpu：{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</div>
+                <div>运行内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryTotle ? machineDetail.systemStatus.memoryTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G</div>
+                <div>SD卡内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G </div>
               </Card>
             </Col>
             <Col span={8}>
               <Card title="SIM卡" bordered={false}>
-                <div>运营商：{machineDetail.systemStatus ? machineDetail.systemStatus.networkOperateName : ''}</div>
+                <div>运营商：{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}</div>
                 {/*<div>卡号：{}</div>*/}
-                <div>ACC ID: {machineDetail.systemStatus ? machineDetail.systemStatus.accid : ''}</div>
+                <div>ACC ID: {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}</div>
                 {/*<div>已使用流量：</div>*/}
                 {/*<div>剩余流量：</div>*/}
               </Card>
@@ -398,6 +398,7 @@ export default class machineSettingList extends PureComponent {
     ManageWatchModalVisible: false,
     ManageWatchEditModalConfirmLoading: false,
     machine: '',
+    createTime: '',
   };
   constructor(props) {
     super(props);
@@ -708,26 +709,29 @@ export default class machineSettingList extends PureComponent {
       }).then((result) => {
         console.log('result', result.status)
         let appLists = [], appLists2 = [], appStatus = '当前没有运行的app';
-        result.status.forEach((item) => {
-          if (item.appType === 1) {
-            let tmp =  { id: item.appPackageName, name: item.appName }
-            appLists.push(tmp);
-          }
-          if (item.appStatus === 1) {
-            appStatus =  item.appName + 'v' + item.versionName
-          }
-          appLists2.push({ id: item.appPackageName, name: item.appName })
-        })
-        console.log('appLists', appLists)
-        this.setState({
-          updateList: result.status,
-          appLists,
-          appLists2,
-        }, () => {
-          this.ManageCutAppForm.setFieldsValue({
-            appStatus,
+        if (result.status) {
+          result.status.forEach((item) => {
+            if (item.appType === 1) {
+              let tmp =  { id: item.appPackageName, name: item.appName }
+              appLists.push(tmp);
+            }
+            if (item.appStatus === 1) {
+              appStatus =  item.appName + 'v' + item.versionName
+            }
+            appLists2.push({ id: item.appPackageName, name: item.appName })
+          })
+          console.log('appLists', appLists)
+          this.setState({
+            updateList: result.status,
+            appLists,
+            appLists2,
+            createTime: result.createTime ? result.createTime : '暂无',
+          }, () => {
+            this.ManageCutAppForm.setFieldsValue({
+              appStatus,
+            });
           });
-        });
+        }
       });
     });
   }
@@ -776,9 +780,9 @@ export default class machineSettingList extends PureComponent {
         },
       }).then((resp) => {
         if (resp && resp.code === 0) {
-          message.success('刷新成功');
+          message.success('升级成功');
         } else {
-          message.error(resp ? resp.msg : '刷新失败');
+          message.error(resp ? resp.msg : '升级失败');
         }
       });
     });
@@ -788,11 +792,30 @@ export default class machineSettingList extends PureComponent {
       ManageAppmodalVisible: !!flag,
     });
   };
-  appUpdate = () => {
-    console.log('点击了更新app');
+  appUpdate = (updateStatus) => {
+    console.log('点击了更新app', this.state.modalData, updateStatus);
+    this.props.dispatch({
+      type: 'machineSetting/machineUpdateInfo',
+      payload: {
+        restParams: {
+          machineId: this.state.modalData.id,
+          updateStatus:  updateStatus ? updateStatus : 2,
+        },
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        message.success('更新成功');
+      } else {
+        message.error(resp ? resp.msg : '更新失败');
+      }
+    });
   }
   appRefresh = () => {
-    console.log('刷新了app');
+    console.log('刷新了app', this.state.modalData);
+    this.handleManageAppClick(this.state.modalData);
+  }
+  appMachineRefresh = () => {
+    this.getMachineStatus(this.state.modalData);
   }
   getUpdateList = () => {
     const updateList = [{
@@ -902,7 +925,7 @@ export default class machineSettingList extends PureComponent {
       type: 'machineSetting/getAisleList',
       payload: {
         restParams: {
-          id: this.state.modalData.id,
+          machineId: this.state.modalData.id,
         },
       },
     }).then((result) => {
@@ -981,26 +1004,30 @@ export default class machineSettingList extends PureComponent {
   getMachineStatus = (item) => {
     console.log('machineId', item.id);
     // getMachineStatus
-    // 获取数据
-    this.props.dispatch({
-      type: 'machineSetting/getMachineStatus',
-      payload: {
-        restParams: {
-          machineId: item.id,
+    this.setState({
+      modalData: item,
+    }, () => {
+      // 获取数据
+      this.props.dispatch({
+        type: 'machineSetting/getMachineStatus',
+        payload: {
+          restParams: {
+            machineId: item.id,
+          },
         },
-      },
-    }).then((result) => {
-      console.log(result)
-      this.setState({
-        machineDetail: result.data,
-        machine: { temperature: result.data.machineStatus.temperature }
-      }, () => {
-        console.log('machineDetail', this.state.machineDetail)
+      }).then((result) => {
+        console.log(result)
         this.setState({
-          ManageWatchModalVisible: true,
-        })
+          machineDetail: result.data,
+          machine: { temperature: result.data.machineStatus.temperature }
+        }, () => {
+          console.log('machineDetail', this.state.machineDetail)
+          this.setState({
+            ManageWatchModalVisible: true,
+          })
+        });
       });
-    });
+    })
   }
   // handleMouseOver
   // 查看机器状态结束
@@ -1037,7 +1064,7 @@ export default class machineSettingList extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2 } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
     const columns = [
       {
         title: '机器编号',
@@ -1181,6 +1208,43 @@ export default class machineSettingList extends PureComponent {
           fetching={this.state.fetching}
           // value={this.state.value}
         />
+        <Modal
+          title="管理App"
+          visible={this.state.ManageAppmodalVisible}
+          onCancel={() => this.ManageAppHandleModalVisibleClick()}
+          width={900}
+          footer={null}
+          confirmLoading={this.state.ManageAppEditModalConfirmLoading}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <span>请您先点击更新，获取最新数据</span>
+              <span><Button type="primary" onClick={() => this.appUpdate(2)}>更新</Button></span>
+            </div>
+            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <span>上次更新时间：{createTime}</span>
+              <span><Button type="Default" onClick={() => this.appRefresh()}>刷新</Button></span>
+            </div>
+          </div>
+          <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} />
+          <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+          <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
+        </Modal>
+        {/*<ManageForm*/}
+          {/*ManageAppmodalVisible={this.state.ManageAppmodalVisible}*/}
+          {/*ManageAppHandleModalVisibleClick={this.ManageAppHandleModalVisibleClick()}*/}
+          {/*ManageAppEditModalConfirmLoading={this.state.ManageAppEditModalConfirmLoading}*/}
+          {/*appUpdate={this.appUpdate}*/}
+          {/*appRefresh={this.appRefresh}*/}
+          {/*columns1={columns1}*/}
+          {/*updateList={updateList}*/}
+          {/*ManageCutAppFormRef={this.ManageCutAppFormRef}*/}
+          {/*appLists={appLists}*/}
+          {/*okCutApp={this.okCutApp}*/}
+          {/*ManageUpdateAppFormRef={this.ManageUpdateAppFormRef}*/}
+          {/*appLists2={appLists2}*/}
+          {/*okRefreshApp={this.okRefreshApp}*/}
+       {/*/>*/}
         <ManageAisleForm
           ref={this.saveManageAisleFormRef}
           ManageAislemodalVisible={this.state.ManageAislemodalVisible}
@@ -1194,35 +1258,13 @@ export default class machineSettingList extends PureComponent {
           message={message}
           updateGoodsCount={this.updateGoodsCount}
         />
-        <Modal
-          title="管理App"
-          visible={this.state.ManageAppmodalVisible}
-          onCancel={() => this.ManageAppHandleModalVisibleClick()}
-          width={900}
-          footer={null}
-          confirmLoading={this.state.ManageAppEditModalConfirmLoading}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span>请您先点击更新，获取最新数据</span>
-              <span><Button type="primary" onClick={this.appUpdate}>更新</Button></span>
-            </div>
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span>上次更新时间：2018.07.15  15:38:30</span>
-              <span><Button type="Default" onClick={this.appRefresh}>刷新</Button></span>
-            </div>
-          </div>
-          <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} />
-          <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
-          <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
-        </Modal>
         <WatchForm
           ref={this.ManageWatchFormRef}
           ManageWatchModalVisible={this.state.ManageWatchModalVisible}
           ManageWatchEditModalConfirmLoading={this.state.ManageWatchEditModalConfirmLoading}
           ManageWatchHandleModalVisibleClick={this.ManageWatchHandleModalVisibleClick}
           appUpdate={this.appUpdate}
-          appRefresh={this.appRefresh}
+          appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
           machine={this.state.machine}
         />

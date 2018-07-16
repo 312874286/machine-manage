@@ -364,6 +364,24 @@ export default class goodsSettingList extends PureComponent {
   }
   // 设置modal 数据
   setModalData = (data) => {
+    // if (data) {
+    //   this.setState({
+    //     fileList: [{
+    //       uid: -1,
+    //       name: 'xxx.png',
+    //       status: 'done',
+    //       url: data.img,
+    //     }],
+    //   });
+    //   this.form.setFieldsValue({
+    //     ...data,
+    //   });
+    // } else {
+    //   this.form.resetFields();
+    //   this.setState({
+    //     fileList: [],
+    //   });
+    // }
     if (data) {
       this.setState({
         fileList: [{
@@ -374,12 +392,22 @@ export default class goodsSettingList extends PureComponent {
         }],
       });
       this.form.setFieldsValue({
-        ...data,
+        name: data.name || '',
+        code: data.code || undefined,
+        sellerId: data.sellerId || undefined,
+        price: data.price || undefined,
+        remark: data.remark || undefined,
       });
     } else {
-      this.form.resetFields();
       this.setState({
         fileList: [],
+      });
+      this.form.setFieldsValue({
+        name: undefined,
+        sellerId: undefined,
+        shopId: undefined,
+        remark: undefined,
+        rangeTime: undefined,
       });
     }
   }

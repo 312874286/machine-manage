@@ -11,11 +11,12 @@ const api = map({
   updateGoodsCountMachineSetting: '/machine/machine/updateGoodsCount',
   updateLocaleMachineSetting: '/machine/machine/updateLocale',
   deleteChannelMachineSetting: '/machine/machine/deleteChannel',
-  getAisleList: '/machine/machine/channelInfo',
+  getAisleList: '/machine/machine/channelInfo?machineId={machineId}',
   getMachineStatus: '/machine/machine/machineStatus?machineId={machineId}',
   getAppStatus: '/machine/machine/appStatus?machineId={machineId}',
   cutApp: '/machine/machine/cutApp?machineId={machineId}&appPackageName={appPackageName}',
   installApp: '/machine/machine/installApp?machineId={machineId}&appPackageName={appPackageName}&url={url}&versionCode={versionCode}',
+  machineUpdateInfo: '/machine/machine/updateInfo?machineId={machineId}&updateStatus={updateStatus}',
 });
 
 export default api;
