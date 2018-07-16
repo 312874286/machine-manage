@@ -705,7 +705,7 @@ export default class machineSettingList extends PureComponent {
         let appLists = [], appLists2 = [], appStatus = '当前没有运行的app';
         if (result) {
           result.status.forEach((item) => {
-            if (item.appType === 1) {
+            if (item.appType === 2) {
               let tmp =  { id: item.appPackageName, name: item.appName }
               appLists.push(tmp);
             }
