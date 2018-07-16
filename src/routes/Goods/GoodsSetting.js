@@ -75,7 +75,7 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请输入商品名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="图片缩略图">
-            {getFieldDecorator('img', {
+            {getFieldDecorator('filelist', {
               rules: [{ required: true, message: '请传图片' }],
               valuePropName: 'filelist',
             })(
