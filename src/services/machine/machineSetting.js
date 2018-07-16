@@ -2,8 +2,8 @@ import { stringify } from 'qs';
 import fetch from '../../utils/fetch';
 import api from './api';
 
-export async function saveMachineSetting({ params }) {
-  return fetch.post(api.saveMachineSetting, {
+export async function updateLocaleMachineSetting({ params }) {
+  return fetch.post(api.updateLocaleMachineSetting, {
     body: stringify(params),
   });
 }
@@ -14,21 +14,55 @@ export async function getMachineSettingList({ params, restParams }) {
   });
 }
 
-export async function editMachineSetting({ params }) {
-  return fetch.post(api.updateMachineSetting, {
+export async function updateGoodsCountMachineSetting({ params }) {
+  return fetch.post(api.updateGoodsCountMachineSetting, {
     body: stringify(params),
   });
 }
 
-export async function delMachineSetting({ params }) {
-  return fetch.post(api.deleteMachineSetting, {
-    body: stringify(params),
+export async function deleteChannelMachineSetting({ params }) {
+  return fetch.postJSON(api.deleteChannelMachineSetting, {
+    body: JSON.stringify(params),
   });
 }
 
 export async function getPointSettingList({ restParams }) {
-  console.log('restParams', restParams)
   return fetch.get(api.getPointSettingList, {
+    restParams,
+  });
+}
+
+export async function getAisleList({ restParams }) {
+  return fetch.get(api.getAisleList, {
+    restParams,
+  });
+}
+
+export async function getMachineStatus({ restParams }) {
+  return fetch.get(api.getMachineStatus, {
+    restParams,
+  });
+}
+
+export async function getAppStatus({ restParams }) {
+  return fetch.get(api.getAppStatus, {
+    restParams,
+  });
+}
+
+export async function cutApp({ restParams }) {
+  return fetch.get(api.cutApp, {
+    restParams,
+  });
+}
+export async function installApp({ restParams }) {
+  return fetch.get(api.installApp, {
+    restParams,
+  });
+}
+
+export async function machineUpdateInfo({ restParams }) {
+  return fetch.post(api.machineUpdateInfo, {
     restParams,
   });
 }

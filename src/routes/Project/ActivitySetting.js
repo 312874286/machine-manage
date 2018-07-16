@@ -64,7 +64,7 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="活动名称">
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入活动名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入活动名称' }],
             })(<Input placeholder="请输入活动名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
@@ -118,9 +118,7 @@ const CreateForm = Form.create()(
             {/*)}*/}
           {/*</FormItem>*/}
           <FormItem {...formItemLayout} label="备注描述">
-            {getFieldDecorator('remark', {
-              rules: [{ required: true, message: '请输入备注描述' }],
-            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
       </Modal>
@@ -295,7 +293,7 @@ export default class activitySettingList extends PureComponent {
   };
   // onSelect
   onSelect = (value, option) => {
-    console.log('value', value, option)
+    // console.log('value', value, option)
     // shopsLists
     this.props.dispatch({
       type: 'activitySetting/getShopsList',

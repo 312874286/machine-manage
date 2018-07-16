@@ -1,23 +1,7 @@
 import React from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import styles from './index.less';
 
-const data = [];
-for (let i = 0; i < 5; i++) {
-  data.push({
-    key: i.toString(),
-    // name: `Edrward ${i}`,
-    // age: 32,
-    // address: `London Park no. ${i}`,
-    code: i.toString(),
-    goodName: `Edrward ${i}`,
-    price: 32,
-    goodsCount: 8,
-    volumeCount: 10,
-    address1: '无',
-    address2: '-',
-    volumeStatus: '已启用',
-  });
-}
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -75,7 +59,7 @@ class EditableCell extends React.Component {
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data, editingKey: '', form: '' };
+    this.state = { editingKey: '', form: '' };
     this.columns = [
       {
         title: '货道号',
@@ -91,7 +75,7 @@ class EditableTable extends React.Component {
       },
       {
         title: '价格',
-        dataIndex: 'price',
+        dataIndex: 'goodsPrice',
         width: '7%',
         editable: false,
       },
@@ -109,21 +93,28 @@ class EditableTable extends React.Component {
       },
       {
         title: '货道故障',
-        dataIndex: 'address1',
+        dataIndex: 'workStatus',
         width: '12%',
         editable: false,
       },
       {
         title: '故障原因',
-        dataIndex: 'address2',
+        dataIndex: 'reason',
         width: '12%',
         editable: false,
       },
       {
         title: '货道状态',
-        dataIndex: 'volumeStatus',
+        dataIndex: 'isDelete',
         width: '12%',
         editable: false,
+        render(val) {
+          if (val === 0) {
+            return <span>停用</span>
+          } else {
+            return <span>启用</span>
+          }
+        }
       },
       {
         title: '操作',
@@ -132,56 +123,94 @@ class EditableTable extends React.Component {
           const editable = this.isEditing(record);
           return (
             <div>
-              <span>
-                  <EditableContext.Consumer>
-                    {form => (
-                      <a
-                        href="javascript:;"
-                        onClick={() => this.edit(form, record.key)}
-                        style={{ marginRight: 8 }}
-                      >
-                        补货
-                      </a>
+                {record.isDelete === 0 ? (
+                  <span>
+                    <EditableContext.Consumer>
+                      {form => (
+                        <a
+                         href="javascript:;"
+                         onClick={() => this.edit(form, record.key)}
+                         style={{ marginRight: 8 }}
+                       >
+                         补货
+                       </a>
                     )}
-                  </EditableContext.Consumer>
-                  <Popconfirm
-                    title="是否确认停用?"
-                    onConfirm={() => this.cancel(record.key)}>
-                    <a>停用</a>
-                  </Popconfirm>
-                </span>
+                    </EditableContext.Consumer>
+                    <Popconfirm title="是否确认启用?" onConfirm={() => this.stopAisle(record.key)}>
+                      <a>启用</a>
+                    </Popconfirm>
+                  </span>
+                ) : (
+                  <span>
+                     <EditableContext.Consumer>
+                      {form => (
+                        <a
+                          href="javascript:;"
+                          onClick={() => this.edit(form, record.key)}
+                          style={{ marginRight: 8 }}
+                        >
+                          补货
+                        </a>
+                      )}
+                    </EditableContext.Consumer>
+                    <Popconfirm title="是否确认停用?" onConfirm={() => this.stopAisle(record.key)}>
+                      <a>停用</a>
+                    </Popconfirm>
+                  </span>
+                )}
             </div>
           );
         },
       },
     ];
   }
-
+  state = {
+    selectedRowKeys: [],
+    totalCallNo: 0,
+  };
   isEditing = (record) => {
     return record.key === this.state.editingKey;
   };
 
+  componentWillReceiveProps(nextProps) {
+    // const { message } = nextProps;
+    // if (message) {
+    //   console.log('componentWillReceiveProps', message)
+    // }
+    // const message1 = this.props.message;
+    // if (message1) {
+    //   console.log('componentWillReceiveProps1', message1)
+    // }
+  }
+  componentDidMount() {
+    const data = this.props.AisleList;
+    this.setState({
+      data,
+    })
+  }
   edit(form, key) {
     this.setState({ form, editingKey: key });
   }
 
-  save(key) {
+  save(AisleList, key) {
     const { form } = this.state
     console.log('form', form)
     form.validateFields((error, row) => {
       if (error) {
         return;
       }
-      const newData = [...this.state.data];
+      const newData = [...AisleList];
       const index = newData.findIndex(item => key === item.key);
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        console.log('newData', newData)
-        this.setState({ data: newData, editingKey: '' });
+        // newData.splice(index, 1, {
+        //   ...item,
+        //   ...row,
+        // });
+        // console.log('newData', newData)
+        // this.setState({ data: newData, editingKey: '' });
+        // console.log('nu', item, key, row)
+        this.props.updateGoodsCount({ channelId: key, count: row.goodsCount });
       } else {
         newData.push(data);
         this.setState({ data: newData, editingKey: '' });
@@ -193,8 +222,58 @@ class EditableTable extends React.Component {
     this.setState({ editingKey: '' });
   };
 
+  handleRowSelectChange = (selectedRowKeys, selectedRows) => {
+    const totalCallNo = selectedRows.reduce((sum, val) => {
+      return sum + parseFloat(val.callNo, 10);
+    }, 0);
+
+    if (this.props.onSelectRow) {
+      this.props.onSelectRow(selectedRows);
+    }
+
+    this.setState({ selectedRowKeys, totalCallNo });
+  }
+
+  closeAisleForm = () => {
+    this.props.handleClose('close');
+  }
+
+  stopAisle = (key) => {
+    const self = this
+    let arr = []
+    if (key) {
+      arr = [{ channelId: key, status: 0 }]
+    } else {
+      arr = self.state.selectedRowKeys.map((item) => {
+        return { channelId: item, status: 0 }
+      });
+    }
+    console.log(arr)
+    this.props.handleStop(arr);
+    this.setState({
+      selectedRowKeys: [],
+    });
+  }
+
+  startAisle = (key) => {
+    const self = this
+    let arr = []
+    if (key) {
+      arr = [{ channelId: key, status: 1 }]
+    } else {
+      // console.log('启用', this.state.selectedRowKeys);
+      arr = self.state.selectedRowKeys.map((item) => {
+        return { channelId: item, status: 1 }
+      });
+    }
+    this.props.handleStart(arr);
+    this.setState({
+      selectedRowKeys: [],
+    });
+  }
   render() {
-    const { editingKey } = this.state;
+    const { editingKey, selectedRowKeys } = this.state;
+    const { AisleList } = this.props
     const components = {
       body: {
         row: EditableFormRow,
@@ -217,24 +296,36 @@ class EditableTable extends React.Component {
         }),
       };
     });
-
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.handleRowSelectChange,
+      getCheckboxProps: record => ({
+        disabled: record.disabled,
+      }),
+    };
     return (
       <div>
         <Table
           components={components}
           bordered
-          dataSource={this.state.data}
+          dataSource={AisleList}
           columns={columns}
           rowClassName="editable-row"
+          rowSelection={rowSelection}
         />
+        <div className={styles.BtnDiv}>
+          <Button type="primary" onClick={() => {this.stopAisle()}}>停用货道</Button>
+          <Button type="primary" onClick={() => {this.startAisle()}}>启用货道</Button>
+        </div>
         {editingKey ? (
           <div style={{ display: 'flex', justifyContent: 'center', width: '100%', flexDirection: 'row' }}>
-            <Button type="Default">取消</Button>
-            <Button type="primary" style={{ marginLeft: '10px'}} onClick={() => this.save(editingKey)}>确定</Button>
+            <Button type="Default" onClick={this.closeAisleForm}>取消</Button>
+            <Button type="primary" style={{ marginLeft: '10px'}} onClick={() => this.save(AisleList, editingKey)}>确定</Button>
           </div>
-        ) : ( <div></div> )}
+        ) : ( <div /> )}
       </div>
     );
   }
 }
 export default EditableTable;
+

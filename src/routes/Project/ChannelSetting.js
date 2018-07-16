@@ -68,12 +68,12 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="渠道编码">
             {getFieldDecorator('channelCode', {
-              rules: [{ required: true, message: '请输入渠道编码' }],
+              rules: [{ required: true, whitespace: true, message: '请输入渠道编码' }],
             })(<Input placeholder="请输入商场" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="渠道名称">
             {getFieldDecorator('channelName', {
-              rules: [{ required: true, message: '请输入渠道名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入渠道名称' }],
             })(<Input placeholder="请输入渠道名称" />)}
           </FormItem>
         </Form>

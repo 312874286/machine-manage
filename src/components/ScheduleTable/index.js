@@ -29,9 +29,11 @@ class ScheduleTable extends PureComponent {
   state = {
     dateTwoWeeksArr: [],
     currentDay: -1,
+    activityArr: [],
   }
   componentDidMount() {
-    this.initTable();
+    const { dateList, } = this.props;
+    this.initTable(dateList);
     window.addEventListener('scroll', this.orderScroll.bind(this));
   }
   format = (date,str) => {
@@ -107,14 +109,14 @@ class ScheduleTable extends PureComponent {
     }
     return dateTwoWeek;
   }
-  initTable = () => {
+  initTable = (dateList) => {
     let date = new Date(); // 获取当前时间
     let nowDate = this.format(date, 'yyyy-mm-dd')
     this.setState({
       currentDay: parseInt(nowDate.split('-')[2]),
     }, () => {
       let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置天数 -7 天
-      let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置天数 +7 天
+      let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置今天天数 +7 天
       console.log('nowDate', startDay, nowDate, endDay)
       let dateTwoWeeksArr = this.dateArr(startDay, endDay);
       this.setState({
@@ -125,7 +127,7 @@ class ScheduleTable extends PureComponent {
     });
   }
   orderScroll() {
-    document.getElementById('dateWeek').scrollLeft = 600;
+    // document.getElementById('dateWeek').scrollLeft = 600;
   }
   filterWeek = (value) => {
     switch (value) {
@@ -154,20 +156,21 @@ class ScheduleTable extends PureComponent {
   }
   render() {
     const { dateTwoWeeksArr, currentDay } = this.state;
-    console.log(dateTwoWeeksArr)
+    const { dateList } = this.props;
+    // console.log('res', dateTwoWeeksArr, dateList);
     return (
-      <Card title="活动排期一览表" style={{overflowX: 'scroll', width: '1200px'}}>
-        <div style={{width: '165%', display: 'flex'}}>
+      <Card title="活动排期一览表" style={{ overflowX: 'scroll', width: '1200px' }}>
+        <div style={{ width: '165%', display: 'flex', position: 'relative' }}>
           <Card.Grid style={gridLeftStyle}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{overflowX: 'scroll', height: '600px', overflowY: 'hidden', width: '165%', display: 'flex'}}  id="dateWeek">
+          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', width: '165%', display: 'flex' }} id="dateWeek">
             {dateTwoWeeksArr.map((item) => {
               return (
                 <Card.Grid value={item.id} key={item.id} className={currentDay === item.id ? styles.currentDay : ''}>
                   <p>{item.value}</p>
                   <p>{this.filterWeek(item.week)}</p>
-                  <p style={{height: '500px' }}></p>
+                  <p style={{ height: '500px' }}></p>
                 </Card.Grid>
               );
             })}
@@ -175,9 +178,18 @@ class ScheduleTable extends PureComponent {
           <Card.Grid style={gridLeftStyle}>
             <span>加载更多</span>
           </Card.Grid>
+          <div className={styles.dateList}>
+            {dateList.map((item) => {
+              return (
+                <div className={styles.dateChildren} key={item.id}
+                style={{ background: item.background, width: item.width, top: item.top, left: item.left }}
+                >{item.name}</div>
+              );
+            })}
+          </div>
         </div>
       </Card>
-     );
+    );
   }
 }
 export default ScheduleTable;

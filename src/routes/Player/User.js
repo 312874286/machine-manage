@@ -7,85 +7,44 @@ import {
   Form,
   Input,
   Button,
-  Cascader,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './Order.less';
-import OrderTable from '../../components/Order/orderTable';
+import styles from './User.less';
+import UserTable from '../../components/Player/userTable';
 import LogModal from '../../components/LogModal';
 
 const FormItem = Form.Item;
-
-
-@connect(({ order, loading, log, common }) => ({
-  order,
+@connect(({ player, loading, log }) => ({
+  player,
   log,
-  loading: loading.models.order,
-  common,
+  loading: loading.models.player,
 }))
 @Form.create()
-export default class Order extends PureComponent {
+export default class PlayerUser extends PureComponent {
   state = {
     pageNo: 1,
     keyword: '',
-    areaCode: '',
     logModalVisible: false,
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
-    areaList: [],
   };
 
   componentDidMount = () => {
     this.getList();
-    this.getArea('');
   }
 
 
   // 获取列表
   getList = () => {
     this.props.dispatch({
-      type: 'order/getOrderList',
+      type: 'player/getList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          areaCode: this.state.areaCode,
           keyword: this.state.keyword,
         },
       },
-    });
-  }
-
-  // 获取商圈信息
-  getArea = (selectedOptions) => {
-    let code = '';
-    let targetOption = null;
-    if (selectedOptions) {
-      targetOption = selectedOptions[selectedOptions.length - 1];
-      code = targetOption.value;
-      targetOption.loading = true;
-    }
-
-    this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
-      payload: {
-        restParams: {
-          code,
-        },
-      },
-    }).then((data) => {
-      if (selectedOptions) {
-        targetOption.loading = false;
-        targetOption.children = data;
-
-        this.setState({
-          areaList: [...this.state.areaList],
-        });
-      } else {
-        this.setState({
-          areaList: data,
-        });
-      }
     });
   }
 
@@ -106,7 +65,6 @@ export default class Order extends PureComponent {
     });
   }
 
-
     // 搜索
     handleSearch = (e) => {
       e.preventDefault();
@@ -115,7 +73,6 @@ export default class Order extends PureComponent {
 
         this.setState({
           keyword: fieldsValue.keyword,
-          areaCode: fieldsValue.areaCode,
         }, () => {
           this.getList();
         });
@@ -158,20 +115,11 @@ export default class Order extends PureComponent {
     });
   }
 
-  // 商圈选择事件
-  areaChange = (value) => {
-    this.setState({
-      areaCode: value.value,
-    }, () => {
-      this.getList();
-    });
-  }
-
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { order: { list, page }, log: { logList, logPage }, loading } = this.props;
-    const { areaCode, keyword, areaList } = this.state;
+    const { player: { list, page }, log: { logList, logPage }, loading } = this.props;
+    const { keyword } = this.state;
 
     return (
       <PageHeaderLayout>
@@ -181,26 +129,11 @@ export default class Order extends PureComponent {
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={8} sm={12}>
-                    <FormItem label="选择商圈">
-                      {getFieldDecorator('areaCode', {
-                        initialValue: areaCode,
-                      })(
-                        <Cascader
-                          options={areaList}
-                          onChange={(value) => { this.areaChange(value); }}
-                          loadData={this.getArea}
-                          changeOnSelect
-                          placeholder="请选择"
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={8} sm={12}>
                     <FormItem label="关键字">
                       {getFieldDecorator('keyword', {
                         initialValue: keyword,
                       })(
-                        <Input placeholder="请输入机器编号、活动名称、订单编号搜索" />
+                        <Input placeholder="请输入关键字进行搜索" />
                       )}
                     </FormItem>
                   </Col>
@@ -214,7 +147,7 @@ export default class Order extends PureComponent {
             </div>
           </div>
 
-          <OrderTable
+          <UserTable
             loading={loading}
             data={list}
             page={page}

@@ -25,7 +25,7 @@ const api = map({
   deleteActivitySetting: '/project/activity/delete',
   getActivitySettingDetail: '/project/activity/detail?id={id}',
   getShopsList: '/project/shops/getList?sellerId={sellerId}',
-  getScheduleSettingList: '/project/schedule/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  getScheduleSettingList: '/activity/list?pageNo={pageNo}&keyword={keyword}',
   saveScheduleSetting: '/project/schedule/add',
   updateScheduleSetting: '/project/schedule/update',
   deleteScheduleSetting: '/project/schedule/delete',
