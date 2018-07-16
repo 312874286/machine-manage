@@ -245,6 +245,8 @@ export default class ScheduleSettingList extends PureComponent {
 
     dateList: [],
     handleDays: {},
+    startTime: '',
+    endTime: '',
   };
   componentWillMount() {
     // 查询省
@@ -298,7 +300,8 @@ export default class ScheduleSettingList extends PureComponent {
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          endTime: this.state.endTime,
+          startTime: this.state.startTime,
           code: this.state.code,
         },
       },
@@ -308,13 +311,29 @@ export default class ScheduleSettingList extends PureComponent {
       if (res.length > 0) {
         res.forEach((item, index) => {
           if (moment(item.startTime) >= moment(this.state.handleDays.startDay)) {
+            // 开始日期>范围的开始日期
              if (moment(item.endTime) <= moment(this.state.handleDays.endDay)) {
+               // 开始时间及结束日期在15天的范围
                let left = Math.floor((moment(item.startTime) - moment(this.state.handleDays.startDay)) / (24 * 60 * 60 * 1000))
                let width = Math.floor((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
+               console.log('endTime', left, width, Math.round((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000)))
+               let tmp = { left: (3.4 + (6.21 * left)) + '%', top: (25 + (index * 4)) + '%', width: (6.21 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName, id: item.id }
+               activityArr.push(tmp);
+             } else {
+               // 结束日期>范围的结束日期
+               let left = Math.floor((moment(item.startTime) - moment(this.state.handleDays.startDay)) / (24 * 60 * 60 * 1000))
+               let width = Math.ceil((moment(this.state.handleDays.endDay) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
                console.log('endTime', left, width)
-               let tmp = { left: (3.4 + (6.21 * left)) + '%', top: (25 + (index * 4)) + '%', width: (6.21 * (width + 1)) + '%', background: 'Green', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName, id: item.id }
+               let tmp = { left: (3.4 + (6.21 * left)) + '%', top: (25 + (index * 4)) + '%', width: (6.21 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName, id: item.id }
                activityArr.push(tmp);
              }
+          } else {
+            // 开始日期<范围的开始日期
+            let left = 0
+            let width = Math.floor((moment(item.endTime) - moment(this.state.handleDays.startDay)) / (24 * 60 * 60 * 1000))
+            console.log('endTime', left, width)
+            let tmp = { left: (3.4 + (6.21 * left)) + '%', top: (25 + (index * 4)) + '%', width: (6.21 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName, id: item.id }
+            activityArr.push(tmp);
           }
           // if ((moment(item.startTime) - moment('2018-7-13')) < 24 * 60 * 60 * 1000) {
           //   console.log('为同一天')

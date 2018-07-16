@@ -110,9 +110,9 @@ class EditableTable extends React.Component {
         editable: false,
         render(val) {
           if (val === 0) {
-            return <span>停用</span>
-          } else {
             return <span>启用</span>
+          } else {
+            return <span>停用</span>
           }
         }
       },
