@@ -330,7 +330,7 @@ export default class goodsSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'goodsSetting/delGoodSetting',
+        type: 'goodsSetting/delGoodsSetting',
         payload: {
           params,
         },

@@ -1741,6 +1741,87 @@ const proxy = {
       "data": ""
     });
   },
+  'GET /project/activityPlan/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 4,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": "4",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-01 13:00:29",
+          "endTime": "2018-07-10 13:00:41",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294673000,
+          "updateId": null,
+          "updateTime": 1531294673000,
+          "activityName": "大股东"
+        },
+        {
+          "id": "2",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-11 11:56:19",
+          "endTime": "2018-07-13 11:56:22",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294662000,
+          "updateId": null,
+          "updateTime": 1531294662000,
+          "activityName": "618大促销"
+        },
+        {
+          "id": "1",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-11 11:55:49",
+          "endTime": "2018-07-13 11:55:52",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294655000,
+          "updateId": null,
+          "updateTime": 1531294655000,
+          "activityName": "7夕欢乐秀"
+        },
+        {
+          "id": "3",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-14 12:56:15",
+          "endTime": "2018-07-31 12:56:23",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294670000,
+          "updateId": null,
+          "updateTime": 1531294670000,
+          "activityName": "reterte"
+        }
+      ]
+    })
+  },
   'GET /order/list': (req, res) => {
     res.send({"msg":"成功","code":0,"page":{"pageSize":20,"currentResult":0,"totalPage":3,"pageNo":1,"totalCount":52,"list":null,"firstPage":true,"lastPage":false,"nextPage":2,"prePage":1,"firstResult":0},"data":[{"id":"3ac834d4-8328-11e8-80ec-00163e0879d9","orderNum":'32128493',"userId":"9b8c0514-8050-11e8-80ec-00163e0879d9","channelId":null,"machineId":"123","nickName":"张三","shopsName":"哈尔滨啤酒","merPointAddress":"北京市朝阳区朝阳公园","activityName":"哈啤","goodsCount":1,"gameId":null,"orderTime":"2018-07-09 11:29:04","orderPrice":0.1,"orderType":"1000","payStatus":"0","payTime":null,"goodsStatus":0,"activityId":'3ac834d4-832',"channelCode":null,"channelName":null,"machineCode":"23829323","machineName":null,"gameName":"答题","gameRemark":null,"keyword":null,"orderGoodsList":[{"id":"sjjjjjjjjj","orderId":"3ac834d4-8328-11e8-80ec-00163e0879d9","orderNum":null,"goodsType":1,"goodsId":"1111","goodsName":"伊利酸牛奶","goodsCode":"433333333","goodsPrice":1.2,"status":1}],"pageNo":0},{"id":"029f1999-836a-11e8-80ec-00163e0879d9","orderNum":null,"userId":"9b8c0514-8050-11e8-80ec-00163e0879d9","channelId":null,"machineId":"123","gameId":null,"orderTime":"2018-07-09 11:19:57","orderPrice":null,"orderType":"1000","payStatus":"1","payTime":"2018-07-09 11:20:26","goodsStatus":0,"activityId":null,"channelCode":null,"channelName":null,"machineCode":null,"machineName":null,"gameName":null,"gameRemark":null,"keyword":null,"orderGoodsList":null,"pageNo":0}]});
   },

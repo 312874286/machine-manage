@@ -109,7 +109,7 @@ class ScheduleTable extends PureComponent {
     }
     return dateTwoWeek;
   }
-  initTable = (dateList) => {
+  initTable = () => {
     let date = new Date(); // 获取当前时间
     let nowDate = this.format(date, 'yyyy-mm-dd')
     this.setState({
@@ -118,6 +118,7 @@ class ScheduleTable extends PureComponent {
       let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置天数 -7 天
       let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置今天天数 +7 天
       console.log('nowDate', startDay, nowDate, endDay)
+      this.props.handleDays({ startDay: startDay.split('--')[0], endDay: endDay.split('--')[0] });
       let dateTwoWeeksArr = this.dateArr(startDay, endDay);
       this.setState({
         dateTwoWeeksArr,
