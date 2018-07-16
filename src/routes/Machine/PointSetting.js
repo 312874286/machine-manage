@@ -83,18 +83,19 @@ const CreateForm = Form.create()(
               />
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="点位名称">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
+            })(<Input placeholder="请输入点位名称" />)}
+          </FormItem>
           <FormItem {...formItemLayout} label="商场名称">
             {getFieldDecorator('mall', {
-              rules: [{ required: true, message: '请输入商场名称' }, {
-                validator: verifyTrim,
-              }],
+              rules: [{ required: true,whitespace: true, message: '请输入商场名称' }],
             })(<Input placeholder="请输入商场" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="运营人员">
             {getFieldDecorator('manager', {
-              rules: [{ required: true, message: '请输入运营人员' }, {
-                validator: verifyTrim,
-              }],
+              rules: [{ required: true, whitespace: true, message: '请输入运营人员' }],
             })(<Input placeholder="请输入运营人" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="手机号码">
@@ -105,9 +106,7 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请输入手机" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="备注描述">
-            {getFieldDecorator('remark', {
-              rules: [{ required: true, message: '请输入备注描述' }],
-            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
       </Modal>
@@ -418,6 +417,7 @@ export default class PointSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
+        name: data.name || '',
         mall: data.mall || '',
         manager: data.manager || '',
         mobile: data.mobile || '',
@@ -426,6 +426,7 @@ export default class PointSettingList extends PureComponent {
       });
     } else {
       this.form.setFieldsValue({
+        name: data.name || '',
         mall: '',
         manager: '',
         mobile: '',

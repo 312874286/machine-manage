@@ -61,27 +61,27 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="商户编码">
             {getFieldDecorator('merchantCode', {
-              rules: [{ required: true, message: '请输入商户编码' }],
+              rules: [{ required: true, whitespace: true, message: '请输入商户编码' }],
             })(<Input placeholder="请输入商户编码" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="商户名称">
             {getFieldDecorator('merchantName', {
-              rules: [{ required: true, message: '请输入商户名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入商户名称' }],
             })(<Input placeholder="请输入商户名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="品牌名称">
             {getFieldDecorator('originFlag', {
-              rules: [{ required: true, message: '请输入品牌名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
             })(<Input placeholder="请输入品牌名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="原始标示">
             {getFieldDecorator('brandName', {
-              rules: [{ required: true, message: '请输入原始标示' }],
+              rules: [{ required: true, whitespace: true, message: '请输入原始标示' }],
             })(<Input placeholder="请输入原始标示" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择渠道">
             {getFieldDecorator('channelId', {
-              rules: [{ required: true, message: '请选择渠道' }],
+              rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
             })(
               <Select placeholder="请选择">
                 {channelLists.map((item) => {
