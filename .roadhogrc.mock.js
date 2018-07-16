@@ -995,7 +995,7 @@ const proxy = {
       "msg": "成功"
     });
   },
-  'GET /machine/machine/updateInfo': (req, res) => {
+  'POST /machine/machine/updateInfo': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
   },
   'POST /machine/machine/update': (req, res) => {

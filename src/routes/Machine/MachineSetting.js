@@ -314,7 +314,7 @@ const WatchForm = Form.create()(
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>请您先点击更新，获取最新数据</span>
-            <span><Button type="primary" onClick={() => appUpdate()}>更新</Button></span>
+            <span><Button type="primary" onClick={() => appUpdate(1)}>更新</Button></span>
           </div>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : (machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '')}</span>
@@ -804,9 +804,9 @@ export default class machineSettingList extends PureComponent {
     this.props.dispatch({
       type: 'machineSetting/machineUpdateInfo',
       payload: {
-        restParams: {
+        params: {
           machineId: this.state.modalData.id,
-          updateStatus:  updateStatus ? updateStatus : 2,
+          updateStatus:  updateStatus ? updateStatus : '',
         },
       },
     }).then((resp) => {

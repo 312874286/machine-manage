@@ -45,10 +45,6 @@ export default {
       const response = yield call(getAppStatus, { restParams });
       return response.data;
     },
-    // *getPointSettingDetail({ payload: { restParams } }, { call }) {
-    //   const response = yield call(getPointSettingDetail, { restParams });
-    //   return response.data;
-    // },
     *cutApp({ payload: { restParams } }, { call, put }) {
       const response = yield call(cutApp, { restParams });
       return response;
@@ -57,8 +53,8 @@ export default {
       const response = yield call(installApp, { restParams });
       return response;
     },
-    *machineUpdateInfo({ payload: { restParams } }, { call, put }) {
-      const response = yield call(machineUpdateInfo, { restParams });
+    *machineUpdateInfo({ payload: { params } }, { call, put }) {
+      const response = yield call(machineUpdateInfo, { params });
       return response;
     },
   },
