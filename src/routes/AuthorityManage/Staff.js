@@ -263,7 +263,7 @@ export default class Staff extends PureComponent {
         dataIndex: '',
         key: '',
         render: (record) => {
-          return <Button type="primary" onClick={this.onToAuthorization.bind(this, record)}>授权</Button>;
+          return <a onClick={this.onToAuthorization.bind(this, record)}>授权</a>;
         },
       },
     ];
@@ -299,11 +299,6 @@ export default class Staff extends PureComponent {
           okText="确认"
           cancelText="取消"
         >
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={9} sm={24}>
-              角色名称
-            </Col>
-          </Row>
           <Tree
             checkable
             onExpand={this.onExpand}
@@ -334,7 +329,6 @@ export default class Staff extends PureComponent {
             pagination={paginationProps}
             onChange={this.handleTableChange}
             rowKey="id"
-            bordered
           />
         </Card>
       </PageHeaderLayout>

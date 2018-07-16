@@ -317,10 +317,10 @@ export default class Account extends PureComponent {
         render: (record) => {
           return (
             <div>
-              <Button type="primary" onClick={this.onToEdit.bind(this, record)}>修改</Button>
+              <a onClick={this.onToEdit.bind(this, record)}>修改</a>
               &nbsp;&nbsp;
               <Popconfirm title="是否删除?" onConfirm={this.onToDel.bind(this, record)} onCancel={this.onComnfirmCancel.bind(this)} okText="删除" cancelText="取消">
-                <Button type="danger">删除</Button>
+                <a>删除</a>
               </Popconfirm>
             </div>
           );
@@ -355,7 +355,6 @@ export default class Account extends PureComponent {
             pagination={paginationProps}
             onChange={this.handleTableChange}
             rowKey="id"
-            bordered
           />
         </Card>
         <Modal

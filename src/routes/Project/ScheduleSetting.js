@@ -29,6 +29,7 @@ import ScheduleTable from '../../components/ScheduleTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ScheduleSetting.less';
 import LogModal from '../../components/LogModal';
+import { setTimeout } from 'timers';
 
 
 const FormItem = Form.Item;
@@ -67,6 +68,36 @@ const CreateForm = Form.create()(
         sm: { span: 18 },
       },
     };
+
+    var goodsInitData = [{
+      "resultCode": 1,
+      "resultRemark": "挑战成功掉货",
+      "prizeType": "1",
+      "prizeId": "100000001",
+      }, {
+      "resultCode": 2,
+      "resultRemark": "挑战成功掉货",
+      "prizeId": "100000002",
+      "prizeType": "1"
+      }]; 
+
+    var couponsInitData = [{
+      "resultRemark": "失败送优惠券",
+      "code": "TM100001",
+      "prizeType": "2",
+      "resultCode": 3,
+      "name": "天猫双十一优惠券"
+    }];
+
+    var clist = [{
+      id: '100000001',
+      name: 'aaa',
+    },
+    {
+      id: '100000002',
+      name: 'bbb',
+    },];
+
     return (
       <Modal
         title={!modalType ? '编辑排期' : '新增排期'}
@@ -117,10 +148,10 @@ const CreateForm = Form.create()(
             )}
           </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField />
+            <GoodsTableField initData={goodsInitData} clist={clist} />
           </FormItem>
           <FormItem label="填写优惠券信息">
-            <DiscountDynamicField />
+            <DiscountDynamicField initData={couponsInitData} />
           </FormItem>
         </Form>
       </Modal>
@@ -765,7 +796,9 @@ export default class ScheduleSettingList extends PureComponent {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
-
+    // setTimeout(() => {
+    //   this.handleModalVisible(true);
+    // }, 1000);
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>

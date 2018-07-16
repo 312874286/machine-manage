@@ -72,7 +72,6 @@ export default class Department extends PureComponent {
             pagination={paginationProps}
             onChange={this.handleTableChange}
             rowKey="id"
-            bordered
           />
         </Card>
       </PageHeaderLayout>
