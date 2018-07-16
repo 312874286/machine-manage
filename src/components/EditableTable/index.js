@@ -304,7 +304,7 @@ class EditableTable extends React.Component {
       }),
     };
     return (
-      <div>
+      <div id="editTable">
         <Table
           components={components}
           bordered

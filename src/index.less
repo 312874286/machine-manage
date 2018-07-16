@@ -74,10 +74,13 @@ body {
   .price-checkbox {
     text-align: center;
   }
+  #editTable .ant-spin-container, #editTable .ant-table, #editTable .ant-table-body {
+    position: static !important;
+  }
   // 选择框
-  .ant-table .ant-table-content .ant-table-body table .ant-table-thead .ant-table-selection-column span {
+  #editTable .ant-table .ant-table-content .ant-table-body table .ant-table-thead .ant-table-selection-column span {
     position: absolute;
-    bottom: -10%;
+    bottom: 0%;
     left: 2.3%;
   }
   .ant-table {
