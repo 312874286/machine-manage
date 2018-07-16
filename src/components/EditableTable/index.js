@@ -136,8 +136,8 @@ class EditableTable extends React.Component {
                        </a>
                     )}
                     </EditableContext.Consumer>
-                    <Popconfirm title="是否确认启用?" onConfirm={() => this.stopAisle(record.key)}>
-                      <a>启用</a>
+                    <Popconfirm title="是否确认停用?" onConfirm={() => this.stopAisle(record.key)}>
+                      <a>停用</a>
                     </Popconfirm>
                   </span>
                 ) : (
@@ -153,8 +153,8 @@ class EditableTable extends React.Component {
                         </a>
                       )}
                     </EditableContext.Consumer>
-                    <Popconfirm title="是否确认停用?" onConfirm={() => this.stopAisle(record.key)}>
-                      <a>停用</a>
+                    <Popconfirm title="是否确认启用?" onConfirm={() => this.startAisle(record.key)}>
+                      <a>启用</a>
                     </Popconfirm>
                   </span>
                 )}
