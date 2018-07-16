@@ -577,8 +577,8 @@ export default class machineSettingList extends PureComponent {
         const list = [];
         result.forEach((r) => {
           list.push({
-            value: r.areaName,
-            text: r.areaName,
+            value: r.name + r.areaName,
+            text: r.name + r.areaName,
             id: r.id,
           });
         });
@@ -587,7 +587,7 @@ export default class machineSettingList extends PureComponent {
           data = [...list, ...this.state.data];
         }
         this.setState({ data, fetching: false });
-        if (result.length < 10) {
+        if (result.length < 20) {
           this.setState({
             fetching: true,
           });
@@ -618,7 +618,7 @@ export default class machineSettingList extends PureComponent {
       let params = '';
       if (this.state.modalData.id) {
         url = 'machineSetting/updateLocaleMachineSetting';
-        params = { id: this.state.modalData.id, locale: this.state.dataId };
+        params = { id: this.state.modalData.id, localeId: this.state.dataId };
       }
       this.props.dispatch({
         type: url,

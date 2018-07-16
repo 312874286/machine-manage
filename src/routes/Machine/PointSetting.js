@@ -426,7 +426,7 @@ export default class PointSettingList extends PureComponent {
       });
     } else {
       this.form.setFieldsValue({
-        name: data.name || '',
+        name: '',
         mall: '',
         manager: '',
         mobile: '',

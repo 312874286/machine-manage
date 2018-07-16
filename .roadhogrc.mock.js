@@ -296,18 +296,10 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            id: 'a11',
-            functionDepict: '商品管理',
-            functionPath: 'goods',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'form',
-          },
-          {
             id: 'a25',
             functionDepict: '商品管理',
             functionPath: 'goods',
-            parentId: null,
+            parentId: 'a11',
             functionLevel: 2,
           },
           {

@@ -62,7 +62,7 @@ export async function installApp({ restParams }) {
 }
 
 export async function machineUpdateInfo({ restParams }) {
-  return fetch.get(api.machineUpdateInfo, {
+  return fetch.post(api.machineUpdateInfo, {
     restParams,
   });
 }
