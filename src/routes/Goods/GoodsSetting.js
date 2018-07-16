@@ -185,7 +185,7 @@ export default class goodsSettingList extends PureComponent {
   }
 
   handleChange = (info) => {
-    // console.log()
+    console.log('222222')
     let fileList = info.fileList;
     fileList = fileList.slice(-1);
     fileList = fileList.map((file) => {
@@ -403,6 +403,8 @@ export default class goodsSettingList extends PureComponent {
       });
       this.form.setFieldsValue({
         name: undefined,
+        code: undefined,
+        price: undefined,
         sellerId: undefined,
         shopId: undefined,
         remark: undefined,

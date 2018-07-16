@@ -608,6 +608,11 @@ export default class PointSettingList extends PureComponent {
         dataIndex: 'areaName',
       },
       {
+        title: '点位名称',
+        // width: 200,
+        dataIndex: 'name',
+      },
+      {
         title: '商场',
         // width: 200,
         dataIndex: 'mall',
