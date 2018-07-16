@@ -290,7 +290,7 @@ const ManageAisleForm = Form.create()(
 const WatchForm = Form.create()(
   (props) => {
     const { form, ManageWatchModalVisible, ManageWatchEditModalConfirmLoading, ManageWatchHandleModalVisibleClick,
-      appUpdate,appRefresh, machineDetail, machine } = props;
+      appUpdate,appRefresh, machineDetail } = props;
     // const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -397,7 +397,6 @@ export default class machineSettingList extends PureComponent {
     machineDetail: {},
     ManageWatchModalVisible: false,
     ManageWatchEditModalConfirmLoading: false,
-    machine: '',
     createTime: '',
   };
   constructor(props) {
@@ -1019,7 +1018,6 @@ export default class machineSettingList extends PureComponent {
         console.log(result)
         this.setState({
           machineDetail: result.data,
-          machine: { temperature: result.data.machineStatus.temperature }
         }, () => {
           console.log('machineDetail', this.state.machineDetail)
           this.setState({
@@ -1266,7 +1264,6 @@ export default class machineSettingList extends PureComponent {
           appUpdate={this.appUpdate}
           appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
-          machine={this.state.machine}
         />
         <LogModal
           data={logList}
