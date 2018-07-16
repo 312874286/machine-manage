@@ -242,10 +242,10 @@ class EditableTable extends React.Component {
     const self = this
     let arr = []
     if (key) {
-      arr = [{ channelId: key, status: 0 }]
+      arr = [{ channelId: key, status: 1 }]
     } else {
       arr = self.state.selectedRowKeys.map((item) => {
-        return { channelId: item, status: 0 }
+        return { channelId: item, status: 1 }
       });
     }
     console.log(arr)
@@ -259,11 +259,11 @@ class EditableTable extends React.Component {
     const self = this
     let arr = []
     if (key) {
-      arr = [{ channelId: key, status: 1 }]
+      arr = [{ channelId: key, status: 0 }]
     } else {
       // console.log('启用', this.state.selectedRowKeys);
       arr = self.state.selectedRowKeys.map((item) => {
-        return { channelId: item, status: 1 }
+        return { channelId: item, status: 0 }
       });
     }
     this.props.handleStart(arr);

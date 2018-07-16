@@ -868,10 +868,10 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
-        message.success('启用成功');
+        message.success('停用成功');
         this.getAisleList();
       } else {
-        message.error(resp ? resp.msg : '启用失败');
+        message.error(resp ? resp.msg : '停用失败');
       }
     });
   }
@@ -883,13 +883,13 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
-        message.success('停用成功');
+        message.success('启动成功');
         this.getAisleList();
         // this.setState({
         //   message: resp.code
         // })
       } else {
-        message.error(resp ? resp.msg : '停用失败');
+        message.error(resp ? resp.msg : '启动失败');
       }
     });
   }
@@ -1084,7 +1084,7 @@ export default class machineSettingList extends PureComponent {
         width: 100,
         dataIndex: 'netStatus',
         render(val) {
-          if (val === 0) {
+          if (val === 1) {
             return <Icon type="wifi" />;
           } else {
             return '网络异常';
@@ -1158,22 +1158,42 @@ export default class machineSettingList extends PureComponent {
     const columns1 = [{
       title: 'APP名称',
       dataIndex: 'appName',
-      key: 'name',
       align: 'center',
     }, {
-      title: '安装状态',
+      title: '安装版本',
       dataIndex: 'versionName',
-      key: 'age',
       align: 'center',
+      render(val) {
+        if (val) {
+          return val;
+        } else {
+          return '无';
+        }
+      },
     }, {
       title: '运行状态',
-      dataIndex: 'versionCode',
-      key: 'address',
-      align: 'center',
-    }, {
-      title: '是否前台运行',
       dataIndex: 'appStatus',
       align: 'center',
+      render(val) {
+        if (val === 0) {
+          return '未启动';
+        } else if (val === 1) {
+          return '前台运行';
+        } else {
+          return '后台运行';
+        }
+      },
+    }, {
+      title: 'App类型',
+      dataIndex: 'appType',
+      align: 'center',
+      render(val) {
+        if (val === 1) {
+          return '监控';
+        } else if (val === 2) {
+          return '正常';
+        }
+      },
     }];
     return (
       <PageHeaderLayout>
