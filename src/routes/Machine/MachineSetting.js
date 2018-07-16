@@ -316,7 +316,7 @@ const WatchForm = Form.create()(
             <span>请您先点击更新，获取最新数据</span>
             <span><Button type="primary" onClick={() => appUpdate(1)}>更新</Button></span>
           </div>
-          <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-end', marginBottom: '10px' }}>
 
             <span><Button type="Default" onClick={() => appRefresh()}>刷新</Button></span>
           </div>
@@ -1179,6 +1179,8 @@ export default class machineSettingList extends PureComponent {
           return '未启动';
         } else if (val === 1) {
           return '前台运行';
+        } else if (val === -1) {
+          return '未安装';
         } else {
           return '后台运行';
         }
@@ -1247,7 +1249,7 @@ export default class machineSettingList extends PureComponent {
               <span><Button type="Default" onClick={() => this.appRefresh()}>刷新</Button></span>
             </div>
           </div>
-          <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} />
+          <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} pagination={false} />
           <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
           <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
         </Modal>
