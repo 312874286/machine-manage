@@ -654,7 +654,7 @@ export default class machineSettingList extends PureComponent {
     //   keyword2: v,
     // });
     this.setState({ data: [], dataId: option.props['data-id'], value: '', });
-    console.log('onselect', value, option.props['data-id'], this.state.value);
+    // console.log('onselect', value, option.props['data-id'], this.state.value);
   }
   editPointHandleModalVisibleClick = (flag) => {
     this.setState({
@@ -706,9 +706,9 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((result) => {
-        console.log('result', result.status)
+        console.log('result', result)
         let appLists = [], appLists2 = [], appStatus = '当前没有运行的app';
-        if (result.status) {
+        if (result) {
           result.status.forEach((item) => {
             if (item.appType === 1) {
               let tmp =  { id: item.appPackageName, name: item.appName }
@@ -725,6 +725,14 @@ export default class machineSettingList extends PureComponent {
             appLists,
             appLists2,
             createTime: result.createTime ? result.createTime : '暂无',
+          }, () => {
+            this.ManageCutAppForm.setFieldsValue({
+              appStatus,
+            });
+          });
+        } else {
+          this.setState({
+            createTime: result ? result.createTime : '暂无',
           }, () => {
             this.ManageCutAppForm.setFieldsValue({
               appStatus,
