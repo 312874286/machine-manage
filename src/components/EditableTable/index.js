@@ -208,7 +208,7 @@ class EditableTable extends React.Component {
         //   ...row,
         // });
         // console.log('newData', newData)
-        // this.setState({ data: newData, editingKey: '' });
+        this.setState({ data: newData, editingKey: '' });
         // console.log('nu', item, key, row)
         this.props.updateGoodsCount([{ channelId: key, count: row.goodsCount }]);
       } else {

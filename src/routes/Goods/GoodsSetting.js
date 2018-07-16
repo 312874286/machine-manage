@@ -76,7 +76,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="图片缩略图">
             {getFieldDecorator('img', {
-              rules: [{ required: true, message: '' }],
+              rules: [{ required: true, message: '请传图片' }],
               valuePropName: 'filelist',
             })(
               <div className="clearfix">
