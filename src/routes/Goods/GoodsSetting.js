@@ -185,7 +185,7 @@ export default class goodsSettingList extends PureComponent {
   }
 
   handleChange = (info) => {
-    console.log()
+    // console.log()
     let fileList = info.fileList;
     fileList = fileList.slice(-1);
     fileList = fileList.map((file) => {
@@ -205,7 +205,7 @@ export default class goodsSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
-        console.log('resp', resp)
+        // console.log('resp', resp)
         this.setState({
           fileList: [{
             uid: -2,

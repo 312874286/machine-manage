@@ -293,7 +293,7 @@ export default class activitySettingList extends PureComponent {
   };
   // onSelect
   onSelect = (value, option) => {
-    console.log('value', value, option)
+    // console.log('value', value, option)
     // shopsLists
     this.props.dispatch({
       type: 'activitySetting/getShopsList',

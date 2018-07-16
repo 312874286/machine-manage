@@ -606,7 +606,7 @@ export default class machineSettingList extends PureComponent {
   }
   editPointHandleAddClick = () => {
     // 确认修改点位
-    console.log(this.state.dataId)
+    // console.log(this.state.dataId)
     this.pointForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -706,7 +706,7 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((result) => {
-        console.log('result', result)
+        // console.log('result', result)
         let appLists = [], appLists2 = [], appStatus = '当前没有运行的app';
         if (result) {
           result.status.forEach((item) => {
@@ -719,7 +719,7 @@ export default class machineSettingList extends PureComponent {
             }
             appLists2.push({ id: item.appPackageName, name: item.appName })
           })
-          console.log('appLists', appLists)
+          // console.log('appLists', appLists)
           this.setState({
             updateList: result.status,
             appLists,
@@ -800,7 +800,7 @@ export default class machineSettingList extends PureComponent {
     });
   };
   appUpdate = (updateStatus) => {
-    console.log('点击了更新app', this.state.modalData, updateStatus);
+    // console.log('点击了更新app', this.state.modalData, updateStatus);
     this.props.dispatch({
       type: 'machineSetting/machineUpdateInfo',
       payload: {
@@ -818,7 +818,7 @@ export default class machineSettingList extends PureComponent {
     });
   }
   appRefresh = () => {
-    console.log('刷新了app', this.state.modalData);
+    // console.log('刷新了app', this.state.modalData);
     this.handleManageAppClick(this.state.modalData);
   }
   appMachineRefresh = () => {
@@ -948,7 +948,7 @@ export default class machineSettingList extends PureComponent {
   }
   ManageAisleHandleAddClick = () => {
     // 确认管理App
-    console.log('确认管理Aisle货道');
+    // console.log('确认管理Aisle货道');
   }
   ManageAisleHandleModalVisibleClick = (flag) => {
     this.setState({
@@ -1009,7 +1009,7 @@ export default class machineSettingList extends PureComponent {
     });
   }
   getMachineStatus = (item) => {
-    console.log('machineId', item.id);
+    // console.log('machineId', item.id);
     // getMachineStatus
     this.setState({
       modalData: item,
@@ -1023,7 +1023,7 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((result) => {
-        console.log(result)
+        // console.log(result)
         this.setState({
           machineDetail: result.data,
         }, () => {
