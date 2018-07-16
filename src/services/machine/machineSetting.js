@@ -15,8 +15,8 @@ export async function getMachineSettingList({ params, restParams }) {
 }
 
 export async function updateGoodsCountMachineSetting({ params }) {
-  return fetch.post(api.updateGoodsCountMachineSetting, {
-    body: stringify(params),
+  return fetch.postJSON(api.updateGoodsCountMachineSetting, {
+    body: JSON.stringify(params),
   });
 }
 
@@ -63,6 +63,6 @@ export async function installApp({ restParams }) {
 
 export async function machineUpdateInfo({ params }) {
   return fetch.post(api.machineUpdateInfo, {
-    body: JSON.stringify(params),
+    body: stringify(params),
   });
 }
