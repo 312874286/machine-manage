@@ -58,22 +58,22 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="游戏名称">
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入游戏名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入游戏名称' }],
             })(<Input placeholder="请输入游戏名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="游戏版本">
             {getFieldDecorator('version', {
-              rules: [{ required: true, message: '请输入游戏版本' }],
+              rules: [{ required: true, whitespace: true, message: '请输入游戏版本' }],
             })(<Input placeholder="请输入游戏版本" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="点72版本">
             {getFieldDecorator('versionInno72', {
-              rules: [{ required: true, message: '请输入点72版本' }],
+              rules: [{ required: true, whitespace: true, message: '请输入点72版本' }],
             })(<Input placeholder="请输入点72版本" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="备注描述">
             {getFieldDecorator('remark', {
-              rules: [{ required: true, message: '请输入备注描述' }],
+              rules: [{ required: true, whitespace: true, message: '请输入备注描述' }],
             })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>

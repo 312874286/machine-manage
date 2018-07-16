@@ -868,10 +868,10 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
-        message.success('停用成功');
+        message.success('启用成功');
         this.getAisleList();
       } else {
-        message.error(resp ? resp.msg : '停用失败');
+        message.error(resp ? resp.msg : '启用失败');
       }
     });
   }
@@ -883,13 +883,13 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
-        message.success('启用成功');
+        message.success('停用成功');
         this.getAisleList();
         // this.setState({
         //   message: resp.code
         // })
       } else {
-        message.error(resp ? resp.msg : '启用失败');
+        message.error(resp ? resp.msg : '停用失败');
       }
     });
   }
