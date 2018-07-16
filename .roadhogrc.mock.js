@@ -1536,7 +1536,8 @@ const proxy = {
         province: 100000,
         city: 100000,
         district: 100000,
-        circle: '其他'
+        circle: '其他',
+        sellerId: 400,
       }
     });
   },
