@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'antd';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -42,7 +42,7 @@ class EditableCell extends React.Component {
                   {getFieldDecorator(dataIndex, {
                     rules: [{
                       required: true,
-                      message: `Please Input ${title}!`,
+                      message: `需填写 ${title}!`,
                     }],
                     initialValue: record[dataIndex],
                   })(this.getInput())}
@@ -201,6 +201,7 @@ class EditableTable extends React.Component {
       }
       const newData = [...AisleList];
       const index = newData.findIndex(item => key === item.key);
+      // console.log('index', index,newData[index])
       if (index > -1) {
         const item = newData[index];
         // newData.splice(index, 1, {
@@ -209,8 +210,13 @@ class EditableTable extends React.Component {
         // });
         // console.log('newData', newData)
         this.setState({ data: newData, editingKey: '' });
+        if (row.goodsCount > newData[index].volumeCount) {
+          message.error('补货数量超出货道容量，请修改');
+          return false
+        } else {
+          this.props.updateGoodsCount([{ channelId: key, count: row.goodsCount }]);
+        }
         // console.log('nu', item, key, row)
-        this.props.updateGoodsCount([{ channelId: key, count: row.goodsCount }]);
       } else {
         newData.push(data);
         this.setState({ data: newData, editingKey: '' });

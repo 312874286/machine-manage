@@ -67,7 +67,7 @@ const CreateForm = Form.create()(
           <FormItem {...formItemLayout} label="商品编码">
             {getFieldDecorator('code', {
               rules: [{ required: true, whitespace: true, message: '请输入商品编码' }],
-            })(<Input placeholder="请输入商品编码" />)}
+            })(modalType ? (<Input placeholder="请输入商品编码" disabled />) : (<Input placeholder="请输入商品编码" />))}
           </FormItem>
           <FormItem {...formItemLayout} label="商品名称">
             {getFieldDecorator('name', {
