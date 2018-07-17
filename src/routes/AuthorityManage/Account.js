@@ -117,7 +117,7 @@ export default class Account extends PureComponent {
         message.success(msg);
         this.getSystemRoleList();
       } else {
-        message.error(msg);
+        // message.error(msg);
       }
     });
     console.log('onToDel::');
