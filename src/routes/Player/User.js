@@ -128,12 +128,12 @@ export default class PlayerUser extends PureComponent {
             <div className={styles.tableListForm}>
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={12}>
+                  <Col md={10} sm={12}>
                     <FormItem label="关键字">
                       {getFieldDecorator('keyword', {
                         initialValue: keyword,
                       })(
-                        <Input placeholder="请输入关键字进行搜索" />
+                        <Input placeholder="请输入用户昵称、手机号、渠道名称" />
                       )}
                     </FormItem>
                   </Col>
