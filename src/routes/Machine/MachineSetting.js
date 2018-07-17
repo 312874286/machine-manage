@@ -314,38 +314,33 @@ const WatchForm = Form.create()(
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>请您先点击更新，获取最新数据</span>
-            <span><Button type="primary" onClick={() => appUpdate()}>更新</Button></span>
+            <span><Button type="primary" onClick={() => appUpdate(1)}>更新</Button></span>
           </div>
-          <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : (machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '')}</span>
+          <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-end', marginBottom: '10px' }}>
+
             <span><Button type="Default" onClick={() => appRefresh()}>刷新</Button></span>
           </div>
         </div>
         <div style={{ background: '#ECECEC', padding: '30px' }}>
           <Row gutter={16}>
-            <Col span={8}>
+            <Col span={12}>
               <Card title="机器状态" bordered={false}>
                 <div>机器门状态：{machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}</div>
                 <div>温度：{machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}</div>
                 <div>掉货开关：{machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}</div>
                 {/*<div>屏幕亮度：{machineDetail.systemStatus ? '111' : '2222'}</div>*/}
                 {/*<div>音量：</div>*/}
+                <div>上次更新时间：{machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}</div>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Card title="硬件状态" bordered={false}>
                 <div>cpu：{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</div>
                 <div>运行内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryTotle ? machineDetail.systemStatus.memoryTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G</div>
                 <div>SD卡内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G </div>
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card title="SIM卡" bordered={false}>
                 <div>运营商：{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}</div>
-                {/*<div>卡号：{}</div>*/}
                 <div>ACC ID: {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}</div>
-                {/*<div>已使用流量：</div>*/}
-                {/*<div>剩余流量：</div>*/}
+                <div>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}</div>
               </Card>
             </Col>
           </Row>
@@ -710,7 +705,7 @@ export default class machineSettingList extends PureComponent {
         let appLists = [], appLists2 = [], appStatus = '当前没有运行的app';
         if (result) {
           result.status.forEach((item) => {
-            if (item.appType === 1) {
+            if (item.appType === 2) {
               let tmp =  { id: item.appPackageName, name: item.appName }
               appLists.push(tmp);
             }
@@ -804,9 +799,9 @@ export default class machineSettingList extends PureComponent {
     this.props.dispatch({
       type: 'machineSetting/machineUpdateInfo',
       payload: {
-        restParams: {
+        params: {
           machineId: this.state.modalData.id,
-          updateStatus:  updateStatus ? updateStatus : 2,
+          updateStatus:  updateStatus ? updateStatus : '',
         },
       },
     }).then((resp) => {
@@ -888,13 +883,13 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
-        message.success('启用成功');
+        message.success('启动成功');
         this.getAisleList();
         // this.setState({
         //   message: resp.code
         // })
       } else {
-        message.error(resp ? resp.msg : '启用失败');
+        message.error(resp ? resp.msg : '启动失败');
       }
     });
   }
@@ -1089,7 +1084,7 @@ export default class machineSettingList extends PureComponent {
         width: 100,
         dataIndex: 'netStatus',
         render(val) {
-          if (val === 0) {
+          if (val === 1) {
             return <Icon type="wifi" />;
           } else {
             return '网络异常';
@@ -1163,22 +1158,44 @@ export default class machineSettingList extends PureComponent {
     const columns1 = [{
       title: 'APP名称',
       dataIndex: 'appName',
-      key: 'name',
       align: 'center',
     }, {
-      title: '安装状态',
+      title: '安装版本',
       dataIndex: 'versionName',
-      key: 'age',
       align: 'center',
+      render(val) {
+        if (val) {
+          return val;
+        } else {
+          return '无';
+        }
+      },
     }, {
       title: '运行状态',
-      dataIndex: 'versionCode',
-      key: 'address',
-      align: 'center',
-    }, {
-      title: '是否前台运行',
       dataIndex: 'appStatus',
       align: 'center',
+      render(val) {
+        if (val === 0) {
+          return '未启动';
+        } else if (val === 1) {
+          return '前台运行';
+        } else if (val === -1) {
+          return '未安装';
+        } else {
+          return '后台运行';
+        }
+      },
+    }, {
+      title: 'App类型',
+      dataIndex: 'appType',
+      align: 'center',
+      render(val) {
+        if (val === 1) {
+          return '监控';
+        } else if (val === 2) {
+          return '正常';
+        }
+      },
     }];
     return (
       <PageHeaderLayout>
@@ -1232,7 +1249,7 @@ export default class machineSettingList extends PureComponent {
               <span><Button type="Default" onClick={() => this.appRefresh()}>刷新</Button></span>
             </div>
           </div>
-          <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} />
+          <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} pagination={false} />
           <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
           <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
         </Modal>

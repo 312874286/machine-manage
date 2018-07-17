@@ -401,12 +401,25 @@ export default class activitySettingList extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
-      this.form.setFieldsValue({
-        name: data.name || '',
-        sellerId: data.sellerId || undefined,
-        shopId: data.shopId || undefined,
-        // rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
-        remark: data.remark || undefined,
+      this.props.dispatch({
+        type: 'activitySetting/getShopsList',
+        payload: {
+          restParams: {
+            sellerId: data.sellerId,
+          },
+        },
+      }).then((res) => {
+        this.setState({
+          shopsLists: res,
+        }, () => {
+          this.form.setFieldsValue({
+            name: data.name || '',
+            sellerId: data.sellerId || undefined,
+            shopId: data.shopId || undefined,
+            // rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
+            remark: data.remark || undefined,
+          });
+        });
       });
     } else {
       this.form.setFieldsValue({

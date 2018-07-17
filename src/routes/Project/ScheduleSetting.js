@@ -79,7 +79,7 @@ const CreateForm = Form.create()(
       "resultRemark": "挑战成功掉货",
       "prizeId": "100000002",
       "prizeType": "1"
-      }]; 
+      }];
 
     var couponsInitData = [{
       "resultRemark": "失败送优惠券",
@@ -244,6 +244,9 @@ export default class ScheduleSettingList extends PureComponent {
     selectStatus: '0',
 
     dateList: [],
+    handleDays: {},
+    startTime: '',
+    endTime: '',
   };
   componentWillMount() {
     // 查询省
@@ -297,7 +300,8 @@ export default class ScheduleSettingList extends PureComponent {
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          endTime: this.state.endTime,
+          startTime: this.state.startTime,
           code: this.state.code,
         },
       },
@@ -306,8 +310,40 @@ export default class ScheduleSettingList extends PureComponent {
       let activityArr = []
       if (res.length > 0) {
         res.forEach((item, index) => {
-          let tmp = { left: '3.5%', top: (25 + (index * 4)) + '%', width: (6 * (index + 1)) + '%', background: 'Green', height: '20px', name: item.activityName, id: item.id }
-          activityArr.push(tmp);
+          if (moment(item.startTime) >= moment(this.state.handleDays.startDay)) {
+            // 开始日期>范围的开始日期
+             if (moment(item.endTime) <= moment(this.state.handleDays.endDay)) {
+               // 开始时间及结束日期在15天的范围
+               let left = Math.floor((moment(item.startTime) - moment(this.state.handleDays.startDay)) / (24 * 60 * 60 * 1000))
+               let width = Math.floor((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
+               console.log('endTime', left, width, Math.round((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000)))
+               let tmp = { left: (3.4 + (6.21 * left)) + '%', top: (25 + (index * 4)) + '%', width: (6.21 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName, id: item.id }
+               activityArr.push(tmp);
+             } else {
+               // 结束日期>范围的结束日期
+               let left = Math.floor((moment(item.startTime) - moment(this.state.handleDays.startDay)) / (24 * 60 * 60 * 1000))
+               let width = Math.ceil((moment(this.state.handleDays.endDay) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
+               console.log('endTime', left, width)
+               let tmp = { left: (3.4 + (6.21 * left)) + '%', top: (25 + (index * 4)) + '%', width: (6.21 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName, id: item.id }
+               activityArr.push(tmp);
+             }
+          } else {
+            // 开始日期<范围的开始日期
+            let left = 0
+            let width = Math.floor((moment(item.endTime) - moment(this.state.handleDays.startDay)) / (24 * 60 * 60 * 1000))
+            console.log('endTime', left, width)
+            let tmp = { left: (3.4 + (6.21 * left)) + '%', top: (25 + (index * 4)) + '%', width: (6.21 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName, id: item.id }
+            activityArr.push(tmp);
+          }
+          // if ((moment(item.startTime) - moment('2018-7-13')) < 24 * 60 * 60 * 1000) {
+          //   console.log('为同一天')
+          // }
+          // console.log('startDay', item.startTime, moment(item.startTime) - moment('2018-7-13'), (moment(item.startTime) - moment('2018-7-13')) < 24 * 60 * 60 * 1000)
+          // for (let i = 0; i < this.state.handleDays.length; i++) {
+          //   if (index.startTime <= this.state.handleDays) {
+          //
+          //   }
+          // }
         })
         this.setState({
           dateList: activityArr,
@@ -318,6 +354,11 @@ export default class ScheduleSettingList extends PureComponent {
       // this.setState({
       //   dateList: res,
       // });
+    });
+  }
+  handleDays = (val) => {
+    this.setState({
+      handleDays: val,
     });
   }
   // 验证
@@ -384,41 +425,6 @@ export default class ScheduleSettingList extends PureComponent {
     });
   };
 
-  toggleForm = () => {
-    const { expandForm } = this.state;
-    this.setState({
-      expandForm: !expandForm,
-    });
-  };
-  // 批量
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-    if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: '',
-          payload: {
-            no: selectedRows.map(row => row.no).join(','),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  };
   // 搜索
   handleSearch = e => {
     e.preventDefault();
@@ -840,7 +846,7 @@ export default class ScheduleSettingList extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            <ScheduleTable dateList={this.state.dateList} />
+            <ScheduleTable dateList={this.state.dateList} handleDays={this.handleDays}/>
           </div>
         </Card>
         <CreateForm

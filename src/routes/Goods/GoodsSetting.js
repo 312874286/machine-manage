@@ -75,8 +75,8 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请输入商品名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="图片缩略图">
-            {getFieldDecorator('img', {
-              rules: [{ required: true, message: '' }],
+            {getFieldDecorator('filelist', {
+              rules: [{ required: true, message: '请传图片' }],
               valuePropName: 'filelist',
             })(
               <div className="clearfix">
@@ -97,7 +97,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="商品价格">
             {getFieldDecorator('price', {
-              rules: [{ required: true, whitespace: true, message: '请输入商品价格' }],
+              rules: [{ required: true, message: '请输入商品价格' }],
             })(<InputNumber placeholder="请输入商品价格" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
@@ -185,7 +185,7 @@ export default class goodsSettingList extends PureComponent {
   }
 
   handleChange = (info) => {
-    // console.log()
+    console.log('222222')
     let fileList = info.fileList;
     fileList = fileList.slice(-1);
     fileList = fileList.map((file) => {
@@ -330,7 +330,7 @@ export default class goodsSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'goodsSetting/delGoodSetting',
+        type: 'goodsSetting/delGoodsSetting',
         payload: {
           params,
         },
@@ -403,6 +403,8 @@ export default class goodsSettingList extends PureComponent {
       });
       this.form.setFieldsValue({
         name: undefined,
+        code: undefined,
+        price: undefined,
         sellerId: undefined,
         shopId: undefined,
         remark: undefined,

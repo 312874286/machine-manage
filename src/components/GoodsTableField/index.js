@@ -151,7 +151,7 @@ class GoodsTableField extends Component {
 
     if (this.props.initData) {
       this.state.dataSource = this.props.initData;
-      
+
       for (var i = 0; i < this.state.dataSource.length; i++) {
         this.state.dataSource[i].key = i;
       }
@@ -170,7 +170,7 @@ class GoodsTableField extends Component {
         }
         children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
       }
-      
+
       for (let i = 0; i < this.state.rlist.length; i++) {
         if (i == 0) {
           defaultValue2 = this.state.rlist[i].id;
@@ -180,7 +180,7 @@ class GoodsTableField extends Component {
     }
 
     this.state.count = this.state.dataSource.length;
-    
+
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'prizeId',
@@ -199,7 +199,7 @@ class GoodsTableField extends Component {
           <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
             {children2}
           </Select>
-          
+
         );
       },
     }, {
@@ -223,7 +223,7 @@ class GoodsTableField extends Component {
   }
   handleChangeName = (record, value) => {
     record.prizeId = value;
-    // console.log('name::', this.state.dataSource);
+    console.log('name::', this.state.dataSource);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
