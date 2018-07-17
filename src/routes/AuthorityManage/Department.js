@@ -58,7 +58,7 @@ export default class Department extends PureComponent {
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
-              <Input placeholder="角色姓名" onChange={this.onChange} />
+              <Input placeholder="请输入部门名称、上级部门" onChange={this.onChange} />
             </Col>
             <Col md={6} sm={24}>
               <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
