@@ -159,6 +159,7 @@ const EditPointForm = Form.create()(
                 onPopupScroll={onPopupScroll}
                 onSelect={onSelect}
                 style={{ width: '100%' }}
+                allowClear={true}
               >{data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)}
               </Select>
             )}
@@ -497,10 +498,12 @@ export default class machineSettingList extends PureComponent {
     if (data) {
       this.pointForm.setFieldsValue({
         localDesc: data.localDesc,
+        locale: undefined,
       });
     } else {
       this.pointForm.setFieldsValue({
         localDesc: undefined,
+        locale: undefined,
       });
     }
   }
@@ -636,9 +639,6 @@ export default class machineSettingList extends PureComponent {
     });
   }
   onSelect = (value, option) => {
-    // this.form.setFieldsValue({
-    //   keyword: value.label,
-    // });
     // let v = '';
     // if (value.length > 1) {
     //   v = value[1]['key']

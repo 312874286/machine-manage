@@ -557,7 +557,11 @@ export default class goodsSettingList extends PureComponent {
         // width: 200,
         dataIndex: 'img',
         render(val) {
-          return <img src={val}  style={{ width: '80px' }} />;
+          return (
+            <a target="_blank" href={val}>
+              <img src={val}  style={{ width: '80px' }} />
+            </a>
+          );
         },
       },
       {
