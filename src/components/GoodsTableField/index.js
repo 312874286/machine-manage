@@ -148,7 +148,7 @@ class GoodsTableField extends Component {
 
     const children2 = [];
     let defaultValue2 = '';
-
+    console.log('this.props.initData', this.props.initData)
     if (this.props.initData) {
       this.state.dataSource = this.props.initData;
 
@@ -223,7 +223,8 @@ class GoodsTableField extends Component {
   }
   handleChangeName = (record, value) => {
     record.prizeId = value;
-    console.log('name::', this.state.dataSource);
+    // console.log('name::', this.state.dataSource);
+    this.props.goodsHandle(this.state.dataSource);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
@@ -240,7 +241,7 @@ class GoodsTableField extends Component {
       key: count,
       prizeId: this.state.currentValue,
       resultCode: '1',
-      resultRemark: '描述',
+      resultRemark: '当游戏得分超过90，掉落此商品',
       prizeType: '1',
     };
     this.setState({

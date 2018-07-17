@@ -37,7 +37,8 @@ const RangePicker = DatePicker.RangePicker;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
+      merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel, normFile } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -75,8 +76,8 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请输入商品名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="图片缩略图">
-            {getFieldDecorator('filelist', {
-              rules: [{ required: true, message: '请传图片' }],
+            {getFieldDecorator('img', {
+              rules: [{ required: true, message: '请传照片' }],
               valuePropName: 'filelist',
             })(
               <div className="clearfix">
@@ -396,6 +397,7 @@ export default class goodsSettingList extends PureComponent {
         sellerId: data.sellerId || undefined,
         price: data.price || undefined,
         remark: data.remark || undefined,
+        img: data.img || undefined,
       });
     } else {
       this.setState({
@@ -408,7 +410,7 @@ export default class goodsSettingList extends PureComponent {
         sellerId: undefined,
         shopId: undefined,
         remark: undefined,
-        rangeTime: undefined,
+        img: undefined,
       });
     }
   }
@@ -645,7 +647,6 @@ export default class goodsSettingList extends PureComponent {
           modalType={modalType}
           merchantLists={merchantLists}
           shopsLists={shopsLists}
-          normFile={this.normFile}
           previewVisible={this.state.previewVisible}
           previewImage={this.state.previewImage}
           fileList={this.state.fileList}
@@ -653,6 +654,7 @@ export default class goodsSettingList extends PureComponent {
           handleChange={this.handleChange}
           handleCancel={this.handleCancel}
           handleUpload={this.handleUpload}
+          normFile={this.normFile}
         />
         <LogModal
           data={logList}

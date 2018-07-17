@@ -602,7 +602,7 @@ export default class activitySettingList extends PureComponent {
       {
         title: '负责人',
         // width: 150,
-        dataIndex: 'remark',
+        dataIndex: 'managerId',
       },
       {
         fixed: 'right',

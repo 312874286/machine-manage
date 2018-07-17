@@ -180,7 +180,7 @@ export default class gameSettingList extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword,
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: fieldsValue.code ? fieldsValue.code : '',
       }, () => {
         this.getLists();

@@ -162,11 +162,11 @@ class ScheduleTable extends PureComponent {
     let date = new Date(); // 获取当前时间
     let nowDate = this.format(date, 'yyyy-mm-dd')
     this.setState({
-      currentDay: parseInt(nowDate.split('-')[2]),
+      currentDay: parseInt(nowDate.split('-')[1]) + '.' + parseInt(nowDate.split('-')[2]),
     }, () => {
       let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置天数 -7 天
       let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置今天天数 +7 天
-      console.log('nowDate', startDay, nowDate, endDay)
+      // console.log('nowDate', startDay, nowDate, endDay)
       this.props.handleDays({ startDay: startDay.split('--')[0], endDay: endDay.split('--')[0] });
       let dateTwoWeeksArr = this.dateArr(startDay, endDay);
       this.setState({
@@ -230,34 +230,34 @@ class ScheduleTable extends PureComponent {
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
       <Card title="活动排期一览表" style={{ overflowX: 'scroll'}}>
-        <div style={{ display: 'flex', position: 'relative' }}>
+        <div style={{ display: 'flex' }}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', display: 'flex' }} id="dateWeek">
+          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3 }} id="dateWeek">
             {dateTwoWeeksArr.map((item) => {
               return (
-                <Card.Grid value={item.id} key={item.id} className={currentDay === item.id ? styles.currentDay : ''}>
+                <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : ''}>
                   <p>{item.value}</p>
                   <p>{this.filterWeek(item.week)}</p>
                   <p style={{ height: '500px' }}></p>
                 </Card.Grid>
               );
             })}
+            {/*<div className={styles.dateList}>*/}
+              {dateList.map((item) => {
+                return (
+                  <div className={styles.dateChildren} key={item.id}
+                       style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute' }}
+                  >{item.name}</div>
+                );
+              })}
+            {/*</div>*/}
           </div>
           <Card.Grid style={gridLeftStyle} onClick={() => this.right()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div className={styles.dateList}>
-            {dateList.map((item) => {
-              return (
-                <div className={styles.dateChildren} key={item.id}
-                style={{ background: item.background, width: item.width, top: item.top, left: item.left }}
-                >{item.name}</div>
-              );
-            })}
-          </div>
-        </div>
+         </div>
       </Card>
     );
   }

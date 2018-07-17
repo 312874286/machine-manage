@@ -113,21 +113,21 @@ class EditableCell extends Component {
 class DiscountDynamicField extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       dataSource: [{
         key: '0',
         code: '优惠券编号',
         name: '优惠券名称',
         resultCode: '',
-        resultRemark: '描述',
+        resultRemark: '当游戏得分超过90，掉落此商品',
         prizeType: '2',
       },],
       count:1,
       rlist: [
       ],
     };
-    
+
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -140,10 +140,10 @@ class DiscountDynamicField extends React.Component {
 
     const children2 = [];
     let defaultValue2 = '';
-
+    console.log('discountthis.props.initData', this.props.initData)
     if (this.props.initData) {
       this.state.dataSource = this.props.initData;
-      
+
       for (var i = 0; i < this.state.dataSource.length; i++) {
         this.state.dataSource[i].key = i;
       }
@@ -161,7 +161,7 @@ class DiscountDynamicField extends React.Component {
     }
 
     this.state.count = this.state.dataSource.length;
-    
+
     this.columns = [{
       title: '*优惠券编号',
       dataIndex: 'code',
@@ -178,7 +178,7 @@ class DiscountDynamicField extends React.Component {
           <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
             {children2}
           </Select>
-          
+
         );
       },
     }, {
@@ -203,6 +203,7 @@ class DiscountDynamicField extends React.Component {
   handleChangeRule = (record, value) => {
     record.resultCode = value;
     // console.log('rule::', this.state.dataSource);
+    this.props.discountHandle(this.state.dataSource);
   }
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
@@ -222,7 +223,7 @@ class DiscountDynamicField extends React.Component {
       code: '优惠券编号',
       name: '优惠券名称',
       resultCode: '1',
-      resultRemark: '描述',
+      resultRemark: '当游戏得分超过90，掉落此商品',
       prizeType: '2',
     };
     this.setState({

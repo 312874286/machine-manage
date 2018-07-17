@@ -575,8 +575,8 @@ export default class machineSettingList extends PureComponent {
         const list = [];
         result.forEach((r) => {
           list.push({
-            value: r.areaName + r.name + r.mall,
-            text: r.areaName + r.name + r.mall,
+            value: r.areaName + r.mall + r.name,
+            text: r.areaName + r.mall + r.name,
             id: r.id,
           });
         });

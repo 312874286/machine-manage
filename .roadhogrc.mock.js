@@ -2273,7 +2273,138 @@ const proxy = {
   },
   'GET /game/user/list': (req, res) => {
     res.send({"msg":"成功","code":0,"page":{"pageSize":20,"currentResult":0,"totalPage":1,"pageNo":1,"totalCount":1,"list":null,"firstResult":0,"firstPage":true,"lastPage":true,"nextPage":1,"prePage":1},"data":[{"id":"ddddddd","userNick":"大姐姐","phone":"13454345656","gameUserId":"hjkjhghjkhjk","channelId":"hjjkklllll","channelName":"到年底","channelUserKey":"nnnmm","createTime":1531477140000}]})
-  }
+  },
+  'POST /project/activityPlan/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /project/activityPlan/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "6666",
+        "activityId": "f3092aec236e4ce4a5d964b16a348ef6",
+        "gameId": "1",
+        "startTime": "2018-07-01 15:04:46",
+        "endTime": "2018-07-31 15:04:53",
+        "userMaxTimes": "1",
+        "prizeType": "100300",
+        "isDelete": 0,
+        "remark": null,
+        "createId": null,
+        "createTime": 1531467800000,
+        "updateId": null,
+        "updateTime": 1531467800000,
+        "machines": null,
+        "goods": [
+          {
+            "id": null,
+            "activityPlanId": null,
+            "prizeId": "1",
+            "prizeType": "及格就送",
+            "resultCode": 1,
+            "resultRemark": "及格就送"
+          },
+          {
+            "id": null,
+            "activityPlanId": null,
+            "prizeId": "4",
+            "prizeType": "90以上送",
+            "resultCode": 2,
+            "resultRemark": "90以上送"
+          }
+        ],
+        "coupons": [
+          {
+            "id": null,
+            "name": "天猫优惠券",
+            "code": "TM10001",
+            "activityPlanId": null,
+            "isDelete": null,
+            "remark": null,
+            "createId": null,
+            "createTime": null,
+            "updateId": null,
+            "updateTime": null,
+            "resultCode": 3,
+            "resultRemark": "失败送优惠券",
+            "prizeType": "2"
+          }
+        ],
+        "activityName": "618大促销"
+      },
+      "msg": "成功"
+    })
+  },
+  'POST /project/activityPlan/delete ': (req, res) => {
+    res.send({
+      "code": 1,
+      "data": null,
+      "msg": "计划进行中不能删除"
+    })
+  },
+  'GET /project/activityPlan/selectAreaMachines': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "code": "100000000",
+          "parentCode": null,
+          "name": "北京市",
+          "province": "北京市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "18f05c0c234749c7bf6c60dda9f5092e",
+              "machineCode": "1846698071048",
+              "state": null
+            },
+            {
+              "machineId": "8389fc95a5324a02a45aabfc6823436d",
+              "machineCode": "1863398071038",
+              "state": null
+            }
+          ]
+        },
+        {
+          "code": "110000000",
+          "parentCode": null,
+          "name": "天津市",
+          "province": "天津市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "1575f4d0ff8c491986d5ff534085904e",
+              "machineCode": "1809510071149",
+              "state": null
+            },
+            {
+              "machineId": "947639777c874724a954b1ca47f987f0",
+              "machineCode": "1834003071023",
+              "state": null
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /project/activityPlan/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
 };
 
 // export default noProxy ? {

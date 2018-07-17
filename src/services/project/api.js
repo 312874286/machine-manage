@@ -25,11 +25,13 @@ const api = map({
   deleteActivitySetting: '/project/activity/delete',
   getActivitySettingDetail: '/project/activity/detail?id={id}',
   getShopsList: '/project/shops/getList?sellerId={sellerId}',
+
   getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}',
-  saveScheduleSetting: '/project/schedule/add',
-  updateScheduleSetting: '/project/schedule/update',
-  deleteScheduleSetting: '/project/schedule/delete',
-  getScheduleSettingDetail: '/project/schedule/detail?id={id}',
+  saveScheduleSetting: '/project/activityPlan/add',
+  updateScheduleSetting: '/project/activityPlan/update',
+  deleteScheduleSetting: '/project/activityPlan/delete?id={id}',
+  getScheduleSettingDetail: '/project/activityPlan/detail?id={id}',
+  selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}',
   getActivityList: '/project/activity/getList',
   getGameList: '/game/game/getList',
 });
