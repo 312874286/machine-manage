@@ -216,11 +216,12 @@ export default class Account extends PureComponent {
     }
   }
   hideOKModal = (e) => {
-    if (this.state.addUserName === '') {
+    
+    if (this.state.addUserName.replace(/\s+/g, '') === '') {
       message.error('请填写角色名称');
       return;
     }
-    console.log(111,this.state.checkedKeys);
+    // console.log(111,this.state.checkedKeys);
     if (this.state.checkedKeys.length === 0) {
       message.error('请选择管理');
       return;
