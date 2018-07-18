@@ -285,10 +285,16 @@ export default class PointSettingList extends PureComponent {
       // this.setState({
       //   formValues: values,
       // });
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+        }
+      }
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        code: fieldsValue.provinceCityAreaTrade.length > 0 ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
+        code: localCode,
       }, () => {
         this.getLists();
       });

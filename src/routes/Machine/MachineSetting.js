@@ -487,11 +487,16 @@ export default class machineSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      console.log('fieldsValue.provinceCityAreaTrade', fieldsValue.provinceCityAreaTrade)
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+        }
+      }
       this.setState({
         pageNo: 1,
         machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
-        localCode: fieldsValue.provinceCityAreaTrade.length > 0 ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
+        localCode: localCode,
       }, () => {
         this.getLists();
       });
