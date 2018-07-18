@@ -31,7 +31,7 @@ const api = map({
   updateScheduleSetting: '/project/activityPlan/update',
   deleteScheduleSetting: '/project/activityPlan/delete?id={id}',
   getScheduleSettingDetail: '/project/activityPlan/detail?id={id}',
-  selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}',
+  selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}&startTime={startTime}&endTime={endTime}',
   getActivityList: '/project/activity/getList',
   getGameList: '/game/game/getList',
 });

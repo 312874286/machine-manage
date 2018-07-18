@@ -205,10 +205,8 @@ const SelectMachineForm = Form.create()(
 export default class ScheduleSettingList extends PureComponent {
   state = {
     modalVisible: false,
-    expandForm: false,
     selectedRows: [],
     formValues: {},
-    defaultValue: {},
     options: '',
     editModalConfirmLoading: false,
     pageNo: 1,
@@ -244,6 +242,8 @@ export default class ScheduleSettingList extends PureComponent {
     goodsInitData: [],
     couponsInitData: [],
     machines: [],
+    machineStartTime: '',
+    machineEndTime: '',
   };
   componentWillMount() {
     // 查询省
@@ -264,19 +264,6 @@ export default class ScheduleSettingList extends PureComponent {
     }).then( (res) => {
       this.setState({
         options: res,
-      });
-    });
-    this.props.dispatch({
-      type: 'scheduleSetting/selectAreaMachines',
-      payload: {
-        restParams: {
-          code: this.state.code,
-          level: 1,
-        },
-      },
-    }).then((res) => {
-      this.setState({
-        treeData: res,
       });
     });
     // activityList
@@ -682,6 +669,8 @@ export default class ScheduleSettingList extends PureComponent {
             restParams: {
               code: targetOption.value,
               level: targetOption.level + 1,
+              startTime: this.state.machineStartTime,
+              endTime: this.state.machineEndTime,
             },
           },
         }).then((res) => {
@@ -719,28 +708,16 @@ export default class ScheduleSettingList extends PureComponent {
   onEditMachineHandleAddClick = () => {
     console.log('选择机器确认');
     let selectCity = this.state.selectCity
-    let selectCityName = [];
-    this.setState({
-      selectCityName: [],
-    }, () => {
-      // selectCity.forEach((item) => {
-      //   let cityName = item.props.dataRef.province;
-      //   let No = item.props.dataRef.machines.length
-      //   console.log('No', No)
-      //   machineNum += No
-      //   selectCityName.push(cityName);
-      // });
-
-      selectCityName = this.uniq(selectCity)
-      console.log('selectCity', selectCityName)
-      this.setState({
-        selectCityName,
-        editMachineModalVisible: false,
-      });
-    });
+    if (selectCity.length > 0) {
+      this.uniq(selectCity)
+      // console.log('selectCity', this.state.machines)
+    } else {
+      message.error('请先选择机器')
+    }
   }
   uniq = (arr) => {
     let max = [];
+    let selectCityName = []
     // for(var i=0;i<arr.length;i++) {
     //   var item = arr[i].props.dataRef;
     //   if(!(item['province'] in max) || (item['level'] > max[item['province']]['level'])){
@@ -749,37 +726,68 @@ export default class ScheduleSettingList extends PureComponent {
     //   }
     // }
     // Object.values(max)
-    //   selectCityName.push(array[i].props.dataRef.province)
-    //   machineNum += parseInt(array[i].props.dataRef.canUseNum)
     for (var i = 0; i < arr.length; i++) {
       var item = arr[i].props.dataRef
       if (!item.children) {
-        console.log(item)
+        item.machines.forEach((MItem) => {
+          max.push(MItem);
+        });
+        if (!(item['province'] in selectCityName)) {
+          selectCityName[item['province']] = item.province;
+        }
+        // selectCityName.push(item.province)
       }
     }
-    console.log('max', max)
-    return arr;
-  }
-  inArray = function (max, element) {
-    for (var i = 0; i < max.length; i++) {
-      if (max[i] == element) {
-        return true;
-      }
-    }
-    return false;
-  }
-  flagLevel = (arr) => {
-    for (var i = 0; i < max.length; i++) {
-      if (max[i] == element) {
-        return true;
-      }
-    }
-    return false;
+    selectCityName = Object.values(name)
+    this.setState({
+      machineNum: max.length,
+      selectCityName,
+      machines: max,
+    }, () => {
+      console.log(this.state.machines)
+      this.setState({
+        editMachineModalVisible: false,
+      });
+    });
   }
   openSelectMachineModal = () => {
-    this.setState({
-      editMachineModalVisible: true,
-    });
+    this.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      const rangeTimeValue = fieldsValue.rangeTime
+      let params = {
+        ...fieldsValue,
+        rangeTime: undefined,
+        startTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
+        endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
+        code: this.state.code,
+        level: 1,
+      };
+      this.setState({
+        machineStartTime: params.startTime,
+        machineEndTime: params.endTime,
+        code: '',
+      }, () => {
+        this.props.dispatch({
+          type: 'scheduleSetting/selectAreaMachines',
+          payload: {
+            restParams: {
+              code: this.state.code,
+              level: 1,
+              startTime: this.state.machineStartTime,
+              endTime: this.state.machineEndTime,
+            },
+          },
+        }).then((res) => {
+          this.setState({
+            treeData: res,
+          }, () => {
+            this.setState({
+              editMachineModalVisible: true,
+            });
+          });
+        });
+      })
+    })
   }
   onEditMachineHandleModalVisibleClick = () => {
     this.setState({
@@ -835,10 +843,6 @@ export default class ScheduleSettingList extends PureComponent {
     );
   }
   // 四级联动结束
-  renderForm() {
-    const { expandForm } = this.state;
-    return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
-  }
   render() {
     const {
       scheduleSetting: { list, page },
