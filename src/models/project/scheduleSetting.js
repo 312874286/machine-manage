@@ -12,10 +12,6 @@ export default {
     *getScheduleSettingList({ payload: { restParams } }, { call, put }) {
       const response = yield call(getScheduleSettingList, { restParams });
       return response.data;
-      // yield put({
-      //   type: 'saveList',
-      //   payload: response,
-      // });
     },
     *getScheduleSettingDetail({ payload: { restParams } }, { call }) {
       const response = yield call(getScheduleSettingDetail, { restParams });

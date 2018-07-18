@@ -288,7 +288,7 @@ export default class PointSettingList extends PureComponent {
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        code: fieldsValue.provinceCityAreaTrade ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
+        code: fieldsValue.provinceCityAreaTrade.length > 0 ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
       }, () => {
         this.getLists();
       });

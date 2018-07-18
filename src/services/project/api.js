@@ -1,4 +1,5 @@
 import { map } from '../../utils/fetch/api';
+import {editScheduleSetting} from "./scheduleSetting";
 
 // API Doc: http://wiki.nblow.cn/pages/viewpage.action?pageId=11797216
 const api = map({
@@ -29,7 +30,7 @@ const api = map({
   getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}',
   saveScheduleSetting: '/project/activityPlan/add',
   updateScheduleSetting: '/project/activityPlan/update',
-  deleteScheduleSetting: '/project/activityPlan/delete?id={id}',
+  deleteScheduleSetting: '/project/activityPlan/delete',
   getScheduleSettingDetail: '/project/activityPlan/detail?id={id}',
   selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}&startTime={startTime}&endTime={endTime}',
   getActivityList: '/project/activity/getList',

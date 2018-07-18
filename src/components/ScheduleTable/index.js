@@ -249,7 +249,7 @@ class ScheduleTable extends PureComponent {
                 return (
                   <div className={styles.dateChildren} key={item.id}
                        style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
-                         justifyContent: 'space-between' }}
+                         justifyContent: 'space-between', zIndex: 999, }}
                   >
                     <div>{item.name}</div>
                     <div className={styles.iconBox}>

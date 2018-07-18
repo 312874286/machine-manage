@@ -34,8 +34,8 @@ export async function getGameList({ restParams }) {
 }
 
 export async function editScheduleSetting({ params }) {
-  return fetch.post(api.updateScheduleSetting, {
-    body: stringify(params),
+  return fetch.postJSON(api.updateScheduleSetting, {
+    body: JSON.stringify(params),
   });
 }
 

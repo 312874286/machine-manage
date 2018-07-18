@@ -22,6 +22,7 @@ import {
   Popconfirm,
   Tree,
   Radio,
+  Table,
 } from 'antd';
 import GoodsTableField from '../../components/GoodsTableField';
 import DiscountDynamicField from '../../components/DiscountDynamicField';
@@ -44,12 +45,20 @@ const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
+const couponsInitData = [{
+  resultRemark: '当游戏得分超过90，掉落此商品',
+  code: '123455',
+  prizeType: '优惠券01 ',
+  resultCode: 1,
+  name: '优惠券01',
+}]
+
 
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType,
       verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName, selectStatus, machineNum,
-      goodsInitData, couponsInitData, goodsHandle, discountHandle,
+      goodsInitData, couponsInitData, goodsHandle, discountHandle, modalData
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -115,10 +124,14 @@ const CreateForm = Form.create()(
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="选择机器">
-            <div>
-              { selectCityName.length > 0 ? '已选择'+ machineNum +'台机器，分别位于' + selectCityName.join('、') : '' }
-            </div>
-            <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+            {getFieldDecorator('remark') ((modalData.id) ? (
+              <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
+              <div>
+                { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
+                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+              </div>
+              ))
+            }
           </FormItem>
           <FormItem {...formItemLayout} label="选择游戏">
             {getFieldDecorator('gameId', {
@@ -196,6 +209,116 @@ const SelectMachineForm = Form.create()(
       </Modal>
     );
 });
+const WatchForm = Form.create()(
+  (props) => {
+    const { watchModalVisible, modalData, handleWatchModalVisible, goodsList, couponsList, watchDetailClick } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    const goodsColumns = [{
+      title: '商品名称',
+      dataIndex: 'prizeId',
+      align: 'center',
+    }, {
+      title: '规则',
+      dataIndex: 'resultCode',
+      align: 'center',
+    }, {
+      title: '规则描述',
+      dataIndex: 'resultRemark',
+      align: 'center',
+    }];
+    const couponsColumns = [{
+      title: '优惠券编号',
+      dataIndex: 'code',
+      align: 'center',
+    }, {
+      title: '优惠券名称',
+      dataIndex: 'name',
+      align: 'center',
+    }, {
+      title: '规则',
+      dataIndex: 'resultCode',
+      align: 'center',
+    }, {
+      title: '规则描述',
+      dataIndex: 'resultRemark',
+      align: 'center',
+    }];
+    return (
+      <Modal
+        title="查看排期"
+        visible={watchModalVisible}
+        onCancel={() => handleWatchModalVisible()}
+        footer={null}
+        width={900}
+      >
+        <Form>
+          <FormItem {...formItemLayout} label="活动名称">
+            <span>{modalData.activityName}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="所属商户">
+            <span>{modalData.merchantName}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="所属店铺">
+            <span>{modalData.shopName}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="活动时间">
+            <span>{modalData.startTime} - {modalData.endTime}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="机器">
+            <span>{modalData.remark}</span>
+            <a onClick={() => watchDetailClick(modalData.id)}>查看详情</a>
+          </FormItem>
+          <FormItem {...formItemLayout} label="游戏">
+            <span>{modalData.gameId}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="同一用户获得商品次数">
+            <span>{modalData.userMaxTimes}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="商品信息">
+            <Table columns={goodsColumns} dataSource={goodsList} rowKey={record => record.prizeId} pagination={false} />
+          </FormItem>
+          <FormItem {...formItemLayout} label="优惠券信息">
+            <Table columns={couponsColumns} dataSource={couponsList} rowKey={record => record.code} pagination={false} />
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  });
+const WatchMachine = Form.create()(
+  (props) => {
+    const { WatchMachineModalVisible, WatchMachineHandleModalVisibleClick, machineList } = props;
+    const machineColumns = [{
+      title: '机器点位',
+      dataIndex: 'prizeId',
+      align: 'center',
+    }, {
+      title: '机器编码',
+      dataIndex: 'resultCode',
+      align: 'center',
+    }];
+    return (
+      <Modal
+        title="查看机器"
+        width={400}
+        visible={WatchMachineModalVisible}
+        onCancel={() => WatchMachineHandleModalVisibleClick()}
+        footer={null}
+      >
+        <div style={{ background: '#ECECEC', padding: '30px' }}>
+          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.prizeId} pagination={false} />
+        </div>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, scheduleSetting }) => ({
   common,
   scheduleSetting,
@@ -244,6 +367,9 @@ export default class ScheduleSettingList extends PureComponent {
     machines: [],
     machineStartTime: '',
     machineEndTime: '',
+
+    WatchMachineModalVisible: false,
+    machineList: [],
   };
   componentWillMount() {
     // 查询省
@@ -487,24 +613,7 @@ export default class ScheduleSettingList extends PureComponent {
   };
   // 删除modal 删除事件
   handleDelClick = (item) => {
-    this.setState({
-      editModalConfirmLoading: true,
-    });
-    if (item) {
-      const params = { id: item.id };
-      this.props.dispatch({
-        type: 'scheduleSetting/delScheduleSetting',
-        payload: {
-          params,
-        },
-      }).then(() => {
-        // message.success('Click on Yes');
-        this.getLists();
-        this.setState({
-          editModalConfirmLoading: false,
-        });
-      });
-    } else return false;
+
   }
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
@@ -528,10 +637,16 @@ export default class ScheduleSettingList extends PureComponent {
     if (data) {
       this.form.setFieldsValue({
         rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
+        activityId: data.activityId,
+        gameId: data.gameId,
+        userMaxTimes: data.userMaxTimes,
       });
     } else {
       this.form.setFieldsValue({
         rangeTime: undefined,
+        activityId: undefined,
+        gameId: undefined,
+        userMaxTimes: undefined,
       });
     }
   }
@@ -564,7 +679,6 @@ export default class ScheduleSettingList extends PureComponent {
         goods: this.state.goodsInitData,
         coupons: this.state.couponsInitData,
         machines: this.state.machines,
-        remark: '已选择'+ this.state.machineNum +'台机器，分别位于' + this.state.selectCityName.join('、'),
       };
       this.setState({
         editModalConfirmLoading: true,
@@ -574,6 +688,8 @@ export default class ScheduleSettingList extends PureComponent {
       if (this.state.modalData.id) {
         url = 'scheduleSetting/editScheduleSetting';
         params = { ...params, id: this.state.modalData.id };
+      } else {
+        params = { ...params, remark: '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、')}
       }
       this.props.dispatch({
         type: url,
@@ -806,14 +922,103 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 动态添加结束
   // 日历排期表格的编辑，查看，删除
+  getDetail = (item) => {
+
+  }
+  handleWatchModalVisible = () => {
+    this.setState({
+      watchModalVisible: false,
+    });
+  }
   onEditClick = (item) => {
     console.log('item编辑', item)
+    this.props.dispatch({
+      type: 'scheduleSetting/getScheduleSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      console.log('res', res)
+      const goodsInitData = [{
+        resultCode: 1,
+        resultRemark: '当游戏得分超过90，掉落此商品',
+        prizeType: 1,
+        prizeId: this.state.gameLists[0].id,
+      }]
+      this.setState({
+        goodsInitData: res.goods.length > 0 ? res.goods : goodsInitData,
+        couponsInitData: res.coupons.length > 0 ? res.coupons : couponsInitData,
+      }, () => {
+        this.setState({
+          modalVisible: true,
+          modalData: res,
+          modalType: true,
+        });
+        this.setModalData(res);
+      });
+    });
   }
   onWatchClick = (item) => {
     console.log('item查看', item)
+    this.props.dispatch({
+      type: 'scheduleSetting/getScheduleSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      const goodsInitData = [{
+        resultCode: 1,
+        resultRemark: '当游戏得分超过90，掉落此商品',
+        prizeType: 1,
+        prizeId: this.state.gameLists[0].id,
+      }]
+      this.setState({
+        goodsInitData: res.goods.length > 0 ? res.goods : goodsInitData,
+        couponsInitData: res.coupons.length > 0 ? res.coupons : couponsInitData,
+      }, () => {
+        this.setState({
+          modalVisible: false,
+          modalData: res,
+          watchModalVisible: true,
+        });
+      });
+    });
   }
   onDeleteClick = (item) => {
     console.log('item删除', item)
+    this.setState({
+      editModalConfirmLoading: true,
+    });
+    if (item) {
+      const params = { id: item.id };
+      this.props.dispatch({
+        type: 'scheduleSetting/delScheduleSetting',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        // message.success('Click on Yes');
+        this.getLists();
+        this.setState({
+          editModalConfirmLoading: false,
+        });
+      });
+    } else return false;
+  }
+  watchDetailClick = () => {
+    console.log('查看机器详情')
+    this.setState({
+      WatchMachineModalVisible: true,
+    });
+  }
+  WatchMachineHandleModalVisibleClick = () => {
+    this.setState({
+      WatchMachineModalVisible: false,
+    });
   }
   // 日历table操作开始
   // 日历table操作结束
@@ -960,7 +1165,7 @@ export default class ScheduleSettingList extends PureComponent {
           onChange={this.onRadioChange}
           selectStatus={this.state.selectStatus}
           editModalConfirmLoading={editModalConfirmLoading}
-          // modalData={modalData}
+          modalData={modalData}
           modalType={modalType}
           verifyPhone={this.verifyPhone}
           verifyString={this.verifyString}
@@ -993,6 +1198,19 @@ export default class ScheduleSettingList extends PureComponent {
           onExpand={this.onExpand}
           onCheck={this.onCheck}
           onSelect={this.onSelect}
+        />
+        <WatchForm
+          watchModalVisible={this.state.watchModalVisible}
+          modalData={this.state.modalData}
+          handleWatchModalVisible={this.handleWatchModalVisible}
+          goodsList={this.state.goodsInitData}
+          couponsList={this.state.couponsInitData}
+          watchDetailClick={this.watchDetailClick}
+        />
+        <WatchMachine
+          WatchMachineModalVisible={this.state.WatchMachineModalVisible}
+          WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
+          machineList={this.state.machineList}
         />
       </PageHeaderLayout>
     );

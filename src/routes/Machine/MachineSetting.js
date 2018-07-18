@@ -487,10 +487,11 @@ export default class machineSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      console.log('fieldsValue.provinceCityAreaTrade', fieldsValue.provinceCityAreaTrade)
       this.setState({
         pageNo: 1,
         machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
-        localCode: fieldsValue.provinceCityAreaTrade ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
+        localCode: fieldsValue.provinceCityAreaTrade.length > 0 ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
       }, () => {
         this.getLists();
       });
@@ -1085,8 +1086,8 @@ export default class machineSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem label="关键字">
-              {getFieldDecorator('machineCode')(<Input placeholder="请输入机器code" />)}
+            <FormItem label="机器编号">
+              {getFieldDecorator('machineCode')(<Input placeholder="请输入机器编号" />)}
             </FormItem>
           </Col>
           <Col md={9} sm={24}>
