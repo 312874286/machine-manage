@@ -1221,28 +1221,19 @@ export default class machineSettingList extends PureComponent {
       title: '安装版本',
       dataIndex: 'versionName',
       align: 'center',
-      render(val) {
-        if (val) {
-          return val;
-        } else {
-          return '无';
-        }
-      },
+      render: (text, item) => (
+        (item.versionCode === -1) ? (
+          <span>未安装</span>
+        ) : ( <span>item.versionName</span>))
     }, {
       title: '运行状态',
-      dataIndex: 'appStatus',
+      render: (text, item) => (
+        (item.versionCode === -1) ? (<span>--</span>) : (
+          item.appStatus === 0 ? '未启动' : '',
+          item.appStatus === 1 ? '未启动' : '',
+          item.appStatus === 2 ? '后台运行' : '')
+      ),
       align: 'center',
-      render(val) {
-        if (val === 0) {
-          return '未启动';
-        } else if (val === 1) {
-          return '前台运行';
-        } else if (val === -1) {
-          return '未安装';
-        } else {
-          return '后台运行';
-        }
-      },
     }, {
       title: 'App类型',
       dataIndex: 'appType',
