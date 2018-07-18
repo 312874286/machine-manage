@@ -805,6 +805,16 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   // 动态添加结束
+  // 日历排期表格的编辑，查看，删除
+  onEditClick = (item) => {
+    console.log('item编辑', item)
+  }
+  onWatchClick = (item) => {
+    console.log('item查看', item)
+  }
+  onDeleteClick = (item) => {
+    console.log('item删除', item)
+  }
   // 日历table操作开始
   // 日历table操作结束
   renderAdvancedForm() {
@@ -932,7 +942,13 @@ export default class ScheduleSettingList extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            <ScheduleTable dateList={this.state.dateList} handleDays={this.handleDays}/>
+            <ScheduleTable
+              dateList={this.state.dateList}
+              handleDays={this.handleDays}
+              onEditClick={this.onEditClick}
+              onWatchClick={this.onWatchClick}
+              onDeleteClick={this.onDeleteClick}
+            />
           </div>
         </Card>
         <CreateForm

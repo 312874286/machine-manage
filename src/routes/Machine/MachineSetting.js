@@ -1224,7 +1224,7 @@ export default class machineSettingList extends PureComponent {
       render: (text, item) => (
         (item.versionCode === -1) ? (
           <span>未安装</span>
-        ) : ( <span>item.versionName</span>))
+        ) : ( <span>{item.versionName}</span>))
     }, {
       title: '运行状态',
       render: (text, item) => (

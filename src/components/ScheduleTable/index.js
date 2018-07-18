@@ -1,4 +1,4 @@
-import { Card, Button } from 'antd';
+import { Card, Button, Icon } from 'antd';
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import styles from './index.less';
@@ -226,7 +226,7 @@ class ScheduleTable extends PureComponent {
   }
   render() {
     const { dateTwoWeeksArr, currentDay } = this.state;
-    const { dateList } = this.props;
+    const { dateList, onEditClick, onWatchClick, onDeleteClick } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
       <Card title="活动排期一览表" style={{ overflowX: 'scroll'}}>
@@ -248,8 +248,16 @@ class ScheduleTable extends PureComponent {
               {dateList.map((item) => {
                 return (
                   <div className={styles.dateChildren} key={item.id}
-                       style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute' }}
-                  >{item.name}</div>
+                       style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
+                         justifyContent: 'space-between' }}
+                  >
+                    <div>{item.name}</div>
+                    <div className={styles.iconBox}>
+                      <Icon type="form" onClick={() => onEditClick(item)} />
+                      <Icon type="eye" onClick={() => onWatchClick(item)} />
+                      <span className={styles.anticonDelete} onClick={() => onDeleteClick(item)}>删除</span>
+                    </div>
+                  </div>
                 );
               })}
             {/*</div>*/}
