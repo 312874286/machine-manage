@@ -170,6 +170,7 @@ const SelectMachineForm = Form.create()(
         onOk={onEditMachineHandleAddClick}
         onCancel={() => onEditMachineHandleModalVisibleClick()}
         confirmLoading={editMachineEditModalConfirmLoading}
+        width={800}
       >
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="选择机器">
@@ -575,6 +576,8 @@ export default class ScheduleSettingList extends PureComponent {
         endTimeStr: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
         goods: this.state.goodsInitData,
         coupons: this.state.couponsInitData,
+        machines: this.state.machines,
+        remark: '已选择'+ this.state.machineNum +'台机器，分别位于' + this.state.selectCityName.join('、'),
       };
       this.setState({
         editModalConfirmLoading: true,
@@ -658,7 +661,7 @@ export default class ScheduleSettingList extends PureComponent {
           </TreeNode>
         );
       }
-      return (item.disabledFlag) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
+      return (parseInt(item.canUseNum) === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
     });
   }
   onLoadData = (treeNode) => {
@@ -705,6 +708,7 @@ export default class ScheduleSettingList extends PureComponent {
   onCheck = (checkedKeys, node) => {
     // .checkedNodes[0].props.dataRef.value
     console.log('onCheck点击复选框触发', checkedKeys, node);
+
     // let node =
     this.setState({ checkedKeys, selectCity: node.checkedNodes });
   }
@@ -716,42 +720,61 @@ export default class ScheduleSettingList extends PureComponent {
     console.log('选择机器确认');
     let selectCity = this.state.selectCity
     let selectCityName = [];
-    let machineNum = 0
     this.setState({
       selectCityName: [],
     }, () => {
-      selectCity.forEach((item) => {
-        let cityName = item.props.dataRef.province;
-        let No = item.props.dataRef.machines.length
-        console.log('No', No)
-        machineNum += No
-        selectCityName.push(cityName);
-      });
+      // selectCity.forEach((item) => {
+      //   let cityName = item.props.dataRef.province;
+      //   let No = item.props.dataRef.machines.length
+      //   console.log('No', No)
+      //   machineNum += No
+      //   selectCityName.push(cityName);
+      // });
+
       selectCityName = this.uniq(selectCity)
+      console.log('selectCity', selectCityName)
       this.setState({
         selectCityName,
-        machineNum,
         editMachineModalVisible: false,
       });
     });
   }
-  uniq = (array) => {
-    let temp = [];
-    let index = [];
-    let l = array.length;
-    for (var i = 0; i < l; i++) {
-      for (var j = i + 1; j < l; j++) {
-        console.log(array[i].props.dataRef.province === array[j].props.dataRef.province, array[i].props.dataRef.level, array[j].props.dataRef.level)
-        if (array[i].props.dataRef.province === array[j].props.dataRef.province && array[i].props.dataRef.level > array[j].props.dataRef.level) {
-          i++;
-          j = i;
-        }
+  uniq = (arr) => {
+    let max = [];
+    // for(var i=0;i<arr.length;i++) {
+    //   var item = arr[i].props.dataRef;
+    //   if(!(item['province'] in max) || (item['level'] > max[item['province']]['level'])){
+    //     // init compare
+    //     max[item['province']] = item;
+    //   }
+    // }
+    // Object.values(max)
+    //   selectCityName.push(array[i].props.dataRef.province)
+    //   machineNum += parseInt(array[i].props.dataRef.canUseNum)
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i].props.dataRef
+      if (!item.children) {
+        console.log(item)
       }
-      temp.push(array[i]);
-      index.push(i);
     }
-    console.log('temp', temp)
-    return temp;
+    console.log('max', max)
+    return arr;
+  }
+  inArray = function (max, element) {
+    for (var i = 0; i < max.length; i++) {
+      if (max[i] == element) {
+        return true;
+      }
+    }
+    return false;
+  }
+  flagLevel = (arr) => {
+    for (var i = 0; i < max.length; i++) {
+      if (max[i] == element) {
+        return true;
+      }
+    }
+    return false;
   }
   openSelectMachineModal = () => {
     this.setState({

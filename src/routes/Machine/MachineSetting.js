@@ -24,6 +24,7 @@ import {
   Table,
   Spin,
   Popover,
+  Cascader,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import EditableTable from '../../components/EditableTable';
@@ -364,7 +365,8 @@ export default class machineSettingList extends PureComponent {
     formValues: {},
     editModalConfirmLoading: false,
     pageNo: 1,
-    keyword: '',
+    machineCode: '',
+    localCode: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
@@ -394,6 +396,9 @@ export default class machineSettingList extends PureComponent {
     ManageWatchModalVisible: false,
     ManageWatchEditModalConfirmLoading: false,
     createTime: '',
+
+    options: [],
+    code: '',
   };
   constructor(props) {
     super(props);
@@ -402,6 +407,7 @@ export default class machineSettingList extends PureComponent {
   }
   componentDidMount() {
     this.getLists();
+    this.getAreaList();
   }
   getInput = () => {
     if (this.props.inputType === 'number') {
@@ -416,7 +422,8 @@ export default class machineSettingList extends PureComponent {
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          localCode: this.state.localCode,
+          machineCode: this.state.machineCode,
         },
       },
     });
@@ -455,10 +462,25 @@ export default class machineSettingList extends PureComponent {
     this.setState({
       formValues: {},
       pageNo: 1,
-      keyword: '',
+      localCode: '',
+      machineCode: '',
     });
   };
-
+  // 获取城市列表
+  getAreaList = () => {
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        restParams: {
+          code: this.state.code,
+        },
+      },
+    }).then( (res) => {
+      this.setState({
+        options: res,
+      });
+    });
+  }
   // 搜索
   handleSearch = e => {
     e.preventDefault();
@@ -467,7 +489,8 @@ export default class machineSettingList extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword,
+        machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
+        localCode: fieldsValue.provinceCityAreaTrade ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
       }, () => {
         this.getLists();
       });
@@ -1032,6 +1055,29 @@ export default class machineSettingList extends PureComponent {
   }
   // handleMouseOver
   // 查看机器状态结束
+  // 四级联动开始
+  loadData = (selectedOptions) => {
+    const targetOption = selectedOptions[selectedOptions.length - 1];
+    targetOption.loading = true;
+    this.setState({
+      code: targetOption.value,
+    }, () => {
+      this.props.dispatch({
+        type: 'common/getProvinceCityAreaTradeArea',
+        payload: {
+          restParams: {
+            code: targetOption.value,
+          },
+        },
+      }).then((res) => {
+        targetOption.loading = false;
+        targetOption.children = res
+        this.setState({
+          options: [...this.state.options],
+        });
+      });
+    });
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -1040,7 +1086,19 @@ export default class machineSettingList extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入机器ID、机器名称、标签" />)}
+              {getFieldDecorator('machineCode')(<Input placeholder="请输入机器code" />)}
+            </FormItem>
+          </Col>
+          <Col md={9} sm={24}>
+            <FormItem label="省市区商圈">
+              {getFieldDecorator('provinceCityAreaTrade')(
+                <Cascader
+                  placeholder="请选择"
+                  options={this.state.options}
+                  loadData={this.loadData}
+                  changeOnSelect
+                />
+              )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -1108,22 +1166,22 @@ export default class machineSettingList extends PureComponent {
       },
       {
         title: '商品缺货状态',
-        render: (text, item) => ((!item.channelStatus) ? (
-          <span>无</span>
+        render: (text, item) => ((!item.goodsStatus) ? (
+          <span>正常</span>
         ) : (
-          <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
+          <Popover placement="left" content={item.goodsStatus} title={null} trigger="hover">
+            <div style={{ color: 'red', border: 0, background: 'transparent' }}>有</div>
           </Popover>
         )),
         textAlign: 'center',
       },
       {
         title: '货道故障',
-        render: (text, item) => ((!item.goodsStatus) ? (
-          <span>正常</span>
+        render: (text, item) => ((!item.channelStatus) ? (
+          <span>无</span>
         ) : (
-          <Popover placement="left" content={item.goodsStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>有</div>
+          <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
+            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
         textAlign: 'center',

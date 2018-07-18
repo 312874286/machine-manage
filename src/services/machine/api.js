@@ -7,7 +7,7 @@ const api = map({
   savePointSetting: '/machine/locale/add',
   updatePointSetting: '/machine/locale/update',
   deletePointSetting: '/machine/locale/delete',
-  getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&keyword={keyword}',
+  getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&machineCode={machineCode}&localCode={localCode}',
   updateGoodsCountMachineSetting: '/machine/machine/updateGoodsCount',
   updateLocaleMachineSetting: '/machine/machine/updateLocale',
   deleteChannelMachineSetting: '/machine/machine/deleteChannel',
