@@ -50,3 +50,9 @@ export async function selectAreaMachines({ restParams }) {
     restParams,
   });
 }
+
+export async function getPlanMachineDetailList({ restParams }) {
+  return fetch.get(api.getPlanMachineDetailList, {
+    restParams,
+  });
+}

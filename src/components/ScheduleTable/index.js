@@ -32,6 +32,8 @@ class ScheduleTable extends PureComponent {
     activityArr: [],
     leftCount: 0,
     rightCount: 0,
+    startDay: '',
+    endDay: '',
   }
   componentDidMount() {
     const { dateList, } = this.props;
@@ -83,7 +85,7 @@ class ScheduleTable extends PureComponent {
             currentDay: i,
           });
         }
-        let newd = {id: (sd + i), value: sm + '.' + (sd + i) + '', week: w };
+        let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w };
         w = w + 1
         if (w === 7) {
           w = 0;
@@ -93,14 +95,14 @@ class ScheduleTable extends PureComponent {
     } else { // 存在跨月
       for (let i = 0; i < 15; i++) {
         if (i < (15 - ed)) {
-          let newd = {id: (sd + i), value: sm + '.' + (sd + i) + '', week: w};
+          let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w};
           w = w + 1
           if (w === 7) {
             w = 0;
           }
           dateTwoWeek.push(newd);
         } else {
-          let newd = {id: (ed - (15 - i) + 1), value: em + '.' + (ed - (15 - i) + 1) + '', week: w};
+          let newd = {id: (em + '.' + (ed - (15 - i) + 1)), value: em + '.' + (ed - (15 - i) + 1) + '', week: w};
           w = w + 1
           if (w === 7) {
             w = 0;
@@ -130,7 +132,7 @@ class ScheduleTable extends PureComponent {
             currentDay: i,
           });
         }
-        let newd = {id: (sd + i), value: sm + '.' + (sd + i) + '', week: w };
+        let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w };
         w = w + 1
         if (w === 7) {
           w = 0;
@@ -140,14 +142,14 @@ class ScheduleTable extends PureComponent {
     } else { // 存在跨月
       for (let i = 0; i < 7; i++) {
         if (i < (7 - ed)) {
-          let newd = {id: (sd + i), value: sm + '.' + (sd + i) + '', week: w};
+          let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w};
           w = w + 1
           if (w === 7) {
             w = 0;
           }
           dateTwoWeek.push(newd);
         } else {
-          let newd = {id: (ed - (7 - i) + 1), value: em + '.' + (ed - (7 - i) + 1) + '', week: w};
+          let newd = {id: (em + '.' + (ed - (7 - i) + 1)), value: em + '.' + (ed - (7 - i) + 1) + '', week: w};
           w = w + 1
           if (w === 7) {
             w = 0;
@@ -167,10 +169,17 @@ class ScheduleTable extends PureComponent {
       let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置天数 -7 天
       let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置今天天数 +7 天
       // console.log('nowDate', startDay, nowDate, endDay)
-      this.props.handleDays({ startDay: startDay.split('--')[0], endDay: endDay.split('--')[0] });
+      this.props.handleDays({
+        startDay: startDay.split('--')[0],
+        endDay: endDay.split('--')[0],
+        getDataStartDay: startDay.split('--')[0],
+        getDataEndDay: endDay.split('--')[0],
+      });
       let dateTwoWeeksArr = this.dateArr(startDay, endDay);
       this.setState({
         dateTwoWeeksArr,
+        startDay: startDay.split('--')[0],
+        endDay: endDay.split('--')[0],
       }, () => {
         document.getElementById('dateWeek').scrollLeft = 600;
       });
@@ -184,20 +193,51 @@ class ScheduleTable extends PureComponent {
     this.setState({
       leftCount: this.state.leftCount + 1,
     }, () => {
+      console.log('this.state.leftCount', this.state.leftCount)
       let date = new Date();
-      let endDay = this.format(new Date(date.setDate(new Date().getDate() - ((7 * this.state.leftCount) + 1))), 'yyyy-mm-dd'); // 设置天数 -7 天
-      let startDay = this.format(new Date(date.setDate(new Date().getDate() - ((7 * this.state.leftCount) + 7))), 'yyyy-mm-dd'); // 设置今天天数 +7 天
-      console.log(startDay, endDay, this.state.leftCount)
+      let endDay = this.format(new Date(new Date().setDate(new Date().getDate() - ((7 * this.state.leftCount) + 1))), 'yyyy-mm-dd'); // 设置天数 -7 天
+      let startDay = this.format(new Date(new Date().setDate(new Date().getDate() - ((7 * this.state.leftCount) + 7))), 'yyyy-mm-dd'); // 设置今天天数 +7 天
+      console.log('leftCount', startDay, endDay, this.state.leftCount)
       let arr2 = this.dateArr2(startDay, endDay)
       console.log(arr2.concat(this.state.dateTwoWeeksArr))
       let dateTwoWeeksArr = arr2.concat(this.state.dateTwoWeeksArr)
       this.setState({
         dateTwoWeeksArr,
-      })
-    })
+        startDay: startDay.split('--')[0],
+      }, () => {
+        this.props.handleDays({
+          startDay: this.state.startDay,
+          endDay: this.state.endDay,
+          getDataStartDay: startDay.split('--')[0],
+          getDataEndDay: endDay.split('--')[0],
+        });
+      });
+    });
   }
   right = () => {
     console.log('右边')
+    this.setState({
+      rightCount: this.state.rightCount + 1,
+    }, () => {
+      let date = new Date();
+      let startDay = this.format(new Date(new Date().setDate(new Date().getDate() + ((7 * this.state.rightCount) + 1))), 'yyyy-mm-dd'); // 设置天数 -7 天
+      let endDay = this.format(new Date(new Date().setDate(new Date().getDate() + ((7 * this.state.rightCount) + 7))), 'yyyy-mm-dd'); // 设置今天天数 +7 天
+      console.log('rightCount', startDay, endDay, this.state.rightCount)
+      let arr2 = this.dateArr2(startDay, endDay)
+      console.log(this.state.dateTwoWeeksArr.concat(arr2))
+      let dateTwoWeeksArr = this.state.dateTwoWeeksArr.concat(arr2)
+      this.setState({
+        dateTwoWeeksArr,
+        endDay: endDay.split('--')[0],
+      }, () => {
+        this.props.handleDays({
+          startDay: this.state.startDay,
+          endDay: this.state.endDay,
+          getDataStartDay: startDay.split('--')[0],
+          getDataEndDay: endDay.split('--')[0],
+        });
+      });
+    });
   }
   filterWeek = (value) => {
     switch (value) {

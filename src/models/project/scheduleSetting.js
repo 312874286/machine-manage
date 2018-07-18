@@ -1,4 +1,4 @@
-import { getScheduleSettingList, saveScheduleSetting, getScheduleSettingDetail, editScheduleSetting, delScheduleSetting, getActivityList, getGameList, selectAreaMachines } from '../../services/project/scheduleSetting';
+import { getScheduleSettingList, saveScheduleSetting, getScheduleSettingDetail, editScheduleSetting, delScheduleSetting, getActivityList, getGameList, selectAreaMachines, getPlanMachineDetailList } from '../../services/project/scheduleSetting';
 
 export default {
   namespace: 'scheduleSetting',
@@ -35,6 +35,10 @@ export default {
     },
     *gameList({ payload: { restParams } }, { call }) {
       const response = yield call(getGameList, { restParams });
+      return response.data;
+    },
+    *getPlanMachineDetailList({ payload: { restParams } }, { call }) {
+      const response = yield call(getPlanMachineDetailList, { restParams });
       return response.data;
     },
     *selectAreaMachines({ payload: { restParams } }, { call }) {

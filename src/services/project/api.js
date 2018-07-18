@@ -35,6 +35,7 @@ const api = map({
   selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}&startTime={startTime}&endTime={endTime}',
   getActivityList: '/project/activity/getList',
   getGameList: '/game/game/getList',
+  getPlanMachineDetailList: '/project/activityPlan/planMachineDetailList?id={id}',
 });
 
 export default api;
