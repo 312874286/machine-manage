@@ -1,53 +1,24 @@
-import { getGoodsSettingList, getGoodsSettingDetail, getMerchantsList, getShopsList, getActivityList, saveGoodsSetting, editGoodsSetting, delGoodsSetting } from '../../services/goods/goodsSetting';
+import { getCheckFaultList } from '../../services/polling/troubleBill';
 
 export default {
   namespace: 'troubleBill',
   state: {
     list: [],
     page: {},
-    datas: {},
   },
 
   effects: {
-    *getGoodsSettingList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(getGoodsSettingList, { restParams });
+    *getCheckFaultList({ payload: { params } }, { call, put }) {
+      const response = yield call(getCheckFaultList, { params });
       yield put({
-        type: 'saveList',
+        type: 'getCheckFaultListBack',
         payload: response,
       });
-    },
-    *getGoodsSettingDetail({ payload: { restParams } }, { call }) {
-      const response = yield call(getGoodsSettingDetail, { restParams });
-      return response.data;
-    },
-    *getMerchantsList({ payload: { restParams } }, { call }) {
-      const response = yield call(getMerchantsList, { restParams });
-      return response.data;
-    },
-    *getShopsList({ payload: { restParams } }, { call }) {
-      const response = yield call(getShopsList, { restParams });
-      return response.data;
-    },
-    *getActivityList({ payload: { restParams } }, { call }) {
-      const response = yield call(getActivityList, { restParams });
-      return response.data;
-    },
-    *saveGoodsSetting({ payload: { params } }, { call }) {
-      const response = yield call(saveGoodsSetting, { params });
-      return response;
-    },
-    *editGoodsSetting({ payload: { params } }, { call }) {
-      const response = yield call(editGoodsSetting, { params });
-      return response;
-    },
-    *delGoodsSetting({ payload: { params } }, { call }) {
-      const response = yield call(delGoodsSetting, { params });
-      return response;
     },
   },
 
   reducers: {
-    saveList(state, { payload: { data, page } }) {
+    getCheckFaultListBack(state, { payload: { data, page } }) {
       return {
         ...state,
         list: data,
