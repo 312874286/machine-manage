@@ -401,8 +401,6 @@ export default class personnelManagement extends PureComponent {
             restParams: {
               code: targetOption.value,
               level: targetOption.level + 1,
-              startTime: this.state.machineStartTime,
-              endTime: this.state.machineEndTime,
             },
           },
         }).then((res) => {
@@ -450,14 +448,6 @@ export default class personnelManagement extends PureComponent {
   uniq = (arr) => {
     let max = [];
     let selectCityName = []
-    // for(var i=0;i<arr.length;i++) {
-    //   var item = arr[i].props.dataRef;
-    //   if(!(item['province'] in max) || (item['level'] > max[item['province']]['level'])){
-    //     // init compare
-    //     max[item['province']] = item;
-    //   }
-    // }
-    // Object.values(max)
     for (var i = 0; i < arr.length; i++) {
       var item = arr[i].props.dataRef
       if (!item.children) {
@@ -483,39 +473,25 @@ export default class personnelManagement extends PureComponent {
     });
   }
   openSelectMachineModal = () => {
-    this.form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      const rangeTimeValue = fieldsValue.rangeTime
-      let params = {
-        ...fieldsValue,
-        rangeTime: undefined,
-        startTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
-        endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
-        code: this.state.code,
-        level: 1,
-      };
-      this.setState({
-        machineStartTime: params.startTime,
-        machineEndTime: params.endTime,
-        code: '',
-      }, () => {
-        this.props.dispatch({
-          type: 'personnelManagement/selectMachine',
-          payload: {
-            restParams: {
-              code: this.state.code,
-              level: 1,
-              startTime: this.state.machineStartTime,
-              endTime: this.state.machineEndTime,
-            },
+    this.setState({
+      machineStartTime: params.startTime,
+      machineEndTime: params.endTime,
+      code: '',
+    }, () => {
+      this.props.dispatch({
+        type: 'personnelManagement/selectMachine',
+        payload: {
+          restParams: {
+            code: this.state.code,
+            level: 1,
           },
-        }).then((res) => {
+        },
+      }).then((res) => {
+        this.setState({
+          treeData: res,
+        }, () => {
           this.setState({
-            treeData: res,
-          }, () => {
-            this.setState({
-              editMachineModalVisible: true,
-            });
+            editMachineModalVisible: true,
           });
         });
       });

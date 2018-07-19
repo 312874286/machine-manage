@@ -29,8 +29,6 @@ import DiscountDynamicField from '../../components/DiscountDynamicField';
 import ScheduleTable from '../../components/ScheduleTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ScheduleSetting.less';
-import LogModal from '../../components/LogModal';
-import { setTimeout } from 'timers';
 
 
 const FormItem = Form.Item;
@@ -41,8 +39,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['processing', 'default', 'success', 'error'];
-const status = ['运行中', '关闭', '已上线', '异常'];
 const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
 const couponsInitData = []
@@ -52,7 +48,8 @@ const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
-      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, discountHandle, discountHandleAdd, discountHandleDelete, modalData, onSelectShop, goodsLists
+      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, discountHandle, discountHandleAdd, discountHandleDelete, modalData, onSelectShop, goodsLists,
+      disabledStartDate, onStartChange, disabledEndDate, onEndChange,  handleStartOpenChange, handleEndOpenChange, startValue, endValue, endOpen,
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -98,11 +95,35 @@ const CreateForm = Form.create()(
               rules: [{ required: false, message: '请选择活动' }],
             })(<Input disabled />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择时间">
-            {getFieldDecorator('rangeTime', {
-              rules: [{ type: 'array', required: true, message: '请选择时间' }],
+          <FormItem {...formItemLayout} label="选择开始时间">
+            {getFieldDecorator('startTime', {
+              rules: [{ required: true, message: '选择开始时间' }],
             })(
-              <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />
+              <DatePicker
+                disabledDate={disabledStartDate}
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                // value={startValue}
+                placeholder="选择开始时间"
+                onChange={onStartChange}
+                onOpenChange={handleStartOpenChange}
+              />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择结束时间">
+            {getFieldDecorator('endTime', {
+              rules: [{ required: true, message: '选择结束时间' }],
+            })(
+              <DatePicker
+                disabledDate={disabledEndDate}
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                // value={endValue}
+                placeholder="选择结束时间"
+                onChange={onEndChange}
+                open={endOpen}
+                onOpenChange={handleEndOpenChange}
+              />
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="选择机器">
@@ -360,6 +381,10 @@ export default class ScheduleSettingList extends PureComponent {
 
     WatchMachineModalVisible: false,
     machineList: [],
+
+    startValue: null,
+    endValue: null,
+    endOpen: false,
   };
   componentDidMount() {
     this.getAreaList();
@@ -380,6 +405,46 @@ export default class ScheduleSettingList extends PureComponent {
       });
     });
   }
+  // 时间控件
+  disabledStartDate = (startValue) => {
+    // const endValue = this.state.endValue;
+    // if (!startValue || !endValue) {
+    //   return false;
+    // }
+    // return startValue.valueOf() > endValue.valueOf();
+    return startValue && startValue < moment().endOf('day');
+  }
+  disabledEndDate = (endValue) => {
+    const startValue = this.state.startValue;
+    if (!endValue || !startValue) {
+      return false;
+    }
+    return endValue.valueOf() <= startValue.valueOf();
+  }
+
+  onChange = (field, value) => {
+    this.setState({
+      [field]: value,
+    });
+  }
+  onStartChange = (value) => {
+    this.onChange('startValue', value);
+  }
+
+  onEndChange = (value) => {
+   //  this.onChange('endValue', value);
+  }
+
+  handleStartOpenChange = (open) => {
+    if (!open) {
+      this.setState({ endOpen: true });
+    }
+  }
+
+  handleEndOpenChange = (open) => {
+    this.setState({ endOpen: open });
+  }
+  // 时间控件
   onSelectShop = (value, option) => {
     this.getGoodsLists(value);
   }
@@ -678,15 +743,17 @@ export default class ScheduleSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        rangeTime: [moment(data.createTime), moment(data.endTime)] || undefined,
         activityId: data.activityId,
         gameId: data.gameId,
         userMaxTimes: data.userMaxTimes,
         activityName: data.activityName,
+        startTime: moment(data.startTime),
+        endTime: moment(data.endTime),
       });
     } else {
       this.form.setFieldsValue({
-        rangeTime: undefined,
+        startTime: undefined,
+        endTime: undefined,
         activityId: undefined,
         gameId: undefined,
         userMaxTimes: undefined,
@@ -762,21 +829,25 @@ export default class ScheduleSettingList extends PureComponent {
       if (err) {
         return;
       }
+      console.log('fieldsValue', fieldsValue)
       if (!this.state.modalData.id) {
         if (this.state.selectCity.length === 0) {
           message.error('请先选择机器')
           return;
         }
       }
-      const rangeTimeValue = fieldsValue.rangeTime
+      // const rangeTimeValue = fieldsValue.rangeTime
       let params = {
         ...fieldsValue,
-        rangeTime: undefined,
-        startTimeStr: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
-        endTimeStr: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
+        // startValue: undefined,
+        // endValue: undefined,
+        // startTimeStr: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
+        // endTimeStr: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
         goods: this.state.goodsInitData,
         coupons: this.state.couponsInitData,
         machines: this.state.machines,
+        startTime: fieldsValue.startTime.format('YYYY-MM-DD HH:mm'),
+        endTime: fieldsValue.endTime.format('YYYY-MM-DD HH:mm'),
       };
       this.setState({
         editModalConfirmLoading: true,
@@ -969,14 +1040,16 @@ export default class ScheduleSettingList extends PureComponent {
   openSelectMachineModal = () => {
     this.form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const rangeTimeValue = fieldsValue.rangeTime
+      // const rangeTimeValue = fieldsValue.rangeTime
       let params = {
         ...fieldsValue,
-        rangeTime: undefined,
-        startTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
-        endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
+        // rangeTime: undefined,
+        // startTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
+        // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
         code: this.state.code,
         level: 1,
+        startTime: fieldsValue.startTime.format('YYYY-MM-DD HH:mm'),
+        endTime: fieldsValue.endTime.format('YYYY-MM-DD HH:mm'),
       };
       this.setState({
         machineStartTime: params.startTime,
@@ -1307,6 +1380,16 @@ export default class ScheduleSettingList extends PureComponent {
           discountHandleAdd={this.discountHandleAdd}
           discountHandleDelete={this.discountHandleDelete}
           onSelectShop={this.onSelectShop}
+
+          disabledStartDate={this.disabledStartDate}
+          onStartChange={this.onStartChange}
+          disabledEndDate={this.disabledEndDate}
+          onEndChange={this.onEndChange}
+          handleStartOpenChange={this.handleStartOpenChange}
+          handleEndOpenChange={this.handleEndOpenChange}
+          startValue={this.state.startValue}
+          endValue={this.state.endValue}
+          endOpen={this.state.endOpen}
         />
         <SelectMachineForm
           ref={this.selectMachineFormRef}
