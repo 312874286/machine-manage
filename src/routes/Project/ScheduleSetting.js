@@ -465,7 +465,7 @@ export default class ScheduleSettingList extends PureComponent {
                 temp[item['id']] = item;
               }
             }
-            activityArrs = Object.values(temp)
+            activityArrs = Object.values(temp);
           }
         }
         console.log('activityArrs', activityArrs)
