@@ -147,18 +147,24 @@ class GoodsTableField extends Component {
   }
 
   handleAdd = () => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      prizeId: this.state.currentValue,
-      resultCode: '1',
-      resultRemark: '当游戏得分超过90，掉落此商品',
-      prizeType: '1',
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
-    });
+    // const { count, dataSource } = this.state;
+    // console.log('11::',count, dataSource);
+    // const newData = {
+    //   key: count,
+    //   prizeId: this.state.currentValue,
+    //   resultCode: '1',
+    //   resultRemark: '当游戏得分超过90，掉落此商品',
+    //   prizeType: '1',
+    // };
+    // this.setState({
+    //   dataSource: [...dataSource, newData],
+    //   count: count + 1,
+    // },() => {
+    //   console.log(this.state.dataSource, this.state.count);
+    // });
+
+    this.props.goodsHandleAdd(this.state.dataSource, this.state.currentValue);
+
   }
 
   handleSave = (row) => {
@@ -174,7 +180,7 @@ class GoodsTableField extends Component {
   updateRenderDatas() {
     console.log(111, this.props.initData);
     this.state.clist = this.props.clist;
-    console.log('this.state.clist', this.state.clist)
+    // console.log('this.state.clist', this.state.clist)
     if(this.state.clist.length === 0 ) {
       this.state.currentValue = '';
     } else {
@@ -197,10 +203,13 @@ class GoodsTableField extends Component {
 
     const children2 = [];
     let defaultValue2 = '';
-    console.log('this.props.initData', this.props.initData)
-    if (this.props.initData) {
+    
+    // console.log('this.props.initData', this.props.initData)
+    if (this.props.initData.length !== 0) {
+      // this.state.dataSource = [];
       this.state.dataSource = this.props.initData;
-
+      
+      // console.log(222,this.state.dataSource);
       for (var i = 0; i < this.state.dataSource.length; i++) {
         this.state.dataSource[i].key = i;
       }

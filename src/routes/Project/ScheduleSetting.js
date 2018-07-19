@@ -56,8 +56,15 @@ const couponsInitData = [{
 
 const CreateForm = Form.create()(
   (props) => {
+<<<<<<< HEAD
+    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType,
+      verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName, selectStatus, machineNum,
+      goodsInitData, couponsInitData, goodsHandle, goodsHandleAdd, discountHandle, modalData, onSelectShop, goodsLists
+    } = props;
+=======
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, gameLists, activityLists, openSelectMachineModal, selectCityName, selectStatus, machineNum,
       goodsInitData, couponsInitData, goodsHandle, discountHandle, modalData, onSelectShop, goodsLists, verifyTimeRequire } = props;
+>>>>>>> f7bad438f5b101de7ed77ecb9039310952bd7f05
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -137,7 +144,11 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
+<<<<<<< HEAD
+            <GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} />
+=======
             <GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} />
+>>>>>>> f7bad438f5b101de7ed77ecb9039310952bd7f05
           </FormItem>
           <FormItem label="填写优惠券信息">
             <DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />
@@ -700,6 +711,20 @@ export default class ScheduleSettingList extends PureComponent {
       goodsInitData: val,
     });
   }
+  goodsHandleAdd = (val, currentValue, count) => {
+    // console.log(v);
+    const { goodsInitData } = this.state;
+    const newData = {
+      key: count,
+      prizeId: currentValue,
+      resultCode: '1',
+      resultRemark: '当游戏得分超过90，掉落此商品',
+      prizeType: '1',
+    };
+    this.setState({
+      goodsInitData: [...goodsInitData, newData]
+    });
+  }
   discountHandle = (val) => {
     this.setState({
       couponsInitData: val,
@@ -1232,6 +1257,7 @@ export default class ScheduleSettingList extends PureComponent {
           goodsInitData={this.state.goodsInitData}
           couponsInitData={this.state.couponsInitData}
           goodsHandle={this.goodsHandle}
+          goodsHandleAdd={this.goodsHandleAdd}
           discountHandle={this.discountHandle}
           onSelectShop={this.onSelectShop}
         />
