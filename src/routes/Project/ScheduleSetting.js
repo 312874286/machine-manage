@@ -58,7 +58,7 @@ const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType,
       verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName, selectStatus, machineNum,
-      goodsInitData, couponsInitData, goodsHandle, discountHandle, modalData, onSelectShop, goodsLists
+      goodsInitData, couponsInitData, goodsHandle, goodsHandleAdd, discountHandle, modalData, onSelectShop, goodsLists
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -152,7 +152,7 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField initData={goodsInitData} clist={gameLists} goodsHandle={goodsHandle} />
+            <GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} />
           </FormItem>
           <FormItem label="填写优惠券信息">
             <DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />
@@ -718,6 +718,20 @@ export default class ScheduleSettingList extends PureComponent {
       goodsInitData: val,
     });
   }
+  goodsHandleAdd = (val, currentValue, count) => {
+    // console.log(v);
+    const { goodsInitData } = this.state;
+    const newData = {
+      key: count,
+      prizeId: currentValue,
+      resultCode: '1',
+      resultRemark: '当游戏得分超过90，掉落此商品',
+      prizeType: '1',
+    };
+    this.setState({
+      goodsInitData: [...goodsInitData, newData]
+    });
+  }
   discountHandle = (val) => {
     this.setState({
       couponsInitData: val,
@@ -1254,6 +1268,7 @@ export default class ScheduleSettingList extends PureComponent {
           goodsInitData={this.state.goodsInitData}
           couponsInitData={this.state.couponsInitData}
           goodsHandle={this.goodsHandle}
+          goodsHandleAdd={this.goodsHandleAdd}
           discountHandle={this.discountHandle}
           onSelectShop={this.onSelectShop}
         />
