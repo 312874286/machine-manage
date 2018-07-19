@@ -114,7 +114,7 @@ class GoodsTableField extends Component {
   constructor(props) {
     super(props);
 
-    console.log(111, this.props.initData);
+    
 
     this.state = {
       dataSource: [{
@@ -130,6 +130,49 @@ class GoodsTableField extends Component {
       currentValue: '',
     };
 
+    this.updateRenderDatas();
+  }
+  handleChangeName = (record, value) => {
+    record.prizeId = value;
+    // console.log('name::', this.state.dataSource);
+    this.props.goodsHandle(this.state.dataSource);
+  }
+  handleChangeRule = (record, value) => {
+    record.resultCode = value;
+    // console.log('rule::', this.state.dataSource);
+  }
+  handleDelete = (key) => {
+    const dataSource = [...this.state.dataSource];
+    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+  }
+
+  handleAdd = () => {
+    const { count, dataSource } = this.state;
+    const newData = {
+      key: count,
+      prizeId: this.state.currentValue,
+      resultCode: '1',
+      resultRemark: '当游戏得分超过90，掉落此商品',
+      prizeType: '1',
+    };
+    this.setState({
+      dataSource: [...dataSource, newData],
+      count: count + 1,
+    });
+  }
+
+  handleSave = (row) => {
+    const newData = [...this.state.dataSource];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    this.setState({ dataSource: newData });
+  }
+  updateRenderDatas() {
+    console.log(111, this.props.initData);
     this.state.clist = this.props.clist;
     console.log('this.state.clist', this.state.clist)
     if(this.state.clist.length === 0 ) {
@@ -227,46 +270,6 @@ class GoodsTableField extends Component {
       },
     }];
   }
-  handleChangeName = (record, value) => {
-    record.prizeId = value;
-    // console.log('name::', this.state.dataSource);
-    this.props.goodsHandle(this.state.dataSource);
-  }
-  handleChangeRule = (record, value) => {
-    record.resultCode = value;
-    // console.log('rule::', this.state.dataSource);
-  }
-  handleDelete = (key) => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  }
-
-  handleAdd = () => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      prizeId: this.state.currentValue,
-      resultCode: '1',
-      resultRemark: '当游戏得分超过90，掉落此商品',
-      prizeType: '1',
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
-    });
-  }
-
-  handleSave = (row) => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    this.setState({ dataSource: newData });
-  }
-
   render() {
     const { dataSource } = this.state;
     const components = {
@@ -290,6 +293,7 @@ class GoodsTableField extends Component {
         }),
       };
     });
+    this.updateRenderDatas();
     return (
       <div>
         <Button icon="plus" onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
