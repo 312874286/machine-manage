@@ -66,7 +66,7 @@ export default {
               machineCode: '',
               machineId: data[i].code,
               state: 0}]
-            title = data[i].code
+            title = data[i].name
           }
           const a = {
             value: data[i].code,
