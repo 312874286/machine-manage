@@ -652,7 +652,7 @@ export default class ScheduleSettingList extends PureComponent {
       couponsInitData: [{
         resultRemark: '当游戏得分超过90，掉落此商品',
         code: '123455',
-        prizeType: '优惠券01 ',
+        prizeType: '优惠券01',
         resultCode: 1,
         name: '优惠券01',
       }],
@@ -917,10 +917,10 @@ export default class ScheduleSettingList extends PureComponent {
     console.log('选择机器确认');
     let selectCity = this.state.selectCity
     if (selectCity.length > 0) {
-      this.uniq(selectCity)
+      this.uniq(selectCity);
       // console.log('selectCity', this.state.machines)
     } else {
-      message.error('请先选择机器')
+      message.error('请先选择机器');
     }
   }
   uniq = (arr) => {
@@ -1015,7 +1015,6 @@ export default class ScheduleSettingList extends PureComponent {
   // 动态添加结束
   // 日历排期表格的编辑，查看，删除
   getDetail = (item) => {
-
   }
   handleWatchModalVisible = () => {
     this.setState({
