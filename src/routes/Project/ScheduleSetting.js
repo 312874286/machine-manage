@@ -96,7 +96,7 @@ const CreateForm = Form.create()(
             })(<Input disabled />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择开始时间">
-            {getFieldDecorator('startTime', {
+            {getFieldDecorator('startTimeStr', {
               rules: [{ required: true, message: '选择开始时间' }],
             })(
               <DatePicker
@@ -111,7 +111,7 @@ const CreateForm = Form.create()(
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="选择结束时间">
-            {getFieldDecorator('endTime', {
+            {getFieldDecorator('endTimeStr', {
               rules: [{ required: true, message: '选择结束时间' }],
             })(
               <DatePicker
@@ -747,13 +747,13 @@ export default class ScheduleSettingList extends PureComponent {
         gameId: data.gameId,
         userMaxTimes: data.userMaxTimes,
         activityName: data.activityName,
-        startTime: moment(data.startTime),
-        endTime: moment(data.endTime),
+        startTimeStr: moment(data.startTime),
+        endTimeStr: moment(data.endTime),
       });
     } else {
       this.form.setFieldsValue({
-        startTime: undefined,
-        endTime: undefined,
+        startTimeStr: undefined,
+        endTimeStr: undefined,
         activityId: undefined,
         gameId: undefined,
         userMaxTimes: undefined,
@@ -846,8 +846,8 @@ export default class ScheduleSettingList extends PureComponent {
         goods: this.state.goodsInitData,
         coupons: this.state.couponsInitData,
         machines: this.state.machines,
-        startTime: fieldsValue.startTime.format('YYYY-MM-DD HH:mm'),
-        endTime: fieldsValue.endTime.format('YYYY-MM-DD HH:mm'),
+        startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
+        endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
       };
       this.setState({
         editModalConfirmLoading: true,
@@ -1048,8 +1048,8 @@ export default class ScheduleSettingList extends PureComponent {
         // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
         code: this.state.code,
         level: 1,
-        startTime: fieldsValue.startTime.format('YYYY-MM-DD HH:mm'),
-        endTime: fieldsValue.endTime.format('YYYY-MM-DD HH:mm'),
+        startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
+        endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
       };
       this.setState({
         machineStartTime: params.startTime,
