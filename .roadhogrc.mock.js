@@ -371,7 +371,36 @@ const proxy = {
             parentId: 'a23',
             functionLevel: 2,
           },
-
+          {
+            id: 'a26',
+            functionDepict: '巡检管理',
+            functionPath: 'polling',
+            parentId: null,
+            functionLevel: 1,
+            functionIcon: 'safety',
+            color: '#174a79'
+          },
+          {
+            id: 'a27',
+            functionDepict: '故障单管理',
+            functionPath: 'troubleBill',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
+          {
+            id: 'a28',
+            functionDepict: '人员管理',
+            functionPath: 'personnelManagement',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
+          {
+            id: 'a29',
+            functionDepict: '打卡记录',
+            functionPath: 'punchingRecord',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
         ]
       };
       res.send({

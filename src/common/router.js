@@ -182,6 +182,15 @@ export const getRouterData = (app) => {
     '/order/order': {
       component: dynamicWrapper(app, ['order/order', 'log/log', 'common'], () => import('../routes/Order/Order')),
     },
+    '/polling/personnelManagement': {
+      component: dynamicWrapper(app, ['polling/personnelManagement', 'log/log', 'common'], () => import('../routes/Polling/PersonnelManagement')),
+    },
+    '/polling/punchingRecord': {
+      component: dynamicWrapper(app, ['polling/punchingRecord', 'log/log', 'common'], () => import('../routes/Polling/PunchingRecord')),
+    },
+    '/polling/troubleBill': {
+      component: dynamicWrapper(app, ['polling/troubleBill', 'log/log', 'common'], () => import('../routes/Polling/TroubleBill')),
+    },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },
