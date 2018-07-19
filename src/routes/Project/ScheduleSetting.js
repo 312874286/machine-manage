@@ -770,8 +770,8 @@ export default class ScheduleSettingList extends PureComponent {
       }).then(() => {
         this.setState({
           code: '',
-          getDataStartDay: this.startTime,
-          getDataEndDay: this.endTime,
+          getDataStartDay: this.state.startTime,
+          getDataEndDay: this.state.endTime,
         }, () => {
           this.getLists();
         })
