@@ -58,7 +58,7 @@ const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType,
       verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName, selectStatus, machineNum,
-      goodsInitData, couponsInitData, goodsHandle, discountHandle, modalData, onSelectShop
+      goodsInitData, couponsInitData, goodsHandle, discountHandle, modalData, onSelectShop, goodsLists
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -152,7 +152,7 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField initData={goodsInitData} clist={gameLists} goodsHandle={goodsHandle} />
+            <GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} />
           </FormItem>
           <FormItem label="填写优惠券信息">
             <DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />
@@ -224,7 +224,7 @@ const WatchForm = Form.create()(
     };
     const goodsColumns = [{
       title: '商品名称',
-      dataIndex: 'activityPlanId',
+      dataIndex: 'prizeId',
       align: 'center',
     }, {
       title: '规则',
@@ -339,7 +339,6 @@ export default class ScheduleSettingList extends PureComponent {
     modalType: true,
     activityLists: [],
     gameLists: [],
-    goodsList: [],
 
     editMachineModalVisible: false,
     confirmLoading: false,
@@ -359,6 +358,7 @@ export default class ScheduleSettingList extends PureComponent {
 
     dateList: [],
     resList: [],
+    goodsLists: [],
     handleDays: {},
     startTime: '',
     getDataStartDay: '',
@@ -396,12 +396,7 @@ export default class ScheduleSettingList extends PureComponent {
         options: res,
       });
     });
-  }
-  onSelectShop = (value, option) => {
-    console.log(value, option)
-    // this.getGoodsLists(value);
-  }
-  getActivityLists = () => {
+    // activityList
     this.props.dispatch({
       type: 'scheduleSetting/activityList',
       payload: {
@@ -412,13 +407,20 @@ export default class ScheduleSettingList extends PureComponent {
         activityLists: res,
       });
     });
+    // gameList
+    this.getGamesLists()
   }
-  getGamesLists = () => {
-
+  onSelectShop = (value, option) => {
+    console.log('12111', value, option)
+    this.getGoodsLists(value);
+  }
+  getGamesLists = (shopId) => {
     this.props.dispatch({
       type: 'scheduleSetting/gameList',
       payload: {
-        restParams: {},
+        restParams: {
+          shopId: shopId ? shopId : ''
+        },
       },
     }).then((res) => {
       this.setState({
@@ -436,31 +438,18 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       this.setState({
-        goodsList: res,
+        goodsLists: res,
       }, () => {
-        // this.setState({
-        //   // goodsInitData: [{
-        //   //   resultCode: 1,
-        //   //   resultRemark: '当游戏得分超过90，掉落此商品',
-        //   //   prizeType: 1,
-        //   //   prizeId: this.state.gameLists[0].id,
-        //   // }],
-        //   goodsInitData: [{
-        //     resultCode: 1,
-        //     resultRemark: '当游戏得分超过90，掉落此商品',
-        //     prizeType: 1,
-        //     prizeId: this.state.gameLists[0].id,
-        //   }],
-        //   couponsInitData: [{
-        //     resultRemark: '当游戏得分超过90，掉落此商品',
-        //     code: '123455',
-        //     prizeType: '优惠券01 ',
-        //     resultCode: 1,
-        //     name: '优惠券01',
-        //   }],
-        // }, () => {
-        //
-        // })
+        this.setState({
+          goodsInitData: [{
+            resultCode: 1,
+            resultRemark: '当游戏得分超过90，掉落此商品',
+            prizeType: 1,
+            prizeId: this.state.goodsLists[0].id,
+          }],
+        }, () => {
+
+        })
       });
     });
   }
@@ -656,10 +645,6 @@ export default class ScheduleSettingList extends PureComponent {
   };
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
-    // activityList
-    this.getActivityLists();
-    // gameList
-    this.getGamesLists();
     this.setState({
       // goodsInitData: [{
       //   resultCode: 1,
@@ -1151,7 +1136,7 @@ export default class ScheduleSettingList extends PureComponent {
       scheduleSetting: { list, page },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, gameLists, activityLists, goodsList } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, gameLists, activityLists, goodsLists } = this.state;
     const columns = [
       {
         title: '所属省市区商圈',
@@ -1259,7 +1244,7 @@ export default class ScheduleSettingList extends PureComponent {
           verifyString={this.verifyString}
           verifyTrim={this.verifyTrim}
           gameLists={gameLists}
-          goodsList={goodsList}
+          goodsLists={goodsLists}
           activityLists={activityLists}
           disabledDate={this.disabledDate}
           disabledDateTime={this.disabledDateTime}
