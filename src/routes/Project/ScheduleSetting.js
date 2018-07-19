@@ -448,8 +448,9 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      console.log('time', this.state.startTime, this.state.endTime)
-      console.log('startTime', this.state.getDataStartDay, this.state.getDataEndDay)
+      console.log('总时间', this.state.startTime, this.state.endTime)
+      console.log('获取数据时间', this.state.getDataStartDay, this.state.getDataEndDay)
+      console.log(this.state.startTime === this.state.getDataStartDay && this.state.endTime === this.state.getDataEndDay)
       if (this.state.startTime === this.state.getDataStartDay && this.state.endTime === this.state.getDataEndDay) {
         this.setState({
           resList: []
@@ -488,11 +489,11 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   drawLine = (arr) => {
-    console.log('time', this.state.startTime, this.state.endTime)
-    console.log('startTime', this.state.handleDays.getDataStartDay, this.state.handleDays.getDataEndDay)
+    // console.log('time', this.state.startTime, this.state.endTime)
+    // console.log('startTime', this.state.handleDays.getDataStartDay, this.state.handleDays.getDataEndDay)
     let activityArr =[]
     let leftTmp = 0, leftNo = 0, widthTmp = 0
-    console.log((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay))
+    // console.log((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay))
     // if ((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay)) {
     //   leftTmp = 2.95
     //   leftNo = 1
@@ -689,7 +690,7 @@ export default class ScheduleSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
+        rangeTime: [moment(data.createTime), moment(data.endTime)] || undefined,
         activityId: data.activityId,
         gameId: data.gameId,
         userMaxTimes: data.userMaxTimes,
@@ -704,6 +705,20 @@ export default class ScheduleSettingList extends PureComponent {
       this.setState({
         machineNum: '',
         selectCityName: '',
+        goodsInitData: [{
+          resultCode: 1,
+          resultRemark: '当游戏得分超过90，掉落此商品',
+          prizeType: 1,
+          prizeId: '',
+        }],
+        couponsInitData: [{
+          resultRemark: '当游戏得分超过90，掉落此商品',
+          code: '123455',
+          prizeType: '优惠券01 ',
+          resultCode: 1,
+          name: '优惠券01',
+        }],
+        goodsLists: [],
       });
     }
   }
@@ -741,6 +756,10 @@ export default class ScheduleSettingList extends PureComponent {
       if (err) {
         return;
       }
+      if (this.state.selectCity.length === 0) {
+        message.error('请先选择机器')
+        return;
+      }
       const rangeTimeValue = fieldsValue.rangeTime
       let params = {
         ...fieldsValue,
@@ -760,7 +779,7 @@ export default class ScheduleSettingList extends PureComponent {
         url = 'scheduleSetting/editScheduleSetting';
         params = { ...params, id: this.state.modalData.id };
       } else {
-        params = { ...params, remark: '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、')}
+        params = { ...params, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
       }
       this.props.dispatch({
         type: url,
@@ -1067,12 +1086,23 @@ export default class ScheduleSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        // message.success('Click on Yes');
-        this.getLists();
-        this.setState({
-          editModalConfirmLoading: false,
-        });
+      }).then((res) => {
+        if (res && res.code === 0) {
+          message.success('删除成功');
+          this.setState({
+            code: '',
+            getDataStartDay: this.state.startTime,
+            getDataEndDay: this.state.endTime,
+          }, () => {
+            this.getLists();
+          })
+          this.setState({
+            editModalConfirmLoading: false,
+          });
+          // this.getLists();
+        } else {
+          message.error(res ? res.msg : '删除失败');
+        }
       });
     } else return false;
   }

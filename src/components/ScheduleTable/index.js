@@ -287,10 +287,11 @@ class ScheduleTable extends PureComponent {
             {/*<div className={styles.dateList}>*/}
               {dateList.map((item) => {
                 return (
-                  <Popover placement="top" content={item.Time} title={null} trigger="hover">
-                    <div className={styles.dateChildren} key={item.id}
-                         style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
-                           justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
+                  <div key={item.id}>
+                    <Popover placement="top" content={item.Time} title={null} trigger="hover">
+                      <div className={styles.dateChildren}
+                           style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
+                             justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
 
                         <div>{item.name}</div>
                         <div className={styles.iconBox}>
@@ -298,8 +299,9 @@ class ScheduleTable extends PureComponent {
                           <Icon type="eye" onClick={() => onWatchClick(item)} />
                           <Icon type="close" className={styles.anticonDelete} onClick={() => onDeleteClick(item)}/>
                         </div>
-                    </div>
-                  </Popover>
+                      </div>
+                    </Popover>
+                  </div>
                 );
               })}
             {/*</div>*/}
