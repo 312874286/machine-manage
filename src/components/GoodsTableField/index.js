@@ -114,7 +114,7 @@ class GoodsTableField extends Component {
   constructor(props) {
     super(props);
 
-    // console.log(111, this.props.initData);
+    console.log(111, this.props.initData);
 
     this.state = {
       dataSource: [{
@@ -131,7 +131,13 @@ class GoodsTableField extends Component {
     };
 
     this.state.clist = this.props.clist;
-    this.state.currentValue = this.props.clist[0].id;
+    
+    if(this.state.clist.length === 0 ) {
+      this.state.currentValue = '';
+    } else {
+      this.state.currentValue = this.props.clist[0].id;
+    }
+    
     // console.log( this.state.currentValue );
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
