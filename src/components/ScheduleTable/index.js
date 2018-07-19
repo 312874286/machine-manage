@@ -270,11 +270,11 @@ class ScheduleTable extends PureComponent {
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
       <Card title="活动排期一览表" style={{ overflowX: 'scroll'}}>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', maxWidth: '1140px', margin: '0 auto' }}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3 }} id="dateWeek">
+          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1140px' }} id="dateWeek">
             {dateTwoWeeksArr.map((item) => {
               return (
                 <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
