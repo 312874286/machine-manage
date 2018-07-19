@@ -296,7 +296,7 @@ class ScheduleTable extends PureComponent {
                         <div className={styles.iconBox}>
                           <Icon type="form" onClick={() => onEditClick(item)} />
                           <Icon type="eye" onClick={() => onWatchClick(item)} />
-                          <span className={styles.anticonDelete} onClick={() => onDeleteClick(item)}>删除</span>
+                          <Icon type="close" className={styles.anticonDelete} onClick={() => onDeleteClick(item)}/>
                         </div>
                     </div>
                   </Popover>
