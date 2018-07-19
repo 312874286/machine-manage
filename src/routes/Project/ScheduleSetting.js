@@ -224,7 +224,7 @@ const WatchForm = Form.create()(
     };
     const goodsColumns = [{
       title: '商品名称',
-      dataIndex: 'prizeId',
+      dataIndex: 'activityPlanId',
       align: 'center',
     }, {
       title: '规则',
@@ -339,6 +339,7 @@ export default class ScheduleSettingList extends PureComponent {
     modalType: true,
     activityLists: [],
     gameLists: [],
+    goodsList: [],
 
     editMachineModalVisible: false,
     confirmLoading: false,
@@ -395,7 +396,12 @@ export default class ScheduleSettingList extends PureComponent {
         options: res,
       });
     });
-    // activityList
+  }
+  onSelectShop = (value, option) => {
+    console.log(value, option)
+    // this.getGoodsLists(value);
+  }
+  getActivityLists = () => {
     this.props.dispatch({
       type: 'scheduleSetting/activityList',
       payload: {
@@ -406,16 +412,23 @@ export default class ScheduleSettingList extends PureComponent {
         activityLists: res,
       });
     });
-    // gameList
-    this.getGamesLists()
   }
-  onSelectShop = (value, option) => {
-    console.log(value, option)
-    // this.getGamesLists()
-  }
-  getGamesLists = (shopId) => {
+  getGamesLists = () => {
+
     this.props.dispatch({
       type: 'scheduleSetting/gameList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        gameLists: res,
+      });
+    });
+  }
+  getGoodsLists = (shopId) => {
+    this.props.dispatch({
+      type: 'scheduleSetting/getGoodsList',
       payload: {
         restParams: {
           shopId: shopId ? shopId : ''
@@ -423,7 +436,7 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       this.setState({
-        gameLists: res,
+        goodsList: res,
       }, () => {
         // this.setState({
         //   // goodsInitData: [{
@@ -643,6 +656,10 @@ export default class ScheduleSettingList extends PureComponent {
   };
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
+    // activityList
+    this.getActivityLists();
+    // gameList
+    this.getGamesLists();
     this.setState({
       // goodsInitData: [{
       //   resultCode: 1,
@@ -1134,7 +1151,7 @@ export default class ScheduleSettingList extends PureComponent {
       scheduleSetting: { list, page },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, gameLists, activityLists } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, gameLists, activityLists, goodsList } = this.state;
     const columns = [
       {
         title: '所属省市区商圈',
@@ -1242,6 +1259,7 @@ export default class ScheduleSettingList extends PureComponent {
           verifyString={this.verifyString}
           verifyTrim={this.verifyTrim}
           gameLists={gameLists}
+          goodsList={goodsList}
           activityLists={activityLists}
           disabledDate={this.disabledDate}
           disabledDateTime={this.disabledDateTime}

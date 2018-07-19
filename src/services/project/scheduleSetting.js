@@ -56,3 +56,9 @@ export async function getPlanMachineDetailList({ restParams }) {
     restParams,
   });
 }
+
+export async function getGoodsList({ restParams }) {
+  return fetch.get(api.getGoodsList, {
+    restParams,
+  });
+}

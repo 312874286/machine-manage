@@ -36,6 +36,7 @@ const api = map({
   getActivityList: '/project/activity/getList',
   getGameList: '/game/game/getList',
   getPlanMachineDetailList: '/project/activityPlan/planMachineDetailList?id={id}',
+  getGoodsList: '/goods/goods/getList?shopId={shopId}',
 });
 
 export default api;
