@@ -45,20 +45,14 @@ const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
-const couponsInitData = [{
-  resultRemark: '当游戏得分超过90，掉落此商品',
-  code: '123455',
-  prizeType: '优惠券01 ',
-  resultCode: 1,
-  name: '优惠券01',
-}]
+const couponsInitData = []
 
 
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
-      goodsInitData, couponsInitData, goodsHandle, goodsHandleAdd, discountHandle, modalData, onSelectShop, goodsLists
+      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, discountHandle, discountHandleAdd, discountHandleDelete, modalData, onSelectShop, goodsLists
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -142,10 +136,10 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} />
+            <GoodsTableField initData={goodsInitData} count={goodsCount} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} goodsHandleDelete={goodsHandleDelete} />
           </FormItem>
           <FormItem label="填写优惠券信息">
-            <DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />
+            <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} />
           </FormItem>
         </Form>
       </Modal>
@@ -358,6 +352,8 @@ export default class ScheduleSettingList extends PureComponent {
 
     goodsInitData: [],
     couponsInitData: [],
+    goodsCount: 0,
+    couponsCount: 0,
     machines: [],
     machineStartTime: '',
     machineEndTime: '',
@@ -651,15 +647,16 @@ export default class ScheduleSettingList extends PureComponent {
     //   prizeType: 1,
     //   prizeId: '',
     // }
+    // {
+    //   resultRemark: '当游戏得分超过90，掉落此商品',
+    //   code: '123455',
+    //   prizeType: '优惠券01',
+    //   resultCode: 1,
+    //   name: '优惠券01',
+    // }
     this.setState({
       goodsInitData: [],
-      couponsInitData: [{
-        resultRemark: '当游戏得分超过90，掉落此商品',
-        code: '123455',
-        prizeType: '优惠券01',
-        resultCode: 1,
-        name: '优惠券01',
-      }],
+      couponsInitData: [],
     }, () => {
       this.setState({
         modalVisible: !!flag,
@@ -713,17 +710,19 @@ export default class ScheduleSettingList extends PureComponent {
         gameId: undefined,
         userMaxTimes: undefined,
       });
+      // {
+      //   resultCode: 1,
+      //   resultRemark: '当游戏得分超过90，掉落此商品',
+      //   prizeType: 1,
+      //   prizeId: '',
+      // }
       this.setState({
         machineNum: '',
         selectCityName: '',
         goodsInitData: [],
-        couponsInitData: [{
-          resultRemark: '当游戏得分超过90，掉落此商品',
-          code: '123455',
-          prizeType: '优惠券01 ',
-          resultCode: 1,
-          name: '优惠券01',
-        }],
+        goodsCount: 0,
+        couponsInitData: [],
+        couponsCount: 0,
         goodsLists: [],
       });
     }
@@ -733,24 +732,50 @@ export default class ScheduleSettingList extends PureComponent {
       goodsInitData: val,
     });
   }
-  goodsHandleAdd = (val, currentValue, count) => {
+  goodsHandleAdd = (val, currentValue) => {
     // console.log(v);
-    const { goodsInitData } = this.state;
+    const { goodsInitData, goodsCount } = this.state;
     const newData = {
-      key: count,
+      key: goodsCount,
       prizeId: currentValue,
       resultCode: '1',
-      resultRemark: '',
+      resultRemark: '描述',
       prizeType: '1',
     };
     this.setState({
-      goodsInitData: [...goodsInitData, newData]
+      goodsInitData: [...goodsInitData, newData],
+      goodsCount: goodsCount+1,
     });
+  }
+  goodsHandleDelete = (key) => {
+    const goodsInitData = [...this.state.goodsInitData];
+    this.setState({ goodsInitData: goodsInitData.filter(item => item.key !== key) });
+    console.log('goodsHandleDelete::', key, goodsInitData);
   }
   discountHandle = (val) => {
     this.setState({
       couponsInitData: val,
     });
+  }
+  discountHandleAdd = (val, currentValue, count) => {
+    const { couponsInitData, couponsCount } = this.state;
+    const newData = {
+      key: couponsCount,
+      code: '优惠券编号',
+      name: '优惠券名称',
+      resultCode: '1',
+      resultRemark: '描述',
+      prizeType: '2',
+    };
+    this.setState({
+      couponsInitData: [...couponsInitData, newData],
+      couponsCount: couponsCount+1,
+    });
+  }
+  discountHandleDelete = (key) => {
+    const couponsInitData = [...this.state.couponsInitData];
+    this.setState({ couponsInitData: couponsInitData.filter(item => item.key !== key) });
+    console.log('discountHandleDelete::', key, couponsInitData);
   }
   // 新增modal确认事件 开始
   saveFormRef = (form) => {
@@ -1288,10 +1313,15 @@ export default class ScheduleSettingList extends PureComponent {
           selectCityName={this.state.selectCityName}
           machineNum={this.state.machineNum}
           goodsInitData={this.state.goodsInitData}
+          goodsCount={this.state.goodsCount}
           couponsInitData={this.state.couponsInitData}
+          couponsCount={this.state.couponsCount}
           goodsHandle={this.goodsHandle}
           goodsHandleAdd={this.goodsHandleAdd}
+          goodsHandleDelete={this.goodsHandleDelete}
           discountHandle={this.discountHandle}
+          discountHandleAdd={this.discountHandleAdd}
+          discountHandleDelete={this.discountHandleDelete}
           onSelectShop={this.onSelectShop}
         />
         <SelectMachineForm
