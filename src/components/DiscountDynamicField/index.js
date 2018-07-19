@@ -115,19 +115,58 @@ class DiscountDynamicField extends React.Component {
     super(props);
 
     this.state = {
-      dataSource: [{
-        key: '0',
-        code: '优惠券编号',
-        name: '优惠券名称',
-        resultCode: '',
-        resultRemark: '当游戏得分超过90，掉落此商品',
-        prizeType: '2',
-      },],
-      count:1,
+      dataSource: [],
+      count:0,
       rlist: [
       ],
     };
+  }
+  handleChangeRule = (record, value) => {
+    record.resultCode = value;
+    // console.log('rule::', this.state.dataSource);
+    this.props.discountHandle(this.state.dataSource);
+  }
+  handleDelete = (key) => {
+    // const dataSource = [...this.state.dataSource];
+    // this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    this.props.discountHandleDelete(key);
+  }
 
+  handleAdd = () => {
+    // const { count, dataSource } = this.state;
+    // const newData = {
+    //   key: count,
+    //   name: `Edward King ${count}`,
+    //   age: 32,
+    //   address: `London, Park Lane no. ${count}`,
+    // };
+    // const newData = {
+    //   key: count,
+    //   code: '优惠券编号',
+    //   name: '优惠券名称',
+    //   resultCode: '1',
+    //   resultRemark: '当游戏得分超过90，掉落此商品',
+    //   prizeType: '2',
+    // };
+    // this.setState({
+    //   dataSource: [...dataSource, newData],
+    //   count: count + 1,
+    // });
+
+    this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
+  }
+
+  handleSave = (row) => {
+    const newData = [...this.state.dataSource];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    this.setState({ dataSource: newData });
+  }
+  updateRenderDatas = () => {
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -144,9 +183,9 @@ class DiscountDynamicField extends React.Component {
     if (this.props.initData) {
       this.state.dataSource = this.props.initData;
 
-      for (var i = 0; i < this.state.dataSource.length; i++) {
-        this.state.dataSource[i].key = i;
-      }
+      // for (var i = 0; i < this.state.dataSource.length; i++) {
+      //   this.state.dataSource[i].key = i;
+      // }
 
       for (let i = 0; i < this.state.rlist.length; i++) {
         children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
@@ -200,51 +239,9 @@ class DiscountDynamicField extends React.Component {
       },
     }];
   }
-  handleChangeRule = (record, value) => {
-    record.resultCode = value;
-    // console.log('rule::', this.state.dataSource);
-    this.props.discountHandle(this.state.dataSource);
-  }
-  handleDelete = (key) => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  }
-
-  handleAdd = () => {
-    const { count, dataSource } = this.state;
-    // const newData = {
-    //   key: count,
-    //   name: `Edward King ${count}`,
-    //   age: 32,
-    //   address: `London, Park Lane no. ${count}`,
-    // };
-    const newData = {
-      key: count,
-      code: '优惠券编号',
-      name: '优惠券名称',
-      resultCode: '1',
-      resultRemark: '当游戏得分超过90，掉落此商品',
-      prizeType: '2',
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
-    });
-  }
-
-  handleSave = (row) => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    this.setState({ dataSource: newData });
-  }
-
   render() {
-    const { dataSource } = this.state;
+    // const { dataSource } = this.state;
+    this.updateRenderDatas();
     const components = {
       body: {
         row: EditableFormRow,
@@ -274,7 +271,7 @@ class DiscountDynamicField extends React.Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={dataSource}
+          dataSource={this.state.dataSource}
           columns={columns}
           pagination={false}
         />

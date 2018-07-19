@@ -114,8 +114,6 @@ class GoodsTableField extends Component {
   constructor(props) {
     super(props);
 
-
-
     this.state = {
       dataSource: [],
       count:0,
@@ -136,8 +134,9 @@ class GoodsTableField extends Component {
     // console.log('rule::', this.state.dataSource);
   }
   handleDelete = (key) => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    // const dataSource = [...this.state.dataSource];
+    // this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    this.props.goodsHandleDelete(key);
   }
 
   handleAdd = () => {
@@ -157,7 +156,7 @@ class GoodsTableField extends Component {
     //   console.log(this.state.dataSource, this.state.count);
     // });
 
-    this.props.goodsHandleAdd(this.state.dataSource, this.state.currentValue, this.state.count);
+    this.props.goodsHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
 
   }
 
@@ -172,8 +171,8 @@ class GoodsTableField extends Component {
     this.setState({ dataSource: newData });
   }
   updateRenderDatas() {
-    // console.log(111, this.props.initData);
     this.state.clist = this.props.clist;
+    // console.log(111, this.props.count);
     // console.log('this.state.clist', this.state.clist)
     if(this.state.clist.length === 0 ) {
       this.state.currentValue = '';
@@ -204,9 +203,9 @@ class GoodsTableField extends Component {
       this.state.dataSource = this.props.initData;
 
       // console.log(222,this.state.dataSource);
-      for (var i = 0; i < this.state.dataSource.length; i++) {
-        this.state.dataSource[i].key = i;
-      }
+      // for (var i = 0; i < this.state.dataSource.length; i++) {
+      //   this.state.dataSource[i].key = i;
+      // }
       for (let i = 0; i < this.state.clist.length; i++) {
         children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
       }
@@ -230,11 +229,11 @@ class GoodsTableField extends Component {
         children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
       }
     }
-    // this.state.count = this.state.dataSource.length;
-    this.setState({
-      dataSource: this.props.initData,
-    });
-    console.log(this.state.dataSource.length, this.state.count, this.state.dataSource);
+    this.state.count = this.props.count;
+    // this.setState({
+    //   dataSource: this.props.initData,
+    // });
+    
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'prizeId',
@@ -276,8 +275,11 @@ class GoodsTableField extends Component {
     }];
   }
   render() {
-    const { dataSource } = this.state;
+    // const { dataSource } = this.state;
+    // const { count } = this.props;
+    // console.log(222, count);
     this.updateRenderDatas();
+    // console.log('dataSource::', dataSource);
     const components = {
       body: {
         row: EditableFormRow,
@@ -308,7 +310,7 @@ class GoodsTableField extends Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={dataSource}
+          dataSource={this.props.initData}
           columns={columns}
           pagination={false}
         />
