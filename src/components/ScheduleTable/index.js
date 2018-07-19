@@ -290,9 +290,9 @@ class ScheduleTable extends PureComponent {
                   <div className={styles.dateChildren} key={item.id}
                        style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
                          justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
-                    {/*<Popover placement="left" content={content} title={null} trigger="hover">*/}
+                    <Popover placement="top" content={item.Time} title={null} trigger="hover">
                       <div>{item.name}</div>
-                    {/*</Popover>*/}
+                    </Popover>
                       <div className={styles.iconBox}>
                         <Icon type="form" onClick={() => onEditClick(item)} />
                         <Icon type="eye" onClick={() => onWatchClick(item)} />
