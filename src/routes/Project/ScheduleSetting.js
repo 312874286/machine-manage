@@ -671,7 +671,7 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      // this.setModalData(res);
+      // this.getGoodsLists()
     });
   }
   // 设置modal 数据
@@ -691,12 +691,6 @@ export default class ScheduleSettingList extends PureComponent {
         gameId: undefined,
         userMaxTimes: undefined,
       });
-      // {
-      //   resultCode: 1,
-      //   resultRemark: '当游戏得分超过90，掉落此商品',
-      //   prizeType: 1,
-      //   prizeId: '',
-      // }
       this.setState({
         machineNum: '',
         selectCityName: '',
@@ -1051,6 +1045,7 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       // console.log('res', res)
+      // this.getGoodsLists()
       let goodsInitDatas = res.goods.map((item, index) => {
         return { key: index, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
       })
