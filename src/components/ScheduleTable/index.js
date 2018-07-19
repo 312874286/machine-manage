@@ -287,18 +287,19 @@ class ScheduleTable extends PureComponent {
             {/*<div className={styles.dateList}>*/}
               {dateList.map((item) => {
                 return (
-                  <div className={styles.dateChildren} key={item.id}
-                       style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
-                         justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
-                    <Popover placement="top" content={item.Time} title={null} trigger="hover">
-                      <div>{item.name}</div>
-                    </Popover>
-                      <div className={styles.iconBox}>
-                        <Icon type="form" onClick={() => onEditClick(item)} />
-                        <Icon type="eye" onClick={() => onWatchClick(item)} />
-                        <span className={styles.anticonDelete} onClick={() => onDeleteClick(item)}>删除</span>
-                      </div>
-                  </div>
+                  <Popover placement="top" content={item.Time} title={null} trigger="hover">
+                    <div className={styles.dateChildren} key={item.id}
+                         style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
+                           justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
+
+                        <div>{item.name}</div>
+                        <div className={styles.iconBox}>
+                          <Icon type="form" onClick={() => onEditClick(item)} />
+                          <Icon type="eye" onClick={() => onWatchClick(item)} />
+                          <span className={styles.anticonDelete} onClick={() => onDeleteClick(item)}>删除</span>
+                        </div>
+                    </div>
+                  </Popover>
                 );
               })}
             {/*</div>*/}
