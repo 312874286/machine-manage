@@ -114,7 +114,7 @@ class GoodsTableField extends Component {
   constructor(props) {
     super(props);
 
-    
+
 
     this.state = {
       dataSource: [{
@@ -178,7 +178,7 @@ class GoodsTableField extends Component {
     this.setState({ dataSource: newData });
   }
   updateRenderDatas() {
-    console.log(111, this.props.initData);
+    // console.log(111, this.props.initData);
     this.state.clist = this.props.clist;
     // console.log('this.state.clist', this.state.clist)
     if(this.state.clist.length === 0 ) {
@@ -203,12 +203,12 @@ class GoodsTableField extends Component {
 
     const children2 = [];
     let defaultValue2 = '';
-    
+
     // console.log('this.props.initData', this.props.initData)
     if (this.props.initData.length !== 0) {
       // this.state.dataSource = [];
       this.state.dataSource = this.props.initData;
-      
+
       // console.log(222,this.state.dataSource);
       for (var i = 0; i < this.state.dataSource.length; i++) {
         this.state.dataSource[i].key = i;

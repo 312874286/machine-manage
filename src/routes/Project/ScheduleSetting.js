@@ -448,7 +448,13 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      // console.log('res', res);
+      console.log('time', this.state.startTime, this.state.endTime)
+      console.log('startTime', this.state.getDataStartDay, this.state.getDataEndDay)
+      if (this.state.startTime === this.state.getDataStartDay && this.state.endTime === this.state.getDataEndDay) {
+        this.setState({
+          resList: []
+        });
+      }
       let activityArr = []
       if (res) {
         let activityArrs = res.length > 0 ? res : this.state.resList
@@ -695,6 +701,10 @@ export default class ScheduleSettingList extends PureComponent {
         gameId: undefined,
         userMaxTimes: undefined,
       });
+      this.setState({
+        machineNum: '',
+        selectCityName: '',
+      });
     }
   }
   goodsHandle = (val) => {
@@ -760,6 +770,8 @@ export default class ScheduleSettingList extends PureComponent {
       }).then(() => {
         this.setState({
           code: '',
+          getDataStartDay: this.startTime,
+          getDataEndDay: this.endTime,
         }, () => {
           this.getLists();
         })
@@ -1006,7 +1018,7 @@ export default class ScheduleSettingList extends PureComponent {
         resultCode: 1,
         resultRemark: '当游戏得分超过90，掉落此商品',
         prizeType: 1,
-        prizeId: this.state.gameLists[0].id,
+        prizeId: '',
       }]
       this.setState({
         goodsInitData: res.goods.length > 0 ? res.goods : goodsInitData,
@@ -1031,15 +1043,9 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      const goodsInitData = [{
-        resultCode: 1,
-        resultRemark: '当游戏得分超过90，掉落此商品',
-        prizeType: 1,
-        prizeId: '',
-      }]
       this.setState({
-        goodsInitData: res.goods.length > 0 ? res.goods : goodsInitData,
-        couponsInitData: res.coupons.length > 0 ? res.coupons : couponsInitData,
+        goodsInitData: res.goods.length > 0 ? res.goods : [],
+        couponsInitData: res.coupons.length > 0 ? res.coupons : [],
       }, () => {
         this.setState({
           modalVisible: false,
