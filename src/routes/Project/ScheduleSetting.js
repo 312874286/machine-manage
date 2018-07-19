@@ -88,24 +88,20 @@ const CreateForm = Form.create()(
         width={800}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="选择活动"  style={{display : modalData.id ? 'none' : 'block'}}>
+          <FormItem {...formItemLayout} label="选择活动" style={{display : modalData.id ? 'none' : 'block'}}>
             {getFieldDecorator('activityId', {
               rules: [{ required: modalData.id ? false : true, message: '请选择活动' }],
-            })(
-              <div>
-                <Select placeholder="请选择" onSelect={onSelectShop} >
+            })(<Select placeholder="请选择" onSelect={onSelectShop} >
                   {activityLists.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.name}</Option>
                     );
                   })}
-                 </Select>
-              </div>
-            )}
+                 </Select>)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择活动"  style={{display : modalData.id ? 'block' : 'none'}}>
             {getFieldDecorator('activityName', {
-              rules: [{ required: modalData.id ? true : false, message: '请选择活动' }],
+              rules: [{ required: false, message: '请选择活动' }],
             })(<Input disabled />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择时间">
@@ -770,9 +766,11 @@ export default class ScheduleSettingList extends PureComponent {
       if (err) {
         return;
       }
-      if (this.state.selectCity.length === 0) {
-        message.error('请先选择机器')
-        return;
+      if (!this.state.modalData.id) {
+        if (this.state.selectCity.length === 0) {
+          message.error('请先选择机器')
+          return;
+        }
       }
       const rangeTimeValue = fieldsValue.rangeTime
       let params = {
