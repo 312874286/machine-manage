@@ -152,7 +152,7 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} />
+            <GoodsTableField initData={goodsInitData} clist={gameLists} goodsHandle={goodsHandle} />
           </FormItem>
           <FormItem label="填写优惠券信息">
             <DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />
