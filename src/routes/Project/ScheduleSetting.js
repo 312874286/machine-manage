@@ -649,13 +649,14 @@ export default class ScheduleSettingList extends PureComponent {
     this.getActivityLists()
     // gameList
     this.getGamesLists()
+    // {
+    //   resultCode: 1,
+    //   resultRemark: '当游戏得分超过90，掉落此商品',
+    //   prizeType: 1,
+    //   prizeId: '',
+    // }
     this.setState({
-      goodsInitData: [{
-        resultCode: 1,
-        resultRemark: '当游戏得分超过90，掉落此商品',
-        prizeType: 1,
-        prizeId: '',
-      }],
+      goodsInitData: [],
       couponsInitData: [{
         resultRemark: '当游戏得分超过90，掉落此商品',
         code: '123455',
@@ -719,12 +720,7 @@ export default class ScheduleSettingList extends PureComponent {
       this.setState({
         machineNum: '',
         selectCityName: '',
-        goodsInitData: [{
-          resultCode: 1,
-          resultRemark: '当游戏得分超过90，掉落此商品',
-          prizeType: 1,
-          prizeId: '',
-        }],
+        goodsInitData: [],
         couponsInitData: [{
           resultRemark: '当游戏得分超过90，掉落此商品',
           code: '123455',
@@ -748,7 +744,7 @@ export default class ScheduleSettingList extends PureComponent {
       key: count,
       prizeId: currentValue,
       resultCode: '1',
-      resultRemark: '当游戏得分超过90，掉落此商品',
+      resultRemark: '',
       prizeType: '1',
     };
     this.setState({
@@ -1050,12 +1046,7 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       console.log('res', res)
-      const goodsInitData = [{
-        resultCode: 1,
-        resultRemark: '当游戏得分超过90，掉落此商品',
-        prizeType: 1,
-        prizeId: '',
-      }]
+      const goodsInitData = []
       this.setState({
         goodsInitData: res.goods.length > 0 ? res.goods : goodsInitData,
         couponsInitData: res.coupons.length > 0 ? res.coupons : couponsInitData,

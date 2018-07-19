@@ -117,20 +117,14 @@ class GoodsTableField extends Component {
 
 
     this.state = {
-      dataSource: [{
-        key: '0',
-        prizeId: '100000001',
-        resultCode: '1',
-        resultRemark: '描述',
-        prizeType: '1',
-      }],
-      count:1,
+      dataSource: [],
+      count:0,
       clist: [],
       rlist: [],
       currentValue: '',
     };
 
-    this.updateRenderDatas();
+    // this.updateRenderDatas();
   }
   handleChangeName = (record, value) => {
     record.prizeId = value;
@@ -163,7 +157,7 @@ class GoodsTableField extends Component {
     //   console.log(this.state.dataSource, this.state.count);
     // });
 
-    this.props.goodsHandleAdd(this.state.dataSource, this.state.currentValue);
+    this.props.goodsHandleAdd(this.state.dataSource, this.state.currentValue, this.state.count);
 
   }
 
@@ -236,9 +230,11 @@ class GoodsTableField extends Component {
         children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
       }
     }
-
-    this.state.count = this.state.dataSource.length;
-
+    // this.state.count = this.state.dataSource.length;
+    this.setState({
+      dataSource: this.props.initData,
+    });
+    console.log(this.state.dataSource.length, this.state.count, this.state.dataSource);
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'prizeId',
@@ -281,6 +277,7 @@ class GoodsTableField extends Component {
   }
   render() {
     const { dataSource } = this.state;
+    this.updateRenderDatas();
     const components = {
       body: {
         row: EditableFormRow,
@@ -302,7 +299,7 @@ class GoodsTableField extends Component {
         }),
       };
     });
-    this.updateRenderDatas();
+    
     return (
       <div>
         <Button icon="plus" onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>

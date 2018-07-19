@@ -2441,6 +2441,41 @@ const proxy = {
       "msg": "成功"
     })
   },
+  'POST /check/fault/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "1",
+        "shopName": "天猫小米旗舰店",
+        "shopCode": "10000@XXXAXX",
+        "sellerId": "1",
+        "isDelete": 0,
+        "remark": null,
+        "createId": "1",
+        "createTime": "2018-07-05 10:37:23",
+        "updateId": null,
+        "updateTime": "2018-07-05 10:37:23"
+        }
+        ]
+        }
+    )
+  },
 };
 
 // export default noProxy ? {
