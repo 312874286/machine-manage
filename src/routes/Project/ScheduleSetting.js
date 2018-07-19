@@ -56,10 +56,8 @@ const couponsInitData = [{
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType,
-      verifyPhone, verifyString, verifyTrim, gameLists, activityLists, disabledDate,disabledDateTime, openSelectMachineModal, selectCityName, selectStatus, machineNum,
-      goodsInitData, couponsInitData, goodsHandle, discountHandle, modalData, onSelectShop, goodsLists
-    } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, gameLists, activityLists, openSelectMachineModal, selectCityName, selectStatus, machineNum,
+      goodsInitData, couponsInitData, goodsHandle, discountHandle, modalData, onSelectShop, goodsLists, verifyTimeRequire } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -78,21 +76,6 @@ const CreateForm = Form.create()(
         sm: { span: 18 },
       },
     };
-
-    // var goodsInitDatas = [{
-    //   resultCode: 1,
-    //   resultRemark: '当游戏得分超过90，掉落此商品',
-    //   prizeType: 1,
-    //   prizeId: '100000002',
-    // }];
-    //
-    // var couponsInitData = [{
-    //   "resultRemark": "失败送优惠券",
-    //   "code": "TM100001",
-    //   "prizeType": "2",
-    //   "resultCode": 3,
-    //   "name": "天猫双十一优惠券"
-    // }];
     return (
       <Modal
         title={!modalType ? '编辑排期' : '新增排期'}
@@ -124,7 +107,9 @@ const CreateForm = Form.create()(
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="选择机器">
-            {getFieldDecorator('remark') ((modalData.id) ? (
+            {getFieldDecorator('remark', {
+              rule: [{ validator: verifyTimeRequire }],
+            }) ((modalData.id) ? (
               <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
               <div>
                 { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
@@ -152,7 +137,7 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField initData={goodsInitData} clist={gameLists} goodsHandle={goodsHandle} />
+            <GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} />
           </FormItem>
           <FormItem label="填写优惠券信息">
             <DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />
@@ -581,6 +566,9 @@ export default class ScheduleSettingList extends PureComponent {
       callback();
     }
   }
+  verifyTimeRequire = (rule, value, callback) => {
+
+  }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -646,12 +634,6 @@ export default class ScheduleSettingList extends PureComponent {
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
     this.setState({
-      // goodsInitData: [{
-      //   resultCode: 1,
-      //   resultRemark: '当游戏得分超过90，掉落此商品',
-      //   prizeType: 1,
-      //   prizeId: this.state.gameLists[0].id,
-      // }],
       goodsInitData: [{
         resultCode: 1,
         resultRemark: '当游戏得分超过90，掉落此商品',
@@ -917,7 +899,7 @@ export default class ScheduleSettingList extends PureComponent {
         // selectCityName.push(item.province)
       }
     }
-    selectCityName = Object.values(name)
+    selectCityName = Object.values(selectCityName)
     this.setState({
       machineNum: max.length,
       selectCityName,
@@ -1072,7 +1054,7 @@ export default class ScheduleSettingList extends PureComponent {
       });
     } else return false;
   }
-  watchDetailClick = (id) => {
+  watchDetailClick = () => {
     console.log('查看机器详情', this.state.modalData)
     this.props.dispatch({
       type: 'scheduleSetting/getPlanMachineDetailList',
@@ -1233,16 +1215,12 @@ export default class ScheduleSettingList extends PureComponent {
           {...parentMethods}
           ref={this.saveFormRef}
           modalVisible={modalVisible}
-          // insertOptions={options}
-          // loadData={this.loadData}
           onChange={this.onRadioChange}
           selectStatus={this.state.selectStatus}
           editModalConfirmLoading={editModalConfirmLoading}
           modalData={modalData}
           modalType={modalType}
-          verifyPhone={this.verifyPhone}
-          verifyString={this.verifyString}
-          verifyTrim={this.verifyTrim}
+          verifyTimeRequire={this.verifyTimeRequire}
           gameLists={gameLists}
           goodsLists={goodsLists}
           activityLists={activityLists}
@@ -1287,6 +1265,72 @@ export default class ScheduleSettingList extends PureComponent {
           WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
           machineList={this.state.machineList}
         />
+
+        {/*<Modal*/}
+          {/*title={!this.state.modalType ? '编辑排期' : '新增排期'}*/}
+          {/*visible={modalVisible}*/}
+          {/*onOk={handleAdd}*/}
+          {/*onCancel={() => handleModalVisible()}*/}
+          {/*confirmLoading={editModalConfirmLoading}*/}
+          {/*width={800}*/}
+        {/*>*/}
+          {/*<Form onSubmit={this.handleSearch}>*/}
+            {/*<FormItem {...formItemLayout} label="选择活动">*/}
+              {/*{getFieldDecorator('activityId', {*/}
+                {/*rules: [{ required: true, message: '请选择活动' }],*/}
+              {/*})(*/}
+                {/*<Select placeholder="请选择" onSelect={onSelectShop}>*/}
+                  {/*{activityLists.map((item) => {*/}
+                    {/*return (*/}
+                      {/*<Option value={item.id} key={item.id}>{item.name}</Option>*/}
+                    {/*);*/}
+                  {/*})}*/}
+                {/*</Select>*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem {...formItemLayout} label="选择时间">*/}
+              {/*{getFieldDecorator('rangeTime', {*/}
+                {/*rules: [{ type: 'array', required: true, message: '请选择时间' }],*/}
+              {/*})(*/}
+                {/*<RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem {...formItemLayout} label="选择机器">*/}
+              {/*{getFieldDecorator('remark') ((modalData.id) ? (*/}
+                {/*<div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (*/}
+                {/*<div>*/}
+                  {/*{ selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }*/}
+                  {/*<Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>*/}
+                {/*</div>*/}
+              {/*))*/}
+              {/*}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem {...formItemLayout} label="选择游戏">*/}
+              {/*{getFieldDecorator('gameId', {*/}
+                {/*rules: [{ required: true, message: '请选择游戏' }],*/}
+              {/*})(*/}
+                {/*<Select placeholder="请选择">*/}
+                  {/*{gameLists.map((item) => {*/}
+                    {/*return (*/}
+                      {/*<Option value={item.id} key={item.id}>{item.name}</Option>*/}
+                    {/*);*/}
+                  {/*})}*/}
+                {/*</Select>*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem {...formItemLayout} label="同一用户获得商品次数">*/}
+              {/*{getFieldDecorator('userMaxTimes', {*/}
+                {/*rules: [{ required: true, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
+              {/*})(<Input placeholder="请填写同一用户获得商品次数" />)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem label="填写商品信息">*/}
+              {/*<GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} />*/}
+            {/*</FormItem>*/}
+            {/*<FormItem label="填写优惠券信息">*/}
+              {/*<DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />*/}
+            {/*</FormItem>*/}
+          {/*</Form>*/}
+        {/*</Modal>*/}
       </PageHeaderLayout>
     );
   }
