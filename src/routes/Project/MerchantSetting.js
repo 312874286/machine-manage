@@ -99,7 +99,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, merchantSetting, log }) => ({
   common,
   merchantSetting,
-  loading: loading.models.rule,
+  loading: loading.models.merchantSetting,
   log,
 }))
 @Form.create()

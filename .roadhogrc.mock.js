@@ -2476,6 +2476,113 @@ const proxy = {
         }
     )
   },
+  'GET /check/user/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": "ghjghjkhj",
+          "name": "赵飞龙",
+          "phone": "13683023304",
+          "password": null,
+          "cardNo": "1686768878989898",
+          "enterprise": "点72",
+          "sex": 1,
+          "email": null,
+          "headImage": null,
+          "createId": null,
+          "createTime": null,
+          "updateId": null,
+          "updateTime": null,
+          "isDelete": 0
+        }
+      ]
+    })
+  },
+  'GET /check/user/getUserMachinDetailList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "machineLocale": "天津市天津市和平区鞍山道沿线",
+          "machineCode": "2121231231231"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'GET /check/user/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "ghjghjkhj",
+        "name": "赵飞龙",
+        "phone": "13683023304",
+        "password": null,
+        "cardNo": "1686768878989898",
+        "enterprise": "点72",
+        "sex": 1,
+        "email": null,
+        "headImage": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null,
+        "isDelete": 0,
+        "remark": null,
+        "machines": [
+          {
+            "machineId": "2222",
+            "machineCode": "北京市北京市东城区王府井—188982407114q",
+            "state": null
+          },
+          {
+            "machineId": "2223",
+            "machineCode": "北京市北京市东城区王府井—188982407114w",
+            "state": null
+          }
+        ]
+      },
+      "msg": "成功"
+    })
+  },
+  'POST /check/user/update': (req, res) => {
+    res.send({
+      "name": "张三",
+      "phone": "18510248685",
+
+      "cardNo": "100111008910108888",
+
+      "enterprise": "36克",
+
+      "machines": [{
+        "machineId": "JQ10001"
+      }, {
+        "machineId": "JQ10002",
+      }]
+    })
+  },
+  'POST /check/user/update/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
 };
 
 // export default noProxy ? {

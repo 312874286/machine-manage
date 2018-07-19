@@ -164,7 +164,7 @@ const WatchForm = Form.create()(
 @connect(({ common, loading, activitySetting, log }) => ({
   common,
   activitySetting,
-  loading: loading.models.rule,
+  loading: loading.models.activitySetting,
   log,
 }))
 @Form.create()
