@@ -233,7 +233,7 @@ class GoodsTableField extends Component {
     // this.setState({
     //   dataSource: this.props.initData,
     // });
-    
+
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'prizeId',
@@ -301,7 +301,7 @@ class GoodsTableField extends Component {
         }),
       };
     });
-    
+
     return (
       <div>
         <Button icon="plus" onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -313,6 +313,7 @@ class GoodsTableField extends Component {
           dataSource={this.props.initData}
           columns={columns}
           pagination={false}
+          rowKey={record => record.key}
         />
       </div>
     );

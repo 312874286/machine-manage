@@ -179,7 +179,7 @@ class DiscountDynamicField extends React.Component {
 
     const children2 = [];
     let defaultValue2 = '';
-    console.log('discountthis.props.initData', this.props.initData)
+    // console.log('discountthis.props.initData', this.props.initData)
     if (this.props.initData) {
       this.state.dataSource = this.props.initData;
 
@@ -274,6 +274,7 @@ class DiscountDynamicField extends React.Component {
           dataSource={this.state.dataSource}
           columns={columns}
           pagination={false}
+          rowKey={record => record.key}
         />
       </div>
     );

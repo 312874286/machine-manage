@@ -8,18 +8,11 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
   Menu,
-  InputNumber,
-  DatePicker,
   Modal,
   message,
-  Badge,
-  Divider,
-  Cascader,
-  Popconfirm,
+  Tree,
   Table,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
@@ -36,7 +29,7 @@ const getValue = obj =>
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, channelLists } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, modalData, selectCityName, openSelectMachineModal, machineNum } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -76,6 +69,18 @@ const CreateForm = Form.create()(
             {getFieldDecorator('brandName', {
               rules: [{ required: true, whitespace: true, message: '请输入公司' }],
             })(<Input placeholder="请输入公司" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择机器">
+            {getFieldDecorator('remark', {
+              rule: [{ validator: '' }],
+            }) ((modalData.id) ? (
+              <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
+              <div>
+                { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
+                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+              </div>
+            ))
+            }
           </FormItem>
         </Form>
       </Modal>
@@ -175,6 +180,17 @@ export default class personnelManagement extends PureComponent {
 
     WatchMachineModalVisible: false,
     machineList: [],
+
+
+    treeData: [],
+    machineNum: 0,
+    selectCity: [],
+    selectCityName: [],
+    expandedKeys: [],
+    autoExpandParent: true,
+    checkedKeys: [],
+    selectedKeys: [],
+    editMachineEditModalConfirmLoading: false,
   };
   componentDidMount() {
     this.getLists();
@@ -354,6 +370,166 @@ export default class personnelManagement extends PureComponent {
       WatchMachineModalVisible: false,
     });
   }
+  // tree开始
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return (parseInt(item.canUseNum) === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
+    });
+  }
+  onLoadData = (treeNode) => {
+    return new Promise((resolve) => {
+      if (treeNode.props.children) {
+        resolve();
+        return;
+      }
+      // console.log('treeNode.props.dataRef', treeNode.props.dataRef.value, treeNode.props.children)
+      const targetOption = treeNode.props.dataRef;
+      // targetOption.loading = true;
+      this.setState({
+        code: targetOption.value,
+      }, () => {
+        this.props.dispatch({
+          type: 'personnelManagement/selectMachine',
+          payload: {
+            restParams: {
+              code: targetOption.value,
+              level: targetOption.level + 1,
+              startTime: this.state.machineStartTime,
+              endTime: this.state.machineEndTime,
+            },
+          },
+        }).then((res) => {
+          // targetOption.loading = false;
+          targetOption.children = res
+          console.log('res', res)
+          this.setState({
+            treeData: [...this.state.treeData],
+          });
+          resolve();
+        });
+      });
+    });
+  }
+  onExpand = (expandedKeys, node) => {
+    // console.log('onExpand展开/收起节点时触发', expandedKeys, node);
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  }
+  onCheck = (checkedKeys, node) => {
+    // .checkedNodes[0].props.dataRef.value
+    console.log('onCheck点击复选框触发', checkedKeys, node);
+
+    // let node =
+    this.setState({ checkedKeys, selectCity: node.checkedNodes });
+  }
+  onSelect = (selectedKeys, info) => {
+    // console.log('onSelect点击树节点触发', info);
+    // this.setState({ selectedKeys });
+  }
+  onEditMachineHandleAddClick = () => {
+    console.log('选择机器确认');
+    let selectCity = this.state.selectCity
+    if (selectCity.length > 0) {
+      this.uniq(selectCity);
+      // console.log('selectCity', this.state.machines)
+    } else {
+      message.error('请先选择机器');
+    }
+  }
+  uniq = (arr) => {
+    let max = [];
+    let selectCityName = []
+    // for(var i=0;i<arr.length;i++) {
+    //   var item = arr[i].props.dataRef;
+    //   if(!(item['province'] in max) || (item['level'] > max[item['province']]['level'])){
+    //     // init compare
+    //     max[item['province']] = item;
+    //   }
+    // }
+    // Object.values(max)
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i].props.dataRef
+      if (!item.children) {
+        item.machines.forEach((MItem) => {
+          max.push(MItem);
+        });
+        if (!(item['province'] in selectCityName)) {
+          selectCityName[item['province']] = item.province;
+        }
+        // selectCityName.push(item.province)
+      }
+    }
+    selectCityName = Object.values(selectCityName)
+    this.setState({
+      machineNum: max.length,
+      selectCityName,
+      machines: max,
+    }, () => {
+      console.log(this.state.machines)
+      this.setState({
+        editMachineModalVisible: false,
+      });
+    });
+  }
+  openSelectMachineModal = () => {
+    this.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      const rangeTimeValue = fieldsValue.rangeTime
+      let params = {
+        ...fieldsValue,
+        rangeTime: undefined,
+        startTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
+        endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
+        code: this.state.code,
+        level: 1,
+      };
+      this.setState({
+        machineStartTime: params.startTime,
+        machineEndTime: params.endTime,
+        code: '',
+      }, () => {
+        this.props.dispatch({
+          type: 'personnelManagement/selectMachine',
+          payload: {
+            restParams: {
+              code: this.state.code,
+              level: 1,
+              startTime: this.state.machineStartTime,
+              endTime: this.state.machineEndTime,
+            },
+          },
+        }).then((res) => {
+          this.setState({
+            treeData: res,
+          }, () => {
+            this.setState({
+              editMachineModalVisible: true,
+            });
+          });
+        });
+      });
+    });
+  }
+  onEditMachineHandleModalVisibleClick = () => {
+    this.setState({
+      editMachineModalVisible: false,
+    });
+  }
+  selectMachineFormRef = (form) => {
+    this.selectMachineform = form;
+  }
+  // tree结束
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -464,11 +640,32 @@ export default class personnelManagement extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
           channelLists={channelLists}
+          modalData={this.state.modalData}
+          machineNum={this.state.machineNum}
+          selectCity={this.state.selectCity}
+          selectCityName={this.state.selectCityName}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}
           WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
           machineList={this.state.machineList}
+        />
+        <SelectMachineForm
+          ref={this.selectMachineFormRef}
+          editMachineModalVisible={this.state.editMachineModalVisible}
+          onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
+          onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
+          editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
+          renderTreeNodes={this.renderTreeNodes}
+          treeData={this.state.treeData}
+          onLoadData={this.onLoadData}
+          expandedKeys={this.state.expandedKeys}
+          autoExpandParent={this.state.autoExpandParent}
+          checkedKeys={this.state.checkedKeys}
+          selectedKeys={this.state.selectedKeys}
+          onExpand={this.onExpand}
+          onCheck={this.onCheck}
+          onSelect={this.onSelect}
         />
       </PageHeaderLayout>
     );

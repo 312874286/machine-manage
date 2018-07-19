@@ -418,20 +418,21 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      this.setState({
-        goodsLists: res,
-      }, () => {
+      if (res.length > 0) {
         this.setState({
-          goodsInitData: [{
-            resultCode: 1,
-            resultRemark: '当游戏得分超过90，掉落此商品',
-            prizeType: 1,
-            prizeId: this.state.goodsLists[0].id,
-          }],
+          goodsLists: res,
         }, () => {
-
-        })
-      });
+          this.setState({
+            goodsInitData: [{
+              key: this.state.goodsLists[0].id,
+              resultCode: 1,
+              resultRemark: '当游戏得分超过90，掉落此商品',
+              prizeType: 1,
+              prizeId: this.state.goodsLists[0].id,
+            }],
+          });
+        });
+      }
     });
   }
   // 获取列表
@@ -619,13 +620,6 @@ export default class ScheduleSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      // const values = {
-      //   ...fieldsValue,
-      //   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      // };
-      // this.setState({
-      //   formValues: values,
-      // });
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
@@ -641,19 +635,6 @@ export default class ScheduleSettingList extends PureComponent {
     this.getActivityLists()
     // gameList
     this.getGamesLists()
-    // {
-    //   resultCode: 1,
-    //   resultRemark: '当游戏得分超过90，掉落此商品',
-    //   prizeType: 1,
-    //   prizeId: '',
-    // }
-    // {
-    //   resultRemark: '当游戏得分超过90，掉落此商品',
-    //   code: '123455',
-    //   prizeType: '优惠券01',
-    //   resultCode: 1,
-    //   name: '优惠券01',
-    // }
     this.setState({
       goodsInitData: [],
       couponsInitData: [],
@@ -1054,6 +1035,7 @@ export default class ScheduleSettingList extends PureComponent {
       watchModalVisible: false,
     });
   }
+  // 编辑
   onEditClick = (item) => {
     console.log('item编辑', item)
     // activityList
