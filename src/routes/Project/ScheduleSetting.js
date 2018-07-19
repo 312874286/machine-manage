@@ -88,18 +88,25 @@ const CreateForm = Form.create()(
         width={800}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="选择活动">
+          <FormItem {...formItemLayout} label="选择活动"  style={{display : modalData.id ? 'none' : 'block'}}>
             {getFieldDecorator('activityId', {
-              rules: [{ required: true, message: '请选择活动' }],
+              rules: [{ required: modalData.id ? false : true, message: '请选择活动' }],
             })(
-              <Select placeholder="请选择" onSelect={onSelectShop}>
-                {activityLists.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id}>{item.name}</Option>
-                  );
-                })}
-              </Select>
+              <div>
+                <Select placeholder="请选择" onSelect={onSelectShop} >
+                  {activityLists.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                    );
+                  })}
+                 </Select>
+              </div>
             )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择活动"  style={{display : modalData.id ? 'block' : 'none'}}>
+            {getFieldDecorator('activityName', {
+              rules: [{ required: modalData.id ? true : false, message: '请选择活动' }],
+            })(<Input disabled />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择时间">
             {getFieldDecorator('rangeTime', {
@@ -671,6 +678,11 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
+    console.log('handleEditClick', item)
+    // activityList
+    this.getActivityLists()
+    // gameList
+    this.getGamesLists()
     this.setState({
       modalVisible: true,
       modalData: item,
@@ -684,6 +696,7 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
+      // this.setModalData(res);
     });
   }
   // 设置modal 数据
@@ -694,6 +707,7 @@ export default class ScheduleSettingList extends PureComponent {
         activityId: data.activityId,
         gameId: data.gameId,
         userMaxTimes: data.userMaxTimes,
+        activityName: data.activityName,
       });
     } else {
       this.form.setFieldsValue({
@@ -1023,6 +1037,10 @@ export default class ScheduleSettingList extends PureComponent {
   }
   onEditClick = (item) => {
     console.log('item编辑', item)
+    // activityList
+    this.getActivityLists()
+    // gameList
+    this.getGamesLists()
     this.props.dispatch({
       type: 'scheduleSetting/getScheduleSettingDetail',
       payload: {
@@ -1045,7 +1063,7 @@ export default class ScheduleSettingList extends PureComponent {
         this.setState({
           modalVisible: true,
           modalData: res,
-          modalType: true,
+          modalType: false,
         });
         this.setModalData(res);
       });
