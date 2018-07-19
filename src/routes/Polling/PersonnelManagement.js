@@ -107,6 +107,54 @@ const WatchMachine = Form.create()(
       </Modal>
     );
   });
+const SelectMachineForm = Form.create()(
+  (props) => {
+    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading,
+      renderTreeNodes, treeData, onLoadData, onExpand, expandedKeys, autoExpandParent, checkedKeys, selectedKeys, onCheck, onSelect, } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title="选择机器"
+        visible={editMachineModalVisible}
+        onOk={onEditMachineHandleAddClick}
+        onCancel={() => onEditMachineHandleModalVisibleClick()}
+        confirmLoading={editMachineEditModalConfirmLoading}
+        width={800}
+      >
+        <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="选择机器">
+            {getFieldDecorator('machine', {
+              rules: [{ type: 'array', required: true, message: '请选择机器' }],
+            })(
+              <Tree
+                loadData={onLoadData}
+                checkable
+                onExpand={onExpand}
+                expandedKeys={expandedKeys}
+                autoExpandParent={autoExpandParent}
+                onCheck={onCheck}
+                checkedKeys={checkedKeys}
+                onSelect={onSelect}
+                selectedKeys={selectedKeys}
+              >
+                {renderTreeNodes(treeData)}
+              </Tree>
+            )}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, personnelManagement }) => ({
   common,
   personnelManagement,
