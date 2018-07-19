@@ -1073,10 +1073,11 @@ export default class ScheduleSettingList extends PureComponent {
         return { key: index, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
       })
       let couponsInitDatas = res.coupons.map((item, index) => {
-        return { key: index, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
+        return { key: index, code: item.code, name: item.name, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
       })
       this.setState({
         goodsCount: res.goods.length,
+        couponsCount: res.coupons.length,
         goodsInitData: res.goods.length > 0 ? goodsInitDatas : [],
         couponsInitData: res.coupons.length > 0 ? couponsInitDatas : [],
       }, () => {
