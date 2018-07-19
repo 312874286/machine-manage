@@ -362,9 +362,6 @@ export default class ScheduleSettingList extends PureComponent {
     WatchMachineModalVisible: false,
     machineList: [],
   };
-  componentWillMount() {
-    // 查询省
-  }
   componentDidMount() {
     this.getAreaList();
     // this.getLists();
@@ -383,7 +380,11 @@ export default class ScheduleSettingList extends PureComponent {
         options: res,
       });
     });
-    // activityList
+  }
+  onSelectShop = (value, option) => {
+    this.getGoodsLists(value);
+  }
+  getActivityLists = () => {
     this.props.dispatch({
       type: 'scheduleSetting/activityList',
       payload: {
@@ -394,12 +395,6 @@ export default class ScheduleSettingList extends PureComponent {
         activityLists: res,
       });
     });
-    // gameList
-    this.getGamesLists()
-  }
-  onSelectShop = (value, option) => {
-    console.log('12111', value, option)
-    this.getGoodsLists(value);
   }
   getGamesLists = (shopId) => {
     this.props.dispatch({
@@ -490,7 +485,7 @@ export default class ScheduleSettingList extends PureComponent {
     console.log('time', this.state.startTime, this.state.endTime)
     console.log('startTime', this.state.handleDays.getDataStartDay, this.state.handleDays.getDataEndDay)
     let activityArr =[]
-    let leftTmp = 0, leftNo = 0
+    let leftTmp = 0, leftNo = 0, widthTmp = 0
     console.log((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay))
     // if ((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay)) {
     //   leftTmp = 2.95
@@ -504,14 +499,14 @@ export default class ScheduleSettingList extends PureComponent {
           let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
           let width = Math.floor((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('开始时间及结束日期在15天的范围', left, width, Math.round((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000)))
-          let tmp = { left: (leftTmp + (7.253 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (7.253 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName+ ' + ' + '结束时间' + item.endTime, id: item.id }
+          let tmp = { left: (leftTmp + (6.5 * left)) + '%', top: (25 + (index * 4)) + '%', width: (widthTmp + (6.5 * (width + 1))) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', startTime: item.startTime, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         } else {
           // 结束日期>范围的结束日期
           let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
           let width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('结束日期>范围的结束日期', left, width)
-          let tmp = { left: (leftTmp + (7.253 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (7.253 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName + ' + '+ '结束时间' + item.endTime, id: item.id }
+          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', startTime: item.startTime, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         }
       } else {
@@ -520,12 +515,12 @@ export default class ScheduleSettingList extends PureComponent {
         if (moment(item.endTime) >= moment(this.state.handleDays.endDay)) {
           // console.log('jieshu日期<范围的开始日期', left, width)
           width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
-          let tmp = { left: (7.253 * (left - leftNo)) + '%', top: (25 + (index * 4)) + '%', width: (7.253 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName + ' + '+ '结束时间' + item.endTime, id: item.id }
+          let tmp = { left: (6.5 * left) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', startTime: item.startTime, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         } else {
           width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('开始日期<范围的开始日期', left, width)
-          let tmp = { left: (leftTmp + (7.253 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (7.253 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', name: '开始时间' + item.startTime + ' + ' + item.activityName + ' + '+ '结束时间' + item.endTime, id: item.id }
+          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', startTime: item.startTime, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         }
       }
@@ -635,6 +630,10 @@ export default class ScheduleSettingList extends PureComponent {
   };
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
+    // activityList
+    this.getActivityLists()
+    // gameList
+    this.getGamesLists()
     this.setState({
       goodsInitData: [{
         resultCode: 1,
@@ -1035,7 +1034,7 @@ export default class ScheduleSettingList extends PureComponent {
         resultCode: 1,
         resultRemark: '当游戏得分超过90，掉落此商品',
         prizeType: 1,
-        prizeId: this.state.gameLists[0].id,
+        prizeId: '',
       }]
       this.setState({
         goodsInitData: res.goods.length > 0 ? res.goods : goodsInitData,

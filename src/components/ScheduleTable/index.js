@@ -1,4 +1,4 @@
-import { Card, Button, Icon } from 'antd';
+import { Card, Button, Icon, Popover } from 'antd';
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import styles from './index.less';
@@ -277,7 +277,7 @@ class ScheduleTable extends PureComponent {
           <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3 }} id="dateWeek">
             {dateTwoWeeksArr.map((item) => {
               return (
-                <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : ''}>
+                <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
                   <p>{item.value}</p>
                   <p>{this.filterWeek(item.week)}</p>
                   <p style={{ height: '500px' }}></p>
@@ -289,14 +289,15 @@ class ScheduleTable extends PureComponent {
                 return (
                   <div className={styles.dateChildren} key={item.id}
                        style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
-                         justifyContent: 'space-between', zIndex: 999, }}
-                  >
-                    <div>{item.name}</div>
-                    <div className={styles.iconBox}>
-                      <Icon type="form" onClick={() => onEditClick(item)} />
-                      <Icon type="eye" onClick={() => onWatchClick(item)} />
-                      <span className={styles.anticonDelete} onClick={() => onDeleteClick(item)}>删除</span>
-                    </div>
+                         justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
+                    {/*<Popover placement="left" content={content} title={null} trigger="hover">*/}
+                      <div>{item.name}</div>
+                    {/*</Popover>*/}
+                      <div className={styles.iconBox}>
+                        <Icon type="form" onClick={() => onEditClick(item)} />
+                        <Icon type="eye" onClick={() => onWatchClick(item)} />
+                        <span className={styles.anticonDelete} onClick={() => onDeleteClick(item)}>删除</span>
+                      </div>
                   </div>
                 );
               })}
