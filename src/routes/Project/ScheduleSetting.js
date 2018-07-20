@@ -147,22 +147,7 @@ const CreateForm = Form.create()(
               ))
             }
           </FormItem>
-          {/*<SelectTimeForm*/}
-            {/*ref={timeFormRef}*/}
-            {/*openSelectMachineModal={openSelectMachineModal}*/}
-            {/*selectCityName={selectCityName}*/}
-            {/*machineNum={machineNum}*/}
-            {/*modalData={modalData}*/}
-            {/*disabledStartDate={disabledStartDate}*/}
-            {/*onStartChange={onStartChange}*/}
-            {/*disabledEndDate={disabledEndDate}*/}
-            {/*onEndChange={onEndChange}*/}
-            {/*handleStartOpenChange={handleStartOpenChange}*/}
-            {/*handleEndOpenChange={handleEndOpenChange}*/}
-            {/*endOpen={endOpen}*/}
-            {/*isDisabled={isDisabled}*/}
-          {/*/>*/}
-          <FormItem {...formItemLayout} label="选择游戏1">
+          <FormItem {...formItemLayout} label="选择游戏">
             {getFieldDecorator('gameId', {
               rules: [{ required: false, message: '请选择游戏' }],
             })(
@@ -190,84 +175,6 @@ const CreateForm = Form.create()(
       </Modal>
     );
 });
-const SelectTimeForm = Form.create()(
-  (props) => {
-    const { form, openSelectMachineModal, selectCityName, machineNum, modalData,
-      disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, } = props;
-    const { getFieldDecorator } = form;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    return (
-      <Form>
-        <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'none' : 'block' }}>
-          {getFieldDecorator('startTimeStr', {
-            rules: [{ required: true, message: '选择开始时间' }],
-          })(
-            <DatePicker
-              disabledDate={disabledStartDate}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              // value={startValue}
-              placeholder="选择开始时间"
-              onChange={onStartChange}
-              onOpenChange={handleStartOpenChange}
-            />
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'block' : 'none' }}>
-          {getFieldDecorator('startTimeStr', {
-            rules: [{ required: true, message: '选择开始时间' }],
-          })(
-            <DatePicker
-              disabledDate={disabledStartDate}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              // value={startValue}
-              placeholder="选择开始时间"
-              onChange={onStartChange}
-              onOpenChange={handleStartOpenChange}
-              disabled
-            />
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="选择结束时间">
-          {getFieldDecorator('endTimeStr', {
-            rules: [{ required: true, message: '选择结束时间' }],
-          })(
-            <DatePicker
-              disabledDate={disabledEndDate}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              // value={endValue}
-              placeholder="选择结束时间"
-              onChange={onEndChange}
-              open={endOpen}
-              onOpenChange={handleEndOpenChange}
-            />
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="选择机器">
-          {getFieldDecorator('remark') ((modalData.id) ? (
-            <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
-            <div>
-              { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
-              <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-            </div>
-          ))
-          }
-        </FormItem>
-      </Form>
-    );
-  });
 const SelectMachineForm = Form.create()(
   (props) => {
     const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading,
@@ -509,8 +416,9 @@ export default class ScheduleSettingList extends PureComponent {
       });
     });
   }
-  // 时间控件
+  // 时间控件开始
   disabledStartDate = (startValue) => {
+    // console.log('disabledStartDate', startValue)
     // const endValue = this.state.endValue;
     // if (!startValue || !endValue) {
     //   return false;
@@ -519,11 +427,16 @@ export default class ScheduleSettingList extends PureComponent {
     return startValue && startValue < moment().endOf('day');
   }
   disabledEndDate = (endValue) => {
+    // console.log('disabledEndDate', endValue)
     const startValue = this.state.startValue;
     if (!endValue || !startValue) {
       return false;
     }
-    return endValue.valueOf() <= startValue.valueOf();
+    // console.log('1', endValue, '2', this.state.endValue, '3', startValue.valueOf())
+    // return endValue.valueOf() <= startValue.valueOf() 时间戳
+    // endValue <= moment(startValue.valueOf()) &&
+    // console.log(typeof this.state.endValue)
+    return !this.state.modalType ? (endValue < moment().endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
   }
 
   onChange = (field, value) => {
@@ -532,11 +445,13 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   onStartChange = (value) => {
+    // console.log('onStartChange', value)
     this.onChange('startValue', value);
   }
 
   onEndChange = (value) => {
-   //  this.onChange('endValue', value);
+    // console.log('onEndChange', value)
+    this.onChange('endValue', value);
   }
 
   handleStartOpenChange = (open) => {
@@ -548,7 +463,7 @@ export default class ScheduleSettingList extends PureComponent {
   handleEndOpenChange = (open) => {
     this.setState({ endOpen: open });
   }
-  // 时间控件
+  // 时间控件结束
   onSelectShop = (value, option) => {
     this.getGoodsLists(value);
   }
@@ -851,6 +766,8 @@ export default class ScheduleSettingList extends PureComponent {
         // 活动开始比现在晚，可以更改日期
         this.setState({
           isDisabled: true,
+          startValue: data.startTime,
+          endValue: data.endTime,
         });
       }
       this.form.setFieldsValue({
@@ -878,6 +795,8 @@ export default class ScheduleSettingList extends PureComponent {
         couponsInitData: [],
         couponsCount: 0,
         goodsLists: [],
+        endValue: '',
+        startValue: '',
       });
     }
   }
@@ -1021,24 +940,24 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 四级联动结束
   // 日历开始
-  range = (start, end) =>  {
-    const result = [];
-    for (let i = start; i < end; i++) {
-      result.push(i);
-    }
-    return result;
-  }
-  disabledDate = (current) => {
-    // Can not select days before today and today
-    return current && current < moment().endOf('day');
-  }
-  disabledDateTime = () => {
-    return {
-      disabledHours: () => range(0, 24).splice(4, 20),
-      disabledMinutes: () => range(30, 60),
-      disabledSeconds: () => [55, 56],
-    };
-  }
+  // range = (start, end) =>  {
+  //   const result = [];
+  //   for (let i = start; i < end; i++) {
+  //     result.push(i);
+  //   }
+  //   return result;
+  // }
+  // disabledDate = (current) => {
+  //   // Can not select days before today and today
+  //   return current && current < moment().endOf('day');
+  // }
+  // disabledDateTime = () => {
+  //   return {
+  //     disabledHours: () => range(0, 24).splice(4, 20),
+  //     disabledMinutes: () => range(30, 60),
+  //     disabledSeconds: () => [55, 56],
+  //   };
+  // }
   // 日历结束
   // tree开始
   renderTreeNodes = (data) => {

@@ -374,7 +374,7 @@ const proxy = {
           {
             id: 'a26',
             functionDepict: '巡检管理',
-            functionPath: 'polling',
+            functionPath: 'check',
             parentId: null,
             functionLevel: 1,
             functionIcon: 'safety',
@@ -383,21 +383,21 @@ const proxy = {
           {
             id: 'a27',
             functionDepict: '故障单管理',
-            functionPath: 'troubleBill',
+            functionPath: 'fault',
             parentId: 'a26',
             functionLevel: 2,
           },
           {
             id: 'a28',
             functionDepict: '人员管理',
-            functionPath: 'personnelManagement',
+            functionPath: 'user',
             parentId: 'a26',
             functionLevel: 2,
           },
           {
             id: 'a29',
             functionDepict: '打卡记录',
-            functionPath: 'punchingRecord',
+            functionPath: 'record',
             parentId: 'a26',
             functionLevel: 2,
           },
