@@ -898,7 +898,19 @@ export default class ScheduleSettingList extends PureComponent {
           payload: {
             params,
           },
-        }).then(() => {
+        }).then((resp) => {
+          if (resp && resp.code === 0) {
+            message.success('新增成功');
+          } else {
+            Modal.error({
+              title: '',
+              content: resp ? resp.msg : '新增失败',
+            });
+            this.setState({
+              editModalConfirmLoading: false,
+            });
+            return;
+          }
           this.setState({
             code: '',
             getDataStartDay: this.state.startTime,
@@ -939,26 +951,6 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   // 四级联动结束
-  // 日历开始
-  // range = (start, end) =>  {
-  //   const result = [];
-  //   for (let i = start; i < end; i++) {
-  //     result.push(i);
-  //   }
-  //   return result;
-  // }
-  // disabledDate = (current) => {
-  //   // Can not select days before today and today
-  //   return current && current < moment().endOf('day');
-  // }
-  // disabledDateTime = () => {
-  //   return {
-  //     disabledHours: () => range(0, 24).splice(4, 20),
-  //     disabledMinutes: () => range(30, 60),
-  //     disabledSeconds: () => [55, 56],
-  //   };
-  // }
-  // 日历结束
   // tree开始
   renderTreeNodes = (data) => {
     return data.map((item) => {

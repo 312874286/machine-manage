@@ -34,11 +34,8 @@ export default class faultType extends PureComponent {
     pageNo: 1,
     keyword: '',
     code: '',
-    channelLists: [],
-    options: [],
   };
   componentDidMount() {
-    this.getAreaList();
     this.getLists();
   }
   // 获取列表
@@ -52,21 +49,6 @@ export default class faultType extends PureComponent {
           code: this.state.code,
         },
       },
-    });
-  }
-  // 获取城市列表
-  getAreaList = () => {
-    this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
-      payload: {
-        restParams: {
-          code: this.state.code,
-        },
-      },
-    }).then( (res) => {
-      this.setState({
-        options: res,
-      });
     });
   }
   // 分页
@@ -118,61 +100,19 @@ export default class faultType extends PureComponent {
       });
     });
   };
-  // 四级联动开始
-  onChange = (value, selectedOptions) => {
-    // 当前选中的value[3]商圈
-    // console.log(value, selectedOptions);
-  }
-  loadData = (selectedOptions) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-    this.setState({
-      code: targetOption.value,
-    }, () => {
-      this.props.dispatch({
-        type: 'common/getProvinceCityAreaTradeArea',
-        payload: {
-          restParams: {
-            code: targetOption.value,
-          },
-        },
-      }).then((res) => {
-        targetOption.loading = false;
-        targetOption.children = res
-        this.setState({
-          options: [...this.state.options],
-        });
-      });
-    });
-  }
-  // 四级联动结束
   handleModalVisible = () => {
-    console.log('导出');
+    console.log('新增');
   }
   // 新增modal确认事件 结束
   renderAdvancedForm() {
     const { form } = this.props;
-    const { channelLists } = this.state;
     const { getFieldDecorator } = form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem label="省市区商圈">
-              {getFieldDecorator('provinceCityAreaTrade')(
-                <Cascader
-                  placeholder="请选择"
-                  options={this.state.options}
-                  loadData={this.loadData}
-                  onChange={this.onChange}
-                  changeOnSelect
-                />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入故障类型名称、解决方案、添加人" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -196,28 +136,30 @@ export default class faultType extends PureComponent {
     const { selectedRows } = this.state;
     const columns = [
       {
-        title: '姓名',
+        title: '故障类型名称',
         dataIndex: 'name',
       },
       {
-        title: '手机号',
+        title: '故障解决方案',
         dataIndex: 'phone',
       },
       {
-        title: '公司',
+        title: '添加时间',
         dataIndex: 'enterprise',
       },
       {
-        title: '机器点位',
+        title: '添加人',
         dataIndex: 'localeName',
       },
       {
-        title: '机器编号',
-        dataIndex: 'machineCode',
-      },
-      {
-        title: '打卡时间',
-        dataIndex: 'createTime',
+        fixed: 'right',
+        width: 150,
+        title: '操作',
+        render: (text, item) => (
+          <Fragment>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+          </Fragment>
+        ),
       },
     ];
     return (
@@ -229,7 +171,7 @@ export default class faultType extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                导出
+                新增
               </Button>
             </div>
             <StandardTable
