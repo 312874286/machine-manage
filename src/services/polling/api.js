@@ -11,6 +11,7 @@ const api = map({
   saveUser: '/check/user/add',
   updateUser: '/check/user/update',
   selectMachine: '/check/user/selectAreaMachines?code={code}&level={level}',
+  getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}',
 });
 
 export default api;

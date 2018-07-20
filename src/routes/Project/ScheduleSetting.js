@@ -1092,8 +1092,8 @@ export default class ScheduleSettingList extends PureComponent {
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
         };
         this.setState({
-          machineStartTime: params.startTime,
-          machineEndTime: params.endTime,
+          machineStartTime: params.startTimeStr,
+          machineEndTime: params.endTimeStr,
           code: '',
         }, () => {
           this.props.dispatch({

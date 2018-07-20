@@ -21,13 +21,13 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-@connect(({ common, loading, faultType }) => ({
+@connect(({ common, loading, signInRecord, log }) => ({
   common,
-  faultType,
-  loading: loading.models.faultType,
+  signInRecord,
+  loading: loading.models.signInRecord,
 }))
 @Form.create()
-export default class faultType extends PureComponent {
+export default class signInRecord extends PureComponent {
   state = {
     selectedRows: [],
     formValues: {},
@@ -44,7 +44,7 @@ export default class faultType extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'faultType/getFaultTypeList',
+      type: 'signInRecord/getRecordList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
@@ -190,7 +190,7 @@ export default class faultType extends PureComponent {
   }
   render() {
     const {
-      faultType: { list, page },
+      signInRecord: { list, page },
       loading,
     } = this.props;
     const { selectedRows } = this.state;

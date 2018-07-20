@@ -397,7 +397,7 @@ const proxy = {
           {
             id: 'a29',
             functionDepict: '打卡记录',
-            functionPath: 'record',
+            functionPath: 'signIn',
             parentId: 'a26',
             functionLevel: 2,
           },
@@ -2723,6 +2723,87 @@ const proxy = {
         }
       ],
       "msg": "成功"
+    })
+  },
+  'GET /check/signIn/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 3,
+        "list": null,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1,
+        "firstResult": 0
+      },
+      "data": [
+        {
+          "id": null,
+          "name": "赵飞龙",
+          "phone": "13683023304",
+          "password": null,
+          "cardNo": null,
+          "enterprise": "点72",
+          "sex": null,
+          "email": null,
+          "headImage": null,
+          "createId": null,
+          "createTime": "2018-07-01 11:21:56",
+          "updateId": null,
+          "updateTime": null,
+          "isDelete": null,
+          "remark": null,
+          "localeName": "北京市北京市东城区王府井—188982407114q",
+          "machineCode": null,
+          "machines": null
+        },
+        {
+          "id": null,
+          "name": "赵飞龙",
+          "phone": "13683023304",
+          "password": null,
+          "cardNo": null,
+          "enterprise": "点72",
+          "sex": null,
+          "email": null,
+          "headImage": null,
+          "createId": null,
+          "createTime": "2018-07-02 11:22:08",
+          "updateId": null,
+          "updateTime": null,
+          "isDelete": null,
+          "remark": null,
+          "localeName": "北京市北京市东城区王府井—188982407114q",
+          "machineCode": null,
+          "machines": null
+        },
+        {
+          "id": null,
+          "name": "赵飞龙",
+          "phone": "13683023304",
+          "password": null,
+          "cardNo": null,
+          "enterprise": "点72",
+          "sex": null,
+          "email": null,
+          "headImage": null,
+          "createId": null,
+          "createTime": "2018-07-03 11:22:19",
+          "updateId": null,
+          "updateTime": null,
+          "isDelete": null,
+          "remark": null,
+          "localeName": "天津市天津市和平区鞍山道沿线—ZJ1807184936290",
+          "machineCode": null,
+          "machines": null
+        }
+      ]
     })
   }
 };
