@@ -1264,6 +1264,24 @@ const proxy = {
       }]
     });
   },
+  'POST /game/game/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        createId: "1",
+        createTime: "2018-07-05 18:43:09",
+        id: "1",
+        isDelete: 0,
+        remark: null,
+        sellerId: "1",
+        shopCode: "10000@XXXAXX",
+        shopName: "天猫小米旗舰店",
+        updateId: "",
+        updateTime: "2018-07-05 18:43:09",
+      }]
+    });
+  },
   'GET /project/channel/detail': (req, res) => {
     res.send({
       "msg": "成功",
@@ -2648,6 +2666,58 @@ const proxy = {
       "msg": "成功"
     })
   },
+  'GET /check/user/selectAreaMachines': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "code": "100000000",
+          "parentCode": null,
+          "name": "北京市",
+          "province": "北京市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "18f05c0c234749c7bf6c60dda9f5092e",
+              "machineCode": "1846698071048",
+              "state": "1"
+            },
+            {
+              "machineId": "8389fc95a5324a02a45aabfc6823436d",
+              "machineCode": "1863398071038",
+              "state": "0"
+            }
+          ]
+        },
+        {
+          "code": "110000000",
+          "parentCode": null,
+          "name": "天津市",
+          "province": "天津市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "1575f4d0ff8c491986d5ff534085904e",
+              "machineCode": "1809510071149",
+              "state": "0"
+            },
+            {
+              "machineId": "947639777c874724a954b1ca47f987f0",
+              "machineCode": "1834003071023",
+              "state": null
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  }
 };
 
 // export default noProxy ? {

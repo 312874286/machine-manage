@@ -44,3 +44,9 @@ export async function delActivitySetting({ params }) {
     body: stringify(params),
   });
 }
+
+export async function getGameList({ params }) {
+  return fetch.post(api.getGameList, {
+    body: stringify(params),
+  });
+}

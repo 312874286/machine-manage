@@ -10,7 +10,7 @@ const api = map({
   getUserDetail: '/check/user/detail?id={id}',
   saveUser: '/check/user/update/add',
   updateUser: '/check/user/update',
-  selectMachine: '/project/activityPlan/selectAreaMachines?code={code}&level={level}',
+  selectMachine: '/check/user/selectAreaMachines?code={code}&level={level}',
 });
 
 export default api;

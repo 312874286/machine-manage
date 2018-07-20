@@ -1,4 +1,4 @@
-import { getActivitySettingList, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting } from '../../services/project/activitySetting';
+import { getActivitySettingList, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting, getGameList } from '../../services/project/activitySetting';
 
 export default {
   namespace: 'activitySetting',
@@ -39,6 +39,10 @@ export default {
     *delActivitySetting({ payload: { params } }, { call }) {
       const response = yield call(delActivitySetting, { params });
       return response;
+    },
+    *gameList({ payload: { params } }, { call }) {
+      const response = yield call(getGameList, { params });
+      return response.data;
     },
   },
 

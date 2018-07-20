@@ -183,7 +183,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['order/order', 'log/log', 'common'], () => import('../routes/Order/Order')),
     },
     '/check/user': {
-      component: dynamicWrapper(app, ['polling/personnelManagement', 'log/log', 'common'], () => import('../routes/Polling/PersonnelManagement')),
+      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/User')),
     },
     '/polling/punchingRecord': {
       component: dynamicWrapper(app, ['polling/punchingRecord', 'log/log', 'common'], () => import('../routes/Polling/PunchingRecord')),

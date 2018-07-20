@@ -14,6 +14,8 @@ import {
   Divider,
   Popconfirm,
   Badge,
+  Spin,
+  Radio,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -38,6 +40,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const RangePicker = DatePicker.RangePicker;
+const RadioGroup = Radio.Group;
 
 const CreateForm = Form.create()(
   (props) => {
@@ -62,6 +65,16 @@ const CreateForm = Form.create()(
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="是否是默认活动">
+            {getFieldDecorator('isDefault', {
+              initialValue: '0',
+            })(
+              <RadioGroup disabled>
+                <Radio value="1">是</Radio>
+                <Radio value="0">否</Radio>
+              </RadioGroup>
+            )}
+          </FormItem>
           <FormItem {...formItemLayout} label="活动名称">
             {getFieldDecorator('name', {
               rules: [{ required: true, whitespace: true, message: '请输入活动名称' }],
@@ -161,6 +174,64 @@ const WatchForm = Form.create()(
       </Modal>
     );
   });
+const SetDefaultForm = Form.create()(
+  (props) => {
+    const { editActivitymodalVisible,
+      form, editActivityHandleAddClick,
+      editActivityHandleModalVisibleClick,
+      editActivityEditModalConfirmLoading,
+      onSelect, data, value, handleChange,
+      onPopupScroll, onSearch, fetching } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title="设置默认活动"
+        visible={editActivitymodalVisible}
+        onOk={editActivityHandleAddClick}
+        onCancel={() => editActivityHandleModalVisibleClick()}
+        confirmLoading={editActivityEditModalConfirmLoading}
+      >
+        <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="活动名称">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: '请输入活动名称' }],
+            })(<Input placeholder="请输入活动名称" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择游戏">
+            {getFieldDecorator('gameId', {
+              rules: [{ required: true, message: '请选择游戏' }],
+            })(
+              <Select
+                // mode="multiple"
+                // labelInValue
+                showSearch={true}
+                placeholder="请输入点位关键字进行选择"
+                notFoundContent={fetching ? <Spin size="small" /> : null}
+                filterOption={false}
+                onSearch={onSearch}
+                onChange={handleChange}
+                onPopupScroll={onPopupScroll}
+                onSelect={onSelect}
+                style={{ width: '100%' }}
+                allowClear={true}
+              >{data.map(d => <Option key={d.key} value={d.value} data-id={d.id}>{d.text}</Option>)}
+              </Select>
+            )}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, activitySetting, log }) => ({
   common,
   activitySetting,
@@ -187,6 +258,14 @@ export default class activitySettingList extends PureComponent {
     merchantLists: [],
     shopsLists: [],
     watchModalVisible: false,
+
+    data: [],
+    dataId: '',
+    value: '',
+    editActivitymodalVisible: false,
+    editActivityEditModalConfirmLoading: false,
+    pointPageNo: 1,
+    fetching: false,
   };
   componentDidMount() {
     this.getLists();
@@ -416,7 +495,6 @@ export default class activitySettingList extends PureComponent {
             name: data.name || '',
             sellerId: data.sellerId || undefined,
             shopId: data.shopId || undefined,
-            // rangeTime: [moment(data.createTime),moment(data.endTime)] || undefined,
             remark: data.remark || undefined,
           });
         });
@@ -427,7 +505,6 @@ export default class activitySettingList extends PureComponent {
         sellerId: undefined,
         shopId: undefined,
         remark: undefined,
-        rangeTime: undefined,
       });
     }
   }
@@ -472,6 +549,130 @@ export default class activitySettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
+  // 设置默认活动开始
+  saveActivityFormRef = (form) => {
+    this.pointForm = form;
+  }
+  handleEditActivityClick = () => {
+    this.setState({
+      modalVisible: false,
+      editActivitymodalVisible: true,
+      data: [],
+    });
+    this.pointForm.setFieldsValue({
+      name: undefined,
+      gameId: undefined,
+    });
+  }
+  getActivitySettingList = (value) => {
+    if (value) {
+      if (value !== this.state.value) {
+        this.setState({
+          value,
+          pointPageNo: 1,
+          data: [],
+        });
+      }
+      this.props.dispatch({
+        type: 'activitySetting/gameList',
+        payload: {
+          params: {
+            pageNo: this.state.pointPageNo ? this.state.pointPageNo : 1,
+            keyword: value ? value : this.state.value,
+          },
+        },
+      }).then((result) => {
+        const list = [];
+        console.log('list', result)
+        result.forEach((r) => {
+          list.push({
+            key: r.id,
+            value: r.name,
+            text: r.name,
+            id: r.id,
+          });
+        });
+        let data = list
+        if (this.state.pointPageNo !== 1) {
+          data = [...list, ...this.state.data];
+        }
+        this.setState({ data, fetching: false });
+        if (result.length < 20) {
+          this.setState({
+            fetching: true,
+          });
+          // return;
+        }
+      });
+    }
+  }
+  handleChange = (value) => {
+    this.setState({
+      pointPageNo: 1,
+      data: [],
+      fetching: false,
+      value: '',
+    });
+  }
+  editActivityHandleAddClick = () => {
+    // 确认修改点位
+    // console.log(this.state.dataId)
+    this.pointForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        editActivityEditModalConfirmLoading: true,
+      });
+      console.log('values', values)
+      const url = 'activitySetting/saveActivitySetting';
+      const params = { ...values, isDefault: 1, gameId: this.state.dataId  };
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then(() => {
+        this.getLists();
+        this.setState({
+          editActivityEditModalConfirmLoading: false,
+          modalVisible: false,
+          modalData: {},
+          data: [],
+          editActivitymodalVisible: false,
+        });
+      });
+    });
+  }
+  onSetDefaultSelect = (value, option) => {
+    // let v = '';
+    // if (value.length > 1) {
+    //   v = value[1]['key']
+    // } else {
+    //   v = value[0]['key']
+    // }
+    // this.pointForm.setFieldsValue({
+    //   keyword2: v,
+    // });
+    this.setState({ data: [], dataId: option.props['data-id'], value: '', });
+    // console.log('onselect', value, option.props['data-id'], this.state.value);
+  }
+  editActivityHandleModalVisibleClick = (flag) => {
+    this.setState({
+      editActivitymodalVisible: !!flag,
+    });
+  };
+  onPopupScroll = () => {
+    // console.log('滚动加载')
+    if (!this.state.fetching) {
+      this.setState({
+        pointPageNo: this.state.pointPageNo + 1,
+      }, () => {
+        this.getActivitySettingList(this.state.value);
+      });
+    }
+  }
+  // 设置默认活动结束
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -561,34 +762,18 @@ export default class activitySettingList extends PureComponent {
     const columns = [
       {
         title: '活动名称',
-        // width: 200,
         dataIndex: 'name',
       },
       {
         title: '所属商户',
-        // width: 200,
         dataIndex: 'merchantName',
       },
-      // {
-      //   title: '开始时间',
-      //   dataIndex: 'createTime',
-      //   sorter: true,
-      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      // },
-      // {
-      //   title: '结束时间',
-      //   dataIndex: 'endTime',
-      //   sorter: true,
-      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      // },
       {
         title: '所属店铺',
-        // width: 200,
         dataIndex: 'shopName',
       },
       {
         title: '商品/优惠券',
-        // width: 200,
         dataIndex: 'prizeType',
         render(val) {
           return <span>{status[val]}</span>;
@@ -596,12 +781,10 @@ export default class activitySettingList extends PureComponent {
       },
       {
         title: '活动状态',
-        // width: 200,
         dataIndex: 'state',
       },
       {
         title: '负责人',
-        // width: 150,
         dataIndex: 'managerId',
       },
       {
@@ -656,6 +839,9 @@ export default class activitySettingList extends PureComponent {
                   {/*</Dropdown>*/}
                 {/*</span>*/}
               {/*)}*/}
+              <Button icon="plus" type="primary" onClick={() => this.handleEditActivityClick(true)}>
+                设置默认活动
+              </Button>
             </div>
             <StandardTable
               selectedRows={selectedRows}
@@ -683,6 +869,21 @@ export default class activitySettingList extends PureComponent {
           modalData={modalData}
           watchModalVisible={watchModalVisible}
           handleWatchModalVisible={this.handleWatchModalVisible}
+        />
+        <SetDefaultForm
+          ref={this.saveActivityFormRef}
+          editActivitymodalVisible={this.state.editActivitymodalVisible}
+          editActivityHandleAddClick={this.editActivityHandleAddClick}
+          editActivityHandleModalVisibleClick={this.editActivityHandleModalVisibleClick}
+          editActivityEditModalConfirmLoading={this.state.editActivityEditModalConfirmLoading}
+          data={this.state.data}
+          // modalData={this.state.modalData}
+          handleChange={this.handleChange}
+          onPopupScroll={this.onPopupScroll}
+          onSelect={this.onSetDefaultSelect}
+          onSearch={this.getActivitySettingList}
+          fetching={this.state.fetching}
+          // value={this.state.value}
         />
         <LogModal
           data={logList}

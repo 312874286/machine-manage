@@ -1,7 +1,7 @@
 import { getUserList, getUserMachineDetailList, getUserDetail, saveUser, updateUser, selectMachine } from '../../services/polling/personnelManagement';
 
 export default {
-  namespace: 'personnelManagement',
+  namespace: 'user',
   state: {
     list: [],
     page: {},
@@ -32,8 +32,8 @@ export default {
       const response = yield call(updateUser, { params });
       return response;
     },
-    *selectMachine({ payload: { params } }, { call }) {
-      const response = yield call(selectMachine, { params });
+    *selectMachine({ payload: { restParams } }, { call }) {
+      const response = yield call(selectMachine, { restParams });
       const { code, data } = response;
       if (code !== 0) return;
       const arr = [];

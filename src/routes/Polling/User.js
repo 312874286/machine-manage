@@ -26,7 +26,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-
+const TreeNode = Tree.TreeNode;
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, modalData, selectCityName, openSelectMachineModal, machineNum } = props;
@@ -160,13 +160,13 @@ const SelectMachineForm = Form.create()(
       </Modal>
     );
   });
-@connect(({ common, loading, personnelManagement }) => ({
+@connect(({ common, loading, user }) => ({
   common,
-  personnelManagement,
-  loading: loading.models.personnelManagement,
+  user,
+  loading: loading.models.user,
 }))
 @Form.create()
-export default class personnelManagement extends PureComponent {
+export default class user extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
@@ -198,7 +198,7 @@ export default class personnelManagement extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'personnelManagement/getUserList',
+      type: 'user/getUserList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
@@ -209,7 +209,6 @@ export default class personnelManagement extends PureComponent {
   }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
     const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -259,6 +258,10 @@ export default class personnelManagement extends PureComponent {
       });
     });
   };
+  // 新增modal确认事件 开始
+  saveFormRef = (form) => {
+    this.form = form;
+  }
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
     this.setState({
@@ -276,7 +279,7 @@ export default class personnelManagement extends PureComponent {
       modalType: false,
     });
     this.props.dispatch({
-      type: 'personnelManagement/getUserDetail',
+      type: 'user/getUserDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -289,6 +292,7 @@ export default class personnelManagement extends PureComponent {
   }
   // 设置modal 数据
   setModalData = (data) => {
+    console.log('data', data)
     if (data) {
       this.form.setFieldsValue({
         name: data.name || undefined,
@@ -305,10 +309,6 @@ export default class personnelManagement extends PureComponent {
       });
     }
   }
-  // 新增modal确认事件 开始
-  saveFormRef = (form) => {
-    this.form = form;
-  }
   // 编辑modal 确认事件
   handleAdd = () => {
     this.form.validateFields((err, values) => {
@@ -319,10 +319,10 @@ export default class personnelManagement extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'personnelManagement/saveUser';
+      let url = 'user/saveUser';
       let params = { ...values };
       if (this.state.modalData.id) {
-        url = 'personnelManagement/updateUser';
+        url = 'user/updateUser';
         params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -347,7 +347,7 @@ export default class personnelManagement extends PureComponent {
     }, () => {
       // 获取数据
       this.props.dispatch({
-        type: 'personnelManagement/getUserMachineDetailList',
+        type: 'user/getUserMachineDetailList',
         payload: {
           restParams: {
             id: item.id,
@@ -396,7 +396,7 @@ export default class personnelManagement extends PureComponent {
         code: targetOption.value,
       }, () => {
         this.props.dispatch({
-          type: 'personnelManagement/selectMachine',
+          type: 'user/selectMachine',
           payload: {
             restParams: {
               code: targetOption.value,
@@ -473,13 +473,12 @@ export default class personnelManagement extends PureComponent {
     });
   }
   openSelectMachineModal = () => {
+    console.log('openSelectMachineModal')
     this.setState({
-      machineStartTime: params.startTime,
-      machineEndTime: params.endTime,
       code: '',
     }, () => {
       this.props.dispatch({
-        type: 'personnelManagement/selectMachine',
+        type: 'user/selectMachine',
         payload: {
           restParams: {
             code: this.state.code,
@@ -535,7 +534,7 @@ export default class personnelManagement extends PureComponent {
   }
   render() {
     const {
-      personnelManagement: { list, page },
+      user: { list, page },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists } = this.state;
@@ -620,6 +619,7 @@ export default class personnelManagement extends PureComponent {
           machineNum={this.state.machineNum}
           selectCity={this.state.selectCity}
           selectCityName={this.state.selectCityName}
+          openSelectMachineModal={this.openSelectMachineModal}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}
