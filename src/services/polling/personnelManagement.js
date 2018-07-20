@@ -18,8 +18,8 @@ export async function getUserDetail({ restParams }) {
   });
 }
 export async function saveUser({ params }) {
-  return fetch.post(api.saveUser, {
-    body: stringify(params),
+  return fetch.postJSON(api.saveUser, {
+    body: JSON.stringify(params),
   });
 }
 export async function updateUser({ params }) {

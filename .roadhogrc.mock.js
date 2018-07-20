@@ -401,6 +401,13 @@ const proxy = {
             parentId: 'a26',
             functionLevel: 2,
           },
+          {
+            id: 'a30',
+            functionDepict: '故障类型',
+            functionPath: 'faultType',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
         ]
       };
       res.send({
@@ -2659,7 +2666,7 @@ const proxy = {
       }]
     })
   },
-  'POST /check/user/update/add': (req, res) => {
+  'POST /check/user/add': (req, res) => {
     res.send({
       "code": 0,
       "data": null,

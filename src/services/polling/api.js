@@ -8,7 +8,7 @@ const api = map({
   getUserList: '/check/user/list?pageNo={pageNo}&keyword={keyword}',
   getUserMachineDetailList: '/check/user/getUserMachinDetailList?id={id}',
   getUserDetail: '/check/user/detail?id={id}',
-  saveUser: '/check/user/update/add',
+  saveUser: '/check/user/add',
   updateUser: '/check/user/update',
   selectMachine: '/check/user/selectAreaMachines?code={code}&level={level}',
 });
