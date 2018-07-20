@@ -229,7 +229,7 @@ class DiscountDynamicField extends React.Component {
       dataIndex: 'operation',
       render: (text, record) => {
         return (
-          this.state.dataSource.length > 1
+          this.state.dataSource.length > 0
             ? (
               <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
                 <a>删除</a>
