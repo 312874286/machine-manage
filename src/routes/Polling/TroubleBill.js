@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm } from 'antd';
+import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TroubleBill.less';
 
@@ -17,6 +17,20 @@ export default class troubleBill extends PureComponent {
     startDateString: '',
     endDateString: '',
     userName: '',
+    seeData: [],
+    currentRecord: {
+      "id": "",
+      "machineId": "",
+      "type": '',
+      "submitUser": "",
+      "finishUser": '',
+      "submitTime": 0,
+      "finishTime": 0,
+      "status": 0,
+      "finishRemark": '',
+      "remindStatus": 0,
+      "remark": "",
+    },
   };
   componentDidMount = () => {
     this.getLists();
@@ -35,14 +49,57 @@ export default class troubleBill extends PureComponent {
     this.getLists();
   }
   onSeeHandle = (record) => {
+
     this.setState({
-      seeVisible: true,
+      currentRecord: record,
     });
-    console.log(record);
+    console.log('111', record.id);
+    this.props.dispatch({
+      type: 'troubleBill/getCheckFaultDetail',
+      payload: {
+        params: {
+          id: record.id,
+        },
+      },
+    }).then((res) => {
+      const { code, data, msg } = res;
+      // console.log(data.functions);
+      this.setState({
+        seeData: data,
+      });
+      console.log(data);
+      this.setState({
+        seeVisible: true,
+      });
+      // treeData = data;
+      
+    });
+
+    
   }
   onReplyHandle = (record) => {
     this.setState({
-      replyVisible: true,
+      currentRecord: record,
+    });
+    this.props.dispatch({
+      type: 'troubleBill/getCheckFaultDetail',
+      payload: {
+        params: {
+          id: record.id,
+        },
+      },
+    }).then((res) => {
+      const { code, data, msg } = res;
+      // console.log(data.functions);
+      this.setState({
+        seeData: data,
+      });
+      console.log(data);
+      this.setState({
+        replyVisible: true,
+      });
+      // treeData = data;
+      
     });
     console.log(record);
   }
@@ -67,9 +124,35 @@ export default class troubleBill extends PureComponent {
     });
   }
   replyOKHandle = (e) => {
-    this.setState({
-      replyVisible: false,
+    if (this.state.textAreaVal === '') {
+      message.info('请填写回复消息');
+      return;
+    }
+    this.props.dispatch({
+      type: 'troubleBill/getCheckFaultAnswer',
+      payload: {
+        params: {
+          id: this.state.currentRecord.id,
+          remark: this.state.textAreaVal,
+        },
+      },
+    }).then((res) => {
+      const { code, data, msg } = res;
+      // console.log(data.functions);
+      console.log(data);
+      if (code === 0) {
+        message.success(msg);
+        this.setState({
+          replyVisible: false,
+        });
+      } else {
+        message.error(msg);
+      }
+      // treeData = data;
+      
     });
+    
+    
   }
   replyHandleCancel = (e) => {
     this.setState({
@@ -91,7 +174,7 @@ export default class troubleBill extends PureComponent {
     console.log('endDatePickerChange::', date, dateString);
   }
   render() {
-    const { seeVisible, replyVisible } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord } = this.state;
     const { troubleBill: { list, page } } = this.props;
     // console.log(11111, list, page);
     const columns = [{
@@ -100,12 +183,12 @@ export default class troubleBill extends PureComponent {
       key: 'id',
     }, {
       title: '机器ID',
-      dataIndex: 'machineCode',
-      key: 'machineCode',
+      dataIndex: 'machineId',
+      key: 'machineId',
     }, {
       title: '故障描述',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'remark',
+      key: 'remark',
     }, {
       title: '上报时间',
       dataIndex: 'submitTime',
@@ -135,17 +218,17 @@ export default class troubleBill extends PureComponent {
       key: 'action',
       render: (text, record) => (
         <span>
-          <a href="javascript:;" onClick={this.onReplyHandle.bind(this, record)} style={{ display: record.status === 0 ? 'none' : 'block' }}>回复</a>
-          <a href="javascript:;" onClick={this.onSeeHandle.bind(this, record)} style={{ display: record.status === 1 ? 'none' : 'block' }}>查看</a>
+          <a href="javascript:;" onClick={this.onReplyHandle.bind(this, record)} style={{ display: record.status === 0 ? 'block' : 'none' }}>回复</a>
+          <a href="javascript:;" onClick={this.onSeeHandle.bind(this, record)} style={{ display: record.status === 1 ? 'block' : 'none' }}>查看</a>
         </span>
       ),
     }];
-    // const paginationProps = {
-    //   showTotal: (total) => {
-    //     return `共${total}条数据  每页${page.pageSize}条`;
-    //   },
-    //   ...page,
-    // };
+    const paginationProps = {
+      showTotal: (total) => {
+        return `共${total}条数据  每页${page.pageSize}条`;
+      },
+      ...page,
+    };
     return (
       <PageHeaderLayout>
         <Card>
@@ -175,7 +258,7 @@ export default class troubleBill extends PureComponent {
             columns={columns}
             dataSource={list}
             rowKey="id"
-            // pagination={paginationProps}
+            pagination={paginationProps}
           />
         </Card>
         <Modal
@@ -193,7 +276,7 @@ export default class troubleBill extends PureComponent {
               故障ID
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {seeData.id}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -201,7 +284,7 @@ export default class troubleBill extends PureComponent {
               机器ID
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {seeData.machineCode}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -209,7 +292,7 @@ export default class troubleBill extends PureComponent {
               上报人
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {seeData.submitUser}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -217,7 +300,7 @@ export default class troubleBill extends PureComponent {
               上报时间
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {seeData.submitTime}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -225,7 +308,7 @@ export default class troubleBill extends PureComponent {
               解决人
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {seeData.finishUser}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -233,7 +316,7 @@ export default class troubleBill extends PureComponent {
               解决时间
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {seeData.finishTime}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -241,7 +324,35 @@ export default class troubleBill extends PureComponent {
               故障描述
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.remark}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={6} sm={24}>
+              图片
+            </Col>
+            <Col md={15} sm={24}>
+              <List
+                dataSource={seeData.imgList}
+                renderItem={item => (
+                  <List.Item
+                    extra={<img width={272} src={item} />}
+                  ></List.Item>
+                )}
+              />
+            </Col>
+          </Row>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={6} sm={24}>
+              回复
+            </Col>
+            <Col md={15} sm={24}>
+              <List
+                dataSource={seeData.answerList}
+                renderItem={item => (
+                  <List.Item>{item}</List.Item>
+                )}
+              />
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -249,7 +360,7 @@ export default class troubleBill extends PureComponent {
               解决方案
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.finishRemark}
             </Col>
           </Row>
         </Modal>
@@ -264,7 +375,7 @@ export default class troubleBill extends PureComponent {
               故障ID
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.id}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -272,7 +383,7 @@ export default class troubleBill extends PureComponent {
               机器ID
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.machineId}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -280,7 +391,7 @@ export default class troubleBill extends PureComponent {
               上报人
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.submitUser}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -288,7 +399,7 @@ export default class troubleBill extends PureComponent {
               上报时间
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.submitTime}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -296,7 +407,7 @@ export default class troubleBill extends PureComponent {
               解决人
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.finishUser}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -304,7 +415,7 @@ export default class troubleBill extends PureComponent {
               解决时间
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.finishTime}
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -312,7 +423,35 @@ export default class troubleBill extends PureComponent {
               故障描述
             </Col>
             <Col md={15} sm={24}>
-              1111
+              {currentRecord.remark}
+            </Col>
+          </Row>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={6} sm={24}>
+              图片
+            </Col>
+            <Col md={15} sm={24}>
+              <List
+                dataSource={seeData.imgList}
+                renderItem={item => (
+                  <List.Item
+                    extra={<img width={272} src={item} />}
+                  ></List.Item>
+                )}
+              />
+            </Col>
+          </Row>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={6} sm={24}>
+              回复列表
+            </Col>
+            <Col md={15} sm={24}>
+              <List
+                dataSource={seeData.answerList}
+                renderItem={item => (
+                  <List.Item>{item}</List.Item>
+                )}
+              />
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>

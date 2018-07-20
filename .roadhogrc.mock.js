@@ -2451,7 +2451,7 @@ const proxy = {
         "currentResult": 0,
         "totalPage": 1,
         "pageNo": 1,
-        "totalCount": 1,
+        "totalCount": 3,
         "list": null,
         "firstResult": 0,
         "firstPage": true,
@@ -2461,18 +2461,83 @@ const proxy = {
         },
         "data": [
         {
-        "id": "1",
-        "shopName": "天猫小米旗舰店",
-        "shopCode": "10000@XXXAXX",
-        "sellerId": "1",
-        "isDelete": 0,
-        "remark": null,
-        "createId": "1",
-        "createTime": "2018-07-05 10:37:23",
-        "updateId": null,
-        "updateTime": "2018-07-05 10:37:23"
+        "id": "f5fe616383454021aa65dc131a0aad0a",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "王老五",
+        "finishUser": null,
+        "submitTime": 1531740076000,
+        "finishTime": null,
+        "status": 0,
+        "finishRemark": null,
+        "remindStatus": 0,
+        "remark": "可能屏幕坏了"
+        },
+        {
+        "id": "fc8c4f5cf3b04daba692a72ccf16503f",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "老司机",
+        "finishUser": null,
+        "submitTime": 1531738920000,
+        "finishTime": null,
+        "status": 0,
+        "finishRemark": null,
+        "remindStatus": 0,
+        "remark": "可能屏幕坏了"
+        },
+        {
+        "id": "fc98baecbd1845f2801e573703868a85",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "老司机",
+        "finishUser": null,
+        "submitTime": 1531735204000,
+        "finishTime": null,
+        "status": 1,
+        "finishRemark": null,
+        "remindStatus": 0,
+        "remark": "可能电源没有插"
         }
         ]
+        }
+    )
+  },
+  'POST /check/fault/detail': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": {
+        "id": "f5fe616383454021aa65dc131a0aad0a",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "王老五",
+        "finishUser": null,
+        "submitTime": 1531740076000,
+        "finishTime": null,
+        "status": null,
+        "finishRemark": null,
+        "remindStatus": null,
+        "remark": null,
+        "imgList": [
+        "11111",
+        "2222"
+        ],
+        "answerList": [
+        "AAAAA",
+        "哈哈哈哈哈哈哈哈哈哈"
+        ]
+        },
+        "msg": "成功"
+        }
+    )
+  },
+  'POST /check/fault/answer': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": null,
+        "msg": "成功"
         }
     )
   },

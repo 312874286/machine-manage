@@ -7,3 +7,17 @@ export async function getCheckFaultList({ params }) {
     body: stringify(params),
   });
 }
+
+export async function getCheckFaultDetail({ params }) {
+  return fetch.post(api.getCheckFaultDetail, {
+    body: stringify(params),
+  });
+}
+
+export async function getCheckFaultAnswer({ params }) {
+  return fetch.post(api.getCheckFaultAnswer, {
+    body: stringify(params),
+  });
+}
+
+
