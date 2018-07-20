@@ -83,7 +83,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, channelSetting, log }) => ({
   common,
   channelSetting,
-  loading: loading.models.rule,
+  loading: loading.models.channelSetting,
   log,
 }))
 @Form.create()

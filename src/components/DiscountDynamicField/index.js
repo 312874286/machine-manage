@@ -179,7 +179,7 @@ class DiscountDynamicField extends React.Component {
 
     const children2 = [];
     let defaultValue2 = '';
-    console.log('discountthis.props.initData', this.props.initData)
+    // console.log('discountthis.props.initData', this.props.initData)
     if (this.props.initData) {
       this.state.dataSource = this.props.initData;
 
@@ -229,7 +229,7 @@ class DiscountDynamicField extends React.Component {
       dataIndex: 'operation',
       render: (text, record) => {
         return (
-          this.state.dataSource.length > 1
+          this.state.dataSource.length > 0
             ? (
               <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
                 <a>删除</a>
@@ -274,6 +274,7 @@ class DiscountDynamicField extends React.Component {
           dataSource={this.state.dataSource}
           columns={columns}
           pagination={false}
+          rowKey={record => record.key}
         />
       </div>
     );

@@ -99,7 +99,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, merchantSetting, log }) => ({
   common,
   merchantSetting,
-  loading: loading.models.rule,
+  loading: loading.models.merchantSetting,
   log,
 }))
 @Form.create()
@@ -400,7 +400,7 @@ export default class merchantSettingList extends PureComponent {
           </Col>
           <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商户编码、商户名称" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入商户编码、商户名称、原始标识、品牌名称" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>

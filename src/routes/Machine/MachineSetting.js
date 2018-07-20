@@ -353,7 +353,7 @@ const WatchForm = Form.create()(
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
   machineSetting,
-  loading: loading.models.rule,
+  loading: loading.models.machineSetting,
   log,
 }))
 @Form.create()

@@ -1,4 +1,4 @@
-import { getGoodsSettingList, getGoodsSettingDetail, getMerchantsList, getShopsList, getActivityList, saveGoodsSetting, editGoodsSetting, delGoodsSetting } from '../../services/goods/goodsSetting';
+import { getUserList, getUserMachineDetailList, getUserDetail, saveUser, updateUser, selectMachine } from '../../services/polling/personnelManagement';
 
 export default {
   namespace: 'personnelManagement',
@@ -9,40 +9,67 @@ export default {
   },
 
   effects: {
-    *getGoodsSettingList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(getGoodsSettingList, { restParams });
+    *getUserList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getUserList, { restParams });
       yield put({
         type: 'saveList',
         payload: response,
       });
     },
-    *getGoodsSettingDetail({ payload: { restParams } }, { call }) {
-      const response = yield call(getGoodsSettingDetail, { restParams });
+    *getUserMachineDetailList({ payload: { restParams } }, { call }) {
+      const response = yield call(getUserMachineDetailList, { restParams });
       return response.data;
     },
-    *getMerchantsList({ payload: { restParams } }, { call }) {
-      const response = yield call(getMerchantsList, { restParams });
+    *getUserDetail({ payload: { restParams } }, { call }) {
+      const response = yield call(getUserDetail, { restParams });
       return response.data;
     },
-    *getShopsList({ payload: { restParams } }, { call }) {
-      const response = yield call(getShopsList, { restParams });
-      return response.data;
-    },
-    *getActivityList({ payload: { restParams } }, { call }) {
-      const response = yield call(getActivityList, { restParams });
-      return response.data;
-    },
-    *saveGoodsSetting({ payload: { params } }, { call }) {
-      const response = yield call(saveGoodsSetting, { params });
+    *saveUser({ payload: { params } }, { call }) {
+      const response = yield call(saveUser, { params });
       return response;
     },
-    *editGoodsSetting({ payload: { params } }, { call }) {
-      const response = yield call(editGoodsSetting, { params });
+    *updateUser({ payload: { params } }, { call }) {
+      const response = yield call(updateUser, { params });
       return response;
     },
-    *delGoodsSetting({ payload: { params } }, { call }) {
-      const response = yield call(delGoodsSetting, { params });
-      return response;
+    *selectMachine({ payload: { params } }, { call }) {
+      const response = yield call(selectMachine, { params });
+      const { code, data } = response;
+      if (code !== 0) return;
+      const arr = [];
+      if (data) {
+        let isLeaf = false, disabled = false, machines = [], title;
+        for (let i = 0; i < data.length; i++) {
+          machines = data[i].machines
+          title = data[i].name + '(' + data[i].canUseNum + '/' + data[i].totalNum + ')'
+          if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
+            isLeaf = true;
+          }
+          if (data[i].canUseNum === '0') {
+            disabled = true;
+          }
+          if (data[0].level === 5) {
+            machines = [{
+              machineCode: '',
+              machineId: data[i].code,
+              state: 0}]
+            title = data[i].name;
+          }
+          const a = {
+            value: data[i].code,
+            isLeaf: isLeaf,
+            title: title,
+            key: data[i].code,
+            level: data[i].level,
+            province: data[i].province,
+            machines: machines,
+            disabledFlag: disabled,
+            canUseNum: data[i].canUseNum,
+          };
+          arr.push(a);
+        }
+      }
+      return arr;
     },
   },
 

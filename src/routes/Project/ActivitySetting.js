@@ -46,7 +46,7 @@ const CreateForm = Form.create()(
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -164,7 +164,7 @@ const WatchForm = Form.create()(
 @connect(({ common, loading, activitySetting, log }) => ({
   common,
   activitySetting,
-  loading: loading.models.rule,
+  loading: loading.models.activitySetting,
   log,
 }))
 @Form.create()
@@ -523,7 +523,7 @@ export default class activitySettingList extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入活动编码、活动名称" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入活动编码、活动名称、所属商户、所属店铺" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

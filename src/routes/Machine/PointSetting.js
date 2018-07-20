@@ -115,7 +115,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, pointSetting, log }) => ({
   common,
   pointSetting,
-  loading: loading.models.rule,
+  loading: loading.models.pointSetting,
   log,
 }))
 @Form.create()

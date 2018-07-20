@@ -8,23 +8,16 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
   Menu,
-  InputNumber,
-  DatePicker,
   Modal,
   message,
-  Badge,
-  Divider,
-  Cascader,
-  Popconfirm
+  Tree,
+  Table,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import styles from './PersonnelManagement.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import LogModal from '../../components/LogModal/index';
 
 
 const FormItem = Form.Item;
@@ -33,12 +26,10 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['processing', 'default', 'success', 'error'];
-const status = ['运行中', '关闭', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, channelLists } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, modalData, selectCityName, openSelectMachineModal, machineNum } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -52,55 +43,127 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={!modalType ? '编辑商户' : '新建商户'}
+        title={!modalType ? '编辑人员信息' : '新建人员'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="商户编码">
+          <FormItem {...formItemLayout} label="姓名">
             {getFieldDecorator('merchantCode', {
-              rules: [{ required: true, whitespace: true, message: '请输入商户编码' }],
-            })(<Input placeholder="请输入商户编码" />)}
+              rules: [{ required: true, whitespace: true, message: '请输入姓名' }],
+            })(<Input placeholder="请输入姓名" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="商户名称">
+          <FormItem {...formItemLayout} label="手机号">
             {getFieldDecorator('merchantName', {
-              rules: [{ required: true, whitespace: true, message: '请输入商户名称' }],
-            })(<Input placeholder="请输入商户名称" />)}
+              rules: [{ required: true, whitespace: true, message: '请输入手机号' }],
+            })(<Input placeholder="请输入手机号" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="品牌名称">
+          <FormItem {...formItemLayout} label="身份证号">
             {getFieldDecorator('originFlag', {
-              rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
-            })(<Input placeholder="请输入品牌名称" />)}
+              rules: [{ required: true, whitespace: true, message: '请输入身份证号' }],
+            })(<Input placeholder="请输入身份证号" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="原始标示">
+          <FormItem {...formItemLayout} label="公司">
             {getFieldDecorator('brandName', {
-              rules: [{ required: true, whitespace: true, message: '请输入原始标示' }],
-            })(<Input placeholder="请输入原始标示" />)}
+              rules: [{ required: true, whitespace: true, message: '请输入公司' }],
+            })(<Input placeholder="请输入公司" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择渠道">
-            {getFieldDecorator('channelId', {
-              rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
+          <FormItem {...formItemLayout} label="选择机器">
+            {getFieldDecorator('remark', {
+              rule: [{ validator: '' }],
+            }) ((modalData.id) ? (
+              <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
+              <div>
+                { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
+                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+              </div>
+            ))
+            }
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  });
+const WatchMachine = Form.create()(
+  (props) => {
+    const { WatchMachineModalVisible, WatchMachineHandleModalVisibleClick, machineList } = props;
+    const machineColumns = [{
+      title: '机器点位',
+      dataIndex: 'machineLocale',
+      align: 'center',
+    }, {
+      title: '机器编码',
+      dataIndex: 'machineCode',
+      align: 'center',
+    }];
+    return (
+      <Modal
+        title="查看机器"
+        width={400}
+        visible={WatchMachineModalVisible}
+        onCancel={() => WatchMachineHandleModalVisibleClick()}
+        footer={null}
+      >
+        <div style={{ background: '#ECECEC', padding: '30px' }}>
+          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+        </div>
+      </Modal>
+    );
+  });
+const SelectMachineForm = Form.create()(
+  (props) => {
+    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading,
+      renderTreeNodes, treeData, onLoadData, onExpand, expandedKeys, autoExpandParent, checkedKeys, selectedKeys, onCheck, onSelect, } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title="选择机器"
+        visible={editMachineModalVisible}
+        onOk={onEditMachineHandleAddClick}
+        onCancel={() => onEditMachineHandleModalVisibleClick()}
+        confirmLoading={editMachineEditModalConfirmLoading}
+        width={800}
+      >
+        <Form onSubmit={this.handleSearch}>
+          <FormItem {...formItemLayout} label="选择机器">
+            {getFieldDecorator('machine', {
+              rules: [{ type: 'array', required: true, message: '请选择机器' }],
             })(
-              <Select placeholder="请选择">
-                {channelLists.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id}>{item.channelName}</Option>
-                  );
-                })}
-              </Select>
+              <Tree
+                loadData={onLoadData}
+                checkable
+                onExpand={onExpand}
+                expandedKeys={expandedKeys}
+                autoExpandParent={autoExpandParent}
+                onCheck={onCheck}
+                checkedKeys={checkedKeys}
+                onSelect={onSelect}
+                selectedKeys={selectedKeys}
+              >
+                {renderTreeNodes(treeData)}
+              </Tree>
             )}
           </FormItem>
         </Form>
       </Modal>
     );
   });
-@connect(({ common, loading, personnelManagement, log }) => ({
+@connect(({ common, loading, personnelManagement }) => ({
   common,
   personnelManagement,
-  loading: loading.models.rule,
-  log,
+  loading: loading.models.personnelManagement,
 }))
 @Form.create()
 export default class personnelManagement extends PureComponent {
@@ -111,41 +174,37 @@ export default class personnelManagement extends PureComponent {
     editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
-    channelId: '',
     modalData: {},
-    logModalVisible: false,
-    logModalLoading: false,
-    logId: '',
-    logModalPageNo: 1,
     modalType: true,
     channelLists: [],
+
+    WatchMachineModalVisible: false,
+    machineList: [],
+
+
+    treeData: [],
+    machineNum: 0,
+    selectCity: [],
+    selectCityName: [],
+    expandedKeys: [],
+    autoExpandParent: true,
+    checkedKeys: [],
+    selectedKeys: [],
+    editMachineEditModalConfirmLoading: false,
   };
   componentDidMount() {
-    // this.getLists();
+    this.getLists();
   }
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'personnelManagement/getMerchantSettingList',
+      type: 'personnelManagement/getUserList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
-          code: this.state.channelId,
         },
       },
-    });
-    this.props.dispatch({
-      type: 'personnelManagement/getChannelsList',
-      payload: {
-        restParams: {},
-      },
-    }).then((res) => {
-      // const arr = { id: -1, channelName: '请选择' }
-      // res.unshift(arr)
-      this.setState({
-        channelLists: res,
-      });
     });
   }
   // 分页
@@ -184,38 +243,6 @@ export default class personnelManagement extends PureComponent {
       formValues: {},
       pageNo: 1,
       keyword: '',
-      channelId: '',
-    });
-  };
-  // 批量
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-
-    if (!selectedRows) return;
-
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: '',
-          payload: {
-            no: selectedRows.map(row => row.no).join(','),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
     });
   };
   // 搜索
@@ -227,7 +254,6 @@ export default class personnelManagement extends PureComponent {
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        channelId: fieldsValue.channelId ? fieldsValue.channelId : '',
       }, () => {
         this.getLists();
       });
@@ -242,27 +268,6 @@ export default class personnelManagement extends PureComponent {
     });
     this.setModalData();
   };
-  // 删除modal 删除事件
-  handleDelClick = (item) => {
-    this.setState({
-      editModalConfirmLoading: true,
-    });
-    if (item) {
-      const params = { id: item.id };
-      this.props.dispatch({
-        type: 'personnelManagement/delMerchantSetting',
-        payload: {
-          params,
-        },
-      }).then(() => {
-        // message.success('Click on Yes');
-        this.getLists();
-        this.setState({
-          editModalConfirmLoading: false,
-        });
-      });
-    } else return false;
-  }
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
     this.setState({
@@ -271,13 +276,14 @@ export default class personnelManagement extends PureComponent {
       modalType: false,
     });
     this.props.dispatch({
-      type: 'personnelManagement/getMerchantSettingDetail',
+      type: 'personnelManagement/getUserDetail',
       payload: {
         restParams: {
           id: item.id,
         },
       },
     }).then((res) => {
+      console.log('res', res)
       this.setModalData(res);
     });
   }
@@ -285,19 +291,17 @@ export default class personnelManagement extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        merchantCode: data.merchantCode || undefined,
-        merchantName: data.merchantName || undefined,
-        brandName: data.brandName || undefined,
-        originFlag: data.originFlag || undefined,
-        channelId: data.channelId || undefined,
+        name: data.name || undefined,
+        phone: data.phone || undefined,
+        cardNo: data.cardNo || undefined,
+        enterprise: data.enterprise || undefined,
       });
     } else {
       this.form.setFieldsValue({
-        merchantCode: undefined,
-        merchantName: undefined,
-        brandName: undefined,
-        originFlag: undefined,
-        channelId: undefined,
+        name: undefined,
+        phone: undefined,
+        cardNo: undefined,
+        enterprise: undefined,
       });
     }
   }
@@ -315,10 +319,10 @@ export default class personnelManagement extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'personnelManagement/saveMerchantSetting';
+      let url = 'personnelManagement/saveUser';
       let params = { ...values };
       if (this.state.modalData.id) {
-        url = 'personnelManagement/editMerchantSetting';
+        url = 'personnelManagement/updateUser';
         params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -336,71 +340,181 @@ export default class personnelManagement extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
-  // 日志相关
-  getLogList = () => {
-    this.props.dispatch({
-      type: 'log/getLogList',
-      payload: {
-        restParams: {
-          code: this.state.logId,
-          pageNo: this.state.logModalPageNo,
-          type: 1020403,
+  // 查看
+  getMachineStatus = (item) => {
+    this.setState({
+      modalData: item,
+    }, () => {
+      // 获取数据
+      this.props.dispatch({
+        type: 'personnelManagement/getUserMachineDetailList',
+        payload: {
+          restParams: {
+            id: item.id,
+          },
         },
-      },
-    }).then(() => {
+      }).then((result) => {
+        // console.log(result)
+        this.setState({
+          machineList: result,
+        }, () => {
+          this.setState({
+            WatchMachineModalVisible: true,
+          });
+        });
+      });
+    })
+  }
+  WatchMachineHandleModalVisibleClick = () => {
+    this.setState({
+      WatchMachineModalVisible: false,
+    });
+  }
+  // tree开始
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return (parseInt(item.canUseNum) === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
+    });
+  }
+  onLoadData = (treeNode) => {
+    return new Promise((resolve) => {
+      if (treeNode.props.children) {
+        resolve();
+        return;
+      }
+      // console.log('treeNode.props.dataRef', treeNode.props.dataRef.value, treeNode.props.children)
+      const targetOption = treeNode.props.dataRef;
+      // targetOption.loading = true;
       this.setState({
-        logModalLoading: false,
+        code: targetOption.value,
+      }, () => {
+        this.props.dispatch({
+          type: 'personnelManagement/selectMachine',
+          payload: {
+            restParams: {
+              code: targetOption.value,
+              level: targetOption.level + 1,
+            },
+          },
+        }).then((res) => {
+          // targetOption.loading = false;
+          targetOption.children = res
+          console.log('res', res)
+          this.setState({
+            treeData: [...this.state.treeData],
+          });
+          resolve();
+        });
       });
     });
   }
-
-  handleLogClick = (data) => {
+  onExpand = (expandedKeys, node) => {
+    // console.log('onExpand展开/收起节点时触发', expandedKeys, node);
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
     this.setState({
-      logModalVisible: !!data,
-      logModalLoading: true,
-      logId: data.id,
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  }
+  onCheck = (checkedKeys, node) => {
+    // .checkedNodes[0].props.dataRef.value
+    console.log('onCheck点击复选框触发', checkedKeys, node);
+
+    // let node =
+    this.setState({ checkedKeys, selectCity: node.checkedNodes });
+  }
+  onSelect = (selectedKeys, info) => {
+    // console.log('onSelect点击树节点触发', info);
+    // this.setState({ selectedKeys });
+  }
+  onEditMachineHandleAddClick = () => {
+    console.log('选择机器确认');
+    let selectCity = this.state.selectCity
+    if (selectCity.length > 0) {
+      this.uniq(selectCity);
+      // console.log('selectCity', this.state.machines)
+    } else {
+      message.error('请先选择机器');
+    }
+  }
+  uniq = (arr) => {
+    let max = [];
+    let selectCityName = []
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i].props.dataRef
+      if (!item.children) {
+        item.machines.forEach((MItem) => {
+          max.push(MItem);
+        });
+        if (!(item['province'] in selectCityName)) {
+          selectCityName[item['province']] = item.province;
+        }
+        // selectCityName.push(item.province)
+      }
+    }
+    selectCityName = Object.values(selectCityName)
+    this.setState({
+      machineNum: max.length,
+      selectCityName,
+      machines: max,
     }, () => {
-      this.getLogList();
+      console.log(this.state.machines)
+      this.setState({
+        editMachineModalVisible: false,
+      });
     });
   }
-
-  logModalHandleCancel = () => {
+  openSelectMachineModal = () => {
     this.setState({
-      logModalVisible: false,
-    });
-  }
-
-  logModalhandleTableChange = (pagination) => {
-    const { current } = pagination;
-    this.setState({
-      logModalPageNo: current,
+      machineStartTime: params.startTime,
+      machineEndTime: params.endTime,
+      code: '',
     }, () => {
-      this.getLogList();
+      this.props.dispatch({
+        type: 'personnelManagement/selectMachine',
+        payload: {
+          restParams: {
+            code: this.state.code,
+            level: 1,
+          },
+        },
+      }).then((res) => {
+        this.setState({
+          treeData: res,
+        }, () => {
+          this.setState({
+            editMachineModalVisible: true,
+          });
+        });
+      });
     });
   }
+  onEditMachineHandleModalVisibleClick = () => {
+    this.setState({
+      editMachineModalVisible: false,
+    });
+  }
+  selectMachineFormRef = (form) => {
+    this.selectMachineform = form;
+  }
+  // tree结束
   renderAdvancedForm() {
     const { form } = this.props;
-    const { channelLists } = this.state;
     const { getFieldDecorator } = form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem label="选择渠道">
-              {getFieldDecorator('channelId')(
-                <Select placeholder="请选择">
-                  {channelLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.channelName}</Option>
-                    );
-                  })}
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商户编码、商户名称" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -423,39 +537,30 @@ export default class personnelManagement extends PureComponent {
     const {
       personnelManagement: { list, page },
       loading,
-      log: { logList, logPage },
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists } = this.state;
     const columns = [
-      // {
-      //   title: '商户ID',
-      //   width: 200,
-      //   dataIndex: 'id',
-      //   fixed: 'left',
-      // },
       {
-        title: '商户编码',
-        // width: 150,
-        dataIndex: 'merchantCode',
+        title: '姓名',
+        dataIndex: 'name',
       },
       {
-        title: '商户名称',
-        // width: 150,
-        dataIndex: 'merchantName',
+        title: '手机号',
+        dataIndex: 'phone',
       },
       {
-        title: '所属渠道',
-        // width: 150,
-        dataIndex: 'channelId',
+        title: '身份证号',
+        dataIndex: 'cardNo',
       },
       {
-        title: '原始标示',
-        // width: 150,
-        dataIndex: 'brandName',
+        title: '公司',
+        dataIndex: 'enterprise',
       },
       {
-        title: '品牌名称',
-        dataIndex: 'originFlag',
+        title: '负责的机器',
+        render: (text, item) => (
+          <div style={{ color: '#174a79', border: 0, background: 'transparent' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+        ),
       },
       {
         fixed: 'right',
@@ -464,12 +569,6 @@ export default class personnelManagement extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            <Divider type="vertical" />
-            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
-            {/*<Divider type="vertical" />*/}
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
-            </Popconfirm>
           </Fragment>
         ),
       },
@@ -497,16 +596,6 @@ export default class personnelManagement extends PureComponent {
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
-              {/*{selectedRows.length > 0 && (*/}
-              {/*<span>*/}
-              {/*<Button>批量操作</Button>*/}
-              {/*<Dropdown overlay={menu}>*/}
-              {/*<Button>*/}
-              {/*更多操作 <Icon type="down" />*/}
-              {/*</Button>*/}
-              {/*</Dropdown>*/}
-              {/*</span>*/}
-              {/*)}*/}
             </div>
             <StandardTable
               selectedRows={selectedRows}
@@ -527,14 +616,32 @@ export default class personnelManagement extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
           channelLists={channelLists}
+          modalData={this.state.modalData}
+          machineNum={this.state.machineNum}
+          selectCity={this.state.selectCity}
+          selectCityName={this.state.selectCityName}
         />
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
+        <WatchMachine
+          WatchMachineModalVisible={this.state.WatchMachineModalVisible}
+          WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
+          machineList={this.state.machineList}
+        />
+        <SelectMachineForm
+          ref={this.selectMachineFormRef}
+          editMachineModalVisible={this.state.editMachineModalVisible}
+          onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
+          onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
+          editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
+          renderTreeNodes={this.renderTreeNodes}
+          treeData={this.state.treeData}
+          onLoadData={this.onLoadData}
+          expandedKeys={this.state.expandedKeys}
+          autoExpandParent={this.state.autoExpandParent}
+          checkedKeys={this.state.checkedKeys}
+          selectedKeys={this.state.selectedKeys}
+          onExpand={this.onExpand}
+          onCheck={this.onCheck}
+          onSelect={this.onSelect}
         />
       </PageHeaderLayout>
     );
