@@ -189,7 +189,7 @@ class ScheduleTable extends PureComponent {
     // document.getElementById('dateWeek').scrollLeft = 600;
   }
   left = () => {
-    console.log('左边')
+    // console.log('左边')
     this.setState({
       leftCount: this.state.leftCount + 1,
     }, () => {
@@ -215,7 +215,7 @@ class ScheduleTable extends PureComponent {
     });
   }
   right = () => {
-    console.log('右边')
+    // console.log('右边')
     this.setState({
       rightCount: this.state.rightCount + 1,
     }, () => {
@@ -295,9 +295,10 @@ class ScheduleTable extends PureComponent {
 
                         <div>{item.name}</div>
                         <div className={styles.iconBox}>
-                          <Icon type="form" onClick={() => onEditClick(item)} />
+                          {/*endTime: item.endTime*/}
+                          <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
                           <Icon type="eye" onClick={() => onWatchClick(item)} />
-                          <Icon type="close" className={styles.anticonDelete} onClick={() => onDeleteClick(item)}/>
+                          <Icon type="close" className={styles.anticonDelete} onClick={() => onDeleteClick(item)} style={{ display: moment(item.endTime) > new Date().getTime() && moment(item.startTime) < new Date().getTime()  ? 'none' : '' }}/>
                         </div>
                       </div>
                     </Popover>
