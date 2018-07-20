@@ -1,4 +1,4 @@
-import { getCheckFaultList } from '../../services/polling/troubleBill';
+import { getCheckFaultList, getCheckFaultDetail, getCheckFaultAnswer } from '../../services/polling/troubleBill';
 
 export default {
   namespace: 'troubleBill',
@@ -14,6 +14,14 @@ export default {
         type: 'getCheckFaultListBack',
         payload: response,
       });
+    },
+    *getCheckFaultDetail({ payload: { params } }, { call, put }) {
+      const response = yield call(getCheckFaultDetail, { params });
+      return response;
+    },
+    *getCheckFaultAnswer({ payload: { params } }, { call, put }) {
+      const response = yield call(getCheckFaultAnswer, { params });
+      return response;
     },
   },
 
