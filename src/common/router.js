@@ -192,7 +192,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['polling/troubleBill', 'log/log', 'common'], () => import('../routes/Polling/TroubleBill')),
     },
     '/check/faultType': {
-      component: dynamicWrapper(app, ['polling/troubleBill', 'log/log', 'common'], () => import('../routes/Polling/FaultType')),
+      component: dynamicWrapper(app, ['polling/faultType', 'log/log', 'common'], () => import('../routes/Polling/FaultType')),
     },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),

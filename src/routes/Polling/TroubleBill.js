@@ -249,7 +249,7 @@ export default class troubleBill extends PureComponent {
               <Input placeholder="请输入角色名称" onChange={this.onChange} />
             </Col>
             <Col md={5} sm={24}>
-              <Button className={styles.serach} style={{ marginLeft: 8}} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
+              <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
             </Col>
           </Row>
         </Card>

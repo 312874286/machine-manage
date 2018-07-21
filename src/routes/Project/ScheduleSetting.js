@@ -49,9 +49,15 @@ const CreateForm = Form.create()(
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
       goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, discountHandle, discountHandleAdd, discountHandleDelete, modalData, onSelectShop, goodsLists,
-      disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, selectMachineFlag,
+      disabledStartDate, onStartChange, disabledEndDate, onEndChange,  handleStartOpenChange, handleEndOpenChange, startValue, endValue, endOpen,
     } = props;
+    // const okHandle = () => {
+    //   form.validateFields((err, fieldsValue) => {
+    //     if (err) return;
+    //     form.resetFields();
+    //     handleAdd(fieldsValue);
+    //   });
+    // };
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -70,25 +76,26 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-        width={800} >
+        width={800}
+      >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="选择活动" style={{ display : modalData.id ? 'none' : 'block' }}>
+          <FormItem {...formItemLayout} label="选择活动" style={{display : modalData.id ? 'none' : 'block'}}>
             {getFieldDecorator('activityId', {
-              rules: [{ required: false, message: '请选择活动' }],
+              rules: [{ required: modalData.id ? false : true, message: '请选择活动' }],
             })(<Select placeholder="请选择" onSelect={onSelectShop} >
                   {activityLists.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.name}</Option>
                     );
                   })}
-               </Select>)}
+                 </Select>)}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择活动" style={{ display : modalData.id ? 'block' : 'none' }}>
+          <FormItem {...formItemLayout} label="选择活动"  style={{display : modalData.id ? 'block' : 'none'}}>
             {getFieldDecorator('activityName', {
               rules: [{ required: false, message: '请选择活动' }],
             })(<Input disabled />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'none' : 'block' }}>
+          <FormItem {...formItemLayout} label="选择开始时间">
             {getFieldDecorator('startTimeStr', {
               rules: [{ required: true, message: '选择开始时间' }],
             })(
@@ -100,22 +107,6 @@ const CreateForm = Form.create()(
                 placeholder="选择开始时间"
                 onChange={onStartChange}
                 onOpenChange={handleStartOpenChange}
-              />
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'block' : 'none' }}>
-            {getFieldDecorator('startTimeStr', {
-              rules: [{ required: true, message: '选择开始时间' }],
-            })(
-              <DatePicker
-                disabledDate={disabledStartDate}
-                showTime
-                format="YYYY-MM-DD HH:mm:ss"
-                // value={startValue}
-                placeholder="选择开始时间"
-                onChange={onStartChange}
-                onOpenChange={handleStartOpenChange}
-                disabled
               />
             )}
           </FormItem>
@@ -149,7 +140,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="选择游戏">
             {getFieldDecorator('gameId', {
-              rules: [{ required: false, message: '请选择游戏' }],
+              rules: [{ required: true, message: '请选择游戏' }],
             })(
               <Select placeholder="请选择">
                 {gameLists.map((item) => {
@@ -162,7 +153,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="同一用户获得商品次数">
             {getFieldDecorator('userMaxTimes', {
-              rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
+              rules: [{ required: true, whitespace: true, message: '请填写同一用户获得商品次数' }],
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
@@ -394,8 +385,6 @@ export default class ScheduleSettingList extends PureComponent {
     startValue: null,
     endValue: null,
     endOpen: false,
-    isDisabled: false,
-    selectMachineFlag: false,
   };
   componentDidMount() {
     this.getAreaList();
@@ -416,9 +405,8 @@ export default class ScheduleSettingList extends PureComponent {
       });
     });
   }
-  // 时间控件开始
+  // 时间控件
   disabledStartDate = (startValue) => {
-    // console.log('disabledStartDate', startValue)
     // const endValue = this.state.endValue;
     // if (!startValue || !endValue) {
     //   return false;
@@ -427,16 +415,11 @@ export default class ScheduleSettingList extends PureComponent {
     return startValue && startValue < moment().endOf('day');
   }
   disabledEndDate = (endValue) => {
-    // console.log('disabledEndDate', endValue)
     const startValue = this.state.startValue;
     if (!endValue || !startValue) {
       return false;
     }
-    // console.log('1', endValue, '2', this.state.endValue, '3', startValue.valueOf())
-    // return endValue.valueOf() <= startValue.valueOf() 时间戳
-    // endValue <= moment(startValue.valueOf()) &&
-    // console.log(typeof this.state.endValue)
-    return !this.state.modalType ? (endValue < moment().endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
+    return endValue.valueOf() <= startValue.valueOf();
   }
 
   onChange = (field, value) => {
@@ -445,13 +428,11 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   onStartChange = (value) => {
-    // console.log('onStartChange', value)
     this.onChange('startValue', value);
   }
 
   onEndChange = (value) => {
-    // console.log('onEndChange', value)
-    this.onChange('endValue', value);
+   //  this.onChange('endValue', value);
   }
 
   handleStartOpenChange = (open) => {
@@ -463,7 +444,7 @@ export default class ScheduleSettingList extends PureComponent {
   handleEndOpenChange = (open) => {
     this.setState({ endOpen: open });
   }
-  // 时间控件结束
+  // 时间控件
   onSelectShop = (value, option) => {
     this.getGoodsLists(value);
   }
@@ -506,15 +487,15 @@ export default class ScheduleSettingList extends PureComponent {
         this.setState({
           goodsLists: res,
         }, () => {
-          // this.setState({
-          //   goodsInitData: [{
-          //     key: this.state.goodsLists[0].id,
-          //     resultCode: 1,
-          //     resultRemark: '当游戏得分超过90，掉落此商品',
-          //     prizeType: 1,
-          //     prizeId: this.state.goodsLists[0].id,
-          //   }],
-          // });
+          this.setState({
+            goodsInitData: [{
+              key: this.state.goodsLists[0].id,
+              resultCode: 1,
+              resultRemark: '当游戏得分超过90，掉落此商品',
+              prizeType: 1,
+              prizeId: this.state.goodsLists[0].id,
+            }],
+          });
         });
       }
     });
@@ -591,14 +572,14 @@ export default class ScheduleSettingList extends PureComponent {
           let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
           let width = Math.floor((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('开始时间及结束日期在15天的范围', left, width, Math.round((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000)))
-          let tmp = { left: (leftTmp + (6.5 * left)) + '%', top: (25 + (index * 4)) + '%', width: (widthTmp + (6.5 * (width + 1))) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          let tmp = { left: (leftTmp + (6.5 * left)) + '%', top: (25 + (index * 4)) + '%', width: (widthTmp + (6.5 * (width + 1))) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         } else {
           // 结束日期>范围的结束日期
           let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
           let width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('结束日期>范围的结束日期', left, width)
-          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         }
       } else {
@@ -607,12 +588,12 @@ export default class ScheduleSettingList extends PureComponent {
         if (moment(item.endTime) >= moment(this.state.handleDays.endDay)) {
           // console.log('jieshu日期<范围的开始日期', left, width)
           width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
-          let tmp = { left: (6.5 * left) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          let tmp = { left: (6.5 * left) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         } else {
           width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('开始日期<范围的开始日期', left, width)
-          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, name: item.activityName, id: item.id }
           activityArr.push(tmp);
         }
       }
@@ -760,16 +741,7 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 设置modal 数据
   setModalData = (data) => {
-    // isDisabled
     if (data) {
-      if (moment(data.startTime) < new Date().getTime()) {
-        // 活动开始比现在晚，可以更改日期
-        this.setState({
-          isDisabled: true,
-          startValue: data.startTime,
-          endValue: data.endTime,
-        });
-      }
       this.form.setFieldsValue({
         activityId: data.activityId,
         gameId: data.gameId,
@@ -787,7 +759,6 @@ export default class ScheduleSettingList extends PureComponent {
         userMaxTimes: undefined,
       });
       this.setState({
-        isDisabled: false,
         machineNum: '',
         selectCityName: '',
         goodsInitData: [],
@@ -795,8 +766,6 @@ export default class ScheduleSettingList extends PureComponent {
         couponsInitData: [],
         couponsCount: 0,
         goodsLists: [],
-        endValue: '',
-        startValue: '',
       });
     }
   }
@@ -856,60 +825,57 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
-    this.setState({
-      selectMachineFlag: false,
-    }, () => {
-      this.form.validateFields((err, fieldsValue) => {
-        if (err) {
+    this.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      console.log('fieldsValue', fieldsValue)
+      if (!this.state.modalData.id) {
+        if (this.state.selectCity.length === 0) {
+          message.error('请先选择机器')
           return;
         }
-        if (!fieldsValue.activityId || !fieldsValue.gameId || !fieldsValue.userMaxTimes) {
-          message.error('请补全信息')
-          return;
-        }
-        console.log('fieldsValue', fieldsValue)
-        if (!this.state.modalData.id) {
-          if (this.state.selectCity.length === 0) {
-            message.error('请先选择机器')
-            return;
-          }
-        }
-        let params = {
-          ...fieldsValue,
-          goods: this.state.goodsInitData,
-          coupons: this.state.couponsInitData,
-          machines: this.state.machines,
-          startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
-          endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
-        };
+      }
+      // const rangeTimeValue = fieldsValue.rangeTime
+      let params = {
+        ...fieldsValue,
+        // startValue: undefined,
+        // endValue: undefined,
+        // startTimeStr: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
+        // endTimeStr: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
+        goods: this.state.goodsInitData,
+        coupons: this.state.couponsInitData,
+        machines: this.state.machines,
+        startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
+        endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
+      };
+      this.setState({
+        editModalConfirmLoading: true,
+        modalData: {},
+      });
+      let url = 'scheduleSetting/saveScheduleSetting';
+      if (this.state.modalData.id) {
+        url = 'scheduleSetting/editScheduleSetting';
+        params = { ...params, id: this.state.modalData.id };
+      } else {
+        params = { ...params, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then(() => {
         this.setState({
-          editModalConfirmLoading: true,
-          modalData: {},
-        });
-        let url = 'scheduleSetting/saveScheduleSetting';
-        if (this.state.modalData.id) {
-          url = 'scheduleSetting/editScheduleSetting';
-          params = { ...params, id: this.state.modalData.id };
-        } else {
-          params = { ...params, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
-        }
-        this.props.dispatch({
-          type: url,
-          payload: {
-            params,
-          },
-        }).then(() => {
-          this.setState({
-            code: '',
-            getDataStartDay: this.state.startTime,
-            getDataEndDay: this.state.endTime,
-          }, () => {
-            this.getLists();
-          })
-          this.setState({
-            editModalConfirmLoading: false,
-            modalVisible: false,
-          });
+          code: '',
+          getDataStartDay: this.state.startTime,
+          getDataEndDay: this.state.endTime,
+        }, () => {
+          this.getLists();
+        })
+        this.setState({
+          editModalConfirmLoading: false,
+          modalVisible: false,
         });
       });
     });
@@ -940,24 +906,24 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 四级联动结束
   // 日历开始
-  // range = (start, end) =>  {
-  //   const result = [];
-  //   for (let i = start; i < end; i++) {
-  //     result.push(i);
-  //   }
-  //   return result;
-  // }
-  // disabledDate = (current) => {
-  //   // Can not select days before today and today
-  //   return current && current < moment().endOf('day');
-  // }
-  // disabledDateTime = () => {
-  //   return {
-  //     disabledHours: () => range(0, 24).splice(4, 20),
-  //     disabledMinutes: () => range(30, 60),
-  //     disabledSeconds: () => [55, 56],
-  //   };
-  // }
+  range = (start, end) =>  {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+  disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  }
+  disabledDateTime = () => {
+    return {
+      disabledHours: () => range(0, 24).splice(4, 20),
+      disabledMinutes: () => range(30, 60),
+      disabledSeconds: () => [55, 56],
+    };
+  }
   // 日历结束
   // tree开始
   renderTreeNodes = (data) => {
@@ -1071,53 +1037,46 @@ export default class ScheduleSettingList extends PureComponent {
       });
     });
   }
-  timeFormRef = (form) => {
-    this.timeFormRef = form;
-  }
   openSelectMachineModal = () => {
-    this.setState({
-      selectMachineFlag: true,
-    }, () => {
-      this.form.validateFields((err, fieldsValue) => {
-        console.log('224', err, fieldsValue)
-        if (err) return;
-        // if (fieldsValue.gameId)
-        // if (fieldsValue.remark)
-        // if (fieldsValue.userMaxTimes)
-        let params = {
-          ...fieldsValue,
-          code: this.state.code,
-          level: 1,
-          startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
-          endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
-        };
-        this.setState({
-          machineStartTime: params.startTime,
-          machineEndTime: params.endTime,
-          code: '',
-        }, () => {
-          this.props.dispatch({
-            type: 'scheduleSetting/selectAreaMachines',
-            payload: {
-              restParams: {
-                code: this.state.code,
-                level: 1,
-                startTime: this.state.machineStartTime,
-                endTime: this.state.machineEndTime,
-              },
+    this.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      // const rangeTimeValue = fieldsValue.rangeTime
+      let params = {
+        ...fieldsValue,
+        // rangeTime: undefined,
+        // startTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
+        // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
+        code: this.state.code,
+        level: 1,
+        startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
+        endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
+      };
+      this.setState({
+        machineStartTime: params.startTime,
+        machineEndTime: params.endTime,
+        code: '',
+      }, () => {
+        this.props.dispatch({
+          type: 'scheduleSetting/selectAreaMachines',
+          payload: {
+            restParams: {
+              code: this.state.code,
+              level: 1,
+              startTime: this.state.machineStartTime,
+              endTime: this.state.machineEndTime,
             },
-          }).then((res) => {
+          },
+        }).then((res) => {
+          this.setState({
+            treeData: res,
+          }, () => {
             this.setState({
-              treeData: res,
-            }, () => {
-              this.setState({
-                editMachineModalVisible: true,
-              });
+              editMachineModalVisible: true,
             });
           });
-        })
+        });
       })
-    });
+    })
   }
   onEditMachineHandleModalVisibleClick = () => {
     this.setState({
@@ -1159,7 +1118,7 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       // console.log('res', res)
-      this.getGoodsLists(res.shopId)
+      // this.getGoodsLists()
       let goodsInitDatas = res.goods.map((item, index) => {
         return { key: index, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
       })
@@ -1428,9 +1387,9 @@ export default class ScheduleSettingList extends PureComponent {
           onEndChange={this.onEndChange}
           handleStartOpenChange={this.handleStartOpenChange}
           handleEndOpenChange={this.handleEndOpenChange}
+          startValue={this.state.startValue}
+          endValue={this.state.endValue}
           endOpen={this.state.endOpen}
-          isDisabled={this.state.isDisabled}
-          selectMachineFlag={this.state.selectMachineFlag}
         />
         <SelectMachineForm
           ref={this.selectMachineFormRef}
@@ -1485,21 +1444,23 @@ export default class ScheduleSettingList extends PureComponent {
                 {/*</Select>*/}
               {/*)}*/}
             {/*</FormItem>*/}
-            {/*<SelectTimeForm*/}
-              {/*ref={this.timeFormRef}*/}
-              {/*openSelectMachineModal={openSelectMachineModal}*/}
-              {/*selectCityName={selectCityName}*/}
-              {/*machineNum={machineNum}*/}
-              {/*modalData={modalData}*/}
-              {/*disabledStartDate={disabledStartDate}*/}
-              {/*onStartChange={onStartChange}*/}
-              {/*disabledEndDate={disabledEndDate}*/}
-              {/*onEndChange={onEndChange}*/}
-              {/*handleStartOpenChange={handleStartOpenChange}*/}
-              {/*handleEndOpenChange={handleEndOpenChange}*/}
-              {/*endOpen={endOpen}*/}
-              {/*isDisabled={isDisabled}*/}
-            {/*/>*/}
+            {/*<FormItem {...formItemLayout} label="选择时间">*/}
+              {/*{getFieldDecorator('rangeTime', {*/}
+                {/*rules: [{ type: 'array', required: true, message: '请选择时间' }],*/}
+              {/*})(*/}
+                {/*<RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem {...formItemLayout} label="选择机器">*/}
+              {/*{getFieldDecorator('remark') ((modalData.id) ? (*/}
+                {/*<div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (*/}
+                {/*<div>*/}
+                  {/*{ selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }*/}
+                  {/*<Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>*/}
+                {/*</div>*/}
+              {/*))*/}
+              {/*}*/}
+            {/*</FormItem>*/}
             {/*<FormItem {...formItemLayout} label="选择游戏">*/}
               {/*{getFieldDecorator('gameId', {*/}
                 {/*rules: [{ required: true, message: '请选择游戏' }],*/}

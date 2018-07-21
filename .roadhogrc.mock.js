@@ -2724,7 +2724,118 @@ const proxy = {
       ],
       "msg": "成功"
     })
-  }
+  },
+  'POST /check/faultType/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+      "pageSize": 20,
+      "currentResult": 0,
+      "totalPage": 1,
+      "pageNo": 1,
+      "totalCount": 3,
+      "list": null,
+      "firstPage": true,
+      "lastPage": true,
+      "nextPage": 1,
+      "prePage": 1,
+      "firstResult": 0
+      },
+      "data": [
+      {
+      "code": "10000",
+      "parentCode": null,
+      "name": "黑屏",
+      "parentName": "大黑屏,小黑瓶,半黑屏",
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      },
+      {
+      "code": "20000",
+      "parentCode": null,
+      "name": "门坏",
+      "parentName": "门掉了,关不上",
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      },
+      {
+      "code": "5906bb314c654f26851781b1b357ec93",
+      "parentCode": null,
+      "name": "玻璃",
+      "parentName": "玻璃掉了,玻璃碎了",
+      "level": null,
+      "createId": "张文杰",
+      "createTime": "2018-07-21 09:40:00",
+      "updateId": null,
+      "updateTime": null
+      }
+      ]
+      })
+  },
+  'POST /check/faultType/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+      })
+  },
+  'POST /check/faultType/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+      "code": "5906bb314c654f26851781b1b357ec93",
+      "parentCode": null,
+      "name": "玻璃",
+      "parentName": null,
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null,
+      "solutions": [
+      {
+      "code": "09ae88f5835348d6976e13dcb2ea86f3",
+      "parentCode": null,
+      "name": "玻璃掉了",
+      "parentName": null,
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      },
+      {
+      "code": "c03f1ebd30ff4b9daafbd972a66c9301",
+      "parentCode": null,
+      "name": "玻璃碎了",
+      "parentName": null,
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      }
+      ]
+      },
+      "msg": "成功"
+      },
+    )
+  },
+  'POST /check/faultType/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+      }
+    )
+  },
 };
 
 // export default noProxy ? {
