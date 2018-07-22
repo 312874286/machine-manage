@@ -149,18 +149,18 @@ export default class signInRecord extends PureComponent {
   // 四级联动结束
   handleModalVisible = () => {
     console.log('导出');
-    this.props.dispatch({
-      type: 'signInRecord/getUserExcel',
-      payload: {
-        restParams: {
-          keyword: this.state.keyword,
-          code: this.state.code,
-        },
-      },
-    }).then((res) => {
-    });
+    // this.props.dispatch({
+    //   type: 'signInRecord/getUserExcel',
+    //   payload: {
+    //     restParams: {
+    //       keyword: this.state.keyword,
+    //       code: this.state.code,
+    //     },
+    //   },
+    // }).then((res) => {
+    // });
     // ?keyword=&code=
-    // window.location.href = "http://api.erp.72solo.com/check/signIn/userExcel?keyword="+this.state.keyword+"&code="+this.state.code
+    window.location.href = "http://api.erp.72solo.com/check/signIn/userExcel?keyword="+this.state.keyword+"&code="+this.state.code
   }
   // 新增modal确认事件 结束
   renderAdvancedForm() {

@@ -333,6 +333,10 @@ export default class user extends PureComponent {
         cardNo: undefined,
         enterprise: undefined,
       });
+      this.setState({
+        machineNum: '',
+        selectCityName: '',
+      });
     }
   }
   // 编辑modal 确认事件
@@ -357,11 +361,23 @@ export default class user extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.getLists();
+      }).then((res) => {
+        if (res && res.code === 0) {
+          message.success('添加成功');
+          this.setState({
+            keyword: '',
+          }, () => {
+            this.getLists();
+          })
+          this.setState({
+            modalVisible: false,
+          });
+          // this.getLists();
+        } else {
+          message.error(res ? res.msg : '添加失败');
+        }
         this.setState({
           editModalConfirmLoading: false,
-          modalVisible: false,
         });
       });
     });
@@ -407,7 +423,7 @@ export default class user extends PureComponent {
           </TreeNode>
         );
       }
-      return (parseInt(item.canUseNum) === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
+      return <TreeNode {...item} dataRef={item} />;
     });
   }
   onLoadData = (treeNode) => {
@@ -500,9 +516,10 @@ export default class user extends PureComponent {
     });
   }
   openSelectMachineModal = () => {
-    console.log('openSelectMachineModal')
+    console.log('openSelectMachineModal', this.state.checkedKeys)
     this.setState({
       code: '',
+      checkedKeys: [],
     }, () => {
       this.props.dispatch({
         type: 'user/selectMachine',
