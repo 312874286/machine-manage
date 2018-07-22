@@ -12,7 +12,7 @@ export async function getCheckFaultTypeList({ params }) {
 export async function getCheckFaultTypeAdd({ params }) {
     //   console.log('getCheckFaultTypeList::22',params,stringify(params));
       return fetch.postJSON(api.getCheckFaultTypeAdd, {
-        body: stringify(params),
+        body: JSON.stringify(params),
       });
     }
 export async function getCheckFaultTypeDetail({ params }) {
