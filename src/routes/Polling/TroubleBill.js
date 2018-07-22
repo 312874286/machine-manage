@@ -164,16 +164,16 @@ export default class troubleBill extends PureComponent {
   startDatePickerChange = (date, dateString) => {
     this.setState({
       type: '1',
-      startDateString: dateString,
+      startDateString: new Date(dateString).getTime(),
     });
-    console.log('startDatePickerChange::', date, dateString);
+    console.log('startDatePickerChange::', date, dateString, new Date(dateString).getTime());
   }
   endDatePickerChange = (date, dateString) => {
     this.setState({
       type: '2',
-      endDateString: dateString,
+      endDateString: new Date(dateString).getTime(),
     });
-    console.log('endDatePickerChange::', date, dateString);
+    console.log('endDatePickerChange::', date, dateString, new Date(dateString).getTime());
   }
   render() {
     const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal } = this.state;
