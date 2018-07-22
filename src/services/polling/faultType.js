@@ -11,7 +11,7 @@ export async function getCheckFaultTypeList({ params }) {
 
 export async function getCheckFaultTypeAdd({ params }) {
     //   console.log('getCheckFaultTypeList::22',params,stringify(params));
-      return fetch.post(api.getCheckFaultTypeAdd, {
+      return fetch.postJSON(api.getCheckFaultTypeAdd, {
         body: stringify(params),
       });
     }
@@ -23,7 +23,7 @@ export async function getCheckFaultTypeDetail({ params }) {
     }
 export async function getCheckFaultTypeUpdate({ params }) {
     //   console.log('getCheckFaultTypeList::22',params);
-      return fetch.post(api.getCheckFaultTypeUpdate, {
+      return fetch.postJSON(api.getCheckFaultTypeUpdate, {
         body: stringify(params),
       });
     }
