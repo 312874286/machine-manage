@@ -1,4 +1,4 @@
-import { getRecordList } from '../../services/polling/SignInRecord';
+import { getRecordList, userExcel } from '../../services/polling/SignInRecord';
 
 export default {
   namespace: 'signInRecord',
@@ -15,6 +15,10 @@ export default {
         type: 'saveList',
         payload: response,
       });
+    },
+    *getUserExcel({ payload: { restParams } }, { call, put }) {
+      const response = yield call(userExcel, { restParams });
+      return response.data;
     },
   },
 

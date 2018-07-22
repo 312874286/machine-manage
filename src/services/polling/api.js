@@ -11,10 +11,15 @@ const api = map({
   saveUser: '/check/user/add',
   updateUser: '/check/user/update',
   selectMachine: '/check/user/selectAreaMachines?code={code}&level={level}',
+
   getCheckFaultTypeList: '/check/faultType/list',
   getCheckFaultTypeAdd: '/check/faultType/add',
   getCheckFaultTypeDetail: '/check/faultType/detail',
   getCheckFaultTypeUpdate: '/check/faultType/update',
+
+  getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  userExcel: '/check/signIn/userExcel?keyword={keyword}&code={code}',
+
 });
 
 export default api;
