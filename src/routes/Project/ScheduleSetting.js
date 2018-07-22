@@ -1107,8 +1107,8 @@ export default class ScheduleSettingList extends PureComponent {
               });
             });
           });
-        })
-      })
+        });
+      });
     });
   }
   onEditMachineHandleModalVisibleClick = () => {
