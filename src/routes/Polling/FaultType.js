@@ -189,6 +189,7 @@ export default class FaultType extends PureComponent {
               this.setState({
                 visible: false,
               });
+              this.getLists();
             } else {
               message.error(msg);
             }
@@ -239,6 +240,7 @@ export default class FaultType extends PureComponent {
               this.setState({
                 visible: false,
               });
+              this.getLists();
             } else {
               message.error(msg);
             }

@@ -24,6 +24,6 @@ export async function getCheckFaultTypeDetail({ params }) {
 export async function getCheckFaultTypeUpdate({ params }) {
     //   console.log('getCheckFaultTypeList::22',params);
       return fetch.postJSON(api.getCheckFaultTypeUpdate, {
-        body: stringify(params),
+        body: JSON.stringify(params),
       });
     }
