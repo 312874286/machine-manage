@@ -177,7 +177,7 @@ export default class FaultType extends PureComponent {
             payload: {
               params: {
                 name: this.state.typeName,
-                solutions: JSON.stringify(newarr),
+                solutions: newarr,
               },
             },
           }).then((res) => {
