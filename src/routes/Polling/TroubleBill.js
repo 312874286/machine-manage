@@ -79,6 +79,7 @@ export default class troubleBill extends PureComponent {
   }
   onReplyHandle = (record) => {
     this.setState({
+      textAreaVal: '',
       currentRecord: record,
     });
     this.props.dispatch({
@@ -96,6 +97,7 @@ export default class troubleBill extends PureComponent {
       });
       console.log(data);
       this.setState({
+        // textAreaVal: '',
         replyVisible: true,
       });
       // treeData = data;
@@ -174,7 +176,7 @@ export default class troubleBill extends PureComponent {
     console.log('endDatePickerChange::', date, dateString);
   }
   render() {
-    const { seeVisible, replyVisible, seeData, currentRecord } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal } = this.state;
     const { troubleBill: { list, page } } = this.props;
     // console.log(11111, list, page);
     const columns = [{
@@ -459,7 +461,7 @@ export default class troubleBill extends PureComponent {
               回复
             </Col>
             <Col md={15} sm={24}>
-              <TextArea placeholder="请输入" onChange={this.onTextAreaChange.bind(this)} autosize={{ minRows: 2, maxRows: 6 }} />
+              <TextArea placeholder="请输入" value={textAreaVal} onChange={this.onTextAreaChange.bind(this)} autosize={{ minRows: 2, maxRows: 6 }} />
             </Col>
           </Row>
         </Modal>
