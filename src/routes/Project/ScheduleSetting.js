@@ -1071,7 +1071,7 @@ export default class ScheduleSettingList extends PureComponent {
       selectMachineFlag: true,
     }, () => {
       this.form.validateFields((err, fieldsValue) => {
-        console.log('224', err, fieldsValue)
+        // console.log('224', err, fieldsValue)
         if (err) return;
         // if (fieldsValue.gameId)
         // if (fieldsValue.remark)

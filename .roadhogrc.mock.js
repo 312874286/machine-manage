@@ -2806,6 +2806,13 @@ const proxy = {
       ]
     })
   }
+  'GET /check/signIn/userExcel': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  }
 };
 
 // export default noProxy ? {
