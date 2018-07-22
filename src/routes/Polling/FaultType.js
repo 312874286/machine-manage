@@ -170,6 +170,7 @@ export default class FaultType extends PureComponent {
             };
             newarr.push(newobj);
         }
+        // console.log(newarr);
         this.props.dispatch({
             type: 'faultType/getCheckFaultTypeAdd',
             payload: {
