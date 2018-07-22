@@ -1126,7 +1126,7 @@ export default class ScheduleSettingList extends PureComponent {
       selectStatus: e.target.value,
     });
   }
-  // 动态添加结束
+  //   动态添加结束
   // 日历排期表格的编辑，查看，删除
   getDetail = (item) => {
   }
