@@ -284,12 +284,6 @@ export default class FaultType extends PureComponent {
         <PageHeaderLayout>
           <Card>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                添加时间
-              </Col>
-              <Col md={4} sm={24}>
-                <DatePicker onChange={this.startDatePickerChange} />
-              </Col>
               <Col md={7} sm={24}>
                 <Input placeholder="请输入角色名称" onChange={this.onChange} />
               </Col>
