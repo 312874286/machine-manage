@@ -560,7 +560,7 @@ export default class user extends PureComponent {
               {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <span style={{ float: 'right' }}>
                <FormItem>
                   <Button onClick={this.handleFormReset}>

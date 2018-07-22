@@ -14,6 +14,7 @@ import {
 import StandardTable from '../../components/StandardTable/index';
 import styles from './PunchingRecord.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import environment from "../../environments/environment";
 
 
 const FormItem = Form.Item;
@@ -160,7 +161,7 @@ export default class signInRecord extends PureComponent {
     // }).then((res) => {
     // });
     // ?keyword=&code=
-    window.location.href = "http://api.erp.72solo.com/check/signIn/userExcel?keyword="+this.state.keyword+"&code="+this.state.code
+    window.location.href = environment.host + "/check/signIn/userExcel?keyword="+this.state.keyword+"&code="+this.state.code
   }
   // 新增modal确认事件 结束
   renderAdvancedForm() {
