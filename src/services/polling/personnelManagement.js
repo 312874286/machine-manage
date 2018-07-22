@@ -23,8 +23,8 @@ export async function saveUser({ params }) {
   });
 }
 export async function updateUser({ params }) {
-  return fetch.post(api.updateUser, {
-    body: stringify(params),
+  return fetch.postJSON(api.updateUser, {
+    body: JSON.stringify(params),
   });
 }
 export async function selectMachine({ restParams }) {

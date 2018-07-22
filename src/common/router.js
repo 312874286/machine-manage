@@ -185,8 +185,8 @@ export const getRouterData = (app) => {
     '/check/user': {
       component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/User')),
     },
-    '/polling/punchingRecord': {
-      component: dynamicWrapper(app, ['polling/punchingRecord', 'log/log', 'common'], () => import('../routes/Polling/PunchingRecord')),
+    '/check/signIn': {
+      component: dynamicWrapper(app, ['polling/signInRecord', 'log/log', 'common'], () => import('../routes/Polling/SignInRecord')),
     },
     '/check/fault': {
       component: dynamicWrapper(app, ['polling/troubleBill', 'log/log', 'common'], () => import('../routes/Polling/TroubleBill')),

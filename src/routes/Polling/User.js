@@ -18,7 +18,7 @@ import {
 import StandardTable from '../../components/StandardTable/index';
 import styles from './PersonnelManagement.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
+import {RegexTool} from "../../utils/utils";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -51,22 +51,43 @@ const CreateForm = Form.create()(
       >
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="姓名">
-            {getFieldDecorator('merchantCode', {
+            {getFieldDecorator('name', {
               rules: [{ required: true, whitespace: true, message: '请输入姓名' }],
             })(<Input placeholder="请输入姓名" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="手机号">
-            {getFieldDecorator('merchantName', {
-              rules: [{ required: true, whitespace: true, message: '请输入手机号' }],
-            })(<Input placeholder="请输入手机号" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="身份证号">
-            {getFieldDecorator('originFlag', {
-              rules: [{ required: true, whitespace: true, message: '请输入身份证号' }],
-            })(<Input placeholder="请输入身份证号" />)}
-          </FormItem>
+          <Form.Item {...formItemLayout} label="手机号码">
+            {getFieldDecorator('phone', {
+              validateFirst: true,
+              rules: [
+                { type: 'string', required: true, message: '请输入手机号' },
+                {
+                  validator(rule, value, callback) {
+                    if (!(RegexTool.mobile.test(value))) {
+                      callback('请输入正确的手机号');
+                    }
+                    callback();
+                  },
+                }],
+            })(<Input placeholder="请输入手机号码"  />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="身份证号">
+            {getFieldDecorator('cardNo', {
+              validateFirst: true,
+              rules: [
+                { type: 'string', required: true, message: '请输入身份证号' },
+                {
+                  validator(rule, value, callback) {
+                    if (!(RegexTool.idCard.test(value))) {
+                      callback('请输入正确的身份证号');
+                    }
+                    callback();
+                  },
+                },
+              ],
+            })(<Input placeholder="请输入身份证号"  />)}
+          </Form.Item>
           <FormItem {...formItemLayout} label="公司">
-            {getFieldDecorator('brandName', {
+            {getFieldDecorator('enterprise', {
               rules: [{ required: true, whitespace: true, message: '请输入公司' }],
             })(<Input placeholder="请输入公司" />)}
           </FormItem>
@@ -74,13 +95,19 @@ const CreateForm = Form.create()(
             {getFieldDecorator('remark', {
               rule: [{ validator: '' }],
             }) ((modalData.id) ? (
-              <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
+              <div>
+                <div>
+                  { selectCityName.length > 0 ? '' : modalData.remark ? modalData.remark : '测试暂无' }
+                  { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
+                </div>
+                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+              </div>
+             ) : (
               <div>
                 { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
                 <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
               </div>
-            ))
-            }
+            ))}
           </FormItem>
         </Form>
       </Modal>
@@ -181,7 +208,7 @@ export default class user extends PureComponent {
     WatchMachineModalVisible: false,
     machineList: [],
 
-
+    machines: [],
     treeData: [],
     machineNum: 0,
     selectCity: [],
@@ -273,11 +300,6 @@ export default class user extends PureComponent {
   };
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
-    this.setState({
-      modalVisible: true,
-      modalData: item,
-      modalType: false,
-    });
     this.props.dispatch({
       type: 'user/getUserDetail',
       payload: {
@@ -286,13 +308,17 @@ export default class user extends PureComponent {
         },
       },
     }).then((res) => {
-      console.log('res', res)
-      this.setModalData(res);
+      this.setState({
+        modalVisible: true,
+        modalData: item,
+        modalType: false,
+      }, () => {
+        this.setModalData(res);
+      });
     });
   }
   // 设置modal 数据
   setModalData = (data) => {
-    console.log('data', data)
     if (data) {
       this.form.setFieldsValue({
         name: data.name || undefined,
@@ -319,11 +345,12 @@ export default class user extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
+      let remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、')
       let url = 'user/saveUser';
-      let params = { ...values };
+      let params = { ...values, remark: remark, machines: this.state.machines };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
-        params = { ...values, id: this.state.modalData.id };
+        params = { ...values, id: this.state.modalData.id, remark: remark, machines: this.state.machines };
       }
       this.props.dispatch({
         type: url,

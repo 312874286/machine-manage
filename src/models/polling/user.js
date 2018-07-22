@@ -41,11 +41,11 @@ export default {
         let isLeaf = false, disabled = false, machines = [], title;
         for (let i = 0; i < data.length; i++) {
           machines = data[i].machines
-          title = data[i].name + '(' + data[i].canUseNum + '/' + data[i].totalNum + ')'
+          title = data[i].name
           if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
             isLeaf = true;
           }
-          if (data[i].canUseNum === '0') {
+          if (data[i].machines.length === 0) {
             disabled = true;
           }
           if (data[0].level === 5) {
@@ -64,7 +64,7 @@ export default {
             province: data[i].province,
             machines: machines,
             disabledFlag: disabled,
-            canUseNum: data[i].canUseNum,
+            canUseNum: data[i].machines.length,
           };
           arr.push(a);
         }

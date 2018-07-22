@@ -397,7 +397,7 @@ const proxy = {
           {
             id: 'a29',
             functionDepict: '打卡记录',
-            functionPath: 'record',
+            functionPath: 'signIn',
             parentId: 'a26',
             functionLevel: 2,
           },

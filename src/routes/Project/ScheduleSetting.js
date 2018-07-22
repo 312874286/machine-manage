@@ -867,15 +867,45 @@ export default class ScheduleSettingList extends PureComponent {
         },
       }).then(() => {
         this.setState({
-          code: '',
-          getDataStartDay: this.state.startTime,
-          getDataEndDay: this.state.endTime,
-        }, () => {
-          this.getLists();
-        })
-        this.setState({
-          editModalConfirmLoading: false,
-          modalVisible: false,
+          editModalConfirmLoading: true,
+          modalData: {},
+        });
+        let url = 'scheduleSetting/saveScheduleSetting';
+        if (this.state.modalData.id) {
+          url = 'scheduleSetting/editScheduleSetting';
+          params = { ...params, id: this.state.modalData.id };
+        } else {
+          params = { ...params, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
+        }
+        this.props.dispatch({
+          type: url,
+          payload: {
+            params,
+          },
+        }).then((resp) => {
+          if (resp && resp.code === 0) {
+            message.success('新增成功');
+          } else {
+            Modal.error({
+              title: '',
+              content: resp ? resp.msg : '新增失败',
+            });
+            this.setState({
+              editModalConfirmLoading: false,
+            });
+            return;
+          }
+          this.setState({
+            code: '',
+            getDataStartDay: this.state.startTime,
+            getDataEndDay: this.state.endTime,
+          }, () => {
+            this.getLists();
+          })
+          this.setState({
+            editModalConfirmLoading: false,
+            modalVisible: false,
+          });
         });
       });
     });
@@ -905,26 +935,6 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   // 四级联动结束
-  // 日历开始
-  range = (start, end) =>  {
-    const result = [];
-    for (let i = start; i < end; i++) {
-      result.push(i);
-    }
-    return result;
-  }
-  disabledDate = (current) => {
-    // Can not select days before today and today
-    return current && current < moment().endOf('day');
-  }
-  disabledDateTime = () => {
-    return {
-      disabledHours: () => range(0, 24).splice(4, 20),
-      disabledMinutes: () => range(30, 60),
-      disabledSeconds: () => [55, 56],
-    };
-  }
-  // 日历结束
   // tree开始
   renderTreeNodes = (data) => {
     return data.map((item) => {
@@ -1038,32 +1048,36 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   openSelectMachineModal = () => {
-    this.form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      // const rangeTimeValue = fieldsValue.rangeTime
-      let params = {
-        ...fieldsValue,
-        // rangeTime: undefined,
-        // startTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm'),
-        // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm'),
-        code: this.state.code,
-        level: 1,
-        startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
-        endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
-      };
-      this.setState({
-        machineStartTime: params.startTime,
-        machineEndTime: params.endTime,
-        code: '',
-      }, () => {
-        this.props.dispatch({
-          type: 'scheduleSetting/selectAreaMachines',
-          payload: {
-            restParams: {
-              code: this.state.code,
-              level: 1,
-              startTime: this.state.machineStartTime,
-              endTime: this.state.machineEndTime,
+    this.setState({
+      selectMachineFlag: true,
+    }, () => {
+      this.form.validateFields((err, fieldsValue) => {
+        console.log('224', err, fieldsValue)
+        if (err) return;
+        // if (fieldsValue.gameId)
+        // if (fieldsValue.remark)
+        // if (fieldsValue.userMaxTimes)
+        let params = {
+          ...fieldsValue,
+          code: this.state.code,
+          level: 1,
+          startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
+          endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
+        };
+        this.setState({
+          machineStartTime: params.startTimeStr,
+          machineEndTime: params.endTimeStr,
+          code: '',
+        }, () => {
+          this.props.dispatch({
+            type: 'scheduleSetting/selectAreaMachines',
+            payload: {
+              restParams: {
+                code: this.state.code,
+                level: 1,
+                startTime: this.state.machineStartTime,
+                endTime: this.state.machineEndTime,
+              },
             },
           },
         }).then((res) => {
