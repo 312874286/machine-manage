@@ -6,7 +6,7 @@ import styles from './TroubleBill.less';
 
 const { TextArea } = Input;
 const { Option } = Select;
-// const { DatePicker } = DatePicker;
+const { RangePicker } = DatePicker;
 
 @connect(({ troubleBill }) => ({ troubleBill }))
 export default class troubleBill extends PureComponent {
@@ -177,9 +177,10 @@ export default class troubleBill extends PureComponent {
   startDatePickerChange = (date, dateString) => {
     this.setState({
       // type: '1',
-      startDateString: new Date(dateString).getTime(),
+      startDateString: new Date(dateString[0]).getTime(),
+      endDateString: new Date(dateString[1]).getTime(),
     });
-    console.log('startDatePickerChange::', date, dateString, new Date(dateString).getTime());
+    console.log('startDatePickerChange::', date, dateString, new Date(dateString[0]).getTime());
   }
   endDatePickerChange = (date, dateString) => {
     this.setState({
@@ -252,6 +253,8 @@ export default class troubleBill extends PureComponent {
     }, {
       title: '操作',
       key: 'action',
+      fixed: 'right',
+      width: 100,
       render: (text, record) => (
         <span>
           <a href="javascript:;" onClick={this.onReplyHandle.bind(this, record)} style={{ display: record.status === 0 ? 'block' : 'none' }}>回复</a>
@@ -269,18 +272,19 @@ export default class troubleBill extends PureComponent {
       <PageHeaderLayout>
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={2} sm={24}>
-              开始时间
+            <Col md={3} sm={24}>
+              选择时间
             </Col>
-            <Col md={4} sm={24}>
-              <DatePicker onChange={this.startDatePickerChange} />
+            <Col md={6} sm={24}>
+              {/* <DatePicker onChange={this.startDatePickerChange} /> */}
+              <RangePicker onChange={this.startDatePickerChange} />
             </Col>
-            <Col md={2} sm={24}>
+            {/* <Col md={2} sm={24}>
               解决时间
             </Col>
             <Col md={4} sm={24}>
               <DatePicker onChange={this.endDatePickerChange} />
-            </Col>
+            </Col> */}
             <Col md={4} sm={24}>
               <Select defaultValue="1" onChange={this.selectHandleChange}>
                 <Option value="1">上报时间</Option>
@@ -290,7 +294,7 @@ export default class troubleBill extends PureComponent {
             <Col md={4} sm={24}>
               <Input placeholder="请输入上报人，解决人，机器编号搜索" onChange={this.onChange} />
             </Col>
-            <Col md={3} sm={24}>
+            <Col md={7} sm={24}>
               <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
             </Col>
           </Row>
@@ -302,6 +306,7 @@ export default class troubleBill extends PureComponent {
             rowKey="id"
             onChange={this.handleTableChange}
             pagination={paginationProps}
+            scroll={{ x: 1500 }}
           />
         </Card>
         <Modal
