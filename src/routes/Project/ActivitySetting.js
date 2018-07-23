@@ -24,7 +24,7 @@ import LogModal from '../../components/LogModal/index';
 import moment from "moment/moment";
 
 // const status = ['全部','未开始', '进行中', '已结束'];
-const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }];
+const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }, { id: 4, name: '未排期' }];
 
 // const statusMap = [100100, 100200, 100300];
 // const prizeTypeStatus = ['商品', '优惠券', '商品+优惠券'];
