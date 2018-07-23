@@ -16,6 +16,7 @@ export default class FaultType extends PureComponent {
       typeName: '',
       type: '',
       currentRecord: {},
+      pageNo: 1,
     };
     componentDidMount = () => {
       this.getLists();
@@ -124,6 +125,7 @@ export default class FaultType extends PureComponent {
         payload: {
           params: {
             keyword: this.state.userName,
+            pageNo: this.state.pageNo,
           },
         },
       });
@@ -147,7 +149,7 @@ export default class FaultType extends PureComponent {
     handleOK = (e) => {
     
       if (this.state.type === 'add') {
-        if (this.state.typeName === ''){
+        if (this.state.typeName.replace(/\s+/g, '') === ''){
             message.info('故障类型名称');
             return;
         }
@@ -157,7 +159,7 @@ export default class FaultType extends PureComponent {
         }
         
         for (var i = 0; i < this.state.solutionsLists.length; i++) {
-            if ( this.state.solutionsLists[i].name === '') {
+            if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
                 console.log(this.state.solutionsLists[i].name, i);
                 message.info('没有填写故障解决方案');
                 return;
@@ -198,7 +200,7 @@ export default class FaultType extends PureComponent {
           });
 
       } else if (this.state.type === 'edit'){
-        if (this.state.typeName === ''){
+        if (this.state.typeName.replace(/\s+/g, '') === ''){
             message.info('故障类型名称');
             return;
         }
@@ -208,7 +210,7 @@ export default class FaultType extends PureComponent {
         }
         
         for (var i = 0; i < this.state.solutionsLists.length; i++) {
-            if ( this.state.solutionsLists[i].name === '') {
+            if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
                 console.log(this.state.solutionsLists[i].name, i);
                 message.info('没有填写故障解决方案');
                 return;
@@ -254,6 +256,15 @@ export default class FaultType extends PureComponent {
         visible: false,
       });
     }
+    handleTableChange = (pagination, filters, sorter) => {
+      this.setState({
+        pageNo: pagination.current,
+      }, () => {
+        this.getLists();
+      });
+      
+      console.log(pagination, filters, sorter);
+    }
     render() {
       const { visible, solutionsLists } = this.state;
       const { faultType: { list, page } } = this.props;
@@ -285,7 +296,7 @@ export default class FaultType extends PureComponent {
           <Card>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={7} sm={24}>
-                <Input placeholder="类型，解决方案 ，添加人" onChange={this.onChange} />
+                <Input placeholder="请输入类型，解决方案 ，添加人搜索" onChange={this.onChange} />
               </Col>
               <Col md={5} sm={24}>
                 <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
@@ -300,6 +311,7 @@ export default class FaultType extends PureComponent {
               dataSource={list}
               rowKey="code"
               pagination={paginationProps}
+              onChange={this.handleTableChange}
             />
           </Card>
           <Modal

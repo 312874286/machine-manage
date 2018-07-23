@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List } from 'antd';
+import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TroubleBill.less';
 
 const { TextArea } = Input;
+const { Option } = Select;
 // const { DatePicker } = DatePicker;
 
 @connect(({ troubleBill }) => ({ troubleBill }))
@@ -13,11 +14,12 @@ export default class troubleBill extends PureComponent {
     seeVisible: false,
     replyVisible: false,
     textAreaVal: '',
-    type: '',
+    type: '1',
     startDateString: '',
     endDateString: '',
     userName: '',
     seeData: [],
+    pageNo: 1,
     currentRecord: {
       "id": "",
       "machineId": "",
@@ -46,6 +48,16 @@ export default class troubleBill extends PureComponent {
     console.log(this.state.textAreaVal, e.target.value);
   }
   onFindData = (e) => {
+
+    if (this.state.startDateString === '') {
+      message.info('请选择开始时间');
+      return;
+    }
+    if (this.state.endDateString === '') {
+      message.info('请选择解决时间');
+      return;
+    }
+
     this.getLists();
   }
   onSeeHandle = (record) => {
@@ -116,6 +128,7 @@ export default class troubleBill extends PureComponent {
           endTime: this.state.endDateString,
           keyword: this.state.userName,
           status: '',
+          pageNo: this.state.pageNo,
         },
       },
     });
@@ -126,7 +139,7 @@ export default class troubleBill extends PureComponent {
     });
   }
   replyOKHandle = (e) => {
-    if (this.state.textAreaVal === '') {
+    if (this.state.textAreaVal.replace(/\s+/g, '') === '') {
       message.info('请填写回复消息');
       return;
     }
@@ -163,17 +176,32 @@ export default class troubleBill extends PureComponent {
   }
   startDatePickerChange = (date, dateString) => {
     this.setState({
-      type: '1',
+      // type: '1',
       startDateString: new Date(dateString).getTime(),
     });
     console.log('startDatePickerChange::', date, dateString, new Date(dateString).getTime());
   }
   endDatePickerChange = (date, dateString) => {
     this.setState({
-      type: '2',
+      // type: '2',
       endDateString: new Date(dateString).getTime(),
     });
     console.log('endDatePickerChange::', date, dateString, new Date(dateString).getTime());
+  }
+  selectHandleChange = (value) => {
+    this.setState({
+      type: value,
+    });
+    // console.log(`selected ${value}`);
+  }
+  handleTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      pageNo: pagination.current,
+    }, () => {
+      this.getLists();
+    });
+    
+    console.log(pagination, filters, sorter);
   }
   render() {
     const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal } = this.state;
@@ -253,10 +281,16 @@ export default class troubleBill extends PureComponent {
             <Col md={4} sm={24}>
               <DatePicker onChange={this.endDatePickerChange} />
             </Col>
-            <Col md={7} sm={24}>
-              <Input placeholder="上报人，解决人，机器编号" onChange={this.onChange} />
+            <Col md={4} sm={24}>
+              <Select defaultValue="1" onChange={this.selectHandleChange}>
+                <Option value="1">上报时间</Option>
+                <Option value="2">解决时间</Option>
+              </Select>
             </Col>
-            <Col md={5} sm={24}>
+            <Col md={4} sm={24}>
+              <Input placeholder="请输入上报人，解决人，机器编号" onChange={this.onChange} />
+            </Col>
+            <Col md={3} sm={24}>
               <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
             </Col>
           </Row>
@@ -266,6 +300,7 @@ export default class troubleBill extends PureComponent {
             columns={columns}
             dataSource={list}
             rowKey="id"
+            onChange={this.handleTableChange}
             pagination={paginationProps}
           />
         </Card>

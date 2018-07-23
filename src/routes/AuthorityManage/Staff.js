@@ -55,6 +55,7 @@ export default class Staff extends PureComponent {
     checkedKeys: [],
     selectedKeys: [],
     isJiaoLeft: 'none',
+    pageNo: 1,
   }
   componentDidMount = () => {
     this.getSystemUserList();
@@ -107,6 +108,7 @@ export default class Staff extends PureComponent {
       payload: {
         restParams: {
           keyword: this.state.userName,
+          pageNo: this.state.pageNo,
         },
       },
     });
@@ -223,6 +225,12 @@ export default class Staff extends PureComponent {
     console.log('hideCancelModal::');
   }
   handleTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      pageNo: pagination.current,
+    }, () => {
+      this.getSystemUserList();
+    });
+    
     console.log(pagination, filters, sorter);
   }
   renderTreeNodes = (data) => {

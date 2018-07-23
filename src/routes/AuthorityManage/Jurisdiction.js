@@ -7,6 +7,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 export default class Jurisdiction extends PureComponent {
   state = {
     userName: '',
+    pageNo: 1,
   }
   componentDidMount = () => {
     this.getSystemFunctionList();
@@ -28,9 +29,19 @@ export default class Jurisdiction extends PureComponent {
       payload: {
         restParams: {
           keyword: this.state.userName,
+          pageNo: this.state.pageNo,
         },
       },
     });
+  }
+  handleTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      pageNo: pagination.current,
+    }, () => {
+      this.getSystemFunctionList();
+    });
+    
+    console.log(pagination, filters, sorter);
   }
   render() {
     const { jurisdiction: { list, page } } = this.props;
