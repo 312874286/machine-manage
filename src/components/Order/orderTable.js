@@ -70,7 +70,11 @@ export default class orderTable extends PureComponent {
       },
       {
         title: '掉货数量',
-        dataIndex: 'goodsCount',
+        dataIndex: 'orderGoodsList',
+        render: (value, item) => {
+          if(!value) return 0;
+          return value.length;
+        }
       },
       {
         title: '下单时间',

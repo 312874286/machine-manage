@@ -22,7 +22,7 @@ export default class userTable extends PureComponent {
       },
       {
         title: '用户昵称',
-        dataIndex: 'nickName',
+        dataIndex: 'userNick',
       },
       {
         title: '手机号',
