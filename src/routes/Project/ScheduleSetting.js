@@ -68,7 +68,7 @@ const CreateForm = Form.create()(
         title={!modalType ? '编辑排期' : '新增排期'}
         visible={modalVisible}
         onOk={handleAdd}
-        onCancel={() => handleModalVisible()}
+        onCancel={() => handleModalVisible(false)}
         confirmLoading={editModalConfirmLoading}
         width={800} >
         <Form onSubmit={this.handleSearch}>
@@ -95,7 +95,7 @@ const CreateForm = Form.create()(
               <DatePicker
                 disabledDate={disabledStartDate}
                 disabledTime={disabledTime}
-                showTime
+                showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 format="YYYY-MM-DD HH:mm"
                 // value={startValue}
                 placeholder="选择开始时间"
@@ -127,7 +127,7 @@ const CreateForm = Form.create()(
               <DatePicker
                 disabledTime={disabledTime}
                 disabledDate={disabledEndDate}
-                showTime
+                showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 format="YYYY-MM-DD HH:mm"
                 // value={endValue}
                 placeholder="选择结束时间"
@@ -732,6 +732,10 @@ export default class ScheduleSettingList extends PureComponent {
       });
       this.setModalData();
     })
+    if (!flag) {
+      this.setState({ endOpen: false });
+    }
+
   };
   // 删除modal 删除事件
   handleDelClick = (item) => {
