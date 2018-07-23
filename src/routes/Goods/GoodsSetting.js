@@ -38,7 +38,8 @@ const RangePicker = DatePicker.RangePicker;
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
-      merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel, normFile } = props;
+      merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
+      handleChange, handleCancel, normFile, onSelect, shopsLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -105,10 +106,23 @@ const CreateForm = Form.create()(
             {getFieldDecorator('sellerId', {
               rules: [{ required: true, message: '请选择商户' }],
             })(
-              <Select placeholder="请选择">
+              <Select placeholder="请选择" onSelect={onSelect}>
                 {merchantLists.map((item) => {
                   return (
                     <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择店铺">
+            {getFieldDecorator('shopId', {
+              rules: [{ required: true, message: '请选择店铺' }],
+            })(
+              <Select placeholder="请选择">
+                {shopsLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.shopName}</Option>
                   );
                 })}
               </Select>
@@ -148,6 +162,7 @@ export default class goodsSettingList extends PureComponent {
     previewVisible: false,
     previewImage: '',
     fileList: [],
+    shopsLists: [],
   };
   componentDidMount() {
     this.getLists();
@@ -172,6 +187,23 @@ export default class goodsSettingList extends PureComponent {
     }).then((res) => {
       this.setState({
         merchantLists: res,
+      });
+    });
+  }
+  onSelect = (value, option) => {
+    this.getShopList(value)
+  }
+  getShopList = (value) => {
+    this.props.dispatch({
+      type: 'activitySetting/getShopsList',
+      payload: {
+        restParams: {
+          sellerId: value,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        shopsLists: res,
       });
     });
   }
@@ -359,6 +391,7 @@ export default class goodsSettingList extends PureComponent {
         },
       },
     }).then((res) => {
+      this.getShopList(res.sellerId)
       this.setModalData(res);
     });
   }
@@ -432,9 +465,11 @@ export default class goodsSettingList extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
+      let messageTxt = '添加'
       let url = 'goodsSetting/saveGoodsSetting';
       if (this.state.modalData.id) {
         url = 'goodsSetting/editGoodsSetting';
+        messageTxt = '编辑'
         params = { ...params, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -442,11 +477,26 @@ export default class goodsSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.getLists();
+      }).then((res) => {
+        if (res && res.code === 0) {
+          message.success( messageTxt + '成功');
+          this.setState({
+            code: '',
+            getDataStartDay: this.state.startTime,
+            getDataEndDay: this.state.endTime,
+          }, () => {
+            this.getLists();
+          })
+          this.setState({
+            editModalConfirmLoading: false,
+            modalVisible: false,
+          });
+        } else {
+          message.error(res ? res.msg : messageTxt + '失败');
+        }
         this.setState({
           editModalConfirmLoading: false,
-          modalVisible: false,
+          // modalVisible: false,
         });
       });
     });
@@ -555,6 +605,11 @@ export default class goodsSettingList extends PureComponent {
         dataIndex: 'sellerId',
       },
       {
+        title: '所属店铺',
+        // width: 200,
+        dataIndex: 'shopName',
+      },
+      {
         title: '图片缩略图',
         // width: 200,
         dataIndex: 'img',
@@ -655,6 +710,7 @@ export default class goodsSettingList extends PureComponent {
           handleCancel={this.handleCancel}
           handleUpload={this.handleUpload}
           normFile={this.normFile}
+          onSelect={this.onSelect}
         />
         <LogModal
           data={logList}
