@@ -215,7 +215,7 @@ const SetDefaultForm = Form.create()(
                 // mode="multiple"
                 // labelInValue
                 showSearch={true}
-                placeholder="请输入点位关键字进行选择"
+                placeholder="请输入游戏名称进行选择"
                 notFoundContent={fetching ? <Spin size="small" /> : null}
                 filterOption={false}
                 onSearch={onSearch}

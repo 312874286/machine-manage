@@ -330,8 +330,115 @@ export default class PointSettingList extends PureComponent {
       });
     } else return false;
   }
-  // 编辑modal 编辑事件
+  // 获取商圈信息
+  getArea = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      code = targetOption.value;
+      targetOption.loading = true;
+    }
+
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        restParams: {
+          code,
+        },
+      },
+    }).then((data) => {
+    });
+  }
   handleEditClick = (item) => {
+    this.setState({
+      modalVisible: true,
+      modalData: item,
+      modalType: false,
+    });
+    this.props.dispatch({
+      type: 'pointSetting/getPointSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      // 回显省市区商圈数据源
+      if (res.province) {
+        let province, provinceIndex, cityIndex, { city, district, circle } = res;
+        // all 省
+        this.props.dispatch({
+          type: 'common/getProvinceCityAreaTradeArea',
+          payload: {
+            restParams: {
+              code: '',
+            },
+          },
+        }).then((provinceRes) => {
+          province = provinceRes; // 所有省
+          // 市
+          this.props.dispatch({
+            type: 'common/getProvinceCityAreaTradeArea',
+            payload: {
+              restParams: {
+                code: res.province,
+              },
+            },
+          }).then((cityRes) => {
+            for (let i = 0; i < province.length; i++) {
+              if (province[i].value === res.province) {
+                provinceIndex = i
+                province[i].children = cityRes;
+              }
+            }
+            // 区
+            this.props.dispatch({
+              type: 'common/getProvinceCityAreaTradeArea',
+              payload: {
+                restParams: {
+                  code: city,
+                },
+              },
+            }).then((districtRes) => {
+              let arr = province[provinceIndex].children
+              for (let i = 0; i < arr.length; i++) {
+                if (arr[i].value === city) {
+                  cityIndex = i
+                  arr[i].children = districtRes;
+                }
+              }
+              // 区
+              this.props.dispatch({
+                type: 'common/getProvinceCityAreaTradeArea',
+                payload: {
+                  restParams: {
+                    code: district,
+                  },
+                },
+              }).then((circleRes) => {
+                let arr = province[provinceIndex].children[cityIndex].children
+                for (let i = 0; i < arr.length; i++) {
+                  if (arr[i].value === district) {
+                    arr[i].children = circleRes;
+                  }
+                }
+                // 商圈
+                this.setState({
+                  options: province,
+                  defaultValue: [res.province, city, district, circle],
+                }, () => {
+                  this.setModalData(res);
+                });
+              });
+            });
+          });
+        });
+      }
+    });
+  }
+  // 编辑modal 编辑事件
+  handleEditClick2 = (item) => {
     this.setState({
       modalVisible: true,
       modalData: item,

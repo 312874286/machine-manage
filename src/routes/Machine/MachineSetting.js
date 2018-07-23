@@ -45,6 +45,7 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
+const machineStatus = ['未知', '机器开机', '初始化机器', '通过测试', '设置在点位']
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
 
@@ -330,8 +331,8 @@ const WatchForm = Form.create()(
                 <div>机器门状态：{machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}</div>
                 <div>温度：{machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}</div>
                 <div>掉货开关：{machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}</div>
-                {/*<div>屏幕亮度：{machineDetail.systemStatus ? '111' : '2222'}</div>*/}
-                {/*<div>音量：</div>*/}
+                <div>屏幕亮度：{machineDetail.systemStatus ? (machineDetail.systemStatus.screenIntensity ? machineDetail.systemStatus.screenIntensity : '') : ''}</div>
+                <div>音量：{machineDetail.systemStatus ? (machineDetail.systemStatus.voice ? machineDetail.systemStatus.voice : '') : ''}</div>
                 <div>上次更新时间：{machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}</div>
               </Card>
             </Col>
@@ -1193,6 +1194,18 @@ export default class machineSettingList extends PureComponent {
         textAlign: 'center',
       },
       {
+        title: '机器状态',
+        dataIndex: 'machineStatus',
+        textAlign: 'center',
+        render(val) {
+          if (val) {
+            return <span>{machineStatus[val]}</span>
+          } else {
+            return <span>{machineStatus[0]}</span>
+          }
+        }
+      },
+      {
         fixed: 'right',
         title: '操作',
         width: 300,
@@ -1267,7 +1280,7 @@ export default class machineSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1300}
+              scrollX={1400}
             />
           </div>
         </Card>

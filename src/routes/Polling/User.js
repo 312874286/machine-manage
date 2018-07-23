@@ -349,7 +349,10 @@ export default class user extends PureComponent {
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、')
+      let remark = ''
+      if (this.state.machineNum) {
+        remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
+      }
       let url = 'user/saveUser';
       let params = { ...values, remark: remark, machines: this.state.machines };
       if (this.state.modalData.id) {
