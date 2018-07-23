@@ -821,7 +821,7 @@ export default class ScheduleSettingList extends PureComponent {
       ...item,
       ...row,
     });
-    
+
     this.setState({ goodsInitData: newData });
     console.log('goodsHandleChange::', row);
   }
@@ -1268,7 +1268,7 @@ export default class ScheduleSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="省市区商圈">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
@@ -1281,7 +1281,7 @@ export default class ScheduleSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <span style={{ float: 'right' }}>
                <FormItem>
                   <Button onClick={this.handleFormReset}>

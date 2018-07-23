@@ -348,7 +348,7 @@ export default class gameSettingList extends PureComponent {
               {getFieldDecorator('keyword')(<Input placeholder="请输入游戏名称、版本、点72版本" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <span style={{ float: 'right' }}>
               <FormItem>
                 <Button onClick={this.handleFormReset}>

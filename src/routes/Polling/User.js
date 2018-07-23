@@ -16,7 +16,7 @@ import {
   Table,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
-import styles from './PersonnelManagement.less';
+import styles from './User.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {RegexTool} from "../../utils/utils";
 
@@ -561,7 +561,7 @@ export default class user extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="关键字">
               {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
             </FormItem>

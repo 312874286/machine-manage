@@ -331,111 +331,63 @@ export default class PointSettingList extends PureComponent {
     } else return false;
   }
   // 获取商圈信息
-  getArea = (selectedOptions) => {
-    let code = '';
-    let targetOption = null;
-    if (selectedOptions) {
-      targetOption = selectedOptions[selectedOptions.length - 1];
-      code = targetOption.value;
-      targetOption.loading = true;
-    }
-
-    this.props.dispatch({
+  getArea = (code) => {
+    return this.props.dispatch({
       type: 'common/getProvinceCityAreaTradeArea',
       payload: {
         restParams: {
           code,
         },
       },
-    }).then((data) => {
     });
   }
-  handleEditClick = (item) => {
-    this.setState({
-      modalVisible: true,
-      modalData: item,
-      modalType: false,
-    });
-    this.props.dispatch({
+  // 获取点位详情
+  getPointSettingDetail = (item) => {
+    return this.props.dispatch({
       type: 'pointSetting/getPointSettingDetail',
       payload: {
         restParams: {
           id: item.id,
         },
       },
-    }).then((res) => {
-      // 回显省市区商圈数据源
-      if (res.province) {
-        let province, provinceIndex, cityIndex, { city, district, circle } = res;
-        // all 省
-        this.props.dispatch({
-          type: 'common/getProvinceCityAreaTradeArea',
-          payload: {
-            restParams: {
-              code: '',
-            },
-          },
-        }).then((provinceRes) => {
-          province = provinceRes; // 所有省
-          // 市
-          this.props.dispatch({
-            type: 'common/getProvinceCityAreaTradeArea',
-            payload: {
-              restParams: {
-                code: res.province,
-              },
-            },
-          }).then((cityRes) => {
-            for (let i = 0; i < province.length; i++) {
-              if (province[i].value === res.province) {
-                provinceIndex = i
-                province[i].children = cityRes;
-              }
-            }
-            // 区
-            this.props.dispatch({
-              type: 'common/getProvinceCityAreaTradeArea',
-              payload: {
-                restParams: {
-                  code: city,
-                },
-              },
-            }).then((districtRes) => {
-              let arr = province[provinceIndex].children
-              for (let i = 0; i < arr.length; i++) {
-                if (arr[i].value === city) {
-                  cityIndex = i
-                  arr[i].children = districtRes;
-                }
-              }
-              // 区
-              this.props.dispatch({
-                type: 'common/getProvinceCityAreaTradeArea',
-                payload: {
-                  restParams: {
-                    code: district,
-                  },
-                },
-              }).then((circleRes) => {
-                let arr = province[provinceIndex].children[cityIndex].children
-                for (let i = 0; i < arr.length; i++) {
-                  if (arr[i].value === district) {
-                    arr[i].children = circleRes;
-                  }
-                }
-                // 商圈
-                this.setState({
-                  options: province,
-                  defaultValue: [res.province, city, district, circle],
-                }, () => {
-                  this.setModalData(res);
-                });
-              });
-            });
-          });
-        });
-      }
     });
+  }
+  // forIn
+  forIn = (arr, value, res) => {
+    for (let [i, v] of new Map(arr.map((item, i) => [i, item]))) {
+      if (v.value === value) {
+        v.children = res;
+        return { index: i };
+      }
+    }
+  }
+  handleEditClick = async (item) => {
+    this.setState({
+      modalVisible: true,
+      modalData: item,
+      modalType: false,
+    });
+    const res = await this.getPointSettingDetail(item);
+    const { city, district, circle } = res;
+    const provinceRes = await this.getArea('')
+    let province = provinceRes;
+    const cityRes = await this.getArea(res.province)
+    const forInCityRes = this.forIn(province, res.province, cityRes)
+    const provinceIndex = forInCityRes.index
+    const districtRes = await this.getArea(city)
+    const arrCity = province[provinceIndex].children
+    const forInDistrictRes = this.forIn(arrCity, city, districtRes)
+    const cityIndex = forInDistrictRes.index
+    const circleRes = await this.getArea(district)
+    const arrDistrict = province[provinceIndex].children[cityIndex].children
+    this.forIn(arrDistrict, district, circleRes)
+    this.setState({
+      options: province,
+      defaultValue: [res.province, city, district, circle],
+    }, () => {
+      this.setModalData(res);
+    });
+    // 回显省市区商圈数据源
   }
   // 编辑modal 编辑事件
   handleEditClick2 = (item) => {
@@ -668,7 +620,7 @@ export default class PointSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="省市区商圈">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
@@ -681,12 +633,12 @@ export default class PointSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="关键字">
               {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <span style={{ float: 'right' }}>
                <FormItem>
                   <Button onClick={this.handleFormReset}>

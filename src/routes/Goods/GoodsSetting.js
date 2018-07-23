@@ -519,7 +519,7 @@ export default class goodsSettingList extends PureComponent {
               {getFieldDecorator('keyword')(<Input placeholder="请输入商品编码、商品名称" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <span style={{ float: 'right' }}>
               <FormItem>
                 <Button onClick={this.handleFormReset}>

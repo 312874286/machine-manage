@@ -740,7 +740,7 @@ export default class activitySettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <span style={{ float: 'right' }}>
               <FormItem>
                 <Button onClick={this.handleFormReset}>
