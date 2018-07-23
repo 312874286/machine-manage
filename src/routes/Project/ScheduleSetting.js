@@ -802,9 +802,10 @@ export default class ScheduleSettingList extends PureComponent {
       });
     }
   }
-  goodsHandle = (val) => {
+  goodsHandle = (record) => {
+    console.log('1111record::', record);
     this.setState({
-      goodsInitData: val,
+      goodsInitData: record,
     });
   }
   goodsHandleAdd = (val, currentValue) => {

@@ -136,8 +136,8 @@ class GoodsTableField extends Component {
   }
   handleChangeName = (record, value) => {
     record.prizeId = value;
-    // console.log('name::', this.state.dataSource);
-    this.props.goodsHandle(this.state.dataSource);
+    console.log('name::', record, value);
+    this.props.goodsHandle(this.props.initData);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
