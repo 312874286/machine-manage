@@ -70,7 +70,7 @@ class EditableTable extends React.Component {
       {
         title: '商品名称',
         dataIndex: 'goodName',
-        width: '12%',
+        width: '10%',
         editable: false,
       },
       {
@@ -119,6 +119,7 @@ class EditableTable extends React.Component {
       {
         title: '操作',
         dataIndex: 'operation',
+        width: '10%',
         render: (text, record) => {
           const editable = this.isEditing(record);
           return (
@@ -309,8 +310,15 @@ class EditableTable extends React.Component {
         disabled: record.disabled,
       }),
     };
+    console.log('selectedRowKeys',selectedRowKeys)
     return (
       <div id="editTable">
+        { selectedRowKeys ? (
+          <div className={styles.BtnDiv}>
+            <Button type="primary" onClick={() => {this.stopAisle()}}>停用货道</Button>
+            <Button type="primary" className={styles.rightBtn} onClick={() => {this.startAisle()}}>启用货道</Button>
+          </div>
+        ) : ( <div/>)}
         <Table
           components={components}
           bordered
@@ -319,10 +327,6 @@ class EditableTable extends React.Component {
           rowClassName="editable-row"
           rowSelection={rowSelection}
         />
-        <div className={styles.BtnDiv}>
-          <Button type="primary" onClick={() => {this.stopAisle()}}>停用货道</Button>
-          <Button type="primary" onClick={() => {this.startAisle()}}>启用货道</Button>
-        </div>
         {editingKey ? (
           <div style={{ display: 'flex', justifyContent: 'center', width: '100%', flexDirection: 'row' }}>
             <Button type="Default" onClick={this.closeAisleForm}>取消</Button>

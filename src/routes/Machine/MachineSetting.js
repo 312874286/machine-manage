@@ -46,6 +46,7 @@ const getValue = obj =>
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 const machineStatus = ['未知', '机器开机', '初始化机器', '通过测试', '设置在点位']
+const appStatus = ['未启动', '前台运行', '后台运行']
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
 
@@ -1167,7 +1168,7 @@ export default class machineSettingList extends PureComponent {
         title: '机器状态',
         width: 100,
         render: (text, item) => (
-            <div style={{ color: '#174a79', border: 0, background: 'transparent' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+            <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
         textAlign: 'center',
       },
@@ -1248,9 +1249,7 @@ export default class machineSettingList extends PureComponent {
       title: '运行状态',
       render: (text, item) => (
         (item.versionCode === -1) ? (<span>--</span>) : (
-          item.appStatus === 0 ? '未启动' : '',
-          item.appStatus === 1 ? '未启动' : '',
-          item.appStatus === 2 ? '后台运行' : '')
+          (item.appStatus) ? (<span>{appStatus[item.appStatus]}</span>) : (<span>--</span>))
       ),
       align: 'center',
     }, {
