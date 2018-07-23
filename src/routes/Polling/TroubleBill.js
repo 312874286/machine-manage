@@ -178,6 +178,7 @@ export default class troubleBill extends PureComponent {
   render() {
     const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal } = this.state;
     const { troubleBill: { list, page } } = this.props;
+    var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
     const columns = [{
       title: '故障单ID',
@@ -215,6 +216,11 @@ export default class troubleBill extends PureComponent {
       title: '故障状态',
       dataIndex: 'status',
       key: 'status',
+      render: (text, record) => (
+        <span>
+          { arr[record.status]  }
+        </span>
+      )
     }, {
       title: '操作',
       key: 'action',
@@ -248,7 +254,7 @@ export default class troubleBill extends PureComponent {
               <DatePicker onChange={this.endDatePickerChange} />
             </Col>
             <Col md={7} sm={24}>
-              <Input placeholder="请输入角色名称" onChange={this.onChange} />
+              <Input placeholder="上报人，解决人，机器编号" onChange={this.onChange} />
             </Col>
             <Col md={5} sm={24}>
               <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
