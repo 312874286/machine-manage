@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Form, Icon, Tree, message, Popconfirm, List } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './FaultType.less';
 
 
 @connect(({ faultType }) => ({ faultType }))
@@ -10,9 +11,9 @@ export default class FaultType extends PureComponent {
       userName: '',
       visible: false,
       solutionsLists: [
-        // { key:0, name: '1',},
+        // { key: 0, name: '',},
       ],
-      count: 0,
+      count: 1,
       typeName: '',
       type: '',
       currentRecord: {},
@@ -134,8 +135,10 @@ export default class FaultType extends PureComponent {
       this.setState({
         visible: true,
         type: 'add',
-        solutionsLists: [],
-        count: 0,
+        solutionsLists: [{ 
+          key: 0, name: '',
+        }],
+        count: 1,
         typeName: '',
       });
     }
@@ -322,7 +325,7 @@ export default class FaultType extends PureComponent {
           >
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={6} sm={24}>
-                故障类型名称
+                类型名称
               </Col>
               <Col md={15} sm={24}>
                 <Input placeholder="输入名称" value={this.state.typeName} onChange={this.onTypeNameChange} />
@@ -330,13 +333,13 @@ export default class FaultType extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={6} sm={24}>
-                故障解决方案
+                解决方案
               </Col>
               <Col md={15} sm={24}>
                 {
                 solutionsLists.map((solutions) => {
                   return (
-                    <div key={solutions.key}>
+                    <div key={solutions.key} className={styles.faultTypeinput}>
                       <Input placeholder="输入方案" value={solutions.name} onChange={(e) => this.onSolutionsChange(e, solutions)} />
                       <span onClick={this.onDelHandle.bind(this, solutions)}>删除</span>
                     </div>
@@ -345,7 +348,7 @@ export default class FaultType extends PureComponent {
                 }
               </Col>
             </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }} className={styles.mT20}>
               <Col md={6} sm={24}></Col>
               <Col md={15} sm={24}>
                 <Button type="primary" onClick={() => this.handleSolutionsAdd(this)}>添加</Button>

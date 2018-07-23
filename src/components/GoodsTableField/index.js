@@ -175,13 +175,22 @@ class GoodsTableField extends Component {
     this.props.goodsHandleChange(row);
   }
   updateRenderDatas(initData, clist, count) {
-    this.state.clist = this.props.clist;
+    // this.state.clist = this.props.clist;
+    this.setState({
+      clist: clist,
+    });
     // console.log(111, this.props.count);
     // console.log('this.state.clist', this.state.clist)
     if(this.state.clist.length === 0 ) {
-      this.state.currentValue = '';
+      // this.state.currentValue = '';
+      this.setState({
+        currentValue: '',
+      });
     } else {
-      this.state.currentValue = this.props.clist[0].id;
+      // this.state.currentValue = this.props.clist[0].id;
+      this.setState({
+        currentValue: this.props.clist[0].id,
+      });
     }
 
     // console.log( this.state.currentValue );
@@ -204,36 +213,41 @@ class GoodsTableField extends Component {
     // console.log('this.props.initData', this.props.initData)
     if (this.props.initData.length !== 0) {
       // this.state.dataSource = [];
-      this.state.dataSource = this.props.initData;
-
+      // this.state.dataSource = this.props.initData;
+      this.setState({
+        dataSource: initData,
+      });
       // console.log(222,this.state.dataSource);
       // for (var i = 0; i < this.state.dataSource.length; i++) {
       //   this.state.dataSource[i].key = i;
       // }
-      for (let i = 0; i < this.state.clist.length; i++) {
-        children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
-      }
+      // for (let i = 0; i < this.state.clist.length; i++) {
+      //   children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
+      // }
 
-      for (let i = 0; i < this.state.rlist.length; i++) {
-        children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      }
+      // for (let i = 0; i < this.state.rlist.length; i++) {
+      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
+      // }
 
     } else {
-      for (let i = 0; i < this.state.clist.length; i++) {
-        if (i == 0) {
-          defaultValue = this.state.clist[i].id;
-        }
-        children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
-      }
+      // for (let i = 0; i < this.state.clist.length; i++) {
+      //   if (i == 0) {
+      //     defaultValue = this.state.clist[i].id;
+      //   }
+      //   children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
+      // }
 
-      for (let i = 0; i < this.state.rlist.length; i++) {
-        if (i == 0) {
-          defaultValue2 = this.state.rlist[i].id;
-        }
-        children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      }
+      // for (let i = 0; i < this.state.rlist.length; i++) {
+      //   if (i == 0) {
+      //     defaultValue2 = this.state.rlist[i].id;
+      //   }
+      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
+      // }
     }
-    this.state.count = this.props.count;
+    // this.state.count = this.props.count;
+    this.setState({
+      count: count,
+    });
     // this.setState({
     //   dataSource: this.props.initData,
     // });
@@ -250,6 +264,21 @@ class GoodsTableField extends Component {
         cell: EditableCell,
       },
     };
+
+    const children = [];
+    let defaultValue = '';
+
+    const children2 = [];
+    let defaultValue2 = '';
+
+    for (let i = 0; i < this.state.clist.length; i++) {
+      children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
+    }
+
+    for (let i = 0; i < this.state.rlist.length; i++) {
+      children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
+    }
+    
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'prizeId',
