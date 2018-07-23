@@ -121,6 +121,15 @@ class DiscountDynamicField extends React.Component {
       ],
     };
   }
+  componentWillReceiveProps(nextProps) {
+    const { initData, count } = nextProps;
+    console.log('componentWillReceiveProps', nextProps);
+    this.updateRenderDatas(initData, count);
+  }
+  componentDidMount() {
+    const { initData, clist } = this.props;
+    console.log('componentDidMount', this.props);
+  }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
     // console.log('rule::', this.state.dataSource);
@@ -131,7 +140,6 @@ class DiscountDynamicField extends React.Component {
     // this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
     this.props.discountHandleDelete(key);
   }
-
   handleAdd = () => {
     // const { count, dataSource } = this.state;
     // const newData = {
@@ -159,7 +167,7 @@ class DiscountDynamicField extends React.Component {
   handleSave = (row) => {
     this.props.discountHandleChange(row);
   }
-  updateRenderDatas = () => {
+  updateRenderDatas = (initData, count) => {
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -168,32 +176,56 @@ class DiscountDynamicField extends React.Component {
       }
       rlist.push(newobj);
     }
-    this.state.rlist = rlist;
+    // this.state.rlist = rlist;
+    this.setState({
+      rlist: rlist,
+    });
 
     const children2 = [];
     let defaultValue2 = '';
     // console.log('discountthis.props.initData', this.props.initData)
     if (this.props.initData) {
-      this.state.dataSource = this.props.initData;
-
+      // this.state.dataSource = this.props.initData;
+      this.setState({
+        dataSource: initData,
+      });      
       // for (var i = 0; i < this.state.dataSource.length; i++) {
       //   this.state.dataSource[i].key = i;
       // }
 
-      for (let i = 0; i < this.state.rlist.length; i++) {
-        children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      }
+      // for (let i = 0; i < this.state.rlist.length; i++) {
+      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
+      // }
     } else {
-      for (let i = 0; i < this.state.rlist.length; i++) {
-        if (i == 0) {
-          defaultValue2 = this.state.rlist[i].id;
-        }
-        children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      }
+      // for (let i = 0; i < this.state.rlist.length; i++) {
+      //   if (i == 0) {
+      //     defaultValue2 = this.state.rlist[i].id;
+      //   }
+      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
+      // }
     }
 
-    this.state.count = this.state.dataSource.length;
+    // this.state.count = this.state.dataSource.length;
+    this.setState({
+      count: count,
+    });
 
+  }
+  render() {
+    // const { dataSource } = this.state;
+    // this.updateRenderDatas();
+    const components = {
+      body: {
+        row: EditableFormRow,
+        cell: EditableCell,
+      },
+    };
+    const children2 = [];
+    let defaultValue2 = '';
+
+    for (let i = 0; i < this.state.rlist.length; i++) {
+      children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
+    }
     this.columns = [{
       title: '*优惠券编号',
       dataIndex: 'code',
@@ -231,16 +263,6 @@ class DiscountDynamicField extends React.Component {
         );
       },
     }];
-  }
-  render() {
-    // const { dataSource } = this.state;
-    this.updateRenderDatas();
-    const components = {
-      body: {
-        row: EditableFormRow,
-        cell: EditableCell,
-      },
-    };
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;

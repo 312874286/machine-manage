@@ -288,7 +288,7 @@ export default class troubleBill extends PureComponent {
               </Select>
             </Col>
             <Col md={4} sm={24}>
-              <Input placeholder="请输入上报人，解决人，机器编号" onChange={this.onChange} />
+              <Input placeholder="请输入上报人，解决人，机器编号搜索" onChange={this.onChange} />
             </Col>
             <Col md={3} sm={24}>
               <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
