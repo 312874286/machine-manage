@@ -1,4 +1,4 @@
-import { getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting, deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus, cutApp,installApp } from '../../services/machine/machineSetting';
+import { getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting, deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus, cutApp,installApp, machineUpdateInfo } from '../../services/machine/machineSetting';
 import {getPointSettingDetail} from "../../services/machine/pointSetting";
 
 export default {
@@ -45,16 +45,16 @@ export default {
       const response = yield call(getAppStatus, { restParams });
       return response.data;
     },
-    // *getPointSettingDetail({ payload: { restParams } }, { call }) {
-    //   const response = yield call(getPointSettingDetail, { restParams });
-    //   return response.data;
-    // },
     *cutApp({ payload: { restParams } }, { call, put }) {
       const response = yield call(cutApp, { restParams });
       return response;
     },
     *installApp({ payload: { restParams } }, { call, put }) {
       const response = yield call(installApp, { restParams });
+      return response;
+    },
+    *machineUpdateInfo({ payload: { params } }, { call, put }) {
+      const response = yield call(machineUpdateInfo, { params });
       return response;
     },
   },

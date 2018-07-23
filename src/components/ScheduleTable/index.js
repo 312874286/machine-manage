@@ -1,4 +1,4 @@
-import { Card, Button } from 'antd';
+import { Card, Button, Icon, Popover } from 'antd';
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import styles from './index.less';
@@ -30,6 +30,10 @@ class ScheduleTable extends PureComponent {
     dateTwoWeeksArr: [],
     currentDay: -1,
     activityArr: [],
+    leftCount: 0,
+    rightCount: 0,
+    startDay: '',
+    endDay: '',
   }
   componentDidMount() {
     const { dateList, } = this.props;
@@ -81,7 +85,7 @@ class ScheduleTable extends PureComponent {
             currentDay: i,
           });
         }
-        let newd = {id: i, value: sm + '.' + (sd + i) + '', week: w };
+        let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w };
         w = w + 1
         if (w === 7) {
           w = 0;
@@ -91,14 +95,14 @@ class ScheduleTable extends PureComponent {
     } else { // 存在跨月
       for (let i = 0; i < 15; i++) {
         if (i < (15 - ed)) {
-          let newd = {id: i, value: sm + '.' + (sd + i) + '', week: w};
+          let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w};
           w = w + 1
           if (w === 7) {
             w = 0;
           }
           dateTwoWeek.push(newd);
         } else {
-          let newd = {id: i, value: em + '.' + (ed - (15 - i) + 1) + '', week: w};
+          let newd = {id: (em + '.' + (ed - (15 - i) + 1)), value: em + '.' + (ed - (15 - i) + 1) + '', week: w};
           w = w + 1
           if (w === 7) {
             w = 0;
@@ -109,18 +113,73 @@ class ScheduleTable extends PureComponent {
     }
     return dateTwoWeek;
   }
-  initTable = (dateList) => {
+  dateArr2 = (startDay, endDay) => {
+    // const s = '12.31';
+    // const e = '1.6';
+    const weekArr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    const start = startDay.split('-')
+    let w = parseInt(startDay.split('--')[1])
+    const end = endDay.split('-')
+    const sd = parseInt(start[2]);
+    const sm = parseInt(start[1]); // 开始时间的月份
+    const em = parseInt(end[1]); // 结束时间的月份
+    const ed = parseInt(end[2]);
+    let dateTwoWeek = []
+    if (sm === em) {
+      for (let i = 0; i < 7; i++) {
+        if (this.state.currentDay === (sd + i)) {
+          this.setState({
+            currentDay: i,
+          });
+        }
+        let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w };
+        w = w + 1
+        if (w === 7) {
+          w = 0;
+        }
+        dateTwoWeek.push(newd);
+      }
+    } else { // 存在跨月
+      for (let i = 0; i < 7; i++) {
+        if (i < (7 - ed)) {
+          let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w};
+          w = w + 1
+          if (w === 7) {
+            w = 0;
+          }
+          dateTwoWeek.push(newd);
+        } else {
+          let newd = {id: (em + '.' + (ed - (7 - i) + 1)), value: em + '.' + (ed - (7 - i) + 1) + '', week: w};
+          w = w + 1
+          if (w === 7) {
+            w = 0;
+          }
+          dateTwoWeek.push(newd);
+        }
+      }
+    }
+    return dateTwoWeek;
+  }
+  initTable = () => {
     let date = new Date(); // 获取当前时间
     let nowDate = this.format(date, 'yyyy-mm-dd')
     this.setState({
-      currentDay: parseInt(nowDate.split('-')[2]),
+      currentDay: parseInt(nowDate.split('-')[1]) + '.' + parseInt(nowDate.split('-')[2]),
     }, () => {
       let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置天数 -7 天
       let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置今天天数 +7 天
-      console.log('nowDate', startDay, nowDate, endDay)
+      // console.log('nowDate', startDay, nowDate, endDay)
+      this.props.handleDays({
+        startDay: startDay.split('--')[0],
+        endDay: endDay.split('--')[0],
+        getDataStartDay: startDay.split('--')[0],
+        getDataEndDay: endDay.split('--')[0],
+      });
       let dateTwoWeeksArr = this.dateArr(startDay, endDay);
       this.setState({
         dateTwoWeeksArr,
+        startDay: startDay.split('--')[0],
+        endDay: endDay.split('--')[0],
       }, () => {
         document.getElementById('dateWeek').scrollLeft = 600;
       });
@@ -128,6 +187,57 @@ class ScheduleTable extends PureComponent {
   }
   orderScroll() {
     // document.getElementById('dateWeek').scrollLeft = 600;
+  }
+  left = () => {
+    // console.log('左边')
+    this.setState({
+      leftCount: this.state.leftCount + 1,
+    }, () => {
+      console.log('this.state.leftCount', this.state.leftCount)
+      let date = new Date();
+      let endDay = this.format(new Date(new Date().setDate(new Date().getDate() - ((7 * this.state.leftCount) + 1))), 'yyyy-mm-dd'); // 设置天数 -7 天
+      let startDay = this.format(new Date(new Date().setDate(new Date().getDate() - ((7 * this.state.leftCount) + 7))), 'yyyy-mm-dd'); // 设置今天天数 +7 天
+      console.log('leftCount', startDay, endDay, this.state.leftCount)
+      let arr2 = this.dateArr2(startDay, endDay)
+      console.log(arr2.concat(this.state.dateTwoWeeksArr))
+      let dateTwoWeeksArr = arr2.concat(this.state.dateTwoWeeksArr)
+      this.setState({
+        dateTwoWeeksArr,
+        startDay: startDay.split('--')[0],
+      }, () => {
+        this.props.handleDays({
+          startDay: this.state.startDay,
+          endDay: this.state.endDay,
+          getDataStartDay: startDay.split('--')[0],
+          getDataEndDay: endDay.split('--')[0],
+        });
+      });
+    });
+  }
+  right = () => {
+    // console.log('右边')
+    this.setState({
+      rightCount: this.state.rightCount + 1,
+    }, () => {
+      let date = new Date();
+      let startDay = this.format(new Date(new Date().setDate(new Date().getDate() + ((7 * this.state.rightCount) + 1))), 'yyyy-mm-dd'); // 设置天数 -7 天
+      let endDay = this.format(new Date(new Date().setDate(new Date().getDate() + ((7 * this.state.rightCount) + 7))), 'yyyy-mm-dd'); // 设置今天天数 +7 天
+      console.log('rightCount', startDay, endDay, this.state.rightCount)
+      let arr2 = this.dateArr2(startDay, endDay)
+      console.log(this.state.dateTwoWeeksArr.concat(arr2))
+      let dateTwoWeeksArr = this.state.dateTwoWeeksArr.concat(arr2)
+      this.setState({
+        dateTwoWeeksArr,
+        endDay: endDay.split('--')[0],
+      }, () => {
+        this.props.handleDays({
+          startDay: this.state.startDay,
+          endDay: this.state.endDay,
+          getDataStartDay: startDay.split('--')[0],
+          getDataEndDay: endDay.split('--')[0],
+        });
+      });
+    });
   }
   filterWeek = (value) => {
     switch (value) {
@@ -156,38 +266,51 @@ class ScheduleTable extends PureComponent {
   }
   render() {
     const { dateTwoWeeksArr, currentDay } = this.state;
-    const { dateList } = this.props;
+    const { dateList, onEditClick, onWatchClick, onDeleteClick } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
-      <Card title="活动排期一览表" style={{ overflowX: 'scroll', width: '1200px' }}>
-        <div style={{ width: '165%', display: 'flex', position: 'relative' }}>
-          <Card.Grid style={gridLeftStyle}>
+      <Card title="活动排期一览表" style={{ overflowX: 'scroll'}}>
+        <div style={{ display: 'flex', maxWidth: '1140px', margin: '0 auto' }}>
+          <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', width: '165%', display: 'flex' }} id="dateWeek">
+          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1140px' }} id="dateWeek">
             {dateTwoWeeksArr.map((item) => {
               return (
-                <Card.Grid value={item.id} key={item.id} className={currentDay === item.id ? styles.currentDay : ''}>
+                <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
                   <p>{item.value}</p>
                   <p>{this.filterWeek(item.week)}</p>
                   <p style={{ height: '500px' }}></p>
                 </Card.Grid>
               );
             })}
+            {/*<div className={styles.dateList}>*/}
+              {dateList.map((item) => {
+                return (
+                  <div key={item.id}>
+                    <Popover placement="top" content={item.Time} title={null} trigger="hover">
+                      <div className={styles.dateChildren}
+                           style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
+                             justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
+
+                        <div>{item.name}</div>
+                        <div className={styles.iconBox}>
+                          {/*endTime: item.endTime*/}
+                          <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
+                          <Icon type="eye" onClick={() => onWatchClick(item)} />
+                          <Icon type="close" className={styles.anticonDelete} onClick={() => onDeleteClick(item)} style={{ display: moment(item.endTime) > new Date().getTime() && moment(item.startTime) < new Date().getTime()  ? 'none' : '' }}/>
+                        </div>
+                      </div>
+                    </Popover>
+                  </div>
+                );
+              })}
+            {/*</div>*/}
           </div>
-          <Card.Grid style={gridLeftStyle}>
+          <Card.Grid style={gridLeftStyle} onClick={() => this.right()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div className={styles.dateList}>
-            {dateList.map((item) => {
-              return (
-                <div className={styles.dateChildren} key={item.id}
-                style={{ background: item.background, width: item.width, top: item.top, left: item.left }}
-                >{item.name}</div>
-              );
-            })}
-          </div>
-        </div>
+         </div>
       </Card>
     );
   }

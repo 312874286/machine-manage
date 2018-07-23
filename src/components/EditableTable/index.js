@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'antd';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -42,7 +42,7 @@ class EditableCell extends React.Component {
                   {getFieldDecorator(dataIndex, {
                     rules: [{
                       required: true,
-                      message: `Please Input ${title}!`,
+                      message: `需填写 ${title}!`,
                     }],
                     initialValue: record[dataIndex],
                   })(this.getInput())}
@@ -110,9 +110,9 @@ class EditableTable extends React.Component {
         editable: false,
         render(val) {
           if (val === 0) {
-            return <span>停用</span>
-          } else {
             return <span>启用</span>
+          } else {
+            return <span>停用</span>
           }
         }
       },
@@ -136,8 +136,8 @@ class EditableTable extends React.Component {
                        </a>
                     )}
                     </EditableContext.Consumer>
-                    <Popconfirm title="是否确认启用?" onConfirm={() => this.stopAisle(record.key)}>
-                      <a>启用</a>
+                    <Popconfirm title="是否确认停用?" onConfirm={() => this.stopAisle(record.key)}>
+                      <a>停用</a>
                     </Popconfirm>
                   </span>
                 ) : (
@@ -153,8 +153,8 @@ class EditableTable extends React.Component {
                         </a>
                       )}
                     </EditableContext.Consumer>
-                    <Popconfirm title="是否确认停用?" onConfirm={() => this.stopAisle(record.key)}>
-                      <a>停用</a>
+                    <Popconfirm title="是否确认启用?" onConfirm={() => this.startAisle(record.key)}>
+                      <a>启用</a>
                     </Popconfirm>
                   </span>
                 )}
@@ -201,6 +201,7 @@ class EditableTable extends React.Component {
       }
       const newData = [...AisleList];
       const index = newData.findIndex(item => key === item.key);
+      // console.log('index', index,newData[index])
       if (index > -1) {
         const item = newData[index];
         // newData.splice(index, 1, {
@@ -208,9 +209,14 @@ class EditableTable extends React.Component {
         //   ...row,
         // });
         // console.log('newData', newData)
-        // this.setState({ data: newData, editingKey: '' });
+        this.setState({ data: newData, editingKey: '' });
+        if (row.goodsCount > newData[index].volumeCount) {
+          message.error('补货数量超出货道容量，请修改');
+          return false
+        } else {
+          this.props.updateGoodsCount([{ channelId: key, count: row.goodsCount }]);
+        }
         // console.log('nu', item, key, row)
-        this.props.updateGoodsCount({ channelId: key, count: row.goodsCount });
       } else {
         newData.push(data);
         this.setState({ data: newData, editingKey: '' });
@@ -242,10 +248,10 @@ class EditableTable extends React.Component {
     const self = this
     let arr = []
     if (key) {
-      arr = [{ channelId: key, status: 0 }]
+      arr = [{ channelId: key, status: 1 }]
     } else {
       arr = self.state.selectedRowKeys.map((item) => {
-        return { channelId: item, status: 0 }
+        return { channelId: item, status: 1 }
       });
     }
     console.log(arr)
@@ -259,11 +265,11 @@ class EditableTable extends React.Component {
     const self = this
     let arr = []
     if (key) {
-      arr = [{ channelId: key, status: 1 }]
+      arr = [{ channelId: key, status: 0 }]
     } else {
       // console.log('启用', this.state.selectedRowKeys);
       arr = self.state.selectedRowKeys.map((item) => {
-        return { channelId: item, status: 1 }
+        return { channelId: item, status: 0 }
       });
     }
     this.props.handleStart(arr);
@@ -304,7 +310,7 @@ class EditableTable extends React.Component {
       }),
     };
     return (
-      <div>
+      <div id="editTable">
         <Table
           components={components}
           bordered

@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -7,40 +8,41 @@ import {
   Form,
   Input,
   Select,
+  Icon,
   Button,
+  Dropdown,
   Menu,
+  InputNumber,
   DatePicker,
   Modal,
+  message,
+  Badge,
   Divider,
-  Popconfirm,
-  InputNumber,
-  Checkbox
+  Cascader,
+  Popconfirm
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './GameSetting.less';
 import LogModal from '../../components/LogModal/index';
-import moment from "moment/moment";
-
+import styles from './User.less';
 
 const FormItem = Form.Item;
-const { TextArea } = Input
 const { Option } = Select;
-const CheckboxGroup = Checkbox.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const RangePicker = DatePicker.RangePicker;
+const statusMap = ['processing', 'default', 'success', 'error'];
+const status = ['运行中', '关闭', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, channelLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 4 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -49,60 +51,73 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={modalType ? '编辑游戏' : '新建游戏'}
+        title={!modalType ? '编辑商户' : '新建商户'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="游戏名称">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, whitespace: true, message: '请输入游戏名称' }],
-            })(<Input placeholder="请输入游戏名称" />)}
+          <FormItem {...formItemLayout} label="商户编码">
+            {getFieldDecorator('merchantCode', {
+              rules: [{ required: true, whitespace: true, message: '请输入商户编码' }],
+            })(<Input placeholder="请输入商户编码" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="游戏版本">
-            {getFieldDecorator('version', {
-              rules: [{ required: true, whitespace: true, message: '请输入游戏版本' }],
-            })(<Input placeholder="请输入游戏版本" />)}
+          <FormItem {...formItemLayout} label="商户名称">
+            {getFieldDecorator('merchantName', {
+              rules: [{ required: true, whitespace: true, message: '请输入商户名称' }],
+            })(<Input placeholder="请输入商户名称" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="点72版本">
-            {getFieldDecorator('versionInno72', {
-              rules: [{ required: true, whitespace: true, message: '请输入点72版本' }],
-            })(<Input placeholder="请输入点72版本" />)}
+          <FormItem {...formItemLayout} label="品牌名称">
+            {getFieldDecorator('originFlag', {
+              rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
+            })(<Input placeholder="请输入品牌名称" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="备注描述">
-            {getFieldDecorator('remark', {
-              rules: [{ required: true, whitespace: true, message: '请输入备注描述' }],
-            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+          <FormItem {...formItemLayout} label="原始标示">
+            {getFieldDecorator('brandName', {
+              rules: [{ required: true, whitespace: true, message: '请输入原始标示' }],
+            })(<Input placeholder="请输入原始标示" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="选择渠道">
+            {getFieldDecorator('channelId', {
+              rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
+            })(
+              <Select placeholder="请选择">
+                {channelLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.channelName}</Option>
+                  );
+                })}
+              </Select>
+            )}
           </FormItem>
         </Form>
       </Modal>
     );
-});
-@connect(({ common, loading, gameSetting, log }) => ({
+  });
+@connect(({ common, loading, user, log }) => ({
   common,
-  gameSetting,
-  loading: loading.models.rule,
+  user,
+  loading: loading.models.user,
   log,
 }))
 @Form.create()
-export default class gameSettingList extends PureComponent {
+export default class merchantSettingList extends PureComponent {
   state = {
     modalVisible: false,
-    expandForm: false,
     selectedRows: [],
     formValues: {},
     editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
-    code: '',
+    channelId: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
     modalType: true,
+    channelLists: [],
   };
   componentDidMount() {
     this.getLists();
@@ -110,17 +125,15 @@ export default class gameSettingList extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'gameSetting/getGameSettingList',
+      type: 'user/getUserList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
-          code: this.state.code,
+          code: this.state.channelId,
         },
       },
     });
-    // shopsLists
-    // activityLists
   }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -152,21 +165,41 @@ export default class gameSettingList extends PureComponent {
   };
   // 重置
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const { form } = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
+      pageNo: 1,
       keyword: '',
-      code: '',
+      channelId: '',
     });
+  };
+  // 批量
+  handleMenuClick = e => {
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
+
+    if (!selectedRows) return;
+
+    switch (e.key) {
+      case 'remove':
+        dispatch({
+          type: '',
+          payload: {
+            no: selectedRows.map(row => row.no).join(','),
+          },
+          callback: () => {
+            this.setState({
+              selectedRows: [],
+            });
+          },
+        });
+        break;
+      default:
+        break;
+    }
   };
 
-  toggleForm = () => {
-    const { expandForm } = this.state;
-    this.setState({
-      expandForm: !expandForm,
-    });
-  };
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -181,7 +214,7 @@ export default class gameSettingList extends PureComponent {
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        code: fieldsValue.code ? fieldsValue.code : '',
+        channelId: fieldsValue.channelId ? fieldsValue.channelId : '',
       }, () => {
         this.getLists();
       });
@@ -192,7 +225,7 @@ export default class gameSettingList extends PureComponent {
     this.setState({
       modalVisible: !!flag,
       modalData: {},
-      modalType: false,
+      modalType: true,
     });
     this.setModalData();
   };
@@ -204,7 +237,7 @@ export default class gameSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'gameSetting/delGameSetting',
+        type: 'user/delMerchantSetting',
         payload: {
           params,
         },
@@ -222,10 +255,10 @@ export default class gameSettingList extends PureComponent {
     this.setState({
       modalVisible: true,
       modalData: item,
-      modalType: true,
+      modalType: false,
     });
     this.props.dispatch({
-      type: 'gameSetting/getGameSettingDetail',
+      type: 'user/getUserDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -235,47 +268,43 @@ export default class gameSettingList extends PureComponent {
       this.setModalData(res);
     });
   }
-  // 新增modal确认事件 开始
-  saveFormRef = (form) => {
-    this.form = form;
-  }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        // ...data,
         name: data.name || undefined,
-        version: data.version || undefined,
-        versionInno72: data.versionInno72 || undefined,
-        remark: data.remark || undefined,
+        phone: data.phone || undefined,
+        cardNo: data.cardNo || undefined,
+        enterprise: data.enterprise || undefined,
       });
     } else {
       this.form.setFieldsValue({
         name: undefined,
-        version: undefined,
-        versionInno72: undefined,
-        remark: undefined,
+        phone: undefined,
+        cardNo: undefined,
+        enterprise: undefined,
       });
     }
   }
-
+  // 新增modal确认事件 开始
+  saveFormRef = (form) => {
+    this.form = form;
+  }
   // 编辑modal 确认事件
-  MachineAdd = () => {
-    this.form.validateFields((err, fieldsValue) => {
+  handleAdd = () => {
+    this.form.validateFields((err, values) => {
       if (err) {
         return;
       }
-      let params = {
-        ...fieldsValue,
-      };
       this.setState({
         editModalConfirmLoading: true,
         modalData: {},
       });
-      let url = 'gameSetting/saveGameSetting';
+      let url = 'user/saveMerchantSetting';
+      let params = { ...values };
       if (this.state.modalData.id) {
-        url = 'gameSetting/editGameSetting';
-        params = { ...params, id: this.state.modalData.id };
+        url = 'user/editMerchantSetting';
+        params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
         type: url,
@@ -292,8 +321,6 @@ export default class gameSettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
-  // 设置机器开始
-  // 设置机器结束
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -338,26 +365,39 @@ export default class gameSettingList extends PureComponent {
   }
   renderAdvancedForm() {
     const { form } = this.props;
+    const { channelLists } = this.state;
     const { getFieldDecorator } = form;
-    const { merchantLists } = this.state;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
+            <FormItem label="选择渠道">
+              {getFieldDecorator('channelId')(
+                <Select placeholder="请选择">
+                  {channelLists.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.channelName}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={9} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入游戏名称、版本、点72版本" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入商户编码、商户名称、原始标识、品牌名称" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <span style={{ float: 'right' }}>
-              <FormItem>
-                <Button onClick={this.handleFormReset}>
-                 重置
-                </Button>
-                <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
-                 查询
-                </Button>
-              </FormItem>
+               <FormItem>
+                  <Button onClick={this.handleFormReset}>
+                    重置
+                  </Button>
+                  <Button style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
+                    查询
+                  </Button>
+               </FormItem>
             </span>
           </Col>
         </Row>
@@ -365,40 +405,42 @@ export default class gameSettingList extends PureComponent {
     );
   }
   render() {
-    const { gameSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, } = this.state;
+    const {
+      user: { list, page },
+      loading,
+      log: { logList, logPage },
+    } = this.props;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists } = this.state;
     const columns = [
       {
-        title: '游戏名称',
+        title: '姓名',
         dataIndex: 'name',
       },
       {
-        title: '版本',
-        dataIndex: 'version',
+        title: '手机号',
+        dataIndex: 'phone',
       },
       {
-        title: '点72版本',
-        dataIndex: 'versionInno72',
+        title: '身份证号',
+        dataIndex: 'cardNo',
       },
       {
-        title: '备注描述',
-        dataIndex: 'remark',
+        title: '公司',
+        dataIndex: 'enterprise',
+      },
+      {
+        title: '负责的机器',
+        render: (text, item) => (
+          <div style={{ color: '#174a79', border: 0, background: 'transparent' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+        ),
       },
       {
         fixed: 'right',
-        width: 200,
+        width: 150,
         title: '操作',
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            <Divider type="vertical" />
-            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
-            {/*<Divider type="vertical" />*/}
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
-            </Popconfirm>
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => this.setMachineClick(item)}>设置机器</a>*/}
           </Fragment>
         ),
       },
@@ -411,13 +453,10 @@ export default class gameSettingList extends PureComponent {
       </Menu>
     );
     const parentMethods = {
-      handleAdd: this.MachineAdd,
+      handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
-    const gameSetMachineMethods = {
-      MachineAdd: this.MachineAdd,
-      MachineHandleModalVisible: this.MachineHandleModalVisible,
-    };
+
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -430,14 +469,14 @@ export default class gameSettingList extends PureComponent {
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
-                {/*<span>*/}
-                  {/*<Button>批量操作</Button>*/}
-                  {/*<Dropdown overlay={menu}>*/}
-                    {/*<Button>*/}
-                      {/*更多操作 <Icon type="down" />*/}
-                    {/*</Button>*/}
-                  {/*</Dropdown>*/}
-                {/*</span>*/}
+              {/*<span>*/}
+              {/*<Button>批量操作</Button>*/}
+              {/*<Dropdown overlay={menu}>*/}
+              {/*<Button>*/}
+              {/*更多操作 <Icon type="down" />*/}
+              {/*</Button>*/}
+              {/*</Dropdown>*/}
+              {/*</span>*/}
               {/*)}*/}
             </div>
             <StandardTable
@@ -448,16 +487,17 @@ export default class gameSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={800}
+              scrollX={700}
             />
           </div>
         </Card>
         <CreateForm
-          ref={this.saveFormRef}
           {...parentMethods}
+          ref={this.saveFormRef}
           modalVisible={modalVisible}
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
+          channelLists={channelLists}
         />
         <LogModal
           data={logList}

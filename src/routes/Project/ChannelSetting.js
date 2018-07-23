@@ -59,7 +59,7 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={!modalType ? '编辑渠道' : '新建渠道'}
+        title={modalType ? '编辑渠道' : '新建渠道'}
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
@@ -68,12 +68,12 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="渠道编码">
             {getFieldDecorator('channelCode', {
-              rules: [{ required: true, message: '请输入渠道编码' }],
-            })(<Input placeholder="请输入商场" />)}
+              rules: [{ required: true, whitespace: true, message: '请输入渠道编码' }],
+            })(<Input placeholder="请输入渠道编码" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="渠道名称">
             {getFieldDecorator('channelName', {
-              rules: [{ required: true, message: '请输入渠道名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入渠道名称' }],
             })(<Input placeholder="请输入渠道名称" />)}
           </FormItem>
         </Form>
@@ -83,7 +83,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, channelSetting, log }) => ({
   common,
   channelSetting,
-  loading: loading.models.rule,
+  loading: loading.models.channelSetting,
   log,
 }))
 @Form.create()

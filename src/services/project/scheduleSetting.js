@@ -3,8 +3,8 @@ import fetch from '../../utils/fetch/index';
 import api from './api';
 
 export async function saveScheduleSetting({ params }) {
-  return fetch.post(api.saveScheduleSetting, {
-    body: stringify(params),
+  return fetch.postJSON(api.saveScheduleSetting, {
+    body: JSON.stringify(params),
   });
 }
 
@@ -34,13 +34,31 @@ export async function getGameList({ restParams }) {
 }
 
 export async function editScheduleSetting({ params }) {
-  return fetch.post(api.updateScheduleSetting, {
-    body: stringify(params),
+  return fetch.postJSON(api.updateScheduleSetting, {
+    body: JSON.stringify(params),
   });
 }
 
 export async function delScheduleSetting({ params }) {
   return fetch.post(api.deleteScheduleSetting, {
     body: stringify(params),
+  });
+}
+
+export async function selectAreaMachines({ restParams }) {
+  return fetch.get(api.selectAreaMachines, {
+    restParams,
+  });
+}
+
+export async function getPlanMachineDetailList({ restParams }) {
+  return fetch.get(api.getPlanMachineDetailList, {
+    restParams,
+  });
+}
+
+export async function getGoodsList({ restParams }) {
+  return fetch.get(api.getGoodsList, {
+    restParams,
   });
 }

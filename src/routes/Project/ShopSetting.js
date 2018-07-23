@@ -61,12 +61,12 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="店铺编码">
             {getFieldDecorator('shopCode', {
-              rules: [{ required: true, message: '请输入店铺编码' }],
+              rules: [{ required: true,whitespace: true,  message: '请输入店铺编码' }],
             })(<Input placeholder="请输入店铺编码" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="店铺名称">
             {getFieldDecorator('shopName', {
-              rules: [{ required: true, message: '请输入店铺名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入店铺名称' }],
             })(<Input placeholder="请输入店铺名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
@@ -89,7 +89,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, shopSetting, log }) => ({
   common,
   shopSetting,
-  loading: loading.models.rule,
+  loading: loading.models.shopSetting,
   log,
 }))
 @Form.create()

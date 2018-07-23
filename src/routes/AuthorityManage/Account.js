@@ -54,6 +54,7 @@ export default class Account extends PureComponent {
     addUserName: '',
     clickType: 0,
     currentSelectID: '',
+    pageNo: 1,
   }
   componentDidMount = () => {
     this.getSystemRoleList();
@@ -117,7 +118,7 @@ export default class Account extends PureComponent {
         message.success(msg);
         this.getSystemRoleList();
       } else {
-        message.error(msg);
+        // message.error(msg);
       }
     });
     console.log('onToDel::');
@@ -158,6 +159,7 @@ export default class Account extends PureComponent {
       payload: {
         restParams: {
           keyword: this.state.userName,
+          pageNo: this.state.pageNo,
         },
       },
     });
@@ -216,11 +218,12 @@ export default class Account extends PureComponent {
     }
   }
   hideOKModal = (e) => {
-    if (this.state.addUserName === '') {
+    
+    if (this.state.addUserName.replace(/\s+/g, '') === '') {
       message.error('请填写角色名称');
       return;
     }
-    console.log(111,this.state.checkedKeys);
+    // console.log(111,this.state.checkedKeys);
     if (this.state.checkedKeys.length === 0) {
       message.error('请选择管理');
       return;
@@ -297,6 +300,15 @@ export default class Account extends PureComponent {
       return <TreeNode {...item} />;
     });
   }
+  handleTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      pageNo: pagination.current,
+    }, () => {
+      this.getSystemRoleList();
+    });
+    
+    console.log(pagination, filters, sorter);
+  }
   render() {
     const { treeData, addUserName } = this.state;
     const { account: { list, page } } = this.props;
@@ -317,10 +329,10 @@ export default class Account extends PureComponent {
         render: (record) => {
           return (
             <div>
-              <Button type="primary" onClick={this.onToEdit.bind(this, record)}>修改</Button>
+              <a onClick={this.onToEdit.bind(this, record)}>修改</a>
               &nbsp;&nbsp;
               <Popconfirm title="是否删除?" onConfirm={this.onToDel.bind(this, record)} onCancel={this.onComnfirmCancel.bind(this)} okText="删除" cancelText="取消">
-                <Button type="danger">删除</Button>
+                <a>删除</a>
               </Popconfirm>
             </div>
           );
@@ -355,7 +367,6 @@ export default class Account extends PureComponent {
             pagination={paginationProps}
             onChange={this.handleTableChange}
             rowKey="id"
-            bordered
           />
         </Card>
         <Modal

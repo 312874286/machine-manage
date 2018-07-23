@@ -1,4 +1,5 @@
 import { map } from '../../utils/fetch/api';
+import {editScheduleSetting} from "./scheduleSetting";
 
 // API Doc: http://wiki.nblow.cn/pages/viewpage.action?pageId=11797216
 const api = map({
@@ -25,13 +26,17 @@ const api = map({
   deleteActivitySetting: '/project/activity/delete',
   getActivitySettingDetail: '/project/activity/detail?id={id}',
   getShopsList: '/project/shops/getList?sellerId={sellerId}',
-  getScheduleSettingList: '/activity/list?pageNo={pageNo}&keyword={keyword}',
-  saveScheduleSetting: '/project/schedule/add',
-  updateScheduleSetting: '/project/schedule/update',
-  deleteScheduleSetting: '/project/schedule/delete',
-  getScheduleSettingDetail: '/project/schedule/detail?id={id}',
+
+  getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}',
+  saveScheduleSetting: '/project/activityPlan/add',
+  updateScheduleSetting: '/project/activityPlan/update',
+  deleteScheduleSetting: '/project/activityPlan/delete',
+  getScheduleSettingDetail: '/project/activityPlan/detail?id={id}',
+  selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}&startTime={startTime}&endTime={endTime}',
   getActivityList: '/project/activity/getList',
   getGameList: '/game/game/getList',
+  getPlanMachineDetailList: '/project/activityPlan/planMachineDetailList?id={id}',
+  getGoodsList: '/goods/goods/getList?shopId={shopId}',
 });
 
 export default api;

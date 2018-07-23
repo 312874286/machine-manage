@@ -296,12 +296,11 @@ const proxy = {
             functionIcon: 'form',
           },
           {
-            id: 'a13',
-            functionDepict: '用户信息',
-            functionPath: 'user',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'form',
+            id: 'a25',
+            functionDepict: '商品管理',
+            functionPath: 'goods',
+            parentId: 'a11',
+            functionLevel: 2,
           },
           {
             id: 'a14',
@@ -372,7 +371,43 @@ const proxy = {
             parentId: 'a23',
             functionLevel: 2,
           },
-
+          {
+            id: 'a26',
+            functionDepict: '巡检管理',
+            functionPath: 'check',
+            parentId: null,
+            functionLevel: 1,
+            functionIcon: 'safety',
+            color: '#174a79'
+          },
+          {
+            id: 'a27',
+            functionDepict: '故障单管理',
+            functionPath: 'fault',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
+          {
+            id: 'a28',
+            functionDepict: '人员管理',
+            functionPath: 'user',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
+          {
+            id: 'a29',
+            functionDepict: '打卡记录',
+            functionPath: 'signIn',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
+          {
+            id: 'a30',
+            functionDepict: '故障类型',
+            functionPath: 'faultType',
+            parentId: 'a26',
+            functionLevel: 2,
+          },
         ]
       };
       res.send({
@@ -975,7 +1010,7 @@ const proxy = {
           "machineDoorStatus": 0,
           "dropGoodsSwitch": 1,
           "goodsChannelStatus": "[]",
-          "temperature": null,
+          // "temperature": null,
           "temperatureSwitchStatus": 0,
           "createTime": "2018-07-09 15:44:16"
         },
@@ -995,6 +1030,9 @@ const proxy = {
       },
       "msg": "成功"
     });
+  },
+  'POST /machine/machine/updateInfo': (req, res) => {
+    res.send({"msg":"成功","code":0, "data": ""});
   },
   'POST /machine/machine/update': (req, res) => {
     res.send({"msg":"成功","code":0, "data": ""});
@@ -1216,6 +1254,24 @@ const proxy = {
     });
   },
   'GET /game/game/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        createId: "1",
+        createTime: "2018-07-05 18:43:09",
+        id: "1",
+        isDelete: 0,
+        remark: null,
+        sellerId: "1",
+        shopCode: "10000@XXXAXX",
+        shopName: "天猫小米旗舰店",
+        updateId: "",
+        updateTime: "2018-07-05 18:43:09",
+      }]
+    });
+  },
+  'POST /game/game/getList': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -1534,7 +1590,8 @@ const proxy = {
         province: 100000,
         city: 100000,
         district: 100000,
-        circle: '其他'
+        circle: '其他',
+        sellerId: 400,
       }
     });
   },
@@ -1655,7 +1712,7 @@ const proxy = {
       "msg": '成功',
     });
   },
-  'GET /project/goods/list': (req, res) => {
+  'GET /goods/goods/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -1737,6 +1794,87 @@ const proxy = {
       "code": 0,
       "data": ""
     });
+  },
+  'GET /project/activityPlan/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 4,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": "4",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-01 13:00:29",
+          "endTime": "2018-07-10 13:00:41",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294673000,
+          "updateId": null,
+          "updateTime": 1531294673000,
+          "activityName": "大股东"
+        },
+        {
+          "id": "2",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-11 11:56:19",
+          "endTime": "2018-07-13 11:56:22",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294662000,
+          "updateId": null,
+          "updateTime": 1531294662000,
+          "activityName": "618大促销"
+        },
+        {
+          "id": "1",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-11 11:55:49",
+          "endTime": "2018-07-13 11:55:52",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294655000,
+          "updateId": null,
+          "updateTime": 1531294655000,
+          "activityName": "7夕欢乐秀"
+        },
+        {
+          "id": "3",
+          "activityId": null,
+          "gameId": null,
+          "startTime": "2018-07-14 12:56:15",
+          "endTime": "2018-07-31 12:56:23",
+          "prizeType": null,
+          "isDelete": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": 1531294670000,
+          "updateId": null,
+          "updateTime": 1531294670000,
+          "activityName": "reterte"
+        }
+      ]
+    })
   },
   'GET /order/list': (req, res) => {
     res.send({"msg":"成功","code":0,"page":{"pageSize":20,"currentResult":0,"totalPage":3,"pageNo":1,"totalCount":52,"list":null,"firstPage":true,"lastPage":false,"nextPage":2,"prePage":1,"firstResult":0},"data":[{"id":"3ac834d4-8328-11e8-80ec-00163e0879d9","orderNum":'32128493',"userId":"9b8c0514-8050-11e8-80ec-00163e0879d9","channelId":null,"machineId":"123","nickName":"张三","shopsName":"哈尔滨啤酒","merPointAddress":"北京市朝阳区朝阳公园","activityName":"哈啤","goodsCount":1,"gameId":null,"orderTime":"2018-07-09 11:29:04","orderPrice":0.1,"orderType":"1000","payStatus":"0","payTime":null,"goodsStatus":0,"activityId":'3ac834d4-832',"channelCode":null,"channelName":null,"machineCode":"23829323","machineName":null,"gameName":"答题","gameRemark":null,"keyword":null,"orderGoodsList":[{"id":"sjjjjjjjjj","orderId":"3ac834d4-8328-11e8-80ec-00163e0879d9","orderNum":null,"goodsType":1,"goodsId":"1111","goodsName":"伊利酸牛奶","goodsCode":"433333333","goodsPrice":1.2,"status":1}],"pageNo":0},{"id":"029f1999-836a-11e8-80ec-00163e0879d9","orderNum":null,"userId":"9b8c0514-8050-11e8-80ec-00163e0879d9","channelId":null,"machineId":"123","gameId":null,"orderTime":"2018-07-09 11:19:57","orderPrice":null,"orderType":"1000","payStatus":"1","payTime":"2018-07-09 11:20:26","goodsStatus":0,"activityId":null,"channelCode":null,"channelName":null,"machineCode":null,"machineName":null,"gameName":null,"gameRemark":null,"keyword":null,"orderGoodsList":null,"pageNo":0}]});
@@ -2189,7 +2327,515 @@ const proxy = {
   },
   'GET /game/user/list': (req, res) => {
     res.send({"msg":"成功","code":0,"page":{"pageSize":20,"currentResult":0,"totalPage":1,"pageNo":1,"totalCount":1,"list":null,"firstResult":0,"firstPage":true,"lastPage":true,"nextPage":1,"prePage":1},"data":[{"id":"ddddddd","userNick":"大姐姐","phone":"13454345656","gameUserId":"hjkjhghjkhjk","channelId":"hjjkklllll","channelName":"到年底","channelUserKey":"nnnmm","createTime":1531477140000}]})
-  }
+  },
+  'POST /project/activityPlan/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /project/activityPlan/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "6666",
+        "activityId": "f3092aec236e4ce4a5d964b16a348ef6",
+        "gameId": "1",
+        "startTime": "2018-07-01 15:04:46",
+        "endTime": "2018-07-31 15:04:53",
+        "userMaxTimes": "1",
+        "prizeType": "100300",
+        "isDelete": 0,
+        "remark": null,
+        "createId": null,
+        "createTime": 1531467800000,
+        "updateId": null,
+        "updateTime": 1531467800000,
+        "machines": null,
+        "goods": [
+          {
+            "id": null,
+            "activityPlanId": null,
+            "prizeId": "1",
+            "prizeType": "及格就送",
+            "resultCode": 1,
+            "resultRemark": "及格就送"
+          },
+          {
+            "id": null,
+            "activityPlanId": null,
+            "prizeId": "4",
+            "prizeType": "90以上送",
+            "resultCode": 2,
+            "resultRemark": "90以上送"
+          }
+        ],
+        "coupons": [
+          {
+            "id": null,
+            "name": "天猫优惠券",
+            "code": "TM10001",
+            "activityPlanId": null,
+            "isDelete": null,
+            "remark": null,
+            "createId": null,
+            "createTime": null,
+            "updateId": null,
+            "updateTime": null,
+            "resultCode": 3,
+            "resultRemark": "失败送优惠券",
+            "prizeType": "2"
+          }
+        ],
+        "activityName": "618大促销"
+      },
+      "msg": "成功"
+    })
+  },
+  'POST /project/activityPlan/delete ': (req, res) => {
+    res.send({
+      "code": 1,
+      "data": null,
+      "msg": "计划进行中不能删除"
+    })
+  },
+  'GET /project/activityPlan/selectAreaMachines': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "code": "100000000",
+          "parentCode": null,
+          "name": "北京市",
+          "province": "北京市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "18f05c0c234749c7bf6c60dda9f5092e",
+              "machineCode": "1846698071048",
+              "state": null
+            },
+            {
+              "machineId": "8389fc95a5324a02a45aabfc6823436d",
+              "machineCode": "1863398071038",
+              "state": null
+            }
+          ]
+        },
+        {
+          "code": "110000000",
+          "parentCode": null,
+          "name": "天津市",
+          "province": "天津市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "1575f4d0ff8c491986d5ff534085904e",
+              "machineCode": "1809510071149",
+              "state": null
+            },
+            {
+              "machineId": "947639777c874724a954b1ca47f987f0",
+              "machineCode": "1834003071023",
+              "state": null
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /project/activityPlan/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /project/activityPlan/planMachineDetailList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /check/fault/list': (req, res) => {
+    res.send(
+      {
+        "msg": "成功",
+        "code": 0,
+        "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 3,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+        },
+        "data": [
+        {
+        "id": "f5fe616383454021aa65dc131a0aad0a",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "王老五",
+        "finishUser": null,
+        "submitTime": 1531740076000,
+        "finishTime": null,
+        "status": 0,
+        "finishRemark": null,
+        "remindStatus": 0,
+        "remark": "可能屏幕坏了"
+        },
+        {
+        "id": "fc8c4f5cf3b04daba692a72ccf16503f",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "老司机",
+        "finishUser": null,
+        "submitTime": 1531738920000,
+        "finishTime": null,
+        "status": 0,
+        "finishRemark": null,
+        "remindStatus": 0,
+        "remark": "可能屏幕坏了"
+        },
+        {
+        "id": "fc98baecbd1845f2801e573703868a85",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "老司机",
+        "finishUser": null,
+        "submitTime": 1531735204000,
+        "finishTime": null,
+        "status": 1,
+        "finishRemark": null,
+        "remindStatus": 0,
+        "remark": "可能电源没有插"
+        }
+        ]
+        }
+    )
+  },
+  'POST /check/fault/detail': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": {
+        "id": "f5fe616383454021aa65dc131a0aad0a",
+        "machineId": "2121231231231",
+        "type": null,
+        "submitUser": "王老五",
+        "finishUser": null,
+        "submitTime": 1531740076000,
+        "finishTime": null,
+        "status": null,
+        "finishRemark": null,
+        "remindStatus": null,
+        "remark": null,
+        "imgList": [
+        "11111",
+        "2222"
+        ],
+        "answerList": [
+        "AAAAA",
+        "哈哈哈哈哈哈哈哈哈哈"
+        ]
+        },
+        "msg": "成功"
+        }
+    )
+  },
+  'POST /check/fault/answer': (req, res) => {
+    res.send(
+      {
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+        }
+    )
+  },
+  'GET /check/user/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": "ghjghjkhj",
+          "name": "赵飞龙",
+          "phone": "13683023304",
+          "password": null,
+          "cardNo": "1686768878989898",
+          "enterprise": "点72",
+          "sex": 1,
+          "email": null,
+          "headImage": null,
+          "createId": null,
+          "createTime": null,
+          "updateId": null,
+          "updateTime": null,
+          "isDelete": 0
+        }
+      ]
+    })
+  },
+  'GET /check/user/getUserMachinDetailList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "machineLocale": "天津市天津市和平区鞍山道沿线",
+          "machineCode": "2121231231231"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'GET /check/user/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "ghjghjkhj",
+        "name": "赵飞龙",
+        "phone": "13683023304",
+        "password": null,
+        "cardNo": "1686768878989898",
+        "enterprise": "点72",
+        "sex": 1,
+        "email": null,
+        "headImage": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null,
+        "isDelete": 0,
+        "remark": null,
+        "machines": [
+          {
+            "machineId": "2222",
+            "machineCode": "北京市北京市东城区王府井—188982407114q",
+            "state": null
+          },
+          {
+            "machineId": "2223",
+            "machineCode": "北京市北京市东城区王府井—188982407114w",
+            "state": null
+          }
+        ]
+      },
+      "msg": "成功"
+    })
+  },
+  'POST /check/user/update': (req, res) => {
+    res.send({
+      "name": "张三",
+      "phone": "18510248685",
+
+      "cardNo": "100111008910108888",
+
+      "enterprise": "36克",
+
+      "machines": [{
+        "machineId": "JQ10001"
+      }, {
+        "machineId": "JQ10002",
+      }]
+    })
+  },
+  'POST /check/user/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /check/user/selectAreaMachines': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "code": "100000000",
+          "parentCode": null,
+          "name": "北京市",
+          "province": "北京市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "18f05c0c234749c7bf6c60dda9f5092e",
+              "machineCode": "1846698071048",
+              "state": "1"
+            },
+            {
+              "machineId": "8389fc95a5324a02a45aabfc6823436d",
+              "machineCode": "1863398071038",
+              "state": "0"
+            }
+          ]
+        },
+        {
+          "code": "110000000",
+          "parentCode": null,
+          "name": "天津市",
+          "province": "天津市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "1575f4d0ff8c491986d5ff534085904e",
+              "machineCode": "1809510071149",
+              "state": "0"
+            },
+            {
+              "machineId": "947639777c874724a954b1ca47f987f0",
+              "machineCode": "1834003071023",
+              "state": null
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /check/faultType/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+      "pageSize": 20,
+      "currentResult": 0,
+      "totalPage": 1,
+      "pageNo": 1,
+      "totalCount": 3,
+      "list": null,
+      "firstPage": true,
+      "lastPage": true,
+      "nextPage": 1,
+      "prePage": 1,
+      "firstResult": 0
+      },
+      "data": [
+      {
+      "code": "10000",
+      "parentCode": null,
+      "name": "黑屏",
+      "parentName": "大黑屏,小黑瓶,半黑屏",
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      },
+      {
+      "code": "20000",
+      "parentCode": null,
+      "name": "门坏",
+      "parentName": "门掉了,关不上",
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      },
+      {
+      "code": "5906bb314c654f26851781b1b357ec93",
+      "parentCode": null,
+      "name": "玻璃",
+      "parentName": "玻璃掉了,玻璃碎了",
+      "level": null,
+      "createId": "张文杰",
+      "createTime": "2018-07-21 09:40:00",
+      "updateId": null,
+      "updateTime": null
+      }
+      ]
+      })
+  },
+  'POST /check/faultType/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+      })
+  },
+  'POST /check/faultType/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+      "code": "5906bb314c654f26851781b1b357ec93",
+      "parentCode": null,
+      "name": "玻璃",
+      "parentName": null,
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null,
+      "solutions": [
+      {
+      "code": "09ae88f5835348d6976e13dcb2ea86f3",
+      "parentCode": null,
+      "name": "玻璃掉了",
+      "parentName": null,
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      },
+      {
+      "code": "c03f1ebd30ff4b9daafbd972a66c9301",
+      "parentCode": null,
+      "name": "玻璃碎了",
+      "parentName": null,
+      "level": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      }
+      ]
+      },
+      "msg": "成功"
+      },
+    )
+  },
+  'POST /check/faultType/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+      }
+    )
+  },
 };
 
 // export default noProxy ? {

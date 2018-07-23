@@ -54,6 +54,8 @@ export default class Staff extends PureComponent {
     autoExpandParent: true,
     checkedKeys: [],
     selectedKeys: [],
+    isJiaoLeft: 'none',
+    pageNo: 1,
   }
   componentDidMount = () => {
     this.getSystemUserList();
@@ -106,12 +108,21 @@ export default class Staff extends PureComponent {
       payload: {
         restParams: {
           keyword: this.state.userName,
+          pageNo: this.state.pageNo,
         },
       },
     });
   }
   getSystemUserQueryUserRoles = (data_) => {
-
+    if (data_.length === 0) {
+      this.setState({
+        isJiaoLeft: 'block',
+      });
+    } else {
+      this.setState({
+        isJiaoLeft: 'none',
+      });
+    }
     var arr = [];
     for (var i = 0; i < data_.length; i++) {
       let obj = {};
@@ -214,6 +225,12 @@ export default class Staff extends PureComponent {
     console.log('hideCancelModal::');
   }
   handleTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      pageNo: pagination.current,
+    }, () => {
+      this.getSystemUserList();
+    });
+    
     console.log(pagination, filters, sorter);
   }
   renderTreeNodes = (data) => {
@@ -230,7 +247,7 @@ export default class Staff extends PureComponent {
     });
   }
   render() {
-    const { allList, checkedKeys } = this.state;
+    const { allList, checkedKeys, isJiaoLeft } = this.state;
     const { staff: { list, page } } = this.props;
     // console.log(111, list, page, allList, 222);
     const columns = [
@@ -263,7 +280,7 @@ export default class Staff extends PureComponent {
         dataIndex: '',
         key: '',
         render: (record) => {
-          return <Button type="primary" onClick={this.onToAuthorization.bind(this, record)}>授权</Button>;
+          return <a onClick={this.onToAuthorization.bind(this, record)}>授权</a>;
         },
       },
     ];
@@ -299,11 +316,7 @@ export default class Staff extends PureComponent {
           okText="确认"
           cancelText="取消"
         >
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={9} sm={24}>
-              角色名称
-            </Col>
-          </Row>
+          <div style={{display:isJiaoLeft}}>角色管理未添加角色</div>
           <Tree
             checkable
             onExpand={this.onExpand}
@@ -320,7 +333,7 @@ export default class Staff extends PureComponent {
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
-              <Input placeholder="请输入姓名" onChange={this.onChange} />
+              <Input placeholder="请输入员工姓名、员工手机、邮箱、角色、部门名称" onChange={this.onChange} />
             </Col>
             <Col md={6} sm={24}>
               <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
@@ -334,7 +347,6 @@ export default class Staff extends PureComponent {
             pagination={paginationProps}
             onChange={this.handleTableChange}
             rowKey="id"
-            bordered
           />
         </Card>
       </PageHeaderLayout>

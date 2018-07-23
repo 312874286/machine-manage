@@ -83,18 +83,19 @@ const CreateForm = Form.create()(
               />
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="点位名称">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
+            })(<Input placeholder="请输入点位名称" />)}
+          </FormItem>
           <FormItem {...formItemLayout} label="商场名称">
             {getFieldDecorator('mall', {
-              rules: [{ required: true, message: '请输入商场名称' }, {
-                validator: verifyTrim,
-              }],
+              rules: [{ required: true,whitespace: true, message: '请输入商场名称' }],
             })(<Input placeholder="请输入商场" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="运营人员">
             {getFieldDecorator('manager', {
-              rules: [{ required: true, message: '请输入运营人员' }, {
-                validator: verifyTrim,
-              }],
+              rules: [{ required: true, whitespace: true, message: '请输入运营人员' }],
             })(<Input placeholder="请输入运营人" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="手机号码">
@@ -105,9 +106,7 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请输入手机" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="备注描述">
-            {getFieldDecorator('remark', {
-              rules: [{ required: true, message: '请输入备注描述' }],
-            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
       </Modal>
@@ -116,7 +115,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, pointSetting, log }) => ({
   common,
   pointSetting,
-  loading: loading.models.rule,
+  loading: loading.models.pointSetting,
   log,
 }))
 @Form.create()
@@ -286,10 +285,16 @@ export default class PointSettingList extends PureComponent {
       // this.setState({
       //   formValues: values,
       // });
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+        }
+      }
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        code: fieldsValue.provinceCityAreaTrade ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
+        code: localCode,
       }, () => {
         this.getLists();
       });
@@ -325,8 +330,115 @@ export default class PointSettingList extends PureComponent {
       });
     } else return false;
   }
-  // 编辑modal 编辑事件
+  // 获取商圈信息
+  getArea = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      code = targetOption.value;
+      targetOption.loading = true;
+    }
+
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        restParams: {
+          code,
+        },
+      },
+    }).then((data) => {
+    });
+  }
   handleEditClick = (item) => {
+    this.setState({
+      modalVisible: true,
+      modalData: item,
+      modalType: false,
+    });
+    this.props.dispatch({
+      type: 'pointSetting/getPointSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      // 回显省市区商圈数据源
+      if (res.province) {
+        let province, provinceIndex, cityIndex, { city, district, circle } = res;
+        // all 省
+        this.props.dispatch({
+          type: 'common/getProvinceCityAreaTradeArea',
+          payload: {
+            restParams: {
+              code: '',
+            },
+          },
+        }).then((provinceRes) => {
+          province = provinceRes; // 所有省
+          // 市
+          this.props.dispatch({
+            type: 'common/getProvinceCityAreaTradeArea',
+            payload: {
+              restParams: {
+                code: res.province,
+              },
+            },
+          }).then((cityRes) => {
+            for (let i = 0; i < province.length; i++) {
+              if (province[i].value === res.province) {
+                provinceIndex = i
+                province[i].children = cityRes;
+              }
+            }
+            // 区
+            this.props.dispatch({
+              type: 'common/getProvinceCityAreaTradeArea',
+              payload: {
+                restParams: {
+                  code: city,
+                },
+              },
+            }).then((districtRes) => {
+              let arr = province[provinceIndex].children
+              for (let i = 0; i < arr.length; i++) {
+                if (arr[i].value === city) {
+                  cityIndex = i
+                  arr[i].children = districtRes;
+                }
+              }
+              // 区
+              this.props.dispatch({
+                type: 'common/getProvinceCityAreaTradeArea',
+                payload: {
+                  restParams: {
+                    code: district,
+                  },
+                },
+              }).then((circleRes) => {
+                let arr = province[provinceIndex].children[cityIndex].children
+                for (let i = 0; i < arr.length; i++) {
+                  if (arr[i].value === district) {
+                    arr[i].children = circleRes;
+                  }
+                }
+                // 商圈
+                this.setState({
+                  options: province,
+                  defaultValue: [res.province, city, district, circle],
+                }, () => {
+                  this.setModalData(res);
+                });
+              });
+            });
+          });
+        });
+      }
+    });
+  }
+  // 编辑modal 编辑事件
+  handleEditClick2 = (item) => {
     this.setState({
       modalVisible: true,
       modalData: item,
@@ -418,6 +530,7 @@ export default class PointSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
+        name: data.name || '',
         mall: data.mall || '',
         manager: data.manager || '',
         mobile: data.mobile || '',
@@ -426,6 +539,7 @@ export default class PointSettingList extends PureComponent {
       });
     } else {
       this.form.setFieldsValue({
+        name: '',
         mall: '',
         manager: '',
         mobile: '',
@@ -605,6 +719,11 @@ export default class PointSettingList extends PureComponent {
         title: '所属省市区商圈',
         // width: 200,
         dataIndex: 'areaName',
+      },
+      {
+        title: '点位名称',
+        // width: 200,
+        dataIndex: 'name',
       },
       {
         title: '商场',

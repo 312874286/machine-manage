@@ -37,7 +37,8 @@ const RangePicker = DatePicker.RangePicker;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
+      merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview, handleChange, handleCancel, normFile } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -66,17 +67,17 @@ const CreateForm = Form.create()(
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="商品编码">
             {getFieldDecorator('code', {
-              rules: [{ required: true, message: '请输入商品编码' }],
-            })(<Input placeholder="请输入商品编码" />)}
+              rules: [{ required: true, whitespace: true, message: '请输入商品编码' }],
+            })(modalType ? (<Input placeholder="请输入商品编码" disabled />) : (<Input placeholder="请输入商品编码" />))}
           </FormItem>
           <FormItem {...formItemLayout} label="商品名称">
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入商品名称' }],
+              rules: [{ required: true, whitespace: true, message: '请输入商品名称' }],
             })(<Input placeholder="请输入商品名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="图片缩略图">
             {getFieldDecorator('img', {
-              rules: [{ required: true, message: '' }],
+              rules: [{ required: true, message: '请传照片' }],
               valuePropName: 'filelist',
             })(
               <div className="clearfix">
@@ -114,8 +115,7 @@ const CreateForm = Form.create()(
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="备注描述">
-            {getFieldDecorator('remark', {
-            })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
       </Modal>
@@ -186,7 +186,7 @@ export default class goodsSettingList extends PureComponent {
   }
 
   handleChange = (info) => {
-    console.log()
+    console.log('222222')
     let fileList = info.fileList;
     fileList = fileList.slice(-1);
     fileList = fileList.map((file) => {
@@ -206,7 +206,7 @@ export default class goodsSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
-        console.log('resp', resp)
+        // console.log('resp', resp)
         this.setState({
           fileList: [{
             uid: -2,
@@ -331,7 +331,7 @@ export default class goodsSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'goodsSetting/delGoodSetting',
+        type: 'goodsSetting/delGoodsSetting',
         payload: {
           params,
         },
@@ -364,6 +364,24 @@ export default class goodsSettingList extends PureComponent {
   }
   // 设置modal 数据
   setModalData = (data) => {
+    // if (data) {
+    //   this.setState({
+    //     fileList: [{
+    //       uid: -1,
+    //       name: 'xxx.png',
+    //       status: 'done',
+    //       url: data.img,
+    //     }],
+    //   });
+    //   this.form.setFieldsValue({
+    //     ...data,
+    //   });
+    // } else {
+    //   this.form.resetFields();
+    //   this.setState({
+    //     fileList: [],
+    //   });
+    // }
     if (data) {
       this.setState({
         fileList: [{
@@ -374,12 +392,25 @@ export default class goodsSettingList extends PureComponent {
         }],
       });
       this.form.setFieldsValue({
-        ...data,
+        name: data.name || '',
+        code: data.code || undefined,
+        sellerId: data.sellerId || undefined,
+        price: data.price || undefined,
+        remark: data.remark || undefined,
+        img: data.img || undefined,
       });
     } else {
-      this.form.resetFields();
       this.setState({
         fileList: [],
+      });
+      this.form.setFieldsValue({
+        name: undefined,
+        code: undefined,
+        price: undefined,
+        sellerId: undefined,
+        shopId: undefined,
+        remark: undefined,
+        img: undefined,
       });
     }
   }
@@ -528,7 +559,11 @@ export default class goodsSettingList extends PureComponent {
         // width: 200,
         dataIndex: 'img',
         render(val) {
-          return <img src={val}  style={{ width: '80px' }} />;
+          return (
+            <a target="_blank" href={val}>
+              <img src={val}  style={{ width: '80px' }} />
+            </a>
+          );
         },
       },
       {
@@ -612,7 +647,6 @@ export default class goodsSettingList extends PureComponent {
           modalType={modalType}
           merchantLists={merchantLists}
           shopsLists={shopsLists}
-          normFile={this.normFile}
           previewVisible={this.state.previewVisible}
           previewImage={this.state.previewImage}
           fileList={this.state.fileList}
@@ -620,6 +654,7 @@ export default class goodsSettingList extends PureComponent {
           handleChange={this.handleChange}
           handleCancel={this.handleCancel}
           handleUpload={this.handleUpload}
+          normFile={this.normFile}
         />
         <LogModal
           data={logList}
