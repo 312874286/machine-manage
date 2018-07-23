@@ -238,7 +238,7 @@ const WatchForm = Form.create()(
     };
     const goodsColumns = [{
       title: '商品名称',
-      dataIndex: 'prizeId',
+      dataIndex: 'activityPlanId',
       align: 'center',
     }, {
       title: '规则',
@@ -505,16 +505,6 @@ export default class ScheduleSettingList extends PureComponent {
       if (res.length > 0) {
         this.setState({
           goodsLists: res,
-        }, () => {
-          // this.setState({
-          //   goodsInitData: [{
-          //     key: this.state.goodsLists[0].id,
-          //     resultCode: 1,
-          //     resultRemark: '当游戏得分超过90，掉落此商品',
-          //     prizeType: 1,
-          //     prizeId: this.state.goodsLists[0].id,
-          //   }],
-          // });
         });
       }
     });
@@ -532,15 +522,14 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      console.log('总时间', this.state.startTime, this.state.endTime)
-      console.log('获取数据时间', this.state.getDataStartDay, this.state.getDataEndDay)
-      console.log(this.state.startTime === this.state.getDataStartDay && this.state.endTime === this.state.getDataEndDay)
+      // console.log('总时间', this.state.startTime, this.state.endTime)
+      // console.log('获取数据时间', this.state.getDataStartDay, this.state.getDataEndDay)
+      // console.log(this.state.startTime === this.state.getDataStartDay && this.state.endTime === this.state.getDataEndDay)
       if (this.state.startTime === this.state.getDataStartDay && this.state.endTime === this.state.getDataEndDay) {
         this.setState({
           resList: []
         });
       }
-      let activityArr = []
       if (res) {
         let activityArrs = res.length > 0 ? res : this.state.resList
         if (this.state.resList.length > 0) {
@@ -556,20 +545,13 @@ export default class ScheduleSettingList extends PureComponent {
             activityArrs = Object.values(temp);
           }
         }
-        console.log('activityArrs', activityArrs)
-        let dateList = this.drawLine(activityArrs)
         // console.log('activityArrs', activityArrs)
-        // console.log('dateList', dateList)
+        let dateList = this.drawLine(activityArrs)
         this.setState({
           resList: activityArrs,
           dateList,
-        }, () => {
-          // console.log('activityArr', this.state.dateList);
         });
-      }
-      // this.setState({
-      //   dateList: res,
-      // });
+      };
     });
   }
   drawLine = (arr) => {
@@ -620,7 +602,7 @@ export default class ScheduleSettingList extends PureComponent {
     return activityArr;
   }
   handleDays = (val) => {
-    console.log('val', val)
+    // console.log('val', val)
     this.setState({
       handleDays: val,
       startTime: val.startDay,
@@ -704,10 +686,16 @@ export default class ScheduleSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1];
+        }
+      }
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        code: fieldsValue.provinceCityAreaTrade ? fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1] : '',
+        code: localCode,
       }, () => {
         this.getLists();
       });
@@ -887,9 +875,11 @@ export default class ScheduleSettingList extends PureComponent {
           modalData: {},
         });
         let url = 'scheduleSetting/saveScheduleSetting';
+        let messageTxt = '新增';
         if (this.state.modalData.id) {
           url = 'scheduleSetting/editScheduleSetting';
           params = { ...params, id: this.state.modalData.id };
+          messageTxt = '编辑';
         } else {
           params = { ...params, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
         }
@@ -900,24 +890,24 @@ export default class ScheduleSettingList extends PureComponent {
           },
         }).then((resp) => {
           if (resp && resp.code === 0) {
-            message.success('新增成功');
+            message.success( messageTxt + '成功');
+            this.setState({
+              code: '',
+              getDataStartDay: this.state.startTime,
+              getDataEndDay: this.state.endTime,
+            }, () => {
+              this.getLists();
+            });
           } else {
             Modal.error({
               title: '',
-              content: resp ? resp.msg : '新增失败',
+              content: resp ? resp.msg : messageTxt + '失败',
             });
             this.setState({
               editModalConfirmLoading: false,
             });
             return;
           }
-          this.setState({
-            code: '',
-            getDataStartDay: this.state.startTime,
-            getDataEndDay: this.state.endTime,
-          }, () => {
-            this.getLists();
-          })
           this.setState({
             editModalConfirmLoading: false,
             modalVisible: false,

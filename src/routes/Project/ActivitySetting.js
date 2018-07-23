@@ -724,7 +724,7 @@ export default class activitySettingList extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入活动编码、活动名称、所属商户、所属店铺" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入活动名称、所属商户、所属店铺" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

@@ -97,7 +97,7 @@ const CreateForm = Form.create()(
             }) ((modalData.id) ? (
               <div>
                 <div>
-                  { selectCityName.length > 0 ? '' : modalData.remark ? modalData.remark : '测试暂无' }
+                  { selectCityName.length > 0 ? '' : modalData.remark ? modalData.remark : '暂无' }
                   { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
                 </div>
                 <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
@@ -423,7 +423,7 @@ export default class user extends PureComponent {
           </TreeNode>
         );
       }
-      return <TreeNode {...item} dataRef={item} />;
+      return (parseInt(item.canUseNum) === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />)
     });
   }
   onLoadData = (treeNode) => {
@@ -516,10 +516,13 @@ export default class user extends PureComponent {
     });
   }
   openSelectMachineModal = () => {
-    console.log('openSelectMachineModal', this.state.checkedKeys)
+    // console.log('openSelectMachineModal', this.state.checkedKeys, this.state.expandedKeys,
+    //   this.state.autoExpandParent, this.state.selectedKeys)
     this.setState({
       code: '',
       checkedKeys: [],
+      expandedKeys: [],
+      autoExpandParent: true,
     }, () => {
       this.props.dispatch({
         type: 'user/selectMachine',

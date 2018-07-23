@@ -38,10 +38,11 @@ export default {
       if (code !== 0) return;
       const arr = [];
       if (data) {
-        let isLeaf = false, disabled = false, machines = [], title;
+        let isLeaf = false, disabled = false, machines = [], title, canUseNum;
         for (let i = 0; i < data.length; i++) {
           machines = data[i].machines
           title = data[i].name
+          canUseNum = data[i].machines.length
           if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
             isLeaf = true;
           }
@@ -54,6 +55,7 @@ export default {
               machineId: data[i].code,
               state: 0}]
             title = data[i].name;
+            canUseNum = 1;
           }
           const a = {
             value: data[i].code,
@@ -64,7 +66,7 @@ export default {
             province: data[i].province,
             machines: machines,
             disabledFlag: disabled,
-            canUseNum: data[i].machines.length,
+            canUseNum: canUseNum,
           };
           arr.push(a);
         }
