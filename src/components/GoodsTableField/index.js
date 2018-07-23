@@ -36,6 +36,7 @@ class EditableCell extends Component {
     const editing = !this.state.editing;
     this.setState({ editing }, () => {
       if (editing) {
+        // console.log('editing::', editing);
         this.input.focus();
       }
     });
@@ -161,14 +162,8 @@ class GoodsTableField extends Component {
   }
 
   handleSave = (row) => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    this.setState({ dataSource: newData });
+    // console.log('handleSave::', row);
+    this.props.goodsHandleChange(row);
   }
   updateRenderDatas() {
     this.state.clist = this.props.clist;

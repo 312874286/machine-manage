@@ -48,7 +48,7 @@ const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
-      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, discountHandle, discountHandleAdd, discountHandleDelete, modalData, onSelectShop, goodsLists,
+      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData, onSelectShop, goodsLists,
       disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
       isDisabled, selectMachineFlag,
     } = props;
@@ -166,10 +166,10 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField initData={goodsInitData} count={goodsCount} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} goodsHandleDelete={goodsHandleDelete} />
+            <GoodsTableField initData={goodsInitData} count={goodsCount} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} goodsHandleDelete={goodsHandleDelete} goodsHandleChange={goodsHandleChange} />
           </FormItem>
           <FormItem label="填写优惠券信息">
-            <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} />
+            <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} discountHandleChange={discountHandleChange} />
           </FormItem>
         </Form>
       </Modal>
@@ -825,6 +825,18 @@ export default class ScheduleSettingList extends PureComponent {
     this.setState({ goodsInitData: goodsInitData.filter(item => item.key !== key) });
     console.log('goodsHandleDelete::', key, goodsInitData);
   }
+  goodsHandleChange = (row) => {
+    const newData = [...this.state.goodsInitData];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    
+    this.setState({ goodsInitData: newData });
+    console.log('goodsHandleChange::', row);
+  }
   discountHandle = (val) => {
     this.setState({
       couponsInitData: val,
@@ -848,7 +860,17 @@ export default class ScheduleSettingList extends PureComponent {
   discountHandleDelete = (key) => {
     const couponsInitData = [...this.state.couponsInitData];
     this.setState({ couponsInitData: couponsInitData.filter(item => item.key !== key) });
-    console.log('discountHandleDelete::', key, couponsInitData);
+    // console.log('discountHandleDelete::', key, couponsInitData);
+  }
+  discountHandleChange = (row) => {
+    const newData = [...this.state.couponsInitData];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    this.setState({ couponsInitData: newData });
   }
   // 新增modal确认事件 开始
   saveFormRef = (form) => {
@@ -1409,9 +1431,11 @@ export default class ScheduleSettingList extends PureComponent {
           goodsHandle={this.goodsHandle}
           goodsHandleAdd={this.goodsHandleAdd}
           goodsHandleDelete={this.goodsHandleDelete}
+          goodsHandleChange={this.goodsHandleChange}
           discountHandle={this.discountHandle}
           discountHandleAdd={this.discountHandleAdd}
           discountHandleDelete={this.discountHandleDelete}
+          discountHandleChange={this.discountHandleChange}
           onSelectShop={this.onSelectShop}
 
           disabledStartDate={this.disabledStartDate}
