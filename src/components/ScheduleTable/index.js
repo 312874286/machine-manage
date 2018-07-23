@@ -1,4 +1,4 @@
-import { Card, Button, Icon, Popover } from 'antd';
+import { Card, Button, Icon, Popover, Popconfirm } from 'antd';
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import styles from './index.less';
@@ -298,7 +298,9 @@ class ScheduleTable extends PureComponent {
                           {/*endTime: item.endTime*/}
                           <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
                           <Icon type="eye" onClick={() => onWatchClick(item)} />
-                          <Icon type="close" className={styles.anticonDelete} onClick={() => onDeleteClick(item)} style={{ display: moment(item.endTime) > new Date().getTime() && moment(item.startTime) < new Date().getTime()  ? 'none' : '' }}/>
+                          <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No"   style={{ display: moment(item.endTime) > new Date().getTime() && moment(item.startTime) < new Date().getTime()  ? 'none' : '' }}>
+                            <Icon type="close" className={styles.anticonDelete}/>
+                          </Popconfirm>
                         </div>
                       </div>
                     </Popover>

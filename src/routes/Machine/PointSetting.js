@@ -669,17 +669,17 @@ export default class PointSettingList extends PureComponent {
     const columns = [
       {
         title: '所属省市区商圈',
-        // width: 200,
+        width: 200,
         dataIndex: 'areaName',
       },
       {
         title: '点位名称',
-        // width: 200,
+        width: 200,
         dataIndex: 'name',
       },
       {
         title: '商场',
-        // width: 200,
+        width: 150,
         dataIndex: 'mall',
       },
       {
@@ -760,6 +760,7 @@ export default class PointSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
+              scrollX={1300}
             />
           </div>
         </Card>

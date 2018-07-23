@@ -4,7 +4,7 @@ import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
-import logo from '../assets/images/avatar/male.png';
+import logo from '../assets/images/logo.png';
 import { getRoutes } from '../utils/utils';
 
 const links = [{
@@ -38,29 +38,32 @@ class UserLayout extends React.PureComponent {
     return (
       <DocumentTitle title={this.getPageTitle()}>
         <div className={styles.container}>
-          <div className={styles.top}>
-            <div className={styles.header}>
-              <Link to="/">
-                <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>erp管理系统</span>
-              </Link>
+          <div className={styles.Box}>
+            <div className={styles.top}>
+              <div className={styles.header}>
+                <Link to="/">
+                  <img alt="logo" className={styles.logo} src={logo} />
+                  {/*<span className={styles.title}>erp管理系统</span>*/}
+                </Link>
+              </div>
+              <div className={styles.desc}>让我们一起为世界做点什么</div>
             </div>
-            <div className={styles.desc}>让我们一起为世界做点什么</div>
+            <Switch>
+              {getRoutes(match.path, routerData).map(item =>
+                (
+                  <Route
+                    key={item.key}
+                    path={item.path}
+                    component={item.component}
+                    exact={item.exact}
+                  />
+                )
+              )}
+              <Redirect exact from="/user" to="/user/login" />
+            </Switch>
           </div>
-          <Switch>
-            {getRoutes(match.path, routerData).map(item =>
-              (
-                <Route
-                  key={item.key}
-                  path={item.path}
-                  component={item.component}
-                  exact={item.exact}
-                />
-              )
-            )}
-            <Redirect exact from="/user" to="/user/login" />
-          </Switch>
-          <GlobalFooter className={styles.footer} links={links} copyright={copyright} />
+
+          {/*<GlobalFooter className={styles.footer} links={links} copyright={copyright} />*/}
         </div>
       </DocumentTitle>
     );

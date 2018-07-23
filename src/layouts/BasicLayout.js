@@ -205,20 +205,20 @@ class BasicLayout extends React.PureComponent {
                 <Route render={NotFound} />
               </Switch>
             </div>
-            <GlobalFooter
-              links={[
-                {
-                  key: 'erp管理系统',
-                  title: 'erp管理系统',
-                  href: 'http://www.pinwheelmedical.com/',
-                  blankTarget: true,
-                }]}
-              copyright={
-                <div>
-                  Copyright <Icon type="copyright" /> 2018 erp管理系统
-                </div>
-              }
-            />
+            {/*<GlobalFooter*/}
+              {/*links={[*/}
+                {/*{*/}
+                  {/*key: 'erp管理系统',*/}
+                  {/*title: 'erp管理系统',*/}
+                  {/*href: 'http://www.pinwheelmedical.com/',*/}
+                  {/*blankTarget: true,*/}
+                {/*}]}*/}
+              {/*copyright={*/}
+                {/*<div>*/}
+                  {/*Copyright <Icon type="copyright" /> 2018 erp管理系统*/}
+                {/*</div>*/}
+              {/*}*/}
+            {/*/>*/}
           </Content>
         </Layout>
       </Layout>

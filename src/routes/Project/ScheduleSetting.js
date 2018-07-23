@@ -1095,6 +1095,9 @@ export default class ScheduleSettingList extends PureComponent {
   openSelectMachineModal = () => {
     this.setState({
       selectMachineFlag: true,
+      checkedKeys: [],
+      expandedKeys: [],
+      autoExpandParent: true,
     }, () => {
       this.form.validateFields((err, fieldsValue) => {
         //     console.log('224', err, fieldsValue)
