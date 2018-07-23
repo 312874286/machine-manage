@@ -157,14 +157,7 @@ class DiscountDynamicField extends React.Component {
   }
 
   handleSave = (row) => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    this.setState({ dataSource: newData });
+    this.props.discountHandleChange(row);
   }
   updateRenderDatas = () => {
     let rlist = [];

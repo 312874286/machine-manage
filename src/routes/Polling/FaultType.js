@@ -285,7 +285,7 @@ export default class FaultType extends PureComponent {
           <Card>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={7} sm={24}>
-                <Input placeholder="请输入角色名称" onChange={this.onChange} />
+                <Input placeholder="类型，解决方案 ，添加人" onChange={this.onChange} />
               </Col>
               <Col md={5} sm={24}>
                 <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
