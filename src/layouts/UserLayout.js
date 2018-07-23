@@ -21,7 +21,7 @@ const links = [{
   href: '',
 }];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2018 erp管理系统</div>;
+const copyright = <div><Icon type="copyright" />inno72.com 版权所有</div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
@@ -63,7 +63,7 @@ class UserLayout extends React.PureComponent {
             </Switch>
           </div>
 
-          {/*<GlobalFooter className={styles.footer} links={links} copyright={copyright} />*/}
+          <GlobalFooter className={styles.footer} copyright={copyright} />
         </div>
       </DocumentTitle>
     );
