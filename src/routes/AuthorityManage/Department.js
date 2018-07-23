@@ -7,6 +7,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 export default class Department extends PureComponent {
   state = {
     userName: '',
+    pageNo: 1,
   }
   componentDidMount = () => {
     this.getSystemDeptList();
@@ -28,9 +29,19 @@ export default class Department extends PureComponent {
       payload: {
         restParams: {
           keyword: this.state.userName,
+          pageNo: this.state.pageNo,
         },
       },
     });
+  }
+  handleTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      pageNo: pagination.current,
+    }, () => {
+      this.getSystemDeptList();
+    });
+    
+    console.log(pagination, filters, sorter);
   }
   render() {
     const { department: { list, page } } = this.props;

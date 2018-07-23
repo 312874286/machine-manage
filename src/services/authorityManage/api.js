@@ -2,10 +2,10 @@ import { map } from '../../utils/fetch/api';
 
 // API Doc: http://wiki.nblow.cn/pages/viewpage.action?pageId=11797216
 const api = map({
-  getSystemUserList: '/system/user/list?keyword={keyword}',
-  getSystemRoleList: '/system/role/list?keyword={keyword}',
-  getSystemDeptList: '/system/dept/list?keyword={keyword}',
-  getSystemFunctionList: '/system/function/list?keyword={keyword}',
+  getSystemUserList: '/system/user/list?keyword={keyword}&pageNo={pageNo}',
+  getSystemRoleList: '/system/role/list?keyword={keyword}&pageNo={pageNo}',
+  getSystemDeptList: '/system/dept/list?keyword={keyword}&pageNo={pageNo}',
+  getSystemFunctionList: '/system/function/list?keyword={keyword}&pageNo={pageNo}',
   getSystemRoleAll: '/system/role/all',
   getSystemUserAuth: '/system/user/auth?userId={userId}&roleIds={roleIds}',
   getSystemFunctionAll: '/system/function/all?roleId={roleId}',

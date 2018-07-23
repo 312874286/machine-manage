@@ -125,6 +125,15 @@ class GoodsTableField extends Component {
 
     // this.updateRenderDatas();
   }
+  componentWillReceiveProps(nextProps) {
+    const { initData, clist, count } = nextProps;
+    console.log('componentWillReceiveProps', nextProps);
+    this.updateRenderDatas(initData, clist, count);
+  }
+  componentDidMount() {
+    const { initData, clist } = this.props;
+    console.log('componentDidMount', this.props);
+  }
   handleChangeName = (record, value) => {
     record.prizeId = value;
     // console.log('name::', this.state.dataSource);
@@ -165,7 +174,7 @@ class GoodsTableField extends Component {
     // console.log('handleSave::', row);
     this.props.goodsHandleChange(row);
   }
-  updateRenderDatas() {
+  updateRenderDatas(initData, clist, count) {
     this.state.clist = this.props.clist;
     // console.log(111, this.props.count);
     // console.log('this.state.clist', this.state.clist)
@@ -228,7 +237,19 @@ class GoodsTableField extends Component {
     // this.setState({
     //   dataSource: this.props.initData,
     // });
-
+  }
+  render() {
+    // const { dataSource } = this.state;
+    const { count } = this.props;
+    console.log(222, count);
+    // this.updateRenderDatas();
+    // console.log('dataSource::', dataSource);
+    const components = {
+      body: {
+        row: EditableFormRow,
+        cell: EditableCell,
+      },
+    };
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'prizeId',
@@ -268,19 +289,6 @@ class GoodsTableField extends Component {
         );
       },
     }];
-  }
-  render() {
-    // const { dataSource } = this.state;
-    // const { count } = this.props;
-    // console.log(222, count);
-    this.updateRenderDatas();
-    // console.log('dataSource::', dataSource);
-    const components = {
-      body: {
-        row: EditableFormRow,
-        cell: EditableCell,
-      },
-    };
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;

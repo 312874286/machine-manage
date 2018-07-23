@@ -54,6 +54,7 @@ export default class Account extends PureComponent {
     addUserName: '',
     clickType: 0,
     currentSelectID: '',
+    pageNo: 1,
   }
   componentDidMount = () => {
     this.getSystemRoleList();
@@ -158,6 +159,7 @@ export default class Account extends PureComponent {
       payload: {
         restParams: {
           keyword: this.state.userName,
+          pageNo: this.state.pageNo,
         },
       },
     });
@@ -297,6 +299,15 @@ export default class Account extends PureComponent {
       }
       return <TreeNode {...item} />;
     });
+  }
+  handleTableChange = (pagination, filters, sorter) => {
+    this.setState({
+      pageNo: pagination.current,
+    }, () => {
+      this.getSystemRoleList();
+    });
+    
+    console.log(pagination, filters, sorter);
   }
   render() {
     const { treeData, addUserName } = this.state;

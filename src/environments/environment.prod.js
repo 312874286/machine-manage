@@ -1,7 +1,7 @@
 const environment = {
-  host: 'http://nb-merchant-service.pinwheelmedical.com/merchant_service',
-  appId: '',
-  frontHost: '',
+  host: 'https://api.erp.prod.32solo.com',
+  appId: 'dingoakb41ozzxedr3gnpv',
+  frontHost: 'https://erp.prod.32solo.com',
 };
 
 export default environment;
