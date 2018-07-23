@@ -127,12 +127,12 @@ class GoodsTableField extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const { initData, clist, count } = nextProps;
-    console.log('componentWillReceiveProps', nextProps);
+    // console.log('componentWillReceiveProps', nextProps);
     this.updateRenderDatas(initData, clist, count);
   }
   componentDidMount() {
     const { initData, clist } = this.props;
-    console.log('componentDidMount', this.props);
+    // console.log('componentDidMount', this.props);
   }
   handleChangeName = (record, value) => {
     record.prizeId = value;
@@ -278,7 +278,7 @@ class GoodsTableField extends Component {
     for (let i = 0; i < this.state.rlist.length; i++) {
       children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
     }
-    
+
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'prizeId',

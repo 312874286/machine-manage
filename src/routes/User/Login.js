@@ -30,6 +30,10 @@ export default class LoginPage extends Component {
     if (urlParams.code) {
       this.loginHandle(urlParams.code);
     }
+    // window.parent.document.all("iframe1").style.height = document.body.scrollHeight;
+    console.log('frames[0]', window.frames[0].document.documentElement.getElementsByClassName('login_content'))
+    console.log('frames[1]', JSON.stringify(window.frames[0].document))
+    console.log('frames[2]', window.frames[0].document)
   }
 
   onTabChange = (type) => {
@@ -44,7 +48,7 @@ export default class LoginPage extends Component {
       style: '',
       href: '',
       width: '300px',
-      height: '300px',
+      height: '400px',
     });
 
     const hanndleMessage = (event) => {
@@ -137,7 +141,7 @@ export default class LoginPage extends Component {
           <Submit loading={submitting}>登录</Submit>
         </Login> */}
 
-        <div id="login_container" />
+        <div id="login_container" style={{ border: 'none' }}/>
       </div>
     );
   }

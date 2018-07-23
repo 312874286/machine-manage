@@ -50,7 +50,7 @@ const CreateForm = Form.create()(
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
       goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData, onSelectShop, goodsLists,
       disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, selectMachineFlag,
+      isDisabled, selectMachineFlag, disabledTime,
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -94,8 +94,9 @@ const CreateForm = Form.create()(
             })(
               <DatePicker
                 disabledDate={disabledStartDate}
+                disabledTime={disabledTime}
                 showTime
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD HH:mm"
                 // value={startValue}
                 placeholder="选择开始时间"
                 onChange={onStartChange}
@@ -110,7 +111,7 @@ const CreateForm = Form.create()(
               <DatePicker
                 disabledDate={disabledStartDate}
                 showTime
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD HH:mm"
                 // value={startValue}
                 placeholder="选择开始时间"
                 onChange={onStartChange}
@@ -124,9 +125,10 @@ const CreateForm = Form.create()(
               rules: [{ required: true, message: '选择结束时间' }],
             })(
               <DatePicker
+                disabledTime={disabledTime}
                 disabledDate={disabledEndDate}
                 showTime
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD HH:mm"
                 // value={endValue}
                 placeholder="选择结束时间"
                 onChange={onEndChange}
@@ -417,6 +419,18 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   // 时间控件开始
+  range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+  disabledTime = () => {
+    return {
+      disabledSeconds: () => this.range(1, 60),
+    };
+  }
   disabledStartDate = (startValue) => {
     // console.log('disabledStartDate', startValue)
     // const endValue = this.state.endValue;
@@ -1082,6 +1096,9 @@ export default class ScheduleSettingList extends PureComponent {
   openSelectMachineModal = () => {
     this.setState({
       selectMachineFlag: true,
+      checkedKeys: [],
+      expandedKeys: [],
+      autoExpandParent: true,
     }, () => {
       this.form.validateFields((err, fieldsValue) => {
         //     console.log('224', err, fieldsValue)
@@ -1430,6 +1447,7 @@ export default class ScheduleSettingList extends PureComponent {
           onSelectShop={this.onSelectShop}
 
           disabledStartDate={this.disabledStartDate}
+          disabledTime={this.disabledTime}
           onStartChange={this.onStartChange}
           disabledEndDate={this.disabledEndDate}
           onEndChange={this.onEndChange}
@@ -1469,70 +1487,6 @@ export default class ScheduleSettingList extends PureComponent {
           WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
           machineList={this.state.machineList}
         />
-
-        {/*<Modal*/}
-          {/*title={!this.state.modalType ? '编辑排期' : '新增排期'}*/}
-          {/*visible={modalVisible}*/}
-          {/*onOk={handleAdd}*/}
-          {/*onCancel={() => handleModalVisible()}*/}
-          {/*confirmLoading={editModalConfirmLoading}*/}
-          {/*width={800}*/}
-        {/*>*/}
-          {/*<Form onSubmit={this.handleSearch}>*/}
-            {/*<FormItem {...formItemLayout} label="选择活动">*/}
-              {/*{getFieldDecorator('activityId', {*/}
-                {/*rules: [{ required: true, message: '请选择活动' }],*/}
-              {/*})(*/}
-                {/*<Select placeholder="请选择" onSelect={onSelectShop}>*/}
-                  {/*{activityLists.map((item) => {*/}
-                    {/*return (*/}
-                      {/*<Option value={item.id} key={item.id}>{item.name}</Option>*/}
-                    {/*);*/}
-                  {/*})}*/}
-                {/*</Select>*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
-            {/*<SelectTimeForm*/}
-              {/*ref={this.timeFormRef}*/}
-              {/*openSelectMachineModal={openSelectMachineModal}*/}
-              {/*selectCityName={selectCityName}*/}
-              {/*machineNum={machineNum}*/}
-              {/*modalData={modalData}*/}
-              {/*disabledStartDate={disabledStartDate}*/}
-              {/*onStartChange={onStartChange}*/}
-              {/*disabledEndDate={disabledEndDate}*/}
-              {/*onEndChange={onEndChange}*/}
-              {/*handleStartOpenChange={handleStartOpenChange}*/}
-              {/*handleEndOpenChange={handleEndOpenChange}*/}
-              {/*endOpen={endOpen}*/}
-              {/*isDisabled={isDisabled}*/}
-            {/*/>*/}
-            {/*<FormItem {...formItemLayout} label="选择游戏">*/}
-              {/*{getFieldDecorator('gameId', {*/}
-                {/*rules: [{ required: true, message: '请选择游戏' }],*/}
-              {/*})(*/}
-                {/*<Select placeholder="请选择">*/}
-                  {/*{gameLists.map((item) => {*/}
-                    {/*return (*/}
-                      {/*<Option value={item.id} key={item.id}>{item.name}</Option>*/}
-                    {/*);*/}
-                  {/*})}*/}
-                {/*</Select>*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
-            {/*<FormItem {...formItemLayout} label="同一用户获得商品次数">*/}
-              {/*{getFieldDecorator('userMaxTimes', {*/}
-                {/*rules: [{ required: true, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
-              {/*})(<Input placeholder="请填写同一用户获得商品次数" />)}*/}
-            {/*</FormItem>*/}
-            {/*<FormItem label="填写商品信息">*/}
-              {/*<GoodsTableField initData={goodsInitData} clist={goodsLists} goodsHandle={goodsHandle} />*/}
-            {/*</FormItem>*/}
-            {/*<FormItem label="填写优惠券信息">*/}
-              {/*<DiscountDynamicField initData={couponsInitData} discountHandle={discountHandle} />*/}
-            {/*</FormItem>*/}
-          {/*</Form>*/}
-        {/*</Modal>*/}
       </PageHeaderLayout>
     );
   }
