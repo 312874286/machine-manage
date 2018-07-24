@@ -145,7 +145,7 @@ export default class Staff extends PureComponent {
       for (let i = 0; i < data.length; i++) {
         checkedKeysarr.push(data[i].roleId);
       }
-      
+
       this.setState({
         allList: arr,
       }, () => {
@@ -168,7 +168,7 @@ export default class Staff extends PureComponent {
       // if(!code) return;
       console.log(data);
       this.getSystemUserQueryUserRoles(data);
-      
+
     });
   }
   hideOKModal = () => {
@@ -230,7 +230,7 @@ export default class Staff extends PureComponent {
     }, () => {
       this.getSystemUserList();
     });
-    
+
     console.log(pagination, filters, sorter);
   }
   renderTreeNodes = (data) => {
@@ -335,7 +335,7 @@ export default class Staff extends PureComponent {
             {this.renderTreeNodes(allList)}
           </Tree>
         </Modal>
-        <Card>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
               <Input placeholder="请输入员工姓名、员工手机、邮箱、角色、部门名称" value={userName} onChange={this.onChange} />
@@ -348,7 +348,7 @@ export default class Staff extends PureComponent {
             </Col>
           </Row>
         </Card>
-        <Card>
+        <Card bordered={false}>
           <Table
             dataSource={list}
             columns={columns}

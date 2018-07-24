@@ -40,7 +40,7 @@ export default class Department extends PureComponent {
     }, () => {
       this.getSystemDeptList();
     });
-    
+
     console.log(pagination, filters, sorter);
   }
   handleReset = () => {
@@ -72,7 +72,7 @@ export default class Department extends PureComponent {
     };
     return (
       <PageHeaderLayout>
-        <Card>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
               <Input placeholder="请输入部门名称、上级部门" value={userName} onChange={this.onChange} />
@@ -85,7 +85,7 @@ export default class Department extends PureComponent {
             </Col>
           </Row>
         </Card>
-        <Card>
+        <Card bordered={false}>
           <Table
             dataSource={list}
             columns={columns}

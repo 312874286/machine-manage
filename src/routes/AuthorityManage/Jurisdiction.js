@@ -40,7 +40,7 @@ export default class Jurisdiction extends PureComponent {
     }, () => {
       this.getSystemFunctionList();
     });
-    
+
     console.log(pagination, filters, sorter);
   }
   handleReset = () => {
@@ -88,7 +88,7 @@ export default class Jurisdiction extends PureComponent {
     };
     return (
       <PageHeaderLayout>
-        <Card>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
               <Input placeholder="权限名称、权限归属名称" value={userName} onChange={this.onChange} />
@@ -101,7 +101,7 @@ export default class Jurisdiction extends PureComponent {
             </Col>
           </Row>
         </Card>
-        <Card>
+        <Card bordered={false}>
           <Table
             dataSource={list}
             columns={columns}

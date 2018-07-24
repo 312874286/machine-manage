@@ -185,7 +185,7 @@ export default class Order extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Card bordered={false}>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               <Form onSubmit={this.handleSearch} layout="inline">
@@ -224,7 +224,8 @@ export default class Order extends PureComponent {
               </Form>
             </div>
           </div>
-
+        </Card>
+        <Card bordered={false}>
           <OrderTable
             loading={loading}
             data={list}

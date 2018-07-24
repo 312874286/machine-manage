@@ -132,7 +132,7 @@ export default class Account extends PureComponent {
   }
   onExpand = (expandedKeys) => {
     console.log('onExpand', expandedKeys);
-    
+
     this.setState({
       expandedKeys,
       autoExpandParent: false,
@@ -218,7 +218,7 @@ export default class Account extends PureComponent {
     }
   }
   hideOKModal = (e) => {
-    
+
     if (this.state.addUserName.replace(/\s+/g, '') === '') {
       message.error('请填写角色名称');
       return;
@@ -251,7 +251,7 @@ export default class Account extends PureComponent {
         } else {
           message.error(msg);
         }
-        
+
       });
     } else if (this.state.clickType === 2) {
       // let postdata = {};
@@ -280,8 +280,8 @@ export default class Account extends PureComponent {
         }
       });
     }
-    
-    
+
+
   }
   hideCancelModal = (e) => {
     this.setState({
@@ -306,7 +306,7 @@ export default class Account extends PureComponent {
     }, () => {
       this.getSystemRoleList();
     });
-    
+
     console.log(pagination, filters, sorter);
   }
   handleReset = () => {
@@ -322,6 +322,7 @@ export default class Account extends PureComponent {
       {
         title: '角色名称',
         dataIndex: 'name',
+        width: 150,
         key: 'name',
       }, {
         title: '权限集合',
@@ -353,7 +354,7 @@ export default class Account extends PureComponent {
     };
     return (
       <PageHeaderLayout>
-        <Card>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
               <Input placeholder="请输入角色名称" value={userName} onChange={this.onChange} />
@@ -366,7 +367,7 @@ export default class Account extends PureComponent {
             </Col>
           </Row>
         </Card>
-        <Card>
+        <Card bordered={false}>
           <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
           <br /><br />
           <Table
@@ -407,7 +408,7 @@ export default class Account extends PureComponent {
                 checkedKeys={this.state.checkedKeys}
                 onSelect={this.onSelect}
                 selectedKeys={this.state.selectedKeys}
-                
+
               >
                 {this.renderTreeNodes(treeData)}
               </Tree>
