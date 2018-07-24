@@ -722,11 +722,6 @@ export default class activitySettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
-            <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入活动名称、所属商户、所属店铺" />)}
-            </FormItem>
-          </Col>
           <Col md={10} sm={24}>
             <FormItem label="选择活动状态">
               {getFieldDecorator('status')(
@@ -738,6 +733,11 @@ export default class activitySettingList extends PureComponent {
                   })}
                 </Select>
               )}
+            </FormItem>
+          </Col>
+          <Col md={9} sm={24}>
+            <FormItem>
+              {getFieldDecorator('keyword')(<Input placeholder="请输入活动名称、所属商户、所属店铺" />)}
             </FormItem>
           </Col>
           <Col md={5} sm={24}>
