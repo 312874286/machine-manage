@@ -49,6 +49,11 @@ const machineStatus = ['未知', '机器开机', '初始化机器', '通过测�
 const appStatus = ['未启动', '前台运行', '后台运行']
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
+message.config({
+  top: 100,
+  duration: 2,
+  maxCount: 1,
+});
 
 const CreateForm = Form.create()(
   (props) => {
@@ -788,8 +793,6 @@ export default class machineSettingList extends PureComponent {
       }).then((resp) => {
         if (resp && resp.code === 0) {
           message.success('切换成功');
-        } else {
-          message.error(resp ? resp.msg : '切换失败');
         }
       });
     });
@@ -814,8 +817,6 @@ export default class machineSettingList extends PureComponent {
       }).then((resp) => {
         if (resp && resp.code === 0) {
           message.success('升级成功');
-        } else {
-          message.error(resp ? resp.msg : '升级失败');
         }
       });
     });
@@ -838,8 +839,6 @@ export default class machineSettingList extends PureComponent {
     }).then((resp) => {
       if (resp && resp.code === 0) {
         message.success('更新成功');
-      } else {
-        message.error(resp ? resp.msg : '更新失败');
       }
     });
   }

@@ -438,7 +438,7 @@ export default class ScheduleSettingList extends PureComponent {
     //   return false;
     // }
     // return startValue.valueOf() > endValue.valueOf();
-    return startValue && startValue < moment().endOf('day');
+    return startValue < moment(new Date().setDate(new Date().getDate() - 1)).endOf('day');
   }
   disabledEndDate = (endValue) => {
     // console.log('disabledEndDate', endValue)
@@ -931,7 +931,7 @@ export default class ScheduleSettingList extends PureComponent {
           },
         }).then((resp) => {
           if (resp && resp.code === 0) {
-            message.success( messageTxt + '成功');
+            // message.success( messageTxt + '成功');
             this.setState({
               code: '',
               getDataStartDay: this.state.startTime,
@@ -940,10 +940,10 @@ export default class ScheduleSettingList extends PureComponent {
               this.getLists();
             });
           } else {
-            Modal.error({
-              title: '',
-              content: resp ? resp.msg : messageTxt + '失败',
-            });
+            // Modal.error({
+            //   title: '',
+            //   content: resp ? resp.msg : messageTxt + '失败',
+            // });
             this.setState({
               editModalConfirmLoading: false,
             });

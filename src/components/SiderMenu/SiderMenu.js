@@ -183,11 +183,13 @@ export default class SiderMenu extends PureComponent {
   /* eslint-disable*/
   @Debounce(600)
   triggerResizeEvent() {
+    console.log('triggerResizeEvent')
     const event = document.createEvent('HTMLEvents');
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
   }
   handleOpenChange = (openKeys) => {
+    console.log('openKeys', openKeys)
     const lastOpenKey = openKeys[openKeys.length - 1];
     const isMainMenu = this.menus.some(
       item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey)
@@ -237,8 +239,7 @@ export default class SiderMenu extends PureComponent {
           {...menuProps}
           onOpenChange={this.handleOpenChange}
           selectedKeys={selectedKeys}
-          className={styles.MenuBackground}
-        >
+          className={styles.MenuBackground}>
           {this.getNavMenuItems(this.menus)}
         </Menu>
       </Sider>

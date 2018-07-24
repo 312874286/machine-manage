@@ -479,7 +479,7 @@ export default class goodsSettingList extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          message.success( messageTxt + '成功');
+          // message.success( messageTxt + '成功');
           this.setState({
             code: '',
             getDataStartDay: this.state.startTime,
