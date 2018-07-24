@@ -116,16 +116,19 @@ class GoodsTableField extends Component {
     super(props);
 
     this.state = {
-      dataSource: [],
       count:0,
       clist: [],
       rlist: [],
       currentValue: '',
+      initData: [],
     };
   }
   componentWillReceiveProps(nextProps) {
-    const { initData, clist, count } = nextProps;
-    this.updateRenderDatas(initData, clist, count);
+    const {initData, clist, count} = nextProps;
+    // console.log('initData, clist, count', initData, clist, count)
+    if (clist.length > 0) {
+      this.updateRenderDatas(initData, clist, count);
+    }
   }
   componentDidMount() {
     const { initData, clist } = this.props;
@@ -150,7 +153,7 @@ class GoodsTableField extends Component {
   }
   updateRenderDatas(initData, clist, count) {
     this.setState({
-      clist: clist,
+      clist,
     });
     if(this.state.clist.length === 0 ) {
       this.setState({
@@ -174,18 +177,18 @@ class GoodsTableField extends Component {
 
     if (this.props.initData.length !== 0) {
       this.setState({
-        dataSource: initData,
+        initData,
       });
-    } else {
     }
-    
+
     this.setState({
       count: count,
     });
   }
   render() {
     const { count } = this.props;
-    console.log('goods::', count);
+    const { clist, rlist, initData } = this.state
+    // console.log('goods::', count);
     const components = {
       body: {
         row: EditableFormRow,
@@ -193,28 +196,33 @@ class GoodsTableField extends Component {
       },
     };
 
-    const children = [];
-    let defaultValue = '';
-
-    const children2 = [];
-    let defaultValue2 = '';
-
-    for (let i = 0; i < this.state.clist.length; i++) {
-      console.log(this.state.clist[i].id,this.state.clist[i].name);
-      children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
-    }
-
-    for (let i = 0; i < this.state.rlist.length; i++) {
-      children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-    }
-
+    // const children = [];
+    // let defaultValue = '';
+    //
+    // const children2 = [];
+    // let defaultValue2 = '';
+    //
+    // for (let i = 0; i < this.state.clist.length; i++) {
+    //   console.log(this.state.clist[i].id,this.state.clist[i].name);
+    //   children.push(<Option key={this.state.clist[i].id} value={this.state.rlist[i].id}>{this.state.clist[i].name}</Option>);
+    // }
+    //
+    // for (let i = 0; i < this.state.rlist.length; i++) {
+    //   children2.push(<Option key={this.state.rlist[i].id} value={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
+    // }
+    // console.log('clist', clist, initData)
     this.columns = [{
       title: '*商品名称',
-      dataIndex: 'prizeId',
+      dataIndex: 'name',
       render: (text, record) => {
         return (
-          <Select onChange={this.handleChangeName.bind(this,record)}>
-            {children}
+          <Select onChange={this.handleChangeName.bind(this,record)} defaultValue={record.prizeId}>
+            {/*{children}*/}
+            {clist.map((item) => {
+              return (
+                <Option key={item.id} value={item.id}>{item.name}</Option>
+              );
+            })}
           </Select>
         );
       },
@@ -224,7 +232,12 @@ class GoodsTableField extends Component {
       render: (text, record) => {
         return (
           <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-            {children2}
+            {/*{children2}*/}
+            {rlist.map((item) => {
+              return (
+                <Option key={item.id} value={item.id}>{item.name}</Option>
+              );
+            })}
           </Select>
 
         );
@@ -268,7 +281,7 @@ class GoodsTableField extends Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={this.props.initData}
+          dataSource={initData}
           columns={columns}
           pagination={false}
           rowKey={record => record.key}

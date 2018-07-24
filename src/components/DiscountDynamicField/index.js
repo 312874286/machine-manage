@@ -113,7 +113,7 @@ class EditableCell extends Component {
 class DiscountDynamicField extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       dataSource: [],
       count:0,
@@ -123,12 +123,12 @@ class DiscountDynamicField extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const { initData, count } = nextProps;
-    console.log('discount::componentWillReceiveProps', nextProps);
+    // console.log('discount::componentWillReceiveProps', nextProps);
     this.updateRenderDatas(initData, count);
   }
   componentDidMount() {
     const { initData } = this.props;
-    console.log('discount::componentDidMount', this.props);
+    // console.log('discount::componentDidMount', this.props);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
@@ -159,7 +159,7 @@ class DiscountDynamicField extends React.Component {
     if (this.props.initData.length !== 0) {
       this.setState({
         dataSource: initData,
-      });      
+      });
     } else {
     }
     this.setState({
@@ -170,7 +170,7 @@ class DiscountDynamicField extends React.Component {
   render() {
     const { dataSource } = this.state;
     const { count } = this.props;
-    console.log('discount::', count);
+    // console.log('discount::', count);
     const components = {
       body: {
         row: EditableFormRow,
