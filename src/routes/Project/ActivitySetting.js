@@ -181,7 +181,7 @@ const SetDefaultForm = Form.create()(
       editActivityHandleModalVisibleClick,
       editActivityEditModalConfirmLoading,
       onSelect, data, value, handleChange,
-      onPopupScroll, onSearch, fetching } = props;
+      onPopupScroll, onSearch, fetching, gameLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -211,20 +211,12 @@ const SetDefaultForm = Form.create()(
             {getFieldDecorator('gameId', {
               rules: [{ required: true, message: '请选择游戏' }],
             })(
-              <Select
-                // mode="multiple"
-                // labelInValue
-                showSearch={true}
-                placeholder="请输入游戏名称进行选择"
-                notFoundContent={fetching ? <Spin size="small" /> : null}
-                filterOption={false}
-                onSearch={onSearch}
-                onChange={handleChange}
-                onPopupScroll={onPopupScroll}
-                onSelect={onSelect}
-                style={{ width: '100%' }}
-                allowClear={true}
-              >{data.map(d => <Option key={d.key} value={d.value} data-id={d.id}>{d.text}</Option>)}
+              <Select placeholder="请选择">
+              {gameLists.map((item) => {
+                return (
+                  <Option value={item.id} key={item.id}>{item.name}</Option>
+                );
+              })}
               </Select>
             )}
           </FormItem>
@@ -266,7 +258,22 @@ export default class activitySettingList extends PureComponent {
     editActivityEditModalConfirmLoading: false,
     pointPageNo: 1,
     fetching: false,
+    gameLists: [],
   };
+// {/*<Select*/}
+// {/*// mode="multiple"*/}
+// {/*// labelInValue*/}
+// {/*showSearch={true}*/}
+// {/*placeholder="请输入游戏名称进行选择"*/}
+// {/*notFoundContent={fetching ? <Spin size="small" /> : null}*/}
+// {/*filterOption={false}*/}
+// {/*onSearch={onSearch}*/}
+// {/*onChange={handleChange}*/}
+// {/*onPopupScroll={onPopupScroll}*/}
+// {/*onSelect={onSelect}*/}
+// {/*style={{ width: '100%' }}*/}
+// {/*allowClear={true}*/}
+// {/*>{data.map(d => <Option key={d.key} value={d.value} data-id={d.id}>{d.text}</Option>)}*/}
   componentDidMount() {
     this.getLists();
   }
@@ -551,17 +558,48 @@ export default class activitySettingList extends PureComponent {
   // 新增modal确认事件 结束
   // 设置默认活动开始
   saveActivityFormRef = (form) => {
-    this.pointForm = form;
+    this.defaultActivityForm = form;
+  }
+  getGameList = () => {
+    this.props.dispatch({
+      type: 'activitySetting/gameList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        gameLists: res,
+      }, () => {
+        this.getDefaultActivity()
+      });
+    });
   }
   handleEditActivityClick = () => {
-    this.setState({
-      modalVisible: false,
-      editActivitymodalVisible: true,
-      data: [],
-    });
-    this.pointForm.setFieldsValue({
-      name: undefined,
-      gameId: undefined,
+    this.getGameList()
+  }
+  getDefaultActivity = () => {
+    this.props.dispatch({
+      type: 'activitySetting/getDefaultActivity',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      if (res) {
+        this.defaultActivityForm.setFieldsValue({
+          name: res.name,
+          gameId: res.gameId,
+        });
+      } else {
+        this.defaultActivityForm.setFieldsValue({
+          name: undefined,
+          gameId: undefined,
+        });
+      }
+      this.setState({
+        modalVisible: false,
+        editActivitymodalVisible: true,
+        data: [],
+      });
     });
   }
   getActivitySettingList = (value) => {
@@ -617,7 +655,7 @@ export default class activitySettingList extends PureComponent {
   editActivityHandleAddClick = () => {
     // 确认修改点位
     // console.log(this.state.dataId)
-    this.pointForm.validateFields((err, values) => {
+    this.defaultActivityForm.validateFields((err, values) => {
       if (err) {
         return;
       }
@@ -625,8 +663,9 @@ export default class activitySettingList extends PureComponent {
         editActivityEditModalConfirmLoading: true,
       });
       console.log('values', values)
+      //  gameId: this.state.dataId
       const url = 'activitySetting/saveActivitySetting';
-      const params = { ...values, isDefault: 1, gameId: this.state.dataId  };
+      const params = { ...values, isDefault: 1 };
       this.props.dispatch({
         type: url,
         payload: {
@@ -883,6 +922,7 @@ export default class activitySettingList extends PureComponent {
           onSelect={this.onSetDefaultSelect}
           onSearch={this.getActivitySettingList}
           fetching={this.state.fetching}
+          gameLists={this.state.gameLists}
           // value={this.state.value}
         />
         <LogModal

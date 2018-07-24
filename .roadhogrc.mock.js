@@ -2901,6 +2901,27 @@ const proxy = {
       }
     )
   },
+  'GET /project/activity/getDefaultActivity': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "2",
+        "name": "dddd",
+        "shopId": "1",
+        "sellerId": "1",
+        "managerId": null,
+        "isDefault": 1,
+        "gameId": null,
+        "isDelete": 0,
+        "remark": null,
+        "createId": null,
+        "createTime": "2018-07-24 18:09:17",
+        "updateId": null,
+        "updateTime": "2018-07-24 18:09:17"
+      },
+      "msg": "成功"
+    })
+  }
 };
 
 // export default noProxy ? {

@@ -50,3 +50,9 @@ export async function getGameList({ params }) {
     body: stringify(params),
   });
 }
+
+export async function getDefaultActivity({ restParams }) {
+  return fetch.get(api.getDefaultActivity, {
+    restParams,
+  });
+}
