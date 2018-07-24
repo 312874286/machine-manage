@@ -55,18 +55,18 @@ export default class userTable extends PureComponent {
 
     return (
       <div className={styles.standardTable}>
-        <div className={styles.tableAlert}>
-          <Alert
-            message={(
-              <div>
-                查询结果：共{paginationProps.total}条数据&nbsp;&nbsp;
-                每页{paginationProps.pageSize}条
-              </div>
-            )}
-            type="info"
-            showIcon
-          />
-        </div>
+        {/*<div className={styles.tableAlert}>*/}
+          {/*<Alert*/}
+            {/*message={(*/}
+              {/*<div>*/}
+                {/*查询结果：共{paginationProps.total}条数据&nbsp;&nbsp;*/}
+                {/*每页{paginationProps.pageSize}条*/}
+              {/*</div>*/}
+            {/*)}*/}
+            {/*type="info"*/}
+            {/*showIcon*/}
+          {/*/>*/}
+        {/*</div>*/}
         <Table
           loading={loading}
           rowKey={record => record.id}

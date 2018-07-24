@@ -1254,10 +1254,10 @@ export default class ScheduleSettingList extends PureComponent {
           this.setState({
             editModalConfirmLoading: false,
           });
-          // this.getLists();
-        } else {
-          message.error(res ? res.msg : '删除失败');
         }
+        // else {
+        //   message.error(res ? res.msg : '删除失败');
+        // }
       });
     } else return false;
   }
