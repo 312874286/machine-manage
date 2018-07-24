@@ -35,8 +35,8 @@ export default class FaultType extends PureComponent {
         const { solutionsLists } = this.state;
         // var n
         // console.log(e,111, solutionsLists);
-        // this.setState({ 
-        //     solutionsLists: solutionsLists, 
+        // this.setState({
+        //     solutionsLists: solutionsLists,
         // });
 
         var arrlist = [];
@@ -58,7 +58,7 @@ export default class FaultType extends PureComponent {
         this.setState({
             solutionsLists: arrlist,
         });
-        
+
     }
     onFindData = (e) => {
     this.getLists();
@@ -98,7 +98,7 @@ export default class FaultType extends PureComponent {
                     solutionsLists: arrlist,
                     typeName: data.name,
                 });
-    
+
               });
           });
       console.log(record);
@@ -110,8 +110,8 @@ export default class FaultType extends PureComponent {
     }
     handleSolutionsAdd = () => {
       const { solutionsLists, count } = this.state;
-      const newData = { 
-        key:count, 
+      const newData = {
+        key:count,
         name: '',
        };
       this.setState({
@@ -135,7 +135,7 @@ export default class FaultType extends PureComponent {
       this.setState({
         visible: true,
         type: 'add',
-        solutionsLists: [{ 
+        solutionsLists: [{
           key: 0, name: '',
         }],
         count: 1,
@@ -150,7 +150,7 @@ export default class FaultType extends PureComponent {
       console.log('startDatePickerChange::', date, dateString);
     }
     handleOK = (e) => {
-    
+
       if (this.state.type === 'add') {
         if (this.state.typeName.replace(/\s+/g, '') === ''){
             message.info('故障类型名称');
@@ -160,7 +160,7 @@ export default class FaultType extends PureComponent {
             message.info('没有故障解决方案');
             return;
         }
-        
+
         for (var i = 0; i < this.state.solutionsLists.length; i++) {
             if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
                 console.log(this.state.solutionsLists[i].name, i);
@@ -176,7 +176,7 @@ export default class FaultType extends PureComponent {
             newarr.push(newobj);
         }
         // console.log(newarr);
-        
+
         this.props.dispatch({
             type: 'faultType/getCheckFaultTypeAdd',
             payload: {
@@ -198,7 +198,7 @@ export default class FaultType extends PureComponent {
             } else {
               message.error(msg);
             }
-            
+
 
           });
 
@@ -211,7 +211,7 @@ export default class FaultType extends PureComponent {
             message.info('没有故障解决方案');
             return;
         }
-        
+
         for (var i = 0; i < this.state.solutionsLists.length; i++) {
             if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
                 console.log(this.state.solutionsLists[i].name, i);
@@ -249,7 +249,7 @@ export default class FaultType extends PureComponent {
             } else {
               message.error(msg);
             }
-            
+
 
           });
       }
@@ -265,7 +265,7 @@ export default class FaultType extends PureComponent {
       }, () => {
         this.getLists();
       });
-      
+
       console.log(pagination, filters, sorter);
     }
     handleReset = () => {
@@ -301,7 +301,7 @@ export default class FaultType extends PureComponent {
       };
       return (
         <PageHeaderLayout>
-          <Card>
+          <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={7} sm={24}>
                 <Input placeholder="请输入类型，解决方案 ，添加人搜索" value={userName} onChange={this.onChange} />
@@ -314,7 +314,7 @@ export default class FaultType extends PureComponent {
               </Col>
             </Row>
           </Card>
-          <Card>
+          <Card bordered={false}>
             <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
             <br /><br />
             <Table
@@ -367,4 +367,4 @@ export default class FaultType extends PureComponent {
       );
     }
   }
-  
+

@@ -310,15 +310,14 @@ class EditableTable extends React.Component {
         disabled: record.disabled,
       }),
     };
-    console.log('selectedRowKeys',selectedRowKeys)
+    // console.log('selectedRowKeys',selectedRowKeys)
     return (
       <div id="editTable">
-        { selectedRowKeys ? (
+        { selectedRowKeys ? ( selectedRowKeys.length > 0 ? (
           <div className={styles.BtnDiv}>
             <Button type="primary" onClick={() => {this.stopAisle()}}>停用货道</Button>
             <Button type="primary" className={styles.rightBtn} onClick={() => {this.startAisle()}}>启用货道</Button>
-          </div>
-        ) : ( <div/>)}
+          </div>) : (<div/>)) : ( <div/>)}
         <Table
           components={components}
           bordered

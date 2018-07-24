@@ -351,7 +351,7 @@ export default class channelSettingList extends PureComponent {
               {getFieldDecorator('keyword')(<Input placeholder="请输入渠道编码、渠道名称" />)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={7} sm={24}>
             <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>

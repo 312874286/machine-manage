@@ -78,7 +78,7 @@ const CreateForm = Form.create()(
             })(<Select placeholder="请选择" onSelect={onSelectShop} >
                   {activityLists.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                      <Option value={item.id} key={item.id} data-id={item.shopId}>{item.name}</Option>
                     );
                   })}
                </Select>)}
@@ -438,7 +438,7 @@ export default class ScheduleSettingList extends PureComponent {
     //   return false;
     // }
     // return startValue.valueOf() > endValue.valueOf();
-    return startValue && startValue < moment().endOf('day');
+    return startValue < moment(new Date().setDate(new Date().getDate() - 1)).endOf('day');
   }
   disabledEndDate = (endValue) => {
     // console.log('disabledEndDate', endValue)
@@ -479,7 +479,8 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 时间控件结束
   onSelectShop = (value, option) => {
-    this.getGoodsLists(value);
+    console.log('value, option', value, option)
+    this.getGoodsLists(option.props['data-id']);
   }
   getActivityLists = () => {
     this.props.dispatch({
@@ -488,6 +489,9 @@ export default class ScheduleSettingList extends PureComponent {
         restParams: {},
       },
     }).then((res) => {
+      res = res.map((item) => {
+        return {shopId: item.shopId, id: item.id, name: item.name}
+      })
       this.setState({
         activityLists: res,
       });
@@ -936,7 +940,7 @@ export default class ScheduleSettingList extends PureComponent {
           },
         }).then((resp) => {
           if (resp && resp.code === 0) {
-            message.success( messageTxt + '成功');
+            // message.success( messageTxt + '成功');
             this.setState({
               code: '',
               getDataStartDay: this.state.startTime,
@@ -945,10 +949,10 @@ export default class ScheduleSettingList extends PureComponent {
               this.getLists();
             });
           } else {
-            Modal.error({
-              title: '',
-              content: resp ? resp.msg : messageTxt + '失败',
-            });
+            // Modal.error({
+            //   title: '',
+            //   content: resp ? resp.msg : messageTxt + '失败',
+            // });
             this.setState({
               editModalConfirmLoading: false,
             });
@@ -1259,10 +1263,10 @@ export default class ScheduleSettingList extends PureComponent {
           this.setState({
             editModalConfirmLoading: false,
           });
-          // this.getLists();
-        } else {
-          message.error(res ? res.msg : '删除失败');
         }
+        // else {
+        //   message.error(res ? res.msg : '删除失败');
+        // }
       });
     } else return false;
   }
@@ -1295,7 +1299,7 @@ export default class ScheduleSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={10} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="省市区商圈">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
@@ -1308,7 +1312,7 @@ export default class ScheduleSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={7} sm={24}>
             <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>

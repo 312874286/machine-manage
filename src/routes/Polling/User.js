@@ -368,7 +368,7 @@ export default class user extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          message.success(messageTxt + '成功');
+          // message.success(messageTxt + '成功');
           this.setState({
             keyword: '',
           }, () => {
@@ -566,7 +566,7 @@ export default class user extends PureComponent {
               {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={7} sm={24}>
             <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>

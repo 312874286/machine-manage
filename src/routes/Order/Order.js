@@ -185,12 +185,12 @@ export default class Order extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Card bordered={false}>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={10} sm={12}>
+                  <Col md={8} sm={12}>
                     <FormItem label="选择商圈">
                       {getFieldDecorator('areaCode', {
                         initialValue: areaCode,
@@ -214,7 +214,7 @@ export default class Order extends PureComponent {
                       )}
                     </FormItem>
                   </Col>
-                  <Col md={5} sm={12}>
+                  <Col md={7} sm={12}>
                     <span className={styles.submitButtons}>
                       <Button onClick={this.handleFormReset}>重置</Button>
                       <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>
@@ -224,7 +224,8 @@ export default class Order extends PureComponent {
               </Form>
             </div>
           </div>
-
+        </Card>
+        <Card bordered={false}>
           <OrderTable
             loading={loading}
             data={list}

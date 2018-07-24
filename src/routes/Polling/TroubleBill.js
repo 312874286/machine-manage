@@ -84,10 +84,10 @@ export default class troubleBill extends PureComponent {
         seeVisible: true,
       });
       // treeData = data;
-      
+
     });
 
-    
+
   }
   onReplyHandle = (record) => {
     this.setState({
@@ -113,7 +113,7 @@ export default class troubleBill extends PureComponent {
         replyVisible: true,
       });
       // treeData = data;
-      
+
     });
     console.log(record);
   }
@@ -164,10 +164,10 @@ export default class troubleBill extends PureComponent {
         message.error(msg);
       }
       // treeData = data;
-      
+
     });
-    
-    
+
+
   }
   replyHandleCancel = (e) => {
     this.setState({
@@ -201,7 +201,7 @@ export default class troubleBill extends PureComponent {
     }, () => {
       this.getLists();
     });
-    
+
     console.log(pagination, filters, sorter);
   }
   handleReset = () => {
@@ -277,7 +277,7 @@ export default class troubleBill extends PureComponent {
     };
     return (
       <PageHeaderLayout>
-        <Card>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={3} sm={24}>
               <Select value={type} onChange={this.selectHandleChange}>
@@ -306,7 +306,7 @@ export default class troubleBill extends PureComponent {
             </Col>
           </Row>
         </Card>
-        <Card>
+        <Card bordered={false}>
           <Table
             columns={columns}
             dataSource={list}

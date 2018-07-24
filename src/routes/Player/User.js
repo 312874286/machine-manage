@@ -132,7 +132,7 @@ export default class PlayerUser extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Card bordered={false}>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               <Form onSubmit={this.handleSearch} layout="inline">
@@ -146,7 +146,7 @@ export default class PlayerUser extends PureComponent {
                       )}
                     </FormItem>
                   </Col>
-                  <Col md={8} sm={12}>
+                  <Col md={7} sm={12}>
                     <span className={styles.submitButtons}>
                       <Button onClick={this.handleFormReset} >重置</Button>
                       <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>
@@ -156,7 +156,8 @@ export default class PlayerUser extends PureComponent {
               </Form>
             </div>
           </div>
-
+        </Card>
+        <Card bordered={false}>
           <UserTable
             loading={loading}
             data={list}
