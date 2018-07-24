@@ -1,6 +1,6 @@
 import api from 'dva/fetch';
 import { routerRedux } from 'dva/router';
-import { notification } from 'antd';
+import { notification, Modal } from 'antd';
 import { headers, methods } from './options';
 import store from '../../index';
 import { getToken } from '../authority';
@@ -74,9 +74,13 @@ function handlehandleCostumStatus(response) {
     } else if (resp.list) {
       return response.json();
     } else {
-      notification.error({
-        message: '请求错误',
-        description: resp.msg,
+      // notification.error({
+      //   message: '请求错误',
+      //   description: resp.msg,
+      // });
+      Modal.error({
+        title: '请求错误',
+        content: resp.msg,
       });
       return response.json();
     }

@@ -491,9 +491,10 @@ export default class goodsSettingList extends PureComponent {
             editModalConfirmLoading: false,
             modalVisible: false,
           });
-        } else {
-          message.error(res ? res.msg : messageTxt + '失败');
         }
+        // else {
+        //   message.error(res ? res.msg : messageTxt + '失败');
+        // }
         this.setState({
           editModalConfirmLoading: false,
           // modalVisible: false,
@@ -591,27 +592,27 @@ export default class goodsSettingList extends PureComponent {
     const columns = [
       {
         title: '商品编码',
-        // width: 200,
+        width: 150,
         dataIndex: 'code',
       },
       {
         title: '商品名称',
-        // width: 200,
+        width: 150,
         dataIndex: 'name',
       },
       {
         title: '所属商户',
-        // width: 200,
+        width: 150,
         dataIndex: 'sellerId',
       },
       {
         title: '所属店铺',
-        // width: 200,
-        dataIndex: 'shopName',
+        width: 150,
+        dataIndex: 'shopId',
       },
       {
         title: '图片缩略图',
-        // width: 200,
+        width: 150,
         dataIndex: 'img',
         render(val) {
           return (
@@ -623,12 +624,11 @@ export default class goodsSettingList extends PureComponent {
       },
       {
         title: '商品价格',
-        // width: 200,
+        width: 100,
         dataIndex: 'price',
       },
       {
         title: '备注',
-        // width: 150,
         dataIndex: 'remark',
       },
       {
@@ -690,7 +690,7 @@ export default class goodsSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={700}
+              scrollX={1100}
             />
           </div>
         </Card>
