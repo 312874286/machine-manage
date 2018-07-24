@@ -770,6 +770,9 @@ export default class machineSettingList extends PureComponent {
         } else {
           this.setState({
             createTime: result ? result.createTime : '暂无',
+            updateList: [],
+            appLists: [],
+            appLists2: [],
           }, () => {
             this.ManageCutAppForm.setFieldsValue({
               appStatus,
