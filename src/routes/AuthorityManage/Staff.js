@@ -246,8 +246,13 @@ export default class Staff extends PureComponent {
       return <TreeNode {...item} />;
     });
   }
+  handleReset = () => {
+    this.setState({
+      userName: '',
+    });
+  }
   render() {
-    const { allList, checkedKeys, isJiaoLeft } = this.state;
+    const { allList, checkedKeys, isJiaoLeft, userName } = this.state;
     const { staff: { list, page } } = this.props;
     // console.log(111, list, page, allList, 222);
     const columns = [
@@ -333,9 +338,12 @@ export default class Staff extends PureComponent {
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
-              <Input placeholder="请输入员工姓名、员工手机、邮箱、角色、部门名称" onChange={this.onChange} />
+              <Input placeholder="请输入员工姓名、员工手机、邮箱、角色、部门名称" value={userName} onChange={this.onChange} />
             </Col>
             <Col md={6} sm={24}>
+              <Button onClick={this.handleReset}>
+                  重置
+              </Button>
               <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
             </Col>
           </Row>
