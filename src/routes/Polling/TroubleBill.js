@@ -177,8 +177,8 @@ export default class troubleBill extends PureComponent {
   startDatePickerChange = (date, dateString) => {
     this.setState({
       // type: '1',
-      startDateString: new Date(dateString[0]).getTime(),
-      endDateString: new Date(dateString[1]).getTime(),
+      startDateString: dateString[0],
+      endDateString: dateString[1],
     });
     console.log('startDatePickerChange::', date, dateString, new Date(dateString[0]).getTime());
   }
@@ -273,7 +273,10 @@ export default class troubleBill extends PureComponent {
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={3} sm={24}>
-              选择时间
+              <Select defaultValue="1" onChange={this.selectHandleChange}>
+                <Option value="1">上报时间</Option>
+                <Option value="2">解决时间</Option>
+              </Select>
             </Col>
             <Col md={6} sm={24}>
               {/* <DatePicker onChange={this.startDatePickerChange} /> */}
@@ -285,13 +288,7 @@ export default class troubleBill extends PureComponent {
             <Col md={4} sm={24}>
               <DatePicker onChange={this.endDatePickerChange} />
             </Col> */}
-            <Col md={4} sm={24}>
-              <Select defaultValue="1" onChange={this.selectHandleChange}>
-                <Option value="1">上报时间</Option>
-                <Option value="2">解决时间</Option>
-              </Select>
-            </Col>
-            <Col md={4} sm={24}>
+            <Col md={8} sm={24}>
               <Input placeholder="请输入上报人，解决人，机器编号搜索" onChange={this.onChange} />
             </Col>
             <Col md={7} sm={24}>

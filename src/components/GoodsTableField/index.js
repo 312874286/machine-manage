@@ -127,7 +127,7 @@ class GoodsTableField extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const { initData, clist, count } = nextProps;
-    // console.log('componentWillReceiveProps', nextProps);
+    console.log('componentWillReceiveProps11', initData);
     this.updateRenderDatas(initData, clist, count);
   }
   componentDidMount() {
@@ -272,6 +272,7 @@ class GoodsTableField extends Component {
     let defaultValue2 = '';
 
     for (let i = 0; i < this.state.clist.length; i++) {
+      console.log(this.state.clist[i].id,this.state.clist[i].name);
       children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
     }
 
@@ -284,7 +285,7 @@ class GoodsTableField extends Component {
       dataIndex: 'prizeId',
       render: (text, record) => {
         return (
-          <Select defaultValue={record.prizeId} onChange={this.handleChangeName.bind(this,record)}>
+          <Select onChange={this.handleChangeName.bind(this,record)}>
             {children}
           </Select>
         );
