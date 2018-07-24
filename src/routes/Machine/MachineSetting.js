@@ -740,6 +740,12 @@ export default class machineSettingList extends PureComponent {
         // console.log('result', result)
         let appLists = [], appLists2 = [], appStatus = '当前没有运行的app';
         if (result) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.success('刷新成功');
           result.status.forEach((item) => {
             if (item.appType === 2) {
               let tmp =  { id: item.appPackageName, name: item.appName }
@@ -838,6 +844,11 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
         message.success('更新成功');
       }
     });

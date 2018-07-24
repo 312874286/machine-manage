@@ -488,6 +488,11 @@ export default class user extends PureComponent {
       this.uniq(selectCity);
       // console.log('selectCity', this.state.machines)
     } else {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请先选择机器');
     }
   }

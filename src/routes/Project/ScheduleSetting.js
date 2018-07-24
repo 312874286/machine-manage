@@ -832,7 +832,7 @@ export default class ScheduleSettingList extends PureComponent {
     }, () => {
       console.log('goodsHandleAdd::', this.state.goodsCount);
     });
-    
+
   }
   goodsHandleDelete = (key) => {
     const goodsInitData = [...this.state.goodsInitData];
@@ -902,13 +902,23 @@ export default class ScheduleSettingList extends PureComponent {
           return;
         }
         if (!fieldsValue.activityId || !fieldsValue.gameId || !fieldsValue.userMaxTimes) {
-          message.error('请补全信息')
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.error('请补全信息');
           return;
         }
         console.log('fieldsValue', fieldsValue)
         if (!this.state.modalData.id) {
           if (this.state.selectCity.length === 0) {
-            message.error('请先选择机器')
+            message.config({
+              top: 100,
+              duration: 2,
+              maxCount: 1,
+            });
+            message.error('请先选择机器');
             return;
           }
         }
@@ -916,7 +926,6 @@ export default class ScheduleSettingList extends PureComponent {
           ...fieldsValue,
           goods: this.state.goodsInitData,
           coupons: this.state.couponsInitData,
-          machines: this.state.machines,
           startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
         };
@@ -931,7 +940,7 @@ export default class ScheduleSettingList extends PureComponent {
           params = { ...params, id: this.state.modalData.id };
           messageTxt = '编辑';
         } else {
-          params = { ...params, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
+          params = { ...params, machines: this.state.machines, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
         }
         this.props.dispatch({
           type: url,
@@ -1065,6 +1074,11 @@ export default class ScheduleSettingList extends PureComponent {
       this.uniq(selectCity);
       // console.log('selectCity', this.state.machines)
     } else {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请先选择机器');
     }
   }

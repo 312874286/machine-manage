@@ -288,12 +288,12 @@ class ScheduleTable extends PureComponent {
               {dateList.map((item) => {
                 return (
                   <div key={item.id}>
-                    <Popover placement="top" content={item.Time} title={null} trigger="hover">
+                    <Popover placement="top" content={item.Time} title={ '活动名称: '+ item.name} trigger="hover">
                       <div className={styles.dateChildren}
                            style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
                              justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
 
-                        <div>{item.name}</div>
+                        {/*<div>{item.name}</div>*/}
                         <div className={styles.iconBox}>
                           {/*endTime: item.endTime*/}
                           <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
