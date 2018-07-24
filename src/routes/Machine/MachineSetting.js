@@ -1223,7 +1223,7 @@ export default class machineSettingList extends PureComponent {
         textAlign: 'center',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>修改点位</a>
+            <a onClick={() => this.handleEditClick(item)}>重置点位</a>
             <Divider type="vertical" />
             <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
             <Divider type="vertical" />
