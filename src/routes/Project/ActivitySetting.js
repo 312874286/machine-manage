@@ -746,7 +746,7 @@ export default class activitySettingList extends PureComponent {
                 <Button onClick={this.handleFormReset}>
                   重置
                 </Button>
-                <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
+                <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" htmlType="submit">
                   查询
                 </Button>
               </FormItem>

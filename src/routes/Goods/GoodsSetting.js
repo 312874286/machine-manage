@@ -552,7 +552,7 @@ export default class goodsSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="选择商户">
               {getFieldDecorator('code')(
                 <Select placeholder="请选择">
@@ -565,7 +565,7 @@ export default class goodsSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="关键字">
               {getFieldDecorator('keyword')(<Input placeholder="请输入商品编码、商品名称" />)}
             </FormItem>
@@ -576,7 +576,7 @@ export default class goodsSettingList extends PureComponent {
                 <Button onClick={this.handleFormReset}>
                  重置
                 </Button>
-                <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
+                <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" htmlType="submit">
                  查询
                 </Button>
               </FormItem>

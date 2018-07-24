@@ -1115,7 +1115,7 @@ export default class machineSettingList extends PureComponent {
                 <Button onClick={this.handleFormReset}>
                   重置
                 </Button>
-                <Button className={styles.serach} style={{ marginLeft: 8, background: 'rgba(245, 75, 48, 1)' }} type="primary" htmlType="submit">
+                <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" htmlType="submit">
                   查询
                 </Button>
               </FormItem>
@@ -1146,6 +1146,14 @@ export default class machineSettingList extends PureComponent {
         textAlign: 'center',
       },
       {
+        title: '机器状态',
+        width: 100,
+        render: (text, item) => (
+          <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+        ),
+        textAlign: 'center',
+      },
+      {
         title: '网络',
         width: 100,
         dataIndex: 'netStatus',
@@ -1162,14 +1170,6 @@ export default class machineSettingList extends PureComponent {
         title: '当前活动',
         width: 150,
         dataIndex: 'activityName',
-        textAlign: 'center',
-      },
-      {
-        title: '机器状态',
-        width: 100,
-        render: (text, item) => (
-            <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
-        ),
         textAlign: 'center',
       },
       {
