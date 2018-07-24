@@ -242,6 +242,7 @@ export default class SiderMenu extends PureComponent {
           className={styles.MenuBackground}>
           {this.getNavMenuItems(this.menus)}
         </Menu>
+        <div></div>
       </Sider>
     );
   }

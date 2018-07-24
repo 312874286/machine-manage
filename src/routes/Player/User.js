@@ -146,7 +146,7 @@ export default class PlayerUser extends PureComponent {
                       )}
                     </FormItem>
                   </Col>
-                  <Col md={8} sm={12}>
+                  <Col md={7} sm={12}>
                     <span className={styles.submitButtons}>
                       <Button onClick={this.handleFormReset} >重置</Button>
                       <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>

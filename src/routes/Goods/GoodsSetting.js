@@ -88,6 +88,7 @@ const CreateForm = Form.create()(
                   fileList={fileList}
                   onPreview={handlePreview}
                   onChange={handleChange}
+                  accept="image/gif, image/jpeg"
                 >
                   {fileList.length > 1 ? null : uploadButton}
                 </Upload>
@@ -552,7 +553,7 @@ export default class goodsSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={10} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="选择商户">
               {getFieldDecorator('code')(
                 <Select placeholder="请选择">
@@ -570,7 +571,7 @@ export default class goodsSettingList extends PureComponent {
               {getFieldDecorator('keyword')(<Input placeholder="请输入商品编码、商品名称" />)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={7} sm={24}>
             <span>
               <FormItem>
                 <Button onClick={this.handleFormReset}>

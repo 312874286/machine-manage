@@ -182,7 +182,7 @@ export default class signInRecord extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={10} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="省市区商圈">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
@@ -200,7 +200,7 @@ export default class signInRecord extends PureComponent {
               {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={7} sm={24}>
             <span>
                <FormItem>
                  <Button onClick={this.handleFormReset}>
