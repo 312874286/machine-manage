@@ -562,12 +562,12 @@ export default class user extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem label="关键字">
+            <FormItem>
               {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
-            <span style={{ float: 'right' }}>
+          <Col md={5} sm={24}>
+            <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>
                     重置

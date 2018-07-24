@@ -166,7 +166,17 @@ export default class Order extends PureComponent {
       this.getList();
     });
   }
-
+  // 重置
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+      pageNo: 1,
+      areaCode: '',
+      keyword: '',
+    });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -180,7 +190,7 @@ export default class Order extends PureComponent {
             <div className={styles.tableListForm}>
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={12}>
+                  <Col md={10} sm={12}>
                     <FormItem label="选择商圈">
                       {getFieldDecorator('areaCode', {
                         initialValue: areaCode,
@@ -195,8 +205,8 @@ export default class Order extends PureComponent {
                       )}
                     </FormItem>
                   </Col>
-                  <Col md={8} sm={12}>
-                    <FormItem label="关键字">
+                  <Col md={9} sm={12}>
+                    <FormItem>
                       {getFieldDecorator('keyword', {
                         initialValue: keyword,
                       })(
@@ -204,9 +214,10 @@ export default class Order extends PureComponent {
                       )}
                     </FormItem>
                   </Col>
-                  <Col md={8} sm={12}>
+                  <Col md={5} sm={12}>
                     <span className={styles.submitButtons}>
-                      <Button type="primary" htmlType="submit">查询</Button>
+                      <Button onClick={this.handleFormReset}>重置</Button>
+                      <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>
                     </span>
                   </Col>
                 </Row>

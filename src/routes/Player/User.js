@@ -114,7 +114,16 @@ export default class PlayerUser extends PureComponent {
       this.getLogList();
     });
   }
-
+  // 重置
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+      pageNo: 1,
+      keyword: '',
+    });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -129,7 +138,7 @@ export default class PlayerUser extends PureComponent {
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={10} sm={12}>
-                    <FormItem label="关键字">
+                    <FormItem>
                       {getFieldDecorator('keyword', {
                         initialValue: keyword,
                       })(
@@ -139,7 +148,8 @@ export default class PlayerUser extends PureComponent {
                   </Col>
                   <Col md={8} sm={12}>
                     <span className={styles.submitButtons}>
-                      <Button type="primary" htmlType="submit">查询</Button>
+                      <Button onClick={this.handleFormReset} >重置</Button>
+                      <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>
                     </span>
                   </Col>
                 </Row>

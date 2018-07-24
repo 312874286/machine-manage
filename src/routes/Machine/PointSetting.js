@@ -633,8 +633,9 @@ export default class PointSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
+          {/*label="关键字"*/}
           <Col md={9} sm={24}>
-            <FormItem label="关键字">
+            <FormItem >
               {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机号搜索" />)}
             </FormItem>
           </Col>
