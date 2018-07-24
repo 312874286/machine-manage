@@ -268,8 +268,13 @@ export default class FaultType extends PureComponent {
       
       console.log(pagination, filters, sorter);
     }
+    handleReset = () => {
+      this.setState({
+        userName: '',
+      });
+    }
     render() {
-      const { visible, solutionsLists } = this.state;
+      const { visible, solutionsLists, userName } = this.state;
       const { faultType: { list, page } } = this.props;
     //   console.log('list::', faultType);
       const columns = [
@@ -299,9 +304,12 @@ export default class FaultType extends PureComponent {
           <Card>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={7} sm={24}>
-                <Input placeholder="请输入类型，解决方案 ，添加人搜索" onChange={this.onChange} />
+                <Input placeholder="请输入类型，解决方案 ，添加人搜索" value={userName} onChange={this.onChange} />
               </Col>
               <Col md={5} sm={24}>
+                <Button onClick={this.handleReset}>
+                  重置
+                </Button>
                 <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
               </Col>
             </Row>

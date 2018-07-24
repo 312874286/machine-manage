@@ -204,8 +204,15 @@ export default class troubleBill extends PureComponent {
     
     console.log(pagination, filters, sorter);
   }
+  handleReset = () => {
+    this.setState({
+      type: '1',
+      userName: '',
+    });
+    console.log('handleReset::');
+  }
   render() {
-    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type ,userName } = this.state;
     const { troubleBill: { list, page } } = this.props;
     var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
@@ -273,7 +280,7 @@ export default class troubleBill extends PureComponent {
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={3} sm={24}>
-              <Select defaultValue="1" onChange={this.selectHandleChange}>
+              <Select value={type} onChange={this.selectHandleChange}>
                 <Option value="1">上报时间</Option>
                 <Option value="2">解决时间</Option>
               </Select>
@@ -289,9 +296,12 @@ export default class troubleBill extends PureComponent {
               <DatePicker onChange={this.endDatePickerChange} />
             </Col> */}
             <Col md={8} sm={24}>
-              <Input placeholder="请输入上报人，解决人，机器编号搜索" onChange={this.onChange} />
+              <Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />
             </Col>
             <Col md={7} sm={24}>
+              <Button onClick={this.handleReset}>
+                重置
+              </Button>
               <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
             </Col>
           </Row>

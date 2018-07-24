@@ -309,8 +309,13 @@ export default class Account extends PureComponent {
     
     console.log(pagination, filters, sorter);
   }
+  handleReset = () => {
+    this.setState({
+      userName: '',
+    });
+  }
   render() {
-    const { treeData, addUserName } = this.state;
+    const { treeData, addUserName, userName } = this.state;
     const { account: { list, page } } = this.props;
     // console.log(111,list,page);
     const columns = [
@@ -351,9 +356,12 @@ export default class Account extends PureComponent {
         <Card>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
-              <Input placeholder="请输入角色名称" onChange={this.onChange} />
+              <Input placeholder="请输入角色名称" value={userName} onChange={this.onChange} />
             </Col>
             <Col md={6} sm={24}>
+              <Button onClick={this.handleReset}>
+                  重置
+              </Button>
               <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
             </Col>
           </Row>
