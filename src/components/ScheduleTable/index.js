@@ -270,7 +270,7 @@ class ScheduleTable extends PureComponent {
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
       <Card title="活动排期一览表" style={{ overflowX: 'scroll'}}>
-        <div style={{ display: 'flex', maxWidth: '1140px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
