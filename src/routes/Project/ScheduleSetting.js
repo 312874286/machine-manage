@@ -829,12 +829,15 @@ export default class ScheduleSettingList extends PureComponent {
     this.setState({
       goodsInitData: [...goodsInitData, newData],
       goodsCount: goodsCount+1,
+    }, () => {
+      console.log('goodsHandleAdd::', this.state.goodsCount);
     });
+    
   }
   goodsHandleDelete = (key) => {
     const goodsInitData = [...this.state.goodsInitData];
     this.setState({ goodsInitData: goodsInitData.filter(item => item.key !== key) });
-    console.log('goodsHandleDelete::', key, goodsInitData);
+    // console.log('goodsHandleDelete::', key, goodsInitData);
   }
   goodsHandleChange = (row) => {
     const newData = [...this.state.goodsInitData];
@@ -846,14 +849,14 @@ export default class ScheduleSettingList extends PureComponent {
     });
 
     this.setState({ goodsInitData: newData });
-    console.log('goodsHandleChange::', row);
+    // console.log('goodsHandleChange::', row);
   }
   discountHandle = (val) => {
     this.setState({
       couponsInitData: val,
     });
   }
-  discountHandleAdd = (val, currentValue, count) => {
+  discountHandleAdd = (val, currentValue) => {
     const { couponsInitData, couponsCount } = this.state;
     const newData = {
       key: couponsCount,
@@ -866,6 +869,8 @@ export default class ScheduleSettingList extends PureComponent {
     this.setState({
       couponsInitData: [...couponsInitData, newData],
       couponsCount: couponsCount+1,
+    }, () => {
+      console.log('discountHandleAdd::', this.state.couponsCount);
     });
   }
   discountHandleDelete = (key) => {

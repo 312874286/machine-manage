@@ -113,7 +113,7 @@ class EditableCell extends Component {
 class DiscountDynamicField extends React.Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       dataSource: [],
       count:0,
@@ -123,44 +123,21 @@ class DiscountDynamicField extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const { initData, count } = nextProps;
-    // console.log('componentWillReceiveProps', nextProps);
+    console.log('discount::componentWillReceiveProps', nextProps);
     this.updateRenderDatas(initData, count);
   }
   componentDidMount() {
-    const { initData, clist } = this.props;
-    // console.log('componentDidMount', this.props);
+    const { initData } = this.props;
+    console.log('discount::componentDidMount', this.props);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
-    // console.log('rule::', this.state.dataSource);
     this.props.discountHandle(this.state.dataSource);
   }
   handleDelete = (key) => {
-    // const dataSource = [...this.state.dataSource];
-    // this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
     this.props.discountHandleDelete(key);
   }
   handleAdd = () => {
-    // const { count, dataSource } = this.state;
-    // const newData = {
-    //   key: count,
-    //   name: `Edward King ${count}`,
-    //   age: 32,
-    //   address: `London, Park Lane no. ${count}`,
-    // };
-    // const newData = {
-    //   key: count,
-    //   code: '优惠券编号',
-    //   name: '优惠券名称',
-    //   resultCode: '1',
-    //   resultRemark: '当游戏得分超过90，掉落此商品',
-    //   prizeType: '2',
-    // };
-    // this.setState({
-    //   dataSource: [...dataSource, newData],
-    //   count: count + 1,
-    // });
-
     this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
   }
 
@@ -176,44 +153,24 @@ class DiscountDynamicField extends React.Component {
       }
       rlist.push(newobj);
     }
-    // this.state.rlist = rlist;
     this.setState({
       rlist: rlist,
     });
-
-    const children2 = [];
-    let defaultValue2 = '';
-    // console.log('discountthis.props.initData', this.props.initData)
-    if (this.props.initData) {
-      // this.state.dataSource = this.props.initData;
+    if (this.props.initData.length !== 0) {
       this.setState({
         dataSource: initData,
       });      
-      // for (var i = 0; i < this.state.dataSource.length; i++) {
-      //   this.state.dataSource[i].key = i;
-      // }
-
-      // for (let i = 0; i < this.state.rlist.length; i++) {
-      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      // }
     } else {
-      // for (let i = 0; i < this.state.rlist.length; i++) {
-      //   if (i == 0) {
-      //     defaultValue2 = this.state.rlist[i].id;
-      //   }
-      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      // }
     }
-
-    // this.state.count = this.state.dataSource.length;
     this.setState({
       count: count,
     });
 
   }
   render() {
-    // const { dataSource } = this.state;
-    // this.updateRenderDatas();
+    const { dataSource } = this.state;
+    const { count } = this.props;
+    console.log('discount::', count);
     const components = {
       body: {
         row: EditableFormRow,
@@ -254,12 +211,9 @@ class DiscountDynamicField extends React.Component {
       dataIndex: 'operation',
       render: (text, record) => {
         return (
-          this.state.dataSource.length > 0
-            ? (
-              <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
-                <a>删除</a>
-              </Popconfirm>
-            ) : null
+            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+              <a>删除</a>
+            </Popconfirm>
         );
       },
     }];
@@ -286,7 +240,7 @@ class DiscountDynamicField extends React.Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={this.state.dataSource}
+          dataSource={this.props.initData}
           columns={columns}
           pagination={false}
           rowKey={record => record.key}

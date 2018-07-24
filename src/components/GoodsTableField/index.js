@@ -122,78 +122,46 @@ class GoodsTableField extends Component {
       rlist: [],
       currentValue: '',
     };
-
-    // this.updateRenderDatas();
   }
   componentWillReceiveProps(nextProps) {
     const { initData, clist, count } = nextProps;
-    console.log('componentWillReceiveProps11', initData);
     this.updateRenderDatas(initData, clist, count);
   }
   componentDidMount() {
     const { initData, clist } = this.props;
-    // console.log('componentDidMount', this.props);
   }
   handleChangeName = (record, value) => {
     record.prizeId = value;
-    console.log('name::', record, value);
     this.props.goodsHandle(this.props.initData);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
-    // console.log('rule::', this.state.dataSource);
   }
   handleDelete = (key) => {
-    // const dataSource = [...this.state.dataSource];
-    // this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
     this.props.goodsHandleDelete(key);
   }
 
   handleAdd = () => {
-    // const { count, dataSource } = this.state;
-    // console.log('11::',count, dataSource);
-    // const newData = {
-    //   key: count,
-    //   prizeId: this.state.currentValue,
-    //   resultCode: '1',
-    //   resultRemark: '当游戏得分超过90，掉落此商品',
-    //   prizeType: '1',
-    // };
-    // this.setState({
-    //   dataSource: [...dataSource, newData],
-    //   count: count + 1,
-    // },() => {
-    //   console.log(this.state.dataSource, this.state.count);
-    // });
-
     this.props.goodsHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
-
   }
 
   handleSave = (row) => {
-    // console.log('handleSave::', row);
     this.props.goodsHandleChange(row);
   }
   updateRenderDatas(initData, clist, count) {
-    // this.state.clist = this.props.clist;
     this.setState({
       clist: clist,
     });
-    // console.log(111, this.props.count);
-    // console.log('this.state.clist', this.state.clist)
     if(this.state.clist.length === 0 ) {
-      // this.state.currentValue = '';
       this.setState({
         currentValue: '',
       });
     } else {
-      // this.state.currentValue = this.props.clist[0].id;
       this.setState({
         currentValue: this.props.clist[0].id,
       });
     }
 
-    // console.log( this.state.currentValue );
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -204,60 +172,20 @@ class GoodsTableField extends Component {
     }
     this.state.rlist = rlist;
 
-    const children = [];
-    let defaultValue = '';
-
-    const children2 = [];
-    let defaultValue2 = '';
-
-    // console.log('this.props.initData', this.props.initData)
     if (this.props.initData.length !== 0) {
-      // this.state.dataSource = [];
-      // this.state.dataSource = this.props.initData;
       this.setState({
         dataSource: initData,
       });
-      // console.log(222,this.state.dataSource);
-      // for (var i = 0; i < this.state.dataSource.length; i++) {
-      //   this.state.dataSource[i].key = i;
-      // }
-      // for (let i = 0; i < this.state.clist.length; i++) {
-      //   children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
-      // }
-
-      // for (let i = 0; i < this.state.rlist.length; i++) {
-      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      // }
-
     } else {
-      // for (let i = 0; i < this.state.clist.length; i++) {
-      //   if (i == 0) {
-      //     defaultValue = this.state.clist[i].id;
-      //   }
-      //   children.push(<Option key={this.state.clist[i].id}>{this.state.clist[i].name}</Option>);
-      // }
-
-      // for (let i = 0; i < this.state.rlist.length; i++) {
-      //   if (i == 0) {
-      //     defaultValue2 = this.state.rlist[i].id;
-      //   }
-      //   children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-      // }
     }
-    // this.state.count = this.props.count;
+    
     this.setState({
       count: count,
     });
-    // this.setState({
-    //   dataSource: this.props.initData,
-    // });
   }
   render() {
-    // const { dataSource } = this.state;
     const { count } = this.props;
-    console.log(222, count);
-    // this.updateRenderDatas();
-    // console.log('dataSource::', dataSource);
+    console.log('goods::', count);
     const components = {
       body: {
         row: EditableFormRow,
@@ -310,12 +238,9 @@ class GoodsTableField extends Component {
       dataIndex: 'operation',
       render: (text, record) => {
         return (
-          this.state.dataSource.length > 0
-            ? (
-              <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
-                <a>删除</a>
-              </Popconfirm>
-            ) : null
+            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+              <a>删除</a>
+            </Popconfirm>
         );
       },
     }];

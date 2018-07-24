@@ -91,7 +91,7 @@ export default class Jurisdiction extends PureComponent {
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={9} sm={24}>
-              <Input placeholder="权限名称、权限归属名称" value={userName} onChange={this.onChange} />
+              <Input placeholder="请输入权限名称、权限归属名称" value={userName} onChange={this.onChange} />
             </Col>
             <Col md={6} sm={24}>
               <Button onClick={this.handleReset}>
