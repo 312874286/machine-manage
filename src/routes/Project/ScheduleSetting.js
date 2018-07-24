@@ -479,7 +479,7 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 时间控件结束
   onSelectShop = (value, option) => {
-    console.log('value, option', value, option)
+    // console.log('value, option', value, option)
     this.getGoodsLists(option.props['data-id']);
   }
   getActivityLists = () => {

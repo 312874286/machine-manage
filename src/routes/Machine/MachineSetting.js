@@ -337,6 +337,8 @@ const WatchForm = Form.create()(
                 <div>机器门状态：{machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}</div>
                 <div>温度：{machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}</div>
                 <div>掉货开关：{machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}</div>
+                <div>屏幕亮度：{machineDetail.systemStatus ? (machineDetail.systemStatus.screenIntensity ? machineDetail.systemStatus.screenIntensity : '') : ''}</div>
+                <div>音量：{machineDetail.systemStatus ? (machineDetail.systemStatus.voice ? machineDetail.systemStatus.voice : '') : ''}</div>
                 <div>上次更新时间：{machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}</div>
               </Card>
             </Col>
@@ -347,8 +349,6 @@ const WatchForm = Form.create()(
                 <div>SD卡内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G </div>
                 <div>运营商：{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}</div>
                 <div>ACC ID: {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}</div>
-                <div>屏幕亮度：{machineDetail.systemStatus ? (machineDetail.systemStatus.screenIntensity ? machineDetail.systemStatus.screenIntensity : '') : ''}</div>
-                <div>音量：{machineDetail.systemStatus ? (machineDetail.systemStatus.voice ? machineDetail.systemStatus.voice : '') : ''}</div>
                 <div>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}</div>
               </Card>
             </Col>
