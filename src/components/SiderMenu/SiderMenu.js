@@ -215,7 +215,8 @@ export default class SiderMenu extends PureComponent {
         trigger={null}
         collapsible
         collapsed={collapsed}
-        breakpoint="md"
+        breakpoint="lg"
+        // // md
         onCollapse={onCollapse}
         width={180}
         className={styles.sider}
