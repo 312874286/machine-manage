@@ -8,18 +8,13 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
   Menu,
-  InputNumber,
-  DatePicker,
   Modal,
-  message,
-  Badge,
   Divider,
   Cascader,
   Popconfirm,
+  Spin,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -83,15 +78,15 @@ const CreateForm = Form.create()(
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="点位名称">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
-            })(<Input placeholder="请输入点位名称" />)}
-          </FormItem>
           <FormItem {...formItemLayout} label="商场名称">
             {getFieldDecorator('mall', {
               rules: [{ required: true,whitespace: true, message: '请输入商场名称' }],
             })(<Input placeholder="请输入商场" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="点位名称">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
+            })(<Input placeholder="请输入点位名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="运营人员">
             {getFieldDecorator('manager', {
@@ -137,6 +132,7 @@ export default class PointSettingList extends PureComponent {
     logModalPageNo: 1,
     code: '',
     modalType: true,
+    CreateFormLoading: false,
   };
   componentWillMount() {
     // 查询省
@@ -366,6 +362,7 @@ export default class PointSettingList extends PureComponent {
       modalVisible: true,
       modalData: item,
       modalType: false,
+      // CreateFormLoading: true,
     });
     const res = await this.getPointSettingDetail(item);
     const { city, district, circle } = res;
@@ -386,10 +383,13 @@ export default class PointSettingList extends PureComponent {
       defaultValue: [res.province, city, district, circle],
     }, () => {
       this.setModalData(res);
+      // this.setState({
+      //   CreateFormLoading: false
+      // })
     });
     // 回显省市区商圈数据源
   }
-  // 编辑modal 编辑事件
+  // 编辑modal 编辑事件 废弃
   handleEditClick2 = (item) => {
     this.setState({
       modalVisible: true,
@@ -635,7 +635,7 @@ export default class PointSettingList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机号搜索" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -673,14 +673,14 @@ export default class PointSettingList extends PureComponent {
         dataIndex: 'areaName',
       },
       {
-        title: '点位名称',
-        width: 200,
-        dataIndex: 'name',
-      },
-      {
         title: '商场',
         width: 150,
         dataIndex: 'mall',
+      },
+      {
+        title: '点位名称',
+        width: 200,
+        dataIndex: 'name',
       },
       {
         title: '运营人',
@@ -764,20 +764,23 @@ export default class PointSettingList extends PureComponent {
             />
           </div>
         </Card>
-        <CreateForm
-          {...parentMethods}
-          ref={this.saveFormRef}
-          modalVisible={modalVisible}
-          insertOptions={options}
-          loadData={this.loadData}
-          onChange={this.onChange}
-          editModalConfirmLoading={editModalConfirmLoading}
-          modalData={modalData}
-          modalType={modalType}
-          verifyPhone={this.verifyPhone}
-          verifyString={this.verifyString}
-          verifyTrim={this.verifyTrim}
-        />
+        {/*<Spin tip="Loading...">*/}
+          <CreateForm
+            {...parentMethods}
+            ref={this.saveFormRef}
+            modalVisible={modalVisible}
+            insertOptions={options}
+            loadData={this.loadData}
+            onChange={this.onChange}
+            editModalConfirmLoading={editModalConfirmLoading}
+            modalData={modalData}
+            modalType={modalType}
+            verifyPhone={this.verifyPhone}
+            verifyString={this.verifyString}
+            verifyTrim={this.verifyTrim}
+          />
+        {/*</Spin>*/}
+        {/*<Spin tip="Loading..." spinning={this.state.CreateFormLoading}></Spin>*/}
         <LogModal
           data={logList}
           page={logPage}
