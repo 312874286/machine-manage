@@ -78,7 +78,7 @@ const CreateForm = Form.create()(
             })(<Select placeholder="请选择" onSelect={onSelectShop} >
                   {activityLists.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                      <Option value={item.id} key={item.id} data-id={item.shopId}>{item.name}</Option>
                     );
                   })}
                </Select>)}
@@ -479,7 +479,8 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 时间控件结束
   onSelectShop = (value, option) => {
-    this.getGoodsLists(value);
+    console.log('value, option', value, option)
+    this.getGoodsLists(option.props['data-id']);
   }
   getActivityLists = () => {
     this.props.dispatch({
@@ -488,6 +489,9 @@ export default class ScheduleSettingList extends PureComponent {
         restParams: {},
       },
     }).then((res) => {
+      res = res.map((item) => {
+        return {shopId: item.shopId, id: item.id, name: item.name}
+      })
       this.setState({
         activityLists: res,
       });
