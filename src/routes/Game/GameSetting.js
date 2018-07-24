@@ -343,12 +343,12 @@ export default class gameSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          <Col md={9} sm={24}>
             <FormItem label="关键字">
               {getFieldDecorator('keyword')(<Input placeholder="请输入游戏名称、版本、点72版本" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <span style={{ float: 'right' }}>
               <FormItem>
                 <Button onClick={this.handleFormReset}>
