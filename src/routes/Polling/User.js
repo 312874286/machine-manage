@@ -350,6 +350,7 @@ export default class user extends PureComponent {
         modalData: {},
       });
       let remark = ''
+      let messageTxt = '添加'
       if (this.state.machineNum) {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
@@ -357,6 +358,7 @@ export default class user extends PureComponent {
       let params = { ...values, remark: remark, machines: this.state.machines };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
+        messageTxt = '编辑'
         params = { ...values, id: this.state.modalData.id, remark: remark, machines: this.state.machines };
       }
       this.props.dispatch({
@@ -366,7 +368,7 @@ export default class user extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          message.success('添加成功');
+          message.success(messageTxt + '成功');
           this.setState({
             keyword: '',
           }, () => {
@@ -376,8 +378,6 @@ export default class user extends PureComponent {
             modalVisible: false,
           });
           // this.getLists();
-        } else {
-          message.error(res ? res.msg : '添加失败');
         }
         this.setState({
           editModalConfirmLoading: false,
