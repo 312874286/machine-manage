@@ -123,12 +123,12 @@ class DiscountDynamicField extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const { initData, count } = nextProps;
-    console.log('componentWillReceiveProps', nextProps);
+    // console.log('componentWillReceiveProps', nextProps);
     this.updateRenderDatas(initData, count);
   }
   componentDidMount() {
     const { initData, clist } = this.props;
-    console.log('componentDidMount', this.props);
+    // console.log('componentDidMount', this.props);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
