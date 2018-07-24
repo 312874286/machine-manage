@@ -1249,7 +1249,7 @@ export default class machineSettingList extends PureComponent {
       title: '运行状态',
       render: (text, item) => (
         (item.versionCode === -1) ? (<span>--</span>) : (
-          (item.appStatus) ? (<span>{appStatus[item.appStatus]}</span>) : (<span>--</span>))
+          (item.appStatus !== -1) ? (<span>{appStatus[item.appStatus]}</span>) : (<span>--</span>))
       ),
       align: 'center',
     }, {
