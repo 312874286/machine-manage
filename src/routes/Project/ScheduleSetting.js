@@ -936,7 +936,6 @@ export default class ScheduleSettingList extends PureComponent {
         };
         this.setState({
           editModalConfirmLoading: true,
-          modalData: {},
         });
         let url = 'scheduleSetting/saveScheduleSetting';
         let messageTxt = '新增';
@@ -959,6 +958,7 @@ export default class ScheduleSettingList extends PureComponent {
               code: '',
               getDataStartDay: this.state.startTime,
               getDataEndDay: this.state.endTime,
+              modalData: {},
             }, () => {
               this.getLists();
             });
