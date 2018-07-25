@@ -154,17 +154,17 @@ class GoodsTableField extends Component {
   updateRenderDatas(initData, clist, count) {
     this.setState({
       clist,
+    }, () => {
+      if(this.state.clist.length === 0 ) {
+        this.setState({
+          currentValue: '',
+        });
+      } else {
+        this.setState({
+          currentValue: clist[0].id,
+        });
+      }
     });
-    if(this.state.clist.length === 0 ) {
-      this.setState({
-        currentValue: '',
-      });
-    } else {
-      this.setState({
-        currentValue: this.props.clist[0].id,
-      });
-    }
-
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
