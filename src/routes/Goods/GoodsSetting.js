@@ -432,6 +432,7 @@ export default class goodsSettingList extends PureComponent {
         price: data.price || undefined,
         remark: data.remark || undefined,
         img: data.img || undefined,
+        shopId: data.shopId || undefined,
       });
     } else {
       this.setState({
