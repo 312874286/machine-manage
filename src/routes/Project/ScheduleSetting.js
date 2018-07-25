@@ -50,7 +50,7 @@ const CreateForm = Form.create()(
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
       goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData, onSelectShop, goodsLists,
       disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, selectMachineFlag, disabledTime,
+      isDisabled, selectMachineFlag, disabledTime, disabledEndTime
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -125,7 +125,7 @@ const CreateForm = Form.create()(
               rules: [{ required: true, message: '选择结束时间' }],
             })(
               <DatePicker
-                disabledTime={disabledTime}
+                disabledTime={disabledEndTime}
                 disabledDate={disabledEndDate}
                 showTime={{ defaultValue: moment('23:59:59', 'HH:mm:ss') }}
                 format="YYYY-MM-DD HH:mm"
@@ -429,6 +429,11 @@ export default class ScheduleSettingList extends PureComponent {
   disabledTime = () => {
     return {
       disabledSeconds: () => this.range(1, 60),
+    };
+  }
+  disabledEndTime = () => {
+    return {
+      disabledSeconds: () => this.range(0, 59),
     };
   }
   disabledStartDate = (startValue) => {
@@ -1483,6 +1488,7 @@ export default class ScheduleSettingList extends PureComponent {
           endOpen={this.state.endOpen}
           isDisabled={this.state.isDisabled}
           selectMachineFlag={this.state.selectMachineFlag}
+          disabledEndTime={this.disabledEndTime}
         />
         <SelectMachineForm
           ref={this.selectMachineFormRef}
