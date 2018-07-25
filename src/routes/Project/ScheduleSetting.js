@@ -43,7 +43,6 @@ const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
 const couponsInitData = []
 
-
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
@@ -834,8 +833,6 @@ export default class ScheduleSettingList extends PureComponent {
     this.setState({
       goodsInitData: [...goodsInitData, newData],
       goodsCount: goodsCount+1,
-    }, () => {
-      console.log('goodsHandleAdd::', this.state.goodsCount);
     });
 
   }
@@ -897,6 +894,25 @@ export default class ScheduleSettingList extends PureComponent {
   saveFormRef = (form) => {
     this.form = form;
   }
+  inArray = (arr, element) => {
+      for (var i = 0; i < arr.length; i++) {
+          if (arr[i] == element) {
+              return true;
+          }
+      }
+      return false;
+  }
+  serachRule = (InitData) => {
+    let max = []
+    for (let i = 0; i < InitData.length; i++) {
+      if (this.inArray(max, InitData[i].resultCode)) {
+        return false;
+      } else {
+        max.push(InitData[i].resultCode)
+      }
+    }
+    return true
+  }
   // 编辑modal 确认事件
   handleAdd = () => {
     this.setState({
@@ -915,7 +931,7 @@ export default class ScheduleSettingList extends PureComponent {
           message.error('请补全信息');
           return;
         }
-        console.log('fieldsValue', fieldsValue)
+        // console.log('fieldsValue', fieldsValue)
         if (!this.state.modalData.id) {
           if (this.state.selectCity.length === 0) {
             message.config({
@@ -926,6 +942,25 @@ export default class ScheduleSettingList extends PureComponent {
             message.error('请先选择机器');
             return;
           }
+        }
+        const { goodsInitData, couponsInitData  } = this.state
+        if (!this.serachRule(goodsInitData)) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.error('商品规则有重复');
+          return;
+        }
+        if (!this.serachRule(couponsInitData)) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.error('优惠券规则有重复');
+          return;
         }
         let params = {
           ...fieldsValue,
@@ -1199,7 +1234,7 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 编辑
   onEditClick = (item) => {
-    console.log('item编辑', item)
+    // console.log('item编辑', item)
     // activityList
     this.getActivityLists()
     // gameList

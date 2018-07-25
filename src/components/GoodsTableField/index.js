@@ -188,29 +188,12 @@ class GoodsTableField extends Component {
   render() {
     const { count } = this.props;
     const { clist, rlist, initData } = this.state
-    // console.log('goods::', count);
     const components = {
       body: {
         row: EditableFormRow,
         cell: EditableCell,
       },
     };
-
-    // const children = [];
-    // let defaultValue = '';
-    //
-    // const children2 = [];
-    // let defaultValue2 = '';
-    //
-    // for (let i = 0; i < this.state.clist.length; i++) {
-    //   console.log(this.state.clist[i].id,this.state.clist[i].name);
-    //   children.push(<Option key={this.state.clist[i].id} value={this.state.rlist[i].id}>{this.state.clist[i].name}</Option>);
-    // }
-    //
-    // for (let i = 0; i < this.state.rlist.length; i++) {
-    //   children2.push(<Option key={this.state.rlist[i].id} value={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-    // }
-    // console.log('clist', clist, initData)
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'name',

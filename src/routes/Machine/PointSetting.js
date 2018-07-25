@@ -640,7 +640,7 @@ export default class PointSettingList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
-            <span style={{ float: 'right' }}>
+            <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>
                     重置
