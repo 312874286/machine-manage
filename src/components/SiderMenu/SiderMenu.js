@@ -210,6 +210,7 @@ export default class SiderMenu extends PureComponent {
     if (!selectedKeys.length) {
       selectedKeys = [openKeys[openKeys.length - 1]];
     }
+    console.log('collapsed', collapsed, collapsed, onCollapse )
     return (
       <Sider
         trigger={null}
@@ -243,7 +244,6 @@ export default class SiderMenu extends PureComponent {
           className={styles.MenuBackground}>
           {this.getNavMenuItems(this.menus)}
         </Menu>
-        <div></div>
       </Sider>
     );
   }
