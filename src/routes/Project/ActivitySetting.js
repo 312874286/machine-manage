@@ -80,6 +80,11 @@ const CreateForm = Form.create()(
               rules: [{ required: true, whitespace: true, message: '请输入活动名称' }],
             })(<Input placeholder="请输入活动名称" />)}
           </FormItem>
+          <FormItem {...formItemLayout} label="活动编码">
+            {getFieldDecorator('code', {
+              rules: [{ required: true, whitespace: true, message: '请输入活动编码' }],
+            })(<Input placeholder="请输入活动编码" />)}
+          </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
             {getFieldDecorator('sellerId', {
               rules: [{ required: true, message: '请选择商户' }],
@@ -161,6 +166,9 @@ const WatchForm = Form.create()(
           <FormItem {...formItemLayout} label="活动名称">
             <span>{modalData.name}</span>
           </FormItem>
+          <FormItem {...formItemLayout} label="活动编码">
+            <span>{modalData.code}</span>
+          </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
             <span>{modalData.merchantName}</span>
           </FormItem>
@@ -206,6 +214,11 @@ const SetDefaultForm = Form.create()(
             {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入活动名称' }],
             })(<Input placeholder="请输入活动名称" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="活动编码">
+            {getFieldDecorator('code', {
+              rules: [{ required: true, message: '请输入活动编码' }],
+            })(<Input placeholder="请输入活动编码" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择游戏">
             {getFieldDecorator('gameId', {
@@ -500,6 +513,7 @@ export default class activitySettingList extends PureComponent {
         }, () => {
           this.form.setFieldsValue({
             name: data.name || '',
+            code: data.code || undefined,
             sellerId: data.sellerId || undefined,
             shopId: data.shopId || undefined,
             remark: data.remark || undefined,
@@ -509,6 +523,7 @@ export default class activitySettingList extends PureComponent {
     } else {
       this.form.setFieldsValue({
         name: undefined,
+        code: undefined,
         sellerId: undefined,
         shopId: undefined,
         remark: undefined,
@@ -587,11 +602,13 @@ export default class activitySettingList extends PureComponent {
       if (res) {
         this.defaultActivityForm.setFieldsValue({
           name: res.name,
+          code: res.code,
           gameId: res.gameId,
         });
       } else {
         this.defaultActivityForm.setFieldsValue({
           name: undefined,
+          code: undefined,
           gameId: undefined,
         });
       }
@@ -621,7 +638,7 @@ export default class activitySettingList extends PureComponent {
         },
       }).then((result) => {
         const list = [];
-        console.log('list', result)
+        // console.log('list', result)
         result.forEach((r) => {
           list.push({
             key: r.id,
@@ -801,18 +818,27 @@ export default class activitySettingList extends PureComponent {
     const columns = [
       {
         title: '活动名称',
+        width: '150',
         dataIndex: 'name',
       },
       {
+        title: '活动编码',
+        width: '150',
+        dataIndex: 'code',
+      },
+      {
         title: '所属商户',
+        width: '150',
         dataIndex: 'merchantName',
       },
       {
         title: '所属店铺',
+        width: '150',
         dataIndex: 'shopName',
       },
       {
         title: '商品/优惠券',
+        width: '150',
         dataIndex: 'prizeType',
         render(val) {
           return <span>{status[val]}</span>;
@@ -820,6 +846,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         title: '活动状态',
+        width: '150',
         dataIndex: 'state',
       },
       {
@@ -900,7 +927,7 @@ export default class activitySettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={700}
+              scrollX={900}
             />
           </div>
         </Card>

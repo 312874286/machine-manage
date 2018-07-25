@@ -88,7 +88,7 @@ const CreateForm = Form.create()(
                   fileList={fileList}
                   onPreview={handlePreview}
                   onChange={handleChange}
-                  accept="image/gif, image/jpeg"
+                  accept="image/gif, image/jpeg, image/png"
                 >
                   {fileList.length > 1 ? null : uploadButton}
                 </Upload>
