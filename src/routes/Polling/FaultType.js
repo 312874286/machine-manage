@@ -332,7 +332,7 @@ export default class FaultType extends PureComponent {
           onCancel={this.handleCancel}
           >
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={6} sm={24}>
+              <Col md={4} sm={24}>
                 类型名称
               </Col>
               <Col md={15} sm={24}>
@@ -340,7 +340,7 @@ export default class FaultType extends PureComponent {
               </Col>
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={6} sm={24}>
+              <Col md={4} sm={24}>
                 解决方案
               </Col>
               <Col md={15} sm={24}>

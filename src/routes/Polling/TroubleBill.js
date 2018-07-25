@@ -3,6 +3,8 @@ import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TroubleBill.less';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -34,6 +36,12 @@ export default class troubleBill extends PureComponent {
       "remark": "",
     },
   };
+  constructor(props) {
+    super(props);
+    console.log(1111,moment().subtract(30,'days').format('YYYY-MM-DD'));
+    this.state.startDateString = moment().subtract(30,'days').format('YYYY-MM-DD');
+    this.state.endDateString = moment().format('YYYY-MM-DD');
+  }
   componentDidMount = () => {
     this.getLists();
   }
@@ -175,12 +183,12 @@ export default class troubleBill extends PureComponent {
     });
   }
   startDatePickerChange = (date, dateString) => {
+    console.log('startDatePickerChange::', date, dateString);
     this.setState({
       // type: '1',
       startDateString: dateString[0],
       endDateString: dateString[1],
     });
-    console.log('startDatePickerChange::', date, dateString, new Date(dateString[0]).getTime());
   }
   endDatePickerChange = (date, dateString) => {
     this.setState({
@@ -208,11 +216,13 @@ export default class troubleBill extends PureComponent {
     this.setState({
       type: '1',
       userName: '',
+      startDateString: moment().subtract(30,'days').format('YYYY-MM-DD'),
+      endDateString: moment().format('YYYY-MM-DD'),
     });
     console.log('handleReset::');
   }
   render() {
-    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type ,userName } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString } = this.state;
     const { troubleBill: { list, page } } = this.props;
     var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
@@ -286,8 +296,18 @@ export default class troubleBill extends PureComponent {
               </Select>
             </Col>
             <Col md={6} sm={24}>
-              {/* <DatePicker onChange={this.startDatePickerChange} /> */}
-              <RangePicker onChange={this.startDatePickerChange} />
+              {/* <DatePicker placeholder="开始时间" 
+              selectedValue={this.state.startDateString}
+              value={this.state.startDateString}
+              showTime={{
+                defaultValue: this.state.startDateString,
+                value: this.state.startDateString,
+              }}
+              onChange={this.startDatePickerChange} /> */}
+              <RangePicker
+               value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}
+               onChange={this.startDatePickerChange}
+              />
             </Col>
             {/* <Col md={2} sm={24}>
               解决时间
@@ -295,7 +315,7 @@ export default class troubleBill extends PureComponent {
             <Col md={4} sm={24}>
               <DatePicker onChange={this.endDatePickerChange} />
             </Col> */}
-            <Col md={8} sm={24}>
+            <Col md={8} sm={24}> 
               <Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />
             </Col>
             <Col md={7} sm={24}>
