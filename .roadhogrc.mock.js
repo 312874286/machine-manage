@@ -199,7 +199,7 @@ const proxy = {
             functionPath: 'machine',
             parentId: null,
             functionLevel: 1,
-            functionIcon: 'form',
+            functionIcon: 'machine',
             color: '#ffd322'
           },
           {
@@ -229,7 +229,7 @@ const proxy = {
             functionPath: 'project',
             parentId: null,
             functionLevel: 1,
-            functionIcon: 'form',
+            functionIcon: 'project',
           },
           {
             id: 'a7',
@@ -237,7 +237,6 @@ const proxy = {
             functionPath: 'channel',
             parentId: 'a6',
             functionLevel: 2,
-            functionIcon: 'form',
           },
           {
             id: 'a8',
@@ -245,7 +244,6 @@ const proxy = {
             functionPath: 'merchant',
             parentId: 'a6',
             functionLevel: 2,
-            functionIcon: 'form',
           },
           {
             id: 'a9',
@@ -253,7 +251,6 @@ const proxy = {
             functionPath: 'activity',
             parentId: 'a6',
             functionLevel: 2,
-            functionIcon: 'form',
           },
           {
             id: 'a20',
@@ -261,7 +258,6 @@ const proxy = {
             functionPath: 'schedule',
             parentId: 'a6',
             functionLevel: 2,
-            functionIcon: 'form',
           },
           {
             id: 'a10',
@@ -269,7 +265,6 @@ const proxy = {
             functionPath: 'shop',
             parentId: 'a6',
             functionLevel: 2,
-            functionIcon: 'form',
           },
           {
             id: 'a19',
@@ -277,7 +272,6 @@ const proxy = {
             functionPath: 'game',
             parentId: 'a6',
             functionLevel: 2,
-            functionIcon: 'form',
           },
           {
             id: 'a25',
@@ -288,11 +282,11 @@ const proxy = {
           },
           {
             id: 'a14',
-            functionDepict: '角色权限',
-            functionPath: 'authorityManage',
+            functionDepict: '系统管理',
+            functionPath: 'system',
             parentId: null,
             functionLevel: 1,
-            functionIcon: 'safety',
+            functionIcon: 'system',
             color: '#ff4c72'
           },
           {
@@ -329,7 +323,7 @@ const proxy = {
             functionPath: 'order',
             parentId: null,
             functionLevel: 1,
-            functionIcon: 'safety',
+            functionIcon: 'order',
             color: 'green'
           },
           {
@@ -345,7 +339,7 @@ const proxy = {
             functionPath: 'player',
             parentId: null,
             functionLevel: 1,
-            functionIcon: 'safety',
+            functionIcon: 'player',
             color: 'yellow'
           },
           {
@@ -361,7 +355,7 @@ const proxy = {
             functionPath: 'check',
             parentId: null,
             functionLevel: 1,
-            functionIcon: 'safety',
+            functionIcon: 'check',
             color: '#174a79'
           },
           {
@@ -2058,7 +2052,7 @@ const proxy = {
           "functionPath": "project",
           "parentId": null,
           "functionLevel": 1,
-          "functionIcon": "form",
+          "functionIcon": "project",
           "color": "#ffd322",
           "parentName": null
         },

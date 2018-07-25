@@ -3,7 +3,6 @@ import { Layout, Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 import styles from './index.less';
 import Debounce from 'lodash-decorators/debounce';
-
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -16,7 +15,10 @@ const getIcon = (icon) => {
     return <img src={icon} alt="icon" className={styles.icon} />;
   }
   if (typeof icon === 'string') {
-    return <Icon type={icon} />;
+    // return <Icon type={icon} />;
+    // {'../../assets/images/menuImg/' + icon + '.png'}
+    let imgSrc = require(`../../assets/images/menuImg/${icon}.png`)
+    return <Icon><img src={imgSrc} alt="icon" className={styles.icon} /></Icon>;
   }
   return icon;
 };
