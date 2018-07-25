@@ -37,7 +37,25 @@ const api = map({
   getGameList: '/game/game/getList',
   getPlanMachineDetailList: '/project/activityPlan/planMachineDetailList?id={id}',
   getGoodsList: '/goods/goods/getList?shopId={shopId}',
-  getDefaultActivity: '/project/activity/getDefaultActivity'
+  getDefaultActivity: '/project/activity/getDefaultActivity',
+
+  getGameSettingList: '/project/game/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  saveGameSetting: '/project/game/add',
+  updateGameSetting: '/project/game/update',
+  deleteGameSetting: '/project/game/delete',
+  getGameSettingDetail: '/project/game/detail?id={id}',
+  // getShopsList: '/project/shops/getList',
+  // getMerchantsList: '/project/merchant/getList',
+  // getActivityList: '/project/activity/getList',
+
+  getGoodsSettingList: '/project/goods/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  saveGoodsSetting: '/project/goods/add',
+  updateGoodsSetting: '/project/goods//update',
+  deleteGoodsSetting: '/project/goods/delete',
+  getGoodsSettingDetail: '/project/goods/detail?id={id}',
+  // getShopsList: '/project/shops/getList',
+  // getMerchantsList: '/project/merchant/getList',
+  // getActivityList: '/project/activity/getList',
 });
 
 export default api;

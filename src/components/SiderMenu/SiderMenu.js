@@ -210,7 +210,7 @@ export default class SiderMenu extends PureComponent {
     if (!selectedKeys.length) {
       selectedKeys = [openKeys[openKeys.length - 1]];
     }
-    console.log('collapsed', collapsed, collapsed, onCollapse )
+    // console.log('collapsed', collapsed, collapsed, onCollapse )
     return (
       <Sider
         trigger={null}

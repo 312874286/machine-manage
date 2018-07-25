@@ -1237,7 +1237,7 @@ const proxy = {
       }]
     });
   },
-  'GET /game/game/getList': (req, res) => {
+  'GET /project/game/getList': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -1255,7 +1255,7 @@ const proxy = {
       }]
     });
   },
-  'POST /game/game/getList': (req, res) => {
+  'POST /project/game/getList': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -1600,7 +1600,7 @@ const proxy = {
       "msg": '成功',
     });
   },
-  'GET /game/game/list': (req, res) => {
+  'GET /project/game/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -1639,7 +1639,7 @@ const proxy = {
       }]
     });
   },
-  'GET /game/game/detail': (req, res) => {
+  'GET /project/game/detail': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -1675,14 +1675,14 @@ const proxy = {
       }
     });
   },
-  'POST /game/game/update': (req, res) => {
+  'POST /project/game/update': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
       "data": ""
     });
   },
-  'POST /game/game/delete': (req, res) => {
+  'POST /project/game/delete': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -1696,7 +1696,7 @@ const proxy = {
       "msg": '成功',
     });
   },
-  'GET /goods/goods/list': (req, res) => {
+  'GET /project/goods/list': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -2309,7 +2309,7 @@ const proxy = {
       }]
     });
   },
-  'GET /game/user/list': (req, res) => {
+  'GET /project/user/list': (req, res) => {
     res.send({"msg":"成功","code":0,"page":{"pageSize":20,"currentResult":0,"totalPage":1,"pageNo":1,"totalCount":1,"list":null,"firstResult":0,"firstPage":true,"lastPage":true,"nextPage":1,"prePage":1},"data":[{"id":"ddddddd","userNick":"大姐姐","phone":"13454345656","gameUserId":"hjkjhghjkhjk","channelId":"hjjkklllll","channelName":"到年底","channelUserKey":"nnnmm","createTime":1531477140000}]})
   },
   'POST /project/activityPlan/update': (req, res) => {
@@ -2921,6 +2921,9 @@ const proxy = {
       },
       "msg": "成功"
     })
+  },
+  'POST /share/uploadImage': (req, res) => {
+    res.send({"code":0,"data":"backend/goods/46c6f7d487d24f2eba83266b85d72008.jpeg","msg":"成功"})
   }
 };
 
