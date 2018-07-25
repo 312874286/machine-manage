@@ -127,7 +127,7 @@ const CreateForm = Form.create()(
               <DatePicker
                 disabledTime={disabledTime}
                 disabledDate={disabledEndDate}
-                showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                showTime={{ defaultValue: moment('23:59:59', 'HH:mm:ss') }}
                 format="YYYY-MM-DD HH:mm"
                 // value={endValue}
                 placeholder="选择结束时间"
@@ -1231,7 +1231,7 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   onWatchClick = (item) => {
-    console.log('item查看', item)
+    // console.log('item查看', item)
     this.props.dispatch({
       type: 'scheduleSetting/getScheduleSettingDetail',
       payload: {

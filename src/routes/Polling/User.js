@@ -128,7 +128,7 @@ const WatchMachine = Form.create()(
     return (
       <Modal
         title="查看机器"
-        width={400}
+        width={600}
         visible={WatchMachineModalVisible}
         onCancel={() => WatchMachineHandleModalVisibleClick()}
         footer={null}
