@@ -18,7 +18,7 @@ export default {
     },
     *getUserExcel({ payload: { restParams } }, { call, put }) {
       const response = yield call(userExcel, { restParams });
-      return response.data;
+      return response;
     },
   },
 

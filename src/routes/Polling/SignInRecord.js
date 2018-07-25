@@ -14,7 +14,6 @@ import {
 import StandardTable from '../../components/StandardTable/index';
 import styles from './PunchingRecord.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import environment from "../../environments/environment";
 
 
 const FormItem = Form.Item;
@@ -160,19 +159,15 @@ export default class signInRecord extends PureComponent {
   }
   // 四级联动结束
   handleModalVisible = () => {
-    console.log('导出');
-    // this.props.dispatch({
-    //   type: 'signInRecord/getUserExcel',
-    //   payload: {
-    //     restParams: {
-    //       keyword: this.state.keyword,
-    //       code: this.state.code,
-    //     },
-    //   },
-    // }).then((res) => {
-    // });
-    // ?keyword=&code=
-    window.location.href = environment.host + "/check/signIn/userExcel?keyword="+this.state.keyword+"&code="+this.state.code
+    this.props.dispatch({
+      type: 'signInRecord/getUserExcel',
+      payload: {
+        restParams: {
+          keyword: this.state.keyword,
+          code: this.state.code,
+        },
+      },
+    })
   }
   // 新增modal确认事件 结束
   renderAdvancedForm() {

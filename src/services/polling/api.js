@@ -18,7 +18,7 @@ const api = map({
   getCheckFaultTypeUpdate: '/check/faultType/update',
 
   getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}',
-  userExcel: '/check/signIn/userExcel?keyword={keyword}&code={code}',
+  userExcel: '/check/signIn/userExcel',
 
 });
 
