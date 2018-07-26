@@ -596,24 +596,29 @@ export default class user extends PureComponent {
       {
         title: '姓名',
         dataIndex: 'name',
+        width: 150,
       },
       {
         title: '手机号',
         dataIndex: 'phone',
+        width: 200,
       },
       {
         title: '身份证号',
         dataIndex: 'cardNo',
+        width: 250,
       },
       {
         title: '公司',
         dataIndex: 'enterprise',
+        width: 200,
       },
       {
         title: '负责的机器',
         render: (text, item) => (
           <div style={{ color: '#174a79', border: 0, background: 'transparent' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
+        width: 200,
       },
       {
         fixed: 'right',
@@ -658,7 +663,7 @@ export default class user extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={700}
+              scrollX={900}
             />
           </div>
         </Card>

@@ -221,26 +221,32 @@ export default class signInRecord extends PureComponent {
       {
         title: '姓名',
         dataIndex: 'name',
+        width: 150,
       },
       {
         title: '手机号',
         dataIndex: 'phone',
+        width: 200,
       },
       {
         title: '公司',
         dataIndex: 'enterprise',
+        width: 150,
       },
       {
         title: '机器点位',
         dataIndex: 'localeName',
+        width: 200,
       },
       {
         title: '机器编号',
         dataIndex: 'machineCode',
+        width: 200,
       },
       {
         title: '打卡时间',
         dataIndex: 'createTime',
+        width: 250,
       },
     ];
     return (
