@@ -43,13 +43,14 @@ const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
 const couponsInitData = []
 
+
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
       goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData, onSelectShop, goodsLists,
       disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, selectMachineFlag, disabledTime, disabledEndTime
+      isDisabled, selectMachineFlag, disabledTime,
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -124,9 +125,9 @@ const CreateForm = Form.create()(
               rules: [{ required: true, message: '选择结束时间' }],
             })(
               <DatePicker
-                disabledTime={disabledEndTime}
+                disabledTime={disabledTime}
                 disabledDate={disabledEndDate}
-                showTime={{ defaultValue: moment('23:59:59', 'HH:mm:ss') }}
+                showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 format="YYYY-MM-DD HH:mm"
                 // value={endValue}
                 placeholder="选择结束时间"
@@ -430,11 +431,6 @@ export default class ScheduleSettingList extends PureComponent {
       disabledSeconds: () => this.range(1, 60),
     };
   }
-  disabledEndTime = () => {
-    return {
-      disabledSeconds: () => this.range(0, 59),
-    };
-  }
   disabledStartDate = (startValue) => {
     // console.log('disabledStartDate', startValue)
     // const endValue = this.state.endValue;
@@ -483,7 +479,7 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 时间控件结束
   onSelectShop = (value, option) => {
-    // console.log('value, option', value, option)
+    console.log('value, option', value, option)
     this.getGoodsLists(option.props['data-id']);
   }
   getActivityLists = () => {
@@ -580,104 +576,46 @@ export default class ScheduleSettingList extends PureComponent {
     // console.log('time', this.state.startTime, this.state.endTime)
     // console.log('startTime', this.state.handleDays.getDataStartDay, this.state.handleDays.getDataEndDay)
     let activityArr =[]
-    let left;
-    let width;
-    let background = 'Green'
+    let leftTmp = 0, leftNo = 0, widthTmp = 0
+    // console.log((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay))
+    // if ((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay)) {
+    //   leftTmp = 2.95
+    //   leftNo = 1
+    // }
     arr.forEach((item, index) => {
       let time = '开始时间：' + item.startTime + '--' + '结束时间: ' + item.endTime
-      const DateNo = 24 * 60 * 60 * 1000
       if (moment(item.startTime) >= moment(this.state.startTime)) {
         // 开始日期>范围的开始日期
         if (moment(item.endTime) <= moment(this.state.endTime)) {
           // 开始时间及结束日期在15天的范围
-          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
-          width = Math.floor((moment(item.endTime) - moment(item.startTime)) / DateNo)
-          // console.log('开始时间及结束日期在15天的范围')
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
+          let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
+          let width = Math.floor((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
+          // console.log('开始时间及结束日期在15天的范围', left, width, Math.round((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000)))
+          let tmp = { left: (leftTmp + (6.5 * left)) + '%', top: (25 + (index * 4)) + '%', width: (widthTmp + (6.5 * (width + 1))) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          activityArr.push(tmp);
         } else {
           // 结束日期>范围的结束日期
-          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
-          width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / DateNo)
+          let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
+          let width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('结束日期>范围的结束日期', left, width)
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
+          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          activityArr.push(tmp);
         }
       } else {
         // 开始日期<范围的开始日期
-        left = 0, width = '';
+        let left = 0, width = '';
         if (moment(item.endTime) >= moment(this.state.handleDays.endDay)) {
           // console.log('jieshu日期<范围的开始日期', left, width)
-          width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / DateNo)
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
+          width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
+          let tmp = { left: (6.5 * left) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          activityArr.push(tmp);
         } else {
-          width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / DateNo)
+          width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
           // console.log('开始日期<范围的开始日期', left, width)
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
+          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
+          activityArr.push(tmp);
         }
       }
-      let tmp = {
-        // left: (6.5 * left) + '%',
-        // top: (25 + (index * 4)) + '%',
-        // width: (6.496 * (width + 1)) + '%',
-        left: (69.33 * left) + 'px',
-        top: (70 + (index * 50)) + 'px',
-        width: (69.33 * (width + 1)) + 'px',
-        background: background,
-        height: '20px',
-        Time: time,
-        startTime: item.startTime,
-        endTime: item.endTime,
-        name: item.activityName,
-        id: item.id
-      }
-      activityArr.push(tmp);
     })
     return activityArr;
   }
@@ -790,8 +728,6 @@ export default class ScheduleSettingList extends PureComponent {
     this.setState({
       goodsInitData: [],
       couponsInitData: [],
-      // goodsCount: 0,
-      // goodsLists: []
     }, () => {
       this.setState({
         modalVisible: !!flag,
@@ -881,11 +817,10 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   goodsHandleAdd = (val, currentValue) => {
+    // console.log(v);
     const { goodsInitData, goodsCount } = this.state;
-    // console.log('goodsHandleAdd', val, currentValue, goodsInitData, goodsCount);
     const newData = {
       key: goodsCount,
-      name: currentValue,
       prizeId: currentValue,
       resultCode: '1',
       resultRemark: '描述',
@@ -893,11 +828,11 @@ export default class ScheduleSettingList extends PureComponent {
     };
     this.setState({
       goodsInitData: [...goodsInitData, newData],
-      goodsCount: goodsCount + 1,
+      goodsCount: goodsCount+1,
     }, () => {
-      console.log('discountHandleAdd::', this.state.goodsCount);
-    });;
-
+      console.log('goodsHandleAdd::', this.state.goodsCount);
+    });
+    
   }
   goodsHandleDelete = (key) => {
     const goodsInitData = [...this.state.goodsInitData];
@@ -912,7 +847,7 @@ export default class ScheduleSettingList extends PureComponent {
       ...item,
       ...row,
     });
-    console.log('newData', newData)
+
     this.setState({ goodsInitData: newData });
     // console.log('goodsHandleChange::', row);
   }
@@ -923,7 +858,6 @@ export default class ScheduleSettingList extends PureComponent {
   }
   discountHandleAdd = (val, currentValue) => {
     const { couponsInitData, couponsCount } = this.state;
-    // console.log('goodsHandleAdd', val, currentValue, couponsInitData, couponsCount);
     const newData = {
       key: couponsCount,
       code: '优惠券编号',
@@ -958,25 +892,6 @@ export default class ScheduleSettingList extends PureComponent {
   saveFormRef = (form) => {
     this.form = form;
   }
-  inArray = (arr, element) => {
-      for (var i = 0; i < arr.length; i++) {
-          if (arr[i] == element) {
-              return true;
-          }
-      }
-      return false;
-  }
-  serachRule = (InitData) => {
-    let max = []
-    for (let i = 0; i < InitData.length; i++) {
-      if (this.inArray(max, InitData[i].resultCode)) {
-        return false;
-      } else {
-        max.push(InitData[i].resultCode)
-      }
-    }
-    return true
-  }
   // 编辑modal 确认事件
   handleAdd = () => {
     this.setState({
@@ -987,54 +902,27 @@ export default class ScheduleSettingList extends PureComponent {
           return;
         }
         if (!fieldsValue.activityId || !fieldsValue.gameId || !fieldsValue.userMaxTimes) {
-          message.config({
-            top: 100,
-            duration: 2,
-            maxCount: 1,
-          });
-          message.error('请补全信息');
+          message.error('请补全信息')
           return;
         }
-        // console.log('fieldsValue', fieldsValue)
+        console.log('fieldsValue', fieldsValue)
         if (!this.state.modalData.id) {
           if (this.state.selectCity.length === 0) {
-            message.config({
-              top: 100,
-              duration: 2,
-              maxCount: 1,
-            });
-            message.error('请先选择机器');
+            message.error('请先选择机器')
             return;
           }
-        }
-        const { goodsInitData, couponsInitData  } = this.state
-        if (!this.serachRule(goodsInitData)) {
-          message.config({
-            top: 100,
-            duration: 2,
-            maxCount: 1,
-          });
-          message.error('商品规则有重复');
-          return;
-        }
-        if (!this.serachRule(couponsInitData)) {
-          message.config({
-            top: 100,
-            duration: 2,
-            maxCount: 1,
-          });
-          message.error('优惠券规则有重复');
-          return;
         }
         let params = {
           ...fieldsValue,
           goods: this.state.goodsInitData,
           coupons: this.state.couponsInitData,
+          machines: this.state.machines,
           startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
         };
         this.setState({
           editModalConfirmLoading: true,
+          modalData: {},
         });
         let url = 'scheduleSetting/saveScheduleSetting';
         let messageTxt = '新增';
@@ -1043,7 +931,7 @@ export default class ScheduleSettingList extends PureComponent {
           params = { ...params, id: this.state.modalData.id };
           messageTxt = '编辑';
         } else {
-          params = { ...params, machines: this.state.machines, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
+          params = { ...params, remark: this.state.selectCityName.length > 0 ? '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、') : ''}
         }
         this.props.dispatch({
           type: url,
@@ -1057,7 +945,6 @@ export default class ScheduleSettingList extends PureComponent {
               code: '',
               getDataStartDay: this.state.startTime,
               getDataEndDay: this.state.endTime,
-              modalData: {},
             }, () => {
               this.getLists();
             });
@@ -1178,11 +1065,6 @@ export default class ScheduleSettingList extends PureComponent {
       this.uniq(selectCity);
       // console.log('selectCity', this.state.machines)
     } else {
-      message.config({
-        top: 100,
-        duration: 2,
-        maxCount: 1,
-      });
       message.error('请先选择机器');
     }
   }
@@ -1298,7 +1180,7 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 编辑
   onEditClick = (item) => {
-    // console.log('item编辑', item)
+    console.log('item编辑', item)
     // activityList
     this.getActivityLists()
     // gameList
@@ -1314,7 +1196,7 @@ export default class ScheduleSettingList extends PureComponent {
       // console.log('res', res)
       this.getGoodsLists(res.shopId)
       let goodsInitDatas = res.goods.map((item, index) => {
-        return { key: index, name: item.activityPlanId, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
+        return { key: index, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
       })
       let couponsInitDatas = res.coupons.map((item, index) => {
         return { key: index, code: item.code, name: item.name, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
@@ -1335,7 +1217,7 @@ export default class ScheduleSettingList extends PureComponent {
     });
   }
   onWatchClick = (item) => {
-    // console.log('item查看', item)
+    console.log('item查看', item)
     this.props.dispatch({
       type: 'scheduleSetting/getScheduleSettingDetail',
       payload: {
@@ -1576,7 +1458,7 @@ export default class ScheduleSettingList extends PureComponent {
           discountHandleDelete={this.discountHandleDelete}
           discountHandleChange={this.discountHandleChange}
           onSelectShop={this.onSelectShop}
-
+              
           disabledStartDate={this.disabledStartDate}
           disabledTime={this.disabledTime}
           onStartChange={this.onStartChange}
@@ -1587,7 +1469,6 @@ export default class ScheduleSettingList extends PureComponent {
           endOpen={this.state.endOpen}
           isDisabled={this.state.isDisabled}
           selectMachineFlag={this.state.selectMachineFlag}
-          disabledEndTime={this.disabledEndTime}
         />
         <SelectMachineForm
           ref={this.selectMachineFormRef}

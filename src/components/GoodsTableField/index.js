@@ -134,9 +134,13 @@ class GoodsTableField extends Component {
     const { initData, clist } = this.props;
   }
   handleChangeName = (record, value) => {
-    console.log('record', record)
     record.prizeId = value;
-    // record.name = record.name
+    for (var i = 0; i < this.state.clist.length; i++ ) {
+      if (this.state.clist[i].id === value) {
+        record.name = this.state.clist[i].name;
+      }
+    }
+    console.log('record', record,this.state.clist);
     this.props.goodsHandle(this.props.initData);
   }
   handleChangeRule = (record, value) => {
@@ -206,7 +210,7 @@ class GoodsTableField extends Component {
         cell: EditableCell,
       },
     };
-    console.log('initData', initData)
+    // console.log('initData', initData)
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'name',
