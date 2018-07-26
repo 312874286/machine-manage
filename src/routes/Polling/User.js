@@ -358,7 +358,7 @@ export default class user extends PureComponent {
       if (this.state.modalData.id) {
         url = 'user/updateUser';
         messageTxt = '编辑'
-        params = { ...values, id: this.state.modalData.id, remark: remark, machines: this.state.machines };
+        params = { ...values, id: this.state.modalData.id, remark: remark ? remark : this.state.modalData.remark, machines: this.state.machines };
       }
       this.props.dispatch({
         type: url,
