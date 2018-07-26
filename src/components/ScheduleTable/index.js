@@ -275,7 +275,7 @@ class ScheduleTable extends PureComponent {
     const { dateList, onEditClick, onWatchClick, onDeleteClick } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
-      <Card title="活动排期一览表" style={{ overflowX: 'scroll'}}>
+      <Card title="活动排期一览表" style={{ overflowX: 'scroll'}} id="scheduleBox">
         <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
