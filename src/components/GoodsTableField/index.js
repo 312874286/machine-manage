@@ -125,10 +125,10 @@ class GoodsTableField extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const {initData, clist, count} = nextProps;
-    // console.log('initData, clist, count', initData, clist, count)
-    if (clist.length > 0) {
-      this.updateRenderDatas(initData, clist, count);
-    }
+    console.log('initData, clist, count', initData, clist, count)
+    // if (clist.length > 0) {
+    this.updateRenderDatas(initData, clist, count);
+    // }
   }
   componentDidMount() {
     const { initData, clist } = this.props;
@@ -145,7 +145,7 @@ class GoodsTableField extends Component {
   }
 
   handleAdd = () => {
-    this.props.goodsHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
+    this.props.goodsHandleAdd(this.state.initData, this.state.currentValue, this.props.count);
   }
 
   handleSave = (row) => {
@@ -155,13 +155,14 @@ class GoodsTableField extends Component {
     this.setState({
       clist,
     }, () => {
+      console.log('clist', this.state.clist)
       if(this.state.clist.length === 0 ) {
         this.setState({
           currentValue: '',
         });
       } else {
         this.setState({
-          currentValue: clist[0].id,
+          currentValue: clist[0].name,
         });
       }
     });
@@ -175,12 +176,20 @@ class GoodsTableField extends Component {
     }
     this.state.rlist = rlist;
 
-    if (this.props.initData.length !== 0) {
+    // if (this.props.initData.length !== 0) {
+    //   this.setState({
+    //     initData,
+    //   });
+    // }
+    if (initData.length !== 0) {
       this.setState({
         initData,
       });
+    } else {
+      this.setState({
+        initData: [],
+      });
     }
-
     this.setState({
       count: count,
     });
@@ -194,12 +203,13 @@ class GoodsTableField extends Component {
         cell: EditableCell,
       },
     };
+    console.log('initData', initData)
     this.columns = [{
       title: '*商品名称',
       dataIndex: 'name',
       render: (text, record) => {
         return (
-          <Select onChange={this.handleChangeName.bind(this,record)} defaultValue={record.prizeId}>
+          <Select onChange={this.handleChangeName.bind(this,record)} defaultValue={record.name}>
             {/*{children}*/}
             {clist.map((item) => {
               return (

@@ -34,9 +34,9 @@ const api = map({
   getScheduleSettingDetail: '/project/activityPlan/detail?id={id}',
   selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}&startTime={startTime}&endTime={endTime}',
   getActivityList: '/project/activity/getList',
-  getGameList: '/game/game/getList',
+  getGameList: '/project/game/getList',
   getPlanMachineDetailList: '/project/activityPlan/planMachineDetailList?id={id}',
-  getGoodsList: '/goods/goods/getList?shopId={shopId}',
+  getGoodsList: '/project/goods/getList?shopId={shopId}',
   getDefaultActivity: '/project/activity/getDefaultActivity',
 
   getGameSettingList: '/project/game/list?pageNo={pageNo}&keyword={keyword}&code={code}',
