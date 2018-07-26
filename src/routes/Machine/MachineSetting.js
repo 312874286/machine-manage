@@ -1216,7 +1216,7 @@ export default class machineSettingList extends PureComponent {
       {
         fixed: 'right',
         title: '操作',
-        width: 300,
+        width: 240,
         textAlign: 'center',
         render: (text, item) => (
           <Fragment>

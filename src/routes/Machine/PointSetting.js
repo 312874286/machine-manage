@@ -680,7 +680,7 @@ export default class PointSettingList extends PureComponent {
       },
       {
         title: '点位名称',
-        width: 200,
+        width: 150,
         dataIndex: 'name',
       },
       {
@@ -704,7 +704,7 @@ export default class PointSettingList extends PureComponent {
       },
       {
         fixed: 'right',
-        width: 200,
+        width: 150,
         title: '操作',
         render: (text, item) => (
           <Fragment>
@@ -761,7 +761,7 @@ export default class PointSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1300}
+              scrollX={1200}
             />
           </div>
         </Card>

@@ -622,7 +622,7 @@ export default class user extends PureComponent {
       },
       {
         fixed: 'right',
-        width: 150,
+        width: 80,
         title: '操作',
         render: (text, item) => (
           <Fragment>
