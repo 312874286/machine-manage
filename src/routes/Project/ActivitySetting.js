@@ -927,7 +927,7 @@ export default class activitySettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={900}
+              scrollX={1000}
             />
           </div>
         </Card>
