@@ -576,46 +576,104 @@ export default class ScheduleSettingList extends PureComponent {
     // console.log('time', this.state.startTime, this.state.endTime)
     // console.log('startTime', this.state.handleDays.getDataStartDay, this.state.handleDays.getDataEndDay)
     let activityArr =[]
-    let leftTmp = 0, leftNo = 0, widthTmp = 0
-    // console.log((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay))
-    // if ((this.state.startTime !== this.state.getDataStartDay) || (this.state.endTime !== this.state.getDataEndDay)) {
-    //   leftTmp = 2.95
-    //   leftNo = 1
-    // }
+    let left;
+    let width;
+    let background = 'Green'
     arr.forEach((item, index) => {
       let time = '开始时间：' + item.startTime + '--' + '结束时间: ' + item.endTime
+      const DateNo = 24 * 60 * 60 * 1000
       if (moment(item.startTime) >= moment(this.state.startTime)) {
         // 开始日期>范围的开始日期
         if (moment(item.endTime) <= moment(this.state.endTime)) {
           // 开始时间及结束日期在15天的范围
-          let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
-          let width = Math.floor((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
-          // console.log('开始时间及结束日期在15天的范围', left, width, Math.round((moment(item.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000)))
-          let tmp = { left: (leftTmp + (6.5 * left)) + '%', top: (25 + (index * 4)) + '%', width: (widthTmp + (6.5 * (width + 1))) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
-          activityArr.push(tmp);
+          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
+          width = Math.floor((moment(item.endTime) - moment(item.startTime)) / DateNo)
+          // console.log('开始时间及结束日期在15天的范围')
+          // let tmp = {
+          //   left: (6.5 * left) + '%',
+          //   top: (25 + (index * 4)) + '%',
+          //   width: (6.5 * (width + 1)) + '%',
+          //   background: 'rgba(193, 229, 158, 1 )',
+          //   height: '20px',
+          //   Time: time,
+          //   startTime: item.startTime,
+          //   endTime: item.endTime,
+          //   name: item.activityName,
+          //   id: item.id
+          // }
+          // activityArr.push(tmp);
         } else {
           // 结束日期>范围的结束日期
-          let left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
-          let width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / (24 * 60 * 60 * 1000))
+          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
+          width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / DateNo)
           // console.log('结束日期>范围的结束日期', left, width)
-          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
-          activityArr.push(tmp);
+          // let tmp = {
+          //   left: (6.5 * left) + '%',
+          //   top: (25 + (index * 4)) + '%',
+          //   width: (6.5 * (width + 1)) + '%',
+          //   background: 'rgba(193, 229, 158, 1 )',
+          //   height: '20px',
+          //   Time: time,
+          //   startTime: item.startTime,
+          //   endTime: item.endTime,
+          //   name: item.activityName,
+          //   id: item.id
+          // }
+          // activityArr.push(tmp);
         }
       } else {
         // 开始日期<范围的开始日期
-        let left = 0, width = '';
+        left = 0, width = '';
         if (moment(item.endTime) >= moment(this.state.handleDays.endDay)) {
           // console.log('jieshu日期<范围的开始日期', left, width)
-          width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
-          let tmp = { left: (6.5 * left) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
-          activityArr.push(tmp);
+          width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / DateNo)
+          // let tmp = {
+          //   left: (6.5 * left) + '%',
+          //   top: (25 + (index * 4)) + '%',
+          //   width: (6.5 * (width + 1)) + '%',
+          //   background: 'rgba(193, 229, 158, 1 )',
+          //   height: '20px',
+          //   Time: time,
+          //   startTime: item.startTime,
+          //   endTime: item.endTime,
+          //   name: item.activityName,
+          //   id: item.id
+          // }
+          // activityArr.push(tmp);
         } else {
-          width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / (24 * 60 * 60 * 1000))
+          width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / DateNo)
           // console.log('开始日期<范围的开始日期', left, width)
-          let tmp = { left: (leftTmp + (6.5 * (left - leftNo))) + '%', top: (25 + (index * 4)) + '%', width: (6.5 * (width + 1)) + '%', background: 'rgba(193, 229, 158, 1 )', height: '20px', Time: time, startTime: item.startTime, endTime: item.endTime, name: item.activityName, id: item.id }
-          activityArr.push(tmp);
+          // let tmp = {
+          //   left: (6.5 * left) + '%',
+          //   top: (25 + (index * 4)) + '%',
+          //   width: (6.5 * (width + 1)) + '%',
+          //   background: 'rgba(193, 229, 158, 1 )',
+          //   height: '20px',
+          //   Time: time,
+          //   startTime: item.startTime,
+          //   endTime: item.endTime,
+          //   name: item.activityName,
+          //   id: item.id
+          // }
+          // activityArr.push(tmp);
         }
       }
+      let tmp = {
+        // left: (6.5 * left) + '%',
+        // top: (25 + (index * 4)) + '%',
+        // width: (6.496 * (width + 1)) + '%',
+        left: (69.33 * left) + 'px',
+        top: (70 + (index * 50)) + 'px',
+        width: (69.33 * (width + 1)) + 'px',
+        background: background,
+        height: '20px',
+        Time: time,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        name: item.activityName,
+        id: item.id
+      }
+      activityArr.push(tmp);
     })
     return activityArr;
   }
@@ -832,7 +890,7 @@ export default class ScheduleSettingList extends PureComponent {
     }, () => {
       console.log('goodsHandleAdd::', this.state.goodsCount);
     });
-    
+
   }
   goodsHandleDelete = (key) => {
     const goodsInitData = [...this.state.goodsInitData];
@@ -1458,7 +1516,7 @@ export default class ScheduleSettingList extends PureComponent {
           discountHandleDelete={this.discountHandleDelete}
           discountHandleChange={this.discountHandleChange}
           onSelectShop={this.onSelectShop}
-              
+
           disabledStartDate={this.disabledStartDate}
           disabledTime={this.disabledTime}
           onStartChange={this.onStartChange}
