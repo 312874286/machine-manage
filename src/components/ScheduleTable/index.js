@@ -14,7 +14,7 @@ const gridStyleMarginLeft = {
   // marginLeft: '6%',
 }
 const gridLeftStyle = {
-  width: '4%',
+  width: '30px',
   // textAlign: 'center',
   // position: 'absolute',
   // top: '50%',
@@ -29,8 +29,28 @@ const gridLeftStyle = {
   borderRadius: '8px',
   background: 'aliceblue',
   color: '#174a79',
+  // position: 'fixed',
+  // marginLeft: '-49px',
 };
-
+const gridStyleRight = {
+  width: '30px',
+  // textAlign: 'center',
+  // position: 'absolute',
+  // top: '50%',
+  height: '150px',
+  marginTop: '175px',
+  border: 0,
+  boxShadow: 'none',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '8px',
+  background: 'aliceblue',
+  color: '#174a79',
+  // position: 'fixed',
+  // marginLeft: '1040px',
+}
 class ScheduleTable extends PureComponent {
   state = {
     dateTwoWeeksArr: [],
@@ -276,47 +296,50 @@ class ScheduleTable extends PureComponent {
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
       <Card title="活动排期一览表" style={{ overflowX: 'scroll'}} id="scheduleBox">
-        <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }} className={styles.cardDiv}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{ overflowX: 'scroll', height: '900px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px' }} id="dateWeek" className={styles.dateWeek}>
+          <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px' }} id="dateWeek" className={styles.dateWeek}>
             {dateTwoWeeksArr.map((item) => {
               return (
                 <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
                   <p>{item.value}</p>
                   <p>{this.filterWeek(item.week)}</p>
-                  <p style={{ height: '500px' }}></p>
+                  <p className="pHeight"></p>
                 </Card.Grid>
               );
             })}
-            {/*<div className={styles.dateList}>*/}
+            <div className={styles.dateList}>
               {dateList.map((item) => {
                 return (
                   <div key={item.id}>
-                    <Popover placement="top" content={item.Time} title={ '活动名称: '+ item.name} trigger="hover">
+                    <Popover placement="top" content=
+                      {
+                      <div className={styles.iconBox}>
+                        {item.Time + '  '}
+                        <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
+                        <Icon type="eye" onClick={() => onWatchClick(item)} />
+                        <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No">
+                          <Icon type="close" className={styles.anticonDelete} style={{ display: moment(item.startTime) >= new Date().getTime() ? '' : 'none' }}/>
+                        </Popconfirm>
+                      </div>
+                     }
+                             title={ '活动名称: '+ item.name } trigger="hover">
                       <div className={styles.dateChildren}
                            style={{ background: moment(item.endTime) < new Date().getTime()  ? 'rgba(189, 189, 189, 0.6)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(25, 120, 254, 0.2)' : 'rgba(122, 219, 62, 0.2)'), width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
                              justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center' }}>
 
                         <div>{item.name}</div>
-                        <div className={styles.iconBox}>
-                          {/*endTime: item.endTime*/}
-                          <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
-                          <Icon type="eye" onClick={() => onWatchClick(item)} />
-                          <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No"
-                                      style={{ display: moment(item.startTime) > new Date().getTime() ? '' : 'none' }}>
-                            <Icon type="close" className={styles.anticonDelete}/>
-                          </Popconfirm>
-                        </div>
+
                       </div>
                     </Popover>
                   </div>
                 );
               })}
-            {/*</div>*/}
+            </div>
           </div>
-          <Card.Grid style={gridLeftStyle} onClick={() => this.right()}>
+          <Card.Grid style={gridStyleRight} onClick={() => this.right()}>
             <span>加载更多</span>
           </Card.Grid>
          </div>

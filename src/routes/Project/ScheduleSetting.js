@@ -667,7 +667,7 @@ export default class ScheduleSettingList extends PureComponent {
         // top: (25 + (index * 4)) + '%',
         // width: (6.496 * (width + 1)) + '%',
         left: (69.33 * left) + 'px',
-        top: (8 + (index * 5)) + '%',
+        top: (70 + (index * 50)) + 'px',
         width: (69.33 * (width + 1)) + 'px',
         background: background,
         height: '20px',
@@ -912,7 +912,7 @@ export default class ScheduleSettingList extends PureComponent {
       ...item,
       ...row,
     });
-
+    console.log('newData', newData)
     this.setState({ goodsInitData: newData });
     // console.log('goodsHandleChange::', row);
   }

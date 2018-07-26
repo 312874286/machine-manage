@@ -134,7 +134,9 @@ class GoodsTableField extends Component {
     const { initData, clist } = this.props;
   }
   handleChangeName = (record, value) => {
+    console.log('record', record)
     record.prizeId = value;
+    // record.name = record.name
     this.props.goodsHandle(this.props.initData);
   }
   handleChangeRule = (record, value) => {
@@ -149,6 +151,7 @@ class GoodsTableField extends Component {
   }
 
   handleSave = (row) => {
+    console.log('row', row)
     this.props.goodsHandleChange(row);
   }
   updateRenderDatas(initData, clist, count) {
@@ -162,7 +165,7 @@ class GoodsTableField extends Component {
         });
       } else {
         this.setState({
-          currentValue: clist[0].name,
+          currentValue: clist[0].id,
         });
       }
     });
@@ -206,10 +209,10 @@ class GoodsTableField extends Component {
     console.log('initData', initData)
     this.columns = [{
       title: '*商品名称',
-      dataIndex: 'name',
+      // dataIndex: 'name',
       render: (text, record) => {
         return (
-          <Select onChange={this.handleChangeName.bind(this,record)} defaultValue={record.name}>
+          <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={record.name}>
             {/*{children}*/}
             {clist.map((item) => {
               return (
@@ -277,7 +280,7 @@ class GoodsTableField extends Component {
           dataSource={initData}
           columns={columns}
           pagination={false}
-          rowKey={record => record.key}
+          rowKey={record => record.id}
         />
       </div>
     );
