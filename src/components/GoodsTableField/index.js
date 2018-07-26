@@ -169,7 +169,7 @@ class GoodsTableField extends Component {
         });
       } else {
         this.setState({
-          currentValue: clist[0].id,
+          currentValue: clist[0].name,
         });
       }
     });

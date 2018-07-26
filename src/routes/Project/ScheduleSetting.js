@@ -1254,7 +1254,7 @@ export default class ScheduleSettingList extends PureComponent {
       // console.log('res', res)
       this.getGoodsLists(res.shopId)
       let goodsInitDatas = res.goods.map((item, index) => {
-        return { key: index, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
+        return { key: index, name: item.activityPlanId, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
       })
       let couponsInitDatas = res.coupons.map((item, index) => {
         return { key: index, code: item.code, name: item.name, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
