@@ -582,6 +582,7 @@ export default class ScheduleSettingList extends PureComponent {
     let activityArr =[]
     let left;
     let width;
+    let background = 'Green'
     arr.forEach((item, index) => {
       let time = '开始时间：' + item.startTime + '--' + '结束时间: ' + item.endTime
       const DateNo = 24 * 60 * 60 * 1000
@@ -666,9 +667,9 @@ export default class ScheduleSettingList extends PureComponent {
         // top: (25 + (index * 4)) + '%',
         // width: (6.496 * (width + 1)) + '%',
         left: (69.33 * left) + 'px',
-        top: (25 + (index * 4)) + '%',
+        top: (8 + (index * 5)) + '%',
         width: (69.33 * (width + 1)) + 'px',
-        background: 'rgba(193, 229, 158, 1 )',
+        background: background,
         height: '20px',
         Time: time,
         startTime: item.startTime,

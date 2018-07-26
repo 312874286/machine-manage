@@ -280,7 +280,7 @@ class ScheduleTable extends PureComponent {
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{ overflowX: 'scroll', height: '600px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px' }} id="dateWeek" className={styles.dateWeek}>
+          <div style={{ overflowX: 'scroll', height: '900px', overflowY: 'hidden', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px' }} id="dateWeek" className={styles.dateWeek}>
             {dateTwoWeeksArr.map((item) => {
               return (
                 <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
@@ -296,15 +296,16 @@ class ScheduleTable extends PureComponent {
                   <div key={item.id}>
                     <Popover placement="top" content={item.Time} title={ '活动名称: '+ item.name} trigger="hover">
                       <div className={styles.dateChildren}
-                           style={{ background: item.background, width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
-                             justifyContent: 'space-between', zIndex: 999, height: '20px', }}>
+                           style={{ background: moment(item.endTime) < new Date().getTime()  ? 'rgba(189, 189, 189, 0.6)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(25, 120, 254, 0.2)' : 'rgba(122, 219, 62, 0.2)'), width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
+                             justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center' }}>
 
                         <div>{item.name}</div>
                         <div className={styles.iconBox}>
                           {/*endTime: item.endTime*/}
                           <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
                           <Icon type="eye" onClick={() => onWatchClick(item)} />
-                          <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No"   style={{ display: moment(item.endTime) > new Date().getTime() && moment(item.startTime) < new Date().getTime()  ? 'none' : '' }}>
+                          <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No"
+                                      style={{ display: moment(item.startTime) > new Date().getTime() ? '' : 'none' }}>
                             <Icon type="close" className={styles.anticonDelete}/>
                           </Popconfirm>
                         </div>
