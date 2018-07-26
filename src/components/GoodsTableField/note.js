@@ -36,6 +36,7 @@ class EditableCell extends Component {
     const editing = !this.state.editing;
     this.setState({ editing }, () => {
       if (editing) {
+        // console.log('editing::', editing);
         this.input.focus();
       }
     });
@@ -110,41 +111,64 @@ class EditableCell extends Component {
   }
 }
 
-class DiscountDynamicField extends React.Component {
+class GoodsTableField extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      dataSource: [],
       count:0,
-      rlist: [
-      ],
+      clist: [],
+      rlist: [],
+      currentValue: '',
+      initData: [],
     };
   }
   componentWillReceiveProps(nextProps) {
-    const { initData, count } = nextProps;
-    // console.log('discount::componentWillReceiveProps', nextProps);
-    this.updateRenderDatas(initData, count);
+    const {initData, clist, count} = nextProps;
+    console.log('initData, clist, count', initData, clist, count)
+    // if (clist.length > 0) {
+    this.updateRenderDatas(initData, clist, count);
+    // }
   }
   componentDidMount() {
-    const { initData } = this.props;
-    // console.log('discount::componentDidMount', this.props);
+    const { initData, clist } = this.props;
+  }
+  handleChangeName = (record, value) => {
+    console.log('record', record)
+    record.prizeId = value;
+    // record.name = record.name
+    this.props.goodsHandle(this.props.initData);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
-    this.props.discountHandle(this.state.dataSource);
   }
   handleDelete = (key) => {
-    this.props.discountHandleDelete(key);
+    this.props.goodsHandleDelete(key);
   }
+
   handleAdd = () => {
-    this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
+    this.props.goodsHandleAdd(this.state.initData, this.state.currentValue, this.props.count);
   }
 
   handleSave = (row) => {
-    this.props.discountHandleChange(row);
+    console.log('row', row)
+    this.props.goodsHandleChange(row);
   }
-  updateRenderDatas = (initData, count) => {
+  updateRenderDatas(initData, clist, count) {
+    this.setState({
+      clist,
+    }, () => {
+      console.log('clist', this.state.clist)
+      if(this.state.clist.length === 0 ) {
+        this.setState({
+          currentValue: '',
+        });
+      } else {
+        this.setState({
+          currentValue: clist[0].id,
+        });
+      }
+    });
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -153,52 +177,63 @@ class DiscountDynamicField extends React.Component {
       }
       rlist.push(newobj);
     }
-    this.setState({
-      rlist: rlist,
-    });
-    if (this.props.initData.length !== 0) {
+    this.state.rlist = rlist;
+
+    // if (this.props.initData.length !== 0) {
+    //   this.setState({
+    //     initData,
+    //   });
+    // }
+    if (initData.length !== 0) {
       this.setState({
-        dataSource: initData,
+        initData,
       });
     } else {
+      this.setState({
+        initData: [],
+      });
     }
     this.setState({
       count: count,
     });
-
   }
   render() {
-    const { dataSource } = this.state;
     const { count } = this.props;
-    // console.log('discount::', count);
+    const { clist, rlist, initData } = this.state
     const components = {
       body: {
         row: EditableFormRow,
         cell: EditableCell,
       },
     };
-    const children2 = [];
-    let defaultValue2 = '';
-
-    for (let i = 0; i < this.state.rlist.length; i++) {
-      children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
-    }
-    console.log('initData2', this.props.initData)
+    console.log('initData', initData)
     this.columns = [{
-      title: '*优惠券编号',
-      dataIndex: 'code',
-      editable: true,
-    },{
-      title: '*优惠券名称',
-      dataIndex: 'name',
-      editable: true,
+      title: '*商品名称',
+      // dataIndex: 'name',
+      render: (text, record) => {
+        return (
+          <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={record.name}>
+            {/*{children}*/}
+            {clist.map((item) => {
+              return (
+                <Option key={item.id} value={item.id}>{item.name}</Option>
+              );
+            })}
+          </Select>
+        );
+      },
     }, {
       title: '*规则',
       dataIndex: 'resultCode',
       render: (text, record) => {
         return (
           <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-            {children2}
+            {/*{children2}*/}
+            {rlist.map((item) => {
+              return (
+                <Option key={item.id} value={item.id}>{item.name}</Option>
+              );
+            })}
           </Select>
 
         );
@@ -212,9 +247,9 @@ class DiscountDynamicField extends React.Component {
       dataIndex: 'operation',
       render: (text, record) => {
         return (
-            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
-              <a>删除</a>
-            </Popconfirm>
+          <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+            <a>删除</a>
+          </Popconfirm>
         );
       },
     }];
@@ -233,6 +268,7 @@ class DiscountDynamicField extends React.Component {
         }),
       };
     });
+
     return (
       <div>
         <Button icon="plus" onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -241,7 +277,7 @@ class DiscountDynamicField extends React.Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={this.props.initData}
+          dataSource={initData}
           columns={columns}
           pagination={false}
           rowKey={record => record.key}
@@ -250,4 +286,4 @@ class DiscountDynamicField extends React.Component {
     );
   }
 }
-export default DiscountDynamicField;
+export default GoodsTableField;

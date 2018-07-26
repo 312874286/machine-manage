@@ -209,7 +209,7 @@ class GoodsTableField extends Component {
     console.log('initData', initData)
     this.columns = [{
       title: '*商品名称',
-      // dataIndex: 'name',
+      dataIndex: 'name',
       render: (text, record) => {
         return (
           <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={record.name}>
@@ -247,9 +247,9 @@ class GoodsTableField extends Component {
       dataIndex: 'operation',
       render: (text, record) => {
         return (
-            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
-              <a>删除</a>
-            </Popconfirm>
+          <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+            <a>删除</a>
+          </Popconfirm>
         );
       },
     }];
@@ -280,7 +280,7 @@ class GoodsTableField extends Component {
           dataSource={initData}
           columns={columns}
           pagination={false}
-          rowKey={record => record.id}
+          rowKey={record => record.key}
         />
       </div>
     );
