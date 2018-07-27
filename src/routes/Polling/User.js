@@ -200,7 +200,7 @@ const SelectMachineForm = Form.create()(
         return (
           targetData.length > 0
             ? (
-              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.key)}>
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.machineCode)}>
                 <a href="javascript:;">删除</a>
               </Popconfirm>
             ) : null
