@@ -2732,7 +2732,7 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'GET /check/user/selectAreaMachines': (req, res) => {
+  'POST /check/user/selectAreaMachines': (req, res) => {
     res.send({
       "code": 0,
       "data": [

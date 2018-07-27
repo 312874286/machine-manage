@@ -341,7 +341,8 @@ export default class user extends PureComponent {
     selectAll: false,
     selectedRows: [],
     code: '',
-    repeat: []
+    repeat: [],
+    level: 1,
   };
 // <Tree
 // loadData={onLoadData}
@@ -374,10 +375,11 @@ export default class user extends PureComponent {
   // 获取城市列表
   getAreaList = () => {
     this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
+      type: 'user/selectMachine',
       payload: {
-        restParams: {
+        params: {
           code: this.state.code,
+          level: this.state.level
         },
       },
     }).then( (res) => {
@@ -721,10 +723,11 @@ export default class user extends PureComponent {
       code: targetOption.value,
     }, () => {
       this.props.dispatch({
-        type: 'common/getProvinceCityAreaTradeArea',
+        type: 'user/selectMachine',
         payload: {
-          restParams: {
+          params: {
             code: targetOption.value,
+            level: targetOption.level + 1,
           },
         },
       }).then((res) => {
@@ -852,7 +855,7 @@ export default class user extends PureComponent {
       this.props.dispatch({
         type: 'user/selectMachine',
         payload: {
-          restParams: {
+          params: {
             code: localCode,
           },
         },
@@ -876,7 +879,8 @@ export default class user extends PureComponent {
     // this.state.autoExpandParent, this.state.selectedKeys)
     this.setState({
       editMachineModalVisible: true,
-      code: ''
+      code: '',
+      level: 1,
     }, () => {
       this.getAreaList();
     });

@@ -27,9 +27,10 @@ export async function updateUser({ params }) {
     body: JSON.stringify(params),
   });
 }
-export async function selectMachine({ restParams }) {
-  return fetch.get(api.selectMachine, {
-    restParams,
+export async function selectMachine({ params }) {
+  console.log('restParams', params, stringify(params))
+  return fetch.post(api.selectMachine, {
+    body: stringify(params),
   });
 }
 

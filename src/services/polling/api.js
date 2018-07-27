@@ -10,7 +10,7 @@ const api = map({
   getUserDetail: '/check/user/detail?id={id}',
   saveUser: '/check/user/add',
   updateUser: '/check/user/update',
-  selectMachine: '/check/user/selectAreaMachines?code={code}',
+  selectMachine: '/check/user/selectAreaMachines',
 
   getCheckFaultTypeList: '/check/faultType/list',
   getCheckFaultTypeAdd: '/check/faultType/add',

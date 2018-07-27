@@ -32,8 +32,8 @@ export default {
       const response = yield call(updateUser, { params });
       return response;
     },
-    *selectMachine({ payload: { restParams } }, { call }) {
-      const response = yield call(selectMachine, { restParams });
+    *selectMachine({ payload: { params } }, { call }) {
+      const response = yield call(selectMachine, { params });
       const { code, data } = response;
       if (code !== 0) return;
       const arr = [];
@@ -43,7 +43,10 @@ export default {
           machines = data[i].machines
           title = data[i].name
           canUseNum = data[i].machines.length
-          if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
+          // if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
+          //   isLeaf = true;
+          // }
+          if (data[0].level === 4) {
             isLeaf = true;
           }
           if (data[i].machines.length === 0) {
@@ -59,6 +62,7 @@ export default {
           }
           const a = {
             value: data[i].code,
+            label: data[i].name + '(' + canUseNum + ')',
             isLeaf: isLeaf,
             title: title,
             key: i,
