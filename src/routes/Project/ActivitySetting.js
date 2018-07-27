@@ -65,16 +65,16 @@ const CreateForm = Form.create()(
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="是否是默认活动">
-            {getFieldDecorator('isDefault', {
-              initialValue: '0',
-            })(
-              <RadioGroup disabled>
-                <Radio value="1">是</Radio>
-                <Radio value="0">否</Radio>
-              </RadioGroup>
-            )}
-          </FormItem>
+          {/*<FormItem {...formItemLayout} label="是否是默认活动">*/}
+            {/*{getFieldDecorator('isDefault', {*/}
+              {/*initialValue: '0',*/}
+            {/*})(*/}
+              {/*<RadioGroup disabled>*/}
+                {/*<Radio value="1">是</Radio>*/}
+                {/*<Radio value="0">否</Radio>*/}
+              {/*</RadioGroup>*/}
+            {/*)}*/}
+          {/*</FormItem>*/}
           <FormItem {...formItemLayout} label="活动名称">
             {getFieldDecorator('name', {
               rules: [{ required: true, whitespace: true, message: '请输入活动名称' }],
@@ -543,6 +543,7 @@ export default class activitySettingList extends PureComponent {
       // const rangeTimeValue = fieldsValue.rangeTime
       let params = {
         ...fieldsValue,
+        isDefault: 0,
         // rangeTime: undefined,
         // createTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm:ss'),
         // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm:ss'),
