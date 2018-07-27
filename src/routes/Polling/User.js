@@ -981,7 +981,7 @@ export default class user extends PureComponent {
       {
         title: '负责的机器',
         render: (text, item) => (
-          <div style={{ color: '#174a79', border: 0, background: 'transparent' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+          <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
         width: 200,
       },
