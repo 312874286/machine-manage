@@ -341,6 +341,7 @@ export default class user extends PureComponent {
     selectAll: false,
     selectedRows: [],
     code: '',
+    repeat: []
   };
 // <Tree
 // loadData={onLoadData}
@@ -744,20 +745,32 @@ export default class user extends PureComponent {
     for (let a of selectedRows) {
       await this.handleDelete(a.machineCode)
     }
+    // console.log(this.state.repeat)
+    if (this.state.repeat.length > 0) {
+      Modal.warning({
+        title: '以下机器和已选机器重复',
+        content: this.state.repeat.join('\n') + '',
+      });
+    }
     this.setState({
       selectAll: false
     })
   }
   unique = (arr) => {
     let targetData = []
+    let repeat = []
     for (var i = 0; i < arr.length; i++) {
       var item = arr[i]
       if (!(item['machineCode'] in targetData)) {
         targetData[item['machineCode']] = item;
+      } else {
+        repeat = [...this.state.repeat, item.machineCode]
       }
     }
+    this.setState({
+      repeat,
+    })
     return Object.values(targetData)
-    // console.log('targetData2', targetData, Object.values(targetData))
   }
   handleSave = (row) => {
     const newData = [...this.state.sourceData];
@@ -771,11 +784,7 @@ export default class user extends PureComponent {
     this.setState({ sourceData: newData });
   }
   handleDelete = (key) => {
-    console.log('key', key, this.state.targetData)
-    // let dataSource = this.state.sourceData;
-    // let newData = dataSource.splice(key - 1, 1)
-    // console.log('newData', newData, dataSource)
-    // this.setState({ sourceData: dataSource });
+    // console.log('key', key, this.state.targetData)
     const dataSource = [...this.state.sourceData];
     this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
     let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
@@ -795,16 +804,12 @@ export default class user extends PureComponent {
     this.setState({ targetData: newData });
   }
   targetHandleDelete = (key) => {
-    console.log('key', key)
-    // let dataSource = this.state.sourceData;
-    // let newData = dataSource.splice(key - 1, 1)
-    // console.log('newData', newData, dataSource)
-    // this.setState({ sourceData: dataSource });
+    // console.log('key', key)
     const dataSource = [...this.state.targetData];
     this.setState({ targetData: dataSource.filter(item => item.machineCode !== key) });
   }
   onChangeRowSelection = (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     this.setState({
       sourceKey: selectedRowKeys
     })
@@ -812,12 +817,8 @@ export default class user extends PureComponent {
   onSelectAll = (selected, selectedRows, changeRows) => {
     this.setState({
       selectedRows,
+      selectAll: selected
     })
-    if (selected) {
-      this.setState({
-        selectAll: true
-      })
-    }
     console.log(selected, selectedRows, changeRows);
   }
   onLeftSelect = (record, selected, selectedRows) => {
@@ -874,13 +875,13 @@ export default class user extends PureComponent {
     // console.log('openSelectMachineModal', this.state.checkedKeys, this.state.expandedKeys,
     // this.state.autoExpandParent, this.state.selectedKeys)
     this.setState({
-      // sourceData: data,
       editMachineModalVisible: true,
-    });
-    this.setState({
       code: ''
     }, () => {
       this.getAreaList();
+    });
+    this.selectMachineform.setFieldsValue({
+      provinceCityAreaTrade: undefined
     })
     // this.setState({
     //   code: '',
