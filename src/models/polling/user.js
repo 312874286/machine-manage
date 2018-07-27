@@ -51,6 +51,8 @@ export default {
           }
           if (data[i].machines.length === 0) {
             disabled = true;
+          } else {
+            disabled = false;
           }
           if (data[0].level === 5) {
             machines = [{
