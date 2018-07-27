@@ -814,8 +814,12 @@ export default class user extends PureComponent {
   onSelectAll = (selected, selectedRows, changeRows) => {
     this.setState({
       selectedRows,
-      selectAll: true
     })
+    if (selected) {
+      this.setState({
+        selectAll: true
+      })
+    }
     console.log(selected, selectedRows, changeRows);
   }
   onLeftSelect = (record, selected, selectedRows) => {
