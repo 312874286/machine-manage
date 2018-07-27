@@ -234,7 +234,7 @@ const SelectMachineForm = Form.create()(
       >
         <Form onSubmit={this.handleSearch}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={8} sm={24}>
+            <Col md={10} sm={24}>
               <FormItem>
                 {getFieldDecorator('provinceCityAreaTrade')(
                   <Cascader
@@ -246,14 +246,12 @@ const SelectMachineForm = Form.create()(
                 )}
               </FormItem>
             </Col>
-            <Col md={7} sm={24}>
-            <span>
-               <FormItem>
-                 <Button onClick={() => findSourceData()}>
-                 搜索
-                 </Button>
-               </FormItem>
-            </span>
+            <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+             <FormItem>
+               <Button onClick={() => findSourceData()}>
+               搜索
+               </Button>
+             </FormItem>
             </Col>
           </Row>
           {/*<FormItem>*/}
@@ -271,7 +269,7 @@ const SelectMachineForm = Form.create()(
                 {/*/>*/}
             {/*)}*/}
           {/*</FormItem>*/}
-          <FormItem {...formItemLayout} label="选择机器">
+          <FormItem {...formItemLayout}>
             {getFieldDecorator('machine')(
               <div style={{ display: 'flex' }}>
                 {/*<Transfer*/}
@@ -848,6 +846,7 @@ export default class user extends PureComponent {
           maxCount: 1,
         });
         message.error('请选择一个地区')
+        return;
       }
       this.props.dispatch({
         type: 'user/selectMachine',
