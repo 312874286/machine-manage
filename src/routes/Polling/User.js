@@ -870,7 +870,11 @@ export default class user extends PureComponent {
       // sourceData: data,
       editMachineModalVisible: true,
     });
-    this.getAreaList();
+    this.setState({
+      code: ''
+    }, () => {
+      this.getAreaList();
+    })
     // this.setState({
     //   code: '',
     //   checkedKeys: [],
