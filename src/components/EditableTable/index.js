@@ -69,14 +69,14 @@ class EditableTable extends React.Component {
       },
       {
         title: '商品名称',
-        dataIndex: 'goodName',
-        width: '10%',
+        dataIndex: 'goodsName',
+        width: '15%',
         editable: false,
       },
       {
         title: '价格',
         dataIndex: 'goodsPrice',
-        width: '7%',
+        width: '10%',
         editable: false,
       },
       {
@@ -91,22 +91,22 @@ class EditableTable extends React.Component {
         width: '12%',
         editable: false,
       },
-      {
-        title: '货道故障',
-        dataIndex: 'workStatus',
-        width: '12%',
-        editable: false,
-      },
-      {
-        title: '故障原因',
-        dataIndex: 'reason',
-        width: '12%',
-        editable: false,
-      },
+      // {
+      //   title: '货道故障',
+      //   dataIndex: 'workStatus',
+      //   width: '12%',
+      //   editable: false,
+      // },
+      // {
+      //   title: '故障原因',
+      //   dataIndex: 'reason',
+      //   width: '12%',
+      //   editable: false,
+      // },
       {
         title: '货道状态',
         dataIndex: 'isDelete',
-        width: '12%',
+        width: '15%',
         editable: false,
         render(val) {
           if (val === 0) {
@@ -119,7 +119,7 @@ class EditableTable extends React.Component {
       {
         title: '操作',
         dataIndex: 'operation',
-        width: '10%',
+        width: '12%',
         render: (text, record) => {
           const editable = this.isEditing(record);
           return (

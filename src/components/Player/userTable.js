@@ -24,10 +24,10 @@ export default class userTable extends PureComponent {
         title: '用户昵称',
         dataIndex: 'userNick',
       },
-      {
-        title: '手机号',
-        dataIndex: 'phone',
-      },
+      // {
+      //   title: '手机号',
+      //   dataIndex: 'phone',
+      // },
       {
         title: '渠道名称',
         dataIndex: 'channelName',

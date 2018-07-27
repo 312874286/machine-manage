@@ -321,7 +321,7 @@ class ScheduleTable extends PureComponent {
                         <Icon type="form" onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} />
                         <Icon type="eye" onClick={() => onWatchClick(item)} />
                         <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No">
-                          <Icon type="close" className={styles.anticonDelete} style={{ display: moment(item.startTime) >= new Date().getTime() ? '' : 'none' }}/>
+                          <Icon type="close" className={styles.anticonDelete} style={{ display: moment(item.endTime) >= new Date().getTime() ? 'none' : '' }}/>
                         </Popconfirm>
                       </div>
                      }

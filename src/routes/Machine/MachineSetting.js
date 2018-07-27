@@ -1185,7 +1185,7 @@ export default class machineSettingList extends PureComponent {
           <span>正常</span>
         ) : (
           <Popover placement="left" content={item.goodsStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>有</div>
+            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
         textAlign: 'center',

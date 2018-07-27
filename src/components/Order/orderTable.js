@@ -68,22 +68,22 @@ export default class orderTable extends PureComponent {
           return nameList.join('、');
         },
       },
-      {
-        title: '掉货数量',
-        // dataIndex: 'orderGoodsList',
-        render: (value, item) => {
-          if(!value) return 0;
-          return value.length;
-        }
-      },
+      // {
+      //   title: '掉货数量',
+      //   // dataIndex: 'orderGoodsList',
+      //   render: (value, item) => {
+      //     if(!value) return 0;
+      //     return value.length;
+      //   }
+      // },
       {
         title: '下单时间',
         dataIndex: 'orderTime',
       },
-      {
-        title: '订单金额',
-        dataIndex: 'orderPrice',
-      },
+      // {
+      //   title: '订单金额',
+      //   dataIndex: 'orderPrice',
+      // },
       {
         title: '订单类型',
         dataIndex: 'orderType',
