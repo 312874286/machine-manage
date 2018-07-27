@@ -265,10 +265,6 @@ export default class Staff extends PureComponent {
         dataIndex: 'mobile',
         key: 'mobile',
       }, {
-        title: '邮箱',
-        dataIndex: 'orgEmail',
-        key: 'orgEmail',
-      }, {
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',

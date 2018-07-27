@@ -305,6 +305,7 @@ export default class troubleBill extends PureComponent {
               }}
               onChange={this.startDatePickerChange} /> */}
               <RangePicker
+               allowClear={false}
                value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}
                onChange={this.startDatePickerChange}
               />
