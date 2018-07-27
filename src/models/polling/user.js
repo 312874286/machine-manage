@@ -74,6 +74,7 @@ export default {
             state: 0,
             disabledFlag: disabled,
             canUseNum: canUseNum,
+            disabled: disabled,
           };
           arr.push(a);
         }
