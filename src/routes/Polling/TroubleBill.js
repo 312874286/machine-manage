@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select } from 'antd';
+import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select,Upload, Icon } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TroubleBill.less';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -35,10 +36,13 @@ export default class troubleBill extends PureComponent {
       "remindStatus": 0,
       "remark": "",
     },
+    previewVisible: false,
+    previewImage: '',
+    fileList: [],
   };
   constructor(props) {
     super(props);
-    console.log(1111,moment().subtract(30,'days').format('YYYY-MM-DD'));
+    // console.log(1111,moment().subtract(30,'days').format('YYYY-MM-DD'));
     this.state.startDateString = moment().subtract(30,'days').format('YYYY-MM-DD');
     this.state.endDateString = moment().format('YYYY-MM-DD');
   }
@@ -86,6 +90,20 @@ export default class troubleBill extends PureComponent {
       // console.log(data.functions);
       this.setState({
         seeData: data,
+      }, () => {
+        // console.log(11111,this.state.seeData);
+        var newImgList = [];
+        for(var i = 0 ; i < this.state.seeData.imgList.length ; i++){
+          newImgList.push({
+            uid: i,
+            name: this.state.seeData.imgList[i],
+            status: 'done',
+            url: this.state.seeData.imgList[i],
+          });
+        }
+        this.setState({
+          fileList: newImgList,
+        });
       });
       console.log(data);
       this.setState({
@@ -112,8 +130,24 @@ export default class troubleBill extends PureComponent {
     }).then((res) => {
       const { code, data, msg } = res;
       // console.log(data.functions);
+      
+
       this.setState({
         seeData: data,
+      }, () => {
+        // console.log(11111,this.state.seeData);
+        var newImgList = [];
+        for(var i = 0 ; i < this.state.seeData.imgList.length ; i++){
+          newImgList.push({
+            uid: i,
+            name: this.state.seeData.imgList[i],
+            status: 'done',
+            url: this.state.seeData.imgList[i],
+          });
+        }
+        this.setState({
+          fileList: newImgList,
+        });
       });
       console.log(data);
       this.setState({
@@ -221,9 +255,19 @@ export default class troubleBill extends PureComponent {
     });
     console.log('handleReset::');
   }
+  handleCancel = () => this.setState({ previewVisible: false })
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  handleChange = ({ fileList }) => this.setState({ fileList })
   render() {
-    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, fileList } = this.state;
     const { troubleBill: { list, page } } = this.props;
+
     var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
     const columns = [{
@@ -408,14 +452,25 @@ export default class troubleBill extends PureComponent {
               图片
             </Col>
             <Col md={15} sm={24}>
-              <List
+              {/* <List
                 dataSource={seeData.imgList}
                 renderItem={item => (
                   <List.Item
                     extra={<img width={272} src={item} />}
                   ></List.Item>
                 )}
-              />
+              /> */}
+              <Upload
+                // action="//jsonplaceholder.typicode.com/posts/"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              > 
+              </Upload>
+              <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+              </Modal>
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -507,14 +562,27 @@ export default class troubleBill extends PureComponent {
               图片
             </Col>
             <Col md={15} sm={24}>
-              <List
+              {/* <List
                 dataSource={seeData.imgList}
                 renderItem={item => (
                   <List.Item
                     extra={<img width={272} src={item} />}
                   ></List.Item>
                 )}
-              />
+              /> */}
+
+              <Upload
+                // action="//jsonplaceholder.typicode.com/posts/"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              > 
+              </Upload>
+              <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+              </Modal>
+              
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
