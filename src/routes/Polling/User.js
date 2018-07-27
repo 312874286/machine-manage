@@ -194,6 +194,7 @@ const SelectMachineForm = Form.create()(
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '操作',
+      width: 70,
       dataIndex: 'operation',
       render: (text, record) => {
         return (
@@ -288,7 +289,7 @@ const SelectMachineForm = Form.create()(
                 <div>
                   <Table rowKey={record => record.machineCode} rowSelection={rowSelection}  columns={columns} dataSource={sourceData}  id="leftTable" style={{ width: '460px', marginRight: '20px', marginBottom: '20px' }}  scroll={{ y: 200 }}  pagination={false}/>
                   <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
-                    add
+                    添加
                   </Button>
                 </div>
                 <Table rowKey={record => record.machineCode} columns={columnsRight} dataSource={targetData} id="rightTable" style={{ width: '460px'}} scroll={{ y: 200 }} pagination={false}/>
@@ -745,6 +746,9 @@ export default class user extends PureComponent {
     for (let a of selectedRows) {
       await this.handleDelete(a.machineCode)
     }
+    this.setState({
+      selectAll: false
+    })
   }
   unique = (arr) => {
     let targetData = []
