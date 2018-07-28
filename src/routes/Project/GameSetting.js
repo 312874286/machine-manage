@@ -81,7 +81,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, gameSetting, log }) => ({
   common,
   gameSetting,
-  loading: loading.models.rule,
+  loading: loading.models.gameSetting,
   log,
 }))
 @Form.create()

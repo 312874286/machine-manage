@@ -139,7 +139,7 @@ const CreateForm = Form.create()(
 @connect(({ common, loading, goodsSetting, log }) => ({
   common,
   goodsSetting,
-  loading: loading.models.rule,
+  loading: loading.models.goodsSetting,
   log,
 }))
 @Form.create()
@@ -160,10 +160,11 @@ export default class goodsSettingList extends PureComponent {
     logModalPageNo: 1,
     modalType: true,
     merchantLists: [],
+    shopsLists: [],
+
     previewVisible: false,
     previewImage: '',
     fileList: [],
-    shopsLists: [],
   };
   componentDidMount() {
     this.getLists();
@@ -588,9 +589,20 @@ export default class goodsSettingList extends PureComponent {
       </Form>
     );
   }
+  handleCancel = () => this.setState({ previewVisible: false })
+  handlePreview = (file) => {
+    console.log('file', file)
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  handleChange = ({ fileList }) => this.setState({ fileList })
   render() {
     const { goodsSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = this.state;
+    const { previewVisible, previewImage, fileList } = this.state
     const columns = [
       {
         title: '商品编码',
@@ -612,17 +624,41 @@ export default class goodsSettingList extends PureComponent {
         width: 150,
         dataIndex: 'shopId',
       },
+      // {
+      //   title: '图片缩略图',
+      //   width: 150,
+      //   dataIndex: 'img',
+      //   render(val) {
+      //     return (
+      //       <a target="_blank" href={val}>
+      //         <img src={val}  style={{ width: '80px' }} />
+      //       </a>
+      //     );
+      //   },
+      // },
       {
         title: '图片缩略图',
         width: 150,
         dataIndex: 'img',
-        render(val) {
-          return (
-            <a target="_blank" href={val}>
-              <img src={val}  style={{ width: '80px' }} />
-            </a>
-          );
-        },
+        render: (text, item) => (
+          <div style={{ height: '104px' }} id="look">
+            <Upload
+              // action="//jsonplaceholder.typicode.com/posts/"
+              listType="picture-card"
+              fileList={[{
+                uid: item.code,
+                name: item.name,
+                status: 'done',
+                url: item.img}]}
+              onPreview={this.handlePreview}
+              onChange={this.handleChange}
+            >
+            </Upload>
+            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </div>
+        )
       },
       {
         title: '商品价格',

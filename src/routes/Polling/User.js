@@ -144,11 +144,8 @@ const WatchMachine = Form.create()(
   });
 const SelectMachineForm = Form.create()(
   (props) => {
-    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading,
-      renderTreeNodes, treeData, onLoadData, onExpand, expandedKeys, autoExpandParent, checkedKeys, selectedKeys, onCheck, onSelect,
-      mockData, targetKeys, TransferhandleChange, insertOptions,
-      loadData, addData, targetData, onChangeRowSelection, onSelectAll, sourceData, handleSave, handleDelete, selectAll, onLeftSelect,
-      targetHandleSave, targetHandleDelete, findSourceData
+    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
+      loadData, addData, targetData, onChangeRowSelection, onSelectAll, sourceData, handleSave, selectAll, onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -230,8 +227,7 @@ const SelectMachineForm = Form.create()(
         onOk={onEditMachineHandleAddClick}
         onCancel={() => onEditMachineHandleModalVisibleClick()}
         confirmLoading={editMachineEditModalConfirmLoading}
-        width={1000}
-      >
+        width={1000}>
         <Form onSubmit={this.handleSearch}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={10} sm={24}>
@@ -254,36 +250,9 @@ const SelectMachineForm = Form.create()(
              </FormItem>
             </Col>
           </Row>
-          {/*<FormItem>*/}
-            {/*<Button onClick={() => findSourceData()}>*/}
-              {/*搜索*/}
-            {/*</Button>*/}
-          {/*</FormItem>*/}
-          {/*<FormItem label="省市区商圈">*/}
-            {/*{getFieldDecorator('provinceCityAreaTrade')(*/}
-                {/*<Cascader*/}
-                  {/*placeholder="请选择"*/}
-                  {/*options={insertOptions}*/}
-                  {/*loadData={loadData}*/}
-                  {/*changeOnSelect*/}
-                {/*/>*/}
-            {/*)}*/}
-          {/*</FormItem>*/}
           <FormItem {...formItemLayout}>
             {getFieldDecorator('machine')(
               <div style={{ display: 'flex' }}>
-                {/*<Transfer*/}
-                  {/*dataSource={mockData}*/}
-                  {/*showSearch*/}
-                  {/*listStyle={{*/}
-                    {/*width: 400,*/}
-                    {/*height: 300,*/}
-                  {/*}}*/}
-                  {/*operations={['to right', 'to left']}*/}
-                  {/*// targetKeys={targetKeys}*/}
-                  {/*onChange={TransferhandleChange}*/}
-                  {/*render={item => `${item.title}-${item.description}`}*/}
-                {/*/>*/}
                 <div>
                   <Table rowKey={record => record.machineCode} rowSelection={rowSelection}  columns={columns} dataSource={sourceData}  id="leftTable" style={{ width: '460px', marginRight: '20px', marginBottom: '20px' }}  scroll={{ y: 200 }}  pagination={false}/>
                   <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
@@ -307,7 +276,6 @@ const SelectMachineForm = Form.create()(
 export default class user extends PureComponent {
   state = {
     modalVisible: false,
-    selectedRows: [],
     formValues: {},
     editModalConfirmLoading: false,
     pageNo: 1,
@@ -320,18 +288,17 @@ export default class user extends PureComponent {
     machineList: [],
 
     machines: [],
-    treeData: [],
+
     machineNum: 0,
     selectCity: [],
     selectCityName: [],
-    expandedKeys: [],
-    autoExpandParent: true,
-    checkedKeys: [],
-    selectedKeys: [],
-    editMachineEditModalConfirmLoading: false,
 
-    mockData: [],
-    targetKeys: [],
+    // treeData: [],
+    // expandedKeys: [],
+    // autoExpandParent: true,
+    // checkedKeys: [],
+    // selectedKeys: [],
+    editMachineEditModalConfirmLoading: false,
 
     insertOptions: [],
     targetData: [],
@@ -340,23 +307,10 @@ export default class user extends PureComponent {
     targetKey: [],
     selectAll: false,
     selectedRows: [],
-    code: '',
+    // code: '',
     repeat: [],
-    level: 1,
+    // level: 1,
   };
-// <Tree
-// loadData={onLoadData}
-// checkable
-// onExpand={onExpand}
-// expandedKeys={expandedKeys}
-// autoExpandParent={autoExpandParent}
-// onCheck={onCheck}
-// checkedKeys={checkedKeys}
-// onSelect={onSelect}
-// selectedKeys={selectedKeys}
-// >
-// {renderTreeNodes(treeData)}
-// </Tree>
   componentDidMount() {
     this.getLists();
   }
@@ -373,21 +327,21 @@ export default class user extends PureComponent {
     });
   }
   // 获取城市列表
-  getAreaList = () => {
-    this.props.dispatch({
-      type: 'user/selectMachine',
-      payload: {
-        params: {
-          code: this.state.code,
-          level: this.state.level
-        },
-      },
-    }).then( (res) => {
-      this.setState({
-        insertOptions: res,
-      });
-    });
-  }
+  // getAreaList = () => {
+  //   this.props.dispatch({
+  //     type: 'user/selectMachine',
+  //     payload: {
+  //       params: {
+  //         code: this.state.code,
+  //         level: this.state.level
+  //       },
+  //     },
+  //   }).then( (res) => {
+  //     this.setState({
+  //       insertOptions: res,
+  //     });
+  //   });
+  // }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { formValues } = this.state;
@@ -671,7 +625,7 @@ export default class user extends PureComponent {
         selectCityName,
         machines: this.state.targetData,
       }, () => {
-        console.log(this.state.machines)
+        // console.log(this.state.machines)
         this.setState({
           editMachineModalVisible: false,
         });
@@ -716,32 +670,44 @@ export default class user extends PureComponent {
     });
   }
   // 回显省市区商圈数据源开始
-  loadData = (selectedOptions) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-    this.setState({
-      code: targetOption.value,
-    }, () => {
-      this.props.dispatch({
-        type: 'user/selectMachine',
-        payload: {
-          params: {
-            code: targetOption.value,
-            level: targetOption.level + 1,
-          },
-        },
-      }).then((res) => {
+  getAreaList = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    let params = { code: code }
+    if (selectedOptions) {
+      if (selectedOptions.level) {
+        params = { ...params, level: 1 }
+      } else if (selectedOptions.code) {
+        params = { code: selectedOptions.code }
+      } else {
+        targetOption = selectedOptions[selectedOptions.length - 1];
+        code = targetOption.value;
+        targetOption.loading = true;
+        params = { code: code, level: targetOption.level + 1}
+      }
+    }
+    this.props.dispatch({
+      type: 'user/selectMachine',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (selectedOptions.level) {
+        this.setState({
+          insertOptions: res,
+        });
+      } else if (selectedOptions.code) {
+        this.setState({
+          sourceData: res,
+        });
+      } else {
         targetOption.loading = false;
         targetOption.children = res
         this.setState({
           insertOptions: [...this.state.insertOptions],
         });
-      });
+      }
     });
-  }
-  TransferhandleChange = (targetKeys) => {
-    console.log('targetKeys', targetKeys)
-    this.setState({ targetKeys });
   }
   addData = async () => {
     const selectedRows = this.state.selectedRows
@@ -842,7 +808,7 @@ export default class user extends PureComponent {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
         }
       }
-      console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
+      // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
       if (!localCode) {
         message.config({
           top: 100,
@@ -852,68 +818,18 @@ export default class user extends PureComponent {
         message.error('请选择一个地区')
         return;
       }
-      this.props.dispatch({
-        type: 'user/selectMachine',
-        payload: {
-          params: {
-            code: localCode,
-          },
-        },
-      }).then((res) => {
-        console.log('res', res)
-        this.setState({
-          editMachineModalVisible: true,
-        });
-        this.setState({
-          sourceData: res,
-        }, () => {
-          this.setState({
-            editMachineModalVisible: true,
-          });
-        });
-      });
+      this.getAreaList({code: localCode})
     });
   }
   openSelectMachineModal = () => {
-    // console.log('openSelectMachineModal', this.state.checkedKeys, this.state.expandedKeys,
-    // this.state.autoExpandParent, this.state.selectedKeys)
     this.setState({
       editMachineModalVisible: true,
-      code: '',
-      level: 1,
     }, () => {
-      this.getAreaList();
+      this.getAreaList({level: 1});
     });
     this.selectMachineform.setFieldsValue({
       provinceCityAreaTrade: undefined
     })
-    // this.setState({
-    //   code: '',
-    //   checkedKeys: [],
-    //   expandedKeys: [],
-    //   autoExpandParent: true,
-    // }, () => {
-    //   this.props.dispatch({
-    //     type: 'user/selectMachine',
-    //     payload: {
-    //       restParams: {
-    //         code: this.state.code,
-    //         level: 1,
-    //       },
-    //     },
-    //   }).then((res) => {
-    //     this.setState({
-    //       editMachineModalVisible: true,
-    //     });
-    //     this.setState({
-    //       treeData: res,
-    //     }, () => {
-    //       this.setState({
-    //         editMachineModalVisible: true,
-    //       });
-    //     });
-    //   });
-    // });
   }
   onEditMachineHandleModalVisibleClick = () => {
     this.setState({
@@ -996,13 +912,6 @@ export default class user extends PureComponent {
         ),
       },
     ];
-    // this.state.options = this.props.common.list
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
-      </Menu>
-    );
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -1056,29 +965,31 @@ export default class user extends PureComponent {
           onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
           onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
           editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
-          renderTreeNodes={this.renderTreeNodes}
-          treeData={this.state.treeData}
-          onLoadData={this.onLoadData}
-          expandedKeys={this.state.expandedKeys}
-          autoExpandParent={this.state.autoExpandParent}
-          checkedKeys={this.state.checkedKeys}
-          selectedKeys={this.state.selectedKeys}
-          onExpand={this.onExpand}
-          onCheck={this.onCheck}
-          onSelect={this.onSelect}
 
-          mockData={this.state.mockData}
-          targetKeys={this.state.targetKeys}
-          TransferhandleChange={this.TransferhandleChange}
+          // renderTreeNodes={this.renderTreeNodes}
+          // treeData={this.state.treeData}
+          // onLoadData={this.onLoadData}
+          // expandedKeys={this.state.expandedKeys}
+          // autoExpandParent={this.state.autoExpandParent}
+          // checkedKeys={this.state.checkedKeys}
+          // selectedKeys={this.state.selectedKeys}
+          // onExpand={this.onExpand}
+          // onCheck={this.onCheck}
+          // onSelect={this.onSelect}
+          //
+          // mockData={this.state.mockData}
+          // targetKeys={this.state.targetKeys}
+          // TransferhandleChange={this.TransferhandleChange}
+
           insertOptions={this.state.insertOptions}
-          loadData={this.loadData}
+          loadData={this.getAreaList}
           addData={this.addData}
           targetData={this.state.targetData}
           onChangeRowSelection={this.onChangeRowSelection}
           onSelectAll={this.onSelectAll}
           sourceData={this.state.sourceData}
           handleSave={this.handleSave}
-          handleDelete={this.handleDelete}
+          // handleDelete={this.handleDelete}
           selectAll={this.state.selectAll}
           targetHandleSave={this.targetHandleSave}
           targetHandleDelete={this.targetHandleDelete}
