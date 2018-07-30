@@ -183,7 +183,7 @@ class MachineAisleTable extends React.Component {
                     </Popconfirm>
                   </div>
               ) : (
-                <div style={{background: '#ffe8e4', padding: 0}}>
+                <div style={{background: '#ffe8e4'}}>
                      <EditableContext.Consumer>
                       {form => (
                         <a
@@ -197,7 +197,7 @@ class MachineAisleTable extends React.Component {
                       )}
                     </EditableContext.Consumer>
                     <Popconfirm title="是否确认启用?" onConfirm={() => this.startAisle(record.key)}>
-                      <a className={styles.stop}>启用</a>
+                      <a className={styles.start}>启用</a>
                     </Popconfirm>
                   </div>
               )}
@@ -361,8 +361,8 @@ class MachineAisleTable extends React.Component {
     return (
       <div id="editTable">
         <div>
-          <span>弹簧货道： 货道1~8 11~18 21~28 皮带货道： 31~38 41~47</span>
-          <span>启动状态 停用状态</span>
+          <div>弹簧货道： 货道1~8 11~18 21~28 皮带货道： 31~38 41~47</div>
+          <div><i className={styles.startStatus}></i>启动状态 <i className={styles.stopStatus}></i>停用状态</div>
         </div>
         { selectedRowKeys ? ( selectedRowKeys.length > 0 ? (
           <div className={styles.BtnDiv}>
