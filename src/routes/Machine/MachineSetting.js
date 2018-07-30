@@ -28,11 +28,11 @@ import {
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import EditableTable from '../../components/EditableTable';
+import MachineAisleTable from '../../components/MachineAisleTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './MachineSetting.less';
 import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
-import {area} from "../../common/config/area";
 import debounce from 'lodash/debounce'
 
 
@@ -278,21 +278,29 @@ const ManageAisleForm = Form.create()(
     return (
       <Modal
         title="管理货道"
-        width={1100}
+        width={1250}
         visible={ManageAislemodalVisible}
         onOk={ManageAisleHandleAddClick}
         onCancel={() => ManageAisleHandleModalVisibleClick()}
         confirmLoading={ManageAisleEditModalConfirmLoading}
         footer={null}
       >
-        <EditableTable
+        {/*<EditableTable*/}
+          {/*handleClose={handleClose}*/}
+          {/*AisleList={AisleList}*/}
+          {/*handleStop={handleStop}*/}
+          {/*handleStart={handleStart}*/}
+          {/*message={message}*/}
+          {/*updateGoodsCount={updateGoodsCount}*/}
+        {/*/>*/}
+        <MachineAisleTable
           handleClose={handleClose}
           AisleList={AisleList}
           handleStop={handleStop}
           handleStart={handleStart}
           message={message}
           updateGoodsCount={updateGoodsCount}
-        />
+          />
       </Modal>
     );
   });
@@ -955,7 +963,6 @@ export default class machineSettingList extends PureComponent {
       modalData: item,
       editPointmodalVisible: false,
       ManageAppmodalVisible: false,
-      ManageAislemodalVisible: true,
     }, () => {
       this.getAisleList();
     });
@@ -969,13 +976,63 @@ export default class machineSettingList extends PureComponent {
         },
       },
     }).then((result) => {
-      let AisleList = []
-      result.forEach((item) => {
-        let r = { key: item.id, code: item.code, goodsName: item.goodsName, goodsPrice: item.goodsPrice, volumeCount: item.volumeCount, goodsCount: item.goodsCount, workStatusreason: item.workStatusreason, isDelete: item.isDelete}
-        AisleList.push(r);
-      })
+      if (result.length === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.error('该货道为空，暂时不能操作')
+        return;
+      }
       this.setState({
-        AisleList,
+        ManageAislemodalVisible: true,
+      }, () => {
+        let AisleList = []
+        for (let i = 0; i < 48; i++) {
+          let r = {}
+          // console.log('i', i)
+          for (let j = 0; j < result.length; j++) {
+            // console.log('parseInt(result[j].code) === i',parseInt(result[j].code), i, j)
+            if (parseInt(result[j].code) === (i+1)) {
+              let item = result[j]
+              r = {
+                value: parseInt(item.code),
+                key: item.id,
+                code: item.code,
+                goodsName: item.goodsName,
+                goodsPrice: item.goodsPrice,
+                volumeCount: item.volumeCount,
+                goodsCount: item.goodsCount,
+                workStatusreason: item.workStatusreason,
+                isDelete: item.isDelete
+              }
+              AisleList.push(r);
+              break;
+            }
+          }
+          if (!AisleList[i]) {
+            r = {
+              value: i + 1,
+              key: i + 1,
+            }
+            AisleList.push(r);
+          }
+        }
+        let tr1 = AisleList.filter(item => item.value <= 8)
+        let tr2 = AisleList.filter(item => item.value <= 18 && item.value >= 11)
+        let tr3 = AisleList.filter(item => item.value <= 28 && item.value >= 21)
+        let tr4 = AisleList.filter(item => item.value <= 38 && item.value >= 31)
+        let tr5 = AisleList.filter(item => item.value <= 41 && item.value >= 48)
+        AisleList = [...tr1, ...tr2, ...tr3, ...tr4, ...tr5]
+        // console.log('AisleList.push(r);', AisleList)
+        // result.forEach((item) => {
+        //   let r = { key: item.id, code: item.code, goodsName: item.goodsName, goodsPrice: item.goodsPrice, volumeCount: item.volumeCount, goodsCount: item.goodsCount, workStatusreason: item.workStatusreason, isDelete: item.isDelete}
+        //   AisleList.push(r);
+        // })
+        this.setState({
+          AisleList,
+        });
       });
     });
   }
