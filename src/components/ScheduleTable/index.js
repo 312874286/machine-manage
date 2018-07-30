@@ -237,6 +237,7 @@ class ScheduleTable extends PureComponent {
           getDataStartDay: startDay.split('--')[0],
           getDataEndDay: endDay.split('--')[0],
         });
+        document.getElementById('dateWeek').scrollLeft = 0;
       });
     });
   }
@@ -262,6 +263,7 @@ class ScheduleTable extends PureComponent {
           getDataStartDay: startDay.split('--')[0],
           getDataEndDay: endDay.split('--')[0],
         });
+        document.getElementById('dateWeek').scrollLeft = 480;
       });
     });
   }
