@@ -431,6 +431,21 @@ export default class user extends PureComponent {
         targetData: data.machines,
         sourceData: [],
       })
+      if (data.machines.length >0) {
+        let arr = data.machines
+        let selectCityName = []
+        for (var i = 0; i < arr.length; i++) {
+          var item = arr[i]
+          if (!(item['province'] in selectCityName)) {
+            selectCityName[item['province']] = item.province;
+          }
+        }
+        selectCityName = Object.values(selectCityName)
+        this.setState({
+          machineNum: data.machines.length,
+          selectCityName,
+        });
+      }
       this.form.setFieldsValue({
         name: data.name || undefined,
         phone: data.phone || undefined,
