@@ -51,8 +51,7 @@ const CreateForm = Form.create()(
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
-        confirmLoading={editModalConfirmLoading}
-      >
+        confirmLoading={editModalConfirmLoading}>
         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="姓名">
             {getFieldDecorator('name', {
@@ -899,7 +898,6 @@ export default class user extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
-        width: 200,
       },
       {
         fixed: 'right',
