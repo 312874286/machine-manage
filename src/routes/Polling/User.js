@@ -18,6 +18,7 @@ import {
   Cascader,
   Popconfirm,
   Icon,
+  Alert,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import styles from './User.less';
@@ -144,7 +145,7 @@ const WatchMachine = Form.create()(
 const SelectMachineForm = Form.create()(
   (props) => {
     const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
-      loadData, addData, targetData, onChangeRowSelection, onSelectAll, sourceData, handleSave, selectAll, onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
+      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll, onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -179,11 +180,11 @@ const SelectMachineForm = Form.create()(
     });
 
     const rowSelection = {
+      selectedRowKeys,
       onChange: onChangeRowSelection,
       onSelect: onLeftSelect,
       onSelectAll: onSelectAll,
     };
-
     this.columnsRight = [{
       title: '名称',
       dataIndex: 'machineCode',
@@ -253,12 +254,48 @@ const SelectMachineForm = Form.create()(
             {getFieldDecorator('machine')(
               <div style={{ display: 'flex' }}>
                 <div>
-                  <Table rowKey={record => record.machineCode} rowSelection={rowSelection}  columns={columns} dataSource={sourceData}  id="leftTable" style={{ width: '460px', marginRight: '20px', marginBottom: '20px' }}  scroll={{ y: 200 }}  pagination={false}/>
+                  <Alert
+                  message={(
+                  <div>
+                    已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
+                  </div>
+                  )}
+                  type="info"
+                  showIcon
+                  />
+                  <Table
+                    rowKey={record => record.machineCode}
+                    rowSelection={rowSelection}
+                    columns={columns}
+                    dataSource={sourceData}
+                    id="leftTable"
+                    style={{ width: '460px', marginBottom: '20px', marginTop: '10px' }}
+                    scroll={{ y: 200 }}
+                    pagination={false}
+                  />
                   <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
                     添加
                   </Button>
                 </div>
-                <Table rowKey={record => record.machineCode} columns={columnsRight} dataSource={targetData} id="rightTable" style={{ width: '460px'}} scroll={{ y: 200 }} pagination={false}/>
+                <div style={{ marginLeft: '20px' }}>
+                  <Alert
+                    message={(
+                      <div>
+                        已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                      </div>
+                    )}
+                    type="success"
+                    showIcon
+                  />
+                  <Table
+                    rowKey={record => record.machineCode}
+                    columns={columnsRight}
+                    dataSource={targetData}
+                    id="rightTable"
+                    style={{ width: '460px', marginTop: '10px' }}
+                    scroll={{ y: 200 }}
+                    pagination={false}/>
+                </div>
               </div>
             )}
           </FormItem>
@@ -309,6 +346,7 @@ export default class user extends PureComponent {
     // code: '',
     repeat: [],
     // level: 1,
+    selectedRowKeys: [],
   };
   componentDidMount() {
     this.getLists();
@@ -726,6 +764,8 @@ export default class user extends PureComponent {
   addData = async () => {
     const selectedRows = this.state.selectedRows
     for (let a of selectedRows) {
+      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
+      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
       await this.handleDelete(a.machineCode)
     }
     // console.log(this.state.repeat)
@@ -794,7 +834,8 @@ export default class user extends PureComponent {
   onChangeRowSelection = (selectedRowKeys, selectedRows) => {
     // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     this.setState({
-      sourceKey: selectedRowKeys
+      sourceKey: selectedRowKeys,
+      selectedRowKeys,
     })
   }
   onSelectAll = (selected, selectedRows, changeRows) => {
@@ -1000,6 +1041,7 @@ export default class user extends PureComponent {
           targetData={this.state.targetData}
           onChangeRowSelection={this.onChangeRowSelection}
           onSelectAll={this.onSelectAll}
+          selectedRowKeys={this.state.selectedRowKeys}
           sourceData={this.state.sourceData}
           handleSave={this.handleSave}
           // handleDelete={this.handleDelete}

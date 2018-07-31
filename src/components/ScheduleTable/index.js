@@ -263,7 +263,7 @@ class ScheduleTable extends PureComponent {
           getDataStartDay: startDay.split('--')[0],
           getDataEndDay: endDay.split('--')[0],
         });
-        document.getElementById('dateWeek').scrollLeft = 480;
+        document.getElementById('dateWeek').scrollLeft += 500;
       });
     });
   }
@@ -297,12 +297,25 @@ class ScheduleTable extends PureComponent {
     const { dateList, onEditClick, onWatchClick, onDeleteClick } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
-      <Card title="活动排期一览表" style={{ overflowX: 'scroll'}} id="scheduleBox">
+      <Card title={
+        <div className={styles.titleBox}>
+          <div>
+            活动排期一览表
+          </div>
+          <div className={styles.iBox}>
+            <i className={styles.endStatus}></i>活动已结束
+            <i className={styles.ingStatus}></i>活动进行中
+            <i className={styles.preStatus}></i>活动未开始
+          </div>
+        </div>
+      } style={{ overflowX: 'scroll'}} id="scheduleBox">
+
         <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }} className={styles.cardDiv}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px' }} id="dateWeek" className={styles.dateWeek}>
+          <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: '500px', height: 50 * dateList.length + 'px' }}
+               id="dateWeek" className={styles.dateWeek}>
             {dateTwoWeeksArr.map((item) => {
               return (
                 <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>

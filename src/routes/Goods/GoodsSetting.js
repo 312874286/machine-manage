@@ -66,10 +66,10 @@ const CreateForm = Form.create()(
         confirmLoading={editModalConfirmLoading}
       >
         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="商品编码">
+          <FormItem {...formItemLayout} label="淘宝商品ID">
             {getFieldDecorator('code', {
-              rules: [{ required: true, whitespace: true, message: '请输入商品编码' }],
-            })(modalType ? (<Input placeholder="请输入商品编码" disabled />) : (<Input placeholder="请输入商品编码" />))}
+              rules: [{ required: true, whitespace: true, message: '请输入淘宝商品ID' }],
+            })(modalType ? (<Input placeholder="请输入商品编码" disabled />) : (<Input placeholder="请输入淘宝商品ID" />))}
           </FormItem>
           <FormItem {...formItemLayout} label="商品名称">
             {getFieldDecorator('name', {
@@ -78,7 +78,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="图片缩略图">
             {getFieldDecorator('img', {
-              rules: [{ required: true, message: '请传照片' }],
+              rules: [{ required: false, message: '请传照片' }],
               valuePropName: 'filelist',
             })(
               <div className="clearfix">
@@ -100,7 +100,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="商品价格">
             {getFieldDecorator('price', {
-              rules: [{ required: true, message: '请输入商品价格' }],
+              rules: [{ required: false, message: '请输入商品价格' }],
             })(<InputNumber placeholder="请输入商品价格" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
@@ -461,7 +461,6 @@ export default class goodsSettingList extends PureComponent {
       }
       let params = {
         ...fieldsValue,
-        img: this.state.fileList[0].data,
       };
       this.setState({
         editModalConfirmLoading: true,
@@ -473,6 +472,10 @@ export default class goodsSettingList extends PureComponent {
         url = 'goodsSetting/editGoodsSetting';
         messageTxt = '编辑'
         params = { ...params, id: this.state.modalData.id };
+      }
+      console.log('this.state.fileList', this.state.fileList)
+      if (this.state.fileList.length > 0) {
+        params = { ...params, img: this.state.fileList[0].data };
       }
       this.props.dispatch({
         type: url,
@@ -593,7 +596,7 @@ export default class goodsSettingList extends PureComponent {
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = this.state;
     const columns = [
       {
-        title: '商品编码',
+        title: '淘宝商品ID',
         width: 150,
         dataIndex: 'code',
       },
