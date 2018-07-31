@@ -21,38 +21,47 @@ export default class orderTable extends PureComponent {
       {
         title: '订单号',
         dataIndex: 'orderNum',
+        width: 200,
       },
       {
         title: '用户Id',
         dataIndex: 'userId',
+        width: 300,
       },
       {
         title: '用户姓名',
         dataIndex: 'nickName',
+        width: 100,
       },
       {
         title: '店铺',
         dataIndex: 'shopsName',
+        width: 100,
       },
       {
         title: '机器点位',
         dataIndex: 'merPointAddress',
+        width: 200,
       },
       {
         title: '机器编号',
         dataIndex: 'machineCode',
+        width: 100,
       },
       {
         title: '活动名称',
         dataIndex: 'activityName',
+        width: 100,
       },
       {
         title: '游戏名称',
         dataIndex: 'gameName',
+        width: 100,
       },
       {
         title: '是否掉货',
         dataIndex: 'goodsStatus',
+        width: 100,
         render: (value) => {
           return value === 1 ? '已出货' : '未出货';
         },
@@ -60,6 +69,7 @@ export default class orderTable extends PureComponent {
       {
         title: '商品名称',
         dataIndex: 'orderGoodsList',
+        width: 200,
         render: (value) => {
           if (!value) return '';
           const nameList = value.map((item) => {
@@ -79,6 +89,7 @@ export default class orderTable extends PureComponent {
       {
         title: '下单时间',
         dataIndex: 'orderTime',
+        width: 200,
       },
       // {
       //   title: '订单金额',
@@ -87,10 +98,12 @@ export default class orderTable extends PureComponent {
       {
         title: '订单类型',
         dataIndex: 'orderType',
+        width: 100,
       },
       {
         title: '支付状态',
         dataIndex: 'payStatus',
+        width: 100,
         render: (value) => {
           if (value === '1') {
             return '支付成功';
@@ -102,6 +115,7 @@ export default class orderTable extends PureComponent {
       {
         title: '支付时间',
         dataIndex: 'payTime',
+        width: 200,
       },
       // {
       //   title: '操作',

@@ -7,5 +7,5 @@ export async function getRecordList({ restParams }) {
   });
 }
 export async function userExcel({ restParams }) {
-  window.location.href = `${api.userExcel}?keyword=${restParams.keyword}&code=${restParams.code}`;
+  window.location.href = `${api.userExcel}?keyword=${restParams.keyword}&code=${restParams.code}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
 }

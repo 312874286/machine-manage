@@ -423,12 +423,12 @@ export default class shopSettingList extends PureComponent {
       // },
       {
         title: '店铺编码',
-        // width: 150,
+        width: '30%',
         dataIndex: 'shopCode',
       },
       {
         title: '所属商户',
-        // width: 200,
+        width: '30%',
         dataIndex: 'sellerId',
       },
       {

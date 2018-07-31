@@ -369,14 +369,17 @@ export default class gameSettingList extends PureComponent {
       {
         title: '游戏名称',
         dataIndex: 'name',
+        width: '20%',
       },
       {
         title: '版本',
         dataIndex: 'version',
+        width: '20%',
       },
       {
         title: '点72版本',
         dataIndex: 'versionInno72',
+        width: '20%',
       },
       {
         title: '备注描述',

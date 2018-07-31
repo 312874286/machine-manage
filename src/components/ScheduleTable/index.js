@@ -55,6 +55,7 @@ class ScheduleTable extends PureComponent {
   state = {
     dateTwoWeeksArr: [],
     currentDay: -1,
+    currentDayAfter: -1,
     activityArr: [],
     leftCount: 0,
     rightCount: 0,
@@ -106,11 +107,11 @@ class ScheduleTable extends PureComponent {
     let dateTwoWeek = []
     if (sm === em) {
       for (let i = 0; i < 15; i++) {
-        if (this.state.currentDay === (sd + i)) {
-          this.setState({
-            currentDay: i,
-          });
-        }
+        // if (this.state.currentDay === (sd + i)) {
+        //   this.setState({
+        //     currentDay: i,
+        //   });
+        // }
         let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w };
         w = w + 1
         if (w === 7) {
@@ -153,11 +154,11 @@ class ScheduleTable extends PureComponent {
     let dateTwoWeek = []
     if (sm === em) {
       for (let i = 0; i < 7; i++) {
-        if (this.state.currentDay === (sd + i)) {
-          this.setState({
-            currentDay: i,
-          });
-        }
+        // if (this.state.currentDay === (sd + i)) {
+        //   this.setState({
+        //     currentDay: i,
+        //   });
+        // }
         let newd = {id: (sm + '.' + (sd + i)), value: sm + '.' + (sd + i) + '', week: w };
         w = w + 1
         if (w === 7) {
@@ -206,6 +207,7 @@ class ScheduleTable extends PureComponent {
         dateTwoWeeksArr,
         startDay: startDay.split('--')[0],
         endDay: endDay.split('--')[0],
+        currentDayAfter: parseInt(endDay.split('-')[1]) + '.' + parseInt(endDay.split('-')[2])
       }, () => {
         document.getElementById('dateWeek').scrollLeft = 600;
       });
@@ -292,8 +294,11 @@ class ScheduleTable extends PureComponent {
         break;
     }
   }
+  backToday = () => {
+    document.querySelector("#currentDayAfter").scrollIntoView(true);
+  }
   render() {
-    const { dateTwoWeeksArr, currentDay } = this.state;
+    const { dateTwoWeeksArr, currentDay, currentDayAfter } = this.state;
     const { dateList, onEditClick, onWatchClick, onDeleteClick } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
@@ -306,6 +311,9 @@ class ScheduleTable extends PureComponent {
             <i className={styles.endStatus}></i>活动已结束
             <i className={styles.ingStatus}></i>活动进行中
             <i className={styles.preStatus}></i>活动未开始
+            <Button icon="reload" type="primary" style={{ marginLeft: '10px' }} onClick={() => this.backToday(true)}>
+              返回今天
+            </Button>
           </div>
         </div>
       } style={{ overflowX: 'scroll'}} id="scheduleBox">
@@ -319,9 +327,11 @@ class ScheduleTable extends PureComponent {
             {dateTwoWeeksArr.map((item) => {
               return (
                 <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
-                  <p>{item.value}</p>
-                  <p>{this.filterWeek(item.week)}</p>
-                  <p className="pHeight"></p>
+                  <a id={currentDayAfter === item.value ? 'currentDayAfter' : (currentDay === item.value ? 'today': '')}>
+                    <p>{item.value}</p>
+                    <p>{this.filterWeek(item.week)}</p>
+                    <p className="pHeight"></p>
+                  </a>
                 </Card.Grid>
               );
             })}

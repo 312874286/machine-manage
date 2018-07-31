@@ -10,6 +10,7 @@ import {
   Button,
   Cascader,
   Table,
+  DatePicker,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import styles from './PunchingRecord.less';
@@ -22,6 +23,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
+const { RangePicker } = DatePicker;
 @connect(({ common, loading, signInRecord, log }) => ({
   common,
   signInRecord,
@@ -37,6 +39,8 @@ export default class signInRecord extends PureComponent {
     code: '',
     channelLists: [],
     options: [],
+    startTime: '',
+    endTime: '',
   };
   componentDidMount() {
     this.getAreaList();
@@ -51,6 +55,8 @@ export default class signInRecord extends PureComponent {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
           code: this.state.code,
+          startTime: this.state.startTime,
+          endTime: this.state.endTime,
         },
       },
     });
@@ -105,14 +111,24 @@ export default class signInRecord extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       let localCode = ''
+      let startTime = ''
+      let endTime = ''
       if (fieldsValue.provinceCityAreaTrade) {
         if (fieldsValue.provinceCityAreaTrade.length > 0) {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1];
         }
       }
+      console.log('fieldsValue.time', fieldsValue.time)
+      if (fieldsValue.time) {
+        startTime = fieldsValue.time[0].format('YYYY-MM-DD HH:mm')
+        endTime = fieldsValue.time[1].format('YYYY-MM-DD HH:mm')
+      }
+
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        startTime,
+        endTime,
         code: localCode,
       }, () => {
         this.getLists();
@@ -165,8 +181,16 @@ export default class signInRecord extends PureComponent {
         restParams: {
           keyword: this.state.keyword,
           code: this.state.code,
+          startTime: this.state.startTime,
+          endTime: this.state.endTime
         },
       },
+    })
+  }
+  onChange = (date, dateString) => {
+    this.setState({
+      startTime: dateString[0],
+      endTime: dateString[1],
     })
   }
   // 新增modal确认事件 结束
@@ -190,11 +214,24 @@ export default class signInRecord extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem>
               {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <span>
+               <FormItem>
+                  {getFieldDecorator('time')(<RangePicker onChange={this.onChange}/>)}
+               </FormItem>
+            </span>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          {/*<Col md={8} sm={24}>*/}
+          {/*</Col>*/}
+          {/*<Col md={9} sm={24}>*/}
+          {/*</Col>*/}
           <Col md={7} sm={24}>
             <span>
                <FormItem>

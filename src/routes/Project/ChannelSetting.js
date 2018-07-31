@@ -383,7 +383,7 @@ export default class channelSettingList extends PureComponent {
       // },
       {
         title: '渠道编码',
-        // width: 200,
+        width: '45%',
         dataIndex: 'channelCode',
       },
       // {
@@ -415,6 +415,7 @@ export default class channelSettingList extends PureComponent {
       // },
       {
         title: '渠道名称',
+        width: '45%',
         dataIndex: 'channelName',
       },
       {

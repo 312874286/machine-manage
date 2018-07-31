@@ -435,22 +435,22 @@ export default class merchantSettingList extends PureComponent {
       // },
       {
         title: '商户编码',
-        // width: 150,
+        width: '16%',
         dataIndex: 'merchantCode',
       },
       {
         title: '商户名称',
-        // width: 150,
+        width: '16%',
         dataIndex: 'merchantName',
       },
       {
         title: '所属渠道',
-        // width: 150,
+        width: '16%',
         dataIndex: 'channelId',
       },
       {
         title: '原始标示',
-        // width: 150,
+        width: '16%',
         dataIndex: 'brandName',
       },
       {

@@ -819,27 +819,27 @@ export default class activitySettingList extends PureComponent {
     const columns = [
       {
         title: '活动名称',
-        width: '150',
+        width: '15%',
         dataIndex: 'name',
       },
       {
         title: '活动编码',
-        width: '150',
+        width: '15%',
         dataIndex: 'code',
       },
       {
         title: '所属商户',
-        width: '150',
+        width: '12%',
         dataIndex: 'merchantName',
       },
       {
         title: '所属店铺',
-        width: '150',
+        width: '10%',
         dataIndex: 'shopName',
       },
       {
         title: '商品/优惠券',
-        width: '150',
+        width: '12%',
         dataIndex: 'prizeType',
         render(val) {
           return <span>{status[val]}</span>;
@@ -847,7 +847,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         title: '活动状态',
-        width: '150',
+        width: '10%',
         dataIndex: 'state',
       },
       {

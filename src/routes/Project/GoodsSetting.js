@@ -643,7 +643,7 @@ export default class goodsSettingList extends PureComponent {
         width: 150,
         dataIndex: 'img',
         render: (text, item) => (
-          <div style={{ height: '104px' }} id="look">
+          <div style={{ maxHeight: '104px' }} id="look">
             <Upload
               // action="//jsonplaceholder.typicode.com/posts/"
               listType="picture-card"
