@@ -1201,13 +1201,11 @@ export default class machineSettingList extends PureComponent {
         title: '机器编号',
         width: 150,
         dataIndex: 'machineCode',
-        textAlign: 'center',
       },
       {
         title: '机器点位',
         width: 250,
         dataIndex: 'localDesc',
-        textAlign: 'center',
       },
       {
         title: '系统状态',
@@ -1215,7 +1213,6 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
-        textAlign: 'center',
       },
       {
         title: '网络',
@@ -1228,13 +1225,11 @@ export default class machineSettingList extends PureComponent {
             return '网络异常';
           }
         },
-        textAlign: 'center',
       },
       {
         title: '当前活动',
         width: 150,
         dataIndex: 'activityName',
-        textAlign: 'center',
       },
       {
         title: '商品缺货状态',
@@ -1245,7 +1240,7 @@ export default class machineSettingList extends PureComponent {
             <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
-        textAlign: 'center',
+        width: 100,
       },
       {
         title: '货道故障',
@@ -1256,12 +1251,11 @@ export default class machineSettingList extends PureComponent {
             <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
-        textAlign: 'center',
+        width: 100,
       },
       {
         title: '机器状态',
         dataIndex: 'machineStatus',
-        textAlign: 'center',
         render(val) {
           if (val) {
             return <span>{machineStatus[val]}</span>
@@ -1274,7 +1268,6 @@ export default class machineSettingList extends PureComponent {
         fixed: 'right',
         title: '操作',
         width: 240,
-        textAlign: 'center',
         render: (text, item) => (
           (item.localDesc) ? (
             <Fragment>
@@ -1353,6 +1346,7 @@ export default class machineSettingList extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={1400}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)}
             />
           </div>
         </Card>

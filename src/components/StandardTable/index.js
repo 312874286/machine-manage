@@ -41,7 +41,7 @@ class StandardTable extends PureComponent {
   }
   render() {
     const { selectedRowKeys, totalCallNo } = this.state;
-    const { data, page, loading, scrollX, columns } = this.props;
+    const { data, page, loading, scrollX, columns, scrollY } = this.props;
     const status = ['关闭', '运行中', '已上线', '异常'];
     // const columns = [
     //   {
@@ -139,7 +139,7 @@ class StandardTable extends PureComponent {
       }),
     };
     // (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)
-    console.log('document.documentElement.scrollHeight || document.body.scrollHeight', document.documentElement.offsetHeight, document.body.offsetHeight)
+    console.log(scrollY, 'document.documentElement.scrollHeight || document.body.scrollHeight', document.documentElement.offsetHeight, document.body.offsetHeight)
     return (
       <div className={styles.standardTable}>
         <div className={styles.tableAlert}>
@@ -163,7 +163,7 @@ class StandardTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: scrollX ? scrollX : 1050, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+          scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)  }}
         />
       </div>
     );
