@@ -36,7 +36,10 @@ class EditableCell extends Component {
     const editing = !this.state.editing;
     this.setState({ editing }, () => {
       if (editing) {
-        // console.log('editing::', editing);
+        console.log('editing::', editing, this.input.input);
+        if(this.input.input.value == '描述'){
+          this.input.input.value = '';
+        }
         this.input.focus();
       }
     });
