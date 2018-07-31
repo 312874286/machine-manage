@@ -314,7 +314,7 @@ class ScheduleTable extends PureComponent {
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
             <span>加载更多</span>
           </Card.Grid>
-          <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: '500px', height: 50 * dateList.length + 'px' }}
+          <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: '500px', height: (50 * dateList.length + 50) + 'px' }}
                id="dateWeek" className={styles.dateWeek}>
             {dateTwoWeeksArr.map((item) => {
               return (

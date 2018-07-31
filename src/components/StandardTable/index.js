@@ -138,6 +138,7 @@ class StandardTable extends PureComponent {
         disabled: record.disabled,
       }),
     };
+    console.log('document.documentElement.scrollHeight || document.body.scrollHeight', document.documentElement.offsetHeight, document.body.offsetHeight)
     return (
       <div className={styles.standardTable}>
         <div className={styles.tableAlert}>
@@ -161,7 +162,7 @@ class StandardTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: scrollX ? scrollX : 1050, y: 500 }}
+          scroll={{ x: scrollX ? scrollX : 1050, y: (document.documentElement.offsetHeight || document.body.offsetHeight) - (68 + 62 + 24 + 53 + 100) }}
         />
       </div>
     );

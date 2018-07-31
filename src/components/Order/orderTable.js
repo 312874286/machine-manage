@@ -141,7 +141,8 @@ export default class orderTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: 2300 }}
+          scroll={{ x: 2300, y: (document.documentElement.offsetHeight || document.body.offsetHeight) - (68 + 62 + 24 + 53 + 100) }}
+          // showHeader={false}
         />
       </div>
     );
