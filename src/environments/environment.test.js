@@ -1,7 +1,7 @@
 const environment = {
-  host: 'http://nb-merchant-service.nblow.cn/merchant_service',
+  host: 'http://api.erp.32solo.com',
   appId: 'dingoaqupjq6gr9m7nrghw',
-  frontHost: 'https://erp.32solo.com',
+  frontHost: 'http://erp.32solo.com',
 };
 
 export default environment;
