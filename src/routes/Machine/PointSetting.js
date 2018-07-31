@@ -707,7 +707,7 @@ export default class PointSettingList extends PureComponent {
         width: 150,
         title: '操作',
         render: (text, item) => (
-          <Fragment>
+          (item.userNum === 0) ? ( <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
             {/*<Divider type="vertical" />*/}
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
@@ -715,7 +715,16 @@ export default class PointSettingList extends PureComponent {
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
               <a className={styles.delete}>删除</a>
             </Popconfirm>
-          </Fragment>
+          </Fragment>) : (
+            <Fragment>
+              <a disabled style={{ cursor: 'not-allowed' }}>编辑</a>
+              <Divider type="vertical" />
+              <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
+                <a className={styles.delete}>删除</a>
+              </Popconfirm>
+            </Fragment>
+          )
+
         ),
       },
     ];

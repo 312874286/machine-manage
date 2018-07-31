@@ -27,7 +27,6 @@ import {
   Cascader,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
-import EditableTable from '../../components/EditableTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './MachineSetting.less';
@@ -141,7 +140,7 @@ const EditPointForm = Form.create()(
     };
     return (
       <Modal
-        title="修改点位"
+        title="重置点位"
         visible={editPointmodalVisible}
         onOk={editPointHandleAddClick}
         onCancel={() => editPointHandleModalVisibleClick()}
@@ -160,11 +159,11 @@ const EditPointForm = Form.create()(
               // labelInValue
                 showSearch={true}
                 placeholder="请输入点位关键字进行选择"
-                notFoundContent={fetching ? <Spin size="small" /> : null}
+                notFoundContent={fetching ? <Spin size="small" /> : '暂无数据'}
                 filterOption={false}
                 onSearch={onSearch}
                 onChange={handleChange}
-                onPopupScroll={onPopupScroll}
+                // onPopupScroll={onPopupScroll}
                 onSelect={onSelect}
                 style={{ width: '100%' }}
                 allowClear={true}
@@ -285,14 +284,6 @@ const ManageAisleForm = Form.create()(
         confirmLoading={ManageAisleEditModalConfirmLoading}
         footer={null}
       >
-        {/*<EditableTable*/}
-          {/*handleClose={handleClose}*/}
-          {/*AisleList={AisleList}*/}
-          {/*handleStop={handleStop}*/}
-          {/*handleStart={handleStart}*/}
-          {/*message={message}*/}
-          {/*updateGoodsCount={updateGoodsCount}*/}
-        {/*/>*/}
         <MachineAisleTable
           handleClose={handleClose}
           AisleList={AisleList}
@@ -604,6 +595,7 @@ export default class machineSettingList extends PureComponent {
           value,
           pointPageNo: 1,
           data: [],
+          fetching: true,
         });
       }
       this.props.dispatch({
@@ -611,30 +603,38 @@ export default class machineSettingList extends PureComponent {
         payload: {
           restParams: {
             pageNo: this.state.pointPageNo ? this.state.pointPageNo : 1,
-            keyword: value ? value : this.state.value,
+            keyword: value ? value.trim() : this.state.value.trim(),
             code: '',
           },
         },
       }).then((result) => {
-        const list = [];
-        result.forEach((r) => {
-          list.push({
-            value: r.areaName + r.mall + r.name,
-            text: r.areaName + r.mall + r.name,
-            id: r.id,
+        if (result.length === 0) {
+          this.setState({
+            fetching: false,
+            data: [], // 无分页
           });
-        });
-        let data = list
-        if (this.state.pointPageNo !== 1) {
-          data = [...list, ...this.state.data];
+          return;
         }
-        this.setState({ data, fetching: false });
         if (result.length < 20) {
           this.setState({
             fetching: true,
           });
           // return;
         }
+        const list = [];
+        result.forEach((r) => {
+          list.push({
+            value: r.areaName + r.mall + r.name + r.id,
+            text: r.areaName + r.mall + r.name + r.id,
+            id: r.id,
+          });
+        });
+        let data = list
+        // if (this.state.pointPageNo !== 1) {
+        //   data = [...list, ...this.state.data];
+        // }
+        // this.setState({ data, fetching: false });
+        this.setState({ data });
       });
     }
   }
@@ -701,7 +701,7 @@ export default class machineSettingList extends PureComponent {
     });
   };
   onPopupScroll = () => {
-    // console.log('滚动加载')
+    console.log('滚动加载', this.state.fetching)
     if (!this.state.fetching) {
       this.setState({
         pointPageNo: this.state.pointPageNo + 1,

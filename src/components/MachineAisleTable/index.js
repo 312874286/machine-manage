@@ -165,7 +165,7 @@ class MachineAisleTable extends React.Component {
           const editable = this.isEditing(record);
           return ((record.code) ? ( <div style={{ padding: 0}}>
               {record.isDelete === 0 ? (
-                <div style={{ background: '#e5f7d8', padding: '4px 8px 4px 0' }}>
+                <div className={styles.isDelete0}>
                     <EditableContext.Consumer>
                       {form => (
                         <a
@@ -183,7 +183,7 @@ class MachineAisleTable extends React.Component {
                     </Popconfirm>
                   </div>
               ) : (
-                <div style={{background: '#ffe8e4', padding: '4px 8px 4px 0'}}>
+                <div className={styles.isDelete1}>
                      <EditableContext.Consumer>
                       {form => (
                         <a
