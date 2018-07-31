@@ -1199,24 +1199,24 @@ export default class machineSettingList extends PureComponent {
     const columns = [
       {
         title: '机器编号',
-        width: 150,
+        width: '10%',
         dataIndex: 'machineCode',
       },
       {
         title: '机器点位',
-        width: 250,
+        width: '18%',
         dataIndex: 'localDesc',
       },
       {
         title: '系统状态',
-        width: 100,
+        width: '10%',
         render: (text, item) => (
           <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
       },
       {
         title: '网络',
-        width: 100,
+        width: '10%',
         dataIndex: 'netStatus',
         render(val) {
           if (val === 1) {
@@ -1228,7 +1228,7 @@ export default class machineSettingList extends PureComponent {
       },
       {
         title: '当前活动',
-        width: 150,
+        width: '10%',
         dataIndex: 'activityName',
       },
       {
@@ -1240,10 +1240,11 @@ export default class machineSettingList extends PureComponent {
             <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
-        width: 100,
+        width: '9%',
       },
       {
         title: '货道故障',
+        width: '9%',
         render: (text, item) => ((!item.channelStatus) ? (
           <span>无</span>
         ) : (
@@ -1251,7 +1252,7 @@ export default class machineSettingList extends PureComponent {
             <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
-        width: 100,
+        // width: 100,
       },
       {
         title: '机器状态',

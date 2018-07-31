@@ -138,8 +138,6 @@ class StandardTable extends PureComponent {
         disabled: record.disabled,
       }),
     };
-    // (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)
-    console.log(scrollY, 'document.documentElement.scrollHeight || document.body.scrollHeight', document.documentElement.offsetHeight, document.body.offsetHeight)
     return (
       <div className={styles.standardTable}>
         <div className={styles.tableAlert}>
