@@ -36,6 +36,9 @@ class EditableCell extends Component {
     const editing = !this.state.editing;
     this.setState({ editing }, () => {
       if (editing) {
+        if(this.input.input.value == '描述' || this.input.input.value == '优惠券编号' || this.input.input.value == '优惠券名称'){
+          this.input.input.value = '';
+        }
         this.input.focus();
       }
     });
