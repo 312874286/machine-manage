@@ -322,11 +322,11 @@ const WatchForm = Form.create()(
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>请您先点击更新，获取最新数据</span>
-            <span><Button type="primary" onClick={() => appUpdate(1)}>更新</Button></span>
+            <span><Button style={{ width: '120px' }}type="primary" onClick={() => appUpdate(1)}>更新</Button></span>
           </div>
           <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-end', marginBottom: '10px' }}>
 
-            <span><Button type="Default" onClick={() => appRefresh()}>刷新</Button></span>
+            <span><Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button></span>
           </div>
         </div>
         <div style={{ background: '#ECECEC', padding: '30px' }}>
@@ -1377,11 +1377,11 @@ export default class machineSettingList extends PureComponent {
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
               <span>请您先点击更新，获取最新数据</span>
-              <span><Button type="primary" onClick={() => this.appUpdate(2)}>更新</Button></span>
+              <span><Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button></span>
             </div>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
               <span>上次更新时间：{createTime}</span>
-              <span><Button type="Default" onClick={() => this.appRefresh()}>刷新</Button></span>
+              <span><Button style={{ width: '120px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button></span>
             </div>
           </div>
           <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} pagination={false} />
