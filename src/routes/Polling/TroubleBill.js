@@ -274,34 +274,42 @@ export default class troubleBill extends PureComponent {
       title: '故障单ID',
       dataIndex: 'id',
       key: 'id',
+      width: '19%'
     }, {
       title: '机器ID',
       dataIndex: 'machineId',
       key: 'machineId',
+      width: '8%'
     }, {
       title: '故障描述',
       dataIndex: 'remark',
       key: 'remark',
+      width: '10%'
     }, {
       title: '上报时间',
       dataIndex: 'submitTime',
       key: 'submitTime',
+      width: '12%'
     }, {
       title: '上报人',
       dataIndex: 'submitUser',
       key: 'submitUser',
+      width: '8%'
     }, {
       title: '解决时间',
       dataIndex: 'finishTime',
       key: 'finishTime',
+      width: '12%'
     }, {
       title: '解决人',
       dataIndex: 'finishUser',
       key: 'finishUser',
+      width: '8%'
     }, {
       title: '解决方案',
       dataIndex: 'finishRemark',
       key: 'finishRemark',
+      width: '10%'
     }, {
       title: '故障状态',
       dataIndex: 'status',

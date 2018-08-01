@@ -86,12 +86,19 @@ export default class Department extends PureComponent {
           </Row>
         </Card>
         <Card bordered={false}>
+          {/*<Table*/}
+            {/*dataSource={list}*/}
+            {/*columns={columns}*/}
+            {/*pagination={paginationProps}*/}
+            {/*onChange={this.handleTableChange}*/}
+            {/*rowKey="id"*/}
+          {/*/>*/}
           <Table
-            dataSource={list}
             columns={columns}
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
+            dataSource={list}
             rowKey="id"
+            onChange={this.handleTableChange}
+            scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
           />
         </Card>
       </PageHeaderLayout>

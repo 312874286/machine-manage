@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input, Modal, Tree, message, Popconfirm } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import StandardTable from '../../components/StandardTable';
+import styles from './Account.less'
 
 
 const { TreeNode } = Tree;
@@ -330,6 +332,7 @@ export default class Account extends PureComponent {
         key: 'auths',
       }, {
         title: '操作',
+        width: 150,
         dataIndex: '',
         key: '',
         render: (record) => {
@@ -338,7 +341,7 @@ export default class Account extends PureComponent {
               <a onClick={this.onToEdit.bind(this, record)}>修改</a>
               &nbsp;&nbsp;
               <Popconfirm title="是否删除?" onConfirm={this.onToDel.bind(this, record)} onCancel={this.onComnfirmCancel.bind(this)} okText="删除" cancelText="取消">
-                <a>删除</a>
+                <a className={styles.delete}>删除</a>
               </Popconfirm>
             </div>
           );
@@ -368,16 +371,27 @@ export default class Account extends PureComponent {
           </Row>
         </Card>
         <Card bordered={false}>
-          <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
-          <br /><br />
-          <Table
-            dataSource={list}
-            columns={columns}
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
-            rowKey="id"
-          />
+          <div class="tableList">
+            <div class="tableListOperator">
+              <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
+            </div>
+            {/*<Table*/}
+              {/*dataSource={list}*/}
+              {/*columns={columns}*/}
+              {/*pagination={paginationProps}*/}
+              {/*onChange={this.handleTableChange}*/}
+              {/*rowKey="id"*/}
+            {/*/>*/}
+            <Table
+              columns={columns}
+              dataSource={list}
+              rowKey="id"
+              onChange={this.handleTableChange}
+              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+            />
+          </div>
         </Card>
+
         <Modal
           title=""
           visible={this.state.visible}

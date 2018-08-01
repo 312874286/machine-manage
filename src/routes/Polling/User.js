@@ -977,11 +977,9 @@ export default class user extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button>
+          <div className="tableList">
+            <div className="tableListOperator">
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>新建</Button>
             </div>
             <StandardTable
               selectedRows={selectedRows}

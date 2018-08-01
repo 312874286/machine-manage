@@ -916,7 +916,7 @@ export default class activitySettingList extends PureComponent {
                   {/*</Dropdown>*/}
                 {/*</span>*/}
               {/*)}*/}
-              <Button icon="plus" type="primary" onClick={() => this.handleEditActivityClick(true)}>
+              <Button type="primary" onClick={() => this.handleEditActivityClick(true)}>
                 设置默认活动
               </Button>
             </div>

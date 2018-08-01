@@ -130,6 +130,7 @@ class StandardTable extends PureComponent {
         return `共${total}条数据  每页${page.pageSize}条`;
       },
       ...page,
+      showQuickJumper: true,
     };
     const rowSelection = {
       selectedRowKeys,
@@ -140,7 +141,7 @@ class StandardTable extends PureComponent {
     };
     return (
       <div className={styles.standardTable}>
-        <div className={styles.tableAlert}>
+        {/*<div className={styles.tableAlert}>*/}
           {/*<Alert*/}
             {/*message={(*/}
               {/*<div>*/}
@@ -152,7 +153,7 @@ class StandardTable extends PureComponent {
             {/*type="info"*/}
             {/*showIcon*/}
           {/*/>*/}
-        </div>
+        {/*</div>*/}
         <Table
           loading={loading}
           rowKey={record => record.id}
@@ -161,7 +162,7 @@ class StandardTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)  }}
+          scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 50)  }}
         />
       </div>
     );

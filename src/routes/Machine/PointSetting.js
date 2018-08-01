@@ -620,7 +620,7 @@ export default class PointSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          <Col md={7} sm={24} lg={8}>
             <FormItem label="省市区商圈">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
@@ -634,12 +634,12 @@ export default class PointSettingList extends PureComponent {
             </FormItem>
           </Col>
           {/*label="关键字"*/}
-          <Col md={9} sm={24}>
+          <Col md={7} sm={24} lg={8}>
             <FormItem >
               {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机号搜索" />)}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
+          <Col md={9} sm={24} lg={8}>
             <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>
@@ -748,7 +748,7 @@ export default class PointSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus-circle-o" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -771,6 +771,7 @@ export default class PointSettingList extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={1200}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 150)}
             />
           </div>
         </Card>

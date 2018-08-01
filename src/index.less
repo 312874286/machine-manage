@@ -19,9 +19,34 @@ body {
   width: 100%;
   margin: 40px 0 !important;
 }
+body a {
+  color: #5076FF;
+}
+body a[disabled] {
+  color: #999;
+  cursor: not-allowed;
+}
+body .ant-table-row-hover {
+  color: transparent;
+}
 
 // temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7
 :global {
+  .ant-btn-primary{
+    //background-color: transparent !important;
+    border-color: transparent !important;
+    background: -webkit-linear-gradient(left, #849FFF, #8B76FF) !important; /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(left, #849FFF, #8B76FF) !important; /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(left, #849FFF, #8B76FF) !important; /* Firefox 3.6 - 15 */
+    background: linear-gradient(left, #849FFF, #8B76FF) !important; /* 标准的语法 */
+  }
+  .ant-btn {
+    border-radius: 17px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    width: 33%;
+    max-width: 120px;
+  }
   i.anticon-menu-unfold{
     justify-content: center;
     -webkit-justify-content: center;
@@ -58,9 +83,9 @@ body {
     border: 0 !important;
   }
   .ant-table-thead > tr > th {
-    background: rgba(233, 244, 255, 1) !important;
+    background: #fff !important;
   }
-  .ant-table-tbody > tr:nth-child(even) {
+  .ant-table-tbody > tr:nth-child(odd) {
     background: rgba(246, 246, 246, 1) !important;
   }
   .ant-input-number {
@@ -212,20 +237,66 @@ body {
     width:0px !important;
   }
   .ant-table-fixed-header .ant-table-scroll .ant-table-header {
-    padding-bottom: 5px !important;
+    overflow: hidden !important;
+    padding-bottom: 1px !important;
     margin-bottom: 0px !important;
     height: 53px;
-    background: #e9f4ff !important;
+    background: #fff !important;
   }
   .ant-table-thead tr {
     height: 53px !important;
   }
-
+  .ant-table-body, .ant-table-body-outer {
+    box-shadow: 1px 0 1px 0px #666;
+    -webkit-box-shadow: 1px 0 1px 0px #666;
+  }
   #checkType .ant-row{
     margin-bottom: 20px !important;
     width: 100%;
     display: flex;
     align-items: flex-start;
+  }
+  // 左边menu样式
+  .ant-menu-submenu-selected .selectedBg {
+    background: #FED92C;
+  }
+  .ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+    background: -webkit-gradient(linear, left top, right top, from(#5076FF), to(#6D52FF)) !important;
+    background: linear-gradient(left, #5076FF, #6D52FF) !important;
+  }
+  .ant-menu-dark, .ant-menu-dark .ant-menu-sub,
+  .ant-menu-dark .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
+  .ant-menu-dark .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
+  .ant-menu-dark .ant-menu-submenu-title .ant-menu-submenu-arrow:before,
+  .ant-menu-dark .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow:before {
+    color: #B4B7DB !important;
+  }
+  .ant-menu .ant-menu-item {
+    padding-left: 58px !important;
+  }
+  // 表格页面的样式
+  .tableList {
+    .tableListOperator {
+      margin-bottom: 0px;
+      button {
+        //width: 100%;
+        border-radius: 6px 6px 0px 0px !important;
+        margin-right: 8px;
+        width: 100%;
+        max-width: 100%;
+        background: #64C81A !important;
+      }
+    }
+  }
+  // 分页样式
+  .ant-pagination-prev .ant-pagination-item-link,  .ant-pagination-next .ant-pagination-item-link {
+    border: 1px solid #CACACA !important;
+    background-color:rgba(248,248,248,1) !important;
+    border-radius: 999px !important;
+  }
+  .ant-pagination-disabled a, .ant-pagination-disabled:hover a, .ant-pagination-disabled:focus a, .ant-pagination-disabled .ant-pagination-item-link, .ant-pagination-disabled:hover .ant-pagination-item-link, .ant-pagination-disabled:focus .ant-pagination-item-link {
+    border-color: #CACACA !important;
+    color: #CACACA !important;
   }
   //.ant-card-bordered {
   //  border: none !important;

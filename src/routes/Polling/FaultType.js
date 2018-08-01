@@ -278,10 +278,10 @@ export default class FaultType extends PureComponent {
       const { faultType: { list, page } } = this.props;
     //   console.log('list::', faultType);
       const columns = [
-        { title: '故障类型名称', dataIndex: 'name', key: 'name' },
-        { title: '故障解决方案', dataIndex: 'parentName', key: 'parentName' },
-        { title: '添加时间', dataIndex: 'createTime', key: 'createTime' },
-        { title: '添加人', dataIndex: 'createId', key: 'createId' },
+        { title: '故障类型名称', dataIndex: 'name', key: 'name', width: '22%' },
+        { title: '故障解决方案', dataIndex: 'parentName', key: 'parentName', width: '22%' },
+        { title: '添加时间', dataIndex: 'createTime', key: 'createTime', width: '22%' },
+        { title: '添加人', dataIndex: 'createId', key: 'createId', width: '22%' },
         { title: '操作', dataIndex: '', key: 'action', render: (text, record) => <a href="javascript:;" onClick={this.onEdit.bind(this, record)}>编辑</a> },
       ];
     //   const data = [
@@ -313,10 +313,10 @@ export default class FaultType extends PureComponent {
         <PageHeaderLayout>
           <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={7} sm={24}>
+              <Col md={8} sm={24}>
                 <Input placeholder="请输入类型，解决方案 ，添加人搜索" value={userName} onChange={this.onChange} />
               </Col>
-              <Col md={5} sm={24}>
+              <Col md={7} sm={24}>
                 <Button onClick={this.handleReset}>
                   重置
                 </Button>
@@ -325,16 +325,22 @@ export default class FaultType extends PureComponent {
             </Row>
           </Card>
           <Card bordered={false}>
-            <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
-            <br /><br />
-            <Table
-              columns={columns}
-              dataSource={list}
-              rowKey="code"
-              pagination={paginationProps}
-              onChange={this.handleTableChange}
-              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-            />
+            <div className="tableList">
+              <div className="tableListOperator">
+                <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
+              </div>
+              <Table
+                columns={columns}
+                dataSource={list}
+                rowKey="code"
+                pagination={paginationProps}
+                onChange={this.handleTableChange}
+                scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+              />
+            </div>
+            {/*<Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>*/}
+            {/*<br /><br />*/}
+
           </Card>
           <Modal
           title="创建故障类型"

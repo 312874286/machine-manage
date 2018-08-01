@@ -57,26 +57,32 @@ export default class Jurisdiction extends PureComponent {
         title: '权限名称',
         dataIndex: 'functionDepict',
         key: 'functionDepict',
+        width: '15%'
       }, {
         title: '归属权限',
         dataIndex: 'parentName',
         key: 'parentName',
+        width: '15%'
       }, {
         title: '权限地址',
         dataIndex: 'functionPath',
         key: 'functionPath',
+        width: '25%'
       }, {
         title: '权限等级',
         dataIndex: 'functionLevel',
         key: 'functionLevel',
+        width: '15%'
       }, {
         title: '图标',
         dataIndex: 'functionIcon',
         key: 'functionIcon',
+        width: '15%'
       }, {
         title: '颜色',
         dataIndex: 'color',
         key: 'color',
+        width: '15%'
       },
     ];
     // const { userName } = this.state;
@@ -102,12 +108,19 @@ export default class Jurisdiction extends PureComponent {
           </Row>
         </Card>
         <Card bordered={false}>
+          {/*<Table*/}
+            {/*dataSource={list}*/}
+            {/*columns={columns}*/}
+            {/*pagination={paginationProps}*/}
+            {/*onChange={this.handleTableChange}*/}
+            {/*rowKey="id"*/}
+          {/*/>*/}
           <Table
-            dataSource={list}
             columns={columns}
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
+            dataSource={list}
             rowKey="id"
+            onChange={this.handleTableChange}
+            scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
           />
         </Card>
       </PageHeaderLayout>

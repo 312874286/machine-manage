@@ -292,15 +292,19 @@ export default class signInRecord extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              {/*<a href="" target="_blank" >*/}
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                  导出
-                </Button>
-              {/*</a>*/}
-              {/**/}
+          <div className="tableList">
+            <div className="tableListOperator">
+              <Button icon="export" type="primary" onClick={() => this.handleModalVisible(true)}>导出</Button>
             </div>
+          {/*<div className={styles.tableList}>*/}
+            {/*<div className={styles.tableListOperator}>*/}
+              {/*/!*<a href="" target="_blank" >*!/*/}
+                {/*<Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>*/}
+                  {/*导出*/}
+                {/*</Button>*/}
+              {/*/!*</a>*!/*/}
+              {/*/!**!/*/}
+            {/*</div>*/}
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

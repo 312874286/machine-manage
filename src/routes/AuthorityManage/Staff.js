@@ -260,18 +260,22 @@ export default class Staff extends PureComponent {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
+        width: '15%'
       }, {
         title: '员工手机',
         dataIndex: 'mobile',
         key: 'mobile',
+        width: '15%'
       }, {
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
+        width: '15%'
       }, {
         title: '角色',
         dataIndex: 'roles',
         key: 'roles',
+        width: '20%'
       }, {
         title: '部门名称',
         dataIndex: 'deptName',
@@ -279,6 +283,7 @@ export default class Staff extends PureComponent {
       }, {
         title: '授权',
         dataIndex: '',
+        width: '15%',
         key: '',
         render: (record) => {
           return <a onClick={this.onToAuthorization.bind(this, record)}>授权</a>;
@@ -345,12 +350,19 @@ export default class Staff extends PureComponent {
           </Row>
         </Card>
         <Card bordered={false}>
+          {/*<Table*/}
+            {/*dataSource={list}*/}
+            {/*columns={columns}*/}
+            {/*pagination={paginationProps}*/}
+            {/*onChange={this.handleTableChange}*/}
+            {/*rowKey="id"*/}
+          {/*/>*/}
           <Table
-            dataSource={list}
             columns={columns}
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
+            dataSource={list}
             rowKey="id"
+            onChange={this.handleTableChange}
+            scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
           />
         </Card>
       </PageHeaderLayout>
