@@ -320,7 +320,7 @@ class ScheduleTable extends PureComponent {
             </Button>
           </div>
         </div>
-      } style={{ overflow: 'hidden'}} id="scheduleBox">
+      } style={{ overflow: 'auto'}} id="scheduleBox">
 
         <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }} className={styles.cardDiv}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>

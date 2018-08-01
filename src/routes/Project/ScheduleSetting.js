@@ -42,6 +42,7 @@ const getValue = obj =>
 const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
 const couponsInitData = []
+const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }];
 
 
 const CreateForm = Form.create()(
@@ -1372,6 +1373,19 @@ export default class ScheduleSettingList extends PureComponent {
                   onChange={this.onChange}
                   changeOnSelect
                 />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="省市区商圈">
+              {getFieldDecorator('status')(
+                <Select placeholder="请选择活动状态">
+                  {ActivityStatus.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
               )}
             </FormItem>
           </Col>
