@@ -130,7 +130,7 @@ export default class troubleBill extends PureComponent {
     }).then((res) => {
       const { code, data, msg } = res;
       // console.log(data.functions);
-      
+
 
       this.setState({
         seeData: data,
@@ -340,7 +340,7 @@ export default class troubleBill extends PureComponent {
               </Select>
             </Col>
             <Col md={6} sm={24}>
-              {/* <DatePicker placeholder="开始时间" 
+              {/* <DatePicker placeholder="开始时间"
               selectedValue={this.state.startDateString}
               value={this.state.startDateString}
               showTime={{
@@ -360,7 +360,7 @@ export default class troubleBill extends PureComponent {
             <Col md={4} sm={24}>
               <DatePicker onChange={this.endDatePickerChange} />
             </Col> */}
-            <Col md={8} sm={24}> 
+            <Col md={8} sm={24}>
               <Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />
             </Col>
             <Col md={7} sm={24}>
@@ -378,7 +378,7 @@ export default class troubleBill extends PureComponent {
             rowKey="id"
             onChange={this.handleTableChange}
             pagination={paginationProps}
-            scroll={{ x: 1500 }}
+            scroll={{ x: 1500, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
           />
         </Card>
         <Modal
@@ -466,7 +466,7 @@ export default class troubleBill extends PureComponent {
                 fileList={fileList}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
-              > 
+              >
               </Upload>
               <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                 <img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -577,12 +577,12 @@ export default class troubleBill extends PureComponent {
                 fileList={fileList}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
-              > 
+              >
               </Upload>
               <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                 <img alt="example" style={{ width: '100%' }} src={previewImage} />
               </Modal>
-              
+
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>

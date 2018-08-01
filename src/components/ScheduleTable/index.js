@@ -295,7 +295,11 @@ class ScheduleTable extends PureComponent {
     }
   }
   backToday = () => {
-    document.querySelector("#currentDayAfter").scrollIntoView(true);
+    document.querySelector("#currentDayAfter").scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+      inline: 'end',
+    });
   }
   render() {
     const { dateTwoWeeksArr, currentDay, currentDayAfter } = this.state;
@@ -316,7 +320,7 @@ class ScheduleTable extends PureComponent {
             </Button>
           </div>
         </div>
-      } style={{ overflowX: 'scroll'}} id="scheduleBox">
+      } style={{ overflow: 'hidden'}} id="scheduleBox">
 
         <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }} className={styles.cardDiv}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>

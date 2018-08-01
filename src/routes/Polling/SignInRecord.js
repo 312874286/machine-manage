@@ -301,17 +301,26 @@ export default class signInRecord extends PureComponent {
               {/*</a>*/}
               {/**/}
             </div>
-            {/*<StandardTable*/}
-              {/*selectedRows={selectedRows}*/}
-              {/*loading={loading}*/}
-              {/*data={list}*/}
-              {/*page={page}*/}
+            <StandardTable
+              selectedRows={selectedRows}
+              loading={loading}
+              data={list}
+              page={page}
+              columns={columns}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
+              scrollX={700}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100)}
+            />
+            {/*<Table */}
               {/*columns={columns}*/}
-              {/*onSelectRow={this.handleSelectRows}*/}
-              {/*onChange={this.handleStandardTableChange}*/}
-              {/*scrollX={700}*/}
+              {/*dataSource={list} */}
+              {/*rowKey={record => record.createTime}*/}
+              {/*pagination={false}*/}
+              {/*scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}*/}
+
             {/*/>*/}
-            <Table columns={columns} dataSource={list} rowKey={record => record.createTime} pagination={false} />
+
           </div>
         </Card>
       </PageHeaderLayout>

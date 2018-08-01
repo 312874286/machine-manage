@@ -4,7 +4,7 @@ import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Form, Icon, Tr
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './FaultType.less';
 
-
+const FormItem = Form.Item;
 @connect(({ faultType }) => ({ faultType }))
 export default class FaultType extends PureComponent {
     state = {
@@ -299,6 +299,16 @@ export default class FaultType extends PureComponent {
         },
         ...page,
       };
+      const formItemLayout = {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 4 },
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 16 },
+        },
+      };
       return (
         <PageHeaderLayout>
           <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
@@ -323,6 +333,7 @@ export default class FaultType extends PureComponent {
               rowKey="code"
               pagination={paginationProps}
               onChange={this.handleTableChange}
+              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
             />
           </Card>
           <Modal
@@ -331,37 +342,64 @@ export default class FaultType extends PureComponent {
           onOk={this.handleOK}
           onCancel={this.handleCancel}
           >
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={5} sm={24}>
-                类型名称
-              </Col>
-              <Col md={15} sm={24}>
+            <Form onSubmit={this.handleSearch}>
+              <FormItem {...formItemLayout} label="类型名称">
                 <Input placeholder="输入名称" value={this.state.typeName} onChange={this.onTypeNameChange} />
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={5} sm={24}>
-                解决方案
-              </Col>
-              <Col md={15} sm={24}>
+              </FormItem>
+              <FormItem {...formItemLayout} label="解决方案">
                 {
-                solutionsLists.map((solutions) => {
-                  return (
+                  <div className={styles.solutionBox}>
+                    {
+                    solutionsLists.map((solutions) => {
+                    return (
                     <div key={solutions.key} className={styles.faultTypeinput}>
-                      <Input placeholder="输入方案" value={solutions.name} onChange={(e) => this.onSolutionsChange(e, solutions)} />
-                      <span onClick={this.onDelHandle.bind(this, solutions)}>删除</span>
+                    <Input placeholder="输入方案" value={solutions.name} onChange={(e) => this.onSolutionsChange(e, solutions)} style={{ width: solutionsLists.length === 1 ? '88%' : '77%', marginRight: '10px' }} />
+                    <span onClick={this.onDelHandle.bind(this, solutions)} style={{ marginRight: '10px', display: solutionsLists.length === 1 ? 'none' : ''}}>删除</span>
                     </div>
-                )
-                })
+                    )})
+                   }
+                    <span onClick={() => this.handleSolutionsAdd(this)} style={{ position: 'absolute', right: '-40px' }}>添加</span>
+                  </div>
                 }
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }} className={styles.mT20}>
-              <Col md={6} sm={24}></Col>
-              <Col md={15} sm={24}>
-                <Button type="primary" onClick={() => this.handleSolutionsAdd(this)}>添加</Button>
-              </Col>
-            </Row>
+              </FormItem>
+             </Form>
+             {/*<div    id="checkType">*/}
+               {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
+                 {/*<Col md={6} sm={24}>*/}
+                   {/*类型名称*/}
+                 {/*</Col>*/}
+                 {/*<Col md={16} sm={24}>*/}
+                   {/*<Input placeholder="输入名称" value={this.state.typeName} onChange={this.onTypeNameChange} />*/}
+                 {/*</Col>*/}
+               {/*</Row>*/}
+               {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
+                 {/*<Col md={6} sm={24}>*/}
+                   {/*解决方案*/}
+                 {/*</Col>*/}
+                 {/*<Col md={16} sm={24}>*/}
+                   {/*{*/}
+                     {/*solutionsLists.map((solutions) => {*/}
+                       {/*return (*/}
+                         {/*<div key={solutions.key} className={styles.faultTypeinput}>*/}
+                           {/*<Input placeholder="输入方案" value={solutions.name} onChange={(e) => this.onSolutionsChange(e, solutions)} style={{ width: '85%', marginRight: '10px' }}/>*/}
+                           {/*<span onClick={this.onDelHandle.bind(this, solutions)} style={{ display: solutionsLists.length === 1 ? 'none' : ''}}>删除</span>*/}
+                         {/*</div>)})*/}
+                   {/*}*/}
+                 {/*</Col>*/}
+                 {/*<Col md={2} sm={24} onClick={() => this.handleSolutionsAdd(this)}>*/}
+                   {/*<div style={{ marginLeft: '10px', width: '48px', cursor: 'pointer', }}>*/}
+                     {/*添加*/}
+                   {/*</div>*/}
+                 {/*</Col>*/}
+               {/*</Row>*/}
+             {/*</div>*/}
+
+            {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }} className={styles.mT20}>*/}
+              {/*<Col md={6} sm={24}></Col>*/}
+              {/*<Col md={15} sm={24}>*/}
+                {/*<Button type="primary" onClick={() => this.handleSolutionsAdd(this)}>添加</Button>*/}
+              {/*</Col>*/}
+            {/*</Row>*/}
           </Modal>
         </PageHeaderLayout>
       );
