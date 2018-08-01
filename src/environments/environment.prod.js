@@ -1,7 +1,7 @@
 const environment = {
-  host: 'https://api.erp.prod.32solo.com',
+  host: 'https://api.erp.inno72.com',
   appId: 'dingoakb41ozzxedr3gnpv',
-  frontHost: 'https://erp.prod.32solo.com',
+  frontHost: 'https://erp.inno72.com',
 };
 
 export default environment;
