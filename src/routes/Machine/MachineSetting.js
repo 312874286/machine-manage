@@ -371,7 +371,7 @@ const WatchForm = Form.create()(
                 </div>
                 <div className={styles.statusBox}>
                   <span>
-                    上次更新时间：
+                    更新时间：
                   </span>
                   <span>
                     {machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}
@@ -419,7 +419,7 @@ const WatchForm = Form.create()(
                   </span>
                 </div>
                 <div className={styles.statusBox}>
-                  <span>上次更新时间：</span>
+                  <span>更新时间：</span>
                   <span>
                     {machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}
                   </span>
@@ -1442,7 +1442,11 @@ export default class machineSettingList extends PureComponent {
           // value={this.state.value}
         />
         <Modal
-          title="管理App"
+          title={
+          <div className="modalBox">
+            <span className="leftSpan"></span>
+            <span className="modalTitle">管理App</span>
+          </div>}
           visible={this.state.ManageAppmodalVisible}
           onCancel={() => this.ManageAppHandleModalVisibleClick()}
           width={900}
