@@ -671,7 +671,7 @@ export default class ScheduleSettingList extends PureComponent {
         // top: (25 + (index * 4)) + '%',
         // width: (6.496 * (width + 1)) + '%',
         left: (69.33 * left) + 'px',
-        top: (70 + (index * 50)) + 'px',
+        top: (85 + (index * 50)) + 'px',
         width: (69.33 * (width + 1)) + 'px',
         background: background,
         height: '20px',
@@ -1481,32 +1481,34 @@ export default class ScheduleSettingList extends PureComponent {
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button>
-              {/*{selectedRows.length > 0 && (*/}
-              {/*<span>*/}
-              {/*<Button>批量操作</Button>*/}
-              {/*<Dropdown overlay={menu}>*/}
-              {/*<Button>*/}
-              {/*更多操作 <Icon type="down" />*/}
-              {/*</Button>*/}
-              {/*</Dropdown>*/}
-              {/*</span>*/}
-              {/*)}*/}
-            </div>
-            <ScheduleTable
-              dateList={this.state.dateList}
-              handleDays={this.handleDays}
-              onEditClick={this.onEditClick}
-              onWatchClick={this.onWatchClick}
-              onDeleteClick={this.onDeleteClick}
-            />
-          </div>
-        </Card>
+        {/*<Card bordered={false}>*/}
+          {/*<div className={styles.tableList}>*/}
+            {/*<div className={styles.tableListOperator}>*/}
+              {/*/!*<Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>*!/*/}
+                {/*/!*新建*!/*/}
+              {/*/!*</Button>*!/*/}
+              {/*/!*{selectedRows.length > 0 && (*!/*/}
+              {/*/!*<span>*!/*/}
+              {/*/!*<Button>批量操作</Button>*!/*/}
+              {/*/!*<Dropdown overlay={menu}>*!/*/}
+              {/*/!*<Button>*!/*/}
+              {/*/!*更多操作 <Icon type="down" />*!/*/}
+              {/*/!*</Button>*!/*/}
+              {/*/!*</Dropdown>*!/*/}
+              {/*/!*</span>*!/*/}
+              {/*/!*)}*!/*/}
+            {/*</div>*/}
+          {/*</div>*/}
+        {/*</Card>*/}
+        <ScheduleTable
+          dateList={this.state.dateList}
+          handleDays={this.handleDays}
+          onEditClick={this.onEditClick}
+          onWatchClick={this.onWatchClick}
+          onDeleteClick={this.onDeleteClick}
+          handleModalVisible={this.handleModalVisible}
+          minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 50)}
+        />
         <CreateForm
           {...parentMethods}
           ref={this.saveFormRef}
@@ -1524,6 +1526,7 @@ export default class ScheduleSettingList extends PureComponent {
           disabledDateTime={this.disabledDateTime}
           openSelectMachineModal={this.openSelectMachineModal}
           selectCityName={this.state.selectCityName}
+
           machineNum={this.state.machineNum}
           goodsInitData={this.state.goodsInitData}
           goodsCount={this.state.goodsCount}

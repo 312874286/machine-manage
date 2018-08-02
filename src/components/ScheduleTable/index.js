@@ -27,6 +27,7 @@ const gridLeftStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '8px',
+  marginRight: '10px'
   // background: 'aliceblue',
   // color: '#174a79',
   // position: 'fixed',
@@ -46,6 +47,7 @@ const gridStyleRight = {
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '8px',
+  marginLeft: '10px'
   // background: 'aliceblue',
   // color: '#174a79',
   // position: 'fixed',
@@ -303,20 +305,26 @@ class ScheduleTable extends PureComponent {
   }
   render() {
     const { dateTwoWeeksArr, currentDay, currentDayAfter } = this.state;
-    const { dateList, onEditClick, onWatchClick, onDeleteClick } = this.props;
+    const { minHeight, dateList, onEditClick, onWatchClick, onDeleteClick, handleModalVisible } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
       <div id="scheduleBox">
         <Card title={
           <div className={styles.titleBox}>
-            <div>
-              活动排期一览表
+            <div style={{ display: 'flex' }}>
+              <div class="modalBox" style={{ marginRight: '29px' }}>
+                <span class="leftSpan"></span>
+                <span class="modalTitle">活动排期一览表</span>
+              </div>
+              <Button icon="plus" type="primary" style={{ width: '120px' }} onClick={() => handleModalVisible(true)}>
+                新建
+              </Button>
             </div>
             <div className={styles.iBox}>
               <i className={styles.endStatus}></i>活动已结束
               <i className={styles.ingStatus}></i>活动进行中
               <i className={styles.preStatus}></i>活动未开始
-              <Button icon="reload" type="primary" style={{ marginLeft: '10px', marginRight: '40px' }} onClick={() => this.backToday(true)}>
+              <Button type="primary" style={{ marginLeft: '10px', marginRight: '63px' }} onClick={() => this.backToday(true)}>
                 返回今天
               </Button>
             </div>
@@ -324,12 +332,12 @@ class ScheduleTable extends PureComponent {
         } style={{ overflow: 'hidden'}} id="scheduleBox"
               bordered={false}
         >
-          <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }} className={styles.cardDiv}>
+          <div style={{ display: 'flex', maxWidth: '1160px',minWidth: '1160px', margin: '0 auto' }} className={styles.cardDiv}>
             <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
               {/*<span>加载更多</span>*/}
               <Icon type="left-circle-o" style={{ fontSize: '44px', color: '#849FFF' }}/>
             </Card.Grid>
-            <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: '500px', height: (50 * dateList.length + 70) + 'px' }}
+            <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: minHeight, height: (50 * dateList.length + 70) + 'px' }}
                  id="dateWeek" className={styles.dateWeek}>
               {dateTwoWeeksArr.map((item) => {
                 return (
