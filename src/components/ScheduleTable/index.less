@@ -15,13 +15,16 @@
   p {
     width: 69.33px;
     text-align: center;
-    padding-top: 5px;
+    //padding-top: 5px;
     //position: fixed;
+    margin-bottom: 0;
   }
   & p:nth-child(2) {
     //margin-top: 30px;
   }
   a {
+    //border-bottom: 1px solid #CACACA;
+    padding: 14px 0 17px;
     &::before {
       content: '';
       width: 100%;
@@ -30,6 +33,7 @@
       border-radius: 12px 12px 0px 0px;
       display: block;
       position: absolute;
+      top: 0px;
     }
   }
 }
@@ -74,6 +78,21 @@
     color: red;
     cursor: pointer;
   }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .timeBox {
+    display: flex;
+    flex-direction: column;
+    margin-right: 59px;
+  }
+  .editBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    color: #5076FF;
+  }
 }
 .cardDiv {
   overflow-y: auto;
@@ -97,6 +116,8 @@
   justify-content: space-between;
   .iBox {
     font-size: 13px;
+    display: flex;
+    align-items: center;
   }
   div:nth-child(1) button {
     background: #64C81A !important
@@ -121,7 +142,7 @@
   height: 10px;
   display: inline-block;
   margin-right: 10px;
-  margin-left: 10px;
+  margin-left: 30px;
   &:before {
     content: '';
     width: 100%;
@@ -154,3 +175,6 @@
     padding: 22px 0 0 0;
   }
 }
+ .anticonDelete {
+  color: #FC5A3F;
+ }
