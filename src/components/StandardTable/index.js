@@ -127,7 +127,7 @@ class StandardTable extends PureComponent {
     // };
     const paginationProps = {
       showTotal: (total) => {
-        console.log(total, page)
+        // console.log(total, page)
         return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
       },
       ...page,

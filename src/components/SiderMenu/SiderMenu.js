@@ -18,7 +18,11 @@ const getIcon = (icon) => {
     // return <Icon type={icon} />;
     // {'../../assets/images/menuImg/' + icon + '.png'}
     let imgSrc = require(`../../assets/images/menuImg/${icon}.png`)
-    return <Icon><img src={imgSrc} alt="icon" className={styles.icon} /></Icon>;
+    let imgSrc2 = require(`../../assets/images/menuImg/${icon}Selected.png`)
+    return <Icon>
+      <img src={imgSrc} alt="icon" className={styles.icon} class="noSelected" />
+      <img src={imgSrc2} alt="icon" className={styles.icon}  class="Selected"/>
+    </Icon>;
   }
   return icon;
 };
@@ -121,7 +125,7 @@ export default class SiderMenu extends PureComponent {
           title={
             item.icon ? (
               <span>
-                <span class="selectedBg" style={{'width': '6px', 'background': item.color, 'height': '40px', 'left': 0, 'position': 'absolute'}}></span>
+                <span class="selectedBg"></span>
                 {getIcon(item.icon)}
                 <span>{item.name}</span>
               </span>

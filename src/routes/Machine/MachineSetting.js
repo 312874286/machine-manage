@@ -312,7 +312,12 @@ const WatchForm = Form.create()(
     };
     return (
       <Modal
-        title="查看机器状态"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看机器状态</span>
+          </div>
+        }
         width={800}
         visible={ManageWatchModalVisible}
         onCancel={() => ManageWatchHandleModalVisibleClick()}

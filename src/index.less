@@ -258,9 +258,6 @@ body .ant-table-row-hover {
     align-items: flex-start;
   }
   // 左边menu样式
-  .ant-menu-submenu-selected .selectedBg {
-    background: #FED92C;
-  }
   .ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
     background: -webkit-gradient(linear, left top, right top, from(#5076FF), to(#6D52FF)) !important;
     background: linear-gradient(left, #5076FF, #6D52FF) !important;
@@ -280,6 +277,35 @@ body .ant-table-row-hover {
   }
   .ant-menu .ant-menu-item {
     padding-left: 58px !important;
+  }
+  .ant-menu img {
+    width: 12px;
+  }
+  .selectedBg {
+    width: 6px;
+    //background: item.color;
+    height: 40px;
+    left: 0;
+    position: absolute
+  }
+  .noSelected {
+    display: inline-block;
+  }
+  .Selected {
+    display: none;
+  }
+  //.ant-menu-submenu-selected .selectedBg {
+  //  background: #FED92C;
+  //}
+  // .ant-menu-submenu-active .selectedBg,
+  .ant-menu-submenu-open .selectedBg {
+    background: #FED92C;
+  }
+  .ant-menu-dark .ant-menu-submenu-open .Selected, .ant-menu-submenu-active .Selected, .ant-menu-dark .ant-menu-submenu-selected .Selected {
+    display: inline-block;
+  }
+  .ant-menu-dark .ant-menu-submenu-open .noSelected, .ant-menu-submenu-active .noSelected, .ant-menu-dark .ant-menu-submenu-selected .noSelected {
+    display: none;
   }
   // 表格页面的样式
   .tableList {
@@ -365,6 +391,22 @@ body .ant-table-row-hover {
     padding: 32px 0 12px 30px !important;
     border-bottom: none !important;
   }
+  //modalstyle
+  .modalBox {
+    display: flex;
+    align-items: center;
+    .leftSpan {
+      width: 4px;
+      height: 24px;
+      background: #FED92C;
+      display: inline-block;
+      margin-right: 5px;
+    }
+    .modalTitle {
+      font-size: 18px;
+    }
+  }
+
   //.ant-card-bordered {
   //  border: none !important;
   //}
