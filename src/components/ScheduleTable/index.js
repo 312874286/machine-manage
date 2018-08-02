@@ -306,7 +306,7 @@ class ScheduleTable extends PureComponent {
     const { dateList, onEditClick, onWatchClick, onDeleteClick } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
-      <div>
+      <div id="scheduleBox">
         <Card title={
           <div className={styles.titleBox}>
             <div>
