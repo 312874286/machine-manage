@@ -65,7 +65,8 @@ const CreateForm = Form.create()(
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="淘宝商品ID">
             {getFieldDecorator('code', {
               rules: [{ required: true, whitespace: true, message: '请输入淘宝商品ID' }],
@@ -133,6 +134,7 @@ const CreateForm = Form.create()(
             {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
 });

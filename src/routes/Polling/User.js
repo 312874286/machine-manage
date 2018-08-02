@@ -53,7 +53,8 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}>
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="姓名">
             {getFieldDecorator('name', {
               rules: [{ required: true, whitespace: true, message: '请输入姓名' }],
@@ -113,6 +114,7 @@ const CreateForm = Form.create()(
             ))}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
   });
@@ -136,8 +138,10 @@ const WatchMachine = Form.create()(
         onCancel={() => WatchMachineHandleModalVisibleClick()}
         footer={null}
       >
-        <div style={{ background: '#ECECEC', padding: '30px' }}>
-          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+        <div className="manageAppBox">
+          <div style={{ background: '#ECECEC', padding: '30px' }}>
+            <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+          </div>
         </div>
       </Modal>
     );
@@ -244,7 +248,7 @@ const SelectMachineForm = Form.create()(
             </Col>
             <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
              <FormItem>
-               <Button onClick={() => findSourceData()}>
+               <Button onClick={() => findSourceData()} style={{ width: '120px' }}>
                搜索
                </Button>
              </FormItem>

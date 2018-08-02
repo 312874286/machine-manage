@@ -58,7 +58,8 @@ const CreateForm = Form.create()(
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="商户编码">
             {getFieldDecorator('merchantCode', {
               rules: [{ required: true, whitespace: true, message: '请输入商户编码' }],
@@ -93,6 +94,7 @@ const CreateForm = Form.create()(
             )}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
 });

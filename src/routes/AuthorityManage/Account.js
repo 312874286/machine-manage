@@ -400,34 +400,36 @@ export default class Account extends PureComponent {
           okText="确认"
           cancelText="取消"
         >
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={6} sm={24}>
-              角色名称
-            </Col>
-            <Col md={15} sm={24}>
-              <Input onChange={this.onAddChange.bind(this)} value={addUserName} />
-            </Col>
-          </Row>
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={6} sm={24}>
-              权限集合
-            </Col>
-            <Col md={15} sm={24}>
-              <Tree
-                checkable
-                onExpand={this.onExpand}
-                expandedKeys={this.state.expandedKeys}
-                autoExpandParent={this.state.autoExpandParent}
-                onCheck={this.onCheck}
-                checkedKeys={this.state.checkedKeys}
-                onSelect={this.onSelect}
-                selectedKeys={this.state.selectedKeys}
+          <div className="manageAppBox">
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={6} sm={24}>
+                角色名称
+              </Col>
+              <Col md={15} sm={24}>
+                <Input onChange={this.onAddChange.bind(this)} value={addUserName} />
+              </Col>
+            </Row>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={6} sm={24}>
+                权限集合
+              </Col>
+              <Col md={15} sm={24}>
+                <Tree
+                  checkable
+                  onExpand={this.onExpand}
+                  expandedKeys={this.state.expandedKeys}
+                  autoExpandParent={this.state.autoExpandParent}
+                  onCheck={this.onCheck}
+                  checkedKeys={this.state.checkedKeys}
+                  onSelect={this.onSelect}
+                  selectedKeys={this.state.selectedKeys}
 
-              >
-                {this.renderTreeNodes(treeData)}
-              </Tree>
-            </Col>
-          </Row>
+                >
+                  {this.renderTreeNodes(treeData)}
+                </Tree>
+              </Col>
+            </Row>
+          </div>
         </Modal>
       </PageHeaderLayout>
     );

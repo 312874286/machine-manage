@@ -4,13 +4,14 @@
   }
 }
 .currentDay {
-  background: #ebf2ff;
+  background: #FFF7F1;
   //width: 6.5%;
   width: 69.33px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0 !important;
+  position: relative;
   p {
     width: 69.33px;
     text-align: center;
@@ -19,6 +20,19 @@
   }
   & p:nth-child(2) {
     //margin-top: 30px;
+  }
+  a {
+    position: absolute;
+    top: 1px;
+    &::before {
+      content: '';
+      width: 100%;
+      height: 8px;
+      background: #FF8B2D;
+      border-radius: 12px 12px 0px 0px;
+      display: block;
+      position: absolute;
+    }
   }
 }
 .tableDiv {

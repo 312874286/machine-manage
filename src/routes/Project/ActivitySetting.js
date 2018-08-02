@@ -64,7 +64,8 @@ const CreateForm = Form.create()(
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           {/*<FormItem {...formItemLayout} label="是否是默认活动">*/}
             {/*{getFieldDecorator('isDefault', {*/}
               {/*initialValue: '0',*/}
@@ -139,6 +140,7 @@ const CreateForm = Form.create()(
             {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
 });

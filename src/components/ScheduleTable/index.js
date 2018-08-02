@@ -27,8 +27,8 @@ const gridLeftStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '8px',
-  background: 'aliceblue',
-  color: '#174a79',
+  // background: 'aliceblue',
+  // color: '#174a79',
   // position: 'fixed',
   // marginLeft: '-49px',
 };
@@ -324,7 +324,8 @@ class ScheduleTable extends PureComponent {
 
         <div style={{ display: 'flex', maxWidth: '1140px',minWidth: '1140px', margin: '0 auto' }} className={styles.cardDiv}>
           <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
-            <span>加载更多</span>
+            {/*<span>加载更多</span>*/}
+            <Icon type="left-circle-o" style={{ fontSize: '44px', color: '#849FFF' }}/>
           </Card.Grid>
           <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: '500px', height: (50 * dateList.length + 70) + 'px' }}
                id="dateWeek" className={styles.dateWeek}>
@@ -356,8 +357,11 @@ class ScheduleTable extends PureComponent {
                      }
                              title={ '活动名称: '+ item.name } trigger="hover">
                       <div className={styles.dateChildren}
-                           style={{ background: moment(item.endTime) < new Date().getTime()  ? 'rgba(189, 189, 189, 0.6)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(25, 120, 254, 0.2)' : 'rgba(122, 219, 62, 0.2)'), width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
-                             justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center' }}>
+                           style={{
+                             background: moment(item.endTime) < new Date().getTime()  ? 'rgba(242,242,242,1)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)'),
+                             color: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
+                             width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
+                             justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
 
                         <div>{item.name}</div>
 
@@ -369,7 +373,8 @@ class ScheduleTable extends PureComponent {
             </div>
           </div>
           <Card.Grid style={gridStyleRight} onClick={() => this.right()}>
-            <span>加载更多</span>
+            {/*<span>加载更多</span>*/}
+            <Icon type="right-circle-o" style={{ fontSize: '44px', color: '#849FFF' }}/>
           </Card.Grid>
          </div>
       </Card>

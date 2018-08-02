@@ -146,32 +146,34 @@ const EditPointForm = Form.create()(
         onCancel={() => editPointHandleModalVisibleClick()}
         confirmLoading={editPointEditModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="当前点位">
-            {getFieldDecorator('localDesc')(<Input disabled />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="新点位">
-            {getFieldDecorator('locale', {
-              rules: [{ required: true, message: '请输入新点位' }],
-            })(
-              <Select
-              // mode="multiple"
-              // labelInValue
-                showSearch={true}
-                placeholder="请输入点位关键字进行选择"
-                notFoundContent={fetching ? <Spin size="small" /> : '暂无数据'}
-                filterOption={false}
-                onSearch={onSearch}
-                onChange={handleChange}
-                // onPopupScroll={onPopupScroll}
-                onSelect={onSelect}
-                style={{ width: '100%' }}
-                allowClear={true}
-              >{data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)}
-              </Select>
-            )}
-          </FormItem>
-        </Form>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="当前点位">
+              {getFieldDecorator('localDesc')(<Input disabled />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="新点位">
+              {getFieldDecorator('locale', {
+                rules: [{ required: true, message: '请输入新点位' }],
+              })(
+                <Select
+                  // mode="multiple"
+                  // labelInValue
+                  showSearch={true}
+                  placeholder="请输入点位关键字进行选择"
+                  notFoundContent={fetching ? <Spin size="small" /> : '暂无数据'}
+                  filterOption={false}
+                  onSearch={onSearch}
+                  onChange={handleChange}
+                  // onPopupScroll={onPopupScroll}
+                  onSelect={onSelect}
+                  style={{ width: '100%' }}
+                  allowClear={true}
+                >{data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)}
+                </Select>
+              )}
+            </FormItem>
+          </Form>
+        </div>
       </Modal>
     );
 });
@@ -190,14 +192,15 @@ const ManageCutAppForm = Form.create()(
       },
     };
     return (
-      <Form>
-        <FormItem {...formItemLayout} label="切换App">
+      <Form id="appCutTitle">
+        <FormItem label="切换App" className={styles.appTitle} />
+        <FormItem {...formItemLayout} label="切换App" style={{ marginLeft: '11px' }}>
           {getFieldDecorator('appStatus', {
-          })(<Input disabled />)}
+          })(<Input disabled style={{ marginLeft: '-8px', width: '103%' }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="请选择前台运行APP">
+        <FormItem {...formItemLayout} label="运行中的APP">
           {getFieldDecorator('appPackageName', {
-            rules: [{ required: true, message: '请选择前台运行APP' }],
+            rules: [{ required: true, message: '运行中的APP' }],
           })(
             <Select placeholder="请选择">
               {appLists.map((item) => {
@@ -208,8 +211,12 @@ const ManageCutAppForm = Form.create()(
             </Select>
           )}
         </FormItem>
-        <FormItem style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={okCutApp}>确定</Button>
+        <FormItem className={styles.rightBtn}>
+          <div className={styles.tipsBox}>
+            <span className={styles.tip}>提示：切换和升级App需要单独提交数据</span>
+            <Button style={{ width: '120px' }} type="primary" onClick={okCutApp}>提交数据</Button>
+            <div className={styles.clear}></div>
+          </div>
         </FormItem>
       </Form>
     );
@@ -229,8 +236,8 @@ const ManageUpdateAppForm = Form.create()(
       },
     };
     return (
-      <Form>
-        <FormItem label="升级App" />
+      <Form id="appUpdateForm">
+        <FormItem label="升级App" className={styles.appTitle} />
         <FormItem {...formItemLayout} label="请选择升级App">
           {getFieldDecorator('appPackageName', {
             rules: [{ required: true, whitespace: true, message: '请选择升级App' }],
@@ -254,8 +261,8 @@ const ManageUpdateAppForm = Form.create()(
             rules: [{ required: true, whitespace: true, message: '请输入升级链接' }],
           })(<Input placeholder="请输入升级链接" />)}
         </FormItem>
-        <FormItem style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={okRefreshApp}>确定</Button>
+        <FormItem  className={styles.rightBtn}>
+          <Button style={{ width: '120px' }} type="primary" onClick={okRefreshApp}>提交数据</Button>
         </FormItem>
       </Form>
     );
@@ -284,14 +291,16 @@ const ManageAisleForm = Form.create()(
         confirmLoading={ManageAisleEditModalConfirmLoading}
         footer={null}
       >
-        <MachineAisleTable
-          handleClose={handleClose}
-          AisleList={AisleList}
-          handleStop={handleStop}
-          handleStart={handleStart}
-          message={message}
-          updateGoodsCount={updateGoodsCount}
+        <div className="manageAppBox">
+          <MachineAisleTable
+            handleClose={handleClose}
+            AisleList={AisleList}
+            handleStop={handleStop}
+            handleStart={handleStart}
+            message={message}
+            updateGoodsCount={updateGoodsCount}
           />
+        </div>
       </Modal>
     );
   });
@@ -324,109 +333,111 @@ const WatchForm = Form.create()(
         confirmLoading={ManageWatchEditModalConfirmLoading}
         footer={null}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
-            <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
-            <span>
-              <Button style={{ width: '120px', marginRight: '10px' }}type="primary" onClick={() => appUpdate(1)}>更新</Button>
+        <div style={{ padding: '0 30px 30px 30px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
+              <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
+              <span>
+              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
               <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
             </span>
+            </div>
           </div>
-        </div>
-        <div style={{ padding: '0px' }}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Card title="机器状态" bordered={false}>
-                <div className={styles.statusBox}>
-                  <span>机器门状态：</span>
-                  <span>
+          <div style={{ padding: '0px' }}>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Card title="机器状态" bordered={false}>
+                  <div className={styles.statusBox}>
+                    <span>机器门状态</span>
+                    <span>
                    {machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}
                   </span>
-                </div>
-                <div className={styles.statusBox}>
-                  <span>温度：</span>
-                  <span>
+                  </div>
+                  <div className={styles.statusBox}>
+                    <span>温度</span>
+                    <span>
                     {machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}
                   </span>
-                </div>
-                <div className={styles.statusBox}>
-                  <span>掉货开关：</span>
-                  <span>
+                  </div>
+                  <div className={styles.statusBox}>
+                    <span>掉货开关</span>
+                    <span>
                    {machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}
                   </span>
-                </div>
-                <div className={styles.statusBox}>
-                  <span>屏幕亮度：</span>
-                  <span>
+                  </div>
+                  <div className={styles.statusBox}>
+                    <span>屏幕亮度</span>
+                    <span>
                     {machineDetail.machineStatus ? (machineDetail.machineStatus.screenIntensity ? machineDetail.machineStatus.screenIntensity : '') : ''}
                   </span>
-                </div>
-                <div className={styles.statusBox}>
+                  </div>
+                  <div className={styles.statusBox}>
                   <span>
-                    音量：
+                    音量
                   </span>
-                  <span>
+                    <span>
                     {machineDetail.machineStatus ? (machineDetail.machineStatus.voice ? machineDetail.machineStatus.voice : '') : ''}
                    </span>
-                </div>
-                <div className={styles.statusBox}>
+                  </div>
+                  <div className={styles.statusBox}>
                   <span>
-                    更新时间：
+                    更新时间
                   </span>
-                  <span>
+                    <span>
                     {machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}
                   </span>
-                </div>
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card title="硬件状态" bordered={false}>
-                <div className={styles.statusBox}>
-                  <span>cpu：</span>
-                  <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</span>
-                </div>
-                <div className={styles.statusBox}>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card title="硬件状态" bordered={false}>
+                  <div className={styles.statusBox}>
+                    <span>cpu：</span>
+                    <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</span>
+                  </div>
+                  <div className={styles.statusBox}>
                   <span>
-                    运行内存：
+                    运行内存
                   </span>
-                  <span>
+                    <span>
                     {machineDetail.systemStatus ? (machineDetail.systemStatus.memoryTotle ? machineDetail.systemStatus.memoryTotle : '') : ''}G
                     <span className={styles.paddingRight}>
-                     剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G
+                     剩余{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G
                     </span>
                   </span>
-                </div>
-                <div className={styles.statusBox}>
+                  </div>
+                  <div className={styles.statusBox}>
                   <span>
-                    SD卡内存：
+                    SD卡内存
                   </span>
-                  <span>
+                    <span>
                     {machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G
                     <span className={styles.paddingRight}>
-                      剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G
+                      剩余{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G
                     </span>
                  </span>
-                </div>
-                <div className={styles.statusBox}>
-                  <span>运营商：</span>
-                  <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}
+                  </div>
+                  <div className={styles.statusBox}>
+                    <span>运营商</span>
+                    <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}
                   </span>
-                </div>
-                <div className={styles.statusBox}>
-                  <span>ACC ID：</span>
-                  <span>
+                  </div>
+                  <div className={styles.statusBox}>
+                    <span>ACC ID</span>
+                    <span>
                     {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}
                   </span>
-                </div>
-                <div className={styles.statusBox}>
-                  <span>更新时间：</span>
-                  <span>
+                  </div>
+                  <div className={styles.statusBox}>
+                    <span>更新时间</span>
+                    <span>
                     {machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}
                   </span>
-                </div>
-              </Card>
-            </Col>
-          </Row>
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </div>
         </div>
       </Modal>
     );
@@ -1449,23 +1460,49 @@ export default class machineSettingList extends PureComponent {
           </div>}
           visible={this.state.ManageAppmodalVisible}
           onCancel={() => this.ManageAppHandleModalVisibleClick()}
-          width={900}
+          width={800}
           footer={null}
           confirmLoading={this.state.ManageAppEditModalConfirmLoading}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span>请您先点击更新，获取最新数据</span>
-              <span><Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button></span>
+         >
+          <div id="manageAppBox">
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>
+              <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>
+                <div>
+                  <div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>
+                  <div style={{ color: '#999'}}>上次更新时间：{createTime}</div>
+                </div>
+                <div>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>
+                  <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button>
+                </div>
+              </div>
             </div>
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span>上次更新时间：{createTime}</span>
-              <span><Button style={{ width: '120px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button></span>
+            <Table
+              id="appTable"
+              className={styles.appTable}
+              columns={columns1}
+              dataSource={updateList}
+              rowKey={record => record.appPackageName}
+              pagination={false} />
+            <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <div className={styles.leftBox}>
+                    {/*<Card title="切换App" bordered={false}>*/}
+                    <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+                    {/*</Card>*/}
+                  </div>
+                </Col>
+                <Col span={12}>
+                  {/*<Card title="升级App" bordered={false}>*/}
+                  <div className={styles.rightBox}>
+                    <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
+                  </div>
+                  {/*</Card>*/}
+                </Col>
+              </Row>
             </div>
           </div>
-          <Table columns={columns1} dataSource={updateList} rowKey={record => record.appPackageName} pagination={false} />
-          <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
-          <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
         </Modal>
         {/*<ManageForm*/}
           {/*ManageAppmodalVisible={this.state.ManageAppmodalVisible}*/}

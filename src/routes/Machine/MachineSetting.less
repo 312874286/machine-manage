@@ -44,6 +44,105 @@
     }
   }
 }
+:global {
+  // card
+  .ant-card {
+    background: transparent !important;
+  }
+  .ant-card-head {
+    background: transparent !important;
+    border-bottom: none !important;
+    padding: 0 !important;
+    min-height: 15px;
+    max-height: 15px;
+  }
+  .ant-card-body {
+    background: #F8F8F8;
+    border-radius: 3px;
+    padding: 15px !important;
+  }
+  .ant-card-head-title {
+    color: #666 !important;
+  }
+  .ant-modal-body {
+    padding: 0 !important;
+  }
+  .ant-card-head-title {
+    padding: 15px 0 !important;
+  }
+  .ant-modal-header {
+    padding: 32px 0 12px 30px !important;
+    border-bottom: none !important;
+  }
+  //modalstyle
+  .modalBox {
+    display: flex;
+    align-items: center;
+    .leftSpan {
+      width: 4px;
+      height: 24px;
+      background: #FED92C;
+      display: inline-block;
+      margin-right: 5px;
+    }
+    .modalTitle {
+      font-size: 18px;
+    }
+  }
+  // appTable
+  #appTable .ant-table-body .ant-table-thead tr th {
+    border-top: none;
+    background: #F1F3FA !important;
+    padding: 0;
+  }
+  #appTable .ant-table-thead tr {
+    height: 34px !important;
+  }
+  #manageAppBox .ant-modal-body {
+    padding: 0 !important;
+  }
+  // ant-form字体颜色
+  .ant-form-item-label label {
+    color: #333 !important;
+  }
+  //
+  #manageAppBox .ant-form-item-label label:after {
+    content: "" !important;
+  }
+  #manageAppBox .ant-form .ant-form-item-label {
+    //text-align: right !important;
+  }
+  #manageAppBox .ant-form-item-label {
+    line-height: 17px;
+  }
+  #manageAppBox .ant-form .ant-form-item:nth-child(1), #manageAppBox .ant-form .ant-form-item:nth-child(4) {
+    margin-bottom: 15px !important;
+  }
+  #manageAppBox .ant-form .ant-form-item {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+  }
+  #manageAppBox .ant-input, #manageAppBox .ant-select-selection--single {
+    height: 44px;
+    background: #F2F2F2;
+    border: 1px solid #CACACA;
+    border-radius: 3px;
+  }
+  #manageAppBox .ant-select-selection__rendered {
+    line-height: 44px;
+  }
+  #appCutTitle .ant-form-item:nth-child(4) .ant-form-item-control-wrapper {
+    margin-top: 59px;
+  }
+  #appCutTitle .ant-form-item:nth-child(4) .ant-form-item-control-wrapper,
+  #appUpdateForm  .ant-form-item:nth-child(5) .ant-form-item-control-wrapper {
+    width: 100%;
+  }
+  //.ant-card-bordered {
+  //  border: none !important;
+  //}
+}
 table tr:nth-child(odd) {
   //background: #ffe8e4;
 }
@@ -67,4 +166,48 @@ table tr:nth-child(odd) {
 }
 .paddingRight {
   color: #999999;
+}
+.manageAppBox {
+  background: #F1F3FA;
+  .leftBox, .rightBox {
+    background: #fff;
+    height: 303px;
+    padding: 15px;
+  }
+  .leftBox {
+    margin-right: -6px;
+  }
+}
+.appTable {
+  padding: 0 10px;
+}
+.manageApp {
+  padding: 0;
+}
+.rightBtn {
+  .tipsBox {
+    .tip {
+      font-size: 12px;
+      color: #cacaca;
+    }
+  }
+  button {
+    float: right;
+  }
+  .clear {
+    clear: both;
+  }
+}
+.appTitle {
+  font-size: 16px;
+  .ant-form-item-label {
+    line-height: 17px !important;
+  }
+  &:before {
+    width: 56px;
+    height: 3px;
+    background: #fed92c;
+    position: absolute;
+    bottom: 1px;
+  }
 }

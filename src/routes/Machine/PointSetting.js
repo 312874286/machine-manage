@@ -61,7 +61,8 @@ const CreateForm = Form.create()(
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+         <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="省市区商圈">
             {getFieldDecorator('provinceCityAreaTrade', {
               rules: [{ required: true, message: '省市区商圈' }, {
@@ -104,6 +105,7 @@ const CreateForm = Form.create()(
             {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
 });
@@ -365,6 +367,9 @@ export default class PointSettingList extends PureComponent {
       // CreateFormLoading: true,
     });
     const res = await this.getPointSettingDetail(item);
+    if (!res) {
+      return
+    }
     const { city, district, circle } = res;
     const provinceRes = await this.getArea('')
     let province = provinceRes;

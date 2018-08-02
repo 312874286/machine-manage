@@ -72,7 +72,8 @@ const CreateForm = Form.create()(
         onCancel={() => handleModalVisible(false)}
         confirmLoading={editModalConfirmLoading}
         width={800} >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="选择活动" style={{ display : modalData.id ? 'none' : 'block' }}>
             {getFieldDecorator('activityId', {
               rules: [{ required: false, message: '请选择活动' }],
@@ -175,6 +176,7 @@ const CreateForm = Form.create()(
             <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} discountHandleChange={discountHandleChange} />
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
 });
@@ -1065,7 +1067,8 @@ export default class ScheduleSettingList extends PureComponent {
           </TreeNode>
         );
       }
-      return (parseInt(item.canUseNum) === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
+      // parseInt(item.canUseNum) === 0
+      return (item.disabledFlag) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
     });
   }
   onLoadData = (treeNode) => {

@@ -55,7 +55,8 @@ const CreateForm = Form.create()(
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="游戏名称">
             {getFieldDecorator('name', {
               rules: [{ required: true, whitespace: true, message: '请输入游戏名称' }],
@@ -75,6 +76,7 @@ const CreateForm = Form.create()(
             {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
 });

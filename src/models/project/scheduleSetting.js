@@ -58,8 +58,11 @@ export default {
           if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
             isLeaf = true;
           }
+          console.log("data[i].canUseNum === '0'", data[i].canUseNum === '0')
           if (data[i].canUseNum === '0') {
             disabled = true;
+          } else {
+            disabled = false;
           }
           if (data[0].level === 5) {
             machines = [{
@@ -67,6 +70,10 @@ export default {
               machineId: data[i].code,
               state: 0}]
             title = data[i].name;
+          }
+          // planed
+          if (data[0].level === 5 && data[0].planed === '1') {
+            disabled = true;
           }
           const a = {
             value: data[i].code,
