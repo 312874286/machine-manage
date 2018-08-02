@@ -313,42 +313,112 @@ const WatchForm = Form.create()(
     return (
       <Modal
         title="查看机器状态"
-        width={1100}
+        width={800}
         visible={ManageWatchModalVisible}
         onCancel={() => ManageWatchHandleModalVisibleClick()}
         confirmLoading={ManageWatchEditModalConfirmLoading}
         footer={null}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span>请您先点击更新，获取最新数据</span>
-            <span><Button style={{ width: '120px' }}type="primary" onClick={() => appUpdate(1)}>更新</Button></span>
-          </div>
-          <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-end', marginBottom: '10px' }}>
-
-            <span><Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button></span>
+          <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
+            <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
+            <span>
+              <Button style={{ width: '120px', marginRight: '10px' }}type="primary" onClick={() => appUpdate(1)}>更新</Button>
+              <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
+            </span>
           </div>
         </div>
-        <div style={{ background: '#ECECEC', padding: '30px' }}>
+        <div style={{ padding: '0px' }}>
           <Row gutter={16}>
             <Col span={12}>
               <Card title="机器状态" bordered={false}>
-                <div>机器门状态：{machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}</div>
-                <div>温度：{machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}</div>
-                <div>掉货开关：{machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}</div>
-                <div>屏幕亮度：{machineDetail.machineStatus ? (machineDetail.machineStatus.screenIntensity ? machineDetail.machineStatus.screenIntensity : '') : ''}</div>
-                <div>音量：{machineDetail.machineStatus ? (machineDetail.machineStatus.voice ? machineDetail.machineStatus.voice : '') : ''}</div>
-                <div>上次更新时间：{machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}</div>
+                <div className={styles.statusBox}>
+                  <span>机器门状态：</span>
+                  <span>
+                   {machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}
+                  </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>温度：</span>
+                  <span>
+                    {machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}
+                  </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>掉货开关：</span>
+                  <span>
+                   {machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}
+                  </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>屏幕亮度：</span>
+                  <span>
+                    {machineDetail.machineStatus ? (machineDetail.machineStatus.screenIntensity ? machineDetail.machineStatus.screenIntensity : '') : ''}
+                  </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>
+                    音量：
+                  </span>
+                  <span>
+                    {machineDetail.machineStatus ? (machineDetail.machineStatus.voice ? machineDetail.machineStatus.voice : '') : ''}
+                   </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>
+                    上次更新时间：
+                  </span>
+                  <span>
+                    {machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}
+                  </span>
+                </div>
               </Card>
             </Col>
             <Col span={12}>
               <Card title="硬件状态" bordered={false}>
-                <div>cpu：{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</div>
-                <div>运行内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryTotle ? machineDetail.systemStatus.memoryTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G</div>
-                <div>SD卡内存：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G 剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G </div>
-                <div>运营商：{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}</div>
-                <div>ACC ID: {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}</div>
-                <div>上次更新时间：{machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}</div>
+                <div className={styles.statusBox}>
+                  <span>cpu：</span>
+                  <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>
+                    运行内存：
+                  </span>
+                  <span>
+                    {machineDetail.systemStatus ? (machineDetail.systemStatus.memoryTotle ? machineDetail.systemStatus.memoryTotle : '') : ''}G
+                    <span className={styles.paddingRight}>
+                     剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G
+                    </span>
+                  </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>
+                    SD卡内存：
+                  </span>
+                  <span>
+                    {machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G
+                    <span className={styles.paddingRight}>
+                      剩余：{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G
+                    </span>
+                 </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>运营商：</span>
+                  <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}
+                  </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>ACC ID：</span>
+                  <span>
+                    {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}
+                  </span>
+                </div>
+                <div className={styles.statusBox}>
+                  <span>上次更新时间：</span>
+                  <span>
+                    {machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}
+                  </span>
+                </div>
               </Card>
             </Col>
           </Row>
