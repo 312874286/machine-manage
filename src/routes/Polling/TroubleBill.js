@@ -544,7 +544,7 @@ export default class troubleBill extends PureComponent {
           title={
             <div class="modalBox">
               <span class="leftSpan"></span>
-              <span class="modalTitle">{currentRecord.remark}</span>
+              <span class="modalTitle">查看</span>
               {/*<span class="resolved" class={} style={{ display: currentRecord.finishTime ? '' : 'none'}}>已解决</span>*/}
               {/*<span class="willResolve">未解决</span>*/}
               <span class={ currentRecord.finishTime ? 'resolved' : 'willResolve' }>
@@ -560,16 +560,24 @@ export default class troubleBill extends PureComponent {
               关闭
             </Button>,
           ]}>
-          <div className="manageAppBox checkFaultBox">
+          <div className={styles.checkFaultBox}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span className="left">故障编号</span>
+                <span className={styles.left}>故障描述</span>
+              </Col>
+              <Col md={20} sm={24}>
+                {currentRecord.remark}
+              </Col>
+            </Row>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={3} sm={24}>
+                <span className={styles.left}>故障编号</span>
               </Col>
               <Col md={8} sm={24}>
                 {seeData.id}
               </Col>
               <Col md={3} sm={24}>
-                <span className="left">机器编号</span>
+                <span className={styles.left}>机器编号</span>
               </Col>
               <Col md={8} sm={24}>
                 {seeData.machineId}
@@ -577,13 +585,13 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span className="left">上报人员</span>
+                <span className={styles.left}>上报人员</span>
               </Col>
               <Col md={8} sm={24}>
                 {seeData.submitUser}
               </Col>
               <Col md={3} sm={24}>
-                <span className="left">解决人员</span>
+                <span className={styles.left}>解决人员</span>
               </Col>
               <Col md={8} sm={24}>
                 {seeData.finishUser}
@@ -591,29 +599,29 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24} style={{ padding:  '0 0 0 0' }}>
-                <span class="left">上报时间</span>
+                <span className={styles.left}>上报时间</span>
               </Col>
               <Col md={8} sm={24}>
                 {seeData.submitTime}
               </Col>
               <Col md={3} sm={24}>
-                <span className="left">解决时间</span>
+                <span className={styles.left}>解决时间</span>
               </Col>
               <Col md={8} sm={24}>
                 {seeData.finishTime}
               </Col>
               {/*<Col md={12} sm={24}>*/}
-              {/*<span className="left">上报时间</span>*/}
+              {/*<span className={styles.left}>上报时间</span>*/}
               {/*<span>{currentRecord.submitTime}</span>*/}
               {/*</Col>*/}
               {/*<Col md={12} sm={24}>*/}
-              {/*<span class="left">解决时间</span>*/}
+              {/*<span className={styles.left}>解决时间</span>*/}
               {/*<span class="right">{currentRecord.finishTime}</span>*/}
               {/*</Col>*/}
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span class="imgLeft">图片</span>
+                <span className={styles.imgLeft}>图片</span>
               </Col>
               <Col md={20} sm={24}>
                 {/* <List
@@ -624,7 +632,7 @@ export default class troubleBill extends PureComponent {
                   ></List.Item>
                 )}
               /> */}
-                <div className="imgRight">
+                <div className={fileList.length > 0 ? styles.imgRight: ''}>
                   <Upload
                     // action="//jsonplaceholder.typicode.com/posts/"
                     listType="picture-card"
@@ -641,7 +649,7 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span class="left">回复列表</span>
+                <span className={styles.left}>回复列表</span>
               </Col>
               <Col md={20} sm={24}>
                 <List
@@ -654,20 +662,19 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span class="left">解决方案</span>
+                <span className={styles.left}>解决方案</span>
               </Col>
-              <Col md={20} sm={24}>
+              <Col md={21} sm={24}>
                 {seeData.finishRemark}
               </Col>
             </Row>
           </div>
         </Modal>
         <Modal
-          // title="回复"
           title={
             <div class="modalBox">
               <span class="leftSpan"></span>
-              <span class="modalTitle">{currentRecord.remark}</span>
+              <span class="modalTitle">回复</span>
               {/*<span class="resolved" class={} style={{ display: currentRecord.finishTime ? '' : 'none'}}>已解决</span>*/}
               {/*<span class="willResolve">未解决</span>*/}
               <span class={ currentRecord.finishTime ? 'resolved' : 'willResolve' }>
@@ -679,16 +686,24 @@ export default class troubleBill extends PureComponent {
           visible={replyVisible}
           onOk={this.replyOKHandle}
           onCancel={this.replyHandleCancel}>
-          <div className="manageAppBox checkFaultBox">
+          <div className={styles.checkFaultBox}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span className="left">故障编号</span>
+                <span className={styles.left}>故障描述</span>
+              </Col>
+              <Col md={20} sm={24}>
+                {currentRecord.remark}
+              </Col>
+            </Row>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={3} sm={24}>
+                <span className={styles.left}>故障编号</span>
               </Col>
               <Col md={8} sm={24}>
                 {currentRecord.id}
               </Col>
               <Col md={3} sm={24}>
-                <span className="left">机器编号</span>
+                <span className={styles.left}>机器编号</span>
               </Col>
               <Col md={8} sm={24}>
                 {currentRecord.machineId}
@@ -696,13 +711,13 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span className="left">上报人员</span>
+                <span className={styles.left}>上报人员</span>
               </Col>
               <Col md={8} sm={24}>
                 {currentRecord.submitUser}
               </Col>
               <Col md={3} sm={24}>
-                <span className="left">解决人员</span>
+                <span className={styles.left}>解决人员</span>
               </Col>
               <Col md={8} sm={24}>
                 {currentRecord.finishUser}
@@ -710,29 +725,29 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24} style={{ padding:  '0 0 0 0' }}>
-                <span class="left">上报时间</span>
+                <span className={styles.left}>上报时间</span>
               </Col>
               <Col md={8} sm={24}>
                 {currentRecord.submitTime}
               </Col>
               <Col md={3} sm={24}>
-                <span className="left">解决时间</span>
+                <span className={styles.left}>解决时间</span>
               </Col>
               <Col md={8} sm={24}>
                 {currentRecord.finishTime}
               </Col>
               {/*<Col md={12} sm={24}>*/}
-                {/*<span className="left">上报时间</span>*/}
+                {/*<span className={styles.left}>上报时间</span>*/}
                 {/*<span>{currentRecord.submitTime}</span>*/}
               {/*</Col>*/}
               {/*<Col md={12} sm={24}>*/}
-                {/*<span class="left">解决时间</span>*/}
+                {/*<span className={styles.left}>解决时间</span>*/}
                 {/*<span class="right">{currentRecord.finishTime}</span>*/}
               {/*</Col>*/}
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span class="imgLeft">图片</span>
+                <span className={styles.imgLeft}>图片</span>
               </Col>
               <Col md={20} sm={24}>
                 {/* <List
@@ -743,7 +758,7 @@ export default class troubleBill extends PureComponent {
                   ></List.Item>
                 )}
               /> */}
-                <div className="imgRight">
+                <div className={fileList.length > 0 ? styles.imgRight: ''}>
                   <Upload
                     // action="//jsonplaceholder.typicode.com/posts/"
                     listType="picture-card"
@@ -760,7 +775,7 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span class="left">回复列表</span>
+                <span className={styles.left}>回复列表</span>
               </Col>
               <Col md={20} sm={24}>
                 <List
@@ -773,9 +788,9 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span class="left">回复内容</span>
+                <span className={styles.left}>回复内容</span>
               </Col>
-              <Col md={20} sm={24}>
+              <Col md={21} sm={24}>
                 <TextArea placeholder="请输入" value={textAreaVal} onChange={this.onTextAreaChange.bind(this)} autosize={{ minRows: 2, maxRows: 6 }} />
               </Col>
             </Row>
