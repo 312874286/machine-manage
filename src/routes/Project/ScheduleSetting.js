@@ -64,6 +64,36 @@ const CreateForm = Form.create()(
         sm: { span: 18 },
       },
     };
+    const goodsColumns = [{
+      title: '商品名称',
+      dataIndex: 'name',
+      align: 'center',
+    }, {
+      title: '规则',
+      dataIndex: 'resultCode',
+      align: 'center',
+    }, {
+      title: '规则描述',
+      dataIndex: 'resultRemark',
+      align: 'center',
+    }];
+    const couponsColumns = [{
+      title: '优惠券编号',
+      dataIndex: 'code',
+      align: 'center',
+    }, {
+      title: '优惠券名称',
+      dataIndex: 'name',
+      align: 'center',
+    }, {
+      title: '规则',
+      dataIndex: 'resultCode',
+      align: 'center',
+    }, {
+      title: '规则描述',
+      dataIndex: 'resultRemark',
+      align: 'center',
+    }];
     return (
       <Modal
         title={
@@ -156,7 +186,8 @@ const CreateForm = Form.create()(
               ))
             }
           </FormItem>
-          <FormItem {...formItemLayout} label="选择游戏">
+            {/*style={{ display: isDisabled ? 'block' : 'none' }}*/}
+          <FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'none' : 'block' }}>
             {getFieldDecorator('gameId', {
               rules: [{ required: false, message: '请选择游戏' }],
             })(
@@ -169,16 +200,40 @@ const CreateForm = Form.create()(
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="同一用户获得商品次数">
+          <FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'block' : 'none' }}>
+            {getFieldDecorator('gameId', {
+              rules: [{ required: false, message: '请选择游戏' }],
+            })(
+              <Select placeholder="请选择" disabled>
+                {gameLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'none' : 'block' }}>
             {getFieldDecorator('userMaxTimes', {
               rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
+            <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
+              {getFieldDecorator('userMaxTimes', {
+                rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
+              })(<Input placeholder="请填写同一用户获得商品次数" disabled />)}
+            </FormItem>
           <FormItem label="填写商品信息">
-            <GoodsTableField initData={goodsInitData} count={goodsCount} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} goodsHandleDelete={goodsHandleDelete} goodsHandleChange={goodsHandleChange} />
+            <Table columns={goodsColumns} dataSource={goodsInitData} rowKey={record => record.prizeId} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />
+            <div style={{ display: isDisabled ? 'none' : 'block' }}>
+              <GoodsTableField initData={goodsInitData} count={goodsCount} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} goodsHandleDelete={goodsHandleDelete} goodsHandleChange={goodsHandleChange}  />
+            </div>
           </FormItem>
           <FormItem label="填写优惠券信息">
-            <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} discountHandleChange={discountHandleChange} />
+            <Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />
+            <div style={{ display: isDisabled ? 'none' : 'block' }}>
+              <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} discountHandleChange={discountHandleChange} />
+            </div>
           </FormItem>
         </Form>
         </div>
