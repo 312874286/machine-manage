@@ -355,6 +355,7 @@ export default class FaultType extends PureComponent {
           onOk={this.handleOK}
           onCancel={this.handleCancel}
           >
+            <div className="manageAppBox">
             <Form onSubmit={this.handleSearch}>
               <FormItem {...formItemLayout} label="类型名称">
                 <Input placeholder="输入名称" value={this.state.typeName} onChange={this.onTypeNameChange} />
@@ -413,6 +414,7 @@ export default class FaultType extends PureComponent {
                 {/*<Button type="primary" onClick={() => this.handleSolutionsAdd(this)}>添加</Button>*/}
               {/*</Col>*/}
             {/*</Row>*/}
+            </div>
           </Modal>
         </PageHeaderLayout>
       );
