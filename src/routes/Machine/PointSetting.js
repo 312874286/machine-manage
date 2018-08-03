@@ -86,7 +86,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="商场名称">
             {getFieldDecorator('mall', {
-              rules: [{ required: true,whitespace: true, message: '请输入商场名称' }],
+              rules: [{ required: false,whitespace: true, message: '请输入商场名称' }],
             })(<Input placeholder="请输入商场" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="点位名称">
