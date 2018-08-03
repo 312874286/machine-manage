@@ -59,9 +59,10 @@ export default {
             isLeaf = true;
           }
           console.log("data[i].canUseNum === '0'", data[i].canUseNum === '0')
-          if (data[i].canUseNum === '0') {
+          if (data[0].level !== 5 && data[i].canUseNum === '0') {
             disabled = true;
-          } else {
+          }
+          if (data[0].level !== 5 && data[i].canUseNum !== '0') {
             disabled = false;
           }
           if (data[0].level === 5) {
