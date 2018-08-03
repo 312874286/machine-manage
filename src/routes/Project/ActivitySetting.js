@@ -174,7 +174,8 @@ const WatchForm = Form.create()(
         onCancel={() => handleWatchModalVisible()}
         footer={null}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="活动名称">
             <span>{modalData.name}</span>
           </FormItem>
@@ -191,6 +192,7 @@ const WatchForm = Form.create()(
             <span>{modalData.remark}</span>
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
   });
@@ -226,7 +228,8 @@ const SetDefaultForm = Form.create()(
         onCancel={() => editActivityHandleModalVisibleClick()}
         confirmLoading={editActivityEditModalConfirmLoading}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="活动名称">
             {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入活动名称' }],
@@ -251,6 +254,7 @@ const SetDefaultForm = Form.create()(
             )}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
   });
