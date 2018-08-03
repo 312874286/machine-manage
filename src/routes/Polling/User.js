@@ -242,7 +242,8 @@ const SelectMachineForm = Form.create()(
         onCancel={() => onEditMachineHandleModalVisibleClick()}
         confirmLoading={editMachineEditModalConfirmLoading}
         width={1000}>
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={10} sm={24}>
               <FormItem>
@@ -258,7 +259,7 @@ const SelectMachineForm = Form.create()(
             </Col>
             <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
              <FormItem>
-               <Button onClick={() => findSourceData()} style={{ width: '120px' }}>
+               <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
                搜索
                </Button>
              </FormItem>
@@ -314,6 +315,7 @@ const SelectMachineForm = Form.create()(
             )}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
   });
