@@ -337,7 +337,7 @@ class ScheduleTable extends PureComponent {
               {/*<span>加载更多</span>*/}
               <Icon type="left-circle-o" style={{ fontSize: '44px', color: '#849FFF' }}/>
             </Card.Grid>
-            <div className={styles.dateWeekBox} style={{ Height: minHeight }}>
+            <div className={styles.dateWeekBox} style={{ height: minHeight }}>
               <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: minHeight, height: (50 * dateList.length + 70) + 'px' }}
                    id="dateWeek" className={styles.dateWeek}>
                 {dateTwoWeeksArr.map((item) => {
