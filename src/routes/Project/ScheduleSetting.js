@@ -381,7 +381,7 @@ export default class ScheduleSettingList extends PureComponent {
     keyword: '',
     modalData: {},
     code: '',
-    status: 0,
+    status: '',
     modalType: true,
     activityLists: [],
     gameLists: [],
@@ -808,7 +808,7 @@ export default class ScheduleSettingList extends PureComponent {
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
-        status: fieldsValue.status ? fieldsValue.status : 0,
+        status: fieldsValue.status ? fieldsValue.status : '',
       }, () => {
         this.getLists();
       });
