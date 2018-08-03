@@ -1380,7 +1380,7 @@ export default class ScheduleSettingList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="省市区商圈">
+            <FormItem label="活动状态">
               {getFieldDecorator('status')(
                 <Select placeholder="请选择活动状态">
                   {ActivityStatus.map((item) => {
