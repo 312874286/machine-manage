@@ -841,7 +841,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         title: '活动编码',
-        width: '15%',
+        width: '20%',
         dataIndex: 'code',
       },
       {
@@ -879,6 +879,8 @@ export default class activitySettingList extends PureComponent {
           (item.state === '已结束') ? (
             <Fragment>
               <a onClick={() => this.handleWatchClick(item)}>查看</a>
+              <Divider type="vertical" />
+              <a disabled style={{ cursor: 'not-allowed' }}>编辑</a>
               <Divider type="vertical" />
               <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
                 <a className={styles.delete}>删除</a>

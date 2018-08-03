@@ -422,7 +422,6 @@ export default class channelSettingList extends PureComponent {
       // },
       {
         title: '渠道名称',
-        width: '45%',
         dataIndex: 'channelName',
       },
       {

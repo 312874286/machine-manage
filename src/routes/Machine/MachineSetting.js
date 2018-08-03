@@ -1311,7 +1311,7 @@ export default class machineSettingList extends PureComponent {
         title: '系统状态',
         width: '10%',
         render: (text, item) => (
-          <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
       },
       {

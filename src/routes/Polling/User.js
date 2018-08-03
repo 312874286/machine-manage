@@ -946,32 +946,32 @@ export default class user extends PureComponent {
       {
         title: '姓名',
         dataIndex: 'name',
-        width: 150,
+        width: '10%',
       },
       {
         title: '手机号',
         dataIndex: 'phone',
-        width: 200,
+        width: '20%',
       },
       {
         title: '身份证号',
         dataIndex: 'cardNo',
-        width: 250,
+        width: '20%',
       },
       {
         title: '公司',
         dataIndex: 'enterprise',
-        width: 200,
+        width: '20%',
       },
       {
         title: '负责的机器',
         render: (text, item) => (
-          <div style={{ color: '#174a79', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
       },
       {
         fixed: 'right',
-        width: 80,
+        width: '100px',
         title: '操作',
         render: (text, item) => (
           <Fragment>

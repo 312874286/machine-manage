@@ -615,22 +615,22 @@ export default class goodsSettingList extends PureComponent {
     const columns = [
       {
         title: '淘宝商品ID',
-        width: 150,
+        width: '15%',
         dataIndex: 'code',
       },
       {
         title: '商品名称',
-        width: 150,
+        width: '15%',
         dataIndex: 'name',
       },
       {
         title: '所属商户',
-        width: 150,
+        width: '10%',
         dataIndex: 'sellerId',
       },
       {
         title: '所属店铺',
-        width: 150,
+        width: '15%',
         dataIndex: 'shopId',
       },
       // {
@@ -671,7 +671,7 @@ export default class goodsSettingList extends PureComponent {
       },
       {
         title: '商品价格',
-        width: 100,
+        width: '10%',
         dataIndex: 'price',
       },
       {

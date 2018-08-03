@@ -808,7 +808,7 @@ export default class ScheduleSettingList extends PureComponent {
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
-        status: fieldsValue.status ? fieldsValue.status : '',
+        status: fieldsValue.status,
       }, () => {
         this.getLists();
       });
