@@ -58,7 +58,7 @@ export default {
           if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
             isLeaf = true;
           }
-          console.log("data[i].canUseNum === '0'", data[i].canUseNum === '0')
+          // console.log("data[i].canUseNum === '0'", data[i].canUseNum === '0')
           if (data[0].level !== 5 && data[i].canUseNum === '0') {
             disabled = true;
           }
@@ -73,12 +73,13 @@ export default {
             title = data[i].name;
           }
           // planed
-          if (data[0].level === 5 && data[0].planed === '1') {
+          if (data[0].level === 5 && data[i].planed === '1') {
             disabled = true;
           }
-          if (data[0].level === 5 && data[0].planed === '0') {
+          if (data[0].level === 5 && data[i].planed === '0') {
             disabled = false;
           }
+          // console.log('arr', data[0].planed === '1', data[0].planed === '0', disabled)
           const a = {
             value: data[i].code,
             isLeaf: isLeaf,
@@ -93,6 +94,7 @@ export default {
           arr.push(a);
         }
       }
+      console.log('arr', arr)
       return arr;
     },
   },
