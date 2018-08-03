@@ -124,25 +124,30 @@ const WatchMachine = Form.create()(
     const machineColumns = [{
       title: '机器点位',
       dataIndex: 'machineLocale',
-      align: 'center',
+      align: 'left',
+      width: '80%'
     }, {
       title: '机器编码',
       dataIndex: 'machineCode',
-      align: 'center',
+      align: 'left',
+      width: '20%'
     }];
     return (
       <Modal
-        title="查看机器"
-        width={600}
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看机器</span>
+          </div>
+        }
+        width={800}
         visible={WatchMachineModalVisible}
         onCancel={() => WatchMachineHandleModalVisibleClick()}
         footer={null}
       >
-        <div className="manageAppBox">
-          <div style={{ background: '#ECECEC', padding: '30px' }}>
+          <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
             <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
-          </div>
-        </div>
+         </div>
       </Modal>
     );
   });

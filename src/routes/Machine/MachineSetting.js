@@ -346,95 +346,99 @@ const WatchForm = Form.create()(
           <div style={{ padding: '0px' }}>
             <Row gutter={16}>
               <Col span={12}>
-                <Card title="机器状态" bordered={false}>
-                  <div className={styles.statusBox}>
-                    <span>机器门状态</span>
-                    <span>
+                <div class="machineStatus">
+                  <Card title="机器状态" bordered={false}>
+                    <div className={styles.statusBox}>
+                      <span>机器门状态</span>
+                      <span>
                    {machineDetail.machineStatus ? (machineDetail.machineStatus.machineDoorStatus === 0 ? '关闭' : '打开') : ''}
                   </span>
-                  </div>
-                  <div className={styles.statusBox}>
-                    <span>温度</span>
-                    <span>
+                    </div>
+                    <div className={styles.statusBox}>
+                      <span>温度</span>
+                      <span>
                     {machineDetail.machineStatus ? (machineDetail.machineStatus.temperature ? machineDetail.machineStatus.temperature : '') : ''}
                   </span>
-                  </div>
-                  <div className={styles.statusBox}>
-                    <span>掉货开关</span>
-                    <span>
+                    </div>
+                    <div className={styles.statusBox}>
+                      <span>掉货开关</span>
+                      <span>
                    {machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}
                   </span>
-                  </div>
-                  <div className={styles.statusBox}>
-                    <span>屏幕亮度</span>
-                    <span>
+                    </div>
+                    <div className={styles.statusBox}>
+                      <span>屏幕亮度</span>
+                      <span>
                     {machineDetail.machineStatus ? (machineDetail.machineStatus.screenIntensity ? machineDetail.machineStatus.screenIntensity : '') : ''}
                   </span>
-                  </div>
-                  <div className={styles.statusBox}>
+                    </div>
+                    <div className={styles.statusBox}>
                   <span>
                     音量
                   </span>
-                    <span>
+                      <span>
                     {machineDetail.machineStatus ? (machineDetail.machineStatus.voice ? machineDetail.machineStatus.voice : '') : ''}
                    </span>
-                  </div>
-                  <div className={styles.statusBox}>
+                    </div>
+                    <div className={styles.statusBox}>
                   <span>
                     更新时间
                   </span>
-                    <span>
+                      <span>
                     {machineDetail.systemStatus ? machineDetail.systemStatus.createTime : '暂无'}
                   </span>
-                  </div>
-                </Card>
+                    </div>
+                  </Card>
+                </div>
               </Col>
               <Col span={12}>
-                <Card title="硬件状态" bordered={false}>
-                  <div className={styles.statusBox}>
-                    <span>cpu：</span>
-                    <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</span>
-                  </div>
-                  <div className={styles.statusBox}>
+                <div class="machineStatus">
+                  <Card title="硬件状态" bordered={false}>
+                    <div className={styles.statusBox}>
+                      <span>cpu：</span>
+                      <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.cpu ? machineDetail.systemStatus.cpu : '') : ''}</span>
+                    </div>
+                    <div className={styles.statusBox}>
                   <span>
                     运行内存
                   </span>
-                    <span>
+                      <span>
                     {machineDetail.systemStatus ? (machineDetail.systemStatus.memoryTotle ? machineDetail.systemStatus.memoryTotle : '') : ''}G
                     <span className={styles.paddingRight}>
                      剩余{machineDetail.systemStatus ? (machineDetail.systemStatus.memoryFree ? machineDetail.systemStatus.memoryFree : '') : ''}G
                     </span>
                   </span>
-                  </div>
-                  <div className={styles.statusBox}>
+                    </div>
+                    <div className={styles.statusBox}>
                   <span>
                     SD卡内存
                   </span>
-                    <span>
+                      <span>
                     {machineDetail.systemStatus ? (machineDetail.systemStatus.sdTotle ? machineDetail.systemStatus.sdTotle : '') : ''}G
                     <span className={styles.paddingRight}>
                       剩余{machineDetail.systemStatus ? (machineDetail.systemStatus.sdFree ? machineDetail.systemStatus.sdFree : '') : ''}G
                     </span>
                  </span>
-                  </div>
-                  <div className={styles.statusBox}>
-                    <span>运营商</span>
-                    <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}
+                    </div>
+                    <div className={styles.statusBox}>
+                      <span>运营商</span>
+                      <span>{machineDetail.systemStatus ? (machineDetail.systemStatus.networkOperateName ? machineDetail.systemStatus.networkOperateName :'') : ''}
                   </span>
-                  </div>
-                  <div className={styles.statusBox}>
-                    <span>ACC ID</span>
-                    <span>
+                    </div>
+                    <div className={styles.statusBox}>
+                      <span>ACC ID</span>
+                      <span>
                     {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}
                   </span>
-                  </div>
-                  <div className={styles.statusBox}>
-                    <span>更新时间</span>
-                    <span>
+                    </div>
+                    <div className={styles.statusBox}>
+                      <span>更新时间</span>
+                      <span>
                     {machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}
                   </span>
-                  </div>
-                </Card>
+                    </div>
+                  </Card>
+                </div>
               </Col>
             </Row>
           </div>

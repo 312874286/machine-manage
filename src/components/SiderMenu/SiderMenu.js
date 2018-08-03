@@ -125,7 +125,7 @@ export default class SiderMenu extends PureComponent {
           title={
             item.icon ? (
               <span>
-                <span class="selectedBg"></span>
+                <span className="selectedBg"></span>
                 {getIcon(item.icon)}
                 <span>{item.name}</span>
               </span>

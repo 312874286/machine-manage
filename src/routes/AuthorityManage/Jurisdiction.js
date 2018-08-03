@@ -88,9 +88,11 @@ export default class Jurisdiction extends PureComponent {
     // const { userName } = this.state;
     const paginationProps = {
       showTotal: (total) => {
-        return `共${total}条数据  每页${page.pageSize}条`;
+        // console.log(total, page)
+        return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
       },
       ...page,
+      showQuickJumper: true,
     };
     return (
       <PageHeaderLayout>
@@ -119,6 +121,7 @@ export default class Jurisdiction extends PureComponent {
             columns={columns}
             dataSource={list}
             rowKey="id"
+            pagination={paginationProps}
             onChange={this.handleTableChange}
             scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
           />

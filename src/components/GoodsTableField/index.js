@@ -215,7 +215,7 @@ class GoodsTableField extends Component {
     };
     // console.log('initData', initData)
     this.columns = [{
-      title: '*商品名称',
+      title: '商品名称',
       dataIndex: 'name',
       render: (text, record) => {
         return (
@@ -230,7 +230,7 @@ class GoodsTableField extends Component {
         );
       },
     }, {
-      title: '*规则',
+      title: '规则',
       dataIndex: 'resultCode',
       render: (text, record) => {
         return (
@@ -246,7 +246,7 @@ class GoodsTableField extends Component {
         );
       },
     }, {
-      title: '*规则描述',
+      title: '规则描述',
       dataIndex: 'resultRemark',
       editable: true,
     }, {

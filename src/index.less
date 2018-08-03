@@ -366,9 +366,15 @@ body .ant-table-row-hover {
   }
   //
   .manageAppBox {
-    padding: 24px;
+    padding: 18px 30px 30px 30px;
   }
-  .ant-card-head {
+  .ant-modal-body {
+    padding: 0 !important;
+  }
+  .ant-modal-header {
+    padding: 32px 0 12px 30px !important
+  }
+  .ant-card-head, .ant-modal-header {
     border-bottom: none !important;
   }
   // modalBoxTitle
@@ -385,5 +391,23 @@ body .ant-table-row-hover {
     .modalTitle {
       font-size: 18px;
     }
+  }
+  // .ant-table
+  .ant-table {
+    color: #666 !important;
+  }
+  .ant-modal-footer {
+    border-top: none !important;
+    padding: 0 30px 30px 30px !important;
+  }
+  .ant-modal-footer .ant-btn {
+    max-width: 150px;
+    height: 50px !important;
+    border-radius: 25px !important;
+    border: 1px solid #849FFF;
+    color: #849FFF;
+  }
+  .ant-modal-footer .ant-btn-primary {
+    color: #fff;
   }
 }

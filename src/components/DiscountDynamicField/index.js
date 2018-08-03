@@ -188,15 +188,15 @@ class DiscountDynamicField extends React.Component {
     }
     console.log('initData2', this.props.initData)
     this.columns = [{
-      title: '*优惠券编号',
+      title: '优惠券编号',
       dataIndex: 'code',
       editable: true,
     },{
-      title: '*优惠券名称',
+      title: '优惠券名称',
       dataIndex: 'name',
       editable: true,
     }, {
-      title: '*规则',
+      title: '规则',
       dataIndex: 'resultCode',
       render: (text, record) => {
         return (
@@ -207,7 +207,7 @@ class DiscountDynamicField extends React.Component {
         );
       },
     }, {
-      title: '*规则描述',
+      title: '规则描述',
       dataIndex: 'resultRemark',
       editable: true,
     }, {
