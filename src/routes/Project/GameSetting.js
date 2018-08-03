@@ -49,7 +49,12 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={modalType ? '编辑游戏' : '新建游戏'}
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">{modalType ? '编辑游戏' : '新建游戏'}</span>
+          </div>
+        }
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}

@@ -140,7 +140,12 @@ const EditPointForm = Form.create()(
     };
     return (
       <Modal
-        title="重置点位"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">重置点位</span>
+          </div>
+        }
         visible={editPointmodalVisible}
         onOk={editPointHandleAddClick}
         onCancel={() => editPointHandleModalVisibleClick()}
@@ -283,7 +288,12 @@ const ManageAisleForm = Form.create()(
     };
     return (
       <Modal
-        title="管理货道"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">管理货道</span>
+          </div>
+        }
         width={1250}
         visible={ManageAislemodalVisible}
         onOk={ManageAisleHandleAddClick}

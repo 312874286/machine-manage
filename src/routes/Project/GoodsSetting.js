@@ -59,7 +59,12 @@ const CreateForm = Form.create()(
     );
     return (
       <Modal
-        title={modalType ? '编辑商品' : '新建商品'}
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">{modalType ? '编辑商品' : '新建商品'}</span>
+          </div>
+        }
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}

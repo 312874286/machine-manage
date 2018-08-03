@@ -392,7 +392,12 @@ export default class troubleBill extends PureComponent {
           />
         </Card>
         <Modal
-          title="查看"
+          title={
+            <div class="modalBox">
+              <span class="leftSpan"></span>
+              <span class="modalTitle">查看</span>
+            </div>
+          }
           visible={seeVisible}
           onCancel={this.seeHandleCancel}
           footer={[

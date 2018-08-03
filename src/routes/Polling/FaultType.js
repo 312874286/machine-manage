@@ -345,7 +345,12 @@ export default class FaultType extends PureComponent {
 
           </Card>
           <Modal
-          title="创建故障类型"
+          title={
+            <div class="modalBox">
+              <span class="leftSpan"></span>
+              <span class="modalTitle">创建故障类型</span>
+            </div>
+          }
           visible={visible}
           onOk={this.handleOK}
           onCancel={this.handleCancel}

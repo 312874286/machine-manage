@@ -66,7 +66,12 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={!modalType ? '编辑排期' : '新增排期'}
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">{!modalType ? '编辑排期' : '新增排期'}</span>
+          </div>
+        }
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible(false)}
@@ -197,14 +202,20 @@ const SelectMachineForm = Form.create()(
     };
     return (
       <Modal
-        title="选择机器"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">选择机器</span>
+          </div>
+        }
         visible={editMachineModalVisible}
         onOk={onEditMachineHandleAddClick}
         onCancel={() => onEditMachineHandleModalVisibleClick()}
         confirmLoading={editMachineEditModalConfirmLoading}
         width={800}
       >
-        <Form onSubmit={this.handleSearch}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="选择机器">
             {getFieldDecorator('machine', {
               rules: [{ type: 'array', required: true, message: '请选择机器' }],
@@ -225,6 +236,7 @@ const SelectMachineForm = Form.create()(
             )}
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
 });
@@ -273,13 +285,19 @@ const WatchForm = Form.create()(
     }];
     return (
       <Modal
-        title="查看排期"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看排期</span>
+          </div>
+        }
         visible={watchModalVisible}
         onCancel={() => handleWatchModalVisible()}
         footer={null}
         width={900}
       >
-        <Form>
+        <div className="manageAppBox">
+          <Form>
           <FormItem {...formItemLayout} label="活动名称">
             <span>{modalData.activityName}</span>
           </FormItem>
@@ -309,6 +327,7 @@ const WatchForm = Form.create()(
             <Table columns={couponsColumns} dataSource={couponsList} rowKey={record => record.code} pagination={false} />
           </FormItem>
         </Form>
+        </div>
       </Modal>
     );
   });
@@ -318,21 +337,28 @@ const WatchMachine = Form.create()(
     const machineColumns = [{
       title: '机器点位',
       dataIndex: 'machineLocale',
-      align: 'center',
+      align: 'left',
+      width: '80%'
     }, {
       title: '机器编码',
       dataIndex: 'machineCode',
-      align: 'center',
+      align: 'left',
+      width: '20%'
     }];
     return (
       <Modal
-        title="查看机器"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看机器</span>
+          </div>
+        }
         width={600}
         visible={WatchMachineModalVisible}
         onCancel={() => WatchMachineHandleModalVisibleClick()}
         footer={null}
       >
-        <div style={{ background: '#ECECEC', padding: '30px' }}>
+        <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
           <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.prizeId} pagination={false} />
         </div>
       </Modal>
@@ -355,6 +381,7 @@ export default class ScheduleSettingList extends PureComponent {
     keyword: '',
     modalData: {},
     code: '',
+    status: 0,
     modalType: true,
     activityLists: [],
     gameLists: [],
@@ -545,6 +572,7 @@ export default class ScheduleSettingList extends PureComponent {
           endTime: this.state.getDataEndDay,
           startTime: this.state.getDataStartDay,
           code: this.state.code,
+          status: this.state.status,
         },
       },
     }).then((res) => {
@@ -780,6 +808,7 @@ export default class ScheduleSettingList extends PureComponent {
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
+        status: fieldsValue.status ? fieldsValue.status : 0,
       }, () => {
         this.getLists();
       });

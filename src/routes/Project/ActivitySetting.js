@@ -58,7 +58,12 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={modalType === 'edit' ? '编辑活动' : (modalType === 'add' ? '新建活动' : '查看活动')}
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">{modalType === 'edit' ? '编辑活动' : (modalType === 'add' ? '新建活动' : '查看活动')}</span>
+          </div>
+        }
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
@@ -159,7 +164,12 @@ const WatchForm = Form.create()(
     };
     return (
       <Modal
-        title="查看活动"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看活动</span>
+          </div>
+        }
         visible={watchModalVisible}
         onCancel={() => handleWatchModalVisible()}
         footer={null}
@@ -205,7 +215,12 @@ const SetDefaultForm = Form.create()(
     };
     return (
       <Modal
-        title="设置默认活动"
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">设置默认活动</span>
+          </div>
+        }
         visible={editActivitymodalVisible}
         onOk={editActivityHandleAddClick}
         onCancel={() => editActivityHandleModalVisibleClick()}

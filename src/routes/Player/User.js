@@ -142,7 +142,7 @@ export default class PlayerUser extends PureComponent {
                       {getFieldDecorator('keyword', {
                         initialValue: keyword,
                       })(
-                        <Input placeholder="请输入用户昵称、手机号、渠道名称" />
+                        <Input placeholder="请输入用户昵称、渠道名称" />
                       )}
                     </FormItem>
                   </Col>

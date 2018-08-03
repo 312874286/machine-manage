@@ -390,7 +390,7 @@ class ScheduleTable extends PureComponent {
                                  width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
                                  justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
 
-                            <div>{item.name}</div>
+                            <div style={{ paddingLeft: '10px' }}>{item.name}</div>
                           </div>
                         </Popover>
                       </div>
