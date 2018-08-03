@@ -337,64 +337,66 @@ class ScheduleTable extends PureComponent {
               {/*<span>加载更多</span>*/}
               <Icon type="left-circle-o" style={{ fontSize: '44px', color: '#849FFF' }}/>
             </Card.Grid>
-            <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: minHeight, height: (50 * dateList.length + 70) + 'px' }}
-                 id="dateWeek" className={styles.dateWeek}>
-              {dateTwoWeeksArr.map((item) => {
-                return (
-                  <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
-                    <a id={currentDayAfter === item.value ? 'currentDayAfter' : (currentDay === item.value ? 'today': '')}>
-                      <p>{item.value}</p>
-                      <p>{this.filterWeek(item.week)}</p>
-                      <p className="pHeight"></p>
-                    </a>
-                  </Card.Grid>
-                );
-              })}
-              <div className={styles.dateList}>
-                {dateList.map((item) => {
+            <div className={styles.dateWeekBox} style={{ Height: minHeight }}>
+              <div style={{ overflowX: 'scroll', display: 'flex', position: 'relative', zIndex: 3, maxWidth: '1040px', minWidth: '1040px', minHeight: minHeight, height: (50 * dateList.length + 70) + 'px' }}
+                   id="dateWeek" className={styles.dateWeek}>
+                {dateTwoWeeksArr.map((item) => {
                   return (
-                    <div key={item.id}>
-                      <Popover placement="top" content=
-                        {
-                          <div className={styles.iconBox}>
-                            {/*{item.Time + '  '}*/}
-                            <div className={styles.timeBox}>
-                              <span>开始时间：{item.startTime}</span>
-                              <span>结束时间：{item.endTime}</span>
-                            </div>
-                            <div className={styles.editBox}>
-                              <div  onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} >
-                                编辑
+                    <Card.Grid value={item.id} key={item.id} className={currentDay === item.value ? styles.currentDay : styles.tableDiv}>
+                      <a id={currentDayAfter === item.value ? 'currentDayAfter' : (currentDay === item.value ? 'today': '')}>
+                        <p>{item.value}</p>
+                        <p>{this.filterWeek(item.week)}</p>
+                        <p className="pHeight"></p>
+                      </a>
+                    </Card.Grid>
+                  );
+                })}
+                <div className={styles.dateList}>
+                  {dateList.map((item) => {
+                    return (
+                      <div key={item.id}>
+                        <Popover placement="top" content=
+                          {
+                            <div className={styles.iconBox}>
+                              {/*{item.Time + '  '}*/}
+                              <div className={styles.timeBox}>
+                                <span>开始时间：{item.startTime}</span>
+                                <span>结束时间：{item.endTime}</span>
                               </div>
-                              <div  onClick={() => onWatchClick(item)}>查看</div>
+                              <div className={styles.editBox}>
+                                <div  onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} >
+                                  编辑
+                                </div>
+                                <div  onClick={() => onWatchClick(item)}>查看</div>
+                              </div>
                             </div>
-                          </div>
-                        }
-                               title={
-                                 <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                                   <span>活动名称: {item.name}</span>
-                                   <div>
-                                      <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No">
+                          }
+                                 title={
+                                   <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                                     <span>活动名称: {item.name}</span>
+                                     <div>
+                                       <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No">
                                          <div className={styles.anticonDelete} style={{ display: moment(item.endTime) <= new Date().getTime() ? '' : (moment(item.startTime) >= new Date().getTime() ? '' : 'none') }}>
                                            清除
                                          </div>
-                                      </Popconfirm>
+                                       </Popconfirm>
+                                     </div>
                                    </div>
-                                 </div>
-                               } trigger="hover">
+                                 } trigger="hover">
                           <div className={styles.dateChildren}
-                             style={{
-                               background: moment(item.endTime) < new Date().getTime()  ? 'rgba(242,242,242,1)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)'),
-                               color: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
-                               width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
-                               justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
+                               style={{
+                                 background: moment(item.endTime) < new Date().getTime()  ? 'rgba(242,242,242,1)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)'),
+                                 color: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
+                                 width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
+                                 justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
 
-                          <div>{item.name}</div>
+                            <div>{item.name}</div>
                           </div>
-                      </Popover>
-                    </div>
-                  );
-                })}
+                        </Popover>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
             <Card.Grid style={gridStyleRight} onClick={() => this.right()}>

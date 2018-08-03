@@ -95,7 +95,7 @@
   }
 }
 .cardDiv {
-  overflow-y: auto;
+  overflow-y: hidden;
   //height: 500px;
   overflow-x: hidden;
 }
@@ -107,9 +107,9 @@
 //}
 .dateWeek {
   //height: 1500px;
-  overflow-y: hidden;
+  overflow-y: scroll;
   box-shadow: 1px 0 0 0 #e8e8e8, 0 1px 0 0 #e8e8e8, 1px 1px 0 0 #e8e8e8, 1px 0 0 0 #e8e8e8 inset, 0 1px 0 0 #e8e8e8 inset;
-  border-bottom: 1px solid #CACACA;
+  //border-bottom: 1px solid #CACACA;
 }
 .titleBox {
   display: flex;
@@ -163,7 +163,7 @@
   #scheduleBox .ant-card-head {
     width: 100%;
     margin: 0 auto;
-    padding: 0 30px;
+    padding: 0 30px !important;
   }
   #scheduleBox .ant-card-body {
     margin: 15px;
@@ -179,3 +179,13 @@
  .anticonDelete {
   color: #FC5A3F;
  }
+.dateWeekBox {
+  overflow: scroll;
+/* display: flex; */
+  position: relative;
+/* z-index: 3; */
+  max-width: 1040px;
+  min-width: 1040px;
+  //max-height: 362px;
+  border: 1px solid #cacaca;
+}
