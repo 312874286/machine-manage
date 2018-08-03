@@ -654,7 +654,7 @@ export default class troubleBill extends PureComponent {
             </Row>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
-                <span class="left">回复内容</span>
+                <span class="left">解决方案</span>
               </Col>
               <Col md={20} sm={24}>
                 {seeData.finishRemark}
