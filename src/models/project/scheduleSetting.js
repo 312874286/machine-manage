@@ -75,6 +75,9 @@ export default {
           if (data[0].level === 5 && data[0].planed === '1') {
             disabled = true;
           }
+          if (data[0].level === 5 && data[0].planed === '0') {
+            disabled = false;
+          }
           const a = {
             value: data[i].code,
             isLeaf: isLeaf,
