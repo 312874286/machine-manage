@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, Tree, message, Popconfirm } from 'antd';
+import { Card, Table, Button, Row, Col, Input, Modal, Tree, message, Popconfirm, Form } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
 import styles from './Account.less'
 
 
 const { TreeNode } = Tree;
+const FormItem = Form.Item;
 // const treeData = [{
 //   title: '0-0',
 //   key: '0-0',
@@ -360,17 +361,39 @@ export default class Account extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={9} sm={24}>
-              <Input placeholder="请输入角色名称" value={userName} onChange={this.onChange} />
-            </Col>
-            <Col md={6} sm={24}>
-              <Button onClick={this.handleReset}>
-                  重置
-              </Button>
-              <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
-            </Col>
-          </Row>
+          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
+            {/*<Col md={9} sm={24}>*/}
+              {/*<Input placeholder="请输入角色名称" value={userName} onChange={this.onChange} />*/}
+            {/*</Col>*/}
+            {/*<Col md={6} sm={24}>*/}
+              {/*<Button onClick={this.handleReset}>*/}
+                  {/*重置*/}
+              {/*</Button>*/}
+              {/*<Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>*/}
+            {/*</Col>*/}
+          {/*</Row>*/}
+          <div className={styles.tableList}>
+            <div className={styles.tableListForm}>
+              <Form onSubmit={this.onFindData.bind(this)} layout="inline">
+                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                  <Col md={10} sm={12}>
+                    <FormItem>
+                      <Input placeholder="请输入角色名称" value={userName} onChange={this.onChange} />
+                    </FormItem>
+                  </Col>
+                  <Col md={7} sm={12}>
+                    <FormItem>
+                      <Button onClick={this.handleReset} >重置</Button>
+                      <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>
+                    </FormItem>
+                    {/*<span className={styles.submitButtons}>*/}
+                    {/**/}
+                    {/*</span>*/}
+                  </Col>
+                </Row>
+              </Form>
+            </div>
+          </div>
         </Card>
         <Card bordered={false}>
           <div class="tableList">

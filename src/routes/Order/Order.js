@@ -215,10 +215,14 @@ export default class Order extends PureComponent {
                     </FormItem>
                   </Col>
                   <Col md={7} sm={12}>
-                    <span className={styles.submitButtons}>
+                    <FormItem>
                       <Button onClick={this.handleFormReset}>重置</Button>
                       <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>
-                    </span>
+                    </FormItem>
+                    {/*<span className={styles.submitButtons}>*/}
+                      {/*<Button onClick={this.handleFormReset}>重置</Button>*/}
+                      {/*<Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>*/}
+                    {/*</span>*/}
                   </Col>
                 </Row>
               </Form>

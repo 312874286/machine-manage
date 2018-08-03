@@ -218,10 +218,20 @@ const CreateForm = Form.create()(
               rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
-            <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
-              {getFieldDecorator('userMaxTimes', {
+          <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
+            {getFieldDecorator('userMaxTimes', {
+              rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
+            })(<Input placeholder="请填写同一用户获得商品次数" disabled />)}
+          </FormItem>
+            <FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'none' : 'block' }}>
+              {getFieldDecorator('dayUserMaxTimes', {
+                rules: [{ required: false, whitespace: true, message: '请填写同一用户每天获得商品次数' }],
+              })(<Input placeholder="请填写同一用户每天获得商品次数" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
+              {getFieldDecorator('dayUserMaxTimes', {
                 rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
-              })(<Input placeholder="请填写同一用户获得商品次数" disabled />)}
+              })(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}
             </FormItem>
           <FormItem label="填写商品信息">
             <Table columns={goodsColumns} dataSource={goodsInitData} rowKey={record => record.prizeId} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />
@@ -934,6 +944,7 @@ export default class ScheduleSettingList extends PureComponent {
         activityId: data.activityId,
         gameId: data.gameId,
         userMaxTimes: data.userMaxTimes,
+        dayUserMaxTimes: data.dayUserMaxTimes,
         activityName: data.activityName,
         startTimeStr: moment(data.startTime),
         endTimeStr: moment(data.endTime),
@@ -945,6 +956,7 @@ export default class ScheduleSettingList extends PureComponent {
         activityId: undefined,
         gameId: undefined,
         userMaxTimes: undefined,
+        dayUserMaxTimes: undefined,
       });
       this.setState({
         isDisabled: false,
@@ -1058,6 +1070,15 @@ export default class ScheduleSettingList extends PureComponent {
             maxCount: 1,
           });
           message.error('请补全信息')
+          return;
+        }
+        if (fieldsValue.dayUserMaxTimes > fieldsValue.userMaxTimes) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.error('同一用户每天获得商品次数应该小于同一用户获得商品次数，请重新填写')
           return;
         }
         console.log('fieldsValue', fieldsValue)
