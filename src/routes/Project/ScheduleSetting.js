@@ -1052,12 +1052,22 @@ export default class ScheduleSettingList extends PureComponent {
           return;
         }
         if (!fieldsValue.activityId || !fieldsValue.gameId || !fieldsValue.userMaxTimes) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
           message.error('请补全信息')
           return;
         }
         console.log('fieldsValue', fieldsValue)
         if (!this.state.modalData.id) {
           if (this.state.selectCity.length === 0) {
+            message.config({
+              top: 100,
+              duration: 2,
+              maxCount: 1,
+            });
             message.error('请先选择机器')
             return;
           }
@@ -1072,7 +1082,6 @@ export default class ScheduleSettingList extends PureComponent {
         };
         this.setState({
           editModalConfirmLoading: true,
-          modalData: {},
         });
         let url = 'scheduleSetting/saveScheduleSetting';
         let messageTxt = '新增';
@@ -1095,6 +1104,7 @@ export default class ScheduleSettingList extends PureComponent {
               code: '',
               getDataStartDay: this.state.startTime,
               getDataEndDay: this.state.endTime,
+              modalData: {},
             }, () => {
               this.getLists();
             });
