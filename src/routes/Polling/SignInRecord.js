@@ -13,7 +13,7 @@ import {
   DatePicker,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
-import styles from './PunchingRecord.less';
+import styles from './SignInRecord.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 
@@ -232,7 +232,13 @@ export default class signInRecord extends PureComponent {
           {/*</Col>*/}
           {/*<Col md={9} sm={24}>*/}
           {/*</Col>*/}
-          <Col md={7} sm={24}>
+          <Col md={8} sm={24}>
+            <FormItem></FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem></FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <span>
                <FormItem>
                  <Button onClick={this.handleFormReset}>

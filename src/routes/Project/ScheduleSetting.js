@@ -385,6 +385,9 @@ const WatchForm = Form.create()(
           <FormItem {...formItemLayout} label="同一用户获得商品次数">
             <span>{modalData.userMaxTimes}</span>
           </FormItem>
+          <FormItem {...formItemLayout} label="请填写同一用户每天获得商品次数">
+            <span>{modalData.dayUserMaxTimes}</span>
+          </FormItem>
           <FormItem {...formItemLayout} label="商品信息">
             <Table columns={goodsColumns} dataSource={goodsList} rowKey={record => record.prizeId} pagination={false} />
           </FormItem>

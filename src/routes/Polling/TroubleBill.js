@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select,Upload, Icon } from 'antd';
+import { Card, Table, Button, Form, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select,Upload, Icon } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TroubleBill.less';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
-
 const { TextArea } = Input;
+const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -342,6 +342,36 @@ export default class troubleBill extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
+          {/*<div className={styles.tableList}>*/}
+            {/*<div className={styles.tableListForm}>*/}
+              {/*<Form onSubmit={this.onFindData.bind(this)} layout="inline">*/}
+                {/*<Col md={3} sm={24}>*/}
+                  {/*<Select value={type} onChange={this.selectHandleChange}>*/}
+                    {/*<Option value="1">上报时间</Option>*/}
+                    {/*<Option value="2">解决时间</Option>*/}
+                  {/*</Select>*/}
+                {/*</Col>*/}
+                {/*<Col md={6} sm={24}>*/}
+                  {/*<RangePicker*/}
+                    {/*allowClear={false}*/}
+                    {/*value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}*/}
+                    {/*onChange={this.startDatePickerChange}*/}
+                  {/*/>*/}
+                {/*</Col>*/}
+                {/*<Col md={8} sm={24}>*/}
+                  {/*<Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />*/}
+                {/*</Col>*/}
+                {/*<Col md={7} sm={24}>*/}
+                  {/*<FormItem>*/}
+                    {/*<Button onClick={this.handleReset}>*/}
+                      {/*重置*/}
+                    {/*</Button>*/}
+                    {/*<Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>*/}
+                  {/*</FormItem>*/}
+                {/*</Col>*/}
+              {/*</Form>*/}
+            {/*</div>*/}
+          {/*</div>*/}
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={3} sm={24}>
               <Select value={type} onChange={this.selectHandleChange}>
@@ -404,8 +434,7 @@ export default class troubleBill extends PureComponent {
             <Button key="submit" type="primary" onClick={this.seeHandleCancel}>
               关闭
             </Button>,
-          ]}
-        >
+          ]}>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={6} sm={24}>
               故障ID
