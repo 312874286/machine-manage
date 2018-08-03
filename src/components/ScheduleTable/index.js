@@ -324,7 +324,7 @@ class ScheduleTable extends PureComponent {
               <i className={styles.endStatus}></i>活动已结束
               <i className={styles.ingStatus}></i>活动进行中
               <i className={styles.preStatus}></i>活动未开始
-              <Button type="primary" style={{ marginLeft: '10px', marginRight: '63px' }} onClick={() => this.backToday(true)}>
+              <Button type="primary" style={{ marginLeft: '10px' }} onClick={() => this.backToday(true)}>
                 返回今天
               </Button>
             </div>
