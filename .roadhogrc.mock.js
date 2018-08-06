@@ -2943,6 +2943,20 @@ const proxy = {
   },
   'POST /share/uploadImage': (req, res) => {
     res.send({"code":0,"data":"backend/goods/46c6f7d487d24f2eba83266b85d72008.jpeg","msg":"成功"})
+  },
+  'POST /check/user/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /check/user/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
   }
 };
 

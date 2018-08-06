@@ -33,4 +33,13 @@ export async function selectMachine({ params }) {
     body: stringify(params),
   });
 }
-
+export async function updateStatus({ params }) {
+  return fetch.post(api.updateStatus, {
+    body: stringify(params),
+  });
+}
+export async function deleteUser({ params }) {
+  return fetch.post(api.deleteUser, {
+    body: stringify(params),
+  });
+}

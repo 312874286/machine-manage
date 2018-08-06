@@ -19,6 +19,7 @@ import {
   Popconfirm,
   Icon,
   Alert,
+  Divider,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import styles from './User.less';
@@ -319,6 +320,7 @@ const SelectMachineForm = Form.create()(
       </Modal>
     );
   });
+const userStatus = ['启用', '停用']
 @connect(({ common, loading, user }) => ({
   common,
   user,
@@ -910,6 +912,39 @@ export default class user extends PureComponent {
   selectMachineFormRef = (form) => {
     this.selectMachineform = form;
   }
+  // 人员管理停用
+  updateStatus = (params, keyWord, postName) => {
+    this.props.dispatch({
+      type: 'user/' + postName,
+      payload: {
+        params,
+      },
+    }).then((resp) => {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      if (resp && resp.code === 0) {
+        message.success(keyWord + '成功');
+        this.getLists()
+      }
+    });
+  }
+  stopClick = (item) => {
+    let params = {id: item.id, status: 1}
+    this.updateStatus(params, '停用', 'updateStatus')
+  }
+  // 人员管用启用
+  startClick = (item) => {
+    let params = {id: item.id, status: 1}
+    this.updateStatus(params, '启用', 'updateStatus')
+  }
+  // 删除
+  deleteClick = (item) => {
+    let params = {id: item.id}
+    this.updateStatus(params, '删除', 'deleteUser')
+  }
   // tree结束
   renderAdvancedForm() {
     const { form } = this.props;
@@ -970,14 +1005,27 @@ export default class user extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
+        width: '10%',
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        render(val) {
+          return <span>{userStatus[val]}</span>
+        }
       },
       {
         fixed: 'right',
-        width: '100px',
+        width: '150px',
         title: '操作',
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.stopClick(item)} style={{display: item.status === 1 ? 'none' : ''}}>停用</a>
+            <a onClick={() => this.startClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>启用</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.deleteClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>删除</a>
           </Fragment>
         ),
       },

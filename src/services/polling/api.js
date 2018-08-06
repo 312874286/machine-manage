@@ -19,7 +19,8 @@ const api = map({
 
   getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}&startTime={startTime}&endTime={endTime}',
   userExcel: '/check/signIn/userExcel',
-
+  updateStatus: '/check/user/updateStatus',
+  deleteUser: '/check/user/delete',
 });
 
 export default api;

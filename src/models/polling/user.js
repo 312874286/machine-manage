@@ -1,4 +1,4 @@
-import { getUserList, getUserMachineDetailList, getUserDetail, saveUser, updateUser, selectMachine } from '../../services/polling/personnelManagement';
+import { getUserList, getUserMachineDetailList, getUserDetail, saveUser, updateUser, selectMachine, updateStatus, deleteUser } from '../../services/polling/personnelManagement';
 
 export default {
   namespace: 'user',
@@ -30,6 +30,14 @@ export default {
     },
     *updateUser({ payload: { params } }, { call }) {
       const response = yield call(updateUser, { params });
+      return response;
+    },
+    *updateStatus({ payload: { params } }, { call }) {
+      const response = yield call(updateStatus, { params });
+      return response;
+    },
+    *deleteUser({ payload: { params } }, { call }) {
+      const response = yield call(deleteUser, { params });
       return response;
     },
     *selectMachine({ payload: { params } }, { call }) {
