@@ -89,6 +89,9 @@ export const getRouterData = (app) => {
     // '/exception/trigger': {
     //   component: dynamicWrapper(app, [], () => import('../routes/Exception/triggerException')),
     // },
+    '/homePage': {
+      component: dynamicWrapper(app, [], () => import('../routes/HomePage/HomePage')),
+    },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
@@ -193,6 +196,12 @@ export const getRouterData = (app) => {
     },
     '/check/faultType': {
       component: dynamicWrapper(app, ['polling/faultType', 'log/log', 'common'], () => import('../routes/Polling/FaultType')),
+    },
+    '/check/workOrder': {
+      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/WorkOrder')),
+    },
+    '/check/replenish': {
+      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
     },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),

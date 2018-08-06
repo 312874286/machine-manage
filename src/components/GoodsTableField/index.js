@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import styles from './index.less'
 import { Table, Input, Button, Popconfirm, Form, Select } from 'antd';
 
 const FormItem = Form.Item;
@@ -277,7 +277,7 @@ class GoodsTableField extends Component {
     });
 
     return (
-      <div>
+      <div className={styles.antButtons}>
         <Button icon="plus" onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
           添加
         </Button>

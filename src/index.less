@@ -158,7 +158,7 @@ body .ant-table-row-hover {
   #editTable .ant-table-thead > tr, #editTable .ant-table-tbody > tr {
     -webkit-transition: all .3s;
     transition: all .3s;
-    width: 139px !important;
+    width: 138px !important;
     height: 122px;
     float: left;
     display: flex;
@@ -222,10 +222,12 @@ body .ant-table-row-hover {
     color: #333;
   }
   #editTable .ant-btn {
-    margin: 5px 0 0 10px;
     padding: 0 5px;
-    height: 20px;
-    line-height: 20px;
+    width: 100%;
+    border-radius: 6px !important;
+    line-height: 13px;
+    height: 20px !important;
+    margin: 5px 5px 0 10px;
   }
   #editTable .ant-table-tbody > tr:nth-child(even) {
     background: #fff !important;
@@ -416,5 +418,9 @@ body .ant-table-row-hover {
   }
   .ant-table-tbody>tr>td {
     padding: 12px !important;
+  }
+  .ant-popover-buttons button {
+    width: 40px;
+    border-radius: 4px !important;
   }
 }

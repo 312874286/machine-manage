@@ -125,7 +125,8 @@ export default class SiderMenu extends PureComponent {
           title={
             item.icon ? (
               <span>
-                <span className="selectedBg"></span>
+                {/*selectedBg*/}
+                <span className={styles.selectedBg}></span>
                 {getIcon(item.icon)}
                 <span>{item.name}</span>
               </span>
@@ -218,39 +219,41 @@ export default class SiderMenu extends PureComponent {
     }
     // console.log('collapsed', collapsed, collapsed, onCollapse )
     return (
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        breakpoint="lg"
-        // // md
-        onCollapse={onCollapse}
-        width={180}
-        className={styles.sider}
-      >
-        <div className={styles.logo} key="logo">
-          <Link to="/">
-            <img src={logo} alt="logo" />
-            <h1>ERP</h1>
-          </Link>
-        </div>
-        <Icon
-          className={styles.trigger}
-          type={collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={this.toggle}
-        />
-        <Menu
-          key="Menu"
-          theme="dark"
-          mode="inline"
-          // inlineCollapsed="false"
-          {...menuProps}
-          onOpenChange={this.handleOpenChange}
-          selectedKeys={selectedKeys}
-          className={styles.MenuBackground}>
-          {this.getNavMenuItems(this.menus)}
-        </Menu>
-      </Sider>
+      <div className={styles.siderBox}>
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          breakpoint="lg"
+          // // md
+          onCollapse={onCollapse}
+          width={180}
+          className={styles.sider}
+        >
+          <div className={styles.logo} key="logo">
+            <Link to="/">
+              <img src={logo} alt="logo" />
+              <h1>ERP</h1>
+            </Link>
+          </div>
+          <Icon
+            className={styles.trigger}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={this.toggle}
+          />
+          <Menu
+            key="Menu"
+            theme="dark"
+            mode="inline"
+            // inlineCollapsed="false"
+            {...menuProps}
+            onOpenChange={this.handleOpenChange}
+            selectedKeys={selectedKeys}
+            className={styles.MenuBackground}>
+            {this.getNavMenuItems(this.menus)}
+          </Menu>
+        </Sider>
+      </div>
     );
   }
 }

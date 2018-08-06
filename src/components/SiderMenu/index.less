@@ -23,7 +23,17 @@
     font-weight: 600;
   }
 }
-
+.siderBox {
+  :global {
+    .selectedBg {
+      width: 6px;
+      //background: item.color;
+      height: 40px;
+      left: 0;
+      position: absolute
+    }
+  }
+}
 .sider {
   min-height: 100vh;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
@@ -42,7 +52,6 @@
     }
   }
 }
-
 .icon {
   width: 14px;
   margin-right: 10px;
@@ -51,6 +60,12 @@
 :global {
   .drawer .drawer-content {
     background: #001529;
+  }
+  .noSelected {
+    display: inline-block;
+  }
+  .Selected {
+    display: none;
   }
 }
 i.trigger {

@@ -140,7 +140,7 @@ export default class troubleBill extends PureComponent {
         for(var i = 0 ; i < this.state.seeData.imgList.length ; i++){
           newImgList.push({
             uid: i,
-            name: this.state.seeData.imgList[i],
+            name: '',
             status: 'done',
             url: this.state.seeData.imgList[i],
           });
