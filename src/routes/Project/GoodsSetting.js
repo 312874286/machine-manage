@@ -650,23 +650,28 @@ export default class goodsSettingList extends PureComponent {
         width: 150,
         dataIndex: 'img',
         render: (text, item) => (
-          <div style={{ height: '104px', display: 'flex', alignItems: 'center' }} id="look">
-            <Upload
-              // action="//jsonplaceholder.typicode.com/posts/"
-              listType="picture-card"
-              fileList={[{
-                uid: item.code,
-                name: item.name,
-                status: 'done',
-                url: item.img}]}
-              onPreview={this.handlePreview}
-              onChange={this.handleChange}
-            >
-            </Upload>
-            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-              <img alt="example" style={{ width: '100%' }} src={previewImage} />
-            </Modal>
-          </div>
+          (item.img.length > 0) ? (
+            <div style={{ height: '68px', display: 'flex', alignItems: 'center', overflow: 'hidden' }} id="look">
+              <Upload
+                // action="//jsonplaceholder.typicode.com/posts/"
+                listType="picture-card"
+                fileList={[{
+                  uid: item.code,
+                  name: item.name,
+                  status: 'done',
+                  url: item.img}]}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              >
+              </Upload>
+              <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+              </Modal>
+            </div>
+          ) : (
+            <div></div>
+          )
+
         )
       },
       {
@@ -709,64 +714,66 @@ export default class goodsSettingList extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
-          <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
-        </Card>
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button>
-              {/*{selectedRows.length > 0 && (*/}
+        <div>
+          <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
+            <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
+          </Card>
+          <Card bordered={false}>
+            <div className={styles.tableList}>
+              <div className={styles.tableListOperator}>
+                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                  新建
+                </Button>
+                {/*{selectedRows.length > 0 && (*/}
                 {/*<span>*/}
-                  {/*<Button>批量操作</Button>*/}
-                  {/*<Dropdown overlay={menu}>*/}
-                    {/*<Button>*/}
-                      {/*更多操作 <Icon type="down" />*/}
-                    {/*</Button>*/}
-                  {/*</Dropdown>*/}
+                {/*<Button>批量操作</Button>*/}
+                {/*<Dropdown overlay={menu}>*/}
+                {/*<Button>*/}
+                {/*更多操作 <Icon type="down" />*/}
+                {/*</Button>*/}
+                {/*</Dropdown>*/}
                 {/*</span>*/}
-              {/*)}*/}
+                {/*)}*/}
+              </div>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={1100}
+              />
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={1100}
-            />
-          </div>
-        </Card>
-        <CreateForm
-          {...parentMethods}
-          ref={this.saveFormRef}
-          modalVisible={modalVisible}
-          editModalConfirmLoading={editModalConfirmLoading}
-          modalType={modalType}
-          merchantLists={merchantLists}
-          shopsLists={shopsLists}
-          previewVisible={this.state.previewVisible}
-          previewImage={this.state.previewImage}
-          fileList={this.state.fileList}
-          handlePreview={this.handlePreview}
-          handleChange={this.handleChange}
-          handleCancel={this.handleCancel}
-          handleUpload={this.handleUpload}
-          normFile={this.normFile}
-          onSelect={this.onSelect}
-        />
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
-        />
+          </Card>
+          <CreateForm
+            {...parentMethods}
+            ref={this.saveFormRef}
+            modalVisible={modalVisible}
+            editModalConfirmLoading={editModalConfirmLoading}
+            modalType={modalType}
+            merchantLists={merchantLists}
+            shopsLists={shopsLists}
+            previewVisible={this.state.previewVisible}
+            previewImage={this.state.previewImage}
+            fileList={this.state.fileList}
+            handlePreview={this.handlePreview}
+            handleChange={this.handleChange}
+            handleCancel={this.handleCancel}
+            handleUpload={this.handleUpload}
+            normFile={this.normFile}
+            onSelect={this.onSelect}
+          />
+          <LogModal
+            data={logList}
+            page={logPage}
+            loding={this.state.logModalLoading}
+            logVisible={this.state.logModalVisible}
+            logHandleCancel={this.logModalHandleCancel}
+            logModalhandleTableChange={this.logModalhandleTableChange}
+          />
+        </div>
       </PageHeaderLayout>
     );
   }

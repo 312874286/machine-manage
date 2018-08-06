@@ -872,11 +872,12 @@ export default class ScheduleSettingList extends PureComponent {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1];
         }
       }
+      console.log('fieldsValue.status', fieldsValue.status)
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
-        status: fieldsValue.status,
+        status: fieldsValue.status >= 0 ? fieldsValue.status : '',
       }, () => {
         this.getLists();
       });

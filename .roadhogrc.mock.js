@@ -193,14 +193,15 @@ const proxy = {
           merchantAdmin: 1,
           merchantId: 'asdnoasndasjd',
         },
-        functions: [{
-          id: 'a33',
-          functionDepict: '首页',
-          functionPath: 'homePage',
-          parentId: null,
-          functionLevel: 1,
-          functionIcon: 'homePage',
-        },
+        functions: [
+          {
+            id: 'a33',
+            functionDepict: '首页',
+            functionPath: 'homePage',
+            parentId: null,
+            functionLevel: 1,
+            functionIcon: 'homePage',
+          },
           {
             id: 'a1',
             functionDepict: '货机管理',
@@ -2601,7 +2602,8 @@ const proxy = {
           "createTime": null,
           "updateId": null,
           "updateTime": null,
-          "isDelete": 0
+          "isDelete": 0,
+          "status": 1,
         }
       ]
     })

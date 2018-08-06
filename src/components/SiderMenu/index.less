@@ -25,12 +25,36 @@
 }
 .siderBox {
   :global {
-    .selectedBg {
-      width: 6px;
-      //background: item.color;
-      height: 40px;
-      left: 0;
-      position: absolute
+    .ant-menu-submenu-open span span:nth-child(1) {
+      background: #FED92C;
+    }
+    .ant-menu-dark .ant-menu-submenu img:nth-child(1), .ant-menu-dark .ant-menu-item img:nth-child(1) {
+      display: inline-block;
+    }
+    .ant-menu-dark .ant-menu-submenu img:nth-child(2), .ant-menu-dark .ant-menu-item img:nth-child(2) {
+      display: none;
+    }
+    .ant-menu-dark .ant-menu-submenu-open img:nth-child(2),
+    .ant-menu-submenu-active img:nth-child(2),
+    .ant-menu-dark .ant-menu-submenu-selected img:nth-child(2),
+    .ant-menu-item-active img:nth-child(2),
+    .ant-menu-dark .ant-menu-item-selected img:nth-child(2) {
+      display: inline-block !important;
+    }
+    .ant-menu-dark .ant-menu-submenu-open img:nth-child(1),
+    .ant-menu-submenu-active img:nth-child(1),
+    .ant-menu-dark .ant-menu-submenu-selected img:nth-child(1),
+    .ant-menu-dark .ant-menu-item-open img:nth-child(1),
+    .ant-menu-item-active img:nth-child(1),
+    .ant-menu-dark .ant-menu-item-selected img:nth-child(1) {
+      display: none !important;
+    }
+    .ant-menu-dark .ant-menu-item:hover, .ant-menu-dark .ant-menu-item-active, .ant-menu-dark .ant-menu-submenu-active, .ant-menu-dark .ant-menu-submenu-open, .ant-menu-dark .ant-menu-submenu-selected, .ant-menu-dark .ant-menu-submenu-title:hover {
+      background-color: transparent;
+      color: #fff !important;
+    }
+    .ant-menu-dark .ant-menu-item:hover > a {
+      color: #fff !important;
     }
   }
 }

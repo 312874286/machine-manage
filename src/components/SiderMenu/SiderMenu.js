@@ -20,8 +20,8 @@ const getIcon = (icon) => {
     let imgSrc = require(`../../assets/images/menuImg/${icon}.png`)
     let imgSrc2 = require(`../../assets/images/menuImg/${icon}Selected.png`)
     return <Icon>
-      <img src={imgSrc} alt="icon" className={styles.icon} class="noSelected" />
-      <img src={imgSrc2} alt="icon" className={styles.icon}  class="Selected"/>
+      <img src={imgSrc} alt="icon" className={styles.icon} />
+      <img src={imgSrc2} alt="icon" className={styles.icon} />
     </Icon>;
   }
   return icon;
