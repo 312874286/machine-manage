@@ -89,18 +89,18 @@ export const getRouterData = (app) => {
     // '/exception/trigger': {
     //   component: dynamicWrapper(app, [], () => import('../routes/Exception/triggerException')),
     // },
-    '/homePage': {
-      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/HomePage/HomePage')),
-    },
-    '/offline': {
-      component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/OffLine')),
-    },
-    '/stockOut': {
-      component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/StockOut')),
-    },
-    '/unusual': {
-      component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/Unusual')),
-    },
+    // '/homePage': {
+    //   component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/HomePage/HomePage')),
+    // },
+    // '/offline': {
+    //   component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/OffLine')),
+    // },
+    // '/stockOut': {
+    //   component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/StockOut')),
+    // },
+    // '/unusual': {
+    //   component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/Unusual')),
+    // },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
