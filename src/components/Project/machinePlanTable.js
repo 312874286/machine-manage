@@ -7,23 +7,27 @@ import $ from 'jquery'
 class MachinePlanTable extends PureComponent {
   componentDidMount () {
     $('#calendar').fullCalendar({
+      buttonText: {
+        today: '今天',
+      },
+      allDayText: "全天",
+      timeFormat: {
+        '': 'H:mm{-H:mm}'
+      },
+      // weekMode: "variable",
+      titleFormat: {
+        month: 'yyyy',                             // September 2009
+      },
+      monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+      dayNames: ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+      dayNamesShort: ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
       header: {
-        left: 'prev,next today',
+        left: 'prev,next',
         center: 'title',
-        right: 'month,agendaWeek'
+        right: 'today'
       },
       defaultDate: '2018-07-12',
       events: [
-        {
-          start: '2018-07-11T10:00:00',
-          end: '2018-07-11T16:00:00',
-          rendering: 'background'
-        },
-        {
-          start: '2018-07-13T10:00:00',
-          end: '2018-07-13T16:00:00',
-          rendering: 'background'
-        },
         {
           start: '2018-07-24',
           end: '2018-07-28',
