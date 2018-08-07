@@ -39,33 +39,41 @@ export default class user extends PureComponent {
     return (
       <div className={styles.gridBox}>
         <PageHeaderLayout>
-          <Card title="运行监控">
-            <a onClick={() => this.props.history.push('/offline')}>
+          <div className={styles.gridCardBox}>
+            <Card title="运行监控">
+              <a>
+                <Card.Grid style={gridStyle}>
+                  <Card title="200台" bordered={false}>机器在线</Card>
+                </Card.Grid>
+              </a>
+              <a onClick={() => this.props.history.push('/offline')}>
+                <Card.Grid style={gridStyle}>
+                  <Card title="200台" bordered={false}>机器离线</Card>
+                </Card.Grid>
+              </a>
+              <a onClick={() => this.props.history.push('/Unusual')}>
+                <Card.Grid style={gridStyle}>
+                  <Card title="200台" bordered={false}>机器异常</Card>
+                </Card.Grid>
+              </a>
+              <a onClick={() => this.props.history.push('/StockOut')}>
+                <Card.Grid style={gridStyle}>
+                  <Card title="200台" bordered={false}>机器缺货</Card>
+                </Card.Grid>
+              </a>
+            </Card>
+            <Card title="工单：">
               <Card.Grid style={gridStyle}>
-                <Card title="200台" bordered={false}>机器在线</Card>
+                <Card title="10台" bordered={false}>待接单</Card>
               </Card.Grid>
-            </a>
-            <Card.Grid style={gridStyle}>
-              <Card title="10台" bordered={false}>机器离线</Card>
-            </Card.Grid>
-            <Card.Grid style={gridStyle}>
-              <Card title="10台" bordered={false}>机器异常</Card>
-            </Card.Grid>
-            <Card.Grid style={gridStyle}>
-              <Card title="200台" bordered={false}>机器缺货</Card>
-            </Card.Grid>
-          </Card>
-          <Card title="工单：">
-            <Card.Grid style={gridStyle}>
-              <Card title="10台" bordered={false}>待接单</Card>
-            </Card.Grid>
-            <Card.Grid style={gridStyle}>
-              <Card title="10台" bordered={false}>处理中</Card>
-            </Card.Grid>
-            <Card.Grid style={gridStyle}>
-              <Card title="10台" bordered={false}>待确认</Card>
-            </Card.Grid>
-          </Card>
+              <Card.Grid style={gridStyle}>
+                <Card title="10台" bordered={false}>处理中</Card>
+              </Card.Grid>
+              <Card.Grid style={gridStyle}>
+                <Card title="10台" bordered={false}>待确认</Card>
+              </Card.Grid>
+            </Card>
+          </div>
         </PageHeaderLayout>
       </div>
     );

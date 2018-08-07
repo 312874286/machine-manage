@@ -219,13 +219,6 @@ const proxy = {
             functionLevel: 2,
           },
           {
-            id: 'a3',
-            functionDepict: '货道管理',
-            functionPath: 'aisle',
-            parentId: 'a1',
-            functionLevel: 2,
-          },
-          {
             id: 'a4',
             functionDepict: '点位管理',
             functionPath: 'point-setting',
@@ -286,6 +279,13 @@ const proxy = {
             id: 'a25',
             functionDepict: '商品管理',
             functionPath: 'goods',
+            parentId: 'a6',
+            functionLevel: 2,
+          },
+          {
+            id: 'a34',
+            functionDepict: '机器排期',
+            functionPath: 'machinePlan',
             parentId: 'a6',
             functionLevel: 2,
           },
@@ -2958,6 +2958,93 @@ const proxy = {
       "code": 0,
       "data": null,
       "msg": "成功"
+    })
+  },
+  'GET /machine/machine/planList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "data": [
+        {
+          "id": "74a9e410a9c044418ee2db260f86401a",
+          "machineCode": "1809510071149",
+          "localDesc": "天津市天津市和平区鞍山道沿线大沽口",
+          "netStatus": null,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null,
+          "machineStatus": null,
+          "planTime": [
+            {
+              "startTime": "2018-08-03 00:00:00",
+              "endTime": "2018-08-04 23:59:59"
+            },
+            {
+              "startTime": "2018-07-31 00:00:00",
+              "endTime": "2018-08-03 23:59:59"
+            }
+          ]
+        },
+        {
+          "id": "6b4cd639883d42999254878b52b1cc20",
+          "machineCode": "18978050",
+          "localDesc": "北京市北京市西城区小西天灯市口",
+          "netStatus": null,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null,
+          "machineStatus": null,
+          "planTime": [
+            {
+              "startTime": "2018-07-25 00:00:00",
+              "endTime": "2018-07-29 00:00:59"
+            }
+          ]
+        },
+        {
+          "id": "123",
+          "machineCode": "123",
+          "localDesc": "天津市天津市和平区鞍山道沿线大沽口",
+          "netStatus": null,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null,
+          "machineStatus": null,
+          "planTime": [
+            {
+              "startTime": "2018-07-16 09:00:00",
+              "endTime": "2018-10-06 23:00:00"
+            }
+          ]
+        },
+        {
+          "id": "6893a2ada9dd4f7eb8dc33adfc6eda73",
+          "machineCode": "18022789",
+          "localDesc": "北京市北京市西城区小西天灯市口",
+          "netStatus": null,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null,
+          "machineStatus": null,
+          "planTime": [
+            {
+              "startTime": "2018-07-31 00:00:00",
+              "endTime": "2018-08-03 23:59:59"
+            }
+          ]
+        },
+        {
+          "id": "2222",
+          "machineCode": "188982407114q",
+          "localDesc": "北京市北京市东城区王府井大沽口",
+          "netStatus": null,
+          "activityName": null,
+          "channelStatus": null,
+          "goodsStatus": null,
+          "machineStatus": null,
+          "planTime": []
+        }
+      ],
+      "code": 0
     })
   }
 };

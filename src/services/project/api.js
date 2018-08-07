@@ -50,12 +50,14 @@ const api = map({
 
   getGoodsSettingList: '/project/goods/list?pageNo={pageNo}&keyword={keyword}&code={code}',
   saveGoodsSetting: '/project/goods/add',
-  updateGoodsSetting: '/project/goods//update',
+  updateGoodsSetting: '/project/goods/update',
   deleteGoodsSetting: '/project/goods/delete',
   getGoodsSettingDetail: '/project/goods/detail?id={id}',
   // getShopsList: '/project/shops/getList',
   // getMerchantsList: '/project/merchant/getList',
   // getActivityList: '/project/activity/getList',
+  getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}',
+
 });
 
 export default api;

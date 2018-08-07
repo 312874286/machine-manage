@@ -272,8 +272,7 @@ export default class troubleBill extends PureComponent {
     // console.log(11111, list, page);
     const columns = [{
       title: '故障单ID',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'code',
       width: '19%'
     }, {
       title: '机器ID',
@@ -415,7 +414,7 @@ export default class troubleBill extends PureComponent {
           <Table
             columns={columns}
             dataSource={list}
-            rowKey="id"
+            rowKey={record => record.id}
             onChange={this.handleTableChange}
             pagination={paginationProps}
             scroll={{ x: 1500, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}

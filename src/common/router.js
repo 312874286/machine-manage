@@ -191,6 +191,9 @@ export const getRouterData = (app) => {
     '/project/goods': {
       component: dynamicWrapper(app, ['project/goodsSetting', 'log/log', 'common'], () => import('../routes/Project/GoodsSetting')),
     },
+    '/project/machinePlan': {
+      component: dynamicWrapper(app, ['project/machinePlanSetting', 'log/log', 'common'], () => import('../routes/Project/machinePlanSetting')),
+    },
     '/order/order': {
       component: dynamicWrapper(app, ['order/order', 'log/log', 'common'], () => import('../routes/Order/Order')),
     },
