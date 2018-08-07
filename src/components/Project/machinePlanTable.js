@@ -1,70 +1,51 @@
-import { Calendar, Badge } from 'antd';
+import 'fullcalendar'
 import {PureComponent} from "react";
 import styles from './machinePlanTable.less'
-
+import moment from 'moment'
+import $ from 'jquery'
 
 class MachinePlanTable extends PureComponent {
-  getListData = (value) => {
-    let listData;
-    switch (value.date()) {
-      case 8:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-        ]; break;
-      case 10:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-          { type: 'error', content: 'This is error event.' },
-        ]; break;
-      case 15:
-        listData = [
-          { type: 'warning', content: 'This is warning event' },
-          { type: 'success', content: 'This is very long usual event。。....' },
-          { type: 'error', content: 'This is error event 1.' },
-          { type: 'error', content: 'This is error event 2.' },
-          { type: 'error', content: 'This is error event 3.' },
-          { type: 'error', content: 'This is error event 4.' },
-        ]; break;
-      default:
-    }
-    return listData || [];
-  }
-
-  dateCellRender = (value) => {
-    const listData = this.getListData(value);
-    return (
-      <ul className="events">
+  componentDidMount () {
+    $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek'
+      },
+      defaultDate: '2018-07-12',
+      events: [
         {
-          listData.map(item => (
-            <li key={item.content}>
-              <Badge status={item.type} text={item.content} />
-            </li>
-          ))
+          start: '2018-07-11T10:00:00',
+          end: '2018-07-11T16:00:00',
+          rendering: 'background'
+        },
+        {
+          start: '2018-07-13T10:00:00',
+          end: '2018-07-13T16:00:00',
+          rendering: 'background'
+        },
+        {
+          start: '2018-07-24',
+          end: '2018-07-28',
+          overlap: false,
+          rendering: 'background',
+          color: '#ff9f89'
+        },
+        {
+          start: '2018-07-06',
+          end: '2018-07-08',
+          overlap: false,
+          rendering: 'background',
+          color: '#ff9f89'
         }
-      </ul>
-    );
-  }
-
-  getMonthData = (value) => {
-    if (value.month() === 8) {
-      return 1394;
-    }
-  }
-
-  monthCellRender = (value) => {
-    const num = this.getMonthData(value);
-    return num ? (
-      <div className={styles.notesMonth}>
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null;
+      ]
+    });
   }
   render() {
     return (
-      <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+      <div className={styles.fullCalendar}>
+        <div id="calendar"></div>
+      </div>
     )
   }
 }

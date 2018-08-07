@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './machinePlanSetting.less'
-// import MachinePlanTable  from '../../components/Project/machinePlanTable'
+import MachinePlanTable  from '../../components/Project/machinePlanTable'
 
 @connect(({ common, loading, machinePlanSetting }) => ({
   common,
@@ -42,7 +42,7 @@ export default class machinePlanSettingList extends PureComponent {
   render() {
     return (
       <PageHeaderLayout>
-        {/*<MachinePlanTable />*/}
+        <MachinePlanTable />
       </PageHeaderLayout>
     );
   }
