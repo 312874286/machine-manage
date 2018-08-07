@@ -63,7 +63,9 @@ class MachinePlanTable extends PureComponent {
     ) : null;
   }
   render() {
-    <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+    return (
+      <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+    )
   }
 }
 export default MachinePlanTable;

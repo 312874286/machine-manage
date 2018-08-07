@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './machinePlanSetting.less'
-import machinePlanTable  from '../../components/Project/machinePlanTable'
+// import MachinePlanTable  from '../../components/Project/machinePlanTable'
 
 @connect(({ common, loading, machinePlanSetting }) => ({
   common,
@@ -23,7 +23,7 @@ export default class machinePlanSettingList extends PureComponent {
     endTime: '',
   };
   componentDidMount() {
-    this.getLists();
+    // this.getLists();
   }
   // 获取点位管理列表
   getLists = () => {
@@ -42,7 +42,7 @@ export default class machinePlanSettingList extends PureComponent {
   render() {
     return (
       <PageHeaderLayout>
-        <machinePlanTable />
+        {/*<MachinePlanTable />*/}
       </PageHeaderLayout>
     );
   }
