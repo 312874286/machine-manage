@@ -3065,7 +3065,7 @@ const proxy = {
   'GET /machine/machine/findExceptionMachine': (req, res) => {
     res.send({
       "code": 0,
-      "data": {
+      "data": [{
         "voice": 10,
         "offline_time": "2018.08.03 12:02:30",
         "goodsChannelStatus": "",
@@ -3087,7 +3087,36 @@ const proxy = {
         ],
         "local": "北京市朝阳区大悦城一层",
         "dropGoodsSwitch": 1
-      },
+      }],
+      "msg": "成功"
+    })
+  },
+  'GET /merchant/log/findLogs': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [{
+        "voice": 10,
+        "offline_time": "2018.08.03 12:02:30",
+        "goodsChannelStatus": "",
+        "update_time": "2018.08.03 12:02:30",
+        "machineCode": "1234",
+        "machineDoorStatus": 1,
+        "screenIntensity": 10,
+        "temperature": 36,
+        "id": "abcde",
+        "stockoutInfo": [
+          {
+            "goodName": "娃哈哈",
+            "goodCount": 10
+          },
+          {
+            "goodName": "娃哇哇",
+            "goodCount": 5
+          }
+        ],
+        "local": "北京市朝阳区大悦城一层",
+        "dropGoodsSwitch": 1
+      }],
       "msg": "成功"
     })
   }

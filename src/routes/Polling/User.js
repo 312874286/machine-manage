@@ -700,6 +700,13 @@ export default class user extends PureComponent {
           editMachineModalVisible: false,
         });
       });
+    } else {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('请先选择机器');
     }
   }
   uniq = (arr) => {
@@ -937,7 +944,7 @@ export default class user extends PureComponent {
   }
   // 人员管用启用
   startClick = (item) => {
-    let params = {id: item.id, status: 1}
+    let params = {id: item.id, status: 0}
     this.updateStatus(params, '启用', 'updateStatus')
   }
   // 删除
@@ -1025,7 +1032,9 @@ export default class user extends PureComponent {
             <a onClick={() => this.stopClick(item)} style={{display: item.status === 1 ? 'none' : ''}}>停用</a>
             <a onClick={() => this.startClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>启用</a>
             <Divider type="vertical" style={{display: item.status === 0 ? 'none' : ''}} />
-            <a onClick={() => this.deleteClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>删除</a>
+            <Popconfirm title="确定要删除吗" onConfirm={() => this.deleteClick(item)} okText="Yes" cancelText="No">
+              <a style={{display: item.status === 0 ? 'none' : ''}}>删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },

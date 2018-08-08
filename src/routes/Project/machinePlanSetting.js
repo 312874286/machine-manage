@@ -26,9 +26,10 @@ export default class machinePlanSettingList extends PureComponent {
     startTime: '',
     localCode: '',
     endTime: '',
+    data: [],
   };
   componentDidMount() {
-    // this.getLists();
+    this.getLists();
   }
   // 获取列表
   getLists = () => {
@@ -42,6 +43,20 @@ export default class machinePlanSettingList extends PureComponent {
           endTime: '',
         },
       },
+    }).then((res) => {
+      // resource = { id: 'a', title: '王府井A', occupancy: 40 },
+      let resource = res.map((item) => {
+        return {id: item.machineCode, title: item.localDesc, code: item.machineCode}
+      })
+      console.log('resource', resource)
+      // events: [
+      //   {"resourceId":"a","title":"","start":"2018-08-01","end":"2018-08-04",rendering: 'background',color: 'red'},
+      // return res.map((item) => {
+      //   let i = {}
+      // })
+      this.setState({
+        data: res
+      })
     });
   }
   renderAdvancedForm() {

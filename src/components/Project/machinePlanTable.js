@@ -17,10 +17,10 @@ class MachinePlanTable extends PureComponent {
        defaultView: 'timelineMonth',
        titleFormat: 'YYYY年MMMM月',
        slotLabelFormat: [
-         'YYYY.MMMM', // top level of text
-         // 'ddd d'
-          'D' // lower level of text
+         'YYYY.MMMM',
+         'D'
        ],
+       scrollTime: '00:00',
        monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
        dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
        header: {
@@ -66,7 +66,6 @@ class MachinePlanTable extends PureComponent {
          { id: 'y', title: 'Auditorium Y', occupancy: 40 },
          { id: 'z', title: 'Auditorium Z', occupancy: 40 }
        ],
-        // resources: 'https://fullcalendar.io/demo-resources.json',
         events: [
           {"resourceId":"a","title":"","start":"2018-08-01","end":"2018-08-04",rendering: 'background',color: 'red'},
           {"resourceId":"b","title":"","start":"2018-08-08","end":"2018-08-10",rendering: 'background',color: 'Green'},

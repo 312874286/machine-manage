@@ -8,13 +8,13 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './OffLine.less'
 
-@connect(({ common, loading, channelSetting, log }) => ({
+@connect(({ common, loading, homePageSetting }) => ({
   common,
-  channelSetting,
-  loading: loading.models.channelSetting,
+  homePageSetting,
+  loading: loading.models.homePageSetting,
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class offLine extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
@@ -27,38 +27,36 @@ export default class channelSettingList extends PureComponent {
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          type: 1
         },
       },
     });
   }
   render() {
     const {
-      channelSetting: { list, page },
+      homePageSetting: { ExceptionMachineList },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
     const columns = [
       {
         title: '机器编号',
-        dataIndex: 'id',
+        dataIndex: 'machineCode',
         width: '30%',
       },
       {
         title: '机器点位',
         width: '25%',
-        dataIndex: 'channelCode',
+        dataIndex: 'local',
       },
       {
         title: '离线时间',
-        dataIndex: 'channelCode',
+        dataIndex: 'offline_time',
       },
       {
         fixed: 'right',
@@ -78,7 +76,7 @@ export default class channelSettingList extends PureComponent {
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={list}
+              dataSource={ExceptionMachineList}
               columns={columns}
               pagination={false}
               onChange={this.handleTableChange}

@@ -4,64 +4,106 @@ import {
   Card,
   Form,
   Table,
+  Modal,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './OffLine.less'
 
-@connect(({ common, loading, channelSetting, log }) => ({
+
+const WatchMachine = Form.create()(
+  (props) => {
+    const { WatchMachineModalVisible, WatchMachineHandleModalVisibleClick, machineList } = props;
+    const machineColumns = [{
+      title: '商品名称',
+      dataIndex: 'goodName',
+      align: 'left',
+      width: '85%'
+    }, {
+      title: '缺货数量',
+        dataIndex: 'goodCount',
+        align: 'left',
+        width: '15%'
+    }];
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看缺货明细</span>
+          </div>
+        }
+        width={800}
+        visible={WatchMachineModalVisible}
+        onCancel={() => WatchMachineHandleModalVisibleClick()}
+        footer={null}
+      >
+        <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
+          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+        </div>
+      </Modal>
+    );
+  });
+@connect(({ common, loading, homePageSetting }) => ({
   common,
-  channelSetting,
-  loading: loading.models.channelSetting,
+  homePageSetting,
+  loading: loading.models.homePageSetting,
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class stockOut extends PureComponent {
   state = {
-    modalVisible: false,
-    selectedRows: [],
-    formValues: {},
-    id: '',
-    editModalConfirmLoading: false,
-    pageNo: 1,
-    keyword: '',
+    WatchMachineModalVisible: false,
+    machineList: [],
   };
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          type: 2
         },
       },
     });
   }
+  getMachineStatus = (item) => {
+    this.setState({
+      machineList: item.stockoutInfo,
+    }, () => {
+      this.setState({
+        WatchMachineModalVisible: true,
+      });
+    });
+  }
+  WatchMachineHandleModalVisibleClick = () => {
+    this.setState({
+      WatchMachineModalVisible: false,
+    });
+  }
   render() {
     const {
-      channelSetting: { list, page },
+      homePageSetting: { ExceptionMachineList },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
     const columns = [
       {
         title: '机器编号',
-        dataIndex: 'id',
+        dataIndex: 'machineCode',
         width: '30%',
       },
       {
         title: '机器点位',
         width: '25%',
-        dataIndex: 'channelCode',
+        dataIndex: 'local',
       },
       {
         title: '缺货明细',
-        dataIndex: 'channelCode1',
-        render() {
-          return <a>查看</a>
-        }
+        dataIndex: 'stockoutInfo',
+        render: (text, item) => (
+          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+        ),
       },
       {
         fixed: 'right',
@@ -81,7 +123,7 @@ export default class channelSettingList extends PureComponent {
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={list}
+              dataSource={ExceptionMachineList}
               columns={columns}
               pagination={false}
               onChange={this.handleTableChange}
@@ -89,6 +131,11 @@ export default class channelSettingList extends PureComponent {
             />
           </div>
         </Card>
+        <WatchMachine
+          WatchMachineModalVisible={this.state.WatchMachineModalVisible}
+          WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
+          machineList={this.state.machineList}
+        />
       </PageHeaderLayout>
     );
   }

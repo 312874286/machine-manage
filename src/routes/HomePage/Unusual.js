@@ -6,100 +6,149 @@ import {
   Table,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import LogModal from '../../components/LogModal';
 import styles from './OffLine.less'
 
-@connect(({ common, loading, channelSetting, log }) => ({
+const machineDoorStatus = ['关闭', '打开']
+
+@connect(({ common, loading, homePageSetting, log }) => ({
   common,
-  channelSetting,
-  loading: loading.models.channelSetting,
+  homePageSetting,
+  loading: loading.models.homePageSetting,
+  log
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class unusual extends PureComponent {
   state = {
-    modalVisible: false,
-    selectedRows: [],
-    formValues: {},
-    id: '',
-    editModalConfirmLoading: false,
-    pageNo: 1,
-    keyword: '',
+    logModalVisible: false,
+    logModalLoading: false,
+    logId: '',
+    logModalPageNo: 1,
   };
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          type: 3
         },
       },
     });
   }
+  // 日志相关开始
+  getLogList = () => {
+    this.props.dispatch({
+      type: 'log/getLogList',
+      payload: {
+        restParams: {
+          code: this.state.logId,
+          pageNo: this.state.logModalPageNo,
+          type: 1020403,
+        },
+      },
+    }).then(() => {
+      this.setState({
+        logModalLoading: false,
+      });
+    });
+  }
+
+  handleLogClick = (data) => {
+    this.setState({
+      logModalVisible: !!data,
+      logModalLoading: true,
+      logId: data.id,
+    }, () => {
+      this.getLogList();
+    });
+  }
+
+  logModalHandleCancel = () => {
+    this.setState({
+      logModalVisible: false,
+    });
+  }
+
+  logModalhandleTableChange = (pagination) => {
+    const { current } = pagination;
+    this.setState({
+      logModalPageNo: current,
+    }, () => {
+      this.getLogList();
+    });
+  }
+  // 日志相关结束
   render() {
     const {
-      channelSetting: { list, page },
+      homePageSetting: { ExceptionMachineList },
       loading,
+      log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
     const columns = [
       {
         title: '机器编号',
-        dataIndex: 'id',
+        dataIndex: 'machineCode',
         width: '10%',
       },
       {
         title: '机器点位',
-        width: '10%',
-        dataIndex: 'channelCode',
+        width: '15%',
+        dataIndex: 'local',
       },
       {
         title: '机器门',
         width: '10%',
-        dataIndex: 'channelCode1',
+        dataIndex: 'machineDoorStatus',
+        render(val) {
+          return machineDoorStatus[val]
+        }
       },
       {
         title: '温度',
-        dataIndex: 'id1',
+        dataIndex: 'temperature',
         width: '10%',
       },
       {
         title: '调货开关',
         width: '10%',
-        dataIndex: 'channelCode2',
+        dataIndex: 'dropGoodsSwitch',
+        render(val) {
+          return machineDoorStatus[val]
+        }
       },
       {
         title: '屏幕亮度',
-        dataIndex: 'channelCode3',
+        dataIndex: 'screenIntensity',
         width: '10%',
       },
       {
         title: '音量',
-        dataIndex: 'id2',
+        dataIndex: 'voice',
         width: '10%',
       },
       {
         title: '货道故障',
         width: '10%',
-        dataIndex: 'channelCode4',
+        dataIndex: 'goodsChannelStatus',
       },
       {
         title: '更新时间',
-        dataIndex: 'channelCode5',
+        dataIndex: 'update_time',
       },
-      {
-        fixed: 'right',
-        width: 150,
-        title: '历史解决方案',
-        render: () => (
-          <Fragment>
-            <a>查看</a>
-          </Fragment>
-        ),
-      },
+      // {
+      //   fixed: 'right',
+      //   width: 150,
+      //   title: '历史解决方案',
+      //   render: (text, item) => (
+      //     <Fragment>
+      //       <a onClick={() => this.handleLogClick(item)}>查看</a>
+      //     </Fragment>
+      //   ),
+      // },
     ];
     return (
       <PageHeaderLayout>
@@ -108,7 +157,7 @@ export default class channelSettingList extends PureComponent {
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={list}
+              dataSource={ExceptionMachineList}
               columns={columns}
               pagination={false}
               onChange={this.handleTableChange}
@@ -116,6 +165,14 @@ export default class channelSettingList extends PureComponent {
             />
           </div>
         </Card>
+        <LogModal
+          data={logList}
+          page={logPage}
+          loding={this.state.logModalLoading}
+          logVisible={this.state.logModalVisible}
+          logHandleCancel={this.logModalHandleCancel}
+          logModalhandleTableChange={this.logModalhandleTableChange}
+        />
       </PageHeaderLayout>
     );
   }
