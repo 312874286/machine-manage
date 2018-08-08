@@ -41,11 +41,11 @@ export default class homePageSetting extends PureComponent {
         <PageHeaderLayout>
           <div className={styles.gridCardBox}>
             <Card title="运行监控">
-              <a>
+              {/*<a>*/}
                 <Card.Grid style={gridStyle}>
                   <Card title={MachinePortalDataList.online === 0 ? "0" : MachinePortalDataList.online} bordered={false}>机器在线</Card>
                 </Card.Grid>
-              </a>
+              {/*</a>*/}
               <a onClick={() => this.props.history.push('/offline')}>
                 <Card.Grid style={gridStyle}>
                   <Card title={MachinePortalDataList.offline} bordered={false}>机器离线</Card>
