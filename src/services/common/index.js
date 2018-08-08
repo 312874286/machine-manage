@@ -16,4 +16,8 @@ export async function getProvinceCityAreaTradeArea({ restParams }) {
     restParams,
   });
 }
-
+export async function getUserArea({ restParams }) {
+  return fetch.get(api.getUserArea, {
+    restParams,
+  });
+}

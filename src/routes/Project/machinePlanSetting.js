@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   Button,
+  Cascader
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './machinePlanSetting.less'
@@ -26,10 +27,13 @@ export default class machinePlanSettingList extends PureComponent {
     startTime: '',
     localCode: '',
     endTime: '',
-    data: [],
+    resource: [],
+    events: [],
+    options: [],
   };
   componentDidMount() {
     this.getLists();
+    this.getAreaList('')
   }
   // 获取列表
   getLists = () => {
@@ -44,32 +48,70 @@ export default class machinePlanSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      // resource = { id: 'a', title: '王府井A', occupancy: 40 },
       let resource = res.map((item) => {
         return {id: item.machineCode, title: item.localDesc, code: item.machineCode}
       })
-      console.log('resource', resource)
-      // events: [
-      //   {"resourceId":"a","title":"","start":"2018-08-01","end":"2018-08-04",rendering: 'background',color: 'red'},
-      // return res.map((item) => {
-      //   let i = {}
-      // })
+      let events = []
+      for (let i = 0; i < res.length; i++) {
+        if (res[i].planTime.length > 0) {
+          for (let j = 0; j < res[i].planTime.length; j++) {
+            let a = {resourceId: res[i].machineCode, start : `${res[i].planTime[j].startTime.split(' ')[0]}T${res[i].planTime[j].startTime.split(' ')[1]}`, end: `${res[i].planTime[j].endTime.split(' ')[0]}T${res[i].planTime[j].endTime.split(' ')[1]}`, rendering: 'background', color: 'red'}
+            events.push(a)
+          }
+        }
+      }
       this.setState({
-        data: res
+        resource,
+        events,
       })
+    });
+  }
+  getAreaList = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    let params = { code: code }
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      targetOption.loading = true;
+      params = { code: targetOption.value }
+    }
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        restParams: {
+          params,
+        }
+      },
+    }).then((res) => {
+      if (!selectedOptions) {
+        this.setState({
+          options: res,
+        });
+      } else {
+        targetOption.loading = false;
+        targetOption.children = res
+        this.setState({
+          options: [...this.state.options],
+        });
+      }
     });
   }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
-    const { merchantLists } = this.state;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="省市区商圈">
-              {/*{getFieldDecorator('code')(*/}
-              {/*)}*/}
+              {getFieldDecorator('code')(
+                <Cascader
+                  placeholder="请选择"
+                  options={this.state.options}
+                  loadData={this.loadData}
+                  changeOnSelect
+                />
+              )}
             </FormItem>
           </Col>
           <Col md={9} sm={24}>
@@ -100,7 +142,7 @@ export default class machinePlanSettingList extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <MachinePlanTable />
+          <MachinePlanTable resource={this.state.resource} events={this.state.events} />
         </Card>
       </PageHeaderLayout>
     );

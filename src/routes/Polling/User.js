@@ -35,7 +35,7 @@ const getValue = obj =>
 const TreeNode = Tree.TreeNode;
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, modalData, selectCityName, openSelectMachineModal, machineNum } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, modalData, selectCityName, openSelectMachineModal, machineNum, options, loadData, verifyString } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -58,7 +58,9 @@ const CreateForm = Form.create()(
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
-        confirmLoading={editModalConfirmLoading}>
+        confirmLoading={editModalConfirmLoading}
+        width={800}
+      >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
           <FormItem {...formItemLayout} label="姓名">
@@ -118,6 +120,20 @@ const CreateForm = Form.create()(
                 <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
               </div>
             ))}
+          </FormItem>
+          <FormItem {...formItemLayout} label="负责区域">
+            {getFieldDecorator('area', {
+              rules: [{ required: true, type: 'array', message: '请选择负责区域' }, {
+                validator: verifyString,
+              }],
+            })(
+              <Cascader
+                placeholder="请选择"
+                options={options}
+                loadData={loadData}
+                changeOnSelect
+              />
+            )}
           </FormItem>
         </Form>
         </div>
@@ -365,6 +381,8 @@ export default class user extends PureComponent {
     repeat: [],
     // level: 1,
     selectedRowKeys: [],
+    options: [],
+    defaultValue: []
   };
   componentDidMount() {
     this.getLists();
@@ -382,21 +400,35 @@ export default class user extends PureComponent {
     });
   }
   // 获取城市列表
-  // getAreaList = () => {
-  //   this.props.dispatch({
-  //     type: 'user/selectMachine',
-  //     payload: {
-  //       params: {
-  //         code: this.state.code,
-  //         level: this.state.level
-  //       },
-  //     },
-  //   }).then( (res) => {
-  //     this.setState({
-  //       insertOptions: res,
-  //     });
-  //   });
-  // }
+  areaList = (selectedOptions) => {
+    let targetOption = null;
+    let code = ''
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      targetOption.loading = true;
+      code = targetOption.value
+    }
+    this.props.dispatch({
+      type: 'common/getUserArea',
+      payload: {
+        restParams: {
+          code,
+        }
+      },
+    }).then((res) => {
+      if (!selectedOptions) {
+        this.setState({
+          options: res,
+        });
+      } else {
+        targetOption.loading = false;
+        targetOption.children = res
+        this.setState({
+          options: [...this.state.options],
+        });
+      }
+    });
+  }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { formValues } = this.state;
@@ -448,6 +480,13 @@ export default class user extends PureComponent {
       });
     });
   };
+  verifyString = (rule, value, callback) => {
+    if (value.length < 2) {
+      callback('请填写完整的省市区商圈');
+    } else {
+      callback();
+    }
+  }
   // 新增modal确认事件 开始
   saveFormRef = (form) => {
     this.form = form;
@@ -459,6 +498,7 @@ export default class user extends PureComponent {
       modalData: {},
       modalType: true,
     });
+    this.areaList('')
     this.setModalData();
   };
   // 编辑modal 编辑事件
@@ -476,9 +516,53 @@ export default class user extends PureComponent {
         modalData: res,
         modalType: false,
       }, () => {
-        this.setModalData(res);
+        this.getModalData(res);
       });
     });
+  }
+  // 获取点位详情
+  getArea = (code) => {
+    return this.props.dispatch({
+      type: 'common/getUserArea',
+      payload: {
+        restParams: {
+          code,
+        },
+      },
+    });
+  }
+  // forIn
+  forIn = (arr, value, res) => {
+    for (let [i, v] of new Map(arr.map((item, i) => [i, item]))) {
+      if (v.value === value) {
+        v.children = res;
+        return { index: i };
+      }
+    }
+  }
+  getModalData = async (item) => {
+    this.setState({
+      modalVisible: true,
+      modalData: item,
+      modalType: false,
+      // CreateFormLoading: true,
+    });
+    const res = await this.getPointSettingDetail(item);
+    if (!res) {
+      return
+    }
+    const { area } = res;
+    const provinceRes = await this.getArea('')
+    let province = provinceRes;
+    const cityRes = await this.getArea(res.province)
+    this.forIn(province, res.province, cityRes)
+    this.setState({
+      options: province,
+      defaultValue: [res.province, area],
+    }, () => {
+      this.setModalData(res);
+    });
+    // 回显省市区商圈数据源
   }
   // 设置modal 数据
   setModalData = (data) => {
@@ -507,6 +591,7 @@ export default class user extends PureComponent {
         phone: data.phone || undefined,
         cardNo: data.cardNo || undefined,
         enterprise: data.enterprise || undefined,
+        area: this.state.defaultValue || undefined,
       });
     } else {
       this.form.setFieldsValue({
@@ -514,6 +599,7 @@ export default class user extends PureComponent {
         phone: undefined,
         cardNo: undefined,
         enterprise: undefined,
+        area: undefined,
       });
       this.setState({
         machineNum: '',
@@ -539,11 +625,17 @@ export default class user extends PureComponent {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
       let url = 'user/saveUser';
-      let params = { ...values, remark: remark, machines: this.state.machines };
+      let params = { ...values, remark: remark, machines: this.state.machines, area: values.area[values.area.length - 1] };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
         messageTxt = '编辑'
-        params = { ...values, id: this.state.modalData.id, remark: remark ? remark : this.state.modalData.remark, machines: this.state.machines };
+        params = {
+          ...values,
+          id: this.state.modalData.id,
+          remark: remark ? remark : this.state.modalData.remark,
+          machines: this.state.machines,
+          area: values.area[values.area.length - 1]
+        };
       }
       this.props.dispatch({
         type: url,
@@ -1005,7 +1097,12 @@ export default class user extends PureComponent {
       {
         title: '公司',
         dataIndex: 'enterprise',
-        width: '20%',
+        width: '10%',
+      },
+      {
+        title: '负责区域',
+        dataIndex: 'area',
+        width: '10%',
       },
       {
         title: '负责的机器',
@@ -1079,6 +1176,9 @@ export default class user extends PureComponent {
           selectCity={this.state.selectCity}
           selectCityName={this.state.selectCityName}
           openSelectMachineModal={this.openSelectMachineModal}
+          options={this.state.options}
+          loadData={this.areaList}
+          verifyString={this.verifyString}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}
@@ -1091,22 +1191,6 @@ export default class user extends PureComponent {
           onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
           onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
           editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
-
-          // renderTreeNodes={this.renderTreeNodes}
-          // treeData={this.state.treeData}
-          // onLoadData={this.onLoadData}
-          // expandedKeys={this.state.expandedKeys}
-          // autoExpandParent={this.state.autoExpandParent}
-          // checkedKeys={this.state.checkedKeys}
-          // selectedKeys={this.state.selectedKeys}
-          // onExpand={this.onExpand}
-          // onCheck={this.onCheck}
-          // onSelect={this.onSelect}
-          //
-          // mockData={this.state.mockData}
-          // targetKeys={this.state.targetKeys}
-          // TransferhandleChange={this.TransferhandleChange}
-
           insertOptions={this.state.insertOptions}
           loadData={this.getAreaList}
           addData={this.addData}

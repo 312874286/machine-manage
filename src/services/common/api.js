@@ -5,6 +5,7 @@ const api = map({
   getCitysByProvince: '/merchant/open/getDistrictObj.json?parentCode={parentCode}',
   uploadFile: '/share/uploadImage?fileType={fileType}&type={type}',
   getProvinceCityAreaTradeArea: '/admin/area/list?code={code}',
+  getUserArea: '/admin/area/list?code={code}',
 });
 
 export default api;
