@@ -3046,6 +3046,50 @@ const proxy = {
       ],
       "code": 0
     })
+  },
+  'GET /machine/machine/findMachinePortalData': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "online": 0,
+        "offline": 12,
+        "exception": 5,
+        "stockout": 2,
+        "waitOrder": 1,
+        "processed": 3,
+        "waitConfirm": 1
+      },
+      "msg": "成功"
+    })
+  },
+  'GET /machine/machine/findExceptionMachine': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "voice": 10,
+        "offline_time": "2018.08.03 12:02:30",
+        "goodsChannelStatus": "",
+        "update_time": "2018.08.03 12:02:30",
+        "machineCode": "1234",
+        "machineDoorStatus": 1,
+        "screenIntensity": 10,
+        "temperature": 36,
+        "id": "abcde",
+        "stockoutInfo": [
+          {
+            "goodName": "娃哈哈",
+            "goodCount": 10
+          },
+          {
+            "goodName": "娃哇哇",
+            "goodCount": 5
+          }
+        ],
+        "local": "北京市朝阳区大悦城一层",
+        "dropGoodsSwitch": 1
+      },
+      "msg": "成功"
+    })
   }
 };
 
