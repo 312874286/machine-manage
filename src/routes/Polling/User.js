@@ -1005,15 +1005,15 @@ export default class user extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
-        width: '10%',
+        // width: '10%',
       },
-      {
-        title: '状态',
-        dataIndex: 'status',
-        render(val) {
-          return <span>{userStatus[val]}</span>
-        }
-      },
+      // {
+      //   title: '状态',
+      //   dataIndex: 'status',
+      //   render(val) {
+      //     return <span>{userStatus[val]}</span>
+      //   }
+      // },
       {
         fixed: 'right',
         width: '150px',
@@ -1021,11 +1021,11 @@ export default class user extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.stopClick(item)} style={{display: item.status === 1 ? 'none' : ''}}>停用</a>
-            <a onClick={() => this.startClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>启用</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.deleteClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>删除</a>
+            {/*<Divider type="vertical" />*/}
+            {/*<a onClick={() => this.stopClick(item)} style={{display: item.status === 1 ? 'none' : ''}}>停用</a>*/}
+            {/*<a onClick={() => this.startClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>启用</a>*/}
+            {/*<Divider type="vertical" />*/}
+            {/*<a onClick={() => this.deleteClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>删除</a>*/}
           </Fragment>
         ),
       },

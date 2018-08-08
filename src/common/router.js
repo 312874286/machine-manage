@@ -89,18 +89,18 @@ export const getRouterData = (app) => {
     // '/exception/trigger': {
     //   component: dynamicWrapper(app, [], () => import('../routes/Exception/triggerException')),
     // },
-    '/homePage': {
-      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/HomePage/HomePage')),
-    },
-    '/offline': {
-      component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/OffLine')),
-    },
-    '/stockOut': {
-      component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/StockOut')),
-    },
-    '/unusual': {
-      component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/Unusual')),
-    },
+    // '/homePage': {
+    //   component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/HomePage/HomePage')),
+    // },
+    // '/offline': {
+    //   component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/OffLine')),
+    // },
+    // '/stockOut': {
+    //   component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/StockOut')),
+    // },
+    // '/unusual': {
+    //   component: dynamicWrapper(app, ['project/channelSetting', 'log/log', 'common'], () => import('../routes/HomePage/Unusual')),
+    // },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
@@ -191,9 +191,9 @@ export const getRouterData = (app) => {
     '/project/goods': {
       component: dynamicWrapper(app, ['project/goodsSetting', 'log/log', 'common'], () => import('../routes/Project/GoodsSetting')),
     },
-    '/project/machinePlan': {
-      component: dynamicWrapper(app, ['project/machinePlanSetting', 'log/log', 'common'], () => import('../routes/Project/machinePlanSetting')),
-    },
+    // '/project/machinePlan': {
+    //   component: dynamicWrapper(app, ['project/machinePlanSetting', 'log/log', 'common'], () => import('../routes/Project/machinePlanSetting')),
+    // },
     '/order/order': {
       component: dynamicWrapper(app, ['order/order', 'log/log', 'common'], () => import('../routes/Order/Order')),
     },
@@ -209,12 +209,12 @@ export const getRouterData = (app) => {
     '/check/faultType': {
       component: dynamicWrapper(app, ['polling/faultType', 'log/log', 'common'], () => import('../routes/Polling/FaultType')),
     },
-    '/check/workOrder': {
-      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/WorkOrder')),
-    },
-    '/check/replenish': {
-      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
-    },
+    // '/check/workOrder': {
+    //   component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/WorkOrder')),
+    // },
+    // '/check/replenish': {
+    //   component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
+    // },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },
