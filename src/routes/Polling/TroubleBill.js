@@ -272,7 +272,7 @@ export default class troubleBill extends PureComponent {
     // console.log(11111, list, page);
     const columns = [{
       title: '故障单ID',
-      dataIndex: 'code',
+      dataIndex: 'id',
       width: '19%'
     }, {
       title: '机器ID',
