@@ -69,12 +69,23 @@ export default class stockOut extends PureComponent {
     });
   }
   getMachineStatus = (item) => {
-    this.setState({
-      machineList: item.stockoutInfo,
-    }, () => {
-      this.setState({
-        WatchMachineModalVisible: true,
-      });
+    this.props.dispatch({
+      type: 'homePageSetting/findMachineStockoutInfo',
+      payload: {
+        restParams: {
+          machineId: item.id
+        },
+      },
+    }).then((res) => {
+      if (res) {
+        this.setState({
+          machineList: res,
+        }, () => {
+          this.setState({
+            WatchMachineModalVisible: true,
+          });
+        });
+      }
     });
   }
   WatchMachineHandleModalVisibleClick = () => {

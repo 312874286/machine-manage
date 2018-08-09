@@ -3119,6 +3119,18 @@ const proxy = {
       }],
       "msg": "成功"
     })
+  },
+  'GET /machine/machine/findMachineStockoutInfo': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "goodName": "测试商品 别删除",
+          "goodCount": 14
+        }
+      ],
+      "msg": "成功"
+    })
   }
 };
 

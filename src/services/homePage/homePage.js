@@ -13,3 +13,8 @@ export async function findExceptionMachine({ restParams }) {
     restParams,
   });
 }
+export async function findMachineStockoutInfo({ restParams }) {
+  return fetch.get(api.findMachineStockoutInfo, {
+    restParams,
+  });
+}

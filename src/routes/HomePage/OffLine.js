@@ -56,7 +56,7 @@ export default class offLine extends PureComponent {
       },
       {
         title: '离线时间',
-        dataIndex: 'offline_time',
+        dataIndex: 'offlineTime',
       },
       {
         fixed: 'right',

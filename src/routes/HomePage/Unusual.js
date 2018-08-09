@@ -137,7 +137,7 @@ export default class unusual extends PureComponent {
       },
       {
         title: '更新时间',
-        dataIndex: 'update_time',
+        dataIndex: 'updateTime',
       },
       // {
       //   fixed: 'right',

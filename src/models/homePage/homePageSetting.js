@@ -1,4 +1,4 @@
-import { findExceptionMachine, findMachinePortalData } from '../../services/homePage/homePage';
+import { findExceptionMachine, findMachinePortalData, findMachineStockoutInfo } from '../../services/homePage/homePage';
 
 export default {
   namespace: 'homePageSetting',
@@ -22,7 +22,10 @@ export default {
         type: 'ExceptionMachineList',
         payload: response,
       });
-
+    },
+    *findMachineStockoutInfo({ payload: { restParams } }, { call }) {
+      const response = yield call(findMachineStockoutInfo, { restParams });
+      return response.data;
     }
   },
 
