@@ -213,7 +213,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/WorkOrder')),
     },
     '/check/replenish': {
-      component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
+      component: dynamicWrapper(app, ['polling/replenish', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
     },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),

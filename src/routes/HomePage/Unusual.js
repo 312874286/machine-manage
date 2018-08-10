@@ -34,7 +34,7 @@ export default class unusual extends PureComponent {
       type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          type: 3
+          type: 2
         },
       },
     });
@@ -107,7 +107,7 @@ export default class unusual extends PureComponent {
           if (val) {
             return machineDoorStatus[val]
           } else {
-            return '暂无'
+            return '无'
           }
         }
       },
@@ -119,7 +119,7 @@ export default class unusual extends PureComponent {
           (item.temperature) ? (
             <span>{item.temperature}</span>
           ) :(
-            <span>暂无</span>
+            <span>无</span>
           )
         )
       },
@@ -131,7 +131,7 @@ export default class unusual extends PureComponent {
           if (val) {
             return machineDoorStatus[val]
           } else {
-            return '暂无'
+            return '无'
           }
         }
       },
@@ -143,7 +143,7 @@ export default class unusual extends PureComponent {
           (item.screenIntensity) ? (
             <span>{item.screenIntensity}</span>
           ) :(
-            <span>暂无</span>
+            <span>无</span>
           )
         )
       },
@@ -155,7 +155,7 @@ export default class unusual extends PureComponent {
           (item.voice) ? (
             <span>{item.voice}</span>
           ) :(
-            <span>暂无</span>
+            <span>无</span>
           )
         )
       },
@@ -167,7 +167,7 @@ export default class unusual extends PureComponent {
           (item.goodsChannelStatus) ? (
             <span>{item.goodsChannelStatus}</span>
           ) :(
-            <span>暂无</span>
+            <span>无</span>
           )
         )
       },
@@ -178,7 +178,7 @@ export default class unusual extends PureComponent {
           (item.updateTime) ? (
             <span>{item.updateTime}</span>
           ) :(
-            <span>暂无</span>
+            <span>无</span>
           )
         )
       },

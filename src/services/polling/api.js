@@ -21,6 +21,9 @@ const api = map({
   userExcel: '/check/signIn/userExcel',
   updateStatus: '/check/user/updateStatus',
   deleteUser: '/check/user/delete',
+
+  replenishList: '/supply/channel/history/list?pageNo={pageNo}',
+  replenishDetail: '/supply/channel/history/detail'
 });
 
 export default api;

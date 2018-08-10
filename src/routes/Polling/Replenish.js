@@ -1,423 +1,345 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Form, Icon, Tree, message, Popconfirm, List } from 'antd';
+import {
+  Card,
+  Form,
+  Row,
+  Col,
+  Input,
+  Button,
+  Cascader,
+  DatePicker,
+  Modal,
+  Table
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './FaultType.less';
-
+import styles from './replenish.less'
+import StandardTable from '../../components/StandardTable/index';
 const FormItem = Form.Item;
-@connect(({ faultType }) => ({ faultType }))
-export default class FaultType extends PureComponent {
-    state = {
-      userName: '',
-      visible: false,
-      solutionsLists: [
-        // { key: 0, name: '',},
-      ],
-      count: 1,
-      typeName: '',
-      type: '',
-      currentRecord: {},
-      pageNo: 1,
-    };
-    componentDidMount = () => {
-      this.getLists();
-    }
-    onChange = (e) => {
-      this.setState({ userName: e.target.value });
-      // console.log(111,e.target.value,this);
-    }
-    onTypeNameChange = (e) => {
-      this.setState({ typeName: e.target.value });
-      console.log(e.target.value);
-    }
-    onSolutionsChange = (e, solutions) => {
-        // solutions.name = e.target.value;
-        const { solutionsLists } = this.state;
-        // var n
-        // console.log(e,111, solutionsLists);
-        // this.setState({
-        //     solutionsLists: solutionsLists,
-        // });
+const { RangePicker } = DatePicker;
 
-        var arrlist = [];
-        for (var i = 0; i < solutionsLists.length; i++) {
-            var newobj = {};
-            if(solutionsLists[i].key === solutions.key){
-                newobj = {
-                    key: solutions.key,
-                    name: e.target.value,
-                };
-            }else{
-                newobj = {
-                    key: solutionsLists[i].key,
-                    name: solutionsLists[i].name,
-                };
-            }
-            arrlist.push(newobj);
+
+const WatchMachine = Form.create()(
+  (props) => {
+    const { WatchMachineModalVisible, WatchMachineHandleModalVisibleClick, machineList } = props;
+    const machineColumns = [{
+      title: '商品名称',
+      dataIndex: 'goodName',
+      align: 'left',
+      width: '85%'
+    }, {
+      title: '缺货数量',
+      dataIndex: 'goodCount',
+      align: 'left',
+      width: '15%'
+    }];
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看缺货明细</span>
+          </div>
         }
-        this.setState({
-            solutionsLists: arrlist,
-        });
-
-    }
-    onFindData = (e) => {
+        width={800}
+        visible={WatchMachineModalVisible}
+        onCancel={() => WatchMachineHandleModalVisibleClick()}
+        footer={null}
+      >
+        <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
+          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+        </div>
+      </Modal>
+    );
+  });
+@connect(({ common, loading, replenish }) => ({
+  common,
+  replenish,
+  loading: loading.models.replenish,
+}))
+@Form.create()
+export default class replenish extends PureComponent {
+  state = {
+    WatchMachineModalVisible: false,
+    machineList: [],
+    pageNo: 1,
+    keyword: '',
+    beginTime: '',
+    endTime: '',
+    areaCode: '',
+    selectedRows: [],
+    options: []
+  };
+  componentDidMount() {
     this.getLists();
-    }
-    onEdit = (record) => {
-
-        this.setState({
-            // visible: true,
-            type: 'edit',
-            solutionsLists: [],
-            count: 0,
-            typeName: '',
-            currentRecord: record,
-          },() => {
-            this.props.dispatch({
-                type: 'faultType/getCheckFaultTypeDetail',
-                payload: {
-                  params: {
-                    code: this.state.currentRecord.code,
-                  },
-                },
-              }).then((res) => {
-                const { code, data, msg } = res;
-                // console.log(data.functions);
-                console.log(111, data);
-                var arrlist = [];
-                for (var i = 0; i < data.solutions.length; i++) {
-                    var newobj = {
-                        key: i,
-                        name: data.solutions[i].name,
-                    };
-                    arrlist.push(newobj);
-                }
-                this.setState({
-                    count: data.solutions.length,
-                    visible: true,
-                    solutionsLists: arrlist,
-                    typeName: data.name,
-                });
-
-              });
-          });
-      console.log(record);
-    }
-    onDelHandle = (val) => {
-      const solutionsLists = [...this.state.solutionsLists];
-      this.setState({ solutionsLists: solutionsLists.filter(item => item.key !== val.key) });
-      console.log(val, this);
-    }
-    handleSolutionsAdd = () => {
-      const { solutionsLists, count } = this.state;
-      const newData = {
-        key:count,
-        name: '',
-       };
-      this.setState({
-        solutionsLists: [...solutionsLists, newData],
-        count: count+1,
-      });
-    }
-    // 获取列表
-    getLists = () => {
-      this.props.dispatch({
-        type: 'faultType/getCheckFaultTypeList',
-        payload: {
-          params: {
-            keyword: this.state.userName,
-            pageNo: this.state.pageNo,
-          },
+    this.getAreaList('')
+  }
+  // 获取列表
+  getLists = () => {
+    this.props.dispatch({
+      type: 'replenish/replenishList',
+      payload: {
+        restParams: {
+          pageNo: this.state.pageNo,
         },
-      });
+        params: {
+          keyword: this.state.keyword,
+          localCode: this.state.localCode,
+          beginTime: this.state.beginTime,
+          endTime: this.state.endTime,
+        }
+      },
+    });
+  }
+  // 分页
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    handleModalAdd = (e) => {
-      this.setState({
-        visible: true,
-        type: 'add',
-        solutionsLists: [{
-          key: 0, name: '',
-        }],
-        count: 1,
-        typeName: '',
-      });
-    }
-    startDatePickerChange = (date, dateString) => {
-      // this.setState({
-      //   type: '1',
-      //   startDateString: dateString,
-      // });
-      console.log('startDatePickerChange::', date, dateString);
-    }
-    handleOK = (e) => {
-
-      if (this.state.type === 'add') {
-        if (this.state.typeName.replace(/\s+/g, '') === ''){
-            message.info('故障类型名称');
-            return;
+    const { current } = pagination;
+    // console.log('params', params)
+    this.setState({
+      pageNo: current,
+    }, () => {
+      this.getLists();
+    });
+  };
+  // 搜索
+  handleSearch = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      let localCode = ''
+      let beginTime = ''
+      let endTime = ''
+      if (fieldsValue.areaCode) {
+        if (fieldsValue.areaCode.length > 0) {
+          localCode = fieldsValue.areaCode[fieldsValue.areaCode.length - 1];
         }
-        if (this.state.solutionsLists.length === 0) {
-            message.info('没有故障解决方案');
-            return;
-        }
-
-        for (var i = 0; i < this.state.solutionsLists.length; i++) {
-            if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
-                console.log(this.state.solutionsLists[i].name, i);
-                message.info('没有填写故障解决方案');
-                return;
-            }
-        }
-        var  newarr = [];
-        for(var i = 0; i < this.state.solutionsLists.length; i++) {
-            var newobj = {
-                name: this.state.solutionsLists[i].name,
-            };
-            newarr.push(newobj);
-        }
-        // console.log(newarr);
-
-        this.props.dispatch({
-            type: 'faultType/getCheckFaultTypeAdd',
-            payload: {
-              params: {
-                name: this.state.typeName,
-                solutions: newarr,
-              },
-            },
-          }).then((res) => {
-            const { code, data, msg } = res;
-            // console.log(data.functions);
-            // console.log(data);
-            if (code === 0) {
-              message.success(msg);
-              this.setState({
-                visible: false,
-              });
-              this.getLists();
-            } else {
-              message.error(msg);
-            }
-
-
-          });
-
-      } else if (this.state.type === 'edit'){
-        if (this.state.typeName.replace(/\s+/g, '') === ''){
-            message.info('故障类型名称');
-            return;
-        }
-        if (this.state.solutionsLists.length === 0) {
-            message.info('没有故障解决方案');
-            return;
-        }
-
-        for (var i = 0; i < this.state.solutionsLists.length; i++) {
-            if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
-                console.log(this.state.solutionsLists[i].name, i);
-                message.info('没有填写故障解决方案');
-                return;
-            }
-        }
-        console.log('edit::');
-        var  newarr = [];
-        for(var i = 0; i < this.state.solutionsLists.length; i++) {
-            var newobj = {
-                name: this.state.solutionsLists[i].name,
-            };
-            newarr.push(newobj);
-        }
-        this.props.dispatch({
-            type: 'faultType/getCheckFaultTypeUpdate',
-            payload: {
-              params: {
-                code: this.state.currentRecord.code,
-                name: this.state.typeName,
-                solutions: newarr,
-              },
-            },
-          }).then((res) => {
-            const { code, data, msg } = res;
-            // console.log(data.functions);
-            // console.log(data);
-            if (code === 0) {
-              message.success(msg);
-              this.setState({
-                visible: false,
-              });
-              this.getLists();
-            } else {
-              message.error(msg);
-            }
-
-
-          });
       }
-    }
-    handleCancel = (e) => {
+      if (fieldsValue.time) {
+        beginTime = fieldsValue.time[0].format('YYYY-MM-DD HH:mm')
+        endTime = fieldsValue.time[1].format('YYYY-MM-DD HH:mm')
+      }
+
       this.setState({
-        visible: false,
-      });
-    }
-    handleTableChange = (pagination, filters, sorter) => {
-      this.setState({
-        pageNo: pagination.current,
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        beginTime,
+        endTime,
+        localCode,
       }, () => {
         this.getLists();
       });
-
-      console.log(pagination, filters, sorter);
+    });
+  };
+  // 重置
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+      pageNo: 1,
+      keyword: '',
+      localCode: '',
+      beginTime: '',
+      endTime: '',
+    });
+  };
+  getAreaList = (selectedOptions) => {
+    let targetOption = null;
+    let code = ''
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      targetOption.loading = true;
+      code = targetOption.value
     }
-    handleReset = () => {
-      this.setState({
-        userName: '',
-      });
-    }
-    render() {
-      const { visible, solutionsLists, userName } = this.state;
-      const { faultType: { list, page } } = this.props;
-    //   console.log('list::', faultType);
-      const columns = [
-        { title: '故障类型名称', dataIndex: 'name', key: 'name', width: '22%' },
-        { title: '故障解决方案', dataIndex: 'parentName', key: 'parentName', width: '22%' },
-        { title: '添加时间', dataIndex: 'createTime', key: 'createTime', width: '22%' },
-        { title: '添加人', dataIndex: 'createId', key: 'createId', width: '22%' },
-        { title: '操作', dataIndex: '', key: 'action', render: (text, record) => <a href="javascript:;" onClick={this.onEdit.bind(this, record)}>编辑</a> },
-      ];
-    //   const data = [
-    //     { code: 1, name: 'John Brown', parentName: 32, createId: 'New York No. 1 Lake Park', createTime: '11' },
-    //   ];
-    //   const books = [
-    //     { key:0, bookname: '1', time: '一号',},
-    //     { key:1,  bookname: '2', time: '二号'},
-    //     { key:2,  bookname: '3', time: '三号'},
-    //     { key:3, bookname: '4', time: '四号'},
-    //   ];
-      const paginationProps = {
-        showTotal: (total) => {
-          // console.log(total, page)
-          return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
-        },
-        ...page,
-        showQuickJumper: true,
-      };
-      const formItemLayout = {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 4 },
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 16 },
-        },
-      };
-      return (
-        <PageHeaderLayout>
-          <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={8} sm={24}>
-                <Input placeholder="请输入类型，解决方案 ，添加人搜索" value={userName} onChange={this.onChange} />
-              </Col>
-              <Col md={7} sm={24}>
-                <Button onClick={this.handleReset}>
-                  重置
-                </Button>
-                <Button style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
-              </Col>
-            </Row>
-          </Card>
-          <Card bordered={false}>
-            <div className="tableList">
-              <div className="tableListOperator">
-                <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
-              </div>
-              <Table
-                columns={columns}
-                dataSource={list}
-                rowKey="code"
-                pagination={paginationProps}
-                onChange={this.handleTableChange}
-                scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-              />
-            </div>
-            {/*<Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>*/}
-            {/*<br /><br />*/}
-
-          </Card>
-          <Modal
-          title={
-            <div class="modalBox">
-              <span class="leftSpan"></span>
-              <span class="modalTitle">创建故障类型</span>
-            </div>
-          }
-          visible={visible}
-          onOk={this.handleOK}
-          onCancel={this.handleCancel}
-          >
-            <div className="manageAppBox">
-            <Form onSubmit={this.handleSearch}>
-              <FormItem {...formItemLayout} label="类型名称">
-                <Input placeholder="输入名称" value={this.state.typeName} onChange={this.onTypeNameChange} />
-              </FormItem>
-              <FormItem {...formItemLayout} label="解决方案">
-                {
-                  <div className={styles.solutionBox}>
-                    {
-                    solutionsLists.map((solutions) => {
-                    return (
-                    <div key={solutions.key} className={styles.faultTypeinput}>
-                    <Input placeholder="输入方案" value={solutions.name} onChange={(e) => this.onSolutionsChange(e, solutions)} style={{ width: solutionsLists.length === 1 ? '88%' : '77%', marginRight: '10px' }} />
-                    <span onClick={this.onDelHandle.bind(this, solutions)} style={{ marginRight: '10px', display: solutionsLists.length === 1 ? 'none' : ''}}>删除</span>
-                    </div>
-                    )})
-                   }
-                    <span onClick={() => this.handleSolutionsAdd(this)} style={{ position: 'absolute', right: '-40px' }}>添加</span>
-                  </div>
-                }
-              </FormItem>
-             </Form>
-             {/*<div    id="checkType">*/}
-               {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-                 {/*<Col md={6} sm={24}>*/}
-                   {/*类型名称*/}
-                 {/*</Col>*/}
-                 {/*<Col md={16} sm={24}>*/}
-                   {/*<Input placeholder="输入名称" value={this.state.typeName} onChange={this.onTypeNameChange} />*/}
-                 {/*</Col>*/}
-               {/*</Row>*/}
-               {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-                 {/*<Col md={6} sm={24}>*/}
-                   {/*解决方案*/}
-                 {/*</Col>*/}
-                 {/*<Col md={16} sm={24}>*/}
-                   {/*{*/}
-                     {/*solutionsLists.map((solutions) => {*/}
-                       {/*return (*/}
-                         {/*<div key={solutions.key} className={styles.faultTypeinput}>*/}
-                           {/*<Input placeholder="输入方案" value={solutions.name} onChange={(e) => this.onSolutionsChange(e, solutions)} style={{ width: '85%', marginRight: '10px' }}/>*/}
-                           {/*<span onClick={this.onDelHandle.bind(this, solutions)} style={{ display: solutionsLists.length === 1 ? 'none' : ''}}>删除</span>*/}
-                         {/*</div>)})*/}
-                   {/*}*/}
-                 {/*</Col>*/}
-                 {/*<Col md={2} sm={24} onClick={() => this.handleSolutionsAdd(this)}>*/}
-                   {/*<div style={{ marginLeft: '10px', width: '48px', cursor: 'pointer', }}>*/}
-                     {/*添加*/}
-                   {/*</div>*/}
-                 {/*</Col>*/}
-               {/*</Row>*/}
-             {/*</div>*/}
-
-            {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }} className={styles.mT20}>*/}
-              {/*<Col md={6} sm={24}></Col>*/}
-              {/*<Col md={15} sm={24}>*/}
-                {/*<Button type="primary" onClick={() => this.handleSolutionsAdd(this)}>添加</Button>*/}
-              {/*</Col>*/}
-            {/*</Row>*/}
-            </div>
-          </Modal>
-        </PageHeaderLayout>
-      );
-    }
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        restParams: {
+          code,
+        }
+      },
+    }).then((res) => {
+      if (!selectedOptions) {
+        this.setState({
+          options: res,
+        });
+      } else {
+        targetOption.loading = false;
+        targetOption.children = res
+        this.setState({
+          options: [...this.state.options],
+        });
+      }
+    });
   }
-
+  getMachineStatus = (item) => {
+    this.props.dispatch({
+      type: 'replenish/replenishDetail',
+      payload: {
+        params: {
+          batchNo: item.id
+        },
+      },
+    }).then((res) => {
+      if (res) {
+        this.setState({
+          machineList: res,
+        }, () => {
+          this.setState({
+            WatchMachineModalVisible: true,
+          });
+        });
+      }
+    });
+  }
+  WatchMachineHandleModalVisibleClick = () => {
+    this.setState({
+      WatchMachineModalVisible: false,
+    });
+  }
+  renderAdvancedForm() {
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="省市区商圈">
+              {getFieldDecorator('areaCode')(
+                <Cascader
+                  placeholder="请选择"
+                  options={this.state.options}
+                  loadData={this.getAreaList}
+                  changeOnSelect
+                />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem>
+              {getFieldDecorator('keyword')(<Input placeholder="请输入机器编码、补货人、手机号搜索" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <span>
+               <FormItem>
+                  {getFieldDecorator('time')(<RangePicker onChange={this.onChange}/>)}
+               </FormItem>
+            </span>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+           <Col md={8} sm={24}>
+             <FormItem></FormItem>
+             </Col>
+           <Col md={8} sm={24}>
+             <FormItem></FormItem>
+             </Col>
+            <Col md={8} sm={24}>
+           <span>
+              <FormItem>
+              <Button onClick={this.handleFormReset}>
+              重置
+              </Button>
+              <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" htmlType="submit">
+              查询
+              </Button>
+              </FormItem>
+           </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+  render() {
+    const {
+      replenish: { list, page },
+      loading,
+    } = this.props;
+    const { selectedRows } = this.state;
+    const columns = [
+      {
+        title: '补货时间',
+        dataIndex: 'createTime',
+        width: '15%',
+      },
+      {
+        title: '机器编号',
+        width: '10%',
+        dataIndex: 'machineCode',
+      },
+      {
+        title: '机器点位',
+        dataIndex: 'localeStr',
+        width: '30%',
+      },
+      {
+        title: '补货人',
+        dataIndex: 'name',
+        width: '10%',
+      },
+      {
+        title: '手机号',
+        width: '10%',
+        dataIndex: 'phone',
+      },
+      {
+        title: '负责区域',
+        dataIndex: 'area',
+        width: '10%',
+      },
+      {
+        title: '补货明细',
+        dataIndex: 'stockoutInfo',
+        render: (text, item) => (
+          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+        ),
+      },
+    ];
+    console.log('list', list)
+    return (
+      <PageHeaderLayout>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
+          <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
+        </Card>
+        <Card bordered={false}>
+          <div className={styles.tableList}>
+            <StandardTable
+              selectedRows={selectedRows}
+              loading={loading}
+              data={list}
+              page={page}
+              columns={columns}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
+              scrollX={1000}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}
+            />
+          </div>
+        </Card>
+        <WatchMachine
+          WatchMachineModalVisible={this.state.WatchMachineModalVisible}
+          WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
+          machineList={this.state.machineList}
+        />
+      </PageHeaderLayout>
+    );
+  }
+}

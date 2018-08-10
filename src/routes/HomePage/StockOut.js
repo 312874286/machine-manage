@@ -19,7 +19,7 @@ const WatchMachine = Form.create()(
       align: 'left',
       width: '85%'
     }, {
-      title: '缺货数量',
+      title: '剩余数量',
         dataIndex: 'goodCount',
         align: 'left',
         width: '15%'
@@ -29,7 +29,7 @@ const WatchMachine = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">查看缺货明细</span>
+            <span class="modalTitle">查看剩余数量</span>
           </div>
         }
         width={800}
@@ -63,7 +63,7 @@ export default class stockOut extends PureComponent {
       type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          type: 2
+          type: 3
         },
       },
     });
@@ -110,7 +110,7 @@ export default class stockOut extends PureComponent {
         dataIndex: 'local',
       },
       {
-        title: '缺货明细',
+        title: '剩余数量',
         dataIndex: 'stockoutInfo',
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
