@@ -318,7 +318,9 @@ class MachinePlan extends PureComponent {
                       <Popover placement="top" content={item.localDesc} trigger="hover">
                         <span className={styles.title}>{item.localDesc}</span>
                       </Popover>
-                      <span className={styles.title}>{item.machineCode}</span>
+                      <Popover placement="top" content={item.machineCode} trigger="hover">
+                        <span className={styles.title}>{item.machineCode}</span>
+                      </Popover>
                       {/*<span>{item.planTime.length > 0 ? item.planTime[0].startTime : ''}</span>*/}
                       {this.timeLineBox(item.planTime, 27 * days)}
 
