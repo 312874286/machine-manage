@@ -47,7 +47,7 @@ export default class homePageSetting extends PureComponent {
               </div>
             }>
               <div className={styles.gridCardBox}>
-                <a>
+                <a style={{ cursor: 'not-allowed' }}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/onLine.png')}/>
                   </div>
