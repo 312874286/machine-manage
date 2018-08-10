@@ -53,6 +53,13 @@ export default class offLine extends PureComponent {
         title: '机器点位',
         width: '25%',
         dataIndex: 'local',
+        render: (text, item) => (
+          (item.local) ? (
+            <span>{item.local}</span>
+          ) :(
+            <span>无</span>
+          )
+        )
       },
       {
         title: '离线时间',

@@ -104,40 +104,83 @@ export default class unusual extends PureComponent {
         width: '10%',
         dataIndex: 'machineDoorStatus',
         render(val) {
-          return machineDoorStatus[val]
+          if (val) {
+            return machineDoorStatus[val]
+          } else {
+            return '暂无'
+          }
         }
       },
       {
         title: '温度',
         dataIndex: 'temperature',
         width: '10%',
+        render: (text, item) => (
+          (item.temperature) ? (
+            <span>{item.temperature}</span>
+          ) :(
+            <span>暂无</span>
+          )
+        )
       },
       {
         title: '调货开关',
         width: '10%',
         dataIndex: 'dropGoodsSwitch',
         render(val) {
-          return machineDoorStatus[val]
+          if (val) {
+            return machineDoorStatus[val]
+          } else {
+            return '暂无'
+          }
         }
       },
       {
         title: '屏幕亮度',
         dataIndex: 'screenIntensity',
         width: '10%',
+        render: (text, item) => (
+          (item.screenIntensity) ? (
+            <span>{item.screenIntensity}</span>
+          ) :(
+            <span>暂无</span>
+          )
+        )
       },
       {
         title: '音量',
         dataIndex: 'voice',
         width: '10%',
+        render: (text, item) => (
+          (item.voice) ? (
+            <span>{item.voice}</span>
+          ) :(
+            <span>暂无</span>
+          )
+        )
       },
       {
         title: '货道故障',
         width: '10%',
         dataIndex: 'goodsChannelStatus',
+        render: (text, item) => (
+          (item.goodsChannelStatus) ? (
+            <span>{item.goodsChannelStatus}</span>
+          ) :(
+            <span>暂无</span>
+          )
+        )
       },
       {
         title: '更新时间',
         dataIndex: 'updateTime',
+        render: (text, item) => (
+          (item.updateTime) ? (
+            <span>{item.updateTime}</span>
+          ) :(
+            <span>暂无</span>
+          )
+        )
       },
       // {
       //   fixed: 'right',
