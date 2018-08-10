@@ -13,7 +13,10 @@ import {
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './machinePlanSetting.less'
-import MachinePlanTable  from '../../components/Project/machinePlanTable'
+// import MachinePlanTable  from '../../components/Project/machinePlanTable'
+import MachinePlan  from '../../components/Project/machinePlan'
+import moment from "moment/moment";
+
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
@@ -32,13 +35,12 @@ export default class machinePlanSettingList extends PureComponent {
     resource: [],
     events: [],
     options: [],
-    slotLabelFormat:  [
-      'YYYY.MMMM',
-      'D'
-    ]
+    handleDays: {},
+    getDataStartDay: '',
+    getDataEndDay: '',
   };
   componentDidMount() {
-    this.getLists();
+    // this.getLists();
     this.getAreaList('')
   }
   // 获取列表
@@ -55,28 +57,86 @@ export default class machinePlanSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res.length > 0) {
-        let resource = res.map((item) => {
-          return {id: item.machineCode, title: item.localDesc, code: item.machineCode}
-        })
-        let events = []
+        // let resource = res.map((item) => {
+        //   return {id: item.machineCode, title: item.localDesc, code: item.machineCode}
+        // })
         for (let i = 0; i < res.length; i++) {
           if (res[i].planTime.length > 0) {
-            for (let j = 0; j < res[i].planTime.length; j++) {
-              let a = {resourceId: res[i].machineCode, start : `${res[i].planTime[j].startTime.split(' ')[0]}T${res[i].planTime[j].startTime.split(' ')[1]}`, end: `${res[i].planTime[j].endTime.split(' ')[0]}T${res[i].planTime[j].endTime.split(' ')[1]}`, rendering: 'background', color: 'red'}
-              events.push(a)
-            }
+            let events = []
+            // for (let j = 0; j < res[i].planTime.length; j++) {
+            //   let a = {resourceId: res[i].machineCode, start : `${res[i].planTime[j].startTime.split(' ')[0]}T${res[i].planTime[j].startTime.split(' ')[1]}`, end: `${res[i].planTime[j].endTime.split(' ')[0]}T${res[i].planTime[j].endTime.split(' ')[1]}`, rendering: 'background', color: 'red'}
+            //   events.push(a)
+            // }
+            let a = this.drawLine(res[i].planTime)
+            events.push(...a)
+            res[i].planTime = events
+          } else {
+            res[i].planTime = []
           }
         }
         this.setState({
-          resource,
-          events,
+          resource: res,
         })
       } else {
         this.setState({
           resource: [],
-          events: [],
         })
       }
+    });
+  }
+  drawLine = (arr) => {
+    console.log('time', this.state.startTime, this.state.endTime)
+    console.log('startTime', this.state.handleDays.getDataStartDay, this.state.handleDays.getDataEndDay)
+    let activityArr =[]
+    let left;
+    let width;
+    let background = 'Green'
+    arr.forEach((item, index) => {
+      let time = '开始时间：' + item.startTime + '--' + '结束时间: ' + item.endTime
+      const DateNo = 24 * 60 * 60 * 1000
+      if (moment(item.startTime) >= moment(this.state.startTime)) {
+        // 开始日期>范围的开始日期
+        if (moment(item.endTime) <= moment(this.state.endTime)) {
+          // 开始时间及结束日期在15天的范围
+          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
+          width = Math.floor((moment(item.endTime) - moment(item.startTime)) / DateNo)
+        } else {
+          // 结束日期>范围的结束日期
+          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
+          width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / DateNo)
+        }
+      } else {
+        // 开始日期<范围的开始日期
+        left = 0, width = '';
+        if (moment(item.endTime) >= moment(this.state.handleDays.endDay)) {
+          // console.log('jieshu日期<范围的开始日期', left, width)
+          width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / DateNo)
+        } else {
+          width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / DateNo)
+        }
+      }
+      let tmp = {
+        left: (27.33 * left) + 'px',
+        width: (27 * (width + 1)) + 'px',
+        background: background,
+        height: '20px',
+        startTime: item.startTime,
+        endTime: item.endTime,
+      }
+      activityArr.push(tmp);
+    })
+    return activityArr;
+  }
+  handleDays = (val) => {
+    // console.log('val', val)
+    this.setState({
+      handleDays: val,
+      startTime: val.startDay,
+      endTime: val.endDay,
+      getDataStartDay: val.getDataStartDay,
+      getDataEndDay: val.getDataEndDay,
+    }, () => {
+      this.getLists();
     });
   }
   getAreaList = (selectedOptions) => {
@@ -132,10 +192,6 @@ export default class machinePlanSettingList extends PureComponent {
         startTime,
         endTime,
         localCode,
-        slotLabelFormat: [
-          'YYYY.MMMM',
-          'D'
-        ],
       }, () => {
         this.getLists();
       });
@@ -155,8 +211,11 @@ export default class machinePlanSettingList extends PureComponent {
   handleTime = (val) => {
     console.log('val', val)
     this.setState({
+      handleDays: val,
       startTime: val.startTime,
-      endTime: val.endTime
+      endTime: val.endTime,
+      getDataStartDay: val.getDataStartDay,
+      getDataEndDay: val.getDataEndDay,
     }, () => {
       this.getLists()
     })
@@ -221,14 +280,29 @@ export default class machinePlanSettingList extends PureComponent {
       </Form>
     );
   }
+  // resource={this.state.resource} events={this.state.events} handleTime={this.handleTime} slotLabelFormat={this.state.slotLabelFormat}
   render() {
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
+          <MachinePlan
+            // dateList={this.state.dateList}
+            handleDays={this.handleDays}
+            // onEditClick={this.onEditClick}
+            // onWatchClick={this.onWatchClick}
+            // onDeleteClick={this.onDeleteClick}
+            // handleModalVisible={this.handleModalVisible}
+            resource={this.state.resource}
+            minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 50)}
+          />
         </Card>
         <Card bordered={false}>
-          <MachinePlanTable resource={this.state.resource} events={this.state.events} handleTime={this.handleTime} slotLabelFormat={this.state.slotLabelFormat}/>
+
+
+          {/*<MachinePlanTable*/}
+            {/*resource={this.state.resource} events={this.state.events} handleTime={this.handleTime} slotLabelFormat={this.state.slotLabelFormat}*/}
+          {/*/>*/}
         </Card>
       </PageHeaderLayout>
     );

@@ -482,7 +482,7 @@ export default class user extends PureComponent {
   };
   verifyString = (rule, value, callback) => {
     if (value.length < 2) {
-      callback('请填写完整的省市区商圈');
+      callback('请填写完整的省市');
     } else {
       callback();
     }
@@ -552,16 +552,21 @@ export default class user extends PureComponent {
       return
     }
     const { area } = res;
-    const provinceRes = await this.getArea('')
-    let province = provinceRes;
-    const cityRes = await this.getArea(res.province)
-    this.forIn(province, res.province, cityRes)
-    this.setState({
-      options: province,
-      defaultValue: [res.province, area],
-    }, () => {
+    if (area) {
+      const provinceRes = await this.getArea('')
+      let province = provinceRes;
+      const cityRes = await this.getArea(res.province)
+      this.forIn(province, res.province, cityRes)
+      this.setState({
+        options: province,
+        defaultValue: [res.province, area],
+      }, () => {
+        this.setModalData(res);
+      });
+    } else {
       this.setModalData(res);
-    });
+    }
+
     // 回显省市区商圈数据源
   }
   // 设置modal 数据

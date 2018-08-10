@@ -17,11 +17,11 @@ class MachinePlanTable extends PureComponent {
     if (resource.length > 0) {
       this.updateRenderDatas( resource, events, this, '', 'calendar' );
       console.log('resource', resource)
-      $('#calendar').fullCalendar(
-        'removeResource',
-        {title: '天津市天津市和平区鞍山道沿线大沽口', code: '123'}
-        // scroll to the new resource?
-      );
+      // $('#calendar').fullCalendar(
+      //   'removeResource',
+      //   {title: '天津市天津市和平区鞍山道沿线大沽口', code: '123'}
+      //   // scroll to the new resource?
+      // );
       // removeResource
     }
     // $('#calendar').fullCalendar('render')
@@ -50,9 +50,12 @@ class MachinePlanTable extends PureComponent {
       // defaultDate: '2018-04-20',
       defaultView: 'timelineMonth',
       titleFormat: 'YYYY年MMMM月',
-      locale: 'zh-cn', // 语言
+      // locale: 'zh-cn', // 语言
       eventLimit: true,
-      // slotLabelFormat,
+      slotLabelFormat: [
+        'YYYY.MMMM',
+        'D'
+      ],
       scrollTime: '00:00',
       monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
       dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
@@ -92,7 +95,7 @@ class MachinePlanTable extends PureComponent {
           }
         });
       },
-      resources: resource,
+      resources: [{code:"1809510071149", id:"1809510071149", title:"天津市天津市和平区鞍山道沿线大沽口"}],
       contentHeight: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100),
       events: function(start, end, timezone, callback) {
         var date = this.getDate().format('YYYY-MM-DD');
