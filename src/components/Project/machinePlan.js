@@ -252,7 +252,7 @@ class MachinePlan extends PureComponent {
     )
   }
   render() {
-    const { dateTwoWeeksArr, currentDay, currentDayAfte, days, showTitleYear, showTitleMonth } = this.state;
+    const { dateTwoWeeksArr, currentDay, days, showTitleYear, showTitleMonth } = this.state;
     const { minHeight, resource } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     console.log('resource', resource)

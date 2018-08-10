@@ -5,6 +5,7 @@ import {
   Form,
   Table,
   Modal,
+  Button
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './OffLine.less'
@@ -130,6 +131,9 @@ export default class stockOut extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <Button icon="arrow-left" type="primary" onClick={() => history.go(-1)}>
+            返回
+          </Button>
           <div className={styles.tableList}>
             <Table
               loading={loading}
