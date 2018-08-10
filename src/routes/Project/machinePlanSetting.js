@@ -118,8 +118,8 @@ export default class machinePlanSettingList extends PureComponent {
         width += 1
       }
       let tmp = {
-        left: (27 * left) + 'px',
-        width: (27 * width) + 'px',
+        left: ((27 * left) + 1) + 'px',
+        width: ((27 * width) - 1) + 'px',
         background: background,
         height: '20px',
         startTime: item.startTime,

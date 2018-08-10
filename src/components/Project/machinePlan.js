@@ -239,11 +239,11 @@ class MachinePlan extends PureComponent {
               </div>
             } trigger="hover">
               <span style={{
-                // background: item.state === 2 ? '#64C81A' : '#849FFF',
-                background: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#64C81A' : '#849FFF'),
+                background: item.state === 2 ? '#64C81A' : '#849FFF',
+                // background: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#64C81A' : '#849FFF'),
                 opacity: 0.5,
-                width: item.width, top: 2, left: item.left, position: 'absolute', display: 'flex',
-                justifyContent: 'space-between', zIndex: 999, height: '27px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
+                width: item.width, top: 3, left: item.left, position: 'absolute', display: 'flex',
+                justifyContent: 'space-between', zIndex: 999, height: '24px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
                 {/*{item.activityName}*/}
               </span>
             </Popover>
