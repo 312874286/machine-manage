@@ -3234,7 +3234,7 @@ const proxy = {
       }
     )
   },
-  'POST /supply/channel/history/detail': (req, res) => {
+  'GET /supply/channel/history/detail': (req, res) => {
     res.send({
       "code": 0,
       "data": [

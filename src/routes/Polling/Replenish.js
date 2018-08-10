@@ -24,12 +24,12 @@ const WatchMachine = Form.create()(
     const { WatchMachineModalVisible, WatchMachineHandleModalVisibleClick, machineList } = props;
     const machineColumns = [{
       title: '商品名称',
-      dataIndex: 'goodName',
+      dataIndex: 'goodsName',
       align: 'left',
       width: '85%'
     }, {
-      title: '缺货数量',
-      dataIndex: 'goodCount',
+      title: '补货数量',
+      dataIndex: 'subCount',
       align: 'left',
       width: '15%'
     }];
@@ -38,7 +38,7 @@ const WatchMachine = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">查看缺货明细</span>
+            <span class="modalTitle">查看补货明细</span>
           </div>
         }
         width={800}
@@ -193,8 +193,8 @@ export default class replenish extends PureComponent {
     this.props.dispatch({
       type: 'replenish/replenishDetail',
       payload: {
-        params: {
-          batchNo: item.id
+        restParams: {
+          batchNo: item.batchNo
         },
       },
     }).then((res) => {

@@ -15,9 +15,9 @@ export default {
         payload: response,
       });
     },
-    *replenishDetail({ payload: { params } }, { call, put }) {
-      const response = yield call(replenishDetail, { params });
-      return response;
+    *replenishDetail({ payload: { restParams } }, { call, put }) {
+      const response = yield call(replenishDetail, { restParams });
+      return response.data;
     },
   },
 

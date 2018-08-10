@@ -9,9 +9,9 @@ export async function replenishList({ params, restParams }) {
   });
 }
 
-export async function replenishDetail({ params }) {
-  return fetch.post(api.replenishDetail, {
-    body: stringify(params),
+export async function replenishDetail({ restParams }) {
+  return fetch.get(api.replenishDetail, {
+    restParams
   });
 }
 

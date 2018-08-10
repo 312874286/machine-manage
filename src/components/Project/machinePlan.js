@@ -34,6 +34,8 @@ class MachinePlan extends PureComponent {
     startDay: '',
     endDay: '',
     days: 0,
+    showTitleYear: '',
+    showTitleMonth: ''
   }
   componentDidMount() {
     const { dateList, } = this.props;
@@ -117,42 +119,33 @@ class MachinePlan extends PureComponent {
     return dateTwoWeek
   }
   initTable = () => {
-    let date = new Date(); // 获取当前时间
-    let nowDate = this.format(date, 'yyyy-mm-dd')
-    let currentYear = date.getFullYear()
-    let currentMonth = date.getMonth() + 1
-    let currentDay = date.getDate()
-    this.setState({
-      currentDay: `${currentYear}.${currentMonth}.${currentDay}`,
-    }, () => {
-      // let startDay = this.format(new Date(date.setDate(date.getDate() - 7)), 'yyyy-mm-dd'); // 设置当月天
-      // let endDay = this.format(new Date(date.setDate(date.getDate() + 14)), 'yyyy-mm-dd'); // 设置今天天数 +7 天
-      console.log('getDaysInOneMonth', this.getDaysInOneMonth(currentYear, currentMonth))
-      // let dateTwoWeeksArr = this.dateArr(startDay, endDay);
-      let days = this.getDaysInOneMonth(currentYear, currentMonth)
-      let dateTwoWeeksArr = this.dateMonth(currentYear, currentMonth, days)
-      console.log('dateTwoWeeksArr2', dateTwoWeeksArr)
-      // this.setState({
-      //   days,
-      //   dateTwoWeeksArr,
-      //   // startDay: startDay.split('--')[0],
-      //   // endDay: endDay.split('--')[0],
-      //   // currentDayAfter: parseInt(endDay.split('-')[1]) + '.' + parseInt(endDay.split('-')[2])
-      // }, () => {
-      //   // document.getElementById('dateWeek').scrollLeft = 600;
-      // });
-      this.setState({
-        days,
-        dateTwoWeeksArr,
-      }, () => {
-        this.props.handleDays({
-          startDay: `${currentYear}-${currentMonth}-01 00:00:00`,
-          endDay: `${currentYear}-${currentMonth + 1}-01 00:00:00`,
-          getDataStartDay: `${currentYear}-${currentMonth}-01 00:00:00`,
-          getDataEndDay: `${currentYear}-${currentMonth + 1}-01 00:00:00`,
-        });
-      });
-    });
+    // let date = new Date(); // 获取当前时间
+    // let nowDate = this.format(date, 'yyyy-mm-dd')
+    // let currentYear = date.getFullYear()
+    // let currentMonth = date.getMonth() + 1
+    // let currentDay = date.getDate()
+    // this.setState({
+    //   currentDay: `${currentYear}.${currentMonth}.${currentDay}`,
+    // }, () => {
+    //   console.log('getDaysInOneMonth', this.getDaysInOneMonth(currentYear, currentMonth))
+    //   let days = this.getDaysInOneMonth(currentYear, currentMonth)
+    //   let dateTwoWeeksArr = this.dateMonth(currentYear, currentMonth, days)
+    //   console.log('dateTwoWeeksArr2', dateTwoWeeksArr)
+    //   this.setState({
+    //     showTitleYear: currentYear,
+    //     showTitleMonth: currentMonth,
+    //     days,
+    //     dateTwoWeeksArr,
+    //   }, () => {
+    //     this.props.handleDays({
+    //       startDay: `${currentYear}-${currentMonth}-01`,
+    //       endDay: `${currentYear}-${currentMonth}-${days}`,
+    //       getDataStartDay: `${currentYear}-${currentMonth}-01`,
+    //       getDataEndDay: `${currentYear}-${currentMonth}-${days}`,
+    //     });
+    //   });
+    // });
+    this.setValue('')
   }
   orderScroll() {
     // document.getElementById('dateWeek').scrollLeft = 600;
@@ -163,10 +156,47 @@ class MachinePlan extends PureComponent {
     return d.getDate();
   }
   left = () => {
-
+    this.setValue('left')
   }
   right = () => {
-
+    this.setValue('right')
+  }
+  setValue = (flag) => {
+    const { showTitleYear, showTitleMonth } = this.state;
+    let currentYear = ''
+    let currentMonth = ''
+    let date = new Date();
+    let currentDay = ''
+    if (flag === 'right') {
+      currentYear = showTitleMonth === 12 ? (showTitleYear + 1) : showTitleYear
+      currentMonth = showTitleMonth === 12 ? 1 : (showTitleMonth + 1)
+    } else if ( flag === 'left'){
+      currentYear = showTitleMonth === 1 ? (showTitleYear - 1) : showTitleYear
+      currentMonth = showTitleMonth === 1 ? 12 : (showTitleMonth - 1)
+    } else {
+      currentYear = date.getFullYear()
+      currentMonth = date.getMonth() + 1
+      currentDay = date.getDate()
+      this.setState({
+        currentDay: `${currentYear}.${currentMonth}.${currentDay}`,
+      })
+    }
+    let days = this.getDaysInOneMonth(currentYear, currentMonth)
+    let dateTwoWeeksArr = this.dateMonth(currentYear, currentMonth, days)
+    this.setState({
+      days,
+      dateTwoWeeksArr,
+      showTitleYear: currentYear,
+      showTitleMonth: currentMonth,
+      currentDay: currentDay ? `${currentYear}.${currentMonth}.${currentDay}` : '',
+    }, () => {
+      this.props.handleDays({
+        startDay: `${currentYear}-${currentMonth}-01`,
+        endDay: `${currentYear}-${currentMonth}-${days}`,
+        getDataStartDay: `${currentYear}-${currentMonth}-01`,
+        getDataEndDay: `${currentYear}-${currentMonth}-${days}`,
+      });
+    });
   }
   filterWeek = (value) => {
     switch (value) {
@@ -194,31 +224,35 @@ class MachinePlan extends PureComponent {
     }
   }
   backToday = () => {
-    document.querySelector("#currentDayAfter").scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'end',
-    });
+    this.setValue('')
   }
   timeLineBox = (items, width) => {
-    // console.log('items', items)
+    // console.log('items', items) activityName state
     return (
       <div className={styles.timeLineBox} style={{ width: width }}>
         {items.map((item, i) => {
           return (
-            <span key={i} style={{
-              background: moment(item.endTime) < new Date().getTime()  ? 'rgba(242,242,242,1)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)'),
-              color: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
-              width: item.width, top: 0, left: item.left, position: 'absolute', display: 'flex',
-              justifyContent: 'space-between', zIndex: 999, height: '30px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
-            </span>
+            <Popover key={i} placement="top" title={`活动名称：${item.activityName}`} content={
+              <div>
+                <span style={{ marginRight: 10 }}>开始时间：{item.startTime}</span>
+                <span>结束时间：{item.endTime}</span>
+              </div>
+            } trigger="hover">
+              <span style={{
+                background: item.state === 2 ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)',
+                color: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
+                width: item.width, top: 0, left: item.left, position: 'absolute', display: 'flex',
+                justifyContent: 'space-between', zIndex: 999, height: '30px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
+                {item.activityName}
+              </span>
+            </Popover>
             )
         })}
       </div>
     )
   }
   render() {
-    const { dateTwoWeeksArr, currentDay, currentDayAfte, days } = this.state;
+    const { dateTwoWeeksArr, currentDay, currentDayAfte, days, showTitleYear, showTitleMonth } = this.state;
     const { minHeight, resource } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     console.log('resource', resource)
@@ -230,7 +264,7 @@ class MachinePlan extends PureComponent {
               <i className={styles.ingStatus}></i>活动进行中
               <i className={styles.preStatus}></i>活动未开始
               <Button type="primary" style={{ marginLeft: '10px' }} onClick={() => this.backToday(true)}>
-                返回今天
+                返回本月
               </Button>
             </div>
           </div>
@@ -253,7 +287,7 @@ class MachinePlan extends PureComponent {
                     <span className={styles.monthBtn} style={{ marginLeft: '3px' }}>上一月</span>
                   </Card.Grid>
                   <Card.Grid style={gridMiddleStyle}>
-                    <span className={styles.gridMiddleStyle}>2018-08</span>
+                    <span className={styles.gridMiddleStyle}>{showTitleYear}-{ showTitleMonth > 9 ? showTitleMonth : `0${showTitleMonth}` }</span>
                   </Card.Grid>
                   <Card.Grid style={gridStyleRight} onClick={() => this.right()}>
                     <span className={styles.monthBtn} style={{ marginRight: '3px' }}>下一月</span>

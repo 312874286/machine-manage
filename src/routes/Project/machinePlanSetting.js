@@ -105,6 +105,7 @@ export default class machinePlanSettingList extends PureComponent {
           left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
           width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / DateNo)
         }
+        width += 1
       } else {
         // 开始日期<范围的开始日期
         left = 0, width = '';
@@ -114,21 +115,24 @@ export default class machinePlanSettingList extends PureComponent {
         } else {
           width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / DateNo)
         }
+        width += 1
       }
       let tmp = {
-        left: (27.33 * left) + 'px',
-        width: (27 * (width + 1)) + 'px',
+        left: (27 * left) + 'px',
+        width: (27 * width) + 'px',
         background: background,
         height: '20px',
         startTime: item.startTime,
         endTime: item.endTime,
+        activityName: item.activityName,
+        state: item.state
       }
       activityArr.push(tmp);
     })
     return activityArr;
   }
   handleDays = (val) => {
-    // console.log('val', val)
+    console.log('val', val)
     this.setState({
       handleDays: val,
       startTime: val.startDay,
@@ -189,8 +193,6 @@ export default class machinePlanSettingList extends PureComponent {
 
       this.setState({
         machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
-        startTime,
-        endTime,
         localCode,
       }, () => {
         this.getLists();

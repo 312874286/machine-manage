@@ -23,7 +23,7 @@ const api = map({
   deleteUser: '/check/user/delete',
 
   replenishList: '/supply/channel/history/list?pageNo={pageNo}',
-  replenishDetail: '/supply/channel/history/detail'
+  replenishDetail: '/supply/channel/history/detail?batchNo={batchNo}'
 });
 
 export default api;
