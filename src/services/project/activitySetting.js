@@ -15,6 +15,12 @@ export async function getActivitySettingList({ params, restParams }) {
   });
 }
 
+export async function getActivityCount({ restParams }) {
+  return fetch.postJSON(api.getActivityCount, {
+    body: JSON.stringify(restParams),
+  });
+}
+
 export async function getActivitySettingDetail({ restParams }) {
   return fetch.get(api.getActivitySettingDetail, {
     restParams,

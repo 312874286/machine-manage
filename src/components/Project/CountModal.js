@@ -8,16 +8,16 @@ export default class CountModal extends PureComponent {
   logModalhandleTableChange = (pagination, filters, sorter) => {
     this.props.logModalhandleTableChange(pagination, filters, sorter);
   }
-  footer = (data) => {
+  footer = (data, count) => {
     return (
       (data) ? (
         <div className={styles.footerBox}>
           <span>合计</span>
-          <span>100</span>
-          <span>100</span>
-          <span>100</span>
-          <span>100</span>
-          <span>100</span>
+          <span>{count.totalUserCount}</span>
+          <span>{count.totalOrderCount}</span>
+          <span>{count.totalPayCount}</span>
+          <span>{count.totalGoodsCount}</span>
+          <span>{count.totalCouponCount}</span>
         </div>
       ) : (
         ''
@@ -32,36 +32,37 @@ export default class CountModal extends PureComponent {
       loding,
       logHandleCancel,
       logVisible,
+      count
     } = this.props;
 
     const columns = [{
       title: '日期',
-      dataIndex: 'createTime',
+      dataIndex: 'createDate',
       width: '25%',
-      align: 'center'
+      // align: 'center'
     }, {
       title: '用户数量',
-      dataIndex: 'creator',
+      dataIndex: 'userCount',
       width: '15%',
       align: 'center'
     }, {
       title: '订单数量',
-      dataIndex: 'description',
+      dataIndex: 'orderCount',
       width: '15%',
       align: 'center'
     }, {
       title: '支付成功数量',
-      dataIndex: 'remark',
+      dataIndex: 'payCount',
       width: '15%',
       align: 'center'
     }, {
       title: '商品发放数量',
-      dataIndex: 'remark2',
+      dataIndex: 'goodsCount',
       width: '15%',
       align: 'center'
     }, {
       title: '优惠券发放数量',
-      dataIndex: 'remark3',
+      dataIndex: 'couponCount',
       width: '15%',
       align: 'center'
     }];
@@ -93,12 +94,12 @@ export default class CountModal extends PureComponent {
             size="small"
             scroll={{ y: 240 }}
             loading={loding}
-            rowKey={record => record.uuid}
+            rowKey={record => record.id}
             dataSource={data}
             columns={columns}
-            pagination={paginationProps}
+            pagination={false}
             onChange={this.logModalhandleTableChange}
-            footer={() => this.footer(data)}
+            footer={() => this.footer(data, count)}
           />
         </Modal>
       </div>

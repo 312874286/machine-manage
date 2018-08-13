@@ -3256,6 +3256,83 @@ const proxy = {
       ],
       "msg": "成功"
     })
+  },
+  'POST /activity/data/count/list': (req, res) => {
+    res.send({
+        "code":0,
+        "data":{
+          "totalOrderCount":0,
+          "totalGoodsCount":0,
+          "totalUserCount":580,
+          "totalPayCount":55,
+          "totalCouponCount":0,
+          "list":[
+            {
+              "id":"0e6e42e367984ea79cea0184f4a0e230",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:50"
+            },
+            {
+              "id":"2500b00692844dbf9085eecf01ab188f",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:40"
+            },
+            {
+              "id":"26d1e29de13b4cca8c50498f70afe952",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:45"
+            },
+            {
+              "id":"9b89d6a48cb44f4aa4532d40e746e5a2",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:55"
+            },
+            {
+              "id":"bb54b8d1a03042e288ccb93efc46cbaa",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:35"
+            }
+          ],
+          "totalOrderCount":370
+        },
+        "msg":"成功"
+      }
+    )
   }
 };
 

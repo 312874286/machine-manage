@@ -177,6 +177,13 @@ class MachinePlan extends PureComponent {
       currentYear = date.getFullYear()
       currentMonth = date.getMonth() + 1
       currentDay = date.getDate()
+      // this.setState({
+      //   currentDay: `${currentYear}.${currentMonth}.${currentDay}`,
+      // })
+    }
+    console.log((currentYear === date.getFullYear()) && (currentMonth === date.getMonth() + 1))
+    if ((currentYear === date.getFullYear()) && (currentMonth === date.getMonth() + 1)) {
+      currentDay = date.getDate()
       this.setState({
         currentDay: `${currentYear}.${currentMonth}.${currentDay}`,
       })
@@ -229,7 +236,7 @@ class MachinePlan extends PureComponent {
   timeLineBox = (items, width) => {
     // console.log('items', items) activityName state
     return (
-      <div className={styles.timeLineBox} style={{ minWidth: width }}>
+      <div className={styles.timeLineBox} style={{ minWidth: '80%' }}>
         {items.map((item, i) => {
           return (
             <Popover key={i} placement="top" title={`活动名称：${item.activityName}`} content={
@@ -257,6 +264,8 @@ class MachinePlan extends PureComponent {
     const { minHeight, resource } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     console.log('resource', resource)
+    var width = (document.documentElement.clientWidth || document.body.clientWidth) - 180
+    console.log('width', width - 180)
     return (
       <div id="scheduleBox" className={styles.machinePlanBox}>
         <Card title={
@@ -269,10 +278,10 @@ class MachinePlan extends PureComponent {
               </Button>
             </div>
           </div>
-        } style={{ overflow: 'hidden', overflowX: 'scroll' }} id="scheduleBox"
+        } style={{ overflow: 'hidden', overflowX: 'scroll', width: width}} id="scheduleBox"
               bordered={false}>
-          <div className={styles.machineBox} style={{  minWidth: (27 * (days) + 202) + 'px', position: 'relative', margin: '0 auto' }}>
-            <div style={{ display: 'flex',  minWidth: (27 * (days) + 202) + 'px', margin: '0 auto' }}
+          <div className={styles.machineBox} style={{ minWidth: '100%', position: 'relative', margin: '0 auto' }}>
+            <div style={{ display: 'flex',  minWidth: '100%', margin: '0 auto' }}
                  className={styles.cardDiv}>
               <div className={styles.machineCodeBox}>
                 <div>
@@ -282,7 +291,7 @@ class MachinePlan extends PureComponent {
                   <span className={styles.title}>机器编号</span>
                 </div>
               </div>
-              <div className={styles.dateWeekBox} style={{ height: minHeight }}>
+              <div className={styles.dateWeekBox} style={{ height: minHeight, width: '76%' }}>
                 <div className={styles.month}>
                   <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
                     <span className={styles.monthBtn} style={{ marginLeft: '3px' }}>上一月</span>
@@ -294,16 +303,21 @@ class MachinePlan extends PureComponent {
                     <span className={styles.monthBtn} style={{ marginRight: '3px' }}>下一月</span>
                   </Card.Grid>
                 </div>
-                <div style={{ overflowX: 'hidden', display: 'flex', position: 'relative', zIndex: 3, height: minHeight }}
+                <div style={{ overflowX: 'hidden', display: 'flex', position: 'relative', zIndex: 3, height: minHeight, minWidth: '100%' }}
                      id="dateWeek" className={styles.dateWeek}>
                   {dateTwoWeeksArr.map((item) => {
                     return (
-                      <Card.Grid value={item.id} key={item.id} className={currentDay === item.id ? styles.currentDay : styles.tableDiv}>
-                        <a id={currentDay === item.id ? 'today': ''}>
-                          <p>{item.value}</p>
-                          <p className="pHeight"></p>
-                        </a>
-                        <div style={{ width: '100%', height: minHeight - 29, borderRight: '1px solid #f2f2f2' }}></div>
+                      <Card.Grid value={item.id} key={item.id} className={currentDay === item.id ? styles.currentDay : styles.tableDiv}
+                                 style={{ width: '3.22%'}}
+                      >
+                        {/*<div style={{ width: '3.22%'}}>*/}
+                          <a id={currentDay === item.id ? 'today': ''}>
+                            <p>{item.value}</p>
+                            <p className="pHeight"></p>
+                          </a>
+                          <div style={{ width: '100%', height: minHeight - 29, borderRight: '1px solid #f2f2f2' }}></div>
+                        {/*</div>*/}
+
                       </Card.Grid>
                     );
                   })}
@@ -311,7 +325,7 @@ class MachinePlan extends PureComponent {
               </div>
             </div>
             <div className={styles.machineLeft}>
-              <div className={styles.dateList} style={{ minWidth: (27 * (days) + 202) + 'px' , height: minHeight - 60}}>
+              <div className={styles.dateList} style={{ minWidth: '100%' , height: minHeight - 60}}>
                 {resource.map((item) => {
                   return (
                     <div className={styles.machineMsg} value={item.machineCode} key={item.machineCode}>

@@ -753,30 +753,31 @@ export default class activitySettingList extends PureComponent {
   }
   // 设置默认活动结束
   // 日志相关
-  getCountList = () => {
+  getCountList = (data) => {
     this.props.dispatch({
-      type: 'log/getLogList',
+      type: 'activitySetting/getActivityCount',
       payload: {
         restParams: {
-          code: this.state.logId,
-          pageNo: this.state.logModalPageNo,
-          type: 1020403,
+          activityId: data.id,
         },
       },
     }).then((res) => {
-      if (!res) {
-        message.config({
-          top: 100,
-          duration: 2,
-          maxCount: 1,
-        })
-        message.error('该活动暂无统计')
-      } else {
-        this.setState({
-          logModalLoading: true,
-          logModalVisible: true
-        });
-      }
+      // if (!res) {
+      //   this.setState({
+      //     logModalLoading: false,
+      //   });
+      //   message.config({
+      //     top: 100,
+      //     duration: 2,
+      //     maxCount: 1,
+      //   })
+      //   message.error('该活动暂无统计')
+      // } else {
+      this.setState({
+        logModalLoading: false,
+        logModalVisible: true
+      });
+      // }
     });
   }
 
@@ -786,7 +787,7 @@ export default class activitySettingList extends PureComponent {
       logModalLoading: true,
       logId: data.id,
     }, () => {
-      this.getCountList();
+      this.getCountList(data);
     });
   }
 
@@ -846,7 +847,7 @@ export default class activitySettingList extends PureComponent {
     );
   }
   render() {
-    const { activitySetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
+    const { activitySetting: { list, page }, loading, activitySetting: { activityCountList, count }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData } = this.state;
     const columns = [
       {
@@ -1001,8 +1002,9 @@ export default class activitySettingList extends PureComponent {
           // value={this.state.value}
         />
         <CountModal
-          data={logList}
-          page={logPage}
+          data={activityCountList}
+          // page={logPage}
+          count={count}
           loding={this.state.logModalLoading}
           logVisible={this.state.logModalVisible}
           logHandleCancel={this.logModalHandleCancel}

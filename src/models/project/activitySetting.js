@@ -1,4 +1,4 @@
-import { getActivitySettingList, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting, getGameList, getDefaultActivity } from '../../services/project/activitySetting';
+import { getActivitySettingList, getActivityCount, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting, getGameList, getDefaultActivity } from '../../services/project/activitySetting';
 
 export default {
   namespace: 'activitySetting',
@@ -6,6 +6,8 @@ export default {
     list: [],
     page: {},
     datas: {},
+    activityCountList: [],
+    count: {}
   },
 
   effects: {
@@ -13,6 +15,13 @@ export default {
       const response = yield call(getActivitySettingList, { restParams });
       yield put({
         type: 'saveList',
+        payload: response,
+      });
+    },
+    *getActivityCount({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getActivityCount, { restParams });
+      yield put({
+        type: 'saveCountList',
         payload: response,
       });
     },
@@ -61,6 +70,19 @@ export default {
           pageSize: page.pageSize,
           current: page.pageNo,
         },
+      };
+    },
+    saveCountList(state, { payload: { data } }) {
+      return {
+        ...state,
+        activityCountList: data.list,
+        count: {
+          totalGoodsCount: data.totalGoodsCount,
+          totalUserCount: data.totalUserCount,
+          totalPayCount: data.totalPayCount,
+          totalCouponCount: data.totalCouponCount,
+          totalOrderCount: data.totalOrderCount,
+        }
       };
     },
   },

@@ -84,7 +84,7 @@ export default class replenish extends PureComponent {
         },
         params: {
           keyword: this.state.keyword,
-          localCode: this.state.localCode,
+          areaCode: this.state.areaCode,
           beginTime: this.state.beginTime,
           endTime: this.state.endTime,
         }
@@ -124,24 +124,24 @@ export default class replenish extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let localCode = ''
+      let areaCode = ''
       let beginTime = ''
       let endTime = ''
       if (fieldsValue.areaCode) {
         if (fieldsValue.areaCode.length > 0) {
-          localCode = fieldsValue.areaCode[fieldsValue.areaCode.length - 1];
+          areaCode = fieldsValue.areaCode[fieldsValue.areaCode.length - 1];
         }
       }
       if (fieldsValue.time) {
-        beginTime = fieldsValue.time[0].format('YYYY-MM-DD HH:mm')
-        endTime = fieldsValue.time[1].format('YYYY-MM-DD HH:mm')
+        beginTime = fieldsValue.time[0].format('YYYY-MM-DD')
+        endTime = fieldsValue.time[1].format('YYYY-MM-DD')
       }
 
       this.setState({
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         beginTime,
         endTime,
-        localCode,
+        areaCode,
       }, () => {
         this.getLists();
       });
