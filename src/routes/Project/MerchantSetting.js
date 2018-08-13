@@ -82,7 +82,7 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="原始标示">
             {getFieldDecorator('brandName', {
-              rules: [{ required: true, whitespace: true, message: '请输入原始标示' }],
+              rules: [{ required: false, whitespace: true, message: '请输入原始标示' }],
             })(<Input placeholder="请输入原始标示" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择渠道">
