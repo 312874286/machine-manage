@@ -229,7 +229,7 @@ class MachinePlan extends PureComponent {
   timeLineBox = (items, width) => {
     // console.log('items', items) activityName state
     return (
-      <div className={styles.timeLineBox} style={{ width: width }}>
+      <div className={styles.timeLineBox} style={{ minWidth: width }}>
         {items.map((item, i) => {
           return (
             <Popover key={i} placement="top" title={`活动名称：${item.activityName}`} content={
@@ -269,7 +269,7 @@ class MachinePlan extends PureComponent {
               </Button>
             </div>
           </div>
-        } style={{ overflow: 'hidden'}} id="scheduleBox"
+        } style={{ overflow: 'hidden', overflowX: 'scroll' }} id="scheduleBox"
               bordered={false}>
           <div className={styles.machineBox} style={{  minWidth: (27 * (days) + 202) + 'px', position: 'relative', margin: '0 auto' }}>
             <div style={{ display: 'flex',  minWidth: (27 * (days) + 202) + 'px', margin: '0 auto' }}

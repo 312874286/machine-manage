@@ -637,8 +637,8 @@ export default class ScheduleSettingList extends PureComponent {
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          endTime: this.state.getDataEndDay,
-          startTime: this.state.getDataStartDay,
+          endTime: this.state.endTime,
+          startTime: this.state.startTime,
           code: this.state.code,
           status: this.state.status,
         },
