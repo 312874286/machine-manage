@@ -249,7 +249,7 @@ class MachinePlan extends PureComponent {
                 background: item.state === '2' ? '#64C81A' : '#849FFF',
                 // background: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#64C81A' : '#849FFF'),
                 opacity: 0.5,
-                width: item.width, top: 3, left: item.left, position: 'absolute', display: 'flex',
+                width: (item.width * 3.22) + '%', top: 3, left: (0.3 + (item.left * 3.22)) + '%', position: 'absolute', display: 'flex',
                 justifyContent: 'space-between', zIndex: 999, height: '24px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
                 {/*{item.activityName}*/}
               </span>
@@ -278,8 +278,7 @@ class MachinePlan extends PureComponent {
               </Button>
             </div>
           </div>
-        } style={{ overflow: 'hidden', overflowX: 'scroll', width: width}} id="scheduleBox"
-              bordered={false}>
+        } style={{ overflow: 'hidden', overflowX: 'scroll' }} id="scheduleBox" bordered={false}>
           <div className={styles.machineBox} style={{ minWidth: '100%', position: 'relative', margin: '0 auto' }}>
             <div style={{ display: 'flex',  minWidth: '100%', margin: '0 auto' }}
                  className={styles.cardDiv}>
@@ -291,7 +290,7 @@ class MachinePlan extends PureComponent {
                   <span className={styles.title}>机器编号</span>
                 </div>
               </div>
-              <div className={styles.dateWeekBox} style={{ height: minHeight, width: '76%' }}>
+              <div className={styles.dateWeekBox} style={{ height: minHeight, width: '80%' }}>
                 <div className={styles.month}>
                   <Card.Grid style={gridLeftStyle} onClick={() => this.left()}>
                     <span className={styles.monthBtn} style={{ marginLeft: '3px' }}>上一月</span>
@@ -308,7 +307,7 @@ class MachinePlan extends PureComponent {
                   {dateTwoWeeksArr.map((item) => {
                     return (
                       <Card.Grid value={item.id} key={item.id} className={currentDay === item.id ? styles.currentDay : styles.tableDiv}
-                                 style={{ width: '3.22%'}}
+                                 style={{ width: '3.226%'}}
                       >
                         {/*<div style={{ width: '3.22%'}}>*/}
                           <a id={currentDay === item.id ? 'today': ''}>
@@ -329,14 +328,17 @@ class MachinePlan extends PureComponent {
                 {resource.map((item) => {
                   return (
                     <div className={styles.machineMsg} value={item.machineCode} key={item.machineCode}>
-                      <Popover placement="top" content={item.localDesc} trigger="hover">
-                        <span className={styles.title}>{item.localDesc}</span>
-                      </Popover>
-                      <Popover placement="top" content={item.machineCode} trigger="hover">
-                        <span className={styles.title}>{item.machineCode}</span>
-                      </Popover>
+                      <div className={styles.msgBox}>
+                        <Popover placement="top" content={item.localDesc} trigger="hover">
+                          <span className={styles.title}>{item.localDesc}</span>
+                        </Popover>
+                        <Popover placement="top" content={item.machineCode} trigger="hover">
+                          <span className={styles.title}>{item.machineCode}</span>
+                        </Popover>
+                      </div>
+
                       {/*<span>{item.planTime.length > 0 ? item.planTime[0].startTime : ''}</span>*/}
-                      {this.timeLineBox(item.planTime, 27 * days)}
+                      {this.timeLineBox(item.planTime)}
 
                       {/*<div className={styles.timeLineBox} style={{ width: 27 * days }}>*/}
                       {/*</div>*/}

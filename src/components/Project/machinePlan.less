@@ -203,6 +203,7 @@
     .ant-card-head {
       min-height: auto;
       margin-bottom: 10px;
+      padding: 0;
     }
   }
   .machineBox {
@@ -236,12 +237,13 @@
     //border: 1px solid #999;
     div:nth-child(1) {
       border-right: 1px solid #cacaca;
+      width: 70%;
       .title {
         width: 100%;
       }
     }
     div {
-      width: 50%;
+      width: 30%;
     }
     .title {
       width: 100%;
@@ -271,22 +273,30 @@
       //border-top: 1px solid #cacaca;
       position: relative;
       display: flex;
-      .title {
-        width: 10%;
-        display: inline-block;
-        text-align: center;
+      .msgBox {
+        width: 20%;
         border-bottom: 1px solid #cacaca;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-      .title:nth-child(1) {
-        width: 10%;
+        line-height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .title {
+          width: 30%;
+          display: inline-block;
+          text-align: center;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .title:nth-child(1) {
+          width: 70%;
+        }
       }
       .timeLineBox {
         border-bottom: 1px solid #f2f2f2;
         position: relative;
       }
+
     }
   }
   .q {
