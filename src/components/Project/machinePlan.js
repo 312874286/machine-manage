@@ -271,8 +271,8 @@ class MachinePlan extends PureComponent {
           </div>
         } style={{ overflow: 'hidden'}} id="scheduleBox"
               bordered={false}>
-          <div className={styles.machineBox} style={{ maxWidth: (27 * (days)) + 'px', minWidth: (27 * (days) + 200) + 'px', position: 'relative', margin: '0 auto' }}>
-            <div style={{ display: 'flex', maxWidth: (27 * (days)  + 200 ) + 'px', minWidth: (27 * (days) + 200) + 'px', margin: '0 auto' }}
+          <div className={styles.machineBox} style={{  minWidth: (27 * (days) + 202) + 'px', position: 'relative', margin: '0 auto' }}>
+            <div style={{ display: 'flex',  minWidth: (27 * (days) + 202) + 'px', margin: '0 auto' }}
                  className={styles.cardDiv}>
               <div className={styles.machineCodeBox}>
                 <div>
@@ -311,7 +311,7 @@ class MachinePlan extends PureComponent {
               </div>
             </div>
             <div className={styles.machineLeft}>
-              <div className={styles.dateList} style={{ maxWidth: (27 * (days) + 200) + 'px', minWidth: (27 * (days) + 200) + 'px' , height: minHeight - 60}}>
+              <div className={styles.dateList} style={{ minWidth: (27 * (days) + 202) + 'px' , height: minHeight - 60}}>
                 {resource.map((item) => {
                   return (
                     <div className={styles.machineMsg} value={item.machineCode} key={item.machineCode}>

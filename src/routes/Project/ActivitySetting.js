@@ -16,11 +16,12 @@ import {
   Badge,
   Spin,
   Radio,
+  message
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ActivitySetting.less';
-import LogModal from '../../components/LogModal/index';
+import CountModal from '../../components/Project/CountModal';
 import moment from "moment/moment";
 
 // const status = ['全部','未开始', '进行中', '已结束'];
@@ -752,7 +753,7 @@ export default class activitySettingList extends PureComponent {
   }
   // 设置默认活动结束
   // 日志相关
-  getLogList = () => {
+  getCountList = () => {
     this.props.dispatch({
       type: 'log/getLogList',
       payload: {
@@ -762,20 +763,30 @@ export default class activitySettingList extends PureComponent {
           type: 1020403,
         },
       },
-    }).then(() => {
-      this.setState({
-        logModalLoading: false,
-      });
+    }).then((res) => {
+      if (!res) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        })
+        message.error('该活动暂无统计')
+      } else {
+        this.setState({
+          logModalLoading: true,
+          logModalVisible: true
+        });
+      }
     });
   }
 
-  handleLogClick = (data) => {
+  handleCountClick = (data) => {
     this.setState({
-      logModalVisible: !!data,
+      // logModalVisible: !!data,
       logModalLoading: true,
       logId: data.id,
     }, () => {
-      this.getLogList();
+      this.getCountList();
     });
   }
 
@@ -790,7 +801,7 @@ export default class activitySettingList extends PureComponent {
     this.setState({
       logModalPageNo: current,
     }, () => {
-      this.getLogList();
+      this.getCountList();
     });
   }
   renderAdvancedForm() {
@@ -877,7 +888,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         fixed: 'right',
-        width: 150,
+        width: 100,
         title: '操作',
         render: (text, item) => (
           (item.state === '已结束') ? (
@@ -885,22 +896,25 @@ export default class activitySettingList extends PureComponent {
               <a onClick={() => this.handleWatchClick(item)}>查看</a>
               <Divider type="vertical" />
               <a disabled style={{ cursor: 'not-allowed' }}>编辑</a>
-              <Divider type="vertical" />
               <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
                 <a className={styles.delete}>删除</a>
               </Popconfirm>
+              <Divider type="vertical" />
+              <a onClick={() => this.handleCountClick(item)}>统计</a>
             </Fragment>
           ) : (
             <Fragment>
               <a onClick={() => this.handleWatchClick(item)}>查看</a>
               <Divider type="vertical" />
               <a onClick={() => this.handleEditClick(item)}>编辑</a>
-              <Divider type="vertical" />
-              {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
+              {/*<Divider type="vertical" />*/}
+              {/*<a onClick={() => this.handleCountClick(item)}>日志</a>*/}
               {/*<Divider type="vertical" />*/}
               <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
                 <a className={styles.delete}>删除</a>
               </Popconfirm>
+              <Divider type="vertical" />
+              <a onClick={() => this.handleCountClick(item)}>统计</a>
             </Fragment>
           )
         ),
@@ -986,7 +1000,7 @@ export default class activitySettingList extends PureComponent {
           gameLists={this.state.gameLists}
           // value={this.state.value}
         />
-        <LogModal
+        <CountModal
           data={logList}
           page={logPage}
           loding={this.state.logModalLoading}
