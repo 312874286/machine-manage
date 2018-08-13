@@ -116,6 +116,12 @@ class MachinePlan extends PureComponent {
       let newd = {dataId: `${currentYear}.${currentMonth}.${i}`, value: i, id: `${currentYear}.${currentMonth}.${i}` };
       dateTwoWeek.push(newd);
     }
+    if (monthdays < 31) {
+      for (let i = 1; i <= (31 - monthdays); i++) {
+        let newd = {dataId: `${currentYear}.${currentMonth + 1}.${i}`, value: ' ', id: `${currentYear}.${currentMonth + 1}.${i}` };
+        dateTwoWeek.push(newd);
+      }
+    }
     return dateTwoWeek
   }
   initTable = () => {
@@ -181,7 +187,6 @@ class MachinePlan extends PureComponent {
       //   currentDay: `${currentYear}.${currentMonth}.${currentDay}`,
       // })
     }
-    console.log((currentYear === date.getFullYear()) && (currentMonth === date.getMonth() + 1))
     if ((currentYear === date.getFullYear()) && (currentMonth === date.getMonth() + 1)) {
       currentDay = date.getDate()
       this.setState({
