@@ -300,8 +300,6 @@ export default class machinePlanSettingList extends PureComponent {
           />
         </Card>
         <Card bordered={false}>
-
-
           {/*<MachinePlanTable*/}
             {/*resource={this.state.resource} events={this.state.events} handleTime={this.handleTime} slotLabelFormat={this.state.slotLabelFormat}*/}
           {/*/>*/}
