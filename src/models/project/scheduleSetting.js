@@ -55,8 +55,10 @@ export default {
         for (let i = 0; i < data.length; i++) {
           machines = data[i].machines
           title = data[i].name + '(' + data[i].canUseNum + '/' + data[i].totalNum + ')'
-          if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
+          if ((data[i].level === 4 || data[i].level === 5) && data[i].machines.length === 0) {
             isLeaf = true;
+          } else {
+            isLeaf = false;
           }
           // console.log("data[i].canUseNum === '0'", data[i].canUseNum === '0')
           if (data[0].level !== 5 && data[i].canUseNum === '0') {
