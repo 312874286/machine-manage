@@ -20,4 +20,14 @@ export async function getCheckFaultAnswer({ params }) {
   });
 }
 
+export async function getMachineUserList({ restParams }) {
+  return fetch.get(api.getMachineUserList, {
+    restParams,
+  });
+}
 
+export async function saveCheckFault({ params }) {
+  return fetch.post(api.saveCheckFault, {
+    body: stringify(params),
+  });
+}

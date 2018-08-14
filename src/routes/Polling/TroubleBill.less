@@ -122,8 +122,9 @@
   //}
 }
 .checkFaultBox {
-  padding: 18px 30px 15px 30px;
+  padding: 18px 30px 30px 30px;
   display: flex;
+  position: relative;
   :global {
     .ant-input {
       border: none;
@@ -138,11 +139,11 @@
     .ant-upload-list-picture-card .ant-upload-list-item {
       float: left;
       width: 120px;
-      height: 90px;
+      height: 90px !important;
       margin: 0 8px 8px 0;
       padding: 0;
-      margin-right: 15px;
-      margin-bottom: 15px;
+      margin-right: 15px !important;
+      margin-bottom: 15px !important;
     }
     .ant-list-item{
       padding: 15px 0;
@@ -151,7 +152,7 @@
       padding: 0 0 15px 0;
     }
     .ant-row {
-      margin: 0;
+      margin: 0 !important;
     }
     .ant-row div {
       padding: 0 !important;
@@ -174,19 +175,45 @@
       //padding: 0 !important;
       //margin-right: 0 !important;
     }
+    .ant-modal-footer {
+      position: absolute;
+      width: 30%;
+      right: 30px;
+      bottom: 30px;
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ant-modal-footer div button {
+      min-width: 160px;
+    }
+    .ant-modal-footer div button:nth-child(1) {
+      margin-bottom: 15px;
+    }
+  }
+  .middleLine {
+    position: absolute;
+    left: 68.5%;
+    height: 100%;
+    width: 1px;
+    background: #ececec;
+    top: 0;
   }
   .checkLeftFaultBox {
     width: 70%;
+    padding-right: 30px;
     :global {
       .ant-list-item-content {
         flex-direction: column;
       }
-      .ant-spin-container {
-        margin: 9px 0 0;
+      .ant-row:nth-child(2) {
+        margin: 9px 0 0 !important;
       }
-      .row:nth-child(1) div {
-        padding-bottom: 15px;
-        border-top: 1px solid #f2f2f2;
+      .ant-row:nth-child(1) div:nth-child(2){
+        padding-bottom: 15px !important;
+        border-bottom: 1px solid #f2f2f2;
       }
     }
     .workType {
@@ -198,9 +225,24 @@
       display: inline-block;
       text-align: center;
     }
+    .answerStatus {
+      color: #999999;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .answer {
+      margin-bottom: 8px;
+    }
+    .left {
+      margin-bottom: 30px;
+      display: inline-block;
+    }
   }
   .checkRightFaultBox {
     width: 30%;
+    padding-left: 15px;
     .left {
       line-height: 34px;
       height: 34px;
@@ -257,6 +299,7 @@
 .imgRight {
   border-bottom: 1px solid #f2f2f2;
   overflow: hidden;
+  margin-bottom: 15px;
 }
 .left {
   //margin-right: 30px;
