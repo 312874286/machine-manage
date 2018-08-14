@@ -10,6 +10,10 @@ const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
+const workType = ['故障', '报警', '补货', '投诉']
+const source = ['巡检上报', '运营派单', '报警派单']
+const urgentStatus = ['日常', '紧急']
+const status = ['待接单', '处理中', '已完成', '已确认', '已关闭']
 
 @connect(({ troubleBill }) => ({ troubleBill }))
 export default class troubleBill extends PureComponent {
@@ -21,7 +25,7 @@ export default class troubleBill extends PureComponent {
     startDateString: '',
     endDateString: '',
     userName: '',
-    seeData: [],
+    seeData: {},
     pageNo: 1,
     currentRecord: {
       "id": "",
@@ -130,34 +134,38 @@ export default class troubleBill extends PureComponent {
     }).then((res) => {
       const { code, data, msg } = res;
       // console.log(data.functions);
-
-
-      this.setState({
-        seeData: data,
-      }, () => {
-        // console.log(11111,this.state.seeData);
-        var newImgList = [];
-        for(var i = 0 ; i < this.state.seeData.imgList.length ; i++){
-          newImgList.push({
+      for(var j = 0 ; j < data.answerList.length; j++) {
+        for(var i = 0 ; i < data.answerList[j].imgList.length ; i++){
+          data.answerList[j].imgList[i] = {
             uid: i,
             name: '',
             status: 'done',
-            url: this.state.seeData.imgList[i],
-          });
+            url: data.answerList[j].imgList[i].image,
+          }
         }
+        // let i = 0
+        // data.answerList[j].imgList.map((item) => {
+        //   i++
+        //   return {
+        //     uid: i,
+        //     name: '',
+        //     status: 'done',
+        //     url: item.image,
+        //   }
+        // })
+      }
+      console.log('this.state.seeData', data);
+      this.setState({
+        seeData: data,
+      }, () => {
         this.setState({
-          fileList: newImgList,
+          // textAreaVal: '',
+          replyVisible: true,
         });
       });
-      console.log(data);
-      this.setState({
-        // textAreaVal: '',
-        replyVisible: true,
-      });
       // treeData = data;
-
     });
-    console.log(record);
+    console.log('record', record);
   }
   // 获取列表
   getLists = () => {
@@ -273,44 +281,64 @@ export default class troubleBill extends PureComponent {
     const columns = [{
       title: '故障单ID',
       dataIndex: 'id',
-      width: '19%'
+      width: '10%'
     }, {
       title: '机器ID',
-      dataIndex: 'machineId',
-      key: 'machineId',
-      width: '8%'
+      dataIndex: 'machineCode',
+      key: 'machineCode',
+      width: '7%'
     }, {
-      title: '故障描述',
+      title: '工单类型',
+      dataIndex: 'workType',
+      key: 'workType',
+      width: '5%'
+    },  {
+      title: '来源',
+      dataIndex: 'source',
+      key: 'source',
+      width: '5%'
+    }, {
+      title: '紧急状态',
+      dataIndex: 'urgentStatus',
+      key: 'urgentStatus',
+      width: '5%'
+    },  {
+      title: '工单描述',
       dataIndex: 'remark',
       key: 'remark',
       width: '10%'
     }, {
-      title: '上报时间',
+      title: '派单时间',
       dataIndex: 'submitTime',
       key: 'submitTime',
-      width: '12%'
+      width: '7%'
     }, {
-      title: '上报人',
+      title: '派单人',
       dataIndex: 'submitUser',
       key: 'submitUser',
-      width: '8%'
+      width: '7%'
     }, {
+      title: '接单时间',
+      dataIndex: 'talkingTime',
+      key: 'talkingTime',
+      width: '7%'
+    },  {
       title: '解决时间',
       dataIndex: 'finishTime',
       key: 'finishTime',
-      width: '12%'
+      width: '7%'
     }, {
       title: '解决人',
       dataIndex: 'finishUser',
       key: 'finishUser',
-      width: '8%'
+      width: '7%'
     }, {
       title: '解决方案',
       dataIndex: 'finishRemark',
       key: 'finishRemark',
       width: '10%'
     }, {
-      title: '故障状态',
+      title: '工单状态',
       dataIndex: 'status',
       key: 'status',
       render: (text, record) => (
@@ -417,127 +445,9 @@ export default class troubleBill extends PureComponent {
             rowKey={record => record.id}
             onChange={this.handleTableChange}
             pagination={paginationProps}
-            scroll={{ x: 1500, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+            scroll={{ x: 1800, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
           />
         </Card>
-        {/*<Modal*/}
-          {/*title={*/}
-            {/*<div class="modalBox">*/}
-              {/*<span class="leftSpan"></span>*/}
-              {/*<span class="modalTitle">查看</span>*/}
-            {/*</div>*/}
-          {/*}*/}
-          {/*visible={seeVisible}*/}
-          {/*onCancel={this.seeHandleCancel}*/}
-          {/*footer={[*/}
-            {/*<Button key="submit" type="primary" onClick={this.seeHandleCancel}>*/}
-              {/*关闭*/}
-            {/*</Button>,*/}
-          {/*]}>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*故障ID*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{seeData.id}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*机器ID*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{seeData.machineCode}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*上报人*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{seeData.submitUser}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*上报时间*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{seeData.submitTime}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*解决人*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{seeData.finishUser}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*解决时间*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{seeData.finishTime}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*故障描述*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{currentRecord.remark}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*图片*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*/!* <List*/}
-                {/*dataSource={seeData.imgList}*/}
-                {/*renderItem={item => (*/}
-                  {/*<List.Item*/}
-                    {/*extra={<img width={272} src={item} />}*/}
-                  {/*></List.Item>*/}
-                {/*)}*/}
-              {/*/> *!/*/}
-              {/*<Upload*/}
-                {/*// action="//jsonplaceholder.typicode.com/posts/"*/}
-                {/*listType="picture-card"*/}
-                {/*fileList={fileList}*/}
-                {/*onPreview={this.handlePreview}*/}
-                {/*onChange={this.handleChange}*/}
-              {/*>*/}
-              {/*</Upload>*/}
-              {/*<Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>*/}
-                {/*<img alt="example" style={{ width: '100%' }} src={previewImage} />*/}
-              {/*</Modal>*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*回复*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*<List*/}
-                {/*dataSource={seeData.answerList}*/}
-                {/*renderItem={item => (*/}
-                  {/*<List.Item>{item}</List.Item>*/}
-                {/*)}*/}
-              {/*/>*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-            {/*<Col md={6} sm={24}>*/}
-              {/*解决方案*/}
-            {/*</Col>*/}
-            {/*<Col md={15} sm={24}>*/}
-              {/*{currentRecord.finishRemark}*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-        {/*</Modal>*/}
         <Modal
           // title="回复"
           title={
@@ -676,8 +586,8 @@ export default class troubleBill extends PureComponent {
               <span class="modalTitle">回复</span>
               {/*<span class="resolved" class={} style={{ display: currentRecord.finishTime ? '' : 'none'}}>已解决</span>*/}
               {/*<span class="willResolve">未解决</span>*/}
-              <span class={ currentRecord.finishTime ? 'resolved' : 'willResolve' }>
-                { currentRecord.finishTime ? '已解决' : '未解决' }
+              <span class={ seeData.finishTime ? 'resolved' : 'willResolve' }>
+                { seeData.finishTime ? '已解决' : '未解决' }
               </span>
             </div>
           }
@@ -686,113 +596,117 @@ export default class troubleBill extends PureComponent {
           onOk={this.replyOKHandle}
           onCancel={this.replyHandleCancel}>
           <div className={styles.checkFaultBox}>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>故障描述</span>
-              </Col>
-              <Col md={20} sm={24}>
-                {currentRecord.remark}
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>故障编号</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {currentRecord.id}
-              </Col>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>机器编号</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {currentRecord.machineId}
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>上报人员</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {currentRecord.submitUser}
-              </Col>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>解决人员</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {currentRecord.finishUser}
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24} style={{ padding:  '0 0 0 0' }}>
-                <span className={styles.left}>上报时间</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {currentRecord.submitTime}
-              </Col>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>解决时间</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {currentRecord.finishTime}
-              </Col>
-              {/*<Col md={12} sm={24}>*/}
-                {/*<span className={styles.left}>上报时间</span>*/}
-                {/*<span>{currentRecord.submitTime}</span>*/}
-              {/*</Col>*/}
-              {/*<Col md={12} sm={24}>*/}
-                {/*<span className={styles.left}>解决时间</span>*/}
-                {/*<span class="right">{currentRecord.finishTime}</span>*/}
-              {/*</Col>*/}
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.imgLeft}>图片</span>
-              </Col>
-              <Col md={20} sm={24}>
-                {/* <List
-                dataSource={seeData.imgList}
-                renderItem={item => (
-                  <List.Item
-                    extra={<img width={272} src={item} />}
-                  ></List.Item>
-                )}
-              /> */}
-                <div className={fileList.length > 0 ? styles.imgRight: ''}>
-                  <Upload
-                    // action="//jsonplaceholder.typicode.com/posts/"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                  >
-                  </Upload>
-                  <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                  </Modal>
-                </div>
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>回复列表</span>
-              </Col>
-              <Col md={20} sm={24}>
-                <List
-                  dataSource={seeData.answerList}
-                  renderItem={item => (
-                    <List.Item>{item}</List.Item>
-                  )}
-                />
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>回复内容</span>
-              </Col>
-              <Col md={21} sm={24}>
-                <TextArea placeholder="请输入" value={textAreaVal} onChange={this.onTextAreaChange.bind(this)} autosize={{ minRows: 2, maxRows: 6 }} />
-              </Col>
-            </Row>
+            <div className={styles.checkLeftFaultBox}>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={3} sm={24}>
+                  <span className={styles.left}>工单类型</span>
+                </Col>
+                <Col md={21} sm={24}>
+                  <span className={styles.workType}>
+                    {workType[seeData.workType]}
+                  </span>
+                </Col>
+              </Row>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={3} sm={24}>
+                  <span className={styles.left}>工单描述</span>
+                </Col>
+                <Col md={21} sm={24}>
+                  <List
+                    dataSource={seeData.answerList}
+                    renderItem={item => (
+                      <List.Item key={item.answerTime}>
+                        <div>{item.answer}</div>
+                        <div className={item.imgList.length > 0 ? styles.imgRight: ''}>
+                          <Upload
+                            // action="//jsonplaceholder.typicode.com/posts/"
+                            listType="picture-card"
+                            fileList={item.imgList}
+                            onPreview={this.handlePreview}
+                            onChange={this.handleChange}
+                          >
+                          </Upload>
+                          <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                          </Modal>
+                        </div>
+                      </List.Item>
+                    )}
+                  />
+                </Col>
+              </Row>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={3} sm={24}>
+                  <span className={styles.left}>回复内容</span>
+                </Col>
+                <Col md={21} sm={24}>
+                  <TextArea placeholder="请输入" value={textAreaVal} onChange={this.onTextAreaChange.bind(this)} autosize={{ minRows: 2, maxRows: 6 }} />
+                </Col>
+              </Row>
+            </div>
+            <div className={styles.checkRightFaultBox}>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={24} sm={24}>
+                  <span className={styles.idStyle}>工单编号 {seeData.id}</span>
+                </Col>
+              </Row>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={24} sm={24}>
+                  <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                </Col>
+              </Row>
+              <div className={styles.checkRightBottomFaultBox} >
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={6} sm={24}>
+                    <span className={styles.left}>指派人</span>
+                  </Col>
+                  <Col md={18} sm={24}>
+                    <span className={styles.right}>{seeData.submitUser}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={6} sm={24}>
+                    <span className={styles.left}>指派时间</span>
+                  </Col>
+                  <Col md={18} sm={24}>
+                    <span className={styles.right}>{seeData.submitUser}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={6} sm={24}>
+                    <span className={styles.left}>接单人</span>
+                  </Col>
+                  <Col md={18} sm={24}>
+                    <span className={styles.right}>{seeData.submitTime}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={6} sm={24}>
+                    <span className={styles.left}>接单时间</span>
+                  </Col>
+                  <Col md={18} sm={24}>
+                    <span className={styles.right}>{seeData.submitTime}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={6} sm={24}>
+                    <span className={styles.left}>解决人</span>
+                  </Col>
+                  <Col md={18} sm={24}>
+                    <span className={styles.right}>{seeData.submitUser}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={6} sm={24}>
+                    <span className={styles.left}>解决时间</span>
+                  </Col>
+                  <Col md={18} sm={24}>
+                    <span className={styles.right}>{seeData.submitUser}</span>
+                  </Col>
+                </Row>
+              </div>
+
+            </div>
           </div>
         </Modal>
       </PageHeaderLayout>
