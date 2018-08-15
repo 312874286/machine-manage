@@ -14,9 +14,11 @@ const { RangePicker } = DatePicker;
 const workType = ['故障', '报警', '补货', '投诉']
 const workTypeOption = [{id: 1, name: '故障'}, {id: 2, name: '报警'}, {id: 3, name: '补货'}, {id: 4, name: '投诉'}]
 const source = ['巡检上报', '运营派单', '报警派单']
+const sourceOption = [{id: 1, name: '巡检上报'}, {id: 2, name: '运营派单'}, {id: 3, name: '报警派单'}]
 const urgentStatusOption = [{id: 1, name: '日常'}, {id: 2, name: '紧急'}]
 const urgentStatus = ['日常', '紧急']
 const status = ['待接单', '处理中', '已完成', '已确认', '已关闭']
+const statusOption = [{id: 1, name: '待接单'}, {id: 2, name: '处理中'}, {id: 3, name: '已完成'}, {id: 4, name: '已确认'}, {id: 5, name: '已关闭'}]
 
 const CreateForm = Form.create()(
   (props) => {
@@ -225,7 +227,9 @@ export default class troubleBill extends PureComponent {
     insertOptions: [],
     sourceData: [],
     options: [],
-    defaultValue: []
+    defaultValue: [],
+    statusValue: undefined,
+    sourceValue: undefined,
   };
   constructor(props) {
     super(props);
@@ -234,7 +238,28 @@ export default class troubleBill extends PureComponent {
     this.state.endDateString = moment().format('YYYY-MM-DD');
   }
   componentDidMount = () => {
-    this.getLists();
+    if (this.props.location.query) {
+      const { flag, statusValue } = this.props.location.query;
+      if (flag === 'openFault') {
+        this.setState({
+          modalVisible: true,
+        }, () => {
+          this.props.location.query = {}
+          this.getLists();
+        });
+      }
+      // statusValue
+      if (statusValue) {
+        this.setState({
+          statusValue,
+        }, () => {
+          this.props.location.query = {}
+          this.getLists();
+        });
+      }
+    } else {
+      this.getLists();
+    }
   }
   onChange = (e) => {
     this.setState({ userName: e.target.value });
@@ -321,8 +346,9 @@ export default class troubleBill extends PureComponent {
           startTime: this.state.startDateString,
           endTime: this.state.endDateString,
           keyword: this.state.userName,
-          status: '',
+          status: this.state.statusValue,
           pageNo: this.state.pageNo,
+          source: this.state.sourceValue,
         },
       },
     });
@@ -410,6 +436,16 @@ export default class troubleBill extends PureComponent {
       type: value,
     });
     // console.log(`selected ${value}`);
+  }
+  selectStatusChange = (value) => {
+    this.setState({
+      statusValue: value,
+    });
+  }
+  selectSourceChange = (value) => {
+    this.setState({
+      sourceValue: value,
+    });
   }
   handleTableChange = (pagination, filters, sorter) => {
     this.setState({
@@ -664,18 +700,9 @@ export default class troubleBill extends PureComponent {
   }
   handleChange = ({ fileList }) => this.setState({ fileList })
   render() {
-    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, fileList, getMachineUserList, userId } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId } = this.state;
     const { troubleBill: { list, page } } = this.props;
-    if (this.props.location.query) {
-      const { flag } = this.props.location.query;
-      if (flag === 'openFault') {
-        this.setState({
-          modalVisible: true,
-        }, () => {
-          this.props.location.query = {}
-        });
-      }
-    }
+
     var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
     const columns = [{
@@ -794,37 +821,7 @@ export default class troubleBill extends PureComponent {
     return (
       <PageHeaderLayout>
         <div className={styles.faultBox}>
-          <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
-            {/*<div className={styles.tableList}>*/}
-            {/*<div className={styles.tableListForm}>*/}
-            {/*<Form onSubmit={this.onFindData.bind(this)} layout="inline">*/}
-            {/*<Col md={3} sm={24}>*/}
-            {/*<Select value={type} onChange={this.selectHandleChange}>*/}
-            {/*<Option value="1">上报时间</Option>*/}
-            {/*<Option value="2">解决时间</Option>*/}
-            {/*</Select>*/}
-            {/*</Col>*/}
-            {/*<Col md={6} sm={24}>*/}
-            {/*<RangePicker*/}
-            {/*allowClear={false}*/}
-            {/*value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}*/}
-            {/*onChange={this.startDatePickerChange}*/}
-            {/*/>*/}
-            {/*</Col>*/}
-            {/*<Col md={8} sm={24}>*/}
-            {/*<Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />*/}
-            {/*</Col>*/}
-            {/*<Col md={7} sm={24}>*/}
-            {/*<FormItem>*/}
-            {/*<Button onClick={this.handleReset}>*/}
-            {/*重置*/}
-            {/*</Button>*/}
-            {/*<Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>*/}
-            {/*</FormItem>*/}
-            {/*</Col>*/}
-            {/*</Form>*/}
-            {/*</div>*/}
-            {/*</div>*/}
+          <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0px'}}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={3} sm={24}>
                 <Select value={type} onChange={this.selectHandleChange}>
@@ -854,9 +851,31 @@ export default class troubleBill extends PureComponent {
               <DatePicker onChange={this.endDatePickerChange} />
             </Col> */}
               <Col md={8} sm={24}>
-                <Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />
+                <Input placeholder="请输入工单id、机器id、派单人，解决人搜索" value={userName} onChange={this.onChange} />
               </Col>
               <Col md={7} sm={24}>
+                <Select placeholder="请选择工单状态" style={{ width: '100%'}} value={statusValue} onChange={this.selectStatusChange}>
+                  {statusOption.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={8} sm={24}>
+                <Select placeholder="请选择工单来源" style={{ width: '100%'}} value={sourceValue} onChange={this.selectSourceChange}>
+                  {sourceOption.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              </Col>
+              <Col md={8} sm={24}>
+              </Col>
+              <Col md={8} sm={24}>
                 <Button onClick={this.handleReset}>
                   重置
                 </Button>
@@ -910,7 +929,7 @@ export default class troubleBill extends PureComponent {
                 </Col>
                 <Col md={20} sm={24}>
                   <span className={styles.workType}>
-                    {workType[seeData.workType]}
+                    {workType[seeData.workType - 1]}
                   </span>
                 </Col>
               </Row>
@@ -1051,7 +1070,7 @@ export default class troubleBill extends PureComponent {
                 </Col>
                 <Col md={20} sm={24}>
                   <span className={styles.workType}>
-                    {workType[seeData.workType]}
+                    {workType[seeData.workType - 1]}
                   </span>
                 </Col>
               </Row>
