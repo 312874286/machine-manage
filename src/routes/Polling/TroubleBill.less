@@ -10,7 +10,6 @@
     }
   }
 }
-
 .tableListForm {
   :global {
     .ant-form-item {
@@ -48,6 +47,13 @@
     }
   }
 }
+.faultBox {
+  :global {
+    .ant-table-fixed a {
+      margin-right: 10px;
+    }
+  }
+}
 :global {
   .resolved {
     width: 66px;
@@ -69,62 +75,12 @@
     text-align: center;
     margin-left: 11px;
   }
-  //.checkFaultBox {
-  //  padding: 18px 30px 15px 30px;
-  //  .imgLeft, .imgRight {
-  //    margin-top: 15px;
-  //    display: block;
-  //  }
-  //  .imgRight {
-  //    border-bottom: 1px solid #f2f2f2;
-  //    overflow: hidden;
-  //  }
-  //  //.replyLeft {
-  //  //  margin-top: 15px;
-  //  //  display: block;
-  //  //  line-height: 28px;
-  //  //  height: 28px;
-  //  //  width: 60px;
-  //  //  font-size: 14px;
-  //  //}
-  //}
-  //.checkFaultBox .left {
-  //  //margin-right: 30px;
-  //  line-height: 18px;
-  //  height: 28px;
-  //  width: 60px;
-  //  display: block;
-  //  font-size: 14px;
-  //}
-  //.checkFaultBox .right {
-  //
-  //}
-  //.checkFaultBox .ant-upload-list-picture .ant-upload-list-item, .checkFaultBox .ant-upload-list-picture-card .ant-upload-list-item {
-  //  border: none !important;
-  //}
-  //.checkFaultBox .ant-upload-list-picture-card .ant-upload-list-item {
-  //  float: left;
-  //  width: 172px;
-  //  height: 133px !important;
-  //  margin: 0 8px 8px 0;
-  //  padding: 0;
-  //  margin-right: 30px !important;
-  //  margin-bottom: 15px !important;
-  //}
-  //.checkFaultBox .ant-list-item{
-  //  padding: 15px 0;
-  //}
-  //.checkFaultBox .ant-list-item:nth-child(1) {
-  //  padding: 0 0 15px 0 !important;
-  //}
-  //.checkFaultBox .ant-row:nth-child(5) {
-  //  margin-top: 15px;
-  //}
 }
 .checkFaultBox {
   padding: 18px 30px 30px 30px;
   display: flex;
   position: relative;
+  min-height: 515px;
   :global {
     .ant-input {
       border: none;
@@ -142,11 +98,21 @@
       height: 90px !important;
       margin: 0 8px 8px 0;
       padding: 0;
-      margin-right: 15px !important;
+      margin-left: 13px !important;
       margin-bottom: 15px !important;
+    }
+    .ant-upload-list-picture-card .ant-upload-list-item:nth-child(3n + 1) {
+      margin-left: 0px !important;
     }
     .ant-list-item{
       padding: 15px 0;
+      margin-bottom: 15px;
+    }
+    .ant-list-item:last-child {
+      margin-bottom: 0px;
+    }
+    .ant-list-split .ant-list-item:last-child {
+      border-bottom: 1px solid #f2f2f2;
     }
     .ant-list-item:nth-child(1) {
       padding: 0 0 15px 0;
@@ -195,21 +161,21 @@
   }
   .middleLine {
     position: absolute;
-    left: 68.5%;
+    left: 65.5%;
     height: 100%;
     width: 1px;
     background: #ececec;
     top: 0;
   }
   .checkLeftFaultBox {
-    width: 70%;
+    width: 67%;
     padding-right: 30px;
     :global {
       .ant-list-item-content {
         flex-direction: column;
       }
       .ant-row:nth-child(2) {
-        margin: 9px 0 0 !important;
+        margin: 9px 0 15px !important;
       }
       .ant-row:nth-child(1) div:nth-child(2){
         padding-bottom: 15px !important;
@@ -233,7 +199,7 @@
       margin-bottom: 5px;
     }
     .answer {
-      margin-bottom: 8px;
+      margin-bottom: 15px;
     }
     .left {
       margin-bottom: 30px;
@@ -241,24 +207,24 @@
     }
   }
   .checkRightFaultBox {
-    width: 30%;
+    width: 33%;
     padding-left: 15px;
     .left {
       line-height: 34px;
       height: 34px;
       width: 60px;
       display: block;
-      font-size: 14px;
+      font-size: 12px;
       text-align: right;
     }
     .right {
       width: 100%;
       text-align: left;
-      margin-left: 15px;
+      margin-left: 40px;
       line-height: 34px;
       height: 34px;
       display: block;
-      font-size: 14px;
+      font-size: 12px;
     }
     .idStyle {
       overflow: hidden;
@@ -285,7 +251,10 @@
       color: #FF8B2D;
     }
     .checkRightBottomFaultBox {
-
+      background: #F8F8F8;
+      padding: 15px 15px 0 15px;
+      font-size: 12px;
+      height: 273px;
     }
   }
 }
@@ -297,10 +266,32 @@
   display: block;
 }
 .imgRight {
-  border-bottom: 1px solid #f2f2f2;
+  //border-bottom: 1px solid #f2f2f2;
   overflow: hidden;
-  margin-bottom: 15px;
 }
+.machineName {
+  padding: 0px 16px 0 23px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  z-index: 1;
+  width: 100%;
+  display: block;
+}
+.machineTable {
+  padding: 0;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+  width: 100%;
+  display: block;
+}
+
 .left {
   //margin-right: 30px;
   //line-height: 18px;

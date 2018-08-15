@@ -18,6 +18,7 @@ const api = map({
   getCheckFaultTypeUpdate: '/check/faultType/update',
   getMachineUserList: '/check/fault/getMachineUserList?machineId={machineId}',
   saveCheckFault: '/check/fault/save',
+  updateCheckStatus: '/check/fault/updateStatus',
 
   getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}&startTime={startTime}&endTime={endTime}',
   userExcel: '/check/signIn/userExcel',

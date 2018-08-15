@@ -1,4 +1,4 @@
-import { getCheckFaultList, getCheckFaultDetail, getCheckFaultAnswer, getMachineUserList, saveCheckFault } from '../../services/polling/troubleBill';
+import { getCheckFaultList, getCheckFaultDetail, getCheckFaultAnswer, getMachineUserList, saveCheckFault, updateCheckStatus} from '../../services/polling/troubleBill';
 
 export default {
   namespace: 'troubleBill',
@@ -28,8 +28,12 @@ export default {
       return response.data;
     },
     *saveCheckFault({ payload: { params } }, { call }) {
-      const response = yield call(getMachineUserList, { params });
+      const response = yield call(saveCheckFault, { params });
       return response.data;
+    },
+    *updateCheckStatus({ payload: { params } }, { call }) {
+      const response = yield call(updateCheckStatus, { params });
+      return response;
     },
   },
 

@@ -31,3 +31,9 @@ export async function saveCheckFault({ params }) {
     body: stringify(params),
   });
 }
+
+export async function updateCheckStatus({ params }) {
+  return fetch.post(api.updateCheckStatus, {
+    body: stringify(params),
+  });
+}

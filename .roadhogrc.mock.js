@@ -3341,6 +3341,13 @@ const proxy = {
       "data": null,
       "msg": "成功"
     })
+  },
+  'POST /check/fault/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
   }
 };
 

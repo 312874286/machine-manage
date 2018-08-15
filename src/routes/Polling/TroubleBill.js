@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Form, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select,Upload, Icon, Cascader, Alert } from 'antd';
+import { Card, Table, Button, Form, Row, Col, Input, Modal, DatePicker, Tree, message, Popconfirm, List, Select,Upload, Icon, Cascader, Alert, Radio, Popover } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TroubleBill.less';
 import moment from 'moment';
@@ -9,9 +9,10 @@ import 'moment/locale/zh-cn';
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
+const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
+const workType = ['故障', '报警', '补货', '投诉']
 const workTypeOption = [{id: 1, name: '故障'}, {id: 2, name: '报警'}, {id: 3, name: '补货'}, {id: 4, name: '投诉'}]
-const workType = [{id: 1, name: '故障'}, {id: 2, name: '报警'}, {id: 3, name: '补货'}, {id: 4, name: '投诉'}]
 const source = ['巡检上报', '运营派单', '报警派单']
 const urgentStatusOption = [{id: 1, name: '日常'}, {id: 2, name: '紧急'}]
 const urgentStatus = ['日常', '紧急']
@@ -19,7 +20,7 @@ const status = ['待接单', '处理中', '已完成', '已确认', '已关闭']
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalData, selectCityName, openSelectMachineModal, machineNum, options, loadData, verifyString } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, openSelectMachineModal, machineId } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -63,19 +64,13 @@ const CreateForm = Form.create()(
             <FormItem {...formItemLayout} label="选择机器">
               {getFieldDecorator('machineId', {
                 rules: [{ required: true, message: '请选择机器' }],
-              })(<Input style={{ border: 0 }} />)}
+              })(
+                <div>
+                  { machineId ? machineId.split('、')[1] : '' }
+                  <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+                </div>
+              )}
             </FormItem>
-            {/*<FormItem {...formItemLayout} label="选择机器">*/}
-              {/*{getFieldDecorator('machineId', {*/}
-                {/*rule: [{ required: true, message: '请选择机器' }],*/}
-              {/*}) (*/}
-                {/*<Input />*/}
-                {/*// <div>*/}
-                {/*//   { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }*/}
-                {/*//   <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>*/}
-                {/*// </div>*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
             <FormItem {...formItemLayout} label="工单描述">
               {getFieldDecorator('remark', {
                 rules: [{ required: true, whitespace: true, message: '请填写工单描述' }],
@@ -104,7 +99,7 @@ const CreateForm = Form.create()(
 const SelectMachineForm = Form.create()(
   (props) => {
     const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
-      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll, onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
+      loadData, sourceData, findSourceData, onSelectMachineChange,
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -117,68 +112,11 @@ const SelectMachineForm = Form.create()(
         sm: { span: 24 },
       },
     };
-    this.columns = [{
-      title: '名称',
-      dataIndex: 'machineCode',
-      render: text => <a href="javascript:;">{text}</a>,
-    }];
-    const columns = this.columns.map((col) => {
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: record => ({
-          record,
-          editable: col.editable,
-          dataIndex: col.dataIndex,
-          title: col.title,
-          handleSave: handleSave,
-        }),
-      };
-    });
-
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: onChangeRowSelection,
-      onSelect: onLeftSelect,
-      onSelectAll: onSelectAll,
+    const radioStyle = {
+      display: 'block',
+      height: '30px',
+      lineHeight: '30px',
     };
-    this.columnsRight = [{
-      title: '名称',
-      dataIndex: 'machineCode',
-      render: text => <a href="javascript:;">{text}</a>,
-    }, {
-      title: '操作',
-      width: 70,
-      dataIndex: 'operation',
-      render: (text, record) => {
-        return (
-          targetData.length > 0
-            ? (
-              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.machineCode)}>
-                <a href="javascript:;">删除</a>
-              </Popconfirm>
-            ) : null
-        );
-      }
-    }];
-    const columnsRight = this.columnsRight.map((col) => {
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: record => ({
-          record,
-          editable: col.editable,
-          dataIndex: col.dataIndex,
-          title: col.title,
-          handleSave: targetHandleSave,
-        }),
-      };
-    });
-
     return (
       <Modal
         title="选择机器"
@@ -186,11 +124,11 @@ const SelectMachineForm = Form.create()(
         onOk={onEditMachineHandleAddClick}
         onCancel={() => onEditMachineHandleModalVisibleClick()}
         confirmLoading={editMachineEditModalConfirmLoading}
-        width={1000}>
+        width={800}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={10} sm={24}>
+              <Col md={20} sm={24}>
                 <FormItem>
                   {getFieldDecorator('provinceCityAreaTrade')(
                     <Cascader
@@ -202,7 +140,7 @@ const SelectMachineForm = Form.create()(
                   )}
                 </FormItem>
               </Col>
-              <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+              <Col md={4} sm={24} style={{ paddingLeft: '3px' }}>
                 <FormItem>
                   <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
                     搜索
@@ -213,48 +151,21 @@ const SelectMachineForm = Form.create()(
             <FormItem {...formItemLayout}>
               {getFieldDecorator('machine')(
                 <div style={{ display: 'flex' }}>
-                  <div>
-                    <Alert
-                      message={(
-                        <div>
-                          已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
-                        </div>
-                      )}
-                      type="info"
-                      showIcon
-                    />
-                    <Table
-                      rowKey={record => record.machineCode}
-                      rowSelection={rowSelection}
-                      columns={columns}
-                      dataSource={sourceData}
-                      id="leftTable"
-                      style={{ width: '460px', marginBottom: '20px', marginTop: '10px' }}
-                      scroll={{ y: 200 }}
-                      pagination={false}
-                    />
-                    <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
-                      添加
-                    </Button>
-                  </div>
-                  <div style={{ marginLeft: '20px' }}>
-                    <Alert
-                      message={(
-                        <div>
-                          已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
-                        </div>
-                      )}
-                      type="success"
-                      showIcon
-                    />
-                    <Table
-                      rowKey={record => record.machineCode}
-                      columns={columnsRight}
-                      dataSource={targetData}
-                      id="rightTable"
-                      style={{ width: '460px', marginTop: '10px' }}
-                      scroll={{ y: 200 }}
-                      pagination={false}/>
+                  <div style={{ width: '100%' }}>
+                    <div>
+                      <span className={styles.machineName}>机器名称</span>
+                      <div >
+                         <span className={styles.machineTable} style={{ display: sourceData.length > 0 ? 'none' : 'block' }} >暂无数据</span>
+                         <RadioGroup style={{ maxHeight: '200px', overflowY: 'scroll', width: '100%', display: sourceData.length > 0 ? 'block' : 'none' }} onChange={onSelectMachineChange}>
+                          {sourceData.map((item) => {
+                            return (
+                              <Radio style={radioStyle} value={`${item.machineId}、${item.machineCode}`} key={item.machineId}>{item.machineCode}</Radio>
+                            );
+                          })}
+                        </RadioGroup>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               )}
@@ -305,21 +216,14 @@ export default class troubleBill extends PureComponent {
     WatchMachineModalVisible: false,
     machineList: [],
 
-    machines: [],
-    machineNum: 0,
-    selectCity: [],
-    selectCityName: [],
+    // machines: [],
+    // machineNum: 0,
+    // selectCity: [],
+    // selectCityName: [],
     editMachineEditModalConfirmLoading: false,
 
     insertOptions: [],
-    targetData: [],
     sourceData: [],
-    sourceKey: [],
-    targetKey: [],
-    selectAll: false,
-    selectedRows: [],
-    repeat: [],
-    selectedRowKeys: [],
     options: [],
     defaultValue: []
   };
@@ -356,49 +260,18 @@ export default class troubleBill extends PureComponent {
     this.getLists();
   }
   onSeeHandle = (record) => {
-
+    this.getFaultDetail(record)
     this.setState({
-      currentRecord: record,
+      seeVisible: true,
     });
-    console.log('111', record.id);
-    this.props.dispatch({
-      type: 'troubleBill/getCheckFaultDetail',
-      payload: {
-        params: {
-          id: record.id,
-        },
-      },
-    }).then((res) => {
-      const { code, data, msg } = res;
-      // console.log(data.functions);
-      this.setState({
-        seeData: data,
-      }, () => {
-        // console.log(11111,this.state.seeData);
-        var newImgList = [];
-        for(var i = 0 ; i < this.state.seeData.imgList.length ; i++){
-          newImgList.push({
-            uid: i,
-            name: '',
-            status: 'done',
-            url: this.state.seeData.imgList[i],
-          });
-        }
-        this.setState({
-          fileList: newImgList,
-        });
-      });
-      console.log(data);
-      this.setState({
-        seeVisible: true,
-      });
-      // treeData = data;
-
-    });
-
-
   }
   onReplyHandle = (record) => {
+   this.getFaultDetail(record)
+   this.setState({
+     replyVisible: true,
+   });
+  }
+  getFaultDetail = (record) => {
     this.setState({
       textAreaVal: '',
       currentRecord: record,
@@ -412,7 +285,6 @@ export default class troubleBill extends PureComponent {
       },
     }).then((res) => {
       const { code, data, msg } = res;
-      // console.log(data.functions);
       for(var j = 0 ; j < data.answerList.length; j++) {
         for(var i = 0 ; i < data.answerList[j].imgList.length ; i++){
           data.answerList[j].imgList[i] = {
@@ -436,15 +308,8 @@ export default class troubleBill extends PureComponent {
       this.getMachineUserList(data.machineId ? data.machineId : '')
       this.setState({
         seeData: data,
-      }, () => {
-        this.setState({
-          // textAreaVal: '',
-          replyVisible: true,
-        });
       });
-      // treeData = data;
     });
-    console.log('record', record);
   }
   // 获取列表
   getLists = () => {
@@ -616,48 +481,15 @@ export default class troubleBill extends PureComponent {
   }
   // 设置modal 数据
   setModalData = (data) => {
-    if (data) {
-      this.setState({
-        targetData: data.machines,
-        sourceData: [],
-      })
-      if (data.machines.length >0) {
-        let arr = data.machines
-        let selectCityName = []
-        for (var i = 0; i < arr.length; i++) {
-          var item = arr[i]
-          if (!(item['province'] in selectCityName)) {
-            selectCityName[item['province']] = item.province;
-          }
-        }
-        selectCityName = Object.values(selectCityName)
-        this.setState({
-          machineNum: data.machines.length,
-          selectCityName,
-        });
-      }
-      this.form.setFieldsValue({
-        name: data.name || undefined,
-        phone: data.phone || undefined,
-        cardNo: data.cardNo || undefined,
-        enterprise: data.enterprise || undefined,
-        area: this.state.defaultValue || undefined,
-      });
-    } else {
-      this.form.setFieldsValue({
-        name: undefined,
-        phone: undefined,
-        cardNo: undefined,
-        enterprise: undefined,
-        area: undefined,
-      });
-      this.setState({
-        machineNum: '',
-        selectCityName: '',
-        sourceData: [],
-        targetData: [],
-      });
-    }
+    this.form.setFieldsValue({
+      workType: undefined,
+      machineId: undefined,
+      remark: undefined,
+      urgentStatus: undefined,
+    });
+    this.setState({
+      machineId: ''
+    })
   }
   // 编辑modal 确认事件
   handleAdd = () => {
@@ -735,99 +567,25 @@ export default class troubleBill extends PureComponent {
       }
     });
   }
-  addData = async () => {
-    const selectedRows = this.state.selectedRows
-    for (let a of selectedRows) {
-      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
-      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
-      await this.handleDelete(a.machineCode)
-    }
-    // console.log(this.state.repeat)
-    if (this.state.repeat.length > 0) {
-      Modal.warning({
-        title: '以下机器和已选机器重复',
-        content: this.state.repeat.join('\n') + '',
-      });
-    }
-    this.setState({
-      selectAll: false
-    })
-  }
-  unique = (arr) => {
-    let targetData = []
-    let repeat = []
-    for (var i = 0; i < arr.length; i++) {
-      var item = arr[i]
-      if (!(item['machineCode'] in targetData)) {
-        targetData[item['machineCode']] = item;
-      } else {
-        repeat = [...this.state.repeat, item.machineCode]
-      }
-    }
-    this.setState({
-      repeat,
-    })
-    return Object.values(targetData)
-  }
-  handleSave = (row) => {
-    const newData = [...this.state.sourceData];
-    const index = newData.findIndex(item => row.machineCode === item.machineCode);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    console.log('newDatahandleSave', newData)
-    this.setState({ sourceData: newData });
-  }
-  handleDelete = (key) => {
-    // console.log('key', key, this.state.targetData)
-    const dataSource = [...this.state.sourceData];
-    this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
-    let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
-    // console.log('targetData', targetData)
-    targetData = this.unique(targetData)
-    this.setState({ targetData });
-  }
-  targetHandleSave = (row) => {
-    const newData = [...this.state.targetData];
-    const index = newData.findIndex(item => row.machineCode === item.machineCode);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    console.log('newDatahandleSave', newData)
-    this.setState({ targetData: newData });
-  }
-  targetHandleDelete = (key) => {
-    // console.log('key', key)
-    const dataSource = [...this.state.targetData];
-    this.setState({ targetData: dataSource.filter(item => item.machineCode !== key) });
-  }
-  onChangeRowSelection = (selectedRowKeys, selectedRows) => {
-    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    this.setState({
-      sourceKey: selectedRowKeys,
-      selectedRowKeys,
-    })
-  }
-  onSelectAll = (selected, selectedRows, changeRows) => {
-    this.setState({
-      selectedRows,
-      selectAll: selected
-    })
-    console.log(selected, selectedRows, changeRows);
-  }
-  onLeftSelect = (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows);
-    this.setState({
-      selectedRows,
-      selectAll: true
-    })
-  }
   // 回显省市区商圈数据源结束
   // 选择机器控件
+  onEditMachineHandleAddClick = () => {
+    if (this.state.machineId) {
+      this.form.setFieldsValue({
+        machineId: this.state.machineId.split('、')[0],
+      });
+      this.setState({
+        editMachineModalVisible: false,
+      });
+    } else {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('请先选择机器');
+    }
+  }
   findSourceData = () => {
     this.selectMachineform.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -850,8 +608,15 @@ export default class troubleBill extends PureComponent {
       this.getAreaList({code: localCode})
     });
   }
+  onSelectMachineChange = (e) => {
+    // console.log('radio checked', e.target);
+    this.setState({
+      machineId: e.target.value,
+    });
+  }
   openSelectMachineModal = () => {
     this.setState({
+      sourceData: [],
       editMachineModalVisible: true,
     }, () => {
       this.getAreaList({level: 1});
@@ -867,6 +632,35 @@ export default class troubleBill extends PureComponent {
   }
   selectMachineFormRef = (form) => {
     this.selectMachineform = form;
+  }
+  closeFault = (item) => {
+ // updateCheckStatus
+    this.updateCheckStatus(item.id, 'close')
+  }
+  okFault = () => {
+    this.updateCheckStatus(item.id, 'ok')
+  }
+  updateCheckStatus = (id, flag) => {
+    let status = 0
+    if (flag === 'close') {
+      status = 5
+    } else {
+      status = 4
+    }
+    let url = 'troubleBill/updateCheckStatus';
+    this.props.dispatch({
+      type: url,
+      payload: {
+        params: {
+          status,
+          id,
+        }
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.getLists();
+      }
+    });
   }
   handleChange = ({ fileList }) => this.setState({ fileList })
   render() {
@@ -888,17 +682,32 @@ export default class troubleBill extends PureComponent {
       title: '工单类型',
       dataIndex: 'workType',
       key: 'workType',
-      width: '5%'
+      width: '5%',
+      render: (text, record) => (
+        <span>
+          { workType[record.workType - 1] }
+        </span>
+      )
     },  {
       title: '来源',
       dataIndex: 'source',
       key: 'source',
-      width: '5%'
+      width: '5%',
+      render: (text, record) => (
+        <span>
+          { source[record.source - 1] }
+        </span>
+      )
     }, {
       title: '紧急状态',
       dataIndex: 'urgentStatus',
       key: 'urgentStatus',
-      width: '5%'
+      width: '5%',
+      render: (text, record) => (
+        <span>
+          { urgentStatus[record.urgentStatus - 1] }
+        </span>
+      )
     },  {
       title: '工单描述',
       dataIndex: 'remark',
@@ -933,26 +742,32 @@ export default class troubleBill extends PureComponent {
       title: '解决方案',
       dataIndex: 'finishRemark',
       key: 'finishRemark',
-      width: '10%'
+      width: '9%'
     }, {
       title: '工单状态',
       dataIndex: 'status',
       key: 'status',
       render: (text, record) => (
         <span>
-          { arr[record.status]  }
+          { status[record.status - 1] }
         </span>
       )
     }, {
       title: '操作',
       key: 'action',
       fixed: 'right',
-      width: 100,
+      width: 150,
       render: (text, record) => (
-        <span>
-          <a href="javascript:;" onClick={this.onReplyHandle.bind(this, record)} style={{ display: record.status === 0 ? 'block' : 'none' }}>回复</a>
-          <a href="javascript:;" onClick={this.onSeeHandle.bind(this, record)} style={{ display: record.status === 1 ? 'block' : 'none' }}>查看</a>
-        </span>
+        <Fragment>
+          <a href="javascript:;" onClick={this.onReplyHandle.bind(this, record)} style={{ display: record.status === 1 || record.status === 2 ? '' : 'none' }}>编辑</a>
+          <a href="javascript:;" onClick={this.onSeeHandle.bind(this, record)} style={{ display: record.status === 3 || record.status === 4 || record.status === 5 ? '' : 'none' }}>查看</a>
+           <a href="javascript:;" onClick={() => (record.status === 1 || record.status === 2) ? this.closeFault(record) : null}
+           style={{ cursor: (record.status !== 1 && record.status !== 2) ? 'not-allowed' : '', color: (record.status !== 1 && record.status !== 2) ? '#999' : ''}}
+           >关闭</a>
+          <a href="javascript:;" onClick={() => record.status === 2 ? this.okFault(record) : null}
+             style={{ cursor: record.status !== 2 ? 'not-allowed' : '', color: record.status !== 2 ? '#999' : ''}}
+          >确认</a>
+        </Fragment>
       ),
     }];
     const paginationProps = {
@@ -969,46 +784,47 @@ export default class troubleBill extends PureComponent {
     };
     return (
       <PageHeaderLayout>
-        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
-          {/*<div className={styles.tableList}>*/}
+        <div className={styles.faultBox}>
+          <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 10px'}}>
+            {/*<div className={styles.tableList}>*/}
             {/*<div className={styles.tableListForm}>*/}
-              {/*<Form onSubmit={this.onFindData.bind(this)} layout="inline">*/}
-                {/*<Col md={3} sm={24}>*/}
-                  {/*<Select value={type} onChange={this.selectHandleChange}>*/}
-                    {/*<Option value="1">上报时间</Option>*/}
-                    {/*<Option value="2">解决时间</Option>*/}
-                  {/*</Select>*/}
-                {/*</Col>*/}
-                {/*<Col md={6} sm={24}>*/}
-                  {/*<RangePicker*/}
-                    {/*allowClear={false}*/}
-                    {/*value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}*/}
-                    {/*onChange={this.startDatePickerChange}*/}
-                  {/*/>*/}
-                {/*</Col>*/}
-                {/*<Col md={8} sm={24}>*/}
-                  {/*<Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />*/}
-                {/*</Col>*/}
-                {/*<Col md={7} sm={24}>*/}
-                  {/*<FormItem>*/}
-                    {/*<Button onClick={this.handleReset}>*/}
-                      {/*重置*/}
-                    {/*</Button>*/}
-                    {/*<Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>*/}
-                  {/*</FormItem>*/}
-                {/*</Col>*/}
-              {/*</Form>*/}
+            {/*<Form onSubmit={this.onFindData.bind(this)} layout="inline">*/}
+            {/*<Col md={3} sm={24}>*/}
+            {/*<Select value={type} onChange={this.selectHandleChange}>*/}
+            {/*<Option value="1">上报时间</Option>*/}
+            {/*<Option value="2">解决时间</Option>*/}
+            {/*</Select>*/}
+            {/*</Col>*/}
+            {/*<Col md={6} sm={24}>*/}
+            {/*<RangePicker*/}
+            {/*allowClear={false}*/}
+            {/*value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}*/}
+            {/*onChange={this.startDatePickerChange}*/}
+            {/*/>*/}
+            {/*</Col>*/}
+            {/*<Col md={8} sm={24}>*/}
+            {/*<Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />*/}
+            {/*</Col>*/}
+            {/*<Col md={7} sm={24}>*/}
+            {/*<FormItem>*/}
+            {/*<Button onClick={this.handleReset}>*/}
+            {/*重置*/}
+            {/*</Button>*/}
+            {/*<Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>*/}
+            {/*</FormItem>*/}
+            {/*</Col>*/}
+            {/*</Form>*/}
             {/*</div>*/}
-          {/*</div>*/}
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={3} sm={24}>
-              <Select value={type} onChange={this.selectHandleChange}>
-                <Option value="1">上报时间</Option>
-                <Option value="2">解决时间</Option>
-              </Select>
-            </Col>
-            <Col md={6} sm={24}>
-              {/* <DatePicker placeholder="开始时间"
+            {/*</div>*/}
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={3} sm={24}>
+                <Select value={type} onChange={this.selectHandleChange}>
+                  <Option value="1">上报时间</Option>
+                  <Option value="2">解决时间</Option>
+                </Select>
+              </Col>
+              <Col md={6} sm={24}>
+                {/* <DatePicker placeholder="开始时间"
               selectedValue={this.state.startDateString}
               value={this.state.startDateString}
               showTime={{
@@ -1016,42 +832,44 @@ export default class troubleBill extends PureComponent {
                 value: this.state.startDateString,
               }}
               onChange={this.startDatePickerChange} /> */}
-              <RangePicker
-               allowClear={false}
-               value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}
-               onChange={this.startDatePickerChange}
-              />
-            </Col>
-            {/* <Col md={2} sm={24}>
+                <RangePicker
+                  allowClear={false}
+                  value={[moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')]}
+                  onChange={this.startDatePickerChange}
+                />
+              </Col>
+              {/* <Col md={2} sm={24}>
               解决时间
             </Col>
             <Col md={4} sm={24}>
               <DatePicker onChange={this.endDatePickerChange} />
             </Col> */}
-            <Col md={8} sm={24}>
-              <Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />
-            </Col>
-            <Col md={7} sm={24}>
-              <Button onClick={this.handleReset}>
-                重置
-              </Button>
-              <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
-            </Col>
-          </Row>
-        </Card>
-        <Card bordered={false}>
-          <div className="tableListOperator">
-            <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>派单</Button>
-          </div>
-          <Table
-            columns={columns}
-            dataSource={list}
-            rowKey={record => record.id}
-            onChange={this.handleTableChange}
-            pagination={paginationProps}
-            scroll={{ x: 1800, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50) }}
-          />
-        </Card>
+              <Col md={8} sm={24}>
+                <Input placeholder="请输入上报人，解决人，机器编号搜索" value={userName} onChange={this.onChange} />
+              </Col>
+              <Col md={7} sm={24}>
+                <Button onClick={this.handleReset}>
+                  重置
+                </Button>
+                <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" onClick={this.onFindData.bind(this)}>查询</Button>
+              </Col>
+            </Row>
+          </Card>
+          <Card bordered={false}>
+            <div className="tableListOperator">
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>派单</Button>
+            </div>
+            <Table
+              columns={columns}
+              dataSource={list}
+              rowKey={record => record.id}
+              onChange={this.handleTableChange}
+              pagination={paginationProps}
+              scroll={{ x: 1800, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50) }}
+            />
+          </Card>
+        </div>
+
         <Modal
           // title="回复"
           title={
@@ -1060,9 +878,9 @@ export default class troubleBill extends PureComponent {
               <span class="modalTitle">查看</span>
               {/*<span class="resolved" class={} style={{ display: currentRecord.finishTime ? '' : 'none'}}>已解决</span>*/}
               {/*<span class="willResolve">未解决</span>*/}
-              <span class={ currentRecord.finishTime ? 'resolved' : 'willResolve' }>
-                { currentRecord.finishTime ? '已解决' : '未解决' }
-              </span>
+              {/*<span class={ currentRecord.finishTime ? 'resolved' : 'willResolve' }>*/}
+                {/*{ currentRecord.finishTime ? '已解决' : '未解决' }*/}
+              {/*</span>*/}
             </div>
           }
           width={800}
@@ -1073,114 +891,126 @@ export default class troubleBill extends PureComponent {
               关闭
             </Button>,
           ]}>
+          <div className={styles.middleLine}></div>
           <div className={styles.checkFaultBox}>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>故障描述</span>
-              </Col>
-              <Col md={20} sm={24}>
-                {currentRecord.remark}
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>故障编号</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {seeData.id}
-              </Col>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>机器编号</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {seeData.machineId}
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>上报人员</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {seeData.submitUser}
-              </Col>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>解决人员</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {seeData.finishUser}
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24} style={{ padding:  '0 0 0 0' }}>
-                <span className={styles.left}>上报时间</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {seeData.submitTime}
-              </Col>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>解决时间</span>
-              </Col>
-              <Col md={8} sm={24}>
-                {seeData.finishTime}
-              </Col>
-              {/*<Col md={12} sm={24}>*/}
-              {/*<span className={styles.left}>上报时间</span>*/}
-              {/*<span>{currentRecord.submitTime}</span>*/}
-              {/*</Col>*/}
-              {/*<Col md={12} sm={24}>*/}
-              {/*<span className={styles.left}>解决时间</span>*/}
-              {/*<span class="right">{currentRecord.finishTime}</span>*/}
-              {/*</Col>*/}
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.imgLeft}>图片</span>
-              </Col>
-              <Col md={20} sm={24}>
-                {/* <List
-                dataSource={seeData.imgList}
-                renderItem={item => (
-                  <List.Item
-                    extra={<img width={272} src={item} />}
-                  ></List.Item>
-                )}
-              /> */}
-                <div className={fileList.length > 0 ? styles.imgRight: ''}>
-                  <Upload
-                    // action="//jsonplaceholder.typicode.com/posts/"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                  >
-                  </Upload>
-                  <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                  </Modal>
-                </div>
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>回复列表</span>
-              </Col>
-              <Col md={20} sm={24}>
-                <List
-                  dataSource={seeData.answerList}
-                  renderItem={item => (
-                    <List.Item>{item}</List.Item>
-                  )}
-                />
-              </Col>
-            </Row>
-            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={3} sm={24}>
-                <span className={styles.left}>解决方案</span>
-              </Col>
-              <Col md={21} sm={24}>
-                {seeData.finishRemark}
-              </Col>
-            </Row>
+            <div className={styles.checkLeftFaultBox}>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={4} sm={24}>
+                  <span>工单类型</span>
+                </Col>
+                <Col md={20} sm={24}>
+                  <span className={styles.workType}>
+                    {workType[seeData.workType]}
+                  </span>
+                </Col>
+              </Row>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={4} sm={24}>
+                  <span>工单描述</span>
+                </Col>
+                <Col md={20} sm={24}>
+                  <List
+                    dataSource={seeData.answerList}
+                    renderItem={item => (
+                      <List.Item key={item.answerTime}>
+                        <div>
+                          <div className={styles.answerStatus}>
+                            <span>{item.answerName ? item.answerName : '运营人员'}</span>
+                            <span>{item.answerTime}</span>
+                          </div>
+                          <div className={styles.answer}>{item.answer}</div>
+                          <div className={item.imgList.length > 0 ? styles.imgRight: ''}>
+                            <Upload
+                              // action="//jsonplaceholder.typicode.com/posts/"
+                              listType="picture-card"
+                              fileList={item.imgList}
+                              onPreview={this.handlePreview}
+                              onChange={this.handleChange}
+                            >
+                            </Upload>
+                            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                            </Modal>
+                          </div>
+                        </div>
+                      </List.Item>
+                    )}
+                  />
+                </Col>
+              </Row>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={4} sm={24}>
+                  <span className={styles.left}>解决方案</span>
+                </Col>
+                <Col md={20} sm={24}>
+                  {seeData.finishRemark ? seeData.finishRemark : '无'}
+                </Col>
+              </Row>
+            </div>
+            <div className={styles.checkRightFaultBox}>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={24} sm={24}>
+                  <Popover placement="top" content={seeData.id}>
+                    <span className={styles.idStyle}>工单编号 {seeData.id}</span>
+                  </Popover>
+                </Col>
+              </Row>
+              <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                <Col md={24} sm={24}>
+                  <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                </Col>
+              </Row>
+              <div className={styles.checkRightBottomFaultBox} >
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={4} sm={24}>
+                    <span className={styles.left}>指派人</span>
+                  </Col>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.submitUser}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={4} sm={24}>
+                    <span className={styles.left}>指派时间</span>
+                  </Col>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.submitTime}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={4} sm={24}>
+                    <span className={styles.left}>接单人</span>
+                  </Col>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.receiveUser}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={4} sm={24}>
+                    <span className={styles.left}>接单时间</span>
+                  </Col>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.talkingTime}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={4} sm={24}>
+                    <span className={styles.left}>解决人</span>
+                  </Col>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.finishUser}</span>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={4} sm={24}>
+                    <span className={styles.left}>解决时间</span>
+                  </Col>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.finishTime}</span>
+                  </Col>
+                </Row>
+              </div>
+            </div>
           </div>
         </Modal>
         <Modal
@@ -1190,17 +1020,16 @@ export default class troubleBill extends PureComponent {
               <span class="modalTitle">回复</span>
               {/*<span class="resolved" class={} style={{ display: currentRecord.finishTime ? '' : 'none'}}>已解决</span>*/}
               {/*<span class="willResolve">未解决</span>*/}
-              <span class={ seeData.finishTime ? 'resolved' : 'willResolve' }>
-                { seeData.finishTime ? '已解决' : '未解决' }
-              </span>
+              {/*<span class={ seeData.finishTime ? 'resolved' : 'willResolve' }>*/}
+                {/*{ seeData.finishTime ? '已解决' : '未解决' }*/}
+              {/*</span>*/}
             </div>
           }
           width={800}
           visible={replyVisible}
           onOk={this.replyOKHandle}
           onCancel={this.replyHandleCancel}
-          className={styles.checkFaultBox}
-        >
+          className={styles.checkFaultBox}>
           <div className={styles.middleLine}></div>
           <div className={styles.checkFaultBox}>
             <div className={styles.checkLeftFaultBox}>
@@ -1282,7 +1111,9 @@ export default class troubleBill extends PureComponent {
             <div className={styles.checkRightFaultBox}>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
-                  <span className={styles.idStyle}>工单编号 {seeData.id}</span>
+                  <Popover placement="top" content={seeData.id}>
+                    <span className={styles.idStyle}>工单编号 {seeData.id}</span>
+                  </Popover>
                 </Col>
               </Row>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -1292,55 +1123,54 @@ export default class troubleBill extends PureComponent {
               </Row>
               <div className={styles.checkRightBottomFaultBox} >
                 <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-                  <Col md={6} sm={24}>
+                  <Col md={4} sm={24}>
                     <span className={styles.left}>指派人</span>
                   </Col>
-                  <Col md={18} sm={24}>
+                  <Col md={20} sm={24}>
                     <span className={styles.right}>{seeData.submitUser}</span>
                   </Col>
                 </Row>
                 <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-                  <Col md={6} sm={24}>
+                  <Col md={4} sm={24}>
                     <span className={styles.left}>指派时间</span>
                   </Col>
-                  <Col md={18} sm={24}>
-                    <span className={styles.right}>{seeData.submitUser}</span>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.submitTime}</span>
                   </Col>
                 </Row>
                 <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-                  <Col md={6} sm={24}>
+                  <Col md={4} sm={24}>
                     <span className={styles.left}>接单人</span>
                   </Col>
-                  <Col md={18} sm={24}>
-                    <span className={styles.right}>{seeData.submitTime}</span>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.receiveUser}</span>
                   </Col>
                 </Row>
                 <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-                  <Col md={6} sm={24}>
+                  <Col md={4} sm={24}>
                     <span className={styles.left}>接单时间</span>
                   </Col>
-                  <Col md={18} sm={24}>
-                    <span className={styles.right}>{seeData.submitTime}</span>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.talkingTime}</span>
                   </Col>
                 </Row>
                 <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-                  <Col md={6} sm={24}>
+                  <Col md={4} sm={24}>
                     <span className={styles.left}>解决人</span>
                   </Col>
-                  <Col md={18} sm={24}>
-                    <span className={styles.right}>{seeData.submitUser}</span>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.finishUser}</span>
                   </Col>
                 </Row>
                 <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-                  <Col md={6} sm={24}>
+                  <Col md={4} sm={24}>
                     <span className={styles.left}>解决时间</span>
                   </Col>
-                  <Col md={18} sm={24}>
-                    <span className={styles.right}>{seeData.submitUser}</span>
+                  <Col md={20} sm={24}>
+                    <span className={styles.right}>{seeData.finishTime}</span>
                   </Col>
                 </Row>
               </div>
-
             </div>
           </div>
         </Modal>
@@ -1349,15 +1179,8 @@ export default class troubleBill extends PureComponent {
           ref={this.saveFormRef}
           modalVisible={this.state.modalVisible}
           editModalConfirmLoading={this.state.editModalConfirmLoading}
-          channelLists={this.state.channelLists}
-          modalData={this.state.modalData}
-          machineNum={this.state.machineNum}
-          selectCity={this.state.selectCity}
-          selectCityName={this.state.selectCityName}
           openSelectMachineModal={this.openSelectMachineModal}
-          options={this.state.options}
-          loadData={this.areaList}
-          verifyString={this.verifyString}
+          machineId={this.state.machineId}
         />
         <SelectMachineForm
           ref={this.selectMachineFormRef}
@@ -1367,18 +1190,9 @@ export default class troubleBill extends PureComponent {
           editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
           insertOptions={this.state.insertOptions}
           loadData={this.getAreaList}
-          addData={this.addData}
-          targetData={this.state.targetData}
-          onChangeRowSelection={this.onChangeRowSelection}
-          onSelectAll={this.onSelectAll}
-          selectedRowKeys={this.state.selectedRowKeys}
+
           sourceData={this.state.sourceData}
-          handleSave={this.handleSave}
-          // handleDelete={this.handleDelete}
-          selectAll={this.state.selectAll}
-          targetHandleSave={this.targetHandleSave}
-          targetHandleDelete={this.targetHandleDelete}
-          onLeftSelect={this.onLeftSelect}
+          onSelectMachineChange={this.onSelectMachineChange}
           findSourceData={this.findSourceData}
         />
       </PageHeaderLayout>
