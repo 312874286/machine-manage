@@ -821,7 +821,7 @@ export default class troubleBill extends PureComponent {
            <a href="javascript:;" onClick={() => (record.status === 1 || record.status === 2) ? this.closeFault(record) : null}
            style={{ cursor: (record.status !== 1 && record.status !== 2) ? 'not-allowed' : '', color: (record.status !== 1 && record.status !== 2) ? '#999' : ''}}
            >关闭</a>
-          <a href="javascript:;" onClick={() => (record.status === 2 && record.status === 3) ? this.okFault(record) : null}
+          <a href="javascript:;" onClick={() => (record.status === 2 || record.status === 3) ? this.okFault(record) : null}
              style={{ cursor: (record.status !== 2 && record.status !== 3) ? 'not-allowed' : '', color: record.status !== 2 ? '#999' : ''}}
           >确认</a>
         </Fragment>
