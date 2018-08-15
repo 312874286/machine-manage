@@ -462,6 +462,8 @@ export default class troubleBill extends PureComponent {
       userName: '',
       startDateString: moment().subtract(30,'days').format('YYYY-MM-DD'),
       endDateString: moment().format('YYYY-MM-DD'),
+      statusValue: undefined,
+      sourceValue: undefined,
     });
     console.log('handleReset::');
   }
