@@ -29,7 +29,7 @@ const CreateForm = Form.create()(
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 20 },
       },
     };
     return (
@@ -42,11 +42,11 @@ const CreateForm = Form.create()(
         }
         visible={modalVisible}
         onOk={handleAdd}
-        onCancel={() => handleModalVisible()}
+        onCancel={() => handleModalVisible(false)}
         confirmLoading={editModalConfirmLoading}
         width={800}
       >
-        <div className="manageAppBox">
+        <div style={{ padding: '30px 60px' }}>
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="工单类型">
               {getFieldDecorator('workType', {
@@ -666,7 +666,16 @@ export default class troubleBill extends PureComponent {
   render() {
     const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, fileList, getMachineUserList, userId } = this.state;
     const { troubleBill: { list, page } } = this.props;
-
+    if (this.props.location.query) {
+      const { flag } = this.props.location.query;
+      if (flag === 'openFault') {
+        this.setState({
+          modalVisible: true,
+        }, () => {
+          this.props.location.query = {}
+        });
+      }
+    }
     var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
     const columns = [{
@@ -890,7 +899,8 @@ export default class troubleBill extends PureComponent {
             <Button key="submit" type="primary" onClick={this.seeHandleCancel}>
               关闭
             </Button>,
-          ]}>
+          ]}
+          className={styles.checkFaultModalBox}>
           <div className={styles.middleLine}></div>
           <div className={styles.checkFaultBox}>
             <div className={styles.checkLeftFaultBox}>
@@ -957,7 +967,9 @@ export default class troubleBill extends PureComponent {
               </Row>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
-                  <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                  <Popover placement="top" content={seeData.machineId}>
+                    <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                  </Popover>
                 </Col>
               </Row>
               <div className={styles.checkRightBottomFaultBox} >
@@ -1029,7 +1041,7 @@ export default class troubleBill extends PureComponent {
           visible={replyVisible}
           onOk={this.replyOKHandle}
           onCancel={this.replyHandleCancel}
-          className={styles.checkFaultBox}>
+          className={styles.checkFaultModalBox}>
           <div className={styles.middleLine}></div>
           <div className={styles.checkFaultBox}>
             <div className={styles.checkLeftFaultBox}>
@@ -1118,7 +1130,9 @@ export default class troubleBill extends PureComponent {
               </Row>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
-                  <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                  <Popover placement="top" content={seeData.machineId}>
+                    <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                  </Popover>
                 </Col>
               </Row>
               <div className={styles.checkRightBottomFaultBox} >

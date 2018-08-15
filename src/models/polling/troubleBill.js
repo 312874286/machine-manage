@@ -29,7 +29,7 @@ export default {
     },
     *saveCheckFault({ payload: { params } }, { call }) {
       const response = yield call(saveCheckFault, { params });
-      return response.data;
+      return response;
     },
     *updateCheckStatus({ payload: { params } }, { call }) {
       const response = yield call(updateCheckStatus, { params });
