@@ -671,7 +671,7 @@ export default class troubleBill extends PureComponent {
     // console.log(11111, list, page);
     const columns = [{
       title: '故障单ID',
-      dataIndex: 'id',
+      dataIndex: 'code',
       width: '10%'
     }, {
       title: '机器ID',
@@ -950,8 +950,8 @@ export default class troubleBill extends PureComponent {
             <div className={styles.checkRightFaultBox}>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
-                  <Popover placement="top" content={seeData.id}>
-                    <span className={styles.idStyle}>工单编号 {seeData.id}</span>
+                  <Popover placement="top" content={seeData.code}>
+                    <span className={styles.idStyle}>工单编号 {seeData.code}</span>
                   </Popover>
                 </Col>
               </Row>
@@ -1111,8 +1111,8 @@ export default class troubleBill extends PureComponent {
             <div className={styles.checkRightFaultBox}>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
-                  <Popover placement="top" content={seeData.id}>
-                    <span className={styles.idStyle}>工单编号 {seeData.id}</span>
+                  <Popover placement="top" content={seeData.code}>
+                    <span className={styles.idStyle}>工单编号 {seeData.code}</span>
                   </Popover>
                 </Col>
               </Row>
