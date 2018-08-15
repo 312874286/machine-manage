@@ -701,8 +701,27 @@ export default class troubleBill extends PureComponent {
     });
   }
   handleChange = ({ fileList }) => this.setState({ fileList })
+  go = () => {
+    const { totalNo, No } = this.state
+    if (No) {
+      if (No <= totalNo) {
+        this.handleTableChange({current: No, pageSize: 20 }, {}, {});
+      } else {
+        this.setState({
+          No: ''
+        })
+      }
+    } else {
+      return false
+    }
+  }
+  inputValue = (e) => {
+    this.setState({
+      No: e.target.value
+    })
+  }
   render() {
-    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId, No } = this.state;
     const { troubleBill: { list, page } } = this.props;
 
     var arr = ['未解决','已解决'];
@@ -802,8 +821,8 @@ export default class troubleBill extends PureComponent {
            <a href="javascript:;" onClick={() => (record.status === 1 || record.status === 2) ? this.closeFault(record) : null}
            style={{ cursor: (record.status !== 1 && record.status !== 2) ? 'not-allowed' : '', color: (record.status !== 1 && record.status !== 2) ? '#999' : ''}}
            >关闭</a>
-          <a href="javascript:;" onClick={() => record.status === 2 ? this.okFault(record) : null}
-             style={{ cursor: record.status !== 2 ? 'not-allowed' : '', color: record.status !== 2 ? '#999' : ''}}
+          <a href="javascript:;" onClick={() => (record.status === 2 && record.status === 3) ? this.okFault(record) : null}
+             style={{ cursor: (record.status !== 2 && record.status !== 3) ? 'not-allowed' : '', color: record.status !== 2 ? '#999' : ''}}
           >确认</a>
         </Fragment>
       ),
@@ -811,10 +830,22 @@ export default class troubleBill extends PureComponent {
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
-        return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
-      },
+        return (
+          <div className="paginationBox">
+            <span>当前显示{page.pageSize}条/页，共{page.total}条</span>
+            <div>
+              <span>第{page.current}页 / 共{Math.ceil(total/page.pageSize)}页</span>
+              <span>
+                 <span>跳至 <Input value={No} onChange={this.inputValue}/>页</span>
+                 <Button type="primary" onClick={() => this.go()}>Go</Button>
+               </span>
+            </div>
+          </div>
+        );
+        // return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
+       },
       ...page,
-      showQuickJumper: true,
+      showQuickJumper: false,
     };
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -895,7 +926,7 @@ export default class troubleBill extends PureComponent {
               rowKey={record => record.id}
               onChange={this.handleTableChange}
               pagination={paginationProps}
-              scroll={{ x: 1800, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50) }}
+              scroll={{ x: 1800, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100) }}
             />
           </Card>
         </div>
@@ -946,7 +977,7 @@ export default class troubleBill extends PureComponent {
                       <List.Item key={item.answerTime}>
                         <div>
                           <div className={styles.answerStatus}>
-                            <span>{item.answerName ? item.answerName : '运营人员'}</span>
+                            <span>{item.answerType === 1 ? '巡检人员' : '运营人员'}</span>
                             <span>{item.answerTime}</span>
                           </div>
                           <div className={styles.answer}>{item.answer}</div>
@@ -988,8 +1019,8 @@ export default class troubleBill extends PureComponent {
               </Row>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
-                  <Popover placement="top" content={seeData.machineId}>
-                    <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                  <Popover placement="top" content={seeData.machineCode}>
+                    <span className={styles.machineStyle}>机器编号 {seeData.machineCode}</span>
                   </Popover>
                 </Col>
               </Row>
@@ -1087,7 +1118,7 @@ export default class troubleBill extends PureComponent {
                       <List.Item key={item.answerTime}>
                         <div>
                           <div className={styles.answerStatus}>
-                            <span>{item.answerName ? item.answerName : '运营人员'}</span>
+                            <span>{item.answerType === 1 ? '巡检人员' : '运营人员'}</span>
                             <span>{item.answerTime}</span>
                           </div>
                           <div className={styles.answer}>{item.answer}</div>
@@ -1151,8 +1182,8 @@ export default class troubleBill extends PureComponent {
               </Row>
               <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                 <Col md={24} sm={24}>
-                  <Popover placement="top" content={seeData.machineId}>
-                    <span className={styles.machineStyle}>机器编号 {seeData.machineId}</span>
+                  <Popover placement="top" content={seeData.machineCode}>
+                    <span className={styles.machineStyle}>机器编号 {seeData.machineCode}</span>
                   </Popover>
                 </Col>
               </Row>

@@ -1,17 +1,45 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Alert, Divider, Popconfirm } from 'antd';
+import { Table, Alert, Divider, Popconfirm, Input, Button } from 'antd';
 import styles from './orderTable.less';
 import { orderStatusData, orderTypeData } from '../../common/config/order';
 
 // const status = [{ id: 0, name: '停用' }, { id: 1, name: '正常' }];
 export default class orderTable extends PureComponent {
-  state = {};
-
+  state = {
+    No: '',
+    totalNo: 0
+  };
+  componentWillReceiveProps(nextProps) {
+    const { page, } = this.props;
+    // console.log('page', page)
+    this.setState({
+      totalNo: Math.ceil(page.total/page.pageSize)
+    })
+  }
   handleTableChange = (pagination, filters, sorter) => {
     this.props.handleTableChange(pagination, filters, sorter);
   }
-
+  go = () => {
+    const { totalNo, No } = this.state
+    if (No) {
+      if (No <= totalNo) {
+        this.props.handleTableChange({current: No, pageSize: 20 }, {}, {});
+      } else {
+        this.setState({
+          No: ''
+        })
+      }
+    } else {
+      return false
+    }
+  }
+  inputValue = (e) => {
+    this.setState({
+      No: e.target.value
+    })
+  }
   render() {
+    const { No } = this.state;
     const {
       data,
       page,
@@ -126,14 +154,25 @@ export default class orderTable extends PureComponent {
       //   ),
       // },
     ];
-
+    // `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
-        return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
+        return (
+          <div className="paginationBox">
+            <span>当前显示{page.pageSize}条/页，共{page.total}条</span>
+            <div>
+              <span>第{page.current}页 / 共{Math.ceil(total/page.pageSize)}页</span>
+              <span>
+                 <span>跳至 <Input value={No} onChange={this.inputValue}/>页</span>
+                 <Button type="primary" onClick={() => this.go()}>Go</Button>
+               </span>
+            </div>
+          </div>
+        );
       },
       ...page,
-      showQuickJumper: true,
+      showQuickJumper: false,
     };
 
     return (
@@ -157,7 +196,7 @@ export default class orderTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: 2300, y: (document.documentElement.offsetHeight || document.body.offsetHeight) - (68 + 62 + 24 + 53 + 100) }}
+          scroll={{ x: 2300, y: (document.documentElement.offsetHeight || document.body.offsetHeight) - (68 + 62 + 24 + 53 + 100 + 30) }}
           // showHeader={false}
         />
       </div>
