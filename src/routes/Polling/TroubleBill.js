@@ -675,7 +675,7 @@ export default class troubleBill extends PureComponent {
  // updateCheckStatus
     this.updateCheckStatus(item.id, 'close')
   }
-  okFault = () => {
+  okFault = (item) => {
     this.updateCheckStatus(item.id, 'ok')
   }
   updateCheckStatus = (id, flag) => {
