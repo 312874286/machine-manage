@@ -1370,22 +1370,29 @@ export default class machineSettingList extends PureComponent {
         title: '操作',
         width: 240,
         render: (text, item) => (
-          (item.localDesc) ? (
-            <Fragment>
-              <a onClick={() => this.handleEditClick(item)}>重置点位</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
-            </Fragment>) : (
-            <Fragment>
-              <a style={{ color: 'grey', cursor: 'not-allowed' }}>重置点位</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
-            </Fragment>
-          )
+          // (item.localDesc) ? (
+          //   <Fragment>
+          //     <a onClick={() => this.handleEditClick(item)}>重置点位</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+          //   </Fragment>) : (
+          //   <Fragment>
+          //     <a style={{ color: 'grey', cursor: 'not-allowed' }}>重置点位</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+          //   </Fragment>
+          // )
+          <Fragment>
+            <a onClick={() => this.handleEditClick(item)}>重置点位</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+          </Fragment>
         ),
       },
     ];
