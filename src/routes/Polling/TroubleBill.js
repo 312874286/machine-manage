@@ -977,7 +977,7 @@ export default class troubleBill extends PureComponent {
                       <List.Item key={item.answerTime}>
                         <div>
                           <div className={styles.answerStatus}>
-                            <span>{item.answerType === '1' ? '巡检人员' : '运营人员'}</span>
+                            <span>{item.answerType === '2' ? '运营人员' : (item.answerName ? item.answerName : '巡检人员')}</span>
                             <span>{item.answerTime}</span>
                           </div>
                           <div className={styles.answer}>{item.answer}</div>
@@ -1118,7 +1118,7 @@ export default class troubleBill extends PureComponent {
                       <List.Item key={item.answerTime}>
                         <div>
                           <div className={styles.answerStatus}>
-                            <span>{item.answerType === '1' ? '巡检人员' : '运营人员'}</span>
+                            <span>{item.answerType === '2' ? '运营人员' : (item.answerName ? item.answerName : '巡检人员')}</span>
                             <span>{item.answerTime}</span>
                           </div>
                           <div className={styles.answer}>{item.answer}</div>
