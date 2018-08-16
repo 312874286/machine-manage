@@ -1114,15 +1114,15 @@ export default class user extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
-        // width: '10%',
+        width: '10%',
       },
-      // {
-      //   title: '状态',
-      //   dataIndex: 'status',
-      //   render(val) {
-      //     return <span>{userStatus[val]}</span>
-      //   }
-      // },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        render(val) {
+          return <span>{userStatus[val]}</span>
+        }
+      },
       {
         fixed: 'right',
         width: '150px',
