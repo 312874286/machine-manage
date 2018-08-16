@@ -681,7 +681,7 @@ export default class troubleBill extends PureComponent {
   updateCheckStatus = (id, flag) => {
     let status = 0
     if (flag === 'close') {
-      status = 3
+      status = 5
     } else {
       status = 4
     }
@@ -701,10 +701,10 @@ export default class troubleBill extends PureComponent {
     });
   }
   handleChange = ({ fileList }) => this.setState({ fileList })
-  go = () => {
-    const { totalNo, No } = this.state
+  go = (totalNo) => {
+    const { No } = this.state
     if (No) {
-      if (No <= totalNo) {
+      if (No <= totalNo && No > 0) {
         this.handleTableChange({current: No, pageSize: 20 }, {}, {});
       } else {
         this.setState({
@@ -722,7 +722,7 @@ export default class troubleBill extends PureComponent {
   }
   render() {
     const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId, No } = this.state;
-    const { troubleBill: { list, page } } = this.props;
+    const { troubleBill: { list, page, totalNo } } = this.props;
 
     var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
@@ -837,7 +837,7 @@ export default class troubleBill extends PureComponent {
               <span>第{page.current}页 / 共{Math.ceil(total/page.pageSize)}页</span>
               <span>
                  <span>跳至 <Input value={No} onChange={this.inputValue}/>页</span>
-                 <Button type="primary" onClick={() => this.go()}>Go</Button>
+                 <Button type="primary" onClick={() => this.go(totalNo)}>Go</Button>
                </span>
             </div>
           </div>

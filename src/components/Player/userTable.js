@@ -7,14 +7,19 @@ export default class userTable extends PureComponent {
     No: '',
     totalNo: 0
   };
-
+  componentWillReceiveProps(nextProps) {
+    const { page, } = this.props;
+    this.setState({
+      totalNo: Math.ceil(page.total/page.pageSize)
+    })
+  }
   handleTableChange = (pagination, filters, sorter) => {
     this.props.handleTableChange(pagination, filters, sorter);
   }
   go = () => {
     const { totalNo, No } = this.state
     if (No) {
-      if (No <= totalNo) {
+      if (No <= totalNo && No > 0) {
         this.props.handleTableChange({current: No, pageSize: 20 }, {}, {});
       } else {
         this.setState({

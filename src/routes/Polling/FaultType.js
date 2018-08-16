@@ -273,10 +273,10 @@ export default class FaultType extends PureComponent {
         userName: '',
       });
     }
-    go = () => {
-      const { totalNo, No } = this.state
+    go = (totalNo) => {
+      const { No } = this.state
       if (No) {
-        if (No <= totalNo) {
+        if (No <= totalNo && No > 0) {
           this.handleTableChange({current: No, pageSize: 20 }, {}, {});
         } else {
           this.setState({
@@ -294,7 +294,7 @@ export default class FaultType extends PureComponent {
     }
     render() {
       const { visible, solutionsLists, userName, No } = this.state;
-      const { faultType: { list, page } } = this.props;
+      const { faultType: { list, page, totalNo } } = this.props;
     //   console.log('list::', faultType);
       const columns = [
         { title: '故障类型名称', dataIndex: 'name', key: 'name', width: '22%' },
@@ -322,7 +322,7 @@ export default class FaultType extends PureComponent {
                 <span>第{page.current}页 / 共{Math.ceil(total/page.pageSize)}页</span>
                 <span>
                  <span>跳至 <Input value={No} onChange={this.inputValue}/>页</span>
-                 <Button type="primary" onClick={() => this.go()}>Go</Button>
+                 <Button type="primary" onClick={() => this.go(totalNo)}>Go</Button>
                </span>
               </div>
             </div>

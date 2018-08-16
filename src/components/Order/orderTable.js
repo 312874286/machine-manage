@@ -22,7 +22,7 @@ export default class orderTable extends PureComponent {
   go = () => {
     const { totalNo, No } = this.state
     if (No) {
-      if (No <= totalNo) {
+      if (No <= totalNo && No > 0) {
         this.props.handleTableChange({current: No, pageSize: 20 }, {}, {});
       } else {
         this.setState({

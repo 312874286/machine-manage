@@ -251,9 +251,28 @@ export default class Staff extends PureComponent {
       userName: '',
     });
   }
+  go = (totalNo) => {
+    const { No } = this.state
+    if (No) {
+      if (No <= totalNo && No > 0) {
+        this.handleTableChange({current: No, pageSize: 20 }, {}, {});
+      } else {
+        this.setState({
+          No: ''
+        })
+      }
+    } else {
+      return false
+    }
+  }
+  inputValue = (e) => {
+    this.setState({
+      No: e.target.value
+    })
+  }
   render() {
-    const { allList, checkedKeys, isJiaoLeft, userName } = this.state;
-    const { staff: { list, page } } = this.props;
+    const { allList, checkedKeys, isJiaoLeft, userName, No } = this.state;
+    const { staff: { list, page, totalNo } } = this.props;
     // console.log(111, list, page, allList, 222);
     const columns = [
       {
@@ -294,10 +313,22 @@ export default class Staff extends PureComponent {
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
-        return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
+        // return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
+        return (
+          <div className="paginationBox">
+            <span>当前显示{page.pageSize}条/页，共{page.total}条</span>
+            <div>
+              <span>第{page.current}页 / 共{Math.ceil(total/page.pageSize)}页</span>
+              <span>
+                 <span>跳至 <Input value={No} onChange={this.inputValue}/>页</span>
+                 <Button type="primary" onClick={() => this.go(totalNo)}>Go</Button>
+               </span>
+            </div>
+          </div>
+        );
       },
       ...page,
-      showQuickJumper: true,
+      showQuickJumper: false,
     };
     // const columnsPop = [
     //   {

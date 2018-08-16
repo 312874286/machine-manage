@@ -5,6 +5,7 @@ export default {
   state: {
     list: [],
     page: {},
+    totalNo: 1
   },
 
   effects: {
@@ -36,7 +37,6 @@ export default {
       return response;
     },
   },
-
   reducers: {
     getCheckFaultListBack(state, { payload: { data, page } }) {
       return {
@@ -47,6 +47,7 @@ export default {
           pageSize: page.pageSize,
           current: page.pageNo,
         },
+        totalNo: Math.ceil(page.totalCount/page.pageSize)
       };
     },
   },
