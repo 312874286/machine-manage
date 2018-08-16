@@ -209,21 +209,12 @@ export const getRouterData = (app) => {
     '/check/faultType': {
       component: dynamicWrapper(app, ['polling/faultType', 'log/log', 'common'], () => import('../routes/Polling/FaultType')),
     },
-<<<<<<< HEAD
-    // '/check/workOrder': {
-    //   component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/WorkOrder')),
-    // },
-    // '/check/replenish': {
-    //   component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
-    // },
-=======
     '/check/workOrder': {
       component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/WorkOrder')),
     },
     '/check/replenish': {
       component: dynamicWrapper(app, ['polling/replenish', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
     },
->>>>>>> v1_0_1_check/fault
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },
