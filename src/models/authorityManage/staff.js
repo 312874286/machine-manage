@@ -5,6 +5,7 @@ export default {
   state: {
     list: [],
     page: {},
+    totalNo: 0
   },
 
   effects: {
@@ -51,6 +52,7 @@ export default {
           pageSize: page.pageSize,
           current: page.pageNo,
         },
+        totalNo: Math.ceil(page.totalCount/page.pageSize)
       };
     },
   },

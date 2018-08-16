@@ -4,17 +4,18 @@ import {
   Card,
   Form,
   Table,
+  Button,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './OffLine.less'
 
-@connect(({ common, loading, channelSetting, log }) => ({
+@connect(({ common, loading, homePageSetting }) => ({
   common,
-  channelSetting,
-  loading: loading.models.channelSetting,
+  homePageSetting,
+  loading: loading.models.homePageSetting,
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class offLine extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
@@ -27,38 +28,43 @@ export default class channelSettingList extends PureComponent {
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          type: 1
         },
       },
     });
   }
   render() {
     const {
-      channelSetting: { list, page },
+      homePageSetting: { ExceptionMachineList },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
     const columns = [
       {
         title: '机器编号',
-        dataIndex: 'id',
+        dataIndex: 'machineCode',
         width: '30%',
       },
       {
         title: '机器点位',
         width: '25%',
-        dataIndex: 'channelCode',
+        dataIndex: 'local',
+        render: (text, item) => (
+          (item.local) ? (
+            <span>{item.local}</span>
+          ) :(
+            <span>无</span>
+          )
+        )
       },
       {
         title: '离线时间',
-        dataIndex: 'channelCode',
+        dataIndex: 'offlineTime',
       },
       {
         fixed: 'right',
@@ -66,7 +72,7 @@ export default class channelSettingList extends PureComponent {
         title: '操作',
         render: () => (
           <Fragment>
-            <a>创建工单</a>
+            <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}>创建工单</a>
           </Fragment>
         ),
       },
@@ -74,15 +80,18 @@ export default class channelSettingList extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <Button icon="arrow-left" type="primary" onClick={() => history.go(-1)}>
+            返回
+          </Button>
           <div className={styles.tableList}>
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={list}
+              dataSource={ExceptionMachineList}
               columns={columns}
               pagination={false}
               onChange={this.handleTableChange}
-              scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}}
+              scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}
             />
           </div>
         </Card>

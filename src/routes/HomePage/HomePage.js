@@ -6,32 +6,32 @@ import {
   Form,
   Card,
 } from 'antd';
-@connect(({ common, loading, user }) => ({
+@connect(({ common, loading, homePageSetting }) => ({
   common,
-  user,
-  loading: loading.models.user,
+  homePageSetting,
+  loading: loading.models.homePageSetting,
 }))
 @Form.create()
-export default class user extends PureComponent {
+export default class homePageSetting extends PureComponent {
   state = {
   };
   componentDidMount() {
-    // this.getLists();
+    this.getLists();
   }
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'user/getUserList',
+      type: 'homePageSetting/findMachinePortalData',
       payload: {
-        restParams: {
-          pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
-        },
+        restParams: {},
       },
     });
   }
 
   render() {
+    const {
+      homePageSetting: { MachinePortalDataList },
+    } = this.props;
     const gridStyle = {
       width: '25%',
       textAlign: 'center',
@@ -39,41 +39,89 @@ export default class user extends PureComponent {
     return (
       <div className={styles.gridBox}>
         <PageHeaderLayout>
-          <div className={styles.gridCardBox}>
-            <Card title="运行监控">
-              <a>
-                <Card.Grid style={gridStyle}>
-                  <Card title="200台" bordered={false}>机器在线</Card>
-                </Card.Grid>
-              </a>
-              <a onClick={() => this.props.history.push('/offline')}>
-                <Card.Grid style={gridStyle}>
-                  <Card title="200台" bordered={false}>机器离线</Card>
-                </Card.Grid>
-              </a>
-              <a onClick={() => this.props.history.push('/Unusual')}>
-                <Card.Grid style={gridStyle}>
-                  <Card title="200台" bordered={false}>机器异常</Card>
-                </Card.Grid>
-              </a>
-              <a onClick={() => this.props.history.push('/StockOut')}>
-                <Card.Grid style={gridStyle}>
-                  <Card title="200台" bordered={false}>机器缺货</Card>
-                </Card.Grid>
-              </a>
+          <div style={{background: '#fff', height: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 10)}}>
+            <Card title={
+              <div>
+                运行监控
+                <span className={styles.titleSpan}>(单位:台)</span>
+              </div>
+            }>
+              <div className={styles.gridCardBox}>
+                <a style={{ cursor: 'not-allowed' }}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/onLine.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.online === 0 ? "0" : MachinePortalDataList.online}</span>
+                    <span>机器在线</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push('/offline')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/offLine.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.offline === 0 ? "0" : MachinePortalDataList.offline}</span>
+                    <span>机器离线</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push('/Unusual')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/unusual.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.exception === 0 ? "0" : MachinePortalDataList.exception}</span>
+                    <span>机器异常</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push('/StockOut')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/stockOut.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.stockout === 0 ? "0" : MachinePortalDataList.stockout}</span>
+                    <span>机器缺货</span>
+                  </div>
+                </a>
+              </div>
             </Card>
-            <Card title="工单：">
-              <Card.Grid style={gridStyle}>
-                <Card title="10台" bordered={false}>待接单</Card>
-              </Card.Grid>
-              <Card.Grid style={gridStyle}>
-                <Card title="10台" bordered={false}>处理中</Card>
-              </Card.Grid>
-              <Card.Grid style={gridStyle}>
-                <Card title="10台" bordered={false}>待确认</Card>
-              </Card.Grid>
+            <Card title={
+              <div>
+                工单
+                <span className={styles.titleSpan}>(单位:条)</span>
+              </div>}>
+              <div className={styles.gridCardBox}>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 1}})}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/receiveOrder.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.waitOrder === 0 ? "0" : MachinePortalDataList.waitOrder}</span>
+                    <span>待接单</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 2}})}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/processed.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.processed === 0 ? "0" : MachinePortalDataList.processed}</span>
+                    <span>处理中</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 3}})}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/affirm.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.waitConfirm === 0 ? "0" : MachinePortalDataList.waitConfirm}</span>
+                    <span>待确认</span>
+                  </div>
+                </a>
+              </div>
             </Card>
           </div>
+
         </PageHeaderLayout>
       </div>
     );

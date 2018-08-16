@@ -4,64 +4,118 @@ import {
   Card,
   Form,
   Table,
+  Modal,
+  Button
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './OffLine.less'
 
-@connect(({ common, loading, channelSetting, log }) => ({
+
+const WatchMachine = Form.create()(
+  (props) => {
+    const { WatchMachineModalVisible, WatchMachineHandleModalVisibleClick, machineList } = props;
+    const machineColumns = [{
+      title: '商品名称',
+      dataIndex: 'goodName',
+      align: 'left',
+      width: '85%'
+    }, {
+      title: '剩余数量',
+        dataIndex: 'goodCount',
+        align: 'left',
+        width: '15%'
+    }];
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看剩余数量</span>
+          </div>
+        }
+        width={800}
+        visible={WatchMachineModalVisible}
+        onCancel={() => WatchMachineHandleModalVisibleClick()}
+        footer={null}
+      >
+        <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
+          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+        </div>
+      </Modal>
+    );
+  });
+@connect(({ common, loading, homePageSetting }) => ({
   common,
-  channelSetting,
-  loading: loading.models.channelSetting,
+  homePageSetting,
+  loading: loading.models.homePageSetting,
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class stockOut extends PureComponent {
   state = {
-    modalVisible: false,
-    selectedRows: [],
-    formValues: {},
-    id: '',
-    editModalConfirmLoading: false,
-    pageNo: 1,
-    keyword: '',
+    WatchMachineModalVisible: false,
+    machineList: [],
   };
   componentDidMount() {
     this.getLists();
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
+          type: 3
         },
       },
     });
   }
+  getMachineStatus = (item) => {
+    this.props.dispatch({
+      type: 'homePageSetting/findMachineStockoutInfo',
+      payload: {
+        restParams: {
+          machineId: item.id
+        },
+      },
+    }).then((res) => {
+      if (res) {
+        this.setState({
+          machineList: res,
+        }, () => {
+          this.setState({
+            WatchMachineModalVisible: true,
+          });
+        });
+      }
+    });
+  }
+  WatchMachineHandleModalVisibleClick = () => {
+    this.setState({
+      WatchMachineModalVisible: false,
+    });
+  }
   render() {
     const {
-      channelSetting: { list, page },
+      homePageSetting: { ExceptionMachineList },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
     const columns = [
       {
         title: '机器编号',
-        dataIndex: 'id',
+        dataIndex: 'machineCode',
         width: '30%',
       },
       {
         title: '机器点位',
         width: '25%',
-        dataIndex: 'channelCode',
+        dataIndex: 'local',
       },
       {
-        title: '缺货明细',
-        dataIndex: 'channelCode1',
-        render() {
-          return <a>查看</a>
-        }
+        title: '剩余数量',
+        dataIndex: 'stockoutInfo',
+        render: (text, item) => (
+          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+        ),
       },
       {
         fixed: 'right',
@@ -69,7 +123,7 @@ export default class channelSettingList extends PureComponent {
         title: '操作',
         render: () => (
           <Fragment>
-            <a>创建工单</a>
+            <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}>创建工单</a>
           </Fragment>
         ),
       },
@@ -77,18 +131,26 @@ export default class channelSettingList extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <Button icon="arrow-left" type="primary" onClick={() => history.go(-1)}>
+            返回
+          </Button>
           <div className={styles.tableList}>
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={list}
+              dataSource={ExceptionMachineList}
               columns={columns}
               pagination={false}
               onChange={this.handleTableChange}
-              scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}}
+              scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}
             />
           </div>
         </Card>
+        <WatchMachine
+          WatchMachineModalVisible={this.state.WatchMachineModalVisible}
+          WatchMachineHandleModalVisibleClick={this.WatchMachineHandleModalVisibleClick}
+          machineList={this.state.machineList}
+        />
       </PageHeaderLayout>
     );
   }

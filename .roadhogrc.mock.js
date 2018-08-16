@@ -2531,34 +2531,7 @@ const proxy = {
   },
   'POST /check/fault/detail': (req, res) => {
     res.send(
-      {
-        "code": 0,
-        "data": {
-        "id": "f5fe616383454021aa65dc131a0aad0a",
-        "machineId": "2121231231231",
-        "type": null,
-        "submitUser": "王老五",
-        "finishUser": null,
-        "submitTime": 1531740076000,
-        "finishTime": null,
-        "status": null,
-        "finishRemark": null,
-        "remindStatus": null,
-        "remark": null,
-        "imgList": [
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=77ccabec44e24ebc3368873762ee50a6&imgtype=0&src=http%3A%2F%2Fwww.pptbz.com%2Fd%2Ffile%2Fp%2F201611%2F3620830f45bea359346b8272ededc4ed.jpg",
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=1395ac0860e40fcbe174545795784c22&imgtype=0&src=http%3A%2F%2Fpic11.photophoto.cn%2F20090410%2F0032018132798491_b.jpg",
-          "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=77ccabec44e24ebc3368873762ee50a6&imgtype=0&src=http%3A%2F%2Fwww.pptbz.com%2Fd%2Ffile%2Fp%2F201611%2F3620830f45bea359346b8272ededc4ed.jpg",
-          "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=77ccabec44e24ebc3368873762ee50a6&imgtype=0&src=http%3A%2F%2Fwww.pptbz.com%2Fd%2Ffile%2Fp%2F201611%2F3620830f45bea359346b8272ededc4ed.jpg",
-
-        ],
-        "answerList": [
-        "AAAAA",
-        "哈哈哈哈哈哈哈哈哈哈"
-        ]
-        },
-        "msg": "成功"
-        }
+      {"code":0,"data":{"id":"f0248d82649f4626a69c60843c010ae3","machineId":"123","code":"FUIWM0S20180808114338","title":null,"workType":1,"status":0,"source":1,"urgentStatus":1,"type":null,"remark":null,"submitUser":"赵飞龙","submitId":null,"submitUserType":null,"receiveUser":"赵飞龙","receiveId":null,"finishUser":null,"finishId":null,"submitTime":"2018-08-08 11:43:38","talkingTime":null,"finishTime":null,"updateTime":null,"finishRemark":null,"remindStatus":null,"machineCode":"123","answerList":[{"answer":"屏幕坏了","answerType":"1","answerName":null,"imgList":[{"imageTime":"2018-08-08 11:43:39","image":"https://inno72.oss-cn-beijing.aliyuncs.com/backend/check/5917744d26f44aebbbec24555cb317fb.jpeg","sort":1},{"imageTime":"2018-08-08 11:43:39","image":"https://inno72.oss-cn-beijing.aliyuncs.com/backend/check/11111.jpeg","sort":2}],"answerTime":"2018-08-08 11:43:39"}]},"msg":"成功"}
     )
   },
   'POST /check/fault/answer': (req, res) => {
@@ -2980,7 +2953,7 @@ const proxy = {
             },
             {
               "startTime": "2018-07-31 00:00:00",
-              "endTime": "2018-08-03 23:59:59"
+              "endTime": "2018-08-02 23:59:59"
             }
           ]
         },
@@ -3045,6 +3018,335 @@ const proxy = {
         }
       ],
       "code": 0
+    })
+  },
+  'GET /machine/machine/findMachinePortalData': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "online": 0,
+        "offline": 12,
+        "exception": 5,
+        "stockout": 2,
+        "waitOrder": 1,
+        "processed": 3,
+        "waitConfirm": 1
+      },
+      "msg": "成功"
+    })
+  },
+  'GET /machine/machine/findExceptionMachine': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [{
+        "voice": 10,
+        "offline_time": "2018.08.03 12:02:30",
+        "goodsChannelStatus": "",
+        "update_time": "2018.08.03 12:02:30",
+        "machineCode": "1234",
+        "machineDoorStatus": 1,
+        "screenIntensity": 10,
+        "temperature": 36,
+        "id": "abcde",
+        "stockoutInfo": [
+          {
+            "goodName": "娃哈哈",
+            "goodCount": 10
+          },
+          {
+            "goodName": "娃哇哇",
+            "goodCount": 5
+          }
+        ],
+        "local": "北京市朝阳区大悦城一层",
+        "dropGoodsSwitch": 1
+      }],
+      "msg": "成功"
+    })
+  },
+  'GET /merchant/log/findLogs': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [{
+        "voice": 10,
+        "offline_time": "2018.08.03 12:02:30",
+        "goodsChannelStatus": "",
+        "update_time": "2018.08.03 12:02:30",
+        "machineCode": "1234",
+        "machineDoorStatus": 1,
+        "screenIntensity": 10,
+        "temperature": 36,
+        "id": "abcde",
+        "stockoutInfo": [
+          {
+            "goodName": "娃哈哈",
+            "goodCount": 10
+          },
+          {
+            "goodName": "娃哇哇",
+            "goodCount": 5
+          }
+        ],
+        "local": "北京市朝阳区大悦城一层",
+        "dropGoodsSwitch": 1
+      }],
+      "msg": "成功"
+    })
+  },
+  'GET /machine/machine/findMachineStockoutInfo': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "goodName": "测试商品 别删除",
+          "goodCount": 14
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /supply/channel/history/list': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "code": 0,
+        "page": {
+          "pageSize": 20,
+          "currentResult": 0,
+          "totalPage": 1,
+          "pageNo": 1,
+          "totalCount": 5,
+          "list": null,
+          "firstResult": 0,
+          "firstPage": true,
+          "lastPage": true,
+          "nextPage": 1,
+          "prePage": 1
+        },
+        "data": [
+          {
+            "batchNo": "06e5ac53d3164119bdbafbd909f25bd6",
+            "machineCode": "18884154",
+            "localeStr": "北京市北京市东城区王府井大沽口",
+            "createTime": "2018-07-25 20:02:04",
+            "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "77f7fe7b9e7a4f008a321e23cdd4cfdf",
+            "machineCode": "18884154",
+            "localeStr": "北京市北京市东城区王府井大沽口",
+            "createTime": "2018-07-25 19:56:48",
+            "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "df8437abfb564153bfec25fd93dfd32b",
+            "machineCode": "18884154",
+            "localeStr": "北京市北京市东城区王府井大沽口",
+            "createTime": "2018-07-25 19:19:03",
+            "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "77",
+            "machineCode": null,
+            "localeStr": null,
+            "createTime": "2018-07-19 11:01:29",
+            "machineId": "be9a6ec2e331468b9d04a95a180dedb2",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "666",
+            "machineCode": null,
+            "localeStr": null,
+            "createTime": "2018-07-19 11:00:21",
+            "machineId": "be9a6ec2e331468b9d04a95a180dedb2",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          }
+        ]
+      }
+    )
+  },
+  'GET /supply/channel/history/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "87e0b8f7d53f48c09123d5142d253707",
+          "supplyChannelId": "017de335d3834ad6952750a754d822db",
+          "beforeCount": 5,
+          "afterCount": 10,
+          "batchNo": "06e5ac53d3164119bdbafbd909f25bd6",
+          "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+          "userId": "",
+          "type": 0,
+          "createTime": "2018-07-25 20:02:04",
+          "machineCode": null,
+          "localeStr": "北京市北京市东城区王府井大沽口",
+          "subCount": 5,
+          "goodsName": "测试商品 别删除"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /activity/data/count/list': (req, res) => {
+    res.send({
+        "code":0,
+        "data":{
+          "totalOrderCount":0,
+          "totalGoodsCount":0,
+          "totalUserCount":580,
+          "totalPayCount":55,
+          "totalCouponCount":0,
+          "list":[
+            {
+              "id":"0e6e42e367984ea79cea0184f4a0e230",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:50"
+            },
+            {
+              "id":"2500b00692844dbf9085eecf01ab188f",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:40"
+            },
+            {
+              "id":"26d1e29de13b4cca8c50498f70afe952",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:45"
+            },
+            {
+              "id":"9b89d6a48cb44f4aa4532d40e746e5a2",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:55"
+            },
+            {
+              "id":"bb54b8d1a03042e288ccb93efc46cbaa",
+              "activityId":"f3092aec236e4ce4a5d964b16a3wq2f6",
+              "activityPlanId":"999",
+              "orderCount":74,
+              "userCount":116,
+              "payCount":11,
+              "goodsCount":0,
+              "couponCount":0,
+              "createDate":"2018-08-13",
+              "submitTime":"2018-08-13 11:12:35"
+            }
+          ],
+          "totalOrderCount":370
+        },
+        "msg":"成功"
+      }
+    )
+  },
+  'GET /check/fault/getMachineUserList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "name": "wang",
+          "id": "980b257b09e243cda221eac56e6e8c40"
+        },
+        {
+          "name": "3224",
+          "id": "529e98dd96a94e6f906913a6419a9f70"
+        },
+        {
+          "name": "111111111",
+          "id": "71846dd7e11a4b1db79249dce8ce34a5"
+        },
+        {
+          "name": "3453453",
+          "id": "e1d3b999a2e94bedb7a91f4399a4ce71"
+        },
+        {
+          "name": "admin",
+          "id": "8844e91ae2684028acb5c55709783cdb"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /check/fault/save': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /check/fault/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
     })
   }
 };
