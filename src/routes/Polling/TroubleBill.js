@@ -681,7 +681,7 @@ export default class troubleBill extends PureComponent {
   updateCheckStatus = (id, flag) => {
     let status = 0
     if (flag === 'close') {
-      status = 5
+      status = 3
     } else {
       status = 4
     }
