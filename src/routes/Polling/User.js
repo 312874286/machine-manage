@@ -123,8 +123,8 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="负责区域">
             {getFieldDecorator('area', {
-              rules: [{ required: true, type: 'array', message: '请选择负责区域' }, {
-                validator: verifyString,
+              rules: [{ required: false, type: 'array', message: '请选择负责区域' }, {
+                // validator: verifyString,
               }],
             })(
               <Cascader
