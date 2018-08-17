@@ -625,16 +625,16 @@ export default class user extends PureComponent {
       if (err) {
         return;
       }
-      this.setState({
-        editModalConfirmLoading: true,
-        modalData: {},
-      });
       let remark = ''
       let messageTxt = '添加'
       if (this.state.machineNum) {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
       console.log('values.area', values.area)
+      this.setState({
+        editModalConfirmLoading: true,
+        modalData: {},
+      });
       if (values.area) {
         if (values.area.length < 2 && values.area.length > 0 ) {
           message.config({
