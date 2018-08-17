@@ -635,6 +635,20 @@ export default class user extends PureComponent {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
       console.log('values.area', values.area)
+      if (values.area) {
+        if (values.area.length < 2 ) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.success('请选择完整的省市');
+          this.setState({
+            editModalConfirmLoading: false,
+          });
+          return false
+        }
+      }
       let url = 'user/saveUser';
       let params = {
         ...values,
