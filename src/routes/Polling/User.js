@@ -636,7 +636,7 @@ export default class user extends PureComponent {
       }
       console.log('values.area', values.area)
       if (values.area) {
-        if (values.area.length < 2 ) {
+        if (values.area.length < 2 && values.area.length > 0 ) {
           message.config({
             top: 100,
             duration: 2,
