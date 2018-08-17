@@ -566,7 +566,7 @@ export default class user extends PureComponent {
     } else {
       this.areaList('')
       this.setState({
-        defaultValue: undefined,
+        defaultValue: [],
       }, () => {
         this.setModalData(res);
       });
@@ -640,7 +640,7 @@ export default class user extends PureComponent {
         ...values,
         remark: remark,
         machines: this.state.machines,
-        area: values.area.length > 0 ? values.area[values.area.length - 1] : ''
+        area: values.area ? values.area[values.area.length - 1] : ''
       };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
