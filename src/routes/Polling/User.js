@@ -564,6 +564,7 @@ export default class user extends PureComponent {
         this.setModalData(res);
       });
     } else {
+      this.areaList('')
       this.setState({
         defaultValue: undefined,
       }, () => {
