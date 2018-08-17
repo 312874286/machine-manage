@@ -630,7 +630,12 @@ export default class user extends PureComponent {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
       let url = 'user/saveUser';
-      let params = { ...values, remark: remark, machines: this.state.machines, area: values.area[values.area.length - 1] };
+      let params = {
+        ...values,
+        remark: remark,
+        machines: this.state.machines,
+        area: values.area[values.area.length - 1] ? values.area[values.area.length - 1] : ''
+      };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
         messageTxt = '编辑'
@@ -639,7 +644,7 @@ export default class user extends PureComponent {
           id: this.state.modalData.id,
           remark: remark ? remark : this.state.modalData.remark,
           machines: this.state.machines,
-          area: values.area[values.area.length - 1]
+          area: values.area[values.area.length - 1] ? values.area[values.area.length - 1] : ''
         };
       }
       this.props.dispatch({
@@ -1087,34 +1092,34 @@ export default class user extends PureComponent {
       {
         title: '姓名',
         dataIndex: 'name',
-        width: '10%',
+        width: '100px',
       },
       {
         title: '手机号',
         dataIndex: 'phone',
-        width: '20%',
+        width: '150px',
       },
       {
         title: '身份证号',
         dataIndex: 'cardNo',
-        width: '20%',
+        width: '200px',
       },
       {
         title: '公司',
         dataIndex: 'enterprise',
-        width: '10%',
+        width: '100px',
       },
       {
         title: '负责区域',
         dataIndex: 'area',
-        width: '10%',
+        width: '100px',
       },
       {
         title: '负责的机器',
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
-        width: '10%',
+        width: '200px',
       },
       {
         title: '状态',
@@ -1164,7 +1169,7 @@ export default class user extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1000}
+              scrollX={1100}
               scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}
             />
           </div>
