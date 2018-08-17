@@ -564,7 +564,11 @@ export default class user extends PureComponent {
         this.setModalData(res);
       });
     } else {
-      this.setModalData(res);
+      this.setState({
+        defaultValue: undefined,
+      }, () => {
+        this.setModalData(res);
+      });
     }
 
     // 回显省市区商圈数据源
@@ -629,12 +633,13 @@ export default class user extends PureComponent {
       if (this.state.machineNum) {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
+      console.log('values.area', values.area)
       let url = 'user/saveUser';
       let params = {
         ...values,
         remark: remark,
         machines: this.state.machines,
-        area: values.area ? values.area[values.area.length - 1] : ''
+        area: values.area.length > 0 ? values.area[values.area.length - 1] : ''
       };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
@@ -644,7 +649,7 @@ export default class user extends PureComponent {
           id: this.state.modalData.id,
           remark: remark ? remark : this.state.modalData.remark,
           machines: this.state.machines,
-          area: values.area ? values.area[values.area.length - 1] : ''
+          area: values.area.length > 0 ? values.area[values.area.length - 1] : ''
         };
       }
       this.props.dispatch({
