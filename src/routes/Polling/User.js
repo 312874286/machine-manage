@@ -634,7 +634,7 @@ export default class user extends PureComponent {
         ...values,
         remark: remark,
         machines: this.state.machines,
-        area: values.area[values.area.length - 1] ? values.area[values.area.length - 1] : ''
+        area: values.area ? values.area[values.area.length - 1] : ''
       };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
@@ -644,7 +644,7 @@ export default class user extends PureComponent {
           id: this.state.modalData.id,
           remark: remark ? remark : this.state.modalData.remark,
           machines: this.state.machines,
-          area: values.area[values.area.length - 1] ? values.area[values.area.length - 1] : ''
+          area: values.area ? values.area[values.area.length - 1] : ''
         };
       }
       this.props.dispatch({
