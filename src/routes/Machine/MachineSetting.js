@@ -126,7 +126,7 @@ const CreateForm = Form.create()(
 });
 const EditPointForm = Form.create()(
   (props) => {
-    const { editPointmodalVisible, form, editPointHandleAddClick, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching } = props;
+    const { editPointmodalVisible, form, editPointHandleAddClick, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -135,7 +135,7 @@ const EditPointForm = Form.create()(
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 20 },
       },
     };
     return (
@@ -150,11 +150,14 @@ const EditPointForm = Form.create()(
         onOk={editPointHandleAddClick}
         onCancel={() => editPointHandleModalVisibleClick()}
         confirmLoading={editPointEditModalConfirmLoading}
+        width={800}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="当前点位">
-              {getFieldDecorator('localDesc')(<Input disabled />)}
+              {getFieldDecorator('localDesc')(
+                <span>{pointName}</span>
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label="新点位">
               {getFieldDecorator('locale', {
@@ -173,7 +176,19 @@ const EditPointForm = Form.create()(
                   onSelect={onSelect}
                   style={{ width: '100%' }}
                   allowClear={true}
-                >{data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)}
+                >
+                  {/*{*/}
+                  {/*data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)*/}
+                  {/*}*/}
+                  {data.map((item) => {
+                    return (
+                        <Option value={item.text} key={item.id} data-id={item.id}>
+                          <a title={item.text}>
+                            {item.text}
+                          </a>
+                        </Option>
+                    );
+                  })}
                 </Select>
               )}
             </FormItem>
@@ -348,6 +363,7 @@ const WatchForm = Form.create()(
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
               <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
               <span>
+              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
               <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
               <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
             </span>
@@ -505,6 +521,7 @@ export default class machineSettingList extends PureComponent {
 
     options: [],
     code: '',
+    pointName: ''
   };
   constructor(props) {
     super(props);
@@ -631,15 +648,21 @@ export default class machineSettingList extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
-      this.pointForm.setFieldsValue({
-        localDesc: data.localDesc,
-        locale: undefined,
-      });
+      this.setState({
+        pointName: data.localDesc
+      })
+      // this.pointForm.setFieldsValue({
+      //   localDesc: data.localDesc,
+      //   locale: undefined,
+      // });
     } else {
-      this.pointForm.setFieldsValue({
-        localDesc: undefined,
-        locale: undefined,
-      });
+      // this.pointForm.setFieldsValue({
+      //   localDesc: undefined,
+      //   locale: undefined,
+      // });
+      this.setState({
+        pointName: ''
+      })
     }
   }
   // 新增modal确认事件 开始
@@ -724,8 +747,8 @@ export default class machineSettingList extends PureComponent {
         const list = [];
         result.forEach((r) => {
           list.push({
-            value: r.areaName + r.mall + r.name + r.id,
-            text: r.areaName + r.mall + r.name + r.id,
+            value: r.areaName,
+            text: r.areaName,
             id: r.id,
           });
         });
@@ -739,6 +762,7 @@ export default class machineSettingList extends PureComponent {
     }
   }
   handleChange = (value) => {
+    console.log('value', value)
     this.setState({
       pointPageNo: 1,
       data: [],
@@ -1472,6 +1496,7 @@ export default class machineSettingList extends PureComponent {
           onSearch={this.getPointSettingList}
           fetching={this.state.fetching}
           // value={this.state.value}
+          pointName={this.state.pointName}
         />
         <Modal
           title={

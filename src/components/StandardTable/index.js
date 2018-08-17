@@ -40,7 +40,7 @@ class StandardTable extends PureComponent {
   }
 
   handleTableChange = (pagination, filters, sorter) => {
-    console.log('change', pagination, filters, sorter)
+    // console.log('change', pagination, filters, sorter)
     this.props.onChange(pagination, filters, sorter);
   }
 

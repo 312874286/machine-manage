@@ -27,7 +27,7 @@ export async function deleteChannelMachineSetting({ params }) {
 }
 
 export async function getPointSettingList({ restParams }) {
-  return fetch.get(api.getPointSettingList, {
+  return fetch.get(api.getPointSettingLists, {
     restParams,
   });
 }

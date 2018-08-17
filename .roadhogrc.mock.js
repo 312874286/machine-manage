@@ -3348,6 +3348,59 @@ const proxy = {
       "data": null,
       "msg": "成功"
     })
+  },
+  'GET /machine/locale/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "inno72Locale": {
+        "id": null,
+        "province": null,
+        "city": null,
+        "district": null,
+        "circle": null,
+        "mail": null,
+        "manager": null,
+        "mobile": null,
+        "state": null,
+        "remark": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null
+      },
+      "data": [{
+        "id": "0667732a80694a71ba021b7282337451",
+        "province": "1",
+        "city": "1",
+        "district": "1",
+        "circle": null,
+        "mail": "奥特莱是",
+        "manager": "王小二",
+        "mobile": "15688886666",
+        "state": 0,
+        "remark": "\b欢迎光临",
+        "createId": "",
+        "createTime": "2018-07-03 11:39:28",
+        "updateId": "",
+        "updateTime": "2018-07-03 11:39:28"
+      }, {
+        "id": "1",
+        "province": "1",
+        "city": "1",
+        "district": "1",
+        "circle": "朝阳大悦城",
+        "mail": "奥特莱是",
+        "manager": "王小二",
+        "mobile": "15688886666",
+        "state": 0,
+        "remark": "\b欢迎光临",
+        "createId": "",
+        "createTime": "2018-07-03 11:40:42",
+        "updateId": "",
+        "updateTime": "2018-07-03 11:40:42"
+      }]
+    })
   }
 };
 

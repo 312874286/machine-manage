@@ -17,6 +17,7 @@ const api = map({
   cutApp: '/machine/machine/cutApp?machineId={machineId}&appPackageName={appPackageName}',
   installApp: '/machine/machine/installApp?machineId={machineId}&appPackageName={appPackageName}&url={url}&versionCode={versionCode}',
   machineUpdateInfo: '/machine/machine/updateInfo',
+  getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}'
 });
 
 export default api;
