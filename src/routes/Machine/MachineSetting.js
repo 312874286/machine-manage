@@ -982,6 +982,14 @@ export default class machineSettingList extends PureComponent {
   };
   appUpdate = (updateStatus) => {
     // console.log('点击了更新app', this.state.modalData, updateStatus);
+    let updateStatusText = ''
+    if (updateStatus === 1) {
+      updateStatusText = '刷新'
+    } else if (updateStatus === 2) {
+      updateStatusText = '更新'
+    } else {
+      updateStatusText = '截屏'
+    }
     this.props.dispatch({
       type: 'machineSetting/machineUpdateInfo',
       payload: {
@@ -997,7 +1005,7 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.success('截屏成功');
+        message.success(updateStatusText + '成功');
       }
     });
   }
