@@ -353,7 +353,7 @@ const WatchForm = Form.create()(
       width: '75%',
       render (text, render) {
         return (
-          <a href={render.imgUrl} target='_blank'>{`${domain.url}${render.imgUrl}`}</a>
+          <a href={`${domain.url}${render.imgUrl}`} target='_blank'>{`${domain.url}${render.imgUrl}`}</a>
         )
       }
     }, {
