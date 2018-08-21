@@ -363,6 +363,7 @@ const WatchForm = Form.create()(
       width: '22%',
     }];
     let machineDetailData = machineDetail.imgs ? (machineDetail.imgs.length > 0 ? machineDetail.imgs.splice(0, 10) : '') : ''
+    console.log('machineDetailData', machineDetailData)
     return (
       <Modal
         title={
@@ -487,7 +488,7 @@ const WatchForm = Form.create()(
               </Col>
             </Row>
           </div>
-          <Table columns={machineColumns} dataSource={machineDetailData} rowKey={record => record.id} pagination={false} />
+          <Table columns={machineColumns} dataSource={machineDetail.machineDetailData} rowKey={record => record.id} pagination={false} />
         </div>
       </Modal>
     );
