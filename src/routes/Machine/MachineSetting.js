@@ -486,7 +486,7 @@ const WatchForm = Form.create()(
               </Col>
             </Row>
           </div>
-          <Table columns={machineColumns} dataSource={machineDetail.imgs} rowKey={record => record.id} pagination={false} />
+          <Table columns={machineColumns} dataSource={machineDetail.imgs.slice(0, 10)} rowKey={record => record.id} pagination={false} />
         </div>
       </Modal>
     );
