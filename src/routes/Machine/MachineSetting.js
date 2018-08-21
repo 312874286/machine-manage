@@ -362,8 +362,7 @@ const WatchForm = Form.create()(
       align: 'left',
       width: '22%',
     }];
-    let machineDetailData = machineDetail.imgs ? (machineDetail.imgs.length > 0 ? machineDetail.imgs.splice(0, 10) : '') : ''
-    console.log('machineDetailData', machineDetailData)
+    // let machineDetailData = machineDetail.status ? (machineDetail.status.length > 0 ? machineDetail.status.splice(0, 10) : '') : ''
     return (
       <Modal
         title={
@@ -493,6 +492,48 @@ const WatchForm = Form.create()(
       </Modal>
     );
   });
+const EditMachineCodeForm = Form.create()(
+  (props) => {
+    const { editMachineCodemodalVisible, form,
+      editMachineCodeHandleAddClick, editMachineCodeHandleModalVisibleClick,
+      editMachineCodeEditModalConfirmLoading,} = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">修改编号</span>
+          </div>
+        }
+        visible={editMachineCodemodalVisible}
+        onOk={editMachineCodeHandleAddClick}
+        onCancel={() => editMachineCodeHandleModalVisibleClick()}
+        confirmLoading={editMachineCodeEditModalConfirmLoading}
+        width={800}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="机器编号">
+              {getFieldDecorator('machineCode', {
+                rules: [{ required: true, whitespace: true, message: '请填写机器编号' }],
+              })(<Input placeholder="请填写机器编号" />)}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
   machineSetting,
@@ -542,7 +583,9 @@ export default class machineSettingList extends PureComponent {
 
     options: [],
     code: '',
-    pointName: ''
+    pointName: '',
+    editMachineCodemodalVisible: false,
+    editMachineCodeEditModalConfirmLoading: false
   };
   constructor(props) {
     super(props);
@@ -856,6 +899,71 @@ export default class machineSettingList extends PureComponent {
     }
   }
   // 修改点位结束
+  // 修改机器code开始
+  // MachineCode
+  handleNoClick = (item) => {
+    this.setState({
+      modalVisible: false,
+      modalData: item,
+      editMachineCodemodalVisible: true,
+    }, () => {
+      this.MachineCodeForm.setFieldsValue({
+        machineCode: item.machineCode,
+      });
+    });
+  }
+  saveMachineCodeFormRef = (form) => {
+    this.MachineCodeForm = form;
+  }
+  editMachineCodeHandleAddClick = () => {
+    // 确认修ga编码
+    // console.log(this.state.dataId)
+    this.MachineCodeForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        editMachineCodeEditModalConfirmLoading: true,
+      });
+      let url = '';
+      let params = '';
+      console.log('modalData', this.state.modalData)
+      if (this.state.modalData.id) {
+        url = 'machineSetting/updateMachineCode';
+        params = { ...values, machineId: this.state.modalData.id};
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then((data) => {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.info(data.data)
+        this.getLists();
+        this.setState({
+          editMachineCodeEditModalConfirmLoading: false,
+          modalVisible: false,
+          modalData: {},
+          dataId: '',
+          data: [],
+          editPointmodalVisible: false,
+          ManageAppmodalVisible: false,
+          ManageAislemodalVisible: false,
+        });
+      });
+    });
+  }
+  editMachineCodeHandleModalVisibleClick = (flag) => {
+    this.setState({
+      editMachineCodemodalVisible: !!flag,
+    });
+  };
+  // 修改机器code结束
   // 管理App开始
   handleClose = () => {
     this.setState({
@@ -1252,7 +1360,7 @@ export default class machineSettingList extends PureComponent {
     });
   }
   getMachineStatus = (item) => {
-    // console.log('machineId', item.id);
+    console.log('machineId', item.id);
     // getMachineStatus
     this.setState({
       modalData: item,
@@ -1266,7 +1374,7 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((result) => {
-        // console.log(result)
+        console.log('result', result)
         this.setState({
           machineDetail: result.data,
         }, () => {
@@ -1445,6 +1553,8 @@ export default class machineSettingList extends PureComponent {
             <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
             <Divider type="vertical" />
             <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleNoClick(item)}>修改编号</a>
           </Fragment>
         ),
       },
@@ -1526,6 +1636,13 @@ export default class machineSettingList extends PureComponent {
           fetching={this.state.fetching}
           // value={this.state.value}
           pointName={this.state.pointName}
+        />
+        <EditMachineCodeForm
+          ref={this.saveMachineCodeFormRef}
+          editMachineCodemodalVisible={this.state.editMachineCodemodalVisible}
+          editMachineCodeHandleAddClick={this.editMachineCodeHandleAddClick}
+          editMachineCodeHandleModalVisibleClick={this.editMachineCodeHandleModalVisibleClick}
+          editMachineCodeEditModalConfirmLoading={this.state.editMachineCodeEditModalConfirmLoading}
         />
         <Modal
           title={
