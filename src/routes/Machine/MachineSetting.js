@@ -1529,7 +1529,7 @@ export default class machineSettingList extends PureComponent {
       {
         fixed: 'right',
         title: '操作',
-        width: 240,
+        width: 180,
         render: (text, item) => (
           // (item.localDesc) ? (
           //   <Fragment>
