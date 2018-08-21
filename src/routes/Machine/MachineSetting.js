@@ -984,9 +984,9 @@ export default class machineSettingList extends PureComponent {
     // console.log('点击了更新app', this.state.modalData, updateStatus);
     let updateStatusText = ''
     if (updateStatus === 1) {
-      updateStatusText = '刷新'
-    } else if (updateStatus === 2) {
       updateStatusText = '更新'
+    } else if (updateStatus === 2) {
+      updateStatusText = '刷新'
     } else {
       updateStatusText = '截屏'
     }
