@@ -997,7 +997,7 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.success('更新成功');
+        message.success('截屏成功');
       }
     });
   }
