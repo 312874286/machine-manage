@@ -33,6 +33,8 @@ import styles from './MachineSetting.less';
 import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
+import domain from "../../common/config/domain"
+
 
 
 const FormItem = Form.Item;
@@ -344,6 +346,22 @@ const WatchForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const machineColumns = [{
+      title: '图片地址',
+      dataIndex: 'imgUrl',
+      align: 'left',
+      width: '80%',
+      render (text, render) {
+        return (
+          <a href={render.imgUrl} target='_blank'>{`${domain}${render.imgUrl}`}</a>
+        )
+      }
+    }, {
+      title: '截屏时间',
+      dataIndex: 'createTime',
+      align: 'left',
+      width: '20%',
+    }];
     return (
       <Modal
         title={
@@ -468,6 +486,7 @@ const WatchForm = Form.create()(
               </Col>
             </Row>
           </div>
+          <Table columns={machineColumns} dataSource={machineDetail.img} rowKey={record => record.id} pagination={false} />
         </div>
       </Modal>
     );
@@ -1343,10 +1362,10 @@ export default class machineSettingList extends PureComponent {
         width: '10%',
         dataIndex: 'netStatus',
         render(val) {
-          if (val === 1) {
-            return <Icon type="wifi" />;
-          } else {
-            return '网络异常';
+          if (val !== null) {
+            return <div className={styles.netStatusStyles}>
+              <img src={require(`../../assets/images/signalIcon/sign${val}.png`)}/>
+            </div>;
           }
         },
       },
