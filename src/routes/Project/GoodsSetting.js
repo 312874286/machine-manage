@@ -39,7 +39,7 @@ const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
-      handleChange, handleCancel, normFile, onSelect, shopsLists } = props;
+      handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList, videoUrl, bannerHandleChange, handleUploadBanner } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -82,14 +82,14 @@ const CreateForm = Form.create()(
               rules: [{ required: true, whitespace: true, message: '请输入商品名称' }],
             })(<Input placeholder="请输入商品名称" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="图片缩略图">
+          <FormItem {...formItemLayout} label="商品图片">
             {getFieldDecorator('img', {
               rules: [{ required: false, message: '请传照片' }],
               valuePropName: 'filelist',
             })(
               <div className="clearfix">
                 <Upload
-                  customRequest={(params) => { handleUpload(params, 2); }}
+                  customRequest={(params) => { handleUpload(params, 2, 'fileList'); }}
                   listType="picture-card"
                   fileList={fileList}
                   onPreview={handlePreview}
@@ -104,11 +104,48 @@ const CreateForm = Form.create()(
               </div>
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="商品banner">
+            {getFieldDecorator('banner', {
+              rules: [{ required: false, message: '请传照片' }],
+              valuePropName: 'filelist',
+            })(
+              <div className="clearfix">
+                  <Upload
+                    customRequest={(params) => { handleUploadBanner(params, 2, 'bannerfileList'); }}
+                    listType="picture-card"
+                    fileList={bannerfileList}
+                    onPreview={handlePreview}
+                    onChange={bannerHandleChange}
+                    accept="image/*, video/*"
+                  >
+                    {bannerfileList.length > 1 ? null : uploadButton}
+                  </Upload>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                    <video id="videos" controls="controls"
+                           style={{ objectFit: 'fill', display:  bannerfileList.length > 0 ? '' : 'none'}}
+                           playsinline=""
+                           webkit-playsinline=""
+                           x5-video-player-fullscreen="true"
+                           x5-video-player-type="h5"
+                           x5-video-orientation="portraint">
+                      <source src={videoUrl} type="video/mp4"/>
+                      Your browser does not support the Video tag.
+                    </video>
+                    <img alt="example" style={{ width: '100%', display:  bannerfileList.length > 0 ? '' : 'none'}} src={previewImage} />
+                  </Modal>
+                </div>
+                )}
+          </FormItem>
           <FormItem {...formItemLayout} label="商品价格">
             {getFieldDecorator('price', {
               rules: [{ required: false, message: '请输入商品价格' }],
             })(<InputNumber placeholder="请输入商品价格" />)}
           </FormItem>
+            <FormItem {...formItemLayout} label="商品数量">
+              {getFieldDecorator('number', {
+                rules: [{ required: true, message: '请输入商品数量' }],
+              })(<InputNumber placeholder="请输入商品数量" />)}
+            </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
             {getFieldDecorator('sellerId', {
               rules: [{ required: true, message: '请选择商户' }],
@@ -172,6 +209,8 @@ export default class goodsSettingList extends PureComponent {
     previewVisible: false,
     previewImage: '',
     fileList: [],
+    bannerfileList: [],
+    videoUrl: ''
   };
   componentDidMount() {
     this.getLists();
@@ -226,18 +265,18 @@ export default class goodsSettingList extends PureComponent {
     });
   }
 
-  handleChange = (info) => {
-    console.log('222222')
-    let fileList = info.fileList;
-    fileList = fileList.slice(-1);
-    fileList = fileList.map((file) => {
-      if (file.response) {
-        file.url = file.response.url;
-      }
-      return file;
-    });
-  }
-  handleUpload = ({ file, onError, onSuccess }, fileType) => {
+  // handleChange = (info) => {
+  //   console.log('222222')
+  //   let fileList = info.fileList;
+  //   fileList = fileList.slice(-1);
+  //   fileList = fileList.map((file) => {
+  //     if (file.response) {
+  //       file.url = file.response.url;
+  //     }
+  //     return file;
+  //   });
+  // }
+  handleUpload = ({ file, onError, onSuccess }, fileType, flag) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'common/upload',
@@ -248,15 +287,67 @@ export default class goodsSettingList extends PureComponent {
     }).then((resp) => {
       if (resp && resp.code === 0) {
         // console.log('resp', resp)
-        this.setState({
-          fileList: [{
+        if (resp.data.indexOf('png') > 0 || resp.data.indexOf('jpg') > 0 || resp.data.indexOf('jpeg') > 0 || resp.data.indexOf('png') > 0) {
+          let fList = [{
             uid: -2,
             name: 'xxx.png',
             status: 'done',
             url: domain.url + resp.data,
             data: resp.data,
-          }],
-        });
+          }]
+          if (flag === 'fileList') {
+            this.setState({
+              fileList: fList,
+            });
+          }
+          if (flag === 'bannerfileList') {
+            console.log('flag', flag)
+            this.setState({
+              bannerfileList: fList,
+            });
+          }
+        } else {
+          this.setState({
+            videoUrl: domain.url + resp.data,
+          })
+        }
+        onSuccess(resp, file);
+        message.success('上传成功');
+      }
+    }).catch((e) => {
+      onError(e);
+    }).finally(() => {
+    });
+  }
+  handleUploadBanner = ({ file, onError, onSuccess }, fileType, flag) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'common/upload',
+      payload: {
+        params: { file },
+        restParams: { fileType, type: 'goods'  },
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        // console.log('resp', resp)
+        if (resp.data.indexOf('png') > 0 || resp.data.indexOf('jpg') > 0 || resp.data.indexOf('jpeg') > 0 || resp.data.indexOf('png') > 0) {
+          let fList = [{
+            uid: -2,
+            name: 'xxx.png',
+            status: 'done',
+            url: domain.url + resp.data,
+            data: resp.data,
+          }]
+          this.setState({
+            bannerfileList: fList,
+            videoUrl: ''
+          });
+        } else {
+          this.setState({
+            videoUrl: domain.url + resp.data,
+            bannerfileList: []
+          })
+        }
         onSuccess(resp, file);
         message.success('上传成功');
       }
@@ -425,6 +516,19 @@ export default class goodsSettingList extends PureComponent {
     //   });
     // }
     if (data) {
+      let flist, videoUrl
+      if (data.banner) {
+        if (data.banner.indexOf('png') > 0 || data.banner.indexOf('jpg') > 0 || data.banner.indexOf('jpeg') > 0 || data.banner.indexOf('png') > 0) {
+          flist = [{
+            uid: -3,
+            name: 'xxx.png',
+            status: 'done',
+            url: data.banner,
+          }]
+        } else {
+          videoUrl = data.banner
+        }
+      }
       this.setState({
         fileList: [{
           uid: -1,
@@ -432,6 +536,8 @@ export default class goodsSettingList extends PureComponent {
           status: 'done',
           url: data.img,
         }],
+        bannerfileList: flist,
+        videoUrl,
       });
       this.form.setFieldsValue({
         name: data.name || '',
@@ -445,6 +551,8 @@ export default class goodsSettingList extends PureComponent {
     } else {
       this.setState({
         fileList: [],
+        bannerfileList: [],
+        videoUrl: ''
       });
       this.form.setFieldsValue({
         name: undefined,
@@ -483,6 +591,12 @@ export default class goodsSettingList extends PureComponent {
       }
       if (this.state.fileList.length > 0) {
         params = { ...params, img: this.state.fileList[0].data };
+      }
+      if (this.state.bannerfileList.length > 0) {
+        params = { ...params, banner: this.state.bannerfileList[0].data };
+      }
+      if (this.state.videoUrl) {
+        params = { ...params, banner: this.state.videoUrl };
       }
       this.props.dispatch({
         type: url,
@@ -608,6 +722,7 @@ export default class goodsSettingList extends PureComponent {
   }
 
   handleChange = ({ fileList }) => this.setState({ fileList })
+  bannerHandleChange = ({ fileList }) => this.setState({ bannerfileList: fileList })
   render() {
     const { goodsSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = this.state;
@@ -615,12 +730,12 @@ export default class goodsSettingList extends PureComponent {
     const columns = [
       {
         title: '淘宝商品ID',
-        width: '15%',
+        width: '10%',
         dataIndex: 'code',
       },
       {
         title: '商品名称',
-        width: '15%',
+        width: '10%',
         dataIndex: 'name',
       },
       {
@@ -633,18 +748,6 @@ export default class goodsSettingList extends PureComponent {
         width: '15%',
         dataIndex: 'shopId',
       },
-      // {
-      //   title: '图片缩略图',
-      //   width: 150,
-      //   dataIndex: 'img',
-      //   render(val) {
-      //     return (
-      //       <a target="_blank" href={val}>
-      //         <img src={val}  style={{ width: '80px' }} />
-      //       </a>
-      //     );
-      //   },
-      // },
       {
         title: '图片缩略图',
         width: 150,
@@ -669,7 +772,7 @@ export default class goodsSettingList extends PureComponent {
               </Modal>
             </div>
           ) : (
-            <div></div>
+            null
           )
 
         )
@@ -678,6 +781,11 @@ export default class goodsSettingList extends PureComponent {
         title: '商品价格',
         width: '10%',
         dataIndex: 'price',
+      },
+      {
+        title: '商品数量',
+        width: '10%',
+        dataIndex: 'number',
       },
       {
         title: '备注',
@@ -733,7 +841,7 @@ export default class goodsSettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1100}
+                scrollX={1200}
               />
             </div>
           </Card>
@@ -754,6 +862,10 @@ export default class goodsSettingList extends PureComponent {
             handleUpload={this.handleUpload}
             normFile={this.normFile}
             onSelect={this.onSelect}
+            bannerfileList={this.state.bannerfileList}
+            videoUrl={this.state.videoUrl}
+            bannerHandleChange={this.bannerHandleChange}
+            handleUploadBanner={this.handleUploadBanner}
           />
           <LogModal
             data={logList}
