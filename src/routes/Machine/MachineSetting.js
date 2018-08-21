@@ -350,7 +350,7 @@ const WatchForm = Form.create()(
       title: '图片地址',
       dataIndex: 'imgUrl',
       align: 'left',
-      width: '75%',
+      width: '78%',
       render (text, render) {
         return (
           <a href={`${domain.url}${render.imgUrl}`} target='_blank'>{`${domain.url}${render.imgUrl}`}</a>
@@ -360,7 +360,7 @@ const WatchForm = Form.create()(
       title: '截屏时间',
       dataIndex: 'createTime',
       align: 'left',
-      width: '25%',
+      width: '22%',
     }];
     return (
       <Modal
