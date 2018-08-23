@@ -1,5 +1,4 @@
 import { getScheduleSettingList, saveScheduleSetting, getScheduleSettingDetail, editScheduleSetting, delScheduleSetting, getActivityList, getGameList, selectAreaMachines, getPlanMachineDetailList, getGoodsList, getActivityShops } from '../../services/project/scheduleSetting';
-import {selectMachine} from "../../services/polling/personnelManagement";
 
 export default {
   namespace: 'scheduleSetting',
@@ -103,7 +102,7 @@ export default {
       // }
       // console.log('arr', arr)
       // return arr;
-      const response = yield call(selectMachine, { params });
+      const response = yield call(selectAreaMachines, { params });
       const { code, data } = response;
       if (code !== 0) return;
       const arr = [];
