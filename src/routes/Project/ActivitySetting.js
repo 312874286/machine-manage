@@ -16,7 +16,9 @@ import {
   Badge,
   Spin,
   Radio,
-  message
+  message,
+  Alert,
+  Table
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -26,7 +28,7 @@ import moment from "moment/moment";
 
 // const status = ['全部','未开始', '进行中', '已结束'];
 const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }, { id: 4, name: '未排期' }];
-
+const activityType = [{id: 0, name: '互动活动'}, {id: 1, name: '派样活动'}]
 // const statusMap = [100100, 100200, 100300];
 // const prizeTypeStatus = ['商品', '优惠券', '商品+优惠券'];
 
@@ -45,18 +47,85 @@ const RadioGroup = Radio.Group;
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, onSelect } = props;
+    const {
+      modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading,
+      modalType, merchantLists, shopsLists, onSelect,
+      addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll,
+      onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 4 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 20 },
       },
     };
+    this.columns = [{
+      title: '名称',
+      dataIndex: 'shopName',
+      render: text => <a href="javascript:;">{text}</a>,
+    }];
+    const columns = this.columns.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: handleSave,
+        }),
+      };
+    });
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: onChangeRowSelection,
+      onSelect: onLeftSelect,
+      onSelectAll: onSelectAll,
+    };
+    this.columnsRight = [{
+      title: '名称',
+      dataIndex: 'shopName',
+      render: text => <a href="javascript:;">{text}</a>,
+    }, {
+      title: '操作',
+      width: 70,
+      dataIndex: 'operation',
+      render: (text, record) => {
+        return (
+          targetData.length > 0
+            ? (
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
+            ) : null
+        );
+      }
+    }];
+    const columnsRight = this.columnsRight.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: targetHandleSave,
+        }),
+      };
+    });
+
     return (
       <Modal
         title={
@@ -64,11 +133,12 @@ const CreateForm = Form.create()(
             <span class="leftSpan"></span>
             <span class="modalTitle">{modalType === 'edit' ? '编辑活动' : (modalType === 'add' ? '新建活动' : '查看活动')}</span>
           </div>
-        }
+        }handleAdd
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
+        width={800}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
@@ -92,49 +162,130 @@ const CreateForm = Form.create()(
               rules: [{ required: true, whitespace: true, message: '请输入活动编码' }],
             })(<Input placeholder="请输入活动编码" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择商户">
-            {getFieldDecorator('sellerId', {
-              rules: [{ required: true, message: '请选择商户' }],
-            })((modalType === 'edit') ? (
-              <Select placeholder="请选择" disabled>
-                {merchantLists.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id}>{item.merchantName}</Option>
-                  );
-                })}
-              </Select>
-              ) : (
-                <Select placeholder="请选择" onSelect={onSelect}>
-                {merchantLists.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id}>{item.merchantName}</Option>
-                  );
-                })}
-                </Select>
-            ))}
-          </FormItem>
-          <FormItem {...formItemLayout} label="选择店铺">
-            {getFieldDecorator('shopId', {
-              rules: [{ required: true, message: '请选择店铺' }],
-            })((modalType === 'edit') ? (
-                <Select placeholder="请选择" disabled>
-                  {shopsLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.shopName}</Option>
-                    );
-                  })}
-                </Select>
-              ) : (
+          <FormItem {...formItemLayout} label="活动类型">
+            {getFieldDecorator('type', {
+              rules: [{ required: true, message: '请选择活动类型' }],
+            })(
               <Select placeholder="请选择">
-                {shopsLists.map((item) => {
+                {activityType.map((item) => {
                   return (
-                    <Option value={item.id} key={item.id}>{item.shopName}</Option>
+                    <Option value={item.id} key={item.id}>{item.name}</Option>
                   );
                 })}
               </Select>
-              )
-              )}
+            )}
           </FormItem>
+          {/*<FormItem {...formItemLayout} label="选择商户">*/}
+            {/*{getFieldDecorator('sellerId', {*/}
+              {/*rules: [{ required: true, message: '请选择商户' }],*/}
+            {/*})((modalType === 'edit') ? (*/}
+              {/*<Select placeholder="请选择" disabled>*/}
+                {/*{merchantLists.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option value={item.id} key={item.id}>{item.merchantName}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>*/}
+              {/*) : (*/}
+                {/*<Select placeholder="请选择" onSelect={onSelect}>*/}
+                {/*{merchantLists.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option value={item.id} key={item.id}>{item.merchantName}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+                {/*</Select>*/}
+            {/*))}*/}
+          {/*</FormItem>*/}
+            <div className="manageAppBox">
+                <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+                  <Col md={10} sm={24}>
+                    <FormItem>
+                      {getFieldDecorator('sellerId')(
+                        <Select placeholder="请选择" onSelect={onSelect}>
+                          {merchantLists.map((item) => {
+                            return (
+                              <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                            );
+                          })}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+                  </Col>
+                </Row>
+                <FormItem {...formItemLayout}>
+                  {getFieldDecorator('machine')(
+                    <div style={{ display: 'flex' }}>
+                      <div>
+                        <Alert
+                          message={(
+                            <div>
+                              已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys ? selectedRowKeys.length : 0}/{sourceData ? sourceData.length : 0} </a> 项
+                            </div>
+                          )}
+                          type="info"
+                          showIcon
+                        />
+                        <Table
+                          rowKey={record => record.id}
+                          rowSelection={rowSelection}
+                          columns={columns}
+                          dataSource={sourceData}
+                          id="leftTable"
+                          style={{ width: '350px', marginBottom: '20px', marginTop: '10px' }}
+                          scroll={{ y: 200 }}
+                          pagination={false}
+                        />
+                        <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
+                          添加
+                        </Button>
+                      </div>
+                      <div style={{ marginLeft: '20px' }}>
+                        <Alert
+                          message={(
+                            <div>
+                              已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                            </div>
+                          )}
+                          type="success"
+                          showIcon
+                        />
+                        <Table
+                          rowKey={record => record.id}
+                          columns={columnsRight}
+                          dataSource={targetData}
+                          id="rightTable"
+                          style={{ width: '350px', marginTop: '10px' }}
+                          scroll={{ y: 200 }}
+                          pagination={false}/>
+                      </div>
+                    </div>
+                  )}
+                </FormItem>
+            </div>
+          {/*<FormItem {...formItemLayout} label="选择店铺">*/}
+            {/*{getFieldDecorator('shopId', {*/}
+              {/*rules: [{ required: true, message: '请选择店铺' }],*/}
+            {/*})((modalType === 'edit') ? (*/}
+                {/*<Select placeholder="请选择" disabled>*/}
+                  {/*{shopsLists.map((item) => {*/}
+                    {/*return (*/}
+                      {/*<Option value={item.id} key={item.id}>{item.shopName}</Option>*/}
+                    {/*);*/}
+                  {/*})}*/}
+                {/*</Select>*/}
+              {/*) : (*/}
+              {/*<Select placeholder="请选择">*/}
+                {/*{shopsLists.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option value={item.id} key={item.id}>{item.shopName}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>*/}
+              {/*)*/}
+              {/*)}*/}
+          {/*</FormItem>*/}
           {/*<FormItem {...formItemLayout} label="选择时间">*/}
             {/*{getFieldDecorator('rangeTime', {*/}
               {/*rules: [{ type: 'array', required: true, message: '请选择时间' }],*/}
@@ -294,6 +445,17 @@ export default class activitySettingList extends PureComponent {
     pointPageNo: 1,
     fetching: false,
     gameLists: [],
+
+    targetData: [],
+    sourceData: [],
+    sourceKey: [],
+    targetKey: [],
+    selectAll: false,
+    selectedRows: [],
+    // code: '',
+    repeat: [],
+    // level: 1,
+    selectedRowKeys: [],
   };
 // {/*<Select*/}
 // {/*// mode="multiple"*/}
@@ -417,7 +579,7 @@ export default class activitySettingList extends PureComponent {
     // console.log('value', value, option)
     // shopsLists
     this.props.dispatch({
-      type: 'activitySetting/getShopsList',
+      type: 'activitySetting/getMerchantShops',
       payload: {
         restParams: {
           sellerId: value,
@@ -425,7 +587,7 @@ export default class activitySettingList extends PureComponent {
       },
     }).then((res) => {
       this.setState({
-        shopsLists: res,
+        sourceData: res,
       });
     });
   }
@@ -566,6 +728,7 @@ export default class activitySettingList extends PureComponent {
       let params = {
         ...fieldsValue,
         isDefault: 0,
+        shops: this.state.targetData
         // rangeTime: undefined,
         // createTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm:ss'),
         // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm:ss'),
@@ -796,7 +959,6 @@ export default class activitySettingList extends PureComponent {
       logModalVisible: false,
     });
   }
-
   logModalhandleTableChange = (pagination) => {
     const { current } = pagination;
     this.setState({
@@ -846,6 +1008,139 @@ export default class activitySettingList extends PureComponent {
       </Form>
     );
   }
+  // 回显数据源开始
+  addData = async () => {
+    const selectedRows = this.state.selectedRows
+    for (let a of selectedRows) {
+      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.id)
+      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
+      await this.handleDelete(a.id)
+    }
+    // console.log(this.state.repeat)
+    if (this.state.repeat.length > 0) {
+      Modal.warning({
+        title: '以下店铺和已选店铺重复',
+        content: this.state.repeat.join('\n') + '',
+      });
+    }
+    this.setState({
+      selectAll: false
+    })
+  }
+  unique = (arr) => {
+    let targetData = []
+    let repeat = []
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i]
+      if (!(item['id'] in targetData)) {
+        targetData[item['id']] = item;
+      } else {
+        // ...this.state.repeat,
+        repeat = [item.shopName]
+      }
+    }
+    this.setState({
+      repeat,
+    })
+    return Object.values(targetData)
+  }
+  handleSave = (row) => {
+    const newData = [...this.state.sourceData];
+    const index = newData.findIndex(item => row.id === item.id);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    console.log('newDatahandleSave', newData)
+    this.setState({ sourceData: newData });
+  }
+  handleDelete = (key) => {
+    const dataSource = [...this.state.sourceData];
+    this.setState({ sourceData: dataSource.filter(item => item.id !== key) });
+    let targetData = [...this.state.targetData, ...dataSource.filter(item => item.id === key)]
+    console.log('targetData', targetData)
+    targetData = this.unique(targetData)
+    this.setState({ targetData });
+  }
+  targetHandleSave = (row) => {
+    const newData = [...this.state.targetData];
+    const index = newData.findIndex(item => row.id === item.id);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    this.setState({ targetData: newData });
+  }
+  targetHandleDelete = (key) => {
+    // console.log('key', key)
+    const dataSource = [...this.state.targetData];
+    this.setState({ targetData: dataSource.filter(item => item.id !== key) });
+  }
+  onChangeRowSelection = (selectedRowKeys, selectedRows) => {
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    this.setState({
+      sourceKey: selectedRowKeys,
+      selectedRowKeys,
+    })
+  }
+  onSelectAll = (selected, selectedRows, changeRows) => {
+    this.setState({
+      selectedRows,
+      selectAll: selected
+    })
+    console.log(selected, selectedRows, changeRows);
+  }
+  onLeftSelect = (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+    this.setState({
+      selectedRows,
+      selectAll: true
+    })
+  }
+  // 回显数据源结束
+  // 选择机器控件
+  findSourceData = () => {
+    this.selectMachineform.validateFields((err, fieldsValue) => {
+      if (err) return;
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+        }
+      }
+      // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
+      if (!localCode) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.error('请选择一个地区')
+        return;
+      }
+      this.getAreaList({code: localCode})
+    });
+  }
+  openSelectMachineModal = () => {
+    this.setState({
+      editMachineModalVisible: true,
+    }, () => {
+      this.getAreaList({level: 1});
+    });
+    this.selectMachineform.setFieldsValue({
+      provinceCityAreaTrade: undefined
+    })
+  }
+  onEditMachineHandleModalVisibleClick = () => {
+    this.setState({
+      editMachineModalVisible: false,
+    });
+  }
+  selectMachineFormRef = (form) => {
+    this.selectMachineform = form;
+  }
   render() {
     const { activitySetting: { list, page }, loading, activitySetting: { activityCountList, count }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData } = this.state;
@@ -860,15 +1155,15 @@ export default class activitySettingList extends PureComponent {
         width: '20%',
         dataIndex: 'code',
       },
+      // {
+      //   title: '所属商户',
+      //   width: '12%',
+      //   dataIndex: 'merchantName',
+      // },
       {
-        title: '所属商户',
-        width: '12%',
-        dataIndex: 'merchantName',
-      },
-      {
-        title: '所属店铺',
+        title: '活动类型',
         width: '10%',
-        dataIndex: 'shopName',
+        dataIndex: 'type',
       },
       {
         title: '商品/优惠券',
@@ -979,6 +1274,21 @@ export default class activitySettingList extends PureComponent {
           merchantLists={merchantLists}
           shopsLists={shopsLists}
           onSelect={this.onSelect}
+
+
+          addData={this.addData}
+          targetData={this.state.targetData}
+          onChangeRowSelection={this.onChangeRowSelection}
+          onSelectAll={this.onSelectAll}
+          selectedRowKeys={this.state.selectedRowKeys}
+          sourceData={this.state.sourceData}
+          handleSave={this.handleSave}
+          // handleDelete={this.handleDelete}
+          selectAll={this.state.selectAll}
+          targetHandleSave={this.targetHandleSave}
+          targetHandleDelete={this.targetHandleDelete}
+          onLeftSelect={this.onLeftSelect}
+          findSourceData={this.findSourceData}
         />
         <WatchForm
           modalData={modalData}

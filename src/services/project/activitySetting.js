@@ -3,8 +3,8 @@ import fetch from '../../utils/fetch/index';
 import api from './api';
 
 export async function saveActivitySetting({ params }) {
-  return fetch.post(api.saveActivitySetting, {
-    body: stringify(params),
+  return fetch.postJSON(api.saveActivitySetting, {
+    body: JSON.stringify(params),
   });
 }
 
@@ -33,6 +33,12 @@ export async function getMerchantsList({ restParams }) {
   });
 }
 
+export async function getMerchantShops({ restParams }) {
+  return fetch.get(api.getMerchantShops, {
+    restParams,
+  });
+}
+
 export async function getShopsList({ restParams }) {
   return fetch.get(api.getShopsList, {
     restParams,
@@ -40,8 +46,8 @@ export async function getShopsList({ restParams }) {
 }
 
 export async function editActivitySetting({ params }) {
-  return fetch.post(api.updateActivitySetting, {
-    body: stringify(params),
+  return fetch.postJSON(api.updateActivitySetting, {
+    body: JSON.stringify(params),
   });
 }
 

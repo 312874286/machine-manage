@@ -186,7 +186,7 @@ class DiscountDynamicField extends React.Component {
     for (let i = 0; i < this.state.rlist.length; i++) {
       children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
     }
-    console.log('initData2', this.props.initData)
+    // console.log('initData2', this.props.initData)
     this.columns = [{
       title: '优惠券编号',
       dataIndex: 'code',

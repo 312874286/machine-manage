@@ -1204,17 +1204,32 @@ const proxy = {
         "prePage": 1
       },
       "data": [{
-        areCode: null,
-        createId: "",
-        createTime: "2018-07-04 16:55:27",
-        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
-        isDelete: 0,
-        mall: "汉光百货",
-        manager: "王小二",
-        mobile: "15688886666",
-        remark: "欢迎光临",
-        updateId: "",
-        updateTime: "2018-07-04 16:55:27",
+        "id": "3",
+        "merchantCode": "2",
+        "merchantName": "天猫",
+        "createId": "12",
+        "updateId": null,
+        "createTime": 1530499549000,
+        "updateTime": 1530499549000,
+        "isDelete": 0
+      }]
+    });
+  },
+  'GET /project/shops/selectActivityShops': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        "id": "1",
+        "shopName": "天猫小米旗舰店",
+        "shopCode": "10000@XXXAXX",
+        "sellerId": "1",
+        "isDelete": 0,
+        "remark": null,
+        "createId": "1",
+        "createTime": "2018-07-05 10:37:23",
+        "updateId": null,
+        "updateTime": "2018-07-05 10:37:23"
       }]
     });
   },
@@ -1231,6 +1246,24 @@ const proxy = {
         sellerId: "1",
         shopCode: "10000@XXXAXX",
         shopName: "天猫小米旗舰店",
+        updateId: "",
+        updateTime: "2018-07-05 18:43:09",
+      }]
+    });
+  },
+  'GET /project/shops/selectMerchantShops': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        createId: "1",
+        createTime: "2018-07-05 18:43:09",
+        id: "1",
+        isDelete: 0,
+        remark: null,
+        sellerId: "1",
+        shopCode: "10000@XXXAXX",
+        shopName: "商户1-天猫小米旗舰店",
         updateId: "",
         updateTime: "2018-07-05 18:43:09",
       }]
@@ -2401,7 +2434,7 @@ const proxy = {
       "msg": "计划进行中不能删除"
     })
   },
-  'GET /project/activityPlan/selectAreaMachines': (req, res) => {
+  'POST /project/activityPlan/selectAreaMachines': (req, res) => {
     res.send({
       "code": 0,
       "data": [
