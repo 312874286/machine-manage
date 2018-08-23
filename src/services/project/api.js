@@ -32,7 +32,7 @@ const api = map({
   getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}&status={status}',
   saveScheduleSetting: '/project/activityPlan/add',
   updateScheduleSetting: '/project/activityPlan/update',
-  deleteScheduleSetting: '/project/activityPlan/delete',
+  deleteScheduleSetting: '/project/activityPlan/delete?status=1',
   getScheduleSettingDetail: '/project/activityPlan/detail?id={id}',
   selectAreaMachines: '/project/activityPlan/selectAreaMachines',
   getActivityList: '/project/activity/getList',
@@ -61,6 +61,7 @@ const api = map({
   // getActivityList: '/project/activity/getList',
   getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}',
 
+  paiActivity: '/pai/data/count/list',
 });
 
 export default api;

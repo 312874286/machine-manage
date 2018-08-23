@@ -18,23 +18,26 @@ import {
   Radio,
   message,
   Alert,
-  Table
+  Table,
+  List
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ActivitySetting.less';
 import CountModal from '../../components/Project/CountModal';
+import GoodsModal from '../../components/Project/GoodsModal';
 import moment from "moment/moment";
 
 // const status = ['全部','未开始', '进行中', '已结束'];
 const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }, { id: 4, name: '未排期' }];
 const activityType = [{id: 0, name: '互动活动'}, {id: 1, name: '派样活动'}]
+const activityTypeLine = ['互动活动', '派样活动']
 // const statusMap = [100100, 100200, 100300];
 // const prizeTypeStatus = ['商品', '优惠券', '商品+优惠券'];
 
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = {'100100': '商品', '100200': '优惠券','100300': '商品+优惠券'};
-
+const isVip = [{id: 0, name: '不加入'}, {id: 1, name: '加入'}]
 const FormItem = Form.Item;
 const { TextArea } = Input
 const { Option } = Select;
@@ -168,6 +171,19 @@ const CreateForm = Form.create()(
             })(
               <Select placeholder="请选择">
                 {activityType.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="是否入会">
+            {getFieldDecorator('isVip', {
+              rules: [{ required: true, message: '请选择是否入会' }],
+            })(
+              <Select placeholder="请选择是否入会">
+                {isVip.map((item) => {
                   return (
                     <Option value={item.id} key={item.id}>{item.name}</Option>
                   );
@@ -334,12 +350,25 @@ const WatchForm = Form.create()(
           <FormItem {...formItemLayout} label="活动编码">
             <span>{modalData.code}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="选择商户">
-            <span>{modalData.merchantName}</span>
+          <FormItem {...formItemLayout} label="是否入会">
+            <span>{parseInt(modalData.isVip) === 1 ? '加入' : '不加入'}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="活动类型">
+            <span>{parseInt(modalData.type) === 1 ? '派样活动' : '互动活动'}</span>
           </FormItem>
           <FormItem {...formItemLayout} label="选择店铺">
-            <span>{modalData.shopName}</span>
+            {/*<span>{modalData.merchantName}</span>*/}
+            <List
+              header={null}
+              footer={null}
+              bordered
+              dataSource={modalData.shops}
+              renderItem={item => (<List.Item>{item.shopName ? item.shopName : item.id}</List.Item>)}
+            />
           </FormItem>
+          {/*<FormItem {...formItemLayout} label="选择店铺">*/}
+            {/*<span>{modalData.shopName}</span>*/}
+          {/*</FormItem>*/}
           <FormItem {...formItemLayout} label="备注描述">
             <span>{modalData.remark}</span>
           </FormItem>
@@ -456,6 +485,11 @@ export default class activitySettingList extends PureComponent {
     repeat: [],
     // level: 1,
     selectedRowKeys: [],
+
+    goodsModalVisible: false,
+    goodsModalLoading: false,
+    goodsId: '',
+    goodsModalPageNo: 1,
   };
 // {/*<Select*/}
 // {/*// mode="multiple"*/}
@@ -684,33 +718,43 @@ export default class activitySettingList extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
-      this.props.dispatch({
-        type: 'activitySetting/getShopsList',
-        payload: {
-          restParams: {
-            sellerId: data.sellerId,
-          },
-        },
-      }).then((res) => {
-        this.setState({
-          shopsLists: res,
-        }, () => {
-          this.form.setFieldsValue({
-            name: data.name || '',
-            code: data.code || undefined,
-            sellerId: data.sellerId || undefined,
-            shopId: data.shopId || undefined,
-            remark: data.remark || undefined,
-          });
-        });
+      // console.log('targetData', data.shops)
+      this.setState({
+        targetData: data.shops
+      })
+      this.form.setFieldsValue({
+        name: data.name || '',
+        code: data.code || undefined,
+        sellerId: data.sellerId || undefined,
+        shopId: data.shopId || undefined,
+        remark: data.remark || undefined,
+        type: data.type
       });
+      // this.props.dispatch({
+      //   type: 'activitySetting/getShopsList',
+      //   payload: {
+      //     restParams: {
+      //       sellerId: data.sellerId,
+      //     },
+      //   },
+      // }).then((res) => {
+      //   this.setState({
+      //     shopsLists: res,
+      //   }, () => {
+      //
+      //   });
+      // });
     } else {
+      this.setState({
+        targetData: []
+      })
       this.form.setFieldsValue({
         name: undefined,
         code: undefined,
         sellerId: undefined,
         shopId: undefined,
         remark: undefined,
+        type: undefined
       });
     }
   }
@@ -915,6 +959,67 @@ export default class activitySettingList extends PureComponent {
     }
   }
   // 设置默认活动结束
+  // 排样统计开始
+  // paiActivity
+  handleGoodsClick = (data) => {
+    this.setState({
+      // logModalVisible: !!data,
+      logModalLoading: true,
+      logId: data.id,
+    }, () => {
+      this.getGoodsList(data);
+    });
+  }
+  getGoodsList = (data) => {
+    this.props.dispatch({
+      type: 'activitySetting/getActivityCount',
+      payload: {
+        restParams: {
+          activityId: data.id,
+        },
+      },
+    }).then((res) => {
+      // if (!res) {
+      //   this.setState({
+      //     logModalLoading: false,
+      //   });
+      //   message.config({
+      //     top: 100,
+      //     duration: 2,
+      //     maxCount: 1,
+      //   })
+      //   message.error('该活动暂无统计')
+      // } else {
+      this.setState({
+        logModalLoading: false,
+        logModalVisible: true
+      });
+      // }
+    });
+  }
+  handleCountClick = (data) => {
+    this.setState({
+      // logModalVisible: !!data,
+      goodsModalLoading: true,
+      goodsId: data.id,
+    }, () => {
+      this.getCountList(data);
+    });
+  }
+  goodsModalHandleCancel = () => {
+    this.setState({
+      goodsModalVisible: false,
+    });
+  }
+  goodsModalhandleTableChange = (pagination) => {
+    const { current } = pagination;
+    this.setState({
+      goodsModalPageNo: current,
+    }, () => {
+      this.getGoodsList();
+    });
+  }
+  // 排样统计结束
   // 日志相关
   getCountList = (data) => {
     this.props.dispatch({
@@ -943,7 +1048,6 @@ export default class activitySettingList extends PureComponent {
       // }
     });
   }
-
   handleCountClick = (data) => {
     this.setState({
       // logModalVisible: !!data,
@@ -953,7 +1057,6 @@ export default class activitySettingList extends PureComponent {
       this.getCountList(data);
     });
   }
-
   logModalHandleCancel = () => {
     this.setState({
       logModalVisible: false,
@@ -1147,12 +1250,12 @@ export default class activitySettingList extends PureComponent {
     const columns = [
       {
         title: '活动名称',
-        width: '15%',
+        width: '20%',
         dataIndex: 'name',
       },
       {
         title: '活动编码',
-        width: '20%',
+        width: '30%',
         dataIndex: 'code',
       },
       // {
@@ -1162,29 +1265,32 @@ export default class activitySettingList extends PureComponent {
       // },
       {
         title: '活动类型',
-        width: '10%',
+        width: '20%',
         dataIndex: 'type',
-      },
-      {
-        title: '商品/优惠券',
-        width: '12%',
-        dataIndex: 'prizeType',
         render(val) {
-          return <span>{status[val]}</span>;
+          return <span>{activityTypeLine[val]}</span>;
         },
       },
-      {
-        title: '活动状态',
-        width: '10%',
-        dataIndex: 'state',
-      },
+      // {
+      //   title: '商品/优惠券',
+      //   width: '12%',
+      //   dataIndex: 'prizeType',
+      //   render(val) {
+      //     return <span>{activityType[val]}</span>;
+      //   },
+      // },
+      // {
+      //   title: '活动状态',
+      //   width: '10%',
+      //   dataIndex: 'state',
+      // },
       {
         title: '负责人',
         dataIndex: 'managerId',
       },
       {
         fixed: 'right',
-        width: 100,
+        width: 200,
         title: '操作',
         render: (text, item) => (
           (item.state === '已结束') ? (
@@ -1192,11 +1298,14 @@ export default class activitySettingList extends PureComponent {
               <a onClick={() => this.handleWatchClick(item)}>查看</a>
               <Divider type="vertical" />
               <a disabled style={{ cursor: 'not-allowed' }}>编辑</a>
+              <Divider type="vertical" />
               <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
                 <a className={styles.delete}>删除</a>
               </Popconfirm>
               <Divider type="vertical" />
-              <a onClick={() => this.handleCountClick(item)}>统计</a>
+              <a onClick={() => this.handleCountClick(item)}>活动统计</a>
+              <Divider type="vertical" />
+              <a onClick={() => this.handleGoodsClick(item)}>商品统计</a>
             </Fragment>
           ) : (
             <Fragment>
@@ -1206,11 +1315,14 @@ export default class activitySettingList extends PureComponent {
               {/*<Divider type="vertical" />*/}
               {/*<a onClick={() => this.handleCountClick(item)}>日志</a>*/}
               {/*<Divider type="vertical" />*/}
+              <Divider type="vertical" />
               <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
                 <a className={styles.delete}>删除</a>
               </Popconfirm>
               <Divider type="vertical" />
-              <a onClick={() => this.handleCountClick(item)}>统计</a>
+              <a onClick={() => this.handleCountClick(item)}>活动统计</a>
+              <Divider type="vertical" />
+              <a onClick={() => this.handleGoodsClick(item)}>商品统计</a>
             </Fragment>
           )
         ),
@@ -1319,6 +1431,15 @@ export default class activitySettingList extends PureComponent {
           logVisible={this.state.logModalVisible}
           logHandleCancel={this.logModalHandleCancel}
           logModalhandleTableChange={this.logModalhandleTableChange}
+        />
+        <GoodsModal
+          data={activityCountList}
+          // page={logPage}
+          count={count}
+          loding={this.state.goodsModalLoading}
+          goodsVisible={this.state.goodsModalVisible}
+          goodsHandleCancel={this.goodsModalHandleCancel}
+          goodsModalhandleTableChange={this.goodsModalhandleTableChange}
         />
       </PageHeaderLayout>
     );

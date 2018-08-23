@@ -14,7 +14,7 @@ import {
   Divider,
   Popconfirm,
   InputNumber,
-  Checkbox
+  Checkbox,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';

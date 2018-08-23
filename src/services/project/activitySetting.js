@@ -68,3 +68,9 @@ export async function getDefaultActivity({ restParams }) {
     restParams,
   });
 }
+
+export async function paiActivity({ restParams }) {
+  return fetch.postJSON(api.paiActivity, {
+    body: JSON.stringify(restParams),
+  });
+}

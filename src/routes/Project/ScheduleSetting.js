@@ -180,17 +180,16 @@ const CreateForm = Form.create()(
           <FormItem {...formItemLayout} label="选择机器">
             {getFieldDecorator('remark', {
               rule: [{ validator: verifyTimeRequire }],
-            }) ((modalData.id) ? (
-              <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
-              <div>
-                { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
-                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-              </div>
-              ))
+            }) (
+                  <div>
+                    { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : (modalData.id ? (modalData.remark ? modalData.remark : '暂无') : '') }
+                    <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+                  </div>
+               )
             }
           </FormItem>
             {/*style={{ display: isDisabled ? 'block' : 'none' }}*/}
-          <FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'none' : 'block' }}>
+          <FormItem {...formItemLayout} label="选择游戏">
             {getFieldDecorator('gameId', {
               rules: [{ required: false, message: '请选择游戏' }],
             })(
@@ -203,47 +202,47 @@ const CreateForm = Form.create()(
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'block' : 'none' }}>
-            {getFieldDecorator('gameId', {
-              rules: [{ required: false, message: '请选择游戏' }],
-            })(
-              <Select placeholder="请选择" disabled>
-                {gameLists.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id} >{item.name}</Option>
-                  );
-                })}
-              </Select>
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'none' : 'block' }}>
+          {/*<FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
+            {/*{getFieldDecorator('gameId', {*/}
+              {/*rules: [{ required: false, message: '请选择游戏' }],*/}
+            {/*})(*/}
+              {/*<Select placeholder="请选择" disabled>*/}
+                {/*{gameLists.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option value={item.id} key={item.id} >{item.name}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>*/}
+            {/*)}*/}
+          {/*</FormItem>*/}
+          <FormItem {...formItemLayout} label="同一用户获得商品次数">
             {getFieldDecorator('userMaxTimes', {
               rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
-            {getFieldDecorator('userMaxTimes', {
-              rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
-            })(<Input placeholder="请填写同一用户获得商品次数" disabled />)}
-          </FormItem>
-            <FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'none' : 'block' }}>
+          {/*<FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
+            {/*{getFieldDecorator('userMaxTimes', {*/}
+              {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
+            {/*})(<Input placeholder="请填写同一用户获得商品次数" disabled />)}*/}
+          {/*</FormItem>*/}
+            <FormItem {...formItemLayout} label="同一用户每天获得商品次数">
               {getFieldDecorator('dayUserMaxTimes', {
                 rules: [{ required: false, whitespace: true, message: '请填写同一用户每天获得商品次数' }],
               })(<Input placeholder="请填写同一用户每天获得商品次数" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
-              {getFieldDecorator('dayUserMaxTimes', {
-                rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
-              })(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}
-            </FormItem>
+            {/*<FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
+              {/*{getFieldDecorator('dayUserMaxTimes', {*/}
+                {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
+              {/*})(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}*/}
+            {/*</FormItem>*/}
           <FormItem label={`填写商品信息：最多可添加${maxNumber}个商品`}>
-            <Table
-              columns={goodsColumns}
-              dataSource={goodsInitData}
-              rowKey={record => record.prizeId}
-              pagination={false}
-              style={{ display: isDisabled ? 'block' : 'none' }} />
-            <div style={{ display: isDisabled ? 'none' : 'block' }}>
+            {/*<Table*/}
+              {/*columns={goodsColumns}*/}
+              {/*dataSource={goodsInitData}*/}
+              {/*rowKey={record => record.prizeId}*/}
+              {/*pagination={false}*/}
+              {/*style={{ display: isDisabled ? 'block' : 'none' }} />*/}
+            <div>
               <GoodsTableField
                 initData={goodsInitData}
                 count={goodsCount}
@@ -259,10 +258,18 @@ const CreateForm = Form.create()(
               />
             </div>
           </FormItem>
-          <FormItem label="填写优惠券信息" style={{ display: couponsShow ? 'block' : 'none' }}>
-            <Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />
-            <div style={{ display: isDisabled ? 'none' : 'block' }}>
-              <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} discountHandleChange={discountHandleChange} />
+            {/*style={{ display: couponsShow ? 'block' : 'none' }}*/}
+          <FormItem label="填写优惠券信息">
+            {/*<Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />*/}
+            <div>
+              <DiscountDynamicField
+                initData={couponsInitData}
+                count={couponsCount}
+                discountHandle={discountHandle}
+                discountHandleAdd={discountHandleAdd}
+                discountHandleDelete={discountHandleDelete}
+                discountHandleChange={discountHandleChange}
+              />
             </div>
           </FormItem>
         </Form>
@@ -491,7 +498,7 @@ const SelectMachineForm = Form.create()(
   });
 const WatchForm = Form.create()(
   (props) => {
-    const { watchModalVisible, modalData, handleWatchModalVisible, goodsList, couponsList, watchDetailClick } = props;
+    const { watchModalVisible, modalData, handleWatchModalVisible, goodsList, couponsList, watchDetailClick, couponsShow } = props;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -503,6 +510,10 @@ const WatchForm = Form.create()(
       },
     };
     const goodsColumns = [{
+      title: '商户名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    }, {
       title: '商品名称',
       dataIndex: 'activityPlanId',
       align: 'center',
@@ -513,6 +524,19 @@ const WatchForm = Form.create()(
     }, {
       title: '规则描述',
       dataIndex: 'resultRemark',
+      align: 'center',
+    }];
+    const goodsColumns2 = [{
+      title: '商户名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    },{
+      title: '商品名称',
+      dataIndex: 'activityPlanId',
+      align: 'center',
+    }, {
+      title: '数量',
+      dataIndex: 'number',
       align: 'center',
     }];
     const couponsColumns = [{
@@ -550,12 +574,12 @@ const WatchForm = Form.create()(
           <FormItem {...formItemLayout} label="活动名称">
             <span>{modalData.activityName}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="所属商户">
-            <span>{modalData.merchantName}</span>
-          </FormItem>
-          <FormItem {...formItemLayout} label="所属店铺">
-            <span>{modalData.shopName}</span>
-          </FormItem>
+          {/*<FormItem {...formItemLayout} label="所属商户">*/}
+            {/*<span>{modalData.merchantName}</span>*/}
+          {/*</FormItem>*/}
+          {/*<FormItem {...formItemLayout} label="所属店铺">*/}
+            {/*<span>{modalData.shopName}</span>*/}
+          {/*</FormItem>*/}
           <FormItem {...formItemLayout} label="活动时间">
             <span>{modalData.startTime} - {modalData.endTime}</span>
           </FormItem>
@@ -573,7 +597,7 @@ const WatchForm = Form.create()(
             <span>{modalData.dayUserMaxTimes}</span>
           </FormItem>
           <FormItem {...formItemLayout} label="商品信息">
-            <Table columns={goodsColumns} dataSource={goodsList} rowKey={record => record.prizeId} pagination={false} />
+            <Table columns={couponsShow ? goodsColumns : goodsColumns2} dataSource={goodsList} rowKey={record => record.prizeId} pagination={false} />
           </FormItem>
           <FormItem {...formItemLayout} label="优惠券信息">
             <Table columns={couponsColumns} dataSource={couponsList} rowKey={record => record.code} pagination={false} />
@@ -886,7 +910,7 @@ export default class ScheduleSettingList extends PureComponent {
           let goodsInitData = this.state.goodsInitData
           for (let i = 0; i < goodsInitData.length; i++ ) {
             for (let j = 0; j < res.length; j++) {
-              console.log('res[j].id === goodsInitData.prizeId', j, i, res[j].id, goodsInitData[i].prizeId)
+              // console.log('res[j].id === goodsInitData.prizeId', j, i, res[j].id, goodsInitData[i].prizeId)
               if (res[j].id === goodsInitData[i].prizeId) {
                 res.splice(j, 1)
                 break
@@ -1090,7 +1114,7 @@ export default class ScheduleSettingList extends PureComponent {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1];
         }
       }
-      console.log('fieldsValue.status', fieldsValue.status)
+      // console.log('fieldsValue.status', fieldsValue.status)
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
@@ -1196,7 +1220,7 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 商品信息及优惠券的操作开始
   goodsHandle = (initData, value, record) => {
-    console.log('1111record::', record);
+    // console.log('1111record::', record);
     // const { goodsLists } = this.state
     // let goodsInitData = record
     // for (var i = 0; i < goodsLists.length; i++ ) {
@@ -1209,7 +1233,7 @@ export default class ScheduleSettingList extends PureComponent {
     this.setState({
       goodsTables: [...this.state.goodsTables, record]
     }, () => {
-      console.log('2222record::', record, initData);
+      // console.log('2222record::', record, initData);
       this.setState({
         goodsInitData: this.state.goodsTables,
       });
@@ -1371,15 +1395,15 @@ export default class ScheduleSettingList extends PureComponent {
           })
         } else {
           // 非派样活动
-          if (this.state.couponsInitData.length === 0) {
-            message.config({
-              top: 100,
-              duration: 2,
-              maxCount: 1,
-            });
-            message.error('非派样活动请添加优惠券')
-            return;
-          }
+          // if (this.state.couponsInitData.length === 0) {
+          //   message.config({
+          //     top: 100,
+          //     duration: 2,
+          //     maxCount: 1,
+          //   });
+          //   message.error('非派样活动请添加优惠券')
+          //   return;
+          // }
           goods = goods.map((item) => {
             return { prizeId: item.prizeId, resultCode: item.resultCode, resultRemark: item.resultRemark }
           })
@@ -1688,11 +1712,32 @@ export default class ScheduleSettingList extends PureComponent {
       watchModalVisible: false,
     });
   }
+  getEditActivityShops = (activityId) => {
+    this.props.dispatch({
+      type: 'scheduleSetting/getActivityShops',
+      payload: {
+        restParams: {
+          activityId: activityId ? activityId : ''
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        shopClist: res
+      });
+    });
+  }
   // 编辑
   onEditClick = (item) => {
+    // key: goodsCount,
+    //   shopName: '',
+    //   prizeId: '',
+    //   number: 0,
+    //   resultCode: '1',
+    //   resultRemark: '描述',
+    //   prizeType: '1',
     console.log('item编辑', item)
     // activityList
-    this.getActivityLists()
+    // this.getActivityLists()
     // gameList
     this.getGamesLists()
     this.props.dispatch({
@@ -1704,14 +1749,47 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       // console.log('res', res)
-      this.getGoodsLists(res.shopId)
+      // this.getGoodsLists(res.shopId)
+      if (parseInt(res.activityType) === 1) {
+        this.setState({
+          couponsShow: false
+        })
+      } else {
+        this.setState({
+          couponsShow: true
+        })
+      }
+      this.getEditActivityShops(res.activityId)
+      // for (let i = 0; i< res.goods.length; i++) {
+      //   console.log('res.goods[i].shopId', res.goods[i], res.goods[i].shopsId)
+      //   this.getGoodsLists(res.goods[i].shopsId)
+      // }
       let goodsInitDatas = res.goods.map((item, index) => {
-        return { key: index, name: item.activityPlanId, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
+        return {
+          key: index,
+          id: item.shopId,
+          shopName: item.shopName,
+          number: item.number,
+          name: item.activityPlanId,
+          prizeId: item.prizeId,
+          prizeType: item.prizeType,
+          resultCode: item.resultCode,
+          resultRemark: item.resultRemark
+        }
       })
       let couponsInitDatas = res.coupons.map((item, index) => {
-        return { key: index, code: item.code, name: item.name, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
+        return {
+          key: index,
+          code: item.code,
+          name: item.name,
+          prizeType: item.prizeType,
+          resultCode: item.resultCode,
+          resultRemark: item.resultRemark
+        }
       })
       this.setState({
+        maxNumber: res.maxGoodsNum ? res.maxGoodsNum : '',
+        targetData: res.machines,
         goodsCount: res.goods.length,
         couponsCount: res.coupons.length,
         goodsInitData: res.goods.length > 0 ? goodsInitDatas : [],
@@ -1736,6 +1814,15 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
+      if (parseInt(res.activityType) === 1) {
+        this.setState({
+          couponsShow: false
+        })
+      } else {
+        this.setState({
+          couponsShow: true
+        })
+      }
       this.setState({
         goodsInitData: res.goods.length > 0 ? res.goods : [],
         couponsInitData: res.coupons.length > 0 ? res.coupons : [],
@@ -1754,7 +1841,7 @@ export default class ScheduleSettingList extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id };
+      const params = { id: item.id, status: 1 };
       this.props.dispatch({
         type: 'scheduleSetting/delScheduleSetting',
         payload: {
@@ -2224,6 +2311,7 @@ export default class ScheduleSettingList extends PureComponent {
           goodsList={this.state.goodsInitData}
           couponsList={this.state.couponsInitData}
           watchDetailClick={this.watchDetailClick}
+          couponsShow={this.state.couponsShow}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}

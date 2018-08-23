@@ -3434,6 +3434,9 @@ const proxy = {
         "updateTime": "2018-07-03 11:40:42"
       }]
     })
+  },
+  'POST /pai/data/count/list': (req, res) => {
+    res.send({"code":0,"data":[{"activityName":"派样活动1","activityId":"111","activityPlanId":"aaaa","startTime":"2018-08-21 17:16:54","endTime":"2018-08-31 17:17:01","submitTime":"2018-08-21 17:17:08","inno72PaiNowDataList":[{"id":null,"activityId":null,"activityPlanId":null,"activityName":null,"goodsName":"测试商品1","goodsCount":10,"totalGoodsCount":500,"startTime":null,"endTime":null,"submitTime":null},{"id":null,"activityId":null,"activityPlanId":null,"activityName":null,"goodsName":"测试商品2","goodsCount":20,"totalGoodsCount":200,"startTime":null,"endTime":null,"submitTime":null}]}],"msg":"成功"})
   }
 };
 

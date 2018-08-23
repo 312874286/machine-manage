@@ -1,0 +1,31 @@
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
+.modal {
+    :global {
+       .ant-table-footer {
+         padding: 16px 0px;
+       }
+      .ant-table-thead th:nth-child(1) {
+        text-align: left !important;
+      }
+      .ant-table-body {
+        overflow-x: hidden;
+        min-width: 800px;
+      }
+      .ant-table-body table {
+        min-width: 800px;
+      }
+    }
+  .footerBox {
+    display: flex;
+    span {
+      width: 15%;
+      text-align: center;
+      padding: 0 12px;
+    }
+    span:nth-child(1) {
+      width: 25%;
+      text-align: left;
+    }
+  }
+}

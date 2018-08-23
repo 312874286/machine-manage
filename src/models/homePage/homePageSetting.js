@@ -1,4 +1,4 @@
-import { findExceptionMachine, findMachinePortalData, findMachineStockoutInfo } from '../../services/homePage/homePage';
+import { findExceptionMachine, findMachinePortalData, findMachineStockoutInfo, paiTotalList, overPlanSetting } from '../../services/homePage/homePage';
 
 export default {
   namespace: 'homePageSetting',
@@ -14,7 +14,6 @@ export default {
         type: 'MachinePortalDataList',
         payload: response,
       });
-
     },
     *findExceptionMachine({ payload: { restParams } }, { call, put }) {
       const response = yield call(findExceptionMachine, { restParams });
@@ -26,7 +25,18 @@ export default {
     *findMachineStockoutInfo({ payload: { restParams } }, { call }) {
       const response = yield call(findMachineStockoutInfo, { restParams });
       return response.data;
-    }
+    },
+    *paiTotalList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(paiTotalList, { restParams });
+      yield put({
+        type: 'PaiTotalDataList',
+        payload: response,
+      });
+    },
+    *overPlanSetting({ payload: { params } }, { call }) {
+      const response = yield call(overPlanSetting, { params });
+      return response.data;
+    },
   },
 
   reducers: {
@@ -40,6 +50,13 @@ export default {
       return {
         ...state,
         ExceptionMachineList: data,
+      };
+    },
+    PaiTotalDataList(state, { payload: { data } }) {
+      console.log('data', data)
+      return {
+        ...state,
+        PaiTotalList: data,
       };
     },
   },
