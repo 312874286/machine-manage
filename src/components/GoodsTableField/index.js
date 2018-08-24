@@ -161,7 +161,7 @@ class GoodsTableField extends Component {
     //   }
     // }
     // console.log('record', record, this.state.clist, this.props.initData, this.state.initData);
-    this.props.goodsHandle(this.state.initData, value, record);
+    this.props.goodsHandle(this.state.initData, value, record, record.key);
   }
   handleShopChangeName = (value) => {
     this.props.shopHandle(value);

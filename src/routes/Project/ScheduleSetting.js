@@ -1238,7 +1238,7 @@ export default class ScheduleSettingList extends PureComponent {
     }
   }
   // 商品信息及优惠券的操作开始
-  goodsHandle = (initData, value, record) => {
+  goodsHandle = (initData, value, record, key) => {
     // console.log('1111record::', record);
     // const { goodsLists } = this.state
     // let goodsInitData = record
@@ -1248,26 +1248,38 @@ export default class ScheduleSettingList extends PureComponent {
     //     goodsInitData[0].number = goodsLists[i].number
     //   }
     // }
-    record = this.getGoodsNumber(value, record)
+
+    // for (let i = 0; i < this.state.goodsTables.length; i++) {
+    //   console.log('value === this.state.goodsTables[i].prizeId', value, this.state.goodsTables[i].prizeId)
+    //   if (value === this.state.goodsTables[i].prizeId) {
+    //     return false
+    //   }
+    // }
+    console.log('initData', initData)
+    record = this.getGoodsNumber(value, record, initData, key)
+    console.log('record', record)
     this.setState({
       goodsTables: [...this.state.goodsTables, record]
     }, () => {
       // console.log('2222record::', record, initData);
       this.setState({
-        goodsInitData: this.state.goodsTables,
+        goodsInitData: record,
       });
     })
   }
-  getGoodsNumber = (value, record) => {
+  getGoodsNumber = (value, record, initData, key) => {
     const { goodsLists } = this.state
-    let j, number;
-    for (var i = 0; i < goodsLists.length; i++ ) {
-      if (goodsLists[i].id === value) {
-        // record.name = this.state.clist[i].name;
-        record.number = goodsLists[i].number
+    for (let j = 0; j < initData.length; j++) {
+      if (initData[j].key === key) {
+        for (var i = 0; i < goodsLists.length; i++ ) {
+          if (goodsLists[i].id === value) {
+            // record.name = this.state.clist[i].name;
+            record.number = goodsLists[i].number
+          }
+        }
       }
     }
-    return record;
+    return initData;
   }
   shopHandle = (shopId) => {
     this.getGoodsLists(shopId)
