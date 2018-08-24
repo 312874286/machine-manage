@@ -59,6 +59,7 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
+        width={800}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
@@ -81,8 +82,8 @@ const CreateForm = Form.create()(
               <Col span={11}>
                 <FormItem label="最小数量">
                   {getFieldDecorator('minGoodsNum', {
-                    rules: [{ required: true, whitespace: true, message: '请输入最小数量' }],
-                  })(<Input placeholder="请输入最小数量" />)}
+                    rules: [{ required: true, message: '请输入最小数量' }],
+                  })(<InputNumber min={1} placeholder="请输入最小数量" />)}
                 </FormItem>
               </Col>
               <Col span={2}>
@@ -93,8 +94,8 @@ const CreateForm = Form.create()(
               <Col span={11}>
                 <FormItem label="最大数量">
                   {getFieldDecorator('maxGoodsNum', {
-                    rules: [{ required: true, whitespace: true, message: '请输入最大数量' }],
-                  })(<Input placeholder="请输入最大数量" />)}
+                    rules: [{ required: true, message: '请输入最大数量' }],
+                  })(<InputNumber min={1} placeholder="请输入最大数量" />)}
                 </FormItem>
               </Col>
             </FormItem>
