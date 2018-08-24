@@ -111,7 +111,7 @@ export default {
         for (let i = 0; i < data.length; i++) {
           machines = data[i].machines
           title = data[i].name
-          canUseNum = data[i].machines.length
+          canUseNum = data[i].canUseNum + '/' + data[i].totalNum
           // if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
           //   isLeaf = true;
           // }

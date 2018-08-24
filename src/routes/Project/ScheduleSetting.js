@@ -81,7 +81,7 @@ const CreateForm = Form.create()(
       align: 'center',
     }];
     const couponsColumns = [{
-      title: '优惠券编号',
+      title: 'InteractID',
       dataIndex: 'code',
       align: 'center',
     }, {
@@ -263,6 +263,7 @@ const CreateForm = Form.create()(
             {/*<Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />*/}
             <div>
               <DiscountDynamicField
+                couponsShow={!couponsShow}
                 initData={couponsInitData}
                 count={couponsCount}
                 discountHandle={discountHandle}
@@ -540,7 +541,16 @@ const WatchForm = Form.create()(
       align: 'center',
     }];
     const couponsColumns = [{
-      title: '优惠券编号',
+      title: 'InteractID',
+      dataIndex: 'code',
+      align: 'center',
+    }, {
+      title: '优惠券名称',
+      dataIndex: 'name',
+      align: 'center',
+    }];
+    const couponsColumns2 = [{
+      title: 'InteractID',
       dataIndex: 'code',
       align: 'center',
     }, {
@@ -600,7 +610,7 @@ const WatchForm = Form.create()(
             <Table columns={couponsShow ? goodsColumns : goodsColumns2} dataSource={goodsList} rowKey={record => record.prizeId} pagination={false} />
           </FormItem>
           <FormItem {...formItemLayout} label="优惠券信息">
-            <Table columns={couponsColumns} dataSource={couponsList} rowKey={record => record.code} pagination={false} />
+            <Table columns={couponsShow ? couponsColumns2 : couponsColumns} dataSource={couponsList} rowKey={record => record.code} pagination={false} />
           </FormItem>
         </Form>
         </div>

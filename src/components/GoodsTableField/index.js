@@ -261,6 +261,7 @@ class GoodsTableField extends Component {
       },
     };
     // console.log('initData', initData)
+    console.log('couponsShow2', couponsShow)
     if (couponsShow) {
       this.columns = [{
         title: '选择店铺',

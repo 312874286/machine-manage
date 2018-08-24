@@ -65,9 +65,9 @@ const CreateForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="商户编码">
+          <FormItem {...formItemLayout} label="sellerID">
             {getFieldDecorator('merchantCode', {
-              rules: [{ required: true, whitespace: true, message: '请输入商户编码' }],
+              rules: [{ required: true, whitespace: true, message: '请输入sellerID' }],
             })(<Input placeholder="请输入商户编码" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="商户名称">
@@ -76,12 +76,12 @@ const CreateForm = Form.create()(
             })(<Input placeholder="请输入商户名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="品牌名称">
-            {getFieldDecorator('originFlag', {
+            {getFieldDecorator('brandName', {
               rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
             })(<Input placeholder="请输入品牌名称" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="原始标示">
-            {getFieldDecorator('brandName', {
+            {getFieldDecorator('originFlag', {
               rules: [{ required: false, whitespace: true, message: '请输入原始标示' }],
             })(<Input placeholder="请输入原始标示" />)}
           </FormItem>
@@ -441,7 +441,7 @@ export default class merchantSettingList extends PureComponent {
       //   fixed: 'left',
       // },
       {
-        title: '商户编码',
+        title: 'sellerID',
         width: '17%',
         dataIndex: 'merchantCode',
       },
@@ -458,11 +458,11 @@ export default class merchantSettingList extends PureComponent {
       {
         title: '原始标示',
         width: '17%',
-        dataIndex: 'brandName',
+        dataIndex: 'originFlag',
       },
       {
         title: '品牌名称',
-        dataIndex: 'originFlag',
+        dataIndex: 'brandName',
       },
       {
         fixed: 'right',

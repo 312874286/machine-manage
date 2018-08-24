@@ -20,7 +20,7 @@ const api = map({
   updateShopSetting: '/project/shops/update',
   deleteShopSetting: '/project/shops/delete',
   getShopSettingDetail: '/project/shops/detail?id={id}',
-  getActivitySettingList: '/project/activity/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  getActivitySettingList: '/project/activity/list?pageNo={pageNo}&keyword={keyword}&type={type}',
   saveActivitySetting: '/project/activity/add',
   updateActivitySetting: '/project/activity/update',
   deleteActivitySetting: '/project/activity/delete',

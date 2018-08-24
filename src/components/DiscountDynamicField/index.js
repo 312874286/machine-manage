@@ -172,7 +172,7 @@ class DiscountDynamicField extends React.Component {
   }
   render() {
     const { dataSource } = this.state;
-    const { count } = this.props;
+    const { count, couponsShow } = this.props;
     // console.log('discount::', count);
     const components = {
       body: {
@@ -187,43 +187,64 @@ class DiscountDynamicField extends React.Component {
       children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
     }
     // console.log('initData2', this.props.initData)
-    // if (couponsShow) {
-    //
-    // }
-    this.columns = [{
-      title: '优惠券编号',
-      dataIndex: 'code',
-      editable: true,
-    },{
-      title: '优惠券名称',
-      dataIndex: 'name',
-      editable: true,
-    }, {
-      title: '规则',
-      dataIndex: 'resultCode',
-      render: (text, record) => {
-        return (
-          <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-            {children2}
-          </Select>
-
-        );
-      },
-    }, {
-      title: '规则描述',
-      dataIndex: 'resultRemark',
-      editable: true,
-    }, {
-      title: '操作',
-      dataIndex: 'operation',
-      render: (text, record) => {
-        return (
+    console.log('couponsShow', couponsShow)
+    if (couponsShow) {
+      this.columns = [{
+        title: 'InteractID',
+        dataIndex: 'code',
+        editable: true,
+      },{
+        title: '优惠券名称',
+        dataIndex: 'name',
+        editable: true,
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        render: (text, record) => {
+          return (
             <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
               <a>删除</a>
             </Popconfirm>
-        );
-      },
-    }];
+          );
+        },
+      }];
+    } else {
+      this.columns = [{
+        title: 'InteractID',
+        dataIndex: 'code',
+        editable: true,
+      },{
+        title: '优惠券名称',
+        dataIndex: 'name',
+        editable: true,
+      }, {
+        title: '规则',
+        dataIndex: 'resultCode',
+        render: (text, record) => {
+          return (
+            <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
+              {children2}
+            </Select>
+
+          );
+        },
+      }, {
+        title: '规则描述',
+        dataIndex: 'resultRemark',
+        editable: true,
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        render: (text, record) => {
+          return (
+            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+              <a>删除</a>
+            </Popconfirm>
+          );
+        },
+      }];
+    }
+
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;
