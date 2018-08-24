@@ -26,6 +26,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ActivitySetting.less';
 import CountModal from '../../components/Project/CountModal';
 import GoodsModal from '../../components/Project/GoodsModal';
+import VipModal from '../../components/Project/VipModal'
 import moment from "moment/moment";
 
 // const status = ['全部','未开始', '进行中', '已结束'];
@@ -55,7 +56,10 @@ const CreateForm = Form.create()(
       modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading,
       modalType, merchantLists, shopsLists, onSelect,
       addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll,
-      onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData, selectType, selectTypeValue
+      onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData, selectType, selectTypeValue,
+
+      goodsInitData, goodsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete,
+      goodsHandleChange, goodsLists, shopClist, couponsShow, shopHandle, maxNumber
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -192,28 +196,7 @@ const CreateForm = Form.create()(
               {/*</Select>*/}
             {/*)}*/}
           {/*</FormItem>*/}
-          {/*<FormItem {...formItemLayout} label="选择商户">*/}
-            {/*{getFieldDecorator('sellerId', {*/}
-              {/*rules: [{ required: true, message: '请选择商户' }],*/}
-            {/*})((modalType === 'edit') ? (*/}
-              {/*<Select placeholder="请选择" disabled>*/}
-                {/*{merchantLists.map((item) => {*/}
-                  {/*return (*/}
-                    {/*<Option value={item.id} key={item.id}>{item.merchantName}</Option>*/}
-                  {/*);*/}
-                {/*})}*/}
-              {/*</Select>*/}
-              {/*) : (*/}
-                {/*<Select placeholder="请选择" onSelect={onSelect}>*/}
-                {/*{merchantLists.map((item) => {*/}
-                  {/*return (*/}
-                    {/*<Option value={item.id} key={item.id}>{item.merchantName}</Option>*/}
-                  {/*);*/}
-                {/*})}*/}
-                {/*</Select>*/}
-            {/*))}*/}
-          {/*</FormItem>*/}
-            <div style={{ padding: 0, border: '1px solid #ececec', paddingLeft: '10px', marginBottom: '20px' }}>
+          <div style={{ padding: 0, border: '1px solid #ececec', paddingLeft: '10px', marginBottom: '20px' }}>
                 <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
                   <Col md={10} sm={24}>
                     <FormItem label="选择商户">
@@ -281,37 +264,26 @@ const CreateForm = Form.create()(
                   )}
                 </FormItem>
             </div>
-          {/*<FormItem {...formItemLayout} label="选择店铺">*/}
-            {/*{getFieldDecorator('shopId', {*/}
-              {/*rules: [{ required: true, message: '请选择店铺' }],*/}
-            {/*})((modalType === 'edit') ? (*/}
-                {/*<Select placeholder="请选择" disabled>*/}
-                  {/*{shopsLists.map((item) => {*/}
-                    {/*return (*/}
-                      {/*<Option value={item.id} key={item.id}>{item.shopName}</Option>*/}
-                    {/*);*/}
-                  {/*})}*/}
-                {/*</Select>*/}
-              {/*) : (*/}
-              {/*<Select placeholder="请选择">*/}
-                {/*{shopsLists.map((item) => {*/}
-                  {/*return (*/}
-                    {/*<Option value={item.id} key={item.id}>{item.shopName}</Option>*/}
-                  {/*);*/}
-                {/*})}*/}
-              {/*</Select>*/}
-              {/*)*/}
-              {/*)}*/}
-          {/*</FormItem>*/}
-          {/*<FormItem {...formItemLayout} label="选择时间">*/}
-            {/*{getFieldDecorator('rangeTime', {*/}
-              {/*rules: [{ type: 'array', required: true, message: '请选择时间' }],*/}
-            {/*})(*/}
-              {/*<RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />*/}
-            {/*)}*/}
-          {/*</FormItem>*/}
           <FormItem {...formItemLayout} label="备注描述">
             {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+          </FormItem>
+          <FormItem>
+            <div style={{ display: selectTypeValue === 0 ? 'none' : ''}}>
+              <VipModal
+                initData={goodsInitData}
+                count={goodsCount}
+                clist={goodsLists}
+                shopClist={shopClist}
+                shopHandle={shopHandle}
+                goodsHandle={goodsHandle}
+                goodsHandleAdd={goodsHandleAdd}
+                goodsHandleDelete={goodsHandleDelete}
+                goodsHandleChange={goodsHandleChange}
+                couponsShow={!couponsShow}
+                maxNumber={maxNumber}
+              />
+            </div>
+
           </FormItem>
         </Form>
         </div>
@@ -503,7 +475,14 @@ export default class activitySettingList extends PureComponent {
     goodsId: '',
     goodsModalPageNo: 1,
 
-    selectTypeValue: 0
+    selectTypeValue: 0,
+
+    // vip
+    goodsInitData: [],
+    goodsCount: 0,
+    goodsLists: [],
+    shopClist: [],
+    vipTables: []
   };
 // {/*<Select*/}
 // {/*// mode="multiple"*/}
@@ -733,14 +712,26 @@ export default class activitySettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       // console.log('targetData', data.shops)
-      this.setState({
-        targetData: data.shops
+      let key = 0
+      let goodsInitDatas = data.shops.map((item, index) => {
+        return {
+          key: key + 1,
+          id: item.id,
+          shopName: item.shopName,
+          isVip: item.isVip,
+          sessionKey: item.sessionKey,
+        }
       })
-      // if (data.type === 1) {
-      //   this.setState({
-      //     selectTypeValue: 1
-      //   })
-      // }
+      this.setState({
+        targetData: goodsInitDatas,
+        goodsCount: data.shops.length,
+        goodsInitData: data.shops.length > 0 ? goodsInitDatas : [],
+      });
+      if (data.type === 1) {
+        this.setState({
+          selectTypeValue: 1
+        })
+      }
       this.form.setFieldsValue({
         name: data.name || '',
         code: data.code || undefined,
@@ -750,23 +741,16 @@ export default class activitySettingList extends PureComponent {
         type: data.type,
         // isVip: data.isVip || undefined
       });
-      // this.props.dispatch({
-      //   type: 'activitySetting/getShopsList',
-      //   payload: {
-      //     restParams: {
-      //       sellerId: data.sellerId,
-      //     },
-      //   },
-      // }).then((res) => {
-      //   this.setState({
-      //     shopsLists: res,
-      //   }, () => {
-      //
-      //   });
-      // });
     } else {
       this.setState({
-        targetData: []
+        targetData: [],
+        sourceData: [],
+        sourceKey: [],
+        targetKey: [],
+        selectAll: false,
+        selectedRows: [],
+        goodsInitData: [],
+        goodsCount: 0,
       })
       this.form.setFieldsValue({
         name: undefined,
@@ -803,11 +787,25 @@ export default class activitySettingList extends PureComponent {
       //   }
       // }
       // const rangeTimeValue = fieldsValue.rangeTime
+      const { goodsInitData } = this.state
+      for (let i = 0; i < goodsInitData.length; i++) {
+        if (parseInt(goodsInitData[i].isVip) === 0 ) {
+          if (goodsInitData[i].sessionKey) {
+            message.config({
+              top: 100,
+              duration: 2,
+              maxCount: 1,
+            });
+            message.warning(`非入会不要填写访问码`)
+            return false
+          }
+        }
+      }
       let params = {
         ...fieldsValue,
         // isVip: fieldsValue.isVip,
         isDefault: 0,
-        shops: this.state.targetData
+        shops: this.state.goodsInitData
         // rangeTime: undefined,
         // createTime: rangeTimeValue[0].format('YYYY-MM-DD HH:mm:ss'),
         // endTime: rangeTimeValue[1].format('YYYY-MM-DD HH:mm:ss'),
@@ -1170,6 +1168,7 @@ export default class activitySettingList extends PureComponent {
     this.setState({
       selectAll: false
     })
+    this.intVipList()
   }
   unique = (arr) => {
     let targetData = []
@@ -1220,7 +1219,13 @@ export default class activitySettingList extends PureComponent {
   targetHandleDelete = (key) => {
     // console.log('key', key)
     const dataSource = [...this.state.targetData];
-    this.setState({ targetData: dataSource.filter(item => item.id !== key) });
+    console.log('dataSource', dataSource, key, dataSource.filter(item => item.id !== key))
+    this.setState(
+      {
+        targetData: dataSource.filter(item => item.id !== key)
+      }, () => {
+        this.intVipList()
+      });
   }
   onChangeRowSelection = (selectedRowKeys, selectedRows) => {
     // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -1285,13 +1290,96 @@ export default class activitySettingList extends PureComponent {
   selectMachineFormRef = (form) => {
     this.selectMachineform = form;
   }
-  //
+  // 检测是否需要有入会选项
   selectType = (value) => {
     console.log('selectTypeValue', value)
     this.setState({
       selectTypeValue: value
     })
   }
+  // 店铺下的vip
+  intVipList = () => {
+    let  { targetData } = this.state
+    console.log('targetData', targetData)
+    let key = 0
+    targetData = targetData.map((item) => {
+      return { key: key + 1, id: item.id, shopName: item.shopName, isVip: 0, sessionKey: ''}
+    })
+    this.setState({
+      goodsInitData: targetData,
+      goodsCount: targetData.length,
+    });
+  }
+  // goodsHandle = (initData, value, record) => {
+  //   if (value === 1) {
+  //     record.sessionKey = '请填写访问码'
+  //   } else {
+  //     record.sessionKey = ''
+  //   }
+  //   this.setState({
+  //     vipTables: [...this.state.vipTables, record]
+  //   }, () => {
+  //     // console.log('2222record::', record, initData);
+  //     this.setState({
+  //       goodsInitData: this.state.vipTables,
+  //     });
+  //   })
+  // }
+  goodsHandle = (initData, value, record) => {
+    console.log('1111record::', record);
+    // const { goodsLists } = this.state
+    // let goodsInitData = record
+    // for (var i = 0; i < goodsLists.length; i++ ) {
+    //   if (goodsLists[i].id === value) {
+    //     // record.name = this.state.clist[i].name;
+    //     goodsInitData[0].number = goodsLists[i].number
+    //   }
+    // }
+    let vipTables = this.getGoodsNumber(value, record)
+    console.log('vipTables11111', vipTables)
+    // this.setState({
+    //   vipTables: [...this.state.vipTables, record]
+    // }, () => {
+    //   console.log('2222record::', record, initData);
+    //   this.setState({
+    //     goodsInitData: this.state.vipTables,
+    //   });
+    // })
+    // vipTables = [{ key: 1, id: "1", shopName: '44444', isVip: 0, sessionKey: '55555'}]
+    // console.log('vipTables22222', vipTables)
+    //          a = { key: 1, id: "1", shopName: '22222', isVip: 0, sessionKey: "1111111"}
+
+    this.setState({
+      goodsInitData: JSON.parse(JSON.stringify(vipTables)),
+    });
+  }
+  getGoodsNumber = (value, record) => {
+    let vipTables = this.state.targetData
+    const vip = [{id: 0, name: ''}, {id: 1, name: '请填写访问码'}]
+    console.log('vipTables', record)
+    vipTables[record.key - 1].isVip = value
+    if (value === 1) {
+      vipTables[record.key - 1].sessionKey = '请填写访问码'
+    } else {
+      vipTables[record.key - 1].sessionKey = ''
+    }
+    return vipTables;
+  }
+
+
+  goodsHandleChange = (row) => {
+    const newData = [...this.state.goodsInitData];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    console.log('recordgoodsHandleChange',newData)
+    this.setState({ goodsInitData: newData });
+    // console.log('goodsHandleChange::', row);
+  }
+
   render() {
     const { activitySetting: { list, page }, loading, activitySetting: { activityCountList, count }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData } = this.state;
@@ -1458,6 +1546,16 @@ export default class activitySettingList extends PureComponent {
           findSourceData={this.findSourceData}
           selectType={this.selectType}
           selectTypeValue={this.state.selectTypeValue}
+
+          goodsInitData={this.state.goodsInitData}
+          goodsCount={this.state.goodsCount}
+          goodsLists={this.state.goodsLists}
+          shopClist={this.state.shopClist}
+          goodsHandle={this.goodsHandle}
+          shopHandle={this.shopHandle}
+          goodsHandleAdd={this.goodsHandleAdd}
+          goodsHandleDelete={this.goodsHandleDelete}
+          goodsHandleChange={this.goodsHandleChange}
         />
         <WatchForm
           modalData={modalData}

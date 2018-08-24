@@ -160,7 +160,7 @@ class GoodsTableField extends Component {
     //     // number = this.state.clist[i].number
     //   }
     // }
-    console.log('record', record, this.state.clist, this.props.initData, this.state.initData);
+    // console.log('record', record, this.state.clist, this.props.initData, this.state.initData);
     this.props.goodsHandle(this.state.initData, value, record);
   }
   handleShopChangeName = (value) => {
@@ -222,7 +222,7 @@ class GoodsTableField extends Component {
         shopClistCurrentValue: this.state.shopClist.length === 0 ? '' : shopClist[0].id,
       })
     });
-    console.log('shopClistCurrentValue', this.state.shopClistCurrentValue)
+    // console.log('shopClistCurrentValue', this.state.shopClistCurrentValue)
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -261,7 +261,6 @@ class GoodsTableField extends Component {
       },
     };
     // console.log('initData', initData)
-    console.log('couponsShow2', couponsShow)
     if (couponsShow) {
       this.columns = [{
         title: '选择店铺',

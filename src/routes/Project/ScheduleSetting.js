@@ -263,6 +263,7 @@ const CreateForm = Form.create()(
             {/*<Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />*/}
             <div>
               <DiscountDynamicField
+                shopClist={shopClist}
                 couponsShow={!couponsShow}
                 initData={couponsInitData}
                 count={couponsCount}
@@ -511,7 +512,7 @@ const WatchForm = Form.create()(
       },
     };
     const goodsColumns = [{
-      title: '商户名称',
+      title: '店铺名称',
       dataIndex: 'shopName',
       align: 'center',
     }, {
@@ -528,7 +529,7 @@ const WatchForm = Form.create()(
       align: 'center',
     }];
     const goodsColumns2 = [{
-      title: '商户名称',
+      title: '店铺名称',
       dataIndex: 'shopName',
       align: 'center',
     },{
@@ -541,6 +542,10 @@ const WatchForm = Form.create()(
       align: 'center',
     }];
     const couponsColumns = [{
+      title: '店铺名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    }, {
       title: 'InteractID',
       dataIndex: 'code',
       align: 'center',
@@ -550,6 +555,10 @@ const WatchForm = Form.create()(
       align: 'center',
     }];
     const couponsColumns2 = [{
+      title: '店铺名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    }, {
       title: 'InteractID',
       dataIndex: 'code',
       align: 'center',
@@ -1300,6 +1309,7 @@ export default class ScheduleSettingList extends PureComponent {
     // console.log('goodsHandleChange::', row);
   }
   discountHandle = (val) => {
+    console.log('val', val)
     this.setState({
       couponsInitData: val,
     });
@@ -1308,6 +1318,8 @@ export default class ScheduleSettingList extends PureComponent {
     const { couponsInitData, couponsCount } = this.state;
     const newData = {
       key: couponsCount,
+      shopsId: '',
+      shopName: '',
       code: '优惠券编号',
       name: '优惠券名称',
       resultCode: '1',
@@ -1422,7 +1434,7 @@ export default class ScheduleSettingList extends PureComponent {
           ...fieldsValue,
           goods,
           coupons: this.state.couponsInitData,
-          machines: this.state.machines,
+          machines: this.state.targetData,
           startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
         };
@@ -1790,6 +1802,8 @@ export default class ScheduleSettingList extends PureComponent {
       let couponsInitDatas = res.coupons.map((item, index) => {
         return {
           key: index,
+          shopName: item.shopName,
+          shopsId: item.shopsId,
           code: item.code,
           name: item.name,
           prizeType: item.prizeType,
@@ -2235,8 +2249,7 @@ export default class ScheduleSettingList extends PureComponent {
           modalType={modalType}
           verifyTimeRequire={this.verifyTimeRequire}
           gameLists={gameLists}
-          goodsLists={goodsLists}
-          shopClist={shopClist}
+
           activityLists={activityLists}
           disabledDate={this.disabledDate}
           disabledDateTime={this.disabledDateTime}
@@ -2248,6 +2261,8 @@ export default class ScheduleSettingList extends PureComponent {
           goodsCount={this.state.goodsCount}
           couponsInitData={this.state.couponsInitData}
           couponsCount={this.state.couponsCount}
+          goodsLists={goodsLists}
+          shopClist={shopClist}
           goodsHandle={this.goodsHandle}
           shopHandle={this.shopHandle}
           goodsHandleAdd={this.goodsHandleAdd}

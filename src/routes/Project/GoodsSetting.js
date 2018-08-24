@@ -95,6 +95,11 @@ const CreateForm = Form.create()(
               rules: [{ required: true, whitespace: true, message: '请输入商品名称' }],
             })(<Input placeholder="请输入商品名称" />)}
           </FormItem>
+          <FormItem {...formItemLayout} label="规格描述">
+            {getFieldDecorator('specRemark', {
+              rules: [{ required: false, whitespace: true, message: '请输入规格描述' }],
+            })(<Input placeholder="请输入规格描述" />)}
+          </FormItem>
           <FormItem {...formItemLayout} label="商品图片">
             {getFieldDecorator('img', {
               rules: [{ required: false, message: '请传照片' }],
@@ -228,6 +233,9 @@ const WatchForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="商品名称">
               <span>{modalData.name}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="规格描述">
+              <span>{modalData.specRemark}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="商品图片">
               <div>
@@ -686,6 +694,7 @@ export default class goodsSettingList extends PureComponent {
         remark: data.remark || undefined,
         img: data.img || undefined,
         shopId: data.shopId || undefined,
+        specRemark: data.specRemark || undefined,
       });
     } else {
       this.setState({
@@ -701,6 +710,7 @@ export default class goodsSettingList extends PureComponent {
         shopId: undefined,
         remark: undefined,
         img: undefined,
+        specRemark: undefined,
       });
     }
   }
@@ -954,12 +964,17 @@ export default class goodsSettingList extends PureComponent {
       },
       {
         title: '商品名称',
-        width: '10%',
+        width: '8%',
         dataIndex: 'name',
       },
       {
+        title: '规格描述',
+        width: '8%',
+        dataIndex: 'specRemark',
+      },
+      {
         title: '所属商户',
-        width: '10%',
+        width: '8%',
         dataIndex: 'sellerId',
       },
       {

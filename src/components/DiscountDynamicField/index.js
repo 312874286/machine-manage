@@ -122,12 +122,13 @@ class DiscountDynamicField extends React.Component {
       count:0,
       rlist: [
       ],
+      shopClist: [],
     };
   }
   componentWillReceiveProps(nextProps) {
-    const { initData, count } = nextProps;
+    const { initData, count, shopClist } = nextProps;
     // console.log('discount::componentWillReceiveProps', nextProps);
-    this.updateRenderDatas(initData, count);
+    this.updateRenderDatas(initData, count, shopClist);
   }
   componentDidMount() {
     const { initData } = this.props;
@@ -143,11 +144,29 @@ class DiscountDynamicField extends React.Component {
   handleAdd = () => {
     this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
   }
-
+  handleChangeName = (record, value) => {
+    record.shopsId = value;
+    // let number = 0
+    // for (var i = 0; i < this.state.clist.length; i++ ) {
+    //   if (this.state.clist[i].id === value) {
+    //     // record.name = this.state.clist[i].name;
+    //     // number = this.state.clist[i].number
+    //   }
+    // }
+    console.log('val', record, this.state.dataSource, this.props.initData);
+    this.props.discountHandle(this.props.initData);
+  }
   handleSave = (row) => {
     this.props.discountHandleChange(row);
   }
-  updateRenderDatas = (initData, count) => {
+  updateRenderDatas = (initData, count, shopClist) => {
+    this.setState({
+      shopClist,
+    }, () => {
+      this.setState({
+        shopClistCurrentValue: this.state.shopClist.length === 0 ? '' : shopClist[0].id,
+      })
+    });
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -172,7 +191,7 @@ class DiscountDynamicField extends React.Component {
   }
   render() {
     const { dataSource } = this.state;
-    const { count, couponsShow } = this.props;
+    const { count, couponsShow, shopClist } = this.props;
     // console.log('discount::', count);
     const components = {
       body: {
@@ -187,9 +206,23 @@ class DiscountDynamicField extends React.Component {
       children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
     }
     // console.log('initData2', this.props.initData)
-    console.log('couponsShow', couponsShow)
     if (couponsShow) {
       this.columns = [{
+        title: '选择店铺',
+        dataIndex: 'shopName',
+        render: (text, record) => {
+          return (
+            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.shopName } placeholder="请选择店铺">
+              {/*{children}*/}
+              {shopClist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      },{
         title: 'InteractID',
         dataIndex: 'code',
         editable: true,
@@ -210,6 +243,21 @@ class DiscountDynamicField extends React.Component {
       }];
     } else {
       this.columns = [{
+        title: '选择店铺',
+        dataIndex: 'shopName',
+        render: (text, record) => {
+          return (
+            <Select defaultValue={ record.shopName } placeholder="请选择店铺">
+              {/*{children}*/}
+              {shopClist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      },{
         title: 'InteractID',
         dataIndex: 'code',
         editable: true,
