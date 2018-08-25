@@ -89,7 +89,7 @@ class EditableCell extends Component {
                   <FormItem style={{ margin: 0 }}>
                     {form.getFieldDecorator(dataIndex, {
                       rules: [{
-                        required: true,
+                        required: false,
                         whitespace: true,
                         message: `请输入${title}`,
                       }, {

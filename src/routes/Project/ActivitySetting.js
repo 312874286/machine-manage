@@ -801,6 +801,16 @@ export default class activitySettingList extends PureComponent {
             message.warning(`非入会不要填写访问码`)
             return false
           }
+        } else {
+          if (!goodsInitData[i].sessionKey) {
+            message.config({
+              top: 100,
+              duration: 2,
+              maxCount: 1,
+            });
+            message.warning(`入会需要填写访问码`)
+            return false
+          }
         }
       }
       let params = {
@@ -1305,7 +1315,7 @@ export default class activitySettingList extends PureComponent {
     console.log('targetData', targetData)
     let key = 0
     targetData = targetData.map((item) => {
-      return { key: key + 1, id: item.id, shopName: item.shopName, isVip: 0, sessionKey: ''}
+      return { key: key + 1, id: item.id, shopName: item.shopName, isVip: 1, sessionKey: 'initData'}
     })
     this.setState({
       goodsInitData: targetData,
@@ -1351,7 +1361,7 @@ export default class activitySettingList extends PureComponent {
     // console.log('vipTables22222', vipTables)
     //          a = { key: 1, id: "1", shopName: '22222', isVip: 0, sessionKey: "1111111"}
     this.setState({
-      goodsInitData: JSON.parse(JSON.stringify(vipTables)),
+      goodsInitData: initData,
     });
   }
   getGoodsNumber = (value, record) => {
