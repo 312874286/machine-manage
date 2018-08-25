@@ -139,7 +139,7 @@ const CreateForm = Form.create()(
                     {bannerfileList.length > 1 ? null : uploadButton}
                   </Upload>
                   <video id="videos" controls="controls"
-                         style={{ objectFit: 'fill', display:  videoUrl ? '' : 'none', maxWidth: '600px', maxHeight: '500px'}}
+                         style={{ objectFit: 'fill', display:  videoUrl ? (videoUrl.url ? '' : 'none') : 'none', maxWidth: '600px', maxHeight: '500px'}}
                          playsInline=""
                          webkit-playsinline=""
                          x5-video-player-fullscreen="true"
