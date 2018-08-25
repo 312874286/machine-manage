@@ -1362,6 +1362,11 @@ export default class activitySettingList extends PureComponent {
     // console.log('vipTables22222', vipTables)
     //          a = { key: 1, id: "1", shopName: '22222', isVip: 0, sessionKey: "1111111"}
     initData[record.key - 1].isVip = value
+    if (value === 1) {
+      initData[record.key - 1].sessionKey = '请填写访问码'
+    } else {
+      initData[record.key - 1].sessionKey = ''
+    }
     console.log('value', value)
     this.setState({
       goodsInitData: initData,

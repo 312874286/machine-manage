@@ -36,16 +36,16 @@ class EditableCell extends Component {
   }
 
   toggleEdit = () => {
-    const editing = !this.state.editing;
-    this.setState({ editing }, () => {
-      if (editing) {
-        console.log('editing::', editing, this.input.input);
-        if(this.input.input.value == '请填写访问码'){
-          this.input.input.value = '';
-        }
-        this.input.focus();
-      }
-    });
+    // const editing = !this.state.editing;
+    // this.setState({ editing }, () => {
+    //   if (editing) {
+    //     console.log('editing::', editing, this);
+    //     if(this.input.input.value == '请填写访问码'){
+    //       this.input.input.value = '';
+    //     }
+    //     this.input.focus();
+    //   }
+    // });
   }
 
   handleClickOutside = (e) => {
@@ -62,6 +62,7 @@ class EditableCell extends Component {
         return;
       }
       // toggleEdit();
+      // console.log('value', record, values )
       handleSave({ ...record, ...values });
     });
   }
@@ -85,7 +86,7 @@ class EditableCell extends Component {
             {(form) => {
               this.form = form;
               return (
-                editing ? (
+                !editing ? (
                   <FormItem style={{ margin: 0 }}>
                     {form.getFieldDecorator(dataIndex, {
                       rules: [{
@@ -106,7 +107,8 @@ class EditableCell extends Component {
                     })(
                       <Input
                         ref={node => (this.input = node)}
-                        onPressEnter={this.save}
+                        // onPressEnter={this.save}
+                        onBlur={this.save}
                       />
                     )}
                   </FormItem>
@@ -217,7 +219,7 @@ class VipModal extends Component {
       dataIndex: 'isVip',
       render: (text, record) => {
         return (
-          <Select onChange={this.handleIsVip.bind(this, record)} defaultValue={ record.isVip } placeholder="请选择是否入会">
+          <Select onChange={this.handleIsVip.bind(this, record)} onSelect={this.handleIsVip.bind(this, record)} defaultValue={ record.isVip } placeholder="请选择是否入会">
             {/*{children}*/}
             {isVip.map((item) => {
               return (
