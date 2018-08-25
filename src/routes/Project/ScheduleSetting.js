@@ -356,7 +356,16 @@ const SelectMachineForm = Form.create()(
     this.columns = [{
       title: '名称',
       dataIndex: 'machineCode',
-      render: text => <a href="javascript:;">{text}</a>,
+      // render: text => <a href="javascript:;">{text}</a>,
+      render: (text, record) => {
+        return (
+          record.planed === '1' ? (
+            <a href="javascript:;">{record.machineCode}<span style={{ color : 'red' }}>/已占用</span></a>
+          ) : (
+            <a href="javascript:;">{record.machineCode}</a>
+          )
+        )
+      }
     }];
     const columns = this.columns.map((col) => {
       if (!col.editable) {
@@ -1975,7 +1984,7 @@ export default class ScheduleSettingList extends PureComponent {
     for (let a of selectedRows) {
       let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
       this.state.selectedRowKeys.splice(selectedRowKeys, 1)
-      await this.handleDelete(a.machineCode)
+      await this.handleDelete(a, a.machineCode)
     }
     // console.log(this.state.repeat)
     if (this.state.repeat.length > 0) {
@@ -2015,9 +2024,19 @@ export default class ScheduleSettingList extends PureComponent {
     console.log('newDatahandleSave', newData)
     this.setState({ sourceData: newData });
   }
-  handleDelete = (key) => {
+  handleDelete = (a, key) => {
     // console.log('key', key, this.state.targetData)
+    if (a.planed === '1') {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.error('该机器已占用，重新选择！')
+      return;
+    }
     const dataSource = [...this.state.sourceData];
+    // console.log('dataSource', dataSource)
     this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
     let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
     // console.log('targetData', targetData)

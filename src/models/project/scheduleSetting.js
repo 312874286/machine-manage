@@ -133,7 +133,7 @@ export default {
           }
           const a = {
             value: data[i].code,
-            label: data[i].name + '(' + canUseNum + ')',
+            label: `${data[i].name}${canUseNum}`,
             isLeaf: isLeaf,
             title: title,
             key: i,
@@ -146,6 +146,7 @@ export default {
             disabledFlag: disabled,
             canUseNum: canUseNum,
             disabled: disabled,
+            planed: data[i].planed,
           };
           arr.push(a);
         }

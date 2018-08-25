@@ -1350,7 +1350,6 @@ export default class activitySettingList extends PureComponent {
     // vipTables = [{ key: 1, id: "1", shopName: '44444', isVip: 0, sessionKey: '55555'}]
     // console.log('vipTables22222', vipTables)
     //          a = { key: 1, id: "1", shopName: '22222', isVip: 0, sessionKey: "1111111"}
-
     this.setState({
       goodsInitData: JSON.parse(JSON.stringify(vipTables)),
     });
