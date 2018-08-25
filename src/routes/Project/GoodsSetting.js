@@ -139,13 +139,13 @@ const CreateForm = Form.create()(
                     {bannerfileList.length > 1 ? null : uploadButton}
                   </Upload>
                   <video id="videos" controls="controls"
-                         style={{ objectFit: 'fill', display:  videoUrl.url ? '' : 'none', maxWidth: '600px', maxHeight: '500px'}}
+                         style={{ objectFit: 'fill', display:  videoUrl ? '' : 'none', maxWidth: '600px', maxHeight: '500px'}}
                          playsInline=""
                          webkit-playsinline=""
                          x5-video-player-fullscreen="true"
                          x5-video-player-type="h5"
                          x5-video-orientation="portraint"
-                         src={videoUrl.url}>
+                         src={videoUrl ? videoUrl.url : ''}>
                     Your browser does not support the Video tag.
                   </video>
                   <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
@@ -641,7 +641,7 @@ export default class goodsSettingList extends PureComponent {
     //   });
     // }
     if (data) {
-      let flist, videoUrl
+      let flist = [], videoUrl = {}
       // if (data.banner) {
       //   if (this.imgFlag(data.banner)) {
       //     flist = [{
@@ -987,7 +987,7 @@ export default class goodsSettingList extends PureComponent {
         width: 150,
         dataIndex: 'img',
         render: (text, item) => (
-          (item.img.length > 0) ? (
+          (item.img) ? (
             <div style={{ height: '68px', display: 'flex', alignItems: 'center', overflow: 'hidden' }} id="look">
               <Upload
                 // action="//jsonplaceholder.typicode.com/posts/"

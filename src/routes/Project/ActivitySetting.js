@@ -788,8 +788,10 @@ export default class activitySettingList extends PureComponent {
       // }
       // const rangeTimeValue = fieldsValue.rangeTime
       const { goodsInitData } = this.state
+      console.log('goodsInitData', goodsInitData)
       for (let i = 0; i < goodsInitData.length; i++) {
         if (parseInt(goodsInitData[i].isVip) === 0 ) {
+          console.log('goodsInitData', goodsInitData[i].sessionKey)
           if (goodsInitData[i].sessionKey) {
             message.config({
               top: 100,
@@ -1336,7 +1338,7 @@ export default class activitySettingList extends PureComponent {
     //   }
     // }
     let vipTables = this.getGoodsNumber(value, record)
-    console.log('vipTables11111', vipTables)
+    console.log('goodsInitData', vipTables)
     // this.setState({
     //   vipTables: [...this.state.vipTables, record]
     // }, () => {
@@ -1357,7 +1359,7 @@ export default class activitySettingList extends PureComponent {
     let vipTables = this.state.targetData
     const vip = [{id: 0, name: ''}, {id: 1, name: '请填写访问码'}]
     console.log('vipTables', record)
-    vipTables[record.key - 1].isVip = value
+    // vipTables[record.key - 1].isVip = value
     if (value === 1) {
       vipTables[record.key - 1].sessionKey = '请填写访问码'
     } else {

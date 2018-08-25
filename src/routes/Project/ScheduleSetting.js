@@ -242,20 +242,22 @@ const CreateForm = Form.create()(
               {/*rowKey={record => record.prizeId}*/}
               {/*pagination={false}*/}
               {/*style={{ display: isDisabled ? 'block' : 'none' }} />*/}
-            <div>
-              <GoodsTableField
-                initData={goodsInitData}
-                count={goodsCount}
-                clist={goodsLists}
-                shopClist={shopClist}
-                shopHandle={shopHandle}
-                goodsHandle={goodsHandle}
-                goodsHandleAdd={goodsHandleAdd}
-                goodsHandleDelete={goodsHandleDelete}
-                goodsHandleChange={goodsHandleChange}
-                couponsShow={!couponsShow}
-                maxNumber={maxNumber}
-              />
+            <div className={styles.goodsNoteBox}>
+              <FormItem label='若要重新选择商品时，需要重新选择一下店铺'>
+                <GoodsTableField
+                  initData={goodsInitData}
+                  count={goodsCount}
+                  clist={goodsLists}
+                  shopClist={shopClist}
+                  shopHandle={shopHandle}
+                  goodsHandle={goodsHandle}
+                  goodsHandleAdd={goodsHandleAdd}
+                  goodsHandleDelete={goodsHandleDelete}
+                  goodsHandleChange={goodsHandleChange}
+                  couponsShow={!couponsShow}
+                  maxNumber={maxNumber}
+                />
+              </FormItem>
             </div>
           </FormItem>
             {/*style={{ display: couponsShow ? 'block' : 'none' }}*/}
@@ -1264,6 +1266,7 @@ export default class ScheduleSettingList extends PureComponent {
       // console.log('2222record::', record, initData);
       this.setState({
         goodsInitData: record,
+        goodsLists: []
       });
     })
   }
