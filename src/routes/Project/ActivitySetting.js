@@ -715,7 +715,7 @@ export default class activitySettingList extends PureComponent {
       let key = 0
       let goodsInitDatas = data.shops.map((item, index) => {
         return {
-          key: key + 1,
+          key: key += 1,
           id: item.id,
           shopName: item.shopName,
           isVip: item.isVip,
@@ -735,8 +735,8 @@ export default class activitySettingList extends PureComponent {
       this.form.setFieldsValue({
         name: data.name || '',
         code: data.code || undefined,
-        sellerId: data.sellerId || undefined,
-        shopId: data.shopId || undefined,
+        // sellerId: data.sellerId || undefined,
+        // shopId: data.shopId || undefined,
         remark: data.remark || undefined,
         type: data.type,
         // isVip: data.isVip || undefined
@@ -751,12 +751,13 @@ export default class activitySettingList extends PureComponent {
         selectedRows: [],
         goodsInitData: [],
         goodsCount: 0,
+        selectTypeValue: 0,
       })
       this.form.setFieldsValue({
         name: undefined,
         code: undefined,
-        sellerId: undefined,
-        shopId: undefined,
+        // sellerId: undefined,
+        // shopId: undefined,
         remark: undefined,
         type: undefined,
         // isVip: undefined
@@ -1315,7 +1316,7 @@ export default class activitySettingList extends PureComponent {
     console.log('targetData', targetData)
     let key = 0
     targetData = targetData.map((item) => {
-      return { key: key + 1, id: item.id, shopName: item.shopName, isVip: 1, sessionKey: 'initData'}
+      return { key: key + 1, id: item.id, shopName: item.shopName, isVip: 1, sessionKey: '请填写访问码'}
     })
     this.setState({
       goodsInitData: targetData,
@@ -1347,8 +1348,8 @@ export default class activitySettingList extends PureComponent {
     //     goodsInitData[0].number = goodsLists[i].number
     //   }
     // }
-    let vipTables = this.getGoodsNumber(value, record)
-    console.log('goodsInitData', vipTables)
+    // let vipTables = this.getGoodsNumber(value, record)
+    // console.log('goodsInitData', vipTables)
     // this.setState({
     //   vipTables: [...this.state.vipTables, record]
     // }, () => {
@@ -1360,6 +1361,8 @@ export default class activitySettingList extends PureComponent {
     // vipTables = [{ key: 1, id: "1", shopName: '44444', isVip: 0, sessionKey: '55555'}]
     // console.log('vipTables22222', vipTables)
     //          a = { key: 1, id: "1", shopName: '22222', isVip: 0, sessionKey: "1111111"}
+    initData[record.key - 1].isVip = value
+    console.log('value', value)
     this.setState({
       goodsInitData: initData,
     });
