@@ -80,10 +80,10 @@ const CreateForm = Form.create()(
               rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
             })(<Input placeholder="请输入品牌名称" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="原始标示">
+          <FormItem {...formItemLayout} label="原始标识">
             {getFieldDecorator('originFlag', {
-              rules: [{ required: false, whitespace: true, message: '请输入原始标示' }],
-            })(<Input placeholder="请输入原始标示" />)}
+              rules: [{ required: false, whitespace: true, message: '请输入原始标识' }],
+            })(<Input placeholder="请输入原始标识" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="选择渠道">
             {getFieldDecorator('channelId', {
@@ -456,7 +456,7 @@ export default class merchantSettingList extends PureComponent {
         dataIndex: 'channelId',
       },
       {
-        title: '原始标示',
+        title: '原始标识',
         width: '17%',
         dataIndex: 'originFlag',
       },
