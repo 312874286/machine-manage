@@ -235,7 +235,7 @@ const CreateForm = Form.create()(
                 {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
               {/*})(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}*/}
             {/*</FormItem>*/}
-          <FormItem label={`填写商品信息：最多可添加${maxNumber}个商品`}>
+          <FormItem label={`填写商品信息：最多可添加${maxNumber || 100}个商品`}>
             {/*<Table*/}
               {/*columns={goodsColumns}*/}
               {/*dataSource={goodsInitData}*/}
