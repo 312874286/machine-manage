@@ -36,16 +36,16 @@ class EditableCell extends Component {
   }
 
   toggleEdit = () => {
-    // const editing = !this.state.editing;
-    // this.setState({ editing }, () => {
-    //   if (editing) {
-    //     console.log('editing::', editing, this);
-    //     if(this.input.input.value == '请填写访问码'){
-    //       this.input.input.value = '';
-    //     }
-    //     this.input.focus();
-    //   }
-    // });
+    const editing = !this.state.editing;
+    this.setState({ editing }, () => {
+      if (editing) {
+        console.log('editing::', editing, this);
+        if(this.input.input.value == '请填写访问码'){
+          this.input.input.value = '';
+        }
+        this.input.focus();
+      }
+    });
   }
 
   handleClickOutside = (e) => {
@@ -86,7 +86,7 @@ class EditableCell extends Component {
             {(form) => {
               this.form = form;
               return (
-                !editing ? (
+                editing ? (
                   <FormItem style={{ margin: 0 }}>
                     {form.getFieldDecorator(dataIndex, {
                       rules: [{
@@ -107,8 +107,8 @@ class EditableCell extends Component {
                     })(
                       <Input
                         ref={node => (this.input = node)}
-                        // onPressEnter={this.save}
-                        onBlur={this.save}
+                        onPressEnter={this.save}
+                        // onBlur={this.save}
                       />
                     )}
                   </FormItem>
@@ -156,17 +156,18 @@ class VipModal extends Component {
     const { initData, clist } = this.props;
   }
   handleIsVip = (record, value) => {
+    console.log('您点击了是否入会', value)
     record.isVip = value
-    // if (value === 1) {
-    //   record.sessionKey = '请填写访问码'
-    // } else {
-    //   record.sessionKey = ''
-    // }
-    // let initData = this.state.initData
+    if (value === 1) {
+      record.sessionKey = '请填写访问码'
+    } else {
+      record.sessionKey = ''
+    }
+    let initData = this.state.initData
     // initData[record.key - 1] = record
-    // this.setState({
-    //   initData,
-    // })
+    this.setState({
+      initData,
+    })
     // record.prizeId = value;
     // console.log('record', record, this.state.clist, this.props.initData, this.state.initData);
     this.props.goodsHandle(this.props.initData, value, record);

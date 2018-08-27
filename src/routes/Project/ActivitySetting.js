@@ -1316,7 +1316,7 @@ export default class activitySettingList extends PureComponent {
     console.log('targetData', targetData)
     let key = 0
     targetData = targetData.map((item) => {
-      return { key: key + 1, id: item.id, shopName: item.shopName, isVip: 1, sessionKey: '请填写访问码'}
+      return { key: key += 1, id: item.id, shopName: item.shopName, isVip: 1, sessionKey: '请填写访问码'}
     })
     this.setState({
       goodsInitData: targetData,
@@ -1339,7 +1339,7 @@ export default class activitySettingList extends PureComponent {
   //   })
   // }
   goodsHandle = (initData, value, record) => {
-    console.log('1111record::', record);
+    console.log('1111record::', initData, record);
     // const { goodsLists } = this.state
     // let goodsInitData = record
     // for (var i = 0; i < goodsLists.length; i++ ) {
@@ -1361,17 +1361,20 @@ export default class activitySettingList extends PureComponent {
     // vipTables = [{ key: 1, id: "1", shopName: '44444', isVip: 0, sessionKey: '55555'}]
     // console.log('vipTables22222', vipTables)
     //          a = { key: 1, id: "1", shopName: '22222', isVip: 0, sessionKey: "1111111"}
-    initData[record.key - 1].isVip = value
-    // if (value === 1) {
-    //   initData[record.key - 1].sessionKey = '请填写访问码'
-    // } else {
-    // }
-    // initData[record.key - 1].sessionKey = '请填写访问码'
-
+    // initData[record.key - 1].isVip = value
+    if (value === 1) {
+      initData[record.key - 1].sessionKey = '请填写访问码'
+    } else {
+      initData[record.key - 1].sessionKey = ''
+    }
     console.log('value', value)
     this.setState({
-      goodsInitData: initData,
-    });
+      goodsInitData: []
+    }, () => {
+      this.setState({
+        goodsInitData: initData,
+      });
+    })
   }
   getGoodsNumber = (value, record) => {
     let vipTables = this.state.targetData
