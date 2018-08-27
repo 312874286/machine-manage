@@ -7,7 +7,9 @@ export default {
     page: {},
     datas: {},
     activityCountList: [],
-    count: {}
+    activityPaiCountList: [],
+    count: {},
+    PaiCount: {}
   },
 
   effects: {
@@ -65,7 +67,7 @@ export default {
     *paiActivity({ payload: { restParams } }, { call, put }) {
       const response = yield call(paiActivity, { restParams });
       yield put({
-        type: 'saveCountList',
+        type: 'savePaiCountList',
         payload: response,
       });
     },
@@ -92,6 +94,18 @@ export default {
           totalUserCount: data.totalUserCount,
           totalPayCount: data.totalPayCount,
           totalCouponCount: data.totalCouponCount,
+          totalOrderCount: data.totalOrderCount,
+        }
+      };
+    },
+    savePaiCountList(state, { payload: { data } }) {
+      return {
+        ...state,
+        activityPaiCountList: data.list,
+        PaiCount: {
+          totalGoodsCount: data.totalGoodsCount,
+          totalUserCount: data.totalUserCount,
+          totalPayCount: data.totalPayCount,
           totalOrderCount: data.totalOrderCount,
         }
       };

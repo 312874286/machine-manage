@@ -39,6 +39,7 @@ const activityTypeLine = ['互动活动', '派样活动']
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = {'100100': '商品', '100200': '优惠券','100300': '商品+优惠券'};
 const isVip = [{id: 0, name: '不加入'}, {id: 1, name: '加入'}]
+const vip = ['不加入', '加入']
 const AState = ['', '未开始', '进行中', '已结束']
 const FormItem = Form.Item;
 const { TextArea } = Input
@@ -304,6 +305,19 @@ const WatchForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const columns = [{
+      title: '店铺名称',
+      dataIndex: 'shopName',
+      render: text => <a href="javascript:;">{text}</a>,
+    }, {
+      title: '是否入会',
+      dataIndex: 'isVip',
+      render: text => <a href="javascript:;">{vip[text]}</a>,
+    }, {
+      title: '访问码',
+      dataIndex: 'sessionKey',
+      render: text => <a href="javascript:;">{text}</a>,
+    }];
     return (
       <Modal
         title={
@@ -331,7 +345,7 @@ const WatchForm = Form.create()(
           <FormItem {...formItemLayout} label="活动类型">
             <span>{parseInt(modalData.type) === 1 ? '派样活动' : '互动活动'}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="选择店铺">
+          <FormItem {...formItemLayout} label="所属店铺">
             {/*<span>{modalData.merchantName}</span>*/}
             <List
               header={null}
@@ -341,9 +355,15 @@ const WatchForm = Form.create()(
               renderItem={item => (<List.Item>{item.shopName ? item.shopName : item.id}</List.Item>)}
             />
           </FormItem>
-          {/*<FormItem {...formItemLayout} label="选择店铺">*/}
-            {/*<span>{modalData.shopName}</span>*/}
-          {/*</FormItem>*/}
+          <div style={{ display: parseInt(modalData.type) === 1  ? '' : 'none'}}>
+            <FormItem {...formItemLayout} label="">
+              <Table
+                rowKey={record => record.id}
+                columns={columns}
+                dataSource={modalData.shops}
+                pagination={false}/>
+            </FormItem>
+          </div>
           <FormItem {...formItemLayout} label="备注描述">
             <span>{modalData.remark}</span>
           </FormItem>
@@ -1033,22 +1053,22 @@ export default class activitySettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      if (!res) {
+      // if (!res) {
+      //   this.setState({
+      //     logModalLoading: false,
+      //   });
+      //   message.config({
+      //     top: 100,
+      //     duration: 2,
+      //     maxCount: 1,
+      //   })
+      //   message.error('该活动暂无统计')
+      // } else {
         this.setState({
-          logModalLoading: false,
+          goodsModalLoading: false,
+          goodsModalVisible: true
         });
-        message.config({
-          top: 100,
-          duration: 2,
-          maxCount: 1,
-        })
-        message.error('该活动暂无统计')
-      } else {
-        this.setState({
-          logModalLoading: false,
-          logModalVisible: true
-        });
-      }
+      // }
     });
   }
   handleCountClick = (data) => {
@@ -1406,7 +1426,7 @@ export default class activitySettingList extends PureComponent {
   }
 
   render() {
-    const { activitySetting: { list, page }, loading, activitySetting: { activityCountList, count }, } = this.props;
+    const { activitySetting: { list, page }, loading, activitySetting: { activityCountList, count }, activitySetting: { activityPaiCountList, PaiCount } } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData } = this.state;
     const columns = [
       {
@@ -1613,7 +1633,7 @@ export default class activitySettingList extends PureComponent {
           logModalhandleTableChange={this.logModalhandleTableChange}
         />
         <GoodsModal
-          data={activityCountList}
+          data={activityPaiCountList}
           // page={logPage}
           count={count}
           loding={this.state.goodsModalLoading}
