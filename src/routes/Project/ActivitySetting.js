@@ -714,6 +714,7 @@ export default class activitySettingList extends PureComponent {
     if (data) {
       // console.log('targetData', data.shops)
       let key = 0
+      // if (data.shops) {}
       let goodsInitDatas = data.shops.map((item, index) => {
         return {
           key: key += 1,
@@ -1025,29 +1026,29 @@ export default class activitySettingList extends PureComponent {
   }
   getGoodsList = (data) => {
     this.props.dispatch({
-      type: 'activitySetting/getActivityCount',
+      type: 'activitySetting/paiActivity',
       payload: {
         restParams: {
           activityId: data.id,
         },
       },
     }).then((res) => {
-      // if (!res) {
-      //   this.setState({
-      //     logModalLoading: false,
-      //   });
-      //   message.config({
-      //     top: 100,
-      //     duration: 2,
-      //     maxCount: 1,
-      //   })
-      //   message.error('该活动暂无统计')
-      // } else {
-      this.setState({
-        logModalLoading: false,
-        logModalVisible: true
-      });
-      // }
+      if (!res) {
+        this.setState({
+          logModalLoading: false,
+        });
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        })
+        message.error('该活动暂无统计')
+      } else {
+        this.setState({
+          logModalLoading: false,
+          logModalVisible: true
+        });
+      }
     });
   }
   handleCountClick = (data) => {
