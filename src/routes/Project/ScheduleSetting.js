@@ -1428,17 +1428,17 @@ export default class ScheduleSettingList extends PureComponent {
         }
         // }
         let goods = this.state.goodsInitData
-        if (goods.length === 0) {
-          message.config({
-            top: 100,
-            duration: 2,
-            maxCount: 1,
-          });
-          message.error('请添加商品信息')
-          return;
-        }
         if (!this.state.couponsShow) {
           // 派样活动
+          if (goods.length === 0) {
+            message.config({
+              top: 100,
+              duration: 2,
+              maxCount: 1,
+            });
+            message.error('请添加商品信息')
+            return;
+          }
           goods = goods.map((item) => {
              return { prizeId: item.prizeId, number: item.number }
           })
