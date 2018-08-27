@@ -735,7 +735,7 @@ export default class activitySettingList extends PureComponent {
       this.form.setFieldsValue({
         name: data.name || '',
         code: data.code || undefined,
-        // sellerId: data.sellerId || undefined,
+        sellerId: data.sellerId || undefined,
         // shopId: data.shopId || undefined,
         remark: data.remark || undefined,
         type: data.type,
@@ -756,7 +756,7 @@ export default class activitySettingList extends PureComponent {
       this.form.setFieldsValue({
         name: undefined,
         code: undefined,
-        // sellerId: undefined,
+        sellerId: undefined,
         // shopId: undefined,
         remark: undefined,
         type: undefined,
