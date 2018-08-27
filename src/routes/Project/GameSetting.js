@@ -275,8 +275,8 @@ export default class gameSettingList extends PureComponent {
         version: data.version || undefined,
         versionInno72: data.versionInno72 || undefined,
         remark: data.remark || undefined,
-        minGoodsNum: data.minGoodsNum,
-        maxGoodsNum: data.maxGoodsNum
+        minGoodsNum: data.minGoodsNum || 10,
+        maxGoodsNum: data.maxGoodsNum || 100
       });
     } else {
       this.form.setFieldsValue({
