@@ -3437,6 +3437,95 @@ const proxy = {
   },
   'POST /pai/data/count/list': (req, res) => {
     res.send({"code":0,"data":[{"activityName":"派样活动1","activityId":"111","activityPlanId":"aaaa","startTime":"2018-08-21 17:16:54","endTime":"2018-08-31 17:17:01","submitTime":"2018-08-21 17:17:08","inno72PaiNowDataList":[{"id":null,"activityId":null,"activityPlanId":null,"activityName":null,"goodsName":"测试商品1","goodsCount":10,"totalGoodsCount":500,"startTime":null,"endTime":null,"submitTime":null},{"id":null,"activityId":null,"activityPlanId":null,"activityName":null,"goodsName":"测试商品2","goodsCount":20,"totalGoodsCount":200,"startTime":null,"endTime":null,"submitTime":null}]}],"msg":"成功"})
+  },
+  'POST /pai/data/count/totalList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [{
+        "activityName": "测试活动1",
+        "activityId": "d6fff348101c46e5a31f895bfbbe2ddb",
+        "activityPlanId": "85f55fc9781a4dfc95c5e1073b0b87f8",
+        "startTime": "2018-08-27 00:00:00",
+        "endTime": "2018-08-27 13:00:59",
+        "submitTime": null,
+        "inno72PaiNowDataList": [{
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "果果",
+          "goodsCount": 0,
+          "totalGoodsCount": 11000,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "水果",
+          "goodsCount": 0,
+          "totalGoodsCount": 1000,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "矿泉水",
+          "goodsCount": 0,
+          "totalGoodsCount": 10000,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }]
+      }, {
+        "activityName": "摩卡达到",
+        "activityId": "e44a2bc820d14e43a06c42f3c79c00ea",
+        "activityPlanId": "e2397f839a2742ea8aabf2d2eaf7ba02",
+        "startTime": "2018-08-27 00:00:00",
+        "endTime": "2018-08-27 16:59:59",
+        "submitTime": null,
+        "inno72PaiNowDataList": [{
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "K9",
+          "goodsCount": 0,
+          "totalGoodsCount": 122888,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "雀巢珍致",
+          "goodsCount": 0,
+          "totalGoodsCount": 33,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "雪诗雅",
+          "goodsCount": 0,
+          "totalGoodsCount": 33,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }]
+      }],
+      "msg": "成功"
+    })
   }
 };
 

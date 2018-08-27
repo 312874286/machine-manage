@@ -135,7 +135,7 @@ export default class PaiActivity extends PureComponent {
         dataIndex: 'submitTime',
       },
       {
-        fixed: 'right',
+        // fixed: 'right',
         width: 150,
         title: '操作',
         render: (text, item) => (
