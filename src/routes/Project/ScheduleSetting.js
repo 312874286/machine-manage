@@ -752,7 +752,7 @@ export default class ScheduleSettingList extends PureComponent {
     couponsShow: true,
 
     goodsTables: [],
-    maxNumber: 0,
+    maxNumber: 100,
   };
   componentDidMount() {
     this.getSearchAreaList();
@@ -1377,7 +1377,7 @@ export default class ScheduleSettingList extends PureComponent {
   onSelectGame = (value, option) => {
     console.log('value, option', value, option)
     this.setState({
-      maxNumber: parseInt(option.props['data-maxNumber'])
+      maxNumber: parseInt(option.props['data-maxNumber']) || 100
     })
   }
   // 新增modal确认事件 开始

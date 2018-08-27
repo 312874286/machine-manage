@@ -268,22 +268,23 @@ const CreateForm = Form.create()(
             {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
           <FormItem>
-            <div style={{ display: selectTypeValue === 0 ? 'none' : ''}}>
-              <VipModal
-                initData={goodsInitData}
-                count={goodsCount}
-                clist={goodsLists}
-                shopClist={shopClist}
-                shopHandle={shopHandle}
-                goodsHandle={goodsHandle}
-                goodsHandleAdd={goodsHandleAdd}
-                goodsHandleDelete={goodsHandleDelete}
-                goodsHandleChange={goodsHandleChange}
-                couponsShow={!couponsShow}
-                maxNumber={maxNumber}
-              />
+            <div className={styles.VipModalBox} style={{ display: selectTypeValue === 0 ? 'none' : ''}}>
+              {/*<FormItem label="不入会无需填写访问码">*/}
+                <VipModal
+                  initData={goodsInitData}
+                  count={goodsCount}
+                  clist={goodsLists}
+                  shopClist={shopClist}
+                  shopHandle={shopHandle}
+                  goodsHandle={goodsHandle}
+                  goodsHandleAdd={goodsHandleAdd}
+                  goodsHandleDelete={goodsHandleDelete}
+                  goodsHandleChange={goodsHandleChange}
+                  couponsShow={!couponsShow}
+                  maxNumber={maxNumber}
+                />
+              {/*</FormItem>*/}
             </div>
-
           </FormItem>
         </Form>
         </div>
