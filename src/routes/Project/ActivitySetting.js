@@ -354,7 +354,7 @@ const WatchForm = Form.create()(
               footer={null}
               bordered
               dataSource={modalData.planTime}
-              renderItem={item => (<List.Item>活动时间: {item.startTime ? item.startTime : '' - item.endTime ? item.endTime : ''}活动状态： { item.state }</List.Item>)}
+              renderItem={item => (<List.Item>活动时间: {item.startTime ? item.startTime : ''} - { item.endTime ? item.endTime : ''}<br/>活动状态： { item.state }</List.Item>)}
             />
           </FormItem>
         </Form>
