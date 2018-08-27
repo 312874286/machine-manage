@@ -628,7 +628,7 @@ export default class activitySettingList extends PureComponent {
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        type: fieldsValue.type ? fieldsValue.type : '',
+        type: fieldsValue.type >= 0 ? fieldsValue.type : ''
       }, () => {
         this.getLists();
       });
