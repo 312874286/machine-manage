@@ -88,8 +88,7 @@ export default class GoodsModal extends PureComponent {
           visible={goodsVisible}
           onCancel={goodsHandleCancel}
           // onOk={logHandleCancel}
-          className={styles.modal}
-        >
+          className={styles.modal}>
           <Table
             size="small"
             scroll={{ y: 240 }}

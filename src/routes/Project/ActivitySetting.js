@@ -1635,7 +1635,7 @@ export default class activitySettingList extends PureComponent {
         <GoodsModal
           data={activityPaiCountList}
           // page={logPage}
-          count={count}
+          count={PaiCount}
           loding={this.state.goodsModalLoading}
           goodsVisible={this.state.goodsModalVisible}
           goodsHandleCancel={this.goodsModalHandleCancel}
