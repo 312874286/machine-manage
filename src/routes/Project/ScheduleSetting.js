@@ -44,7 +44,7 @@ const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
 const couponsInitData = []
 const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }];
-
+const activityType = [{id: 0, name: '互动活动'}, {id: 1, name: '派样活动'}]
 
 const CreateForm = Form.create()(
   (props) => {
@@ -688,6 +688,7 @@ export default class ScheduleSettingList extends PureComponent {
     modalData: {},
     code: '',
     status: '',
+    type: '',
     modalType: true,
     activityLists: [],
     gameLists: [],
@@ -965,6 +966,7 @@ export default class ScheduleSettingList extends PureComponent {
           startTime: this.state.startTime,
           code: this.state.code,
           status: this.state.status,
+          type: this.state.type
         },
       },
     }).then((res) => {
@@ -1150,6 +1152,7 @@ export default class ScheduleSettingList extends PureComponent {
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
         status: fieldsValue.status >= 0 ? fieldsValue.status : '',
+        type: fieldsValue.type >= 0 ? fieldsValue.type : ''
       }, () => {
         this.getLists();
       });
@@ -2155,6 +2158,21 @@ export default class ScheduleSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
+          <Col md={7} sm={24}>
+            <FormItem label="选择活动类型">
+              {getFieldDecorator('type')(
+                <Select placeholder="请选择活动类型">
+                  {activityType.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={7} sm={24}>
             <span>
                <FormItem>

@@ -29,7 +29,7 @@ const api = map({
   getMerchantShops: '/project/shops/selectMerchantShops?sellerId={sellerId}',
   getActivityShops: '/project/shops/selectActivityShops?activityId={activityId}',
 
-  getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}&status={status}',
+  getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}&status={status}&type={type}',
   saveScheduleSetting: '/project/activityPlan/add',
   updateScheduleSetting: '/project/activityPlan/update',
   deleteScheduleSetting: '/project/activityPlan/delete?status=1',
