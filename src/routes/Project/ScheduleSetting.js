@@ -1696,6 +1696,8 @@ export default class ScheduleSettingList extends PureComponent {
   }
   openSelectMachineModal = () => {
     this.setState({
+      sourceData: [],
+      targetData: [],
       selectMachineFlag: true,
       checkedKeys: [],
       expandedKeys: [],
@@ -1801,6 +1803,14 @@ export default class ScheduleSettingList extends PureComponent {
     // activityList
     // this.getActivityLists()
     // gameList
+    this.setState({
+      maxNumber: 100,
+      targetData: [],
+      goodsCount: 0,
+      couponsCount: 0,
+      goodsInitData: [],
+      couponsInitData: [],
+    })
     this.getGamesLists()
     this.props.dispatch({
       type: 'scheduleSetting/getScheduleSettingDetail',
@@ -1851,6 +1861,7 @@ export default class ScheduleSettingList extends PureComponent {
           resultRemark: item.resultRemark
         }
       })
+      // console.log('couponsInitDatas', couponsInitDatas)
       this.setState({
         maxNumber: res.maxGoodsNum ? res.maxGoodsNum : '',
         targetData: res.machines,
