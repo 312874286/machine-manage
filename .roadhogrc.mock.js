@@ -226,6 +226,13 @@ const proxy = {
             functionLevel: 2,
           },
           {
+            id: 'a33',
+            functionDepict: '任务管理',
+            functionPath: 'task-setting',
+            parentId: 'a1',
+            functionLevel: 2,
+          },
+          {
             id: 'a6',
             functionDepict: '项目管理',
             functionPath: 'project',

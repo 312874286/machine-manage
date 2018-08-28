@@ -17,7 +17,15 @@ const api = map({
   cutApp: '/machine/machine/cutApp?machineId={machineId}&appPackageName={appPackageName}',
   installApp: '/machine/machine/installApp?machineId={machineId}&appPackageName={appPackageName}&url={url}&versionCode={versionCode}',
   machineUpdateInfo: '/machine/machine/updateInfo',
-  getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}'
+  getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
+
+  taskList: '/task/list?pageNo={pageNo}&type={type}&status={status}',
+  taskDelete: '/task/delete',
+  taskAdd: '/task/add',
+  taskUpdate: '/task/update',
+  taskSelectAppList: '/task/selectAppList',
+  taskDetail: '/task/detail',
+  taskSelectAreaMachines: '/task/selectAreaMachines',
 });
 
 export default api;
