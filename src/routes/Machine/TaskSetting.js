@@ -364,22 +364,6 @@ export default class TaskSetting extends PureComponent {
       taskSetting: { list },
       loading,
     } = this.props;
-    const goodColumns = [ {
-      title: '商品名称',
-      dataIndex: 'goodsName',
-      width: '100%',
-    }]
-    const goodColumns2 = [{
-      title: '已派发数量',
-      dataIndex: 'goodsCount',
-      width: '100%',
-    }]
-    const goodColumns3 = [{
-      title: '商品总数量',
-      dataIndex: 'totalGoodsCount',
-      width: '100%',
-    }]
-    const List = []
     const columns = [
       {
         title: '任务ID',
@@ -429,7 +413,7 @@ export default class TaskSetting extends PureComponent {
         dataIndex: 'createTime',
       },
       {
-        // fixed: 'right',
+        fixed: 'right',
         width: 150,
         title: '操作',
         render: (text, item) => (
