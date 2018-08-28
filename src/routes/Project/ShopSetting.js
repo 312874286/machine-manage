@@ -65,10 +65,10 @@ const CreateForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="店铺编码">
+          <FormItem {...formItemLayout} label="Shop ID">
             {getFieldDecorator('shopCode', {
-              rules: [{ required: true,whitespace: true,  message: '请输入店铺编码' }],
-            })(<Input placeholder="请输入店铺编码" />)}
+              rules: [{ required: true,whitespace: true,  message: '请输入Shop ID' }],
+            })(<Input placeholder="请输入Shop ID" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="店铺名称">
             {getFieldDecorator('shopName', {
@@ -429,7 +429,7 @@ export default class shopSettingList extends PureComponent {
       //   fixed: 'left',
       // },
       {
-        title: '店铺编码',
+        title: 'Shop ID',
         width: '30%',
         dataIndex: 'shopCode',
       },

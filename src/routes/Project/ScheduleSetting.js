@@ -1457,10 +1457,23 @@ export default class ScheduleSettingList extends PureComponent {
             return { prizeId: item.prizeId, resultCode: item.resultCode, resultRemark: item.resultRemark }
           })
         }
+        let coupons = this.state.couponsInitData
+        if (this.state.couponsInitData) {
+          if (!this.state.couponsShow) {
+            // 派样活动
+            coupons = coupons.map((item) => {
+              return { code: item.code, name: item.name, shopsId: item.shopsId}
+            })
+          } else {
+            coupons = coupons.map((item) => {
+              return {  code: item.code, name: item.name, shopsId: item.shopsId, resultCode: item.resultCode, resultRemark: item.resultRemark  }
+            })
+          }
+        }
         let params = {
           ...fieldsValue,
           goods,
-          coupons: this.state.couponsInitData,
+          coupons,
           machines: this.state.targetData,
           startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),

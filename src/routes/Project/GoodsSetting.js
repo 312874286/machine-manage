@@ -85,10 +85,10 @@ const CreateForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="shop ID">
+          <FormItem {...formItemLayout} label="商品ID">
             {getFieldDecorator('code', {
-              rules: [{ required: true, whitespace: true, message: '请输入shop ID' }],
-            })(modalType ? (<Input placeholder="请输入淘宝商品ID" disabled />) : (<Input placeholder="请输入shop ID" />))}
+              rules: [{ required: true, whitespace: true, message: '请输入商品ID' }],
+            })(modalType ? (<Input placeholder="请输入商品ID" disabled />) : (<Input placeholder="请输入商品ID" />))}
           </FormItem>
           <FormItem {...formItemLayout} label="商品名称">
             {getFieldDecorator('name', {
@@ -958,7 +958,7 @@ export default class goodsSettingList extends PureComponent {
     const { previewVisible, previewImage, fileList } = this.state
     const columns = [
       {
-        title: 'shop ID',
+        title: '商品ID',
         width: '10%',
         dataIndex: 'code',
       },
