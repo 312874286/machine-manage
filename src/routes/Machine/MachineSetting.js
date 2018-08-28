@@ -841,9 +841,11 @@ export default class machineSettingList extends PureComponent {
     });
   }
   ManageCutAppFormRef = (form) => {
+    // console.log('this.form', form)
     this.ManageCutAppForm = form;
   }
   ManageUpdateAppFormRef = (form) => {
+    // console.log('this.form2', form)
     this.ManageUpdateAppForm = form;
   }
   handleManageAppClick = (item) => {

@@ -8,7 +8,9 @@ import {
   Table,
   Button,
   Input,
-  Select
+  Select,
+  DatePicker,
+  Modal
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TaskSetting.less'
@@ -19,11 +21,15 @@ const taskTypeOptions = [{id: 1, name: '升级App'}, {id: 2, name: '卸载App'},
 const taskType = ['', '升级App', '卸载App', '合并货道', '拆分货道']
 const taskStatusOptions = [{id: 0, name: '未执行'}, {id: 1, name: '待执行'}, {id: 2, name: '已执行'} ]
 const taskStatus = ['未执行', '待执行', '已执行']
-
+const doType = ['socket', 'push']
 
 const CreateForm = Form.create()(
   (props) => {
-    const {} = props;
+    const {
+      form, modalVisible, handleAdd, handleModalVisible,
+      editModalConfirmLoading, openSelectMachineModal,
+      disabledStartDate, modalType, disabledTime
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -37,36 +43,59 @@ const CreateForm = Form.create()(
     };
     return (
       <Modal
-        title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">{!modalType ? '编辑排期' : '新增排期'}</span>
-          </div>
-        }
-        visible={modalVisible}
+        // title={
+        //   <div class="modalBox">
+        //     <span class="leftSpan"></span>
+        //     <span class="modalTitle">{!modalType ? '编辑任务' : '新增排期'}</span>
+        //   </div>
+        // }
+        // visible={modalVisible}
         onOk={handleAdd}
-        onCancel={() => handleModalVisible(false)}
+        // onCancel={() => handleModalVisible(false)}
         confirmLoading={editModalConfirmLoading}
         width={800} >
-        <div className="manageAppBox">
-          <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="选择活动" style={{ display : modalData.id ? 'none' : 'block' }}>
-              {getFieldDecorator('activityId', {
-                rules: [{ required: false, message: '请选择活动' }],
-              })(<Select placeholder="请选择" onSelect={onSelectShop} >
-                {activityLists.map((item) => {
+        {/*<div className="manageAppBox">*/}
+          <Form>
+            {/*<FormItem {...formItemLayout} label="选择任务类型">*/}
+              {/*{getFieldDecorator('activityId', {*/}
+                {/*rules: [{ required: false, message: '请选择任务类型' }],*/}
+              {/*})(<Select placeholder="请选择">*/}
+                {/*{taskTypeOptions.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem {...formItemLayout} label="选择机器">*/}
+              {/*{getFieldDecorator('remark')(*/}
+                {/*<div>*/}
+                  {/*<Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>*/}
+                {/*</div>)*/}
+              {/*}*/}
+            {/*</FormItem>*/}
+            <FormItem {...formItemLayout} label="选择App">
+              {getFieldDecorator('activityName', {
+                rules: [{ required: false, message: '请选择App' }],
+              })(<Select placeholder="请选择App">
+                {taskTypeOptions.map((item) => {
                   return (
                     <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
                   );
                 })}
               </Select>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择活动" style={{ display : modalData.id ? 'block' : 'none' }}>
+            <FormItem {...formItemLayout} label="升级版本">
               {getFieldDecorator('activityName', {
-                rules: [{ required: false, message: '请选择活动' }],
-              })(<Input disabled />)}
+                rules: [{ required: false, message: '请填写升级版本' }],
+              })(<Input />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'none' : 'block' }}>
+            <FormItem {...formItemLayout} label="升级链接">
+              {getFieldDecorator('activityName', {
+                rules: [{ required: false, message: '请填写升级链接' }],
+              })(<Input />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="选择开始时间">
               {getFieldDecorator('startTimeStr', {
                 rules: [{ required: true, message: '选择开始时间' }],
               })(
@@ -75,147 +104,25 @@ const CreateForm = Form.create()(
                   disabledTime={disabledTime}
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                   format="YYYY-MM-DD HH:mm"
-                  // value={startValue}
                   placeholder="选择开始时间"
-                  onChange={onStartChange}
-                  onOpenChange={handleStartOpenChange}
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'block' : 'none' }}>
-              {getFieldDecorator('startTimeStr', {
-                rules: [{ required: true, message: '选择开始时间' }],
-              })(
-                <DatePicker
-                  disabledDate={disabledStartDate}
-                  showTime
-                  format="YYYY-MM-DD HH:mm"
-                  // value={startValue}
-                  placeholder="选择开始时间"
-                  onChange={onStartChange}
-                  onOpenChange={handleStartOpenChange}
-                  disabled
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择结束时间">
-              {getFieldDecorator('endTimeStr', {
-                rules: [{ required: true, message: '选择结束时间' }],
-              })(
-                <DatePicker
-                  disabledTime={disabledEndTime}
-                  disabledDate={disabledEndDate}
-                  showTime={{ defaultValue: moment('23:59:59', 'HH:mm:ss') }}
-                  format="YYYY-MM-DD HH:mm"
-                  // value={endValue}
-                  placeholder="选择结束时间"
-                  onChange={onEndChange}
-                  open={endOpen}
-                  onOpenChange={handleEndOpenChange}
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择机器">
-              {getFieldDecorator('remark', {
-                rule: [{ validator: verifyTimeRequire }],
-              }) (
-                <div>
-                  { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : (modalData.id ? (modalData.remark ? modalData.remark : '暂无') : '') }
-                  <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-                </div>
-              )
-              }
-            </FormItem>
-            {/*style={{ display: isDisabled ? 'block' : 'none' }}*/}
-            <FormItem {...formItemLayout} label="选择游戏">
+            <FormItem {...formItemLayout} label="选择执行方式">
               {getFieldDecorator('gameId', {
-                rules: [{ required: false, message: '请选择游戏' }],
+                rules: [{ required: false, message: '请选择执行方式' }],
               })(
-                <Select placeholder="请选择" onSelect={onSelectGame}>
-                  {gameLists.map((item) => {
+                <Select placeholder="请选择执行方式">
+                  {doType.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id} data-maxNumber={item.maxGoodsNum}>{item.name}</Option>
+                      <Option key={item}>{item}</Option>
                     );
                   })}
                 </Select>
               )}
             </FormItem>
-            {/*<FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
-            {/*{getFieldDecorator('gameId', {*/}
-            {/*rules: [{ required: false, message: '请选择游戏' }],*/}
-            {/*})(*/}
-            {/*<Select placeholder="请选择" disabled>*/}
-            {/*{gameLists.map((item) => {*/}
-            {/*return (*/}
-            {/*<Option value={item.id} key={item.id} >{item.name}</Option>*/}
-            {/*);*/}
-            {/*})}*/}
-            {/*</Select>*/}
-            {/*)}*/}
-            {/*</FormItem>*/}
-            <FormItem {...formItemLayout} label="同一用户获得商品次数">
-              {getFieldDecorator('userMaxTimes', {
-                rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
-              })(<Input placeholder="请填写同一用户获得商品次数" />)}
-            </FormItem>
-            {/*<FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
-            {/*{getFieldDecorator('userMaxTimes', {*/}
-            {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
-            {/*})(<Input placeholder="请填写同一用户获得商品次数" disabled />)}*/}
-            {/*</FormItem>*/}
-            <FormItem {...formItemLayout} label="同一用户每天获得商品次数">
-              {getFieldDecorator('dayUserMaxTimes', {
-                rules: [{ required: false, whitespace: true, message: '请填写同一用户每天获得商品次数' }],
-              })(<Input placeholder="请填写同一用户每天获得商品次数" />)}
-            </FormItem>
-            {/*<FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
-            {/*{getFieldDecorator('dayUserMaxTimes', {*/}
-            {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
-            {/*})(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}*/}
-            {/*</FormItem>*/}
-            <FormItem label={`填写商品信息：最多可添加${maxNumber || 100}个商品`}>
-              {/*<Table*/}
-              {/*columns={goodsColumns}*/}
-              {/*dataSource={goodsInitData}*/}
-              {/*rowKey={record => record.prizeId}*/}
-              {/*pagination={false}*/}
-              {/*style={{ display: isDisabled ? 'block' : 'none' }} />*/}
-              <div className={styles.goodsNoteBox}>
-                <FormItem label='若要重新选择商品时，需要重新选择一下店铺'>
-                  <GoodsTableField
-                    initData={goodsInitData}
-                    count={goodsCount}
-                    clist={goodsLists}
-                    shopClist={shopClist}
-                    shopHandle={shopHandle}
-                    goodsHandle={goodsHandle}
-                    goodsHandleAdd={goodsHandleAdd}
-                    goodsHandleDelete={goodsHandleDelete}
-                    goodsHandleChange={goodsHandleChange}
-                    couponsShow={!couponsShow}
-                    maxNumber={maxNumber}
-                  />
-                </FormItem>
-              </div>
-            </FormItem>
-            {/*style={{ display: couponsShow ? 'block' : 'none' }}*/}
-            <FormItem label="填写优惠券信息">
-              {/*<Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />*/}
-              <div>
-                <DiscountDynamicField
-                  shopClist={shopClist}
-                  couponsShow={!couponsShow}
-                  initData={couponsInitData}
-                  count={couponsCount}
-                  discountHandle={discountHandle}
-                  discountHandleAdd={discountHandleAdd}
-                  discountHandleDelete={discountHandleDelete}
-                  discountHandleChange={discountHandleChange}
-                />
-              </div>
-            </FormItem>
           </Form>
-        </div>
+        {/*</div>*/}
       </Modal>
     );
   });
@@ -229,14 +136,12 @@ const CreateForm = Form.create()(
 export default class TaskSetting extends PureComponent {
   state = {
     modalVisible: false,
-    selectedRows: [],
     formValues: {},
-    id: '',
     editModalConfirmLoading: false,
-
     pageNo: 1,
     type: '',
-    status: ''
+    status: '',
+    modalType: true,
   };
   componentDidMount() {
     this.getLists();
@@ -254,18 +159,7 @@ export default class TaskSetting extends PureComponent {
       },
     });
   }
-  overActivity = (item) => {
-    this.props.dispatch({
-      type: 'homePageSetting/overPlanSetting',
-      payload: {
-        params: {
-          id: item.activityPlanId,
-          status: 2,
-        }
-      },
-    });
-    this.getLists()
-  }
+
   // 重置
   handleFormReset = () => {
     const { form } = this.props;
@@ -292,6 +186,44 @@ export default class TaskSetting extends PureComponent {
       });
     });
   };
+  // 新增modal确认事件 开始
+  saveFormRef = (form) => {
+    this.form = form;
+    console.log('this.form', this.form)
+  }
+  // 添加modal 添加事件
+  handleModalVisible = (flag) => {
+    this.setState({
+      modalVisible: flag,
+      modalData: {},
+      modalType: true,
+    });
+    this.setModalData();
+  };
+  // 设置modal 数据
+  setModalData = (data) => {
+    console.log('this.form', this.form)
+    if (data) {
+      this.form.setFieldsValue({
+        type: data.type || '',
+        doType: data.doType || undefined,
+        app: data.app || undefined,
+        appUrl: data.appUrl || undefined,
+        appVersion: data.appVersion,
+      });
+    } else {
+      this.form.setFieldsValue({
+        name: undefined,
+        code: undefined,
+        sellerId: undefined,
+        remark: undefined,
+        type: undefined,
+      });
+    }
+  }
+  taskType = (value) => {
+    console.log('value', value)
+  }
   watchTask = () => {
 
   }
@@ -364,6 +296,7 @@ export default class TaskSetting extends PureComponent {
       taskSetting: { list },
       loading,
     } = this.props;
+    const { modalType, modalVisible } = this.state
     const columns = [
       {
         title: '任务ID',
@@ -425,6 +358,16 @@ export default class TaskSetting extends PureComponent {
         ),
       },
     ];
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -450,6 +393,55 @@ export default class TaskSetting extends PureComponent {
             </div>
           </div>
         </Card>
+        <Modal
+          title={
+            <div class="modalBox">
+              <span class="leftSpan"></span>
+              <span class="modalTitle">{!modalType ? '编辑任务' : '新增排期'}</span>
+            </div>
+          }
+          visible={modalVisible}
+          // onOk={handleAdd}
+          onCancel={() => this.handleModalVisible(false)}
+          // confirmLoading={editModalConfirmLoading}
+          width={800} >
+          <div className="manageAppBox">
+            <Form>
+              <FormItem {...formItemLayout} label="选择任务类型">
+                {/*{getFieldDecorator('activityId', {*/}
+                  {/*rules: [{ required: false, message: '请选择任务类型' }],*/}
+                {/*})(*/}
+                  <Select placeholder="请选择" onSelect={() => this.taskType}>
+                  {taskTypeOptions.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+                {/*)}*/}
+              </FormItem>
+              <FormItem {...formItemLayout} label="选择机器">
+                {/*{getFieldDecorator('remark')(*/}
+                  <div>
+                    <Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>
+                  </div>)
+                {/*}*/}
+              </FormItem>
+              {/*<div style={{ display: '' }}>*/}
+                <CreateForm
+                  ref={this.saveFormRef}
+                  // modalVisible={this.state.modalVisible}
+                  handleAdd={this.handleAdd}
+                  // handleModalVisible={this.handleModalVisible}
+                  // editModalConfirmLoading={this.state.editModalConfirmLoading}
+                  // openSelectMachineModal={this.openSelectMachineModal}
+                  disabledStartDate={this.disabledStartDate}
+                  disabledTime={this.disabledTime}
+                />
+              {/*</div>*/}
+            </Form>
+          </div>
+        </Modal>
       </PageHeaderLayout>
     );
   }
