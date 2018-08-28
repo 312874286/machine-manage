@@ -256,7 +256,7 @@ class DiscountDynamicField extends React.Component {
         dataIndex: 'shopName',
         render: (text, record) => {
           return (
-            <Select defaultValue={ record.shopName } placeholder="请选择店铺">
+            <Select onSelect={this.handleChangeName.bind(this, record)}  defaultValue={ record.shopName } placeholder="请选择店铺">
               {/*{children}*/}
               {shopClist.map((item) => {
                 return (
