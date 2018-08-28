@@ -3533,7 +3533,237 @@ const proxy = {
       }],
       "msg": "成功"
     })
-  }
+  },
+  'GET /machine/task/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 3,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": "3",
+          "type": 3,
+          "status": 0,
+          "doType": 0,
+          "doTime": "2018-08-27 10:45:17",
+          "app": "",
+          "appUrl": "",
+          "appVersion": null,
+          "channelCode": "1,3,5,7,9",
+          "createId": null,
+          "createTime": "2018-08-27 10:46:25",
+          "updateId": null,
+          "updateTime": "2018-08-27 10:46:25",
+          "taskAll": 0,
+          "taskSuss": 0,
+          "doTimeStr": null,
+          "channelCodeStr": null,
+          "appName": null,
+          "machineList": null
+        },
+        {
+          "id": "2",
+          "type": 2,
+          "status": 0,
+          "doType": 0,
+          "doTime": "2018-08-27 10:44:38",
+          "app": "1",
+          "appUrl": "www.baidu.com",
+          "appVersion": "1.0.1",
+          "channelCode": null,
+          "createId": null,
+          "createTime": "2018-08-27 10:45:01",
+          "updateId": null,
+          "updateTime": "2018-08-27 10:45:01",
+          "taskAll": 0,
+          "taskSuss": 0,
+          "doTimeStr": null,
+          "channelCodeStr": null,
+          "appName": null,
+          "machineList": null
+        },
+        {
+          "id": "1",
+          "type": 1,
+          "status": 0,
+          "doType": 0,
+          "doTime": "2018-08-27 10:00:00",
+          "app": "1",
+          "appUrl": "www.baidu.com",
+          "appVersion": "1.0.1",
+          "channelCode": null,
+          "createId": null,
+          "createTime": "2018-08-27 09:50:08",
+          "updateId": null,
+          "updateTime": "2018-08-27 09:50:08",
+          "taskAll": 0,
+          "taskSuss": 0,
+          "doTimeStr": null,
+          "channelCodeStr": null,
+          "appName": null,
+          "machineList": null
+        }
+      ]
+    })
+  },
+  'POST /machine/task/delete': (req, res) => {
+    res.send({
+      "code": 1,
+      "data": null,
+      "msg": "该任务记录不能删除"
+    })
+  },
+  'POST /machine/task/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /machine/task/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /machine/task/updateStatus': (req, res) => {
+    res.send({
+      "code": 1,
+      "data": null,
+      "msg": "该任务未执行，不能继续执行"
+    })
+  },
+  'POST /machine/task/selectAppList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "appType": 1,
+          "appName": "海莲",
+          "appPackageName": "com.muwood.chainapp",
+          "id": "1"
+        },
+        {
+          "appType": 2,
+          "appName": "安装器",
+          "appPackageName": "com.detection.inno72.installer",
+          "id": "2"
+        },
+        {
+          "appType": 2,
+          "appName": "测试程序",
+          "appPackageName": "com.detection.inno72.test",
+          "id": "3"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /machine/task/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "2",
+        "type": 2,
+        "status": 0,
+        "doType": 0,
+        "doTime": "2018-08-27 10:44:38",
+        "app": "1",
+        "appUrl": "www.baidu.com",
+        "appVersion": "1.0.1",
+        "channelCode": null,
+        "createId": "936451df9a7443c3a59102b193e3b7ff",
+        "createTime": "2018-08-27 13:25:59",
+        "updateId": null,
+        "updateTime": "2018-08-27 13:25:59",
+        "taskAll": 0,
+        "taskSuss": 0,
+        "doTimeStr": null,
+        "channelCodeStr": null,
+        "appName": "海莲",
+        "creater": null,
+        "machineList": [
+          {
+            "id": null,
+            "taskId": "天津市天津市和平区鞍山道沿线大沽口",
+            "machineId": "123",
+            "machineCode": "123",
+            "taskStatus": null,
+            "doType": null,
+            "doStatus": null,
+            "doMsg": null,
+            "doTime": null
+          }
+        ]
+      },
+      "msg": "成功"
+    })
+  },
+  'POST /machine/task/selectAreaMachines': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "code": "100000000",
+          "parentCode": null,
+          "name": "北京市",
+          "province": "北京市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "18f05c0c234749c7bf6c60dda9f5092e",
+              "machineCode": "1846698071048",
+              "state": "1"
+            },
+            {
+              "machineId": "8389fc95a5324a02a45aabfc6823436d",
+              "machineCode": "1863398071038",
+              "state": "0"
+            }
+          ]
+        },
+        {
+          "code": "110000000",
+          "parentCode": null,
+          "name": "天津市",
+          "province": "天津市",
+          "city": null,
+          "district": null,
+          "circle": null,
+          "level": 1,
+          "machines": [
+            {
+              "machineId": "1575f4d0ff8c491986d5ff534085904e",
+              "machineCode": "1809510071149",
+              "state": "0"
+            },
+            {
+              "machineId": "947639777c874724a954b1ca47f987f0",
+              "machineCode": "1834003071023",
+              "state": null
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
 };
 
 // export default noProxy ? {

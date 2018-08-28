@@ -19,13 +19,13 @@ const api = map({
   machineUpdateInfo: '/machine/machine/updateInfo',
   getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
 
-  taskList: '/task/list?pageNo={pageNo}&type={type}&status={status}',
-  taskDelete: '/task/delete',
-  taskAdd: '/task/add',
-  taskUpdate: '/task/update',
-  taskSelectAppList: '/task/selectAppList',
-  taskDetail: '/task/detail',
-  taskSelectAreaMachines: '/task/selectAreaMachines',
+  taskList: '/machine/task/list?pageNo={pageNo}&type={type}&status={status}',
+  taskDelete: '/machine/task/delete',
+  taskAdd: '/machine/task/add',
+  taskUpdate: '/machine/task/update',
+  taskSelectAppList: '/machine/task/selectAppList',
+  taskDetail: '/machine/task/detail',
+  taskSelectAreaMachines: '/machine/task/selectAreaMachines',
 });
 
 export default api;
