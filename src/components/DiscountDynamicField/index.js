@@ -145,6 +145,7 @@ class DiscountDynamicField extends React.Component {
     this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
   }
   handleChangeName = (record, value) => {
+    console.log('val', val)
     record.shopsId = value;
     // let number = 0
     // for (var i = 0; i < this.state.clist.length; i++ ) {
