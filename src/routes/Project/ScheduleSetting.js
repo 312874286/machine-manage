@@ -1354,11 +1354,15 @@ export default class ScheduleSettingList extends PureComponent {
       prizeType: '2',
     };
     this.setState({
-      couponsInitData: [...couponsInitData, newData],
-      couponsCount: couponsCount+1,
+      couponsInitData: [],
     }, () => {
-      console.log('discountHandleAdd::', this.state.couponsCount);
-    });
+      this.setState({
+        couponsInitData: [...couponsInitData, newData],
+        couponsCount: couponsCount+1,
+      }, () => {
+        console.log('discountHandleAdd::', this.state.couponsCount);
+      });
+    })
   }
   discountHandleDelete = (key) => {
     const couponsInitData = [...this.state.couponsInitData];

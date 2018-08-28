@@ -179,7 +179,8 @@ class DiscountDynamicField extends React.Component {
     this.setState({
       rlist,
     });
-    if (this.props.initData.length !== 0) {
+    console.log('couponsInitDatas', initData)
+    if (initData.length !== 0) {
       this.setState({
         dataSource: initData,
       });
