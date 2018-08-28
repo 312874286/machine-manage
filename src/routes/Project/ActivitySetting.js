@@ -812,27 +812,29 @@ export default class activitySettingList extends PureComponent {
       // const rangeTimeValue = fieldsValue.rangeTime
       const { goodsInitData } = this.state
       console.log('goodsInitData', goodsInitData)
-      for (let i = 0; i < goodsInitData.length; i++) {
-        if (parseInt(goodsInitData[i].isVip) === 0 ) {
-          console.log('goodsInitData', goodsInitData[i].sessionKey)
-          if (goodsInitData[i].sessionKey) {
-            message.config({
-              top: 100,
-              duration: 2,
-              maxCount: 1,
-            });
-            message.warning(`非入会不要填写访问码`)
-            return false
-          }
-        } else {
-          if (!goodsInitData[i].sessionKey) {
-            message.config({
-              top: 100,
-              duration: 2,
-              maxCount: 1,
-            });
-            message.warning(`入会需要填写访问码`)
-            return false
+      if (this.state.selectTypeValue === 1) {
+        for (let i = 0; i < goodsInitData.length; i++) {
+          if (parseInt(goodsInitData[i].isVip) === 0 ) {
+            console.log('goodsInitData', goodsInitData[i].sessionKey)
+            if (goodsInitData[i].sessionKey) {
+              message.config({
+                top: 100,
+                duration: 2,
+                maxCount: 1,
+              });
+              message.warning(`非入会不要填写访问码`)
+              return false
+            }
+          } else {
+            if (!goodsInitData[i].sessionKey) {
+              message.config({
+                top: 100,
+                duration: 2,
+                maxCount: 1,
+              });
+              message.warning(`入会需要填写访问码`)
+              return false
+            }
           }
         }
       }
