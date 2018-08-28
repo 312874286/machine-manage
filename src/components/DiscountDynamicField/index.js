@@ -170,13 +170,13 @@ class DiscountDynamicField extends React.Component {
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
-        id: i.toString(),
+        id: i,
         name: i.toString(),
       }
       rlist.push(newobj);
     }
     this.setState({
-      rlist: rlist,
+      rlist,
     });
     if (this.props.initData.length !== 0) {
       this.setState({
@@ -190,7 +190,7 @@ class DiscountDynamicField extends React.Component {
 
   }
   render() {
-    const { dataSource } = this.state;
+    const { dataSource, rlist } = this.state;
     const { count, couponsShow, shopClist } = this.props;
     // console.log('discount::', count);
     const components = {
@@ -271,7 +271,11 @@ class DiscountDynamicField extends React.Component {
         render: (text, record) => {
           return (
             <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-              {children2}
+              {rlist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.name}</Option>
+                );
+              })}
             </Select>
 
           );

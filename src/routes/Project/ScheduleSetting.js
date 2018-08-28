@@ -1803,14 +1803,6 @@ export default class ScheduleSettingList extends PureComponent {
     // activityList
     // this.getActivityLists()
     // gameList
-    this.setState({
-      maxNumber: 100,
-      targetData: [],
-      goodsCount: 0,
-      couponsCount: 0,
-      goodsInitData: [],
-      couponsInitData: [],
-    })
     this.getGamesLists()
     this.props.dispatch({
       type: 'scheduleSetting/getScheduleSettingDetail',
@@ -1861,22 +1853,31 @@ export default class ScheduleSettingList extends PureComponent {
           resultRemark: item.resultRemark
         }
       })
-      // console.log('couponsInitDatas', couponsInitDatas)
       this.setState({
-        maxNumber: res.maxGoodsNum ? res.maxGoodsNum : '',
-        targetData: res.machines,
-        goodsCount: res.goods.length,
-        couponsCount: res.coupons.length,
-        goodsInitData: res.goods.length > 0 ? goodsInitDatas : [],
-        couponsInitData: res.coupons.length > 0 ? couponsInitDatas : [],
+        maxNumber: 100,
+        targetData: [],
+        goodsCount: 0,
+        couponsCount: 0,
+        goodsInitData: [],
+        couponsInitData: [],
       }, () => {
+        console.log('couponsInitDatas', couponsInitDatas)
         this.setState({
-          modalVisible: true,
-          modalData: res,
-          modalType: false,
+          maxNumber: res.maxGoodsNum ? res.maxGoodsNum : '',
+          targetData: res.machines,
+          goodsCount: res.goods.length,
+          couponsCount: res.coupons.length,
+          goodsInitData: res.goods.length > 0 ? goodsInitDatas : [],
+          couponsInitData: res.coupons.length > 0 ? couponsInitDatas : [],
+        }, () => {
+          this.setState({
+            modalVisible: true,
+            modalData: res,
+            modalType: false,
+          });
+          this.setModalData(res);
         });
-        this.setModalData(res);
-      });
+      })
     });
   }
   onWatchClick = (item) => {

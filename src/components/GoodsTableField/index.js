@@ -226,7 +226,7 @@ class GoodsTableField extends Component {
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
-        id: i.toString(),
+        id: i,
         name: i.toString(),
       }
       rlist.push(newobj);
