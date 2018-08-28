@@ -320,7 +320,7 @@ class GoodsTableField extends Component {
         dataIndex: 'shopName',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
+            <Select onSelect={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
               {/*{children}*/}
               {shopClist.map((item) => {
                 return (
@@ -335,7 +335,7 @@ class GoodsTableField extends Component {
         dataIndex: 'name',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
+            <Select onSelect={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
               {/*{children}*/}
               {clist.map((item) => {
                 return (
