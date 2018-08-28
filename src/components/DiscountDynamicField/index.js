@@ -155,7 +155,7 @@ class DiscountDynamicField extends React.Component {
     //   }
     // }
     console.log('val', record, this.state.dataSource, this.props.initData);
-    this.props.discountHandle(this.props.initData);
+    this.props.discountHandle(this.state.dataSource);
   }
   handleSave = (row) => {
     this.props.discountHandleChange(row);
