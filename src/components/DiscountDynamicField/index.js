@@ -122,12 +122,13 @@ class DiscountDynamicField extends React.Component {
       count:0,
       rlist: [
       ],
+      shopClist: [],
     };
   }
   componentWillReceiveProps(nextProps) {
-    const { initData, count } = nextProps;
+    const { initData, count, shopClist } = nextProps;
     // console.log('discount::componentWillReceiveProps', nextProps);
-    this.updateRenderDatas(initData, count);
+    this.updateRenderDatas(initData, count, shopClist);
   }
   componentDidMount() {
     const { initData } = this.props;
@@ -143,11 +144,29 @@ class DiscountDynamicField extends React.Component {
   handleAdd = () => {
     this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
   }
-
+  handleChangeName = (record, value) => {
+    record.shopsId = value;
+    // let number = 0
+    // for (var i = 0; i < this.state.clist.length; i++ ) {
+    //   if (this.state.clist[i].id === value) {
+    //     // record.name = this.state.clist[i].name;
+    //     // number = this.state.clist[i].number
+    //   }
+    // }
+    console.log('val', record, this.state.dataSource, this.props.initData);
+    this.props.discountHandle(this.props.initData);
+  }
   handleSave = (row) => {
     this.props.discountHandleChange(row);
   }
-  updateRenderDatas = (initData, count) => {
+  updateRenderDatas = (initData, count, shopClist) => {
+    this.setState({
+      shopClist,
+    }, () => {
+      this.setState({
+        shopClistCurrentValue: this.state.shopClist.length === 0 ? '' : shopClist[0].id,
+      })
+    });
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -172,7 +191,7 @@ class DiscountDynamicField extends React.Component {
   }
   render() {
     const { dataSource } = this.state;
-    const { count } = this.props;
+    const { count, couponsShow, shopClist } = this.props;
     // console.log('discount::', count);
     const components = {
       body: {
@@ -186,41 +205,94 @@ class DiscountDynamicField extends React.Component {
     for (let i = 0; i < this.state.rlist.length; i++) {
       children2.push(<Option key={this.state.rlist[i].id}>{this.state.rlist[i].name}</Option>);
     }
-    console.log('initData2', this.props.initData)
-    this.columns = [{
-      title: '优惠券编号',
-      dataIndex: 'code',
-      editable: true,
-    },{
-      title: '优惠券名称',
-      dataIndex: 'name',
-      editable: true,
-    }, {
-      title: '规则',
-      dataIndex: 'resultCode',
-      render: (text, record) => {
-        return (
-          <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-            {children2}
-          </Select>
-
-        );
-      },
-    }, {
-      title: '规则描述',
-      dataIndex: 'resultRemark',
-      editable: true,
-    }, {
-      title: '操作',
-      dataIndex: 'operation',
-      render: (text, record) => {
-        return (
+    // console.log('initData2', this.props.initData)
+    if (couponsShow) {
+      this.columns = [{
+        title: '选择店铺',
+        dataIndex: 'shopName',
+        render: (text, record) => {
+          return (
+            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.shopName } placeholder="请选择店铺">
+              {/*{children}*/}
+              {shopClist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      },{
+        title: 'InteractID',
+        dataIndex: 'code',
+        editable: true,
+      },{
+        title: '优惠券名称',
+        dataIndex: 'name',
+        editable: true,
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        render: (text, record) => {
+          return (
             <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
               <a>删除</a>
             </Popconfirm>
-        );
-      },
-    }];
+          );
+        },
+      }];
+    } else {
+      this.columns = [{
+        title: '选择店铺',
+        dataIndex: 'shopName',
+        render: (text, record) => {
+          return (
+            <Select defaultValue={ record.shopName } placeholder="请选择店铺">
+              {/*{children}*/}
+              {shopClist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      },{
+        title: 'InteractID',
+        dataIndex: 'code',
+        editable: true,
+      },{
+        title: '优惠券名称',
+        dataIndex: 'name',
+        editable: true,
+      }, {
+        title: '规则',
+        dataIndex: 'resultCode',
+        render: (text, record) => {
+          return (
+            <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
+              {children2}
+            </Select>
+
+          );
+        },
+      }, {
+        title: '规则描述',
+        dataIndex: 'resultRemark',
+        editable: true,
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        render: (text, record) => {
+          return (
+            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+              <a>删除</a>
+            </Popconfirm>
+          );
+        },
+      }];
+    }
+
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;

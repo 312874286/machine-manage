@@ -20,19 +20,21 @@ const api = map({
   updateShopSetting: '/project/shops/update',
   deleteShopSetting: '/project/shops/delete',
   getShopSettingDetail: '/project/shops/detail?id={id}',
-  getActivitySettingList: '/project/activity/list?pageNo={pageNo}&keyword={keyword}&code={code}',
+  getActivitySettingList: '/project/activity/list?pageNo={pageNo}&keyword={keyword}&type={type}',
   saveActivitySetting: '/project/activity/add',
   updateActivitySetting: '/project/activity/update',
   deleteActivitySetting: '/project/activity/delete',
   getActivitySettingDetail: '/project/activity/detail?id={id}',
   getShopsList: '/project/shops/getList?sellerId={sellerId}',
+  getMerchantShops: '/project/shops/selectMerchantShops?sellerId={sellerId}',
+  getActivityShops: '/project/shops/selectActivityShops?activityId={activityId}',
 
-  getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}&status={status}',
+  getScheduleSettingList: '/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}&status={status}&type={type}',
   saveScheduleSetting: '/project/activityPlan/add',
   updateScheduleSetting: '/project/activityPlan/update',
-  deleteScheduleSetting: '/project/activityPlan/delete',
+  deleteScheduleSetting: '/project/activityPlan/delete?status=1',
   getScheduleSettingDetail: '/project/activityPlan/detail?id={id}',
-  selectAreaMachines: '/project/activityPlan/selectAreaMachines?code={code}&level={level}&startTime={startTime}&endTime={endTime}',
+  selectAreaMachines: '/project/activityPlan/selectAreaMachines',
   getActivityList: '/project/activity/getList',
   getActivityCount: '/activity/data/count/list',
   getGameList: '/project/game/getList',
@@ -59,6 +61,7 @@ const api = map({
   // getActivityList: '/project/activity/getList',
   getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}',
 
+  paiActivity: '/pai/data/count/list',
 });
 
 export default api;

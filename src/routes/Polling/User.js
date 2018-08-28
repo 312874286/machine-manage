@@ -175,8 +175,10 @@ const WatchMachine = Form.create()(
   });
 const SelectMachineForm = Form.create()(
   (props) => {
-    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
-      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll, onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
+    const { editMachineModalVisible, form,
+      onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
+      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll,
+      onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {

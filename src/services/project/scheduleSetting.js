@@ -45,9 +45,12 @@ export async function delScheduleSetting({ params }) {
   });
 }
 
-export async function selectAreaMachines({ restParams }) {
-  return fetch.get(api.selectAreaMachines, {
-    restParams,
+export async function selectAreaMachines({ params }) {
+  // return fetch.get(api.selectAreaMachines, {
+  //   restParams,
+  // });
+  return fetch.post(api.selectAreaMachines, {
+    body: stringify(params),
   });
 }
 
@@ -59,6 +62,12 @@ export async function getPlanMachineDetailList({ restParams }) {
 
 export async function getGoodsList({ restParams }) {
   return fetch.get(api.getGoodsList, {
+    restParams,
+  });
+}
+
+export async function getActivityShops({ restParams }) {
+  return fetch.get(api.getActivityShops, {
     restParams,
   });
 }

@@ -177,8 +177,7 @@ const EditPointForm = Form.create()(
                   // onPopupScroll={onPopupScroll}
                   onSelect={onSelect}
                   style={{ width: '100%' }}
-                  allowClear={true}
-                >
+                  allowClear={true}>
                   {/*{*/}
                   {/*data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)*/}
                   {/*}*/}

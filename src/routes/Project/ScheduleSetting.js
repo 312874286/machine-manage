@@ -23,6 +23,7 @@ import {
   Tree,
   Radio,
   Table,
+  Alert
 } from 'antd';
 import GoodsTableField from '../../components/GoodsTableField';
 import DiscountDynamicField from '../../components/DiscountDynamicField';
@@ -43,15 +44,17 @@ const RangePicker = DatePicker.RangePicker;
 const TreeNode = Tree.TreeNode;
 const couponsInitData = []
 const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }];
-
+const activityType = [{id: 0, name: '互动活动'}, {id: 1, name: '派样活动'}]
 
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
-      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete, goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData, onSelectShop, goodsLists,
+      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete,
+      goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData,
+      onSelectShop, goodsLists, shopClist,
       disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, selectMachineFlag, disabledTime, disabledEndTime,
+      isDisabled, selectMachineFlag, disabledTime, disabledEndTime, couponsShow, shopHandle, onSelectGame, maxNumber
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -78,7 +81,7 @@ const CreateForm = Form.create()(
       align: 'center',
     }];
     const couponsColumns = [{
-      title: '优惠券编号',
+      title: 'InteractID',
       dataIndex: 'code',
       align: 'center',
     }, {
@@ -115,7 +118,7 @@ const CreateForm = Form.create()(
             })(<Select placeholder="请选择" onSelect={onSelectShop} >
                   {activityLists.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id} data-id={item.shopId}>{item.name}</Option>
+                      <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
                     );
                   })}
                </Select>)}
@@ -177,72 +180,100 @@ const CreateForm = Form.create()(
           <FormItem {...formItemLayout} label="选择机器">
             {getFieldDecorator('remark', {
               rule: [{ validator: verifyTimeRequire }],
-            }) ((modalData.id) ? (
-              <div>{modalData.remark ? modalData.remark : '测试暂无'}</div>) : (
-              <div>
-                { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
-                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-              </div>
-              ))
+            }) (
+                  <div>
+                    { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : (modalData.id ? (modalData.remark ? modalData.remark : '暂无') : '') }
+                    <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+                  </div>
+               )
             }
           </FormItem>
             {/*style={{ display: isDisabled ? 'block' : 'none' }}*/}
-          <FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'none' : 'block' }}>
+          <FormItem {...formItemLayout} label="选择游戏">
             {getFieldDecorator('gameId', {
               rules: [{ required: false, message: '请选择游戏' }],
             })(
-              <Select placeholder="请选择">
+              <Select placeholder="请选择" onSelect={onSelectGame}>
                 {gameLists.map((item) => {
                   return (
-                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                    <Option value={item.id} key={item.id} data-maxNumber={item.maxGoodsNum}>{item.name}</Option>
                   );
                 })}
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'block' : 'none' }}>
-            {getFieldDecorator('gameId', {
-              rules: [{ required: false, message: '请选择游戏' }],
-            })(
-              <Select placeholder="请选择" disabled>
-                {gameLists.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id}>{item.name}</Option>
-                  );
-                })}
-              </Select>
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'none' : 'block' }}>
+          {/*<FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
+            {/*{getFieldDecorator('gameId', {*/}
+              {/*rules: [{ required: false, message: '请选择游戏' }],*/}
+            {/*})(*/}
+              {/*<Select placeholder="请选择" disabled>*/}
+                {/*{gameLists.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option value={item.id} key={item.id} >{item.name}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>*/}
+            {/*)}*/}
+          {/*</FormItem>*/}
+          <FormItem {...formItemLayout} label="同一用户获得商品次数">
             {getFieldDecorator('userMaxTimes', {
               rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
             })(<Input placeholder="请填写同一用户获得商品次数" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
-            {getFieldDecorator('userMaxTimes', {
-              rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
-            })(<Input placeholder="请填写同一用户获得商品次数" disabled />)}
-          </FormItem>
-            <FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'none' : 'block' }}>
+          {/*<FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
+            {/*{getFieldDecorator('userMaxTimes', {*/}
+              {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
+            {/*})(<Input placeholder="请填写同一用户获得商品次数" disabled />)}*/}
+          {/*</FormItem>*/}
+            <FormItem {...formItemLayout} label="同一用户每天获得商品次数">
               {getFieldDecorator('dayUserMaxTimes', {
                 rules: [{ required: false, whitespace: true, message: '请填写同一用户每天获得商品次数' }],
               })(<Input placeholder="请填写同一用户每天获得商品次数" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>
-              {getFieldDecorator('dayUserMaxTimes', {
-                rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
-              })(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}
-            </FormItem>
-          <FormItem label="填写商品信息">
-            <Table columns={goodsColumns} dataSource={goodsInitData} rowKey={record => record.prizeId} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />
-            <div style={{ display: isDisabled ? 'none' : 'block' }}>
-              <GoodsTableField initData={goodsInitData} count={goodsCount} clist={goodsLists} goodsHandle={goodsHandle} goodsHandleAdd={goodsHandleAdd} goodsHandleDelete={goodsHandleDelete} goodsHandleChange={goodsHandleChange}  />
+            {/*<FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
+              {/*{getFieldDecorator('dayUserMaxTimes', {*/}
+                {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
+              {/*})(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}*/}
+            {/*</FormItem>*/}
+          <FormItem label={`填写商品信息：最多可添加${maxNumber || 100}个商品`}>
+            {/*<Table*/}
+              {/*columns={goodsColumns}*/}
+              {/*dataSource={goodsInitData}*/}
+              {/*rowKey={record => record.prizeId}*/}
+              {/*pagination={false}*/}
+              {/*style={{ display: isDisabled ? 'block' : 'none' }} />*/}
+            <div className={styles.goodsNoteBox}>
+              <FormItem label='若要重新选择商品时，需要重新选择一下店铺'>
+                <GoodsTableField
+                  initData={goodsInitData}
+                  count={goodsCount}
+                  clist={goodsLists}
+                  shopClist={shopClist}
+                  shopHandle={shopHandle}
+                  goodsHandle={goodsHandle}
+                  goodsHandleAdd={goodsHandleAdd}
+                  goodsHandleDelete={goodsHandleDelete}
+                  goodsHandleChange={goodsHandleChange}
+                  couponsShow={!couponsShow}
+                  maxNumber={maxNumber}
+                />
+              </FormItem>
             </div>
           </FormItem>
+            {/*style={{ display: couponsShow ? 'block' : 'none' }}*/}
           <FormItem label="填写优惠券信息">
-            <Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />
-            <div style={{ display: isDisabled ? 'none' : 'block' }}>
-              <DiscountDynamicField initData={couponsInitData} count={couponsCount} discountHandle={discountHandle} discountHandleAdd={discountHandleAdd} discountHandleDelete={discountHandleDelete} discountHandleChange={discountHandleChange} />
+            {/*<Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />*/}
+            <div>
+              <DiscountDynamicField
+                shopClist={shopClist}
+                couponsShow={!couponsShow}
+                initData={couponsInitData}
+                count={couponsCount}
+                discountHandle={discountHandle}
+                discountHandleAdd={discountHandleAdd}
+                discountHandleDelete={discountHandleDelete}
+                discountHandleChange={discountHandleChange}
+              />
             </div>
           </FormItem>
         </Form>
@@ -250,10 +281,67 @@ const CreateForm = Form.create()(
       </Modal>
     );
 });
+// const SelectMachineForm = Form.create()(
+//   (props) => {
+//     const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading,
+//     renderTreeNodes, treeData, onLoadData, onExpand, expandedKeys, autoExpandParent, checkedKeys, selectedKeys, onCheck, onSelect, } = props;
+//     const { getFieldDecorator } = form;
+//     const formItemLayout = {
+//       labelCol: {
+//         xs: { span: 24 },
+//         sm: { span: 4 },
+//       },
+//       wrapperCol: {
+//         xs: { span: 24 },
+//         sm: { span: 16 },
+//       },
+//     };
+//     return (
+//       <Modal
+//         title={
+//           <div class="modalBox">
+//             <span class="leftSpan"></span>
+//             <span class="modalTitle">选择机器</span>
+//           </div>
+//         }
+//         visible={editMachineModalVisible}
+//         onOk={onEditMachineHandleAddClick}
+//         onCancel={() => onEditMachineHandleModalVisibleClick()}
+//         confirmLoading={editMachineEditModalConfirmLoading}
+//         width={800}>
+//         <div className="manageAppBox">
+//           <Form onSubmit={this.handleSearch}>
+//           <FormItem {...formItemLayout} label="选择机器">
+//             {getFieldDecorator('machine', {
+//               rules: [{ type: 'array', required: true, message: '请选择机器' }],
+//             })(
+//               <Tree
+//                 loadData={onLoadData}
+//                 checkable
+//                 onExpand={onExpand}
+//                 expandedKeys={expandedKeys}
+//                 autoExpandParent={autoExpandParent}
+//                 onCheck={onCheck}
+//                 checkedKeys={checkedKeys}
+//                 onSelect={onSelect}
+//                 selectedKeys={selectedKeys}
+//               >
+//                 {renderTreeNodes(treeData)}
+//               </Tree>
+//             )}
+//           </FormItem>
+//         </Form>
+//         </div>
+//       </Modal>
+//     );
+// });
 const SelectMachineForm = Form.create()(
   (props) => {
-    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading,
-    renderTreeNodes, treeData, onLoadData, onExpand, expandedKeys, autoExpandParent, checkedKeys, selectedKeys, onCheck, onSelect, } = props;
+    const { editMachineModalVisible, form,
+      onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
+      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll,
+      onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -262,52 +350,168 @@ const SelectMachineForm = Form.create()(
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 24 },
       },
     };
+    this.columns = [{
+      title: '名称',
+      dataIndex: 'machineCode',
+      // render: text => <a href="javascript:;">{text}</a>,
+      render: (text, record) => {
+        return (
+          record.planed === '1' ? (
+            <a href="javascript:;">{record.machineCode}<span style={{ color : 'red' }}>/已占用</span></a>
+          ) : (
+            <a href="javascript:;">{record.machineCode}</a>
+          )
+        )
+      }
+    }];
+    const columns = this.columns.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: handleSave,
+        }),
+      };
+    });
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: onChangeRowSelection,
+      onSelect: onLeftSelect,
+      onSelectAll: onSelectAll,
+    };
+    this.columnsRight = [{
+      title: '名称',
+      dataIndex: 'machineCode',
+      render: text => <a href="javascript:;">{text}</a>,
+    }, {
+      title: '操作',
+      width: 70,
+      dataIndex: 'operation',
+      render: (text, record) => {
+        return (
+          targetData.length > 0
+            ? (
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.machineCode)}>
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
+            ) : null
+        );
+      }
+    }];
+    const columnsRight = this.columnsRight.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: targetHandleSave,
+        }),
+      };
+    });
+
     return (
       <Modal
-        title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">选择机器</span>
-          </div>
-        }
+        title="选择机器"
         visible={editMachineModalVisible}
         onOk={onEditMachineHandleAddClick}
         onCancel={() => onEditMachineHandleModalVisibleClick()}
         confirmLoading={editMachineEditModalConfirmLoading}
-        width={800}
-      >
+        width={1000}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="选择机器">
-            {getFieldDecorator('machine', {
-              rules: [{ type: 'array', required: true, message: '请选择机器' }],
-            })(
-              <Tree
-                loadData={onLoadData}
-                checkable
-                onExpand={onExpand}
-                expandedKeys={expandedKeys}
-                autoExpandParent={autoExpandParent}
-                onCheck={onCheck}
-                checkedKeys={checkedKeys}
-                onSelect={onSelect}
-                selectedKeys={selectedKeys}
-              >
-                {renderTreeNodes(treeData)}
-              </Tree>
-            )}
-          </FormItem>
-        </Form>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={10} sm={24}>
+                <FormItem>
+                  {getFieldDecorator('provinceCityAreaTrade')(
+                    <Cascader
+                      placeholder="请选择"
+                      options={insertOptions}
+                      loadData={loadData}
+                      changeOnSelect
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+                <FormItem>
+                  <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
+                    搜索
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('machine')(
+                <div style={{ display: 'flex' }}>
+                  <div>
+                    <Alert
+                      message={(
+                        <div>
+                          已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
+                        </div>
+                      )}
+                      type="info"
+                      showIcon
+                    />
+                    <Table
+                      rowKey={record => record.machineCode}
+                      rowSelection={rowSelection}
+                      columns={columns}
+                      dataSource={sourceData}
+                      id="leftTable"
+                      style={{ width: '460px', marginBottom: '20px', marginTop: '10px' }}
+                      scroll={{ y: 200 }}
+                      pagination={false}
+                    />
+                    <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
+                      添加
+                    </Button>
+                  </div>
+                  <div style={{ marginLeft: '20px' }}>
+                    <Alert
+                      message={(
+                        <div>
+                          已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                        </div>
+                      )}
+                      type="success"
+                      showIcon
+                    />
+                    <Table
+                      rowKey={record => record.machineCode}
+                      columns={columnsRight}
+                      dataSource={targetData}
+                      id="rightTable"
+                      style={{ width: '460px', marginTop: '10px' }}
+                      scroll={{ y: 200 }}
+                      pagination={false}/>
+                  </div>
+                </div>
+              )}
+            </FormItem>
+          </Form>
         </div>
       </Modal>
     );
-});
+  });
 const WatchForm = Form.create()(
   (props) => {
-    const { watchModalVisible, modalData, handleWatchModalVisible, goodsList, couponsList, watchDetailClick } = props;
+    const { watchModalVisible, modalData, handleWatchModalVisible, goodsList, couponsList, watchDetailClick, couponsShow } = props;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -319,6 +523,10 @@ const WatchForm = Form.create()(
       },
     };
     const goodsColumns = [{
+      title: '店铺名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    }, {
       title: '商品名称',
       dataIndex: 'activityPlanId',
       align: 'center',
@@ -331,8 +539,38 @@ const WatchForm = Form.create()(
       dataIndex: 'resultRemark',
       align: 'center',
     }];
+    const goodsColumns2 = [{
+      title: '店铺名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    },{
+      title: '商品名称',
+      dataIndex: 'activityPlanId',
+      align: 'center',
+    }, {
+      title: '数量',
+      dataIndex: 'number',
+      align: 'center',
+    }];
     const couponsColumns = [{
-      title: '优惠券编号',
+      title: '店铺名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    }, {
+      title: 'InteractID',
+      dataIndex: 'code',
+      align: 'center',
+    }, {
+      title: '优惠券名称',
+      dataIndex: 'name',
+      align: 'center',
+    }];
+    const couponsColumns2 = [{
+      title: '店铺名称',
+      dataIndex: 'shopName',
+      align: 'center',
+    }, {
+      title: 'InteractID',
       dataIndex: 'code',
       align: 'center',
     }, {
@@ -366,12 +604,12 @@ const WatchForm = Form.create()(
           <FormItem {...formItemLayout} label="活动名称">
             <span>{modalData.activityName}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="所属商户">
-            <span>{modalData.merchantName}</span>
-          </FormItem>
-          <FormItem {...formItemLayout} label="所属店铺">
-            <span>{modalData.shopName}</span>
-          </FormItem>
+          {/*<FormItem {...formItemLayout} label="所属商户">*/}
+            {/*<span>{modalData.merchantName}</span>*/}
+          {/*</FormItem>*/}
+          {/*<FormItem {...formItemLayout} label="所属店铺">*/}
+            {/*<span>{modalData.shopName}</span>*/}
+          {/*</FormItem>*/}
           <FormItem {...formItemLayout} label="活动时间">
             <span>{modalData.startTime} - {modalData.endTime}</span>
           </FormItem>
@@ -389,10 +627,10 @@ const WatchForm = Form.create()(
             <span>{modalData.dayUserMaxTimes}</span>
           </FormItem>
           <FormItem {...formItemLayout} label="商品信息">
-            <Table columns={goodsColumns} dataSource={goodsList} rowKey={record => record.prizeId} pagination={false} />
+            <Table columns={couponsShow ? goodsColumns : goodsColumns2} dataSource={goodsList} rowKey={record => record.prizeId} pagination={false} />
           </FormItem>
           <FormItem {...formItemLayout} label="优惠券信息">
-            <Table columns={couponsColumns} dataSource={couponsList} rowKey={record => record.code} pagination={false} />
+            <Table columns={couponsShow ? couponsColumns2 : couponsColumns} dataSource={couponsList} rowKey={record => record.code} pagination={false} />
           </FormItem>
         </Form>
         </div>
@@ -441,38 +679,54 @@ const WatchMachine = Form.create()(
 export default class ScheduleSettingList extends PureComponent {
   state = {
     modalVisible: false,
-    selectedRows: [],
+    // selectedRows: [],
     formValues: {},
-    options: '',
+    // options: '',
     editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
     modalData: {},
     code: '',
     status: '',
+    type: '',
     modalType: true,
     activityLists: [],
     gameLists: [],
 
     editMachineModalVisible: false,
-    confirmLoading: false,
-    treeData: [
-      // { title: 'Expand to load', key: '0' },
-      // { title: 'Expand to load', key: '1' },
-      // { title: 'Tree Node', key: '2', isLeaf: true },
-    ],
+    // confirmLoading: false,
+    // treeData: [
+    //   // { title: 'Expand to load', key: '0' },
+    //   // { title: 'Expand to load', key: '1' },
+    //   // { title: 'Tree Node', key: '2', isLeaf: true },
+    // ],
     selectCity: [],
     selectCityName: [],
-    expandedKeys: [],
-    autoExpandParent: true,
-    checkedKeys: [],
-    selectedKeys: [],
+    // expandedKeys: [],
+    // autoExpandParent: true,
+    // checkedKeys: [],
+    // selectedKeys: [],
     editMachineEditModalConfirmLoading: false,
-    selectStatus: '0',
+    // selectStatus: '0',
+    insertOptions: [],
+    targetData: [],
+    sourceData: [],
+    sourceKey: [],
+    targetKey: [],
+    selectAll: false,
+    selectedRows: [],
+    // code: '',
+    repeat: [],
+    // level: 1,
+    selectedRowKeys: [],
+    options: [],
+    defaultValue: [],
+
 
     dateList: [],
     resList: [],
     goodsLists: [],
+    shopClist: [],
     handleDays: {},
     startTime: '',
     getDataStartDay: '',
@@ -496,13 +750,17 @@ export default class ScheduleSettingList extends PureComponent {
     endOpen: false,
     isDisabled: false,
     selectMachineFlag: false,
+    couponsShow: true,
+
+    goodsTables: [],
+    maxNumber: 100,
   };
   componentDidMount() {
-    this.getAreaList();
+    this.getSearchAreaList();
     // this.getLists();
   }
   // 获取城市列表
-  getAreaList = () => {
+  getSearchAreaList = () => {
     this.props.dispatch({
       type: 'common/getProvinceCityAreaTradeArea',
       payload: {
@@ -553,7 +811,7 @@ export default class ScheduleSettingList extends PureComponent {
     // return endValue.valueOf() <= startValue.valueOf() 时间戳
     // endValue <= moment(startValue.valueOf()) &&
     // console.log(typeof this.state.endValue)
-    return !this.state.modalType ? (endValue < moment().endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
+    return !this.state.modalType ? (endValue < moment(new Date().setDate(new Date().getDate() - 1)).endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
   }
 
   onChange = (field, value) => {
@@ -583,7 +841,17 @@ export default class ScheduleSettingList extends PureComponent {
   // 时间控件结束
   onSelectShop = (value, option) => {
     console.log('value, option', value, option)
-    this.getGoodsLists(option.props['data-id']);
+    if (option.props['data-type'] === 1) {
+      this.setState({
+        couponsShow: false
+      })
+    } else {
+      this.setState({
+        couponsShow: true
+      })
+    }
+    this.getActivityShops(value)
+    // this.getGoodsLists(option.props['data-id']);
   }
   getActivityLists = () => {
     this.props.dispatch({
@@ -593,11 +861,56 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       res = res.map((item) => {
-        return {shopId: item.shopId, id: item.id, name: item.name}
+        return { type: item.type, id: item.id, name: item.name }
       })
       this.setState({
         activityLists: res,
       });
+    });
+  }
+  getActivityShops = (activityId) => {
+    this.props.dispatch({
+      type: 'scheduleSetting/getActivityShops',
+      payload: {
+        restParams: {
+          activityId: activityId ? activityId : ''
+        },
+      },
+    }).then((res) => {
+      // 初始化商品
+      // const goodsData = {
+      //   key: 0,
+      //   shopName: '',
+      //   prizeId: '',
+      //   number: 0,
+      //   resultCode: '1',
+      //   resultRemark: '描述',
+      //   prizeType: '1',
+      // };
+      this.setState({
+        goodsInitData: [],
+        goodsCount: 0,
+        couponsInitData: [],
+        couponsCount: 0,
+        goodsTables: [],
+        shopClist: res
+      });
+      // this.setState({
+      //   shopClist: res
+      // });
+      // 初始化优惠券
+      // const couponsData = {
+      //   key: 0,
+      //   code: '优惠券编号',
+      //   name: '优惠券名称',
+      //   resultCode: '1',
+      //   resultRemark: '描述',
+      //   prizeType: '2',
+      // };
+      // this.setState({
+      //   couponsInitData: [],
+      //   couponsCount: 0,
+      // });
     });
   }
   getGamesLists = (shopId) => {
@@ -624,10 +937,22 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res.length > 0) {
-        this.setState({
-          goodsLists: res,
-        });
+        if (this.state.goodsInitData.length >0) {
+          let goodsInitData = this.state.goodsInitData
+          for (let i = 0; i < goodsInitData.length; i++ ) {
+            for (let j = 0; j < res.length; j++) {
+              // console.log('res[j].id === goodsInitData.prizeId', j, i, res[j].id, goodsInitData[i].prizeId)
+              if (res[j].id === goodsInitData[i].prizeId) {
+                res.splice(j, 1)
+                break
+              }
+            }
+          }
+        }
       }
+      this.setState({
+        goodsLists: res,
+      });
     });
   }
   // 获取列表
@@ -641,6 +966,7 @@ export default class ScheduleSettingList extends PureComponent {
           startTime: this.state.startTime,
           code: this.state.code,
           status: this.state.status,
+          type: this.state.type
         },
       },
     }).then((res) => {
@@ -693,37 +1019,11 @@ export default class ScheduleSettingList extends PureComponent {
           left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
           width = Math.floor((moment(item.endTime) - moment(item.startTime)) / DateNo)
           // console.log('开始时间及结束日期在15天的范围')
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
         } else {
           // 结束日期>范围的结束日期
           left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
           width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / DateNo)
           // console.log('结束日期>范围的结束日期', left, width)
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
         }
       } else {
         // 开始日期<范围的开始日期
@@ -731,35 +1031,9 @@ export default class ScheduleSettingList extends PureComponent {
         if (moment(item.endTime) >= moment(this.state.handleDays.endDay)) {
           // console.log('jieshu日期<范围的开始日期', left, width)
           width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / DateNo)
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
         } else {
           width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / DateNo)
           // console.log('开始日期<范围的开始日期', left, width)
-          // let tmp = {
-          //   left: (6.5 * left) + '%',
-          //   top: (25 + (index * 4)) + '%',
-          //   width: (6.5 * (width + 1)) + '%',
-          //   background: 'rgba(193, 229, 158, 1 )',
-          //   height: '20px',
-          //   Time: time,
-          //   startTime: item.startTime,
-          //   endTime: item.endTime,
-          //   name: item.activityName,
-          //   id: item.id
-          // }
-          // activityArr.push(tmp);
         }
       }
       let tmp = {
@@ -872,12 +1146,13 @@ export default class ScheduleSettingList extends PureComponent {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1];
         }
       }
-      console.log('fieldsValue.status', fieldsValue.status)
+      // console.log('fieldsValue.status', fieldsValue.status)
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
         status: fieldsValue.status >= 0 ? fieldsValue.status : '',
+        type: fieldsValue.type >= 0 ? fieldsValue.type : ''
       }, () => {
         this.getLists();
       });
@@ -976,18 +1251,62 @@ export default class ScheduleSettingList extends PureComponent {
       });
     }
   }
-  goodsHandle = (record) => {
-    console.log('1111record::', record);
+  // 商品信息及优惠券的操作开始
+  goodsHandle = (initData, value, record, key) => {
+    // console.log('1111record::', record);
+    // const { goodsLists } = this.state
+    // let goodsInitData = record
+    // for (var i = 0; i < goodsLists.length; i++ ) {
+    //   if (goodsLists[i].id === value) {
+    //     // record.name = this.state.clist[i].name;
+    //     goodsInitData[0].number = goodsLists[i].number
+    //   }
+    // }
+
+    // for (let i = 0; i < this.state.goodsTables.length; i++) {
+    //   console.log('value === this.state.goodsTables[i].prizeId', value, this.state.goodsTables[i].prizeId)
+    //   if (value === this.state.goodsTables[i].prizeId) {
+    //     return false
+    //   }
+    // }
+    console.log('initData', initData)
+    record = this.getGoodsNumber(value, record, initData, key)
+    console.log('record', record)
     this.setState({
-      goodsInitData: record,
-    });
+      goodsTables: [...this.state.goodsTables, record]
+    }, () => {
+      // console.log('2222record::', record, initData);
+      this.setState({
+        goodsInitData: record,
+        goodsLists: []
+      });
+    })
+  }
+  getGoodsNumber = (value, record, initData, key) => {
+    const { goodsLists } = this.state
+    for (let j = 0; j < initData.length; j++) {
+      if (initData[j].key === key) {
+        for (var i = 0; i < goodsLists.length; i++ ) {
+          if (goodsLists[i].id === value) {
+            // record.name = this.state.clist[i].name;
+            record.number = goodsLists[i].number
+          }
+        }
+      }
+    }
+    return initData;
+  }
+  shopHandle = (shopId) => {
+    this.getGoodsLists(shopId)
   }
   goodsHandleAdd = (val, currentValue) => {
     // console.log(v);
     const { goodsInitData, goodsCount } = this.state;
     const newData = {
       key: goodsCount,
-      prizeId: currentValue,
+      shopName: '',
+      prizeId: '',
+      number: 0,
       resultCode: '1',
       resultRemark: '描述',
       prizeType: '1',
@@ -998,7 +1317,6 @@ export default class ScheduleSettingList extends PureComponent {
     }, () => {
       console.log('goodsHandleAdd::', this.state.goodsCount);
     });
-
   }
   goodsHandleDelete = (key) => {
     const goodsInitData = [...this.state.goodsInitData];
@@ -1018,6 +1336,7 @@ export default class ScheduleSettingList extends PureComponent {
     // console.log('goodsHandleChange::', row);
   }
   discountHandle = (val) => {
+    console.log('val', val)
     this.setState({
       couponsInitData: val,
     });
@@ -1026,6 +1345,8 @@ export default class ScheduleSettingList extends PureComponent {
     const { couponsInitData, couponsCount } = this.state;
     const newData = {
       key: couponsCount,
+      shopsId: '',
+      shopName: '',
       code: '优惠券编号',
       name: '优惠券名称',
       resultCode: '1',
@@ -1054,6 +1375,14 @@ export default class ScheduleSettingList extends PureComponent {
     });
     this.setState({ couponsInitData: newData });
   }
+  // 商品信息及优惠券的操作结束
+  // 选择游戏之后限制新增商品的数量
+  onSelectGame = (value, option) => {
+    console.log('value, option', value, option)
+    this.setState({
+      maxNumber: parseInt(option.props['data-maxNumber']) || 100
+    })
+  }
   // 新增modal确认事件 开始
   saveFormRef = (form) => {
     this.form = form;
@@ -1076,7 +1405,8 @@ export default class ScheduleSettingList extends PureComponent {
           message.error('请补全信息')
           return;
         }
-        if (fieldsValue.dayUserMaxTimes > fieldsValue.userMaxTimes) {
+        console.log('fieldsValue.dayUserMaxTimes > fieldsValue.userMaxTimes', fieldsValue.dayUserMaxTimes, fieldsValue.userMaxTimes)
+        if (parseInt(fieldsValue.dayUserMaxTimes) > parseInt(fieldsValue.userMaxTimes)) {
           message.config({
             top: 100,
             duration: 2,
@@ -1085,23 +1415,53 @@ export default class ScheduleSettingList extends PureComponent {
           message.error('同一用户每天获得商品次数应该小于同一用户获得商品次数，请重新填写')
           return;
         }
-        console.log('fieldsValue', fieldsValue)
-        if (!this.state.modalData.id) {
-          if (this.state.selectCity.length === 0) {
+        console.log('fieldsValue', fieldsValue, this.state.targetData)
+        // if (!this.state.modalData.id) {
+        if (this.state.targetData.length === 0) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.error('请先选择机器')
+          return;
+        }
+        // }
+        let goods = this.state.goodsInitData
+        if (!this.state.couponsShow) {
+          // 派样活动
+          if (goods.length === 0) {
             message.config({
               top: 100,
               duration: 2,
               maxCount: 1,
             });
-            message.error('请先选择机器')
+            message.error('请添加商品信息')
             return;
           }
+          goods = goods.map((item) => {
+             return { prizeId: item.prizeId, number: item.number }
+          })
+        } else {
+          // 非派样活动
+          // if (this.state.couponsInitData.length === 0) {
+          //   message.config({
+          //     top: 100,
+          //     duration: 2,
+          //     maxCount: 1,
+          //   });
+          //   message.error('非派样活动请添加优惠券')
+          //   return;
+          // }
+          goods = goods.map((item) => {
+            return { prizeId: item.prizeId, resultCode: item.resultCode, resultRemark: item.resultRemark }
+          })
         }
         let params = {
           ...fieldsValue,
-          goods: this.state.goodsInitData,
+          goods,
           coupons: this.state.couponsInitData,
-          machines: this.state.machines,
+          machines: this.state.targetData,
           startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
         };
@@ -1245,13 +1605,42 @@ export default class ScheduleSettingList extends PureComponent {
     // this.setState({ selectedKeys });
   }
   onEditMachineHandleAddClick = () => {
-    console.log('选择机器确认');
-    let selectCity = this.state.selectCity
-    if (selectCity.length > 0) {
-      this.uniq(selectCity);
-      // console.log('selectCity', this.state.machines)
+    // console.log('选择机器确认');
+    // let selectCity = this.state.selectCity
+    // if (selectCity.length > 0) {
+    //   this.uniq(selectCity);
+    //   // console.log('selectCity', this.state.machines)
+    // } else {
+    //   message.error('请先选择机器');
+    // }
+    console.log('this.state.targetData.machines', this.state.targetData)
+    if (this.state.targetData.length >0) {
+      let arr = this.state.targetData
+      let selectCityName = []
+      for (var i = 0; i < arr.length; i++) {
+        var item = arr[i]
+        if (!(item['province'] in selectCityName)) {
+          selectCityName[item['province']] = item.province;
+        }
+      }
+      selectCityName = Object.values(selectCityName)
+      this.setState({
+        machineNum: this.state.targetData.length,
+        selectCityName,
+        machines: this.state.targetData,
+      }, () => {
+        // console.log(this.state.machines)
+        this.setState({
+          editMachineModalVisible: false,
+        });
+      });
     } else {
-      message.error('请先选择机器');
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('请先选择机器');
     }
   }
   uniq = (arr) => {
@@ -1305,6 +1694,7 @@ export default class ScheduleSettingList extends PureComponent {
         // if (fieldsValue.gameId)
         // if (fieldsValue.remark)
         // if (fieldsValue.userMaxTimes)
+        console.log('fieldsValue', fieldsValue)
         let params = {
           ...fieldsValue,
           code: this.state.code,
@@ -1315,27 +1705,34 @@ export default class ScheduleSettingList extends PureComponent {
         this.setState({
           machineStartTime: params.startTimeStr,
           machineEndTime: params.endTimeStr,
-          code: '',
         }, () => {
-          this.props.dispatch({
-            type: 'scheduleSetting/selectAreaMachines',
-            payload: {
-              restParams: {
-                code: this.state.code,
-                level: 1,
-                startTime: this.state.machineStartTime,
-                endTime: this.state.machineEndTime,
-              },
-            },
-          }).then((res) => {
+          // this.props.dispatch({
+          //   type: 'scheduleSetting/selectAreaMachines',
+          //   payload: {
+          //     restParams: {
+          //       code: this.state.code,
+          //       level: 1,
+          //       startTime: this.state.machineStartTime,
+          //       endTime: this.state.machineEndTime,
+          //     },
+          //   },
+          // }).then((res) => {
+          //   this.setState({
+          //     treeData: res,
+          //   }, () => {
+          //     this.setState({
+          //       editMachineModalVisible: true,
+          //     });
+          //   });
+          // });
             this.setState({
-              treeData: res,
+              editMachineModalVisible: true,
             }, () => {
-              this.setState({
-                editMachineModalVisible: true,
-              });
+              this.getAreaList({level: 1});
             });
-          });
+            this.selectMachineform.setFieldsValue({
+              provinceCityAreaTrade: undefined
+            })
         });
       });
     });
@@ -1364,11 +1761,32 @@ export default class ScheduleSettingList extends PureComponent {
       watchModalVisible: false,
     });
   }
+  getEditActivityShops = (activityId) => {
+    this.props.dispatch({
+      type: 'scheduleSetting/getActivityShops',
+      payload: {
+        restParams: {
+          activityId: activityId ? activityId : ''
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        shopClist: res
+      });
+    });
+  }
   // 编辑
   onEditClick = (item) => {
+    // key: goodsCount,
+    //   shopName: '',
+    //   prizeId: '',
+    //   number: 0,
+    //   resultCode: '1',
+    //   resultRemark: '描述',
+    //   prizeType: '1',
     console.log('item编辑', item)
     // activityList
-    this.getActivityLists()
+    // this.getActivityLists()
     // gameList
     this.getGamesLists()
     this.props.dispatch({
@@ -1380,14 +1798,49 @@ export default class ScheduleSettingList extends PureComponent {
       },
     }).then((res) => {
       // console.log('res', res)
-      this.getGoodsLists(res.shopId)
+      // this.getGoodsLists(res.shopId)
+      if (parseInt(res.activityType) === 1) {
+        this.setState({
+          couponsShow: false
+        })
+      } else {
+        this.setState({
+          couponsShow: true
+        })
+      }
+      this.getEditActivityShops(res.activityId)
+      // for (let i = 0; i< res.goods.length; i++) {
+      //   console.log('res.goods[i].shopId', res.goods[i], res.goods[i].shopsId)
+      //   this.getGoodsLists(res.goods[i].shopsId)
+      // }
       let goodsInitDatas = res.goods.map((item, index) => {
-        return { key: index, name: item.activityPlanId, prizeId: item.prizeId, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
+        return {
+          key: index,
+          id: item.shopId,
+          shopName: item.shopName,
+          number: item.number,
+          name: item.activityPlanId,
+          prizeId: item.prizeId,
+          prizeType: item.prizeType,
+          resultCode: item.resultCode,
+          resultRemark: item.resultRemark
+        }
       })
       let couponsInitDatas = res.coupons.map((item, index) => {
-        return { key: index, code: item.code, name: item.name, prizeType: item.prizeType, resultCode: item.resultCode, resultRemark: item.resultRemark }
+        return {
+          key: index,
+          shopName: item.shopName,
+          shopsId: item.shopsId,
+          code: item.code,
+          name: item.name,
+          prizeType: item.prizeType,
+          resultCode: item.resultCode,
+          resultRemark: item.resultRemark
+        }
       })
       this.setState({
+        maxNumber: res.maxGoodsNum ? res.maxGoodsNum : '',
+        targetData: res.machines,
         goodsCount: res.goods.length,
         couponsCount: res.coupons.length,
         goodsInitData: res.goods.length > 0 ? goodsInitDatas : [],
@@ -1412,6 +1865,15 @@ export default class ScheduleSettingList extends PureComponent {
         },
       },
     }).then((res) => {
+      if (parseInt(res.activityType) === 1) {
+        this.setState({
+          couponsShow: false
+        })
+      } else {
+        this.setState({
+          couponsShow: true
+        })
+      }
       this.setState({
         goodsInitData: res.goods.length > 0 ? res.goods : [],
         couponsInitData: res.coupons.length > 0 ? res.coupons : [],
@@ -1430,7 +1892,7 @@ export default class ScheduleSettingList extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id };
+      const params = { id: item.id, status: 1 };
       this.props.dispatch({
         type: 'scheduleSetting/delScheduleSetting',
         payload: {
@@ -1479,6 +1941,191 @@ export default class ScheduleSettingList extends PureComponent {
   }
   // 日历table操作开始
   // 日历table操作结束
+  // 选择机器开始
+  // 回显省市区商圈数据源开始
+  getAreaList = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    let params = { code: code }
+    if (selectedOptions) {
+      if (selectedOptions.level) {
+        params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+      } else if (selectedOptions.code) {
+        params = { code: selectedOptions.code, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+      } else {
+        targetOption = selectedOptions[selectedOptions.length - 1];
+        code = targetOption.value;
+        targetOption.loading = true;
+        params = { code: code, level: targetOption.level + 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime}
+      }
+    }
+    this.props.dispatch({
+      type: 'scheduleSetting/selectAreaMachines',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (selectedOptions.level) {
+        this.setState({
+          insertOptions: res,
+        });
+      } else if (selectedOptions.code) {
+        this.setState({
+          sourceData: res,
+        });
+      } else {
+        targetOption.loading = false;
+        targetOption.children = res
+        this.setState({
+          insertOptions: [...this.state.insertOptions],
+        });
+      }
+    });
+  }
+  addData = async () => {
+    const selectedRows = this.state.selectedRows
+    for (let a of selectedRows) {
+      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
+      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
+      await this.handleDelete(a, a.machineCode)
+    }
+    // console.log(this.state.repeat)
+    if (this.state.repeat.length > 0) {
+      Modal.warning({
+        title: '以下机器和已选机器重复',
+        content: this.state.repeat.join('\n') + '',
+      });
+    }
+    this.setState({
+      selectAll: false
+    })
+  }
+  unique = (arr) => {
+    let targetData = []
+    let repeat = []
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i]
+      if (!(item['machineCode'] in targetData)) {
+        targetData[item['machineCode']] = item;
+      } else {
+        repeat = [...this.state.repeat, item.machineCode]
+      }
+    }
+    this.setState({
+      repeat,
+    })
+    return Object.values(targetData)
+  }
+  handleSave = (row) => {
+    const newData = [...this.state.sourceData];
+    const index = newData.findIndex(item => row.machineCode === item.machineCode);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    console.log('newDatahandleSave', newData)
+    this.setState({ sourceData: newData });
+  }
+  handleDelete = (a, key) => {
+    // console.log('key', key, this.state.targetData)
+    if (a.planed === '1') {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.error('该机器已占用，重新选择！')
+      return;
+    }
+    const dataSource = [...this.state.sourceData];
+    // console.log('dataSource', dataSource)
+    this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
+    let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
+    // console.log('targetData', targetData)
+    targetData = this.unique(targetData)
+    this.setState({ targetData });
+  }
+  targetHandleSave = (row) => {
+    const newData = [...this.state.targetData];
+    const index = newData.findIndex(item => row.machineCode === item.machineCode);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    console.log('newDatahandleSave', newData)
+    this.setState({ targetData: newData });
+  }
+  targetHandleDelete = (key) => {
+    // console.log('key', key)
+    const dataSource = [...this.state.targetData];
+    this.setState({ targetData: dataSource.filter(item => item.machineCode !== key) });
+  }
+  onChangeRowSelection = (selectedRowKeys, selectedRows) => {
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    this.setState({
+      sourceKey: selectedRowKeys,
+      selectedRowKeys,
+    })
+  }
+  onSelectAll = (selected, selectedRows, changeRows) => {
+    this.setState({
+      selectedRows,
+      selectAll: selected
+    })
+    console.log(selected, selectedRows, changeRows);
+  }
+  onLeftSelect = (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+    this.setState({
+      selectedRows,
+      selectAll: true
+    })
+  }
+  // 回显省市区商圈数据源结束
+  // 选择机器控件
+  findSourceData = () => {
+    this.selectMachineform.validateFields((err, fieldsValue) => {
+      if (err) return;
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+        }
+      }
+      // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
+      if (!localCode) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.error('请选择一个地区')
+        return;
+      }
+      this.getAreaList({code: localCode})
+    });
+  }
+  // openSelectMachineModal = () => {
+  //   this.setState({
+  //     editMachineModalVisible: true,
+  //   }, () => {
+  //     this.getAreaList({level: 1});
+  //   });
+  //   this.selectMachineform.setFieldsValue({
+  //     provinceCityAreaTrade: undefined
+  //   })
+  // }
+  onEditMachineHandleModalVisibleClick = () => {
+    this.setState({
+      editMachineModalVisible: false,
+    });
+  }
+  selectMachineFormRef = (form) => {
+    this.selectMachineform = form;
+  }
+  // 选择机器结束
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -1512,6 +2159,21 @@ export default class ScheduleSettingList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
+            <FormItem label="选择活动类型">
+              {getFieldDecorator('type')(
+                <Select placeholder="请选择活动类型">
+                  {activityType.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}>
             <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>
@@ -1533,7 +2195,7 @@ export default class ScheduleSettingList extends PureComponent {
       scheduleSetting: { list, page },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, gameLists, activityLists, goodsLists } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, gameLists, activityLists, goodsLists, shopClist } = this.state;
     const columns = [
       {
         title: '所属省市区商圈',
@@ -1639,7 +2301,7 @@ export default class ScheduleSettingList extends PureComponent {
           modalType={modalType}
           verifyTimeRequire={this.verifyTimeRequire}
           gameLists={gameLists}
-          goodsLists={goodsLists}
+
           activityLists={activityLists}
           disabledDate={this.disabledDate}
           disabledDateTime={this.disabledDateTime}
@@ -1651,7 +2313,10 @@ export default class ScheduleSettingList extends PureComponent {
           goodsCount={this.state.goodsCount}
           couponsInitData={this.state.couponsInitData}
           couponsCount={this.state.couponsCount}
+          goodsLists={goodsLists}
+          shopClist={shopClist}
           goodsHandle={this.goodsHandle}
+          shopHandle={this.shopHandle}
           goodsHandleAdd={this.goodsHandleAdd}
           goodsHandleDelete={this.goodsHandleDelete}
           goodsHandleChange={this.goodsHandleChange}
@@ -1661,6 +2326,8 @@ export default class ScheduleSettingList extends PureComponent {
           discountHandleChange={this.discountHandleChange}
           onSelectShop={this.onSelectShop}
 
+          onSelectGame={this.onSelectGame}
+          maxNumber={this.state.maxNumber}
           disabledStartDate={this.disabledStartDate}
           disabledTime={this.disabledTime}
           disabledEndTime={this.disabledEndTime}
@@ -1672,23 +2339,47 @@ export default class ScheduleSettingList extends PureComponent {
           endOpen={this.state.endOpen}
           isDisabled={this.state.isDisabled}
           selectMachineFlag={this.state.selectMachineFlag}
+
+          couponsShow={this.state.couponsShow}
         />
+        {/*<SelectMachineForm*/}
+          {/*ref={this.selectMachineFormRef}*/}
+          {/*editMachineModalVisible={this.state.editMachineModalVisible}*/}
+          {/*onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}*/}
+          {/*onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}*/}
+          {/*editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}*/}
+          {/*renderTreeNodes={this.renderTreeNodes}*/}
+          {/*treeData={this.state.treeData}*/}
+          {/*onLoadData={this.onLoadData}*/}
+          {/*expandedKeys={this.state.expandedKeys}*/}
+          {/*autoExpandParent={this.state.autoExpandParent}*/}
+          {/*checkedKeys={this.state.checkedKeys}*/}
+          {/*selectedKeys={this.state.selectedKeys}*/}
+          {/*onExpand={this.onExpand}*/}
+          {/*onCheck={this.onCheck}*/}
+          {/*onSelect={this.onSelect}*/}
+        {/*/>*/}
         <SelectMachineForm
           ref={this.selectMachineFormRef}
           editMachineModalVisible={this.state.editMachineModalVisible}
           onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
           onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
           editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
-          renderTreeNodes={this.renderTreeNodes}
-          treeData={this.state.treeData}
-          onLoadData={this.onLoadData}
-          expandedKeys={this.state.expandedKeys}
-          autoExpandParent={this.state.autoExpandParent}
-          checkedKeys={this.state.checkedKeys}
-          selectedKeys={this.state.selectedKeys}
-          onExpand={this.onExpand}
-          onCheck={this.onCheck}
-          onSelect={this.onSelect}
+          insertOptions={this.state.insertOptions}
+          loadData={this.getAreaList}
+          addData={this.addData}
+          targetData={this.state.targetData}
+          onChangeRowSelection={this.onChangeRowSelection}
+          onSelectAll={this.onSelectAll}
+          selectedRowKeys={this.state.selectedRowKeys}
+          sourceData={this.state.sourceData}
+          handleSave={this.handleSave}
+          // handleDelete={this.handleDelete}
+          selectAll={this.state.selectAll}
+          targetHandleSave={this.targetHandleSave}
+          targetHandleDelete={this.targetHandleDelete}
+          onLeftSelect={this.onLeftSelect}
+          findSourceData={this.findSourceData}
         />
         <WatchForm
           watchModalVisible={this.state.watchModalVisible}
@@ -1697,6 +2388,7 @@ export default class ScheduleSettingList extends PureComponent {
           goodsList={this.state.goodsInitData}
           couponsList={this.state.couponsInitData}
           watchDetailClick={this.watchDetailClick}
+          couponsShow={this.state.couponsShow}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}

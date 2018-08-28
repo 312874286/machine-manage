@@ -1,4 +1,4 @@
-import { getActivitySettingList, getActivityCount, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting, getGameList, getDefaultActivity } from '../../services/project/activitySetting';
+import { getActivitySettingList, getActivityCount, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting, getGameList, getDefaultActivity, getMerchantShops, paiActivity } from '../../services/project/activitySetting';
 
 export default {
   namespace: 'activitySetting',
@@ -7,7 +7,9 @@ export default {
     page: {},
     datas: {},
     activityCountList: [],
-    count: {}
+    activityPaiCountList: [],
+    count: {},
+    PaiCount: {}
   },
 
   effects: {
@@ -31,6 +33,10 @@ export default {
     },
     *getMerchantsList({ payload: { restParams } }, { call }) {
       const response = yield call(getMerchantsList, { restParams });
+      return response.data;
+    },
+    *getMerchantShops({ payload: { restParams } }, { call }) {
+      const response = yield call(getMerchantShops, { restParams });
       return response.data;
     },
     *getShopsList({ payload: { restParams } }, { call }) {
@@ -58,6 +64,13 @@ export default {
       const response = yield call(getDefaultActivity, { restParams });
       return response.data;
     },
+    *paiActivity({ payload: { restParams } }, { call, put }) {
+      const response = yield call(paiActivity, { restParams });
+      yield put({
+        type: 'savePaiCountList',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -81,6 +94,18 @@ export default {
           totalUserCount: data.totalUserCount,
           totalPayCount: data.totalPayCount,
           totalCouponCount: data.totalCouponCount,
+          totalOrderCount: data.totalOrderCount,
+        }
+      };
+    },
+    savePaiCountList(state, { payload: { data } }) {
+      return {
+        ...state,
+        activityPaiCountList: data.list,
+        PaiCount: {
+          totalGoodsCount: data.totalGoodsCount,
+          totalUserCount: data.totalUserCount,
+          totalPayCount: data.totalPayCount,
           totalOrderCount: data.totalOrderCount,
         }
       };

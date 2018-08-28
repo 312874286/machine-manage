@@ -1,5 +1,4 @@
-import { getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting, deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus, cutApp,installApp, machineUpdateInfo, updateMachineCode } from '../../services/machine/machineSetting';
-import {getPointSettingDetail} from "../../services/machine/pointSetting";
+import { getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting, deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus, cutApp,installApp, machineUpdateInfo } from '../../services/machine/machineSetting';
 
 export default {
   namespace: 'machineSetting',
@@ -12,6 +11,7 @@ export default {
   effects: {
     *getMachineSettingList({ payload: { restParams } }, { call, put }) {
       const response = yield call(getMachineSettingList, { restParams });
+      // console.log('response', response)
       yield put({
         type: 'saveList',
         payload: response,
