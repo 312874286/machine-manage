@@ -811,7 +811,7 @@ export default class ScheduleSettingList extends PureComponent {
     // return endValue.valueOf() <= startValue.valueOf() 时间戳
     // endValue <= moment(startValue.valueOf()) &&
     // console.log(typeof this.state.endValue)
-    return !this.state.modalType ? (endValue < moment().endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
+    return !this.state.modalType ? (endValue < moment(new Date().setDate(new Date().getDate() - 1)).endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
   }
 
   onChange = (field, value) => {
