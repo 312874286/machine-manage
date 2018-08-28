@@ -195,6 +195,8 @@ class GoodsTableField extends Component {
       }
       return false
     }
+    console.log('val', this.state.initData, this.state.currentValue, this.props.count)
+
     this.props.goodsHandleAdd(this.state.initData, this.state.currentValue, this.props.count);
 
   }

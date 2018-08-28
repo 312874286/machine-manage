@@ -1362,8 +1362,8 @@ export default class ScheduleSettingList extends PureComponent {
   }
   discountHandleDelete = (key) => {
     const couponsInitData = [...this.state.couponsInitData];
-    this.setState({ couponsInitData: couponsInitData.filter(item => item.key !== key) });
-    // console.log('discountHandleDelete::', key, couponsInitData);
+    this.setState({ couponsInitData: couponsInitData.filter(item => item.key !== key), });
+    // console.log('discountHandleDelete::', key, couponsInitData.filter(item => item.key !== key));
   }
   discountHandleChange = (row) => {
     const newData = [...this.state.couponsInitData];

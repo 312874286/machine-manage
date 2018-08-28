@@ -139,9 +139,11 @@ class DiscountDynamicField extends React.Component {
     this.props.discountHandle(this.state.dataSource);
   }
   handleDelete = (key) => {
+    console.log(key)
     this.props.discountHandleDelete(key);
   }
   handleAdd = () => {
+    console.log('val', this.state.dataSource, this.state.currentValue, this.props.count)
     this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
   }
   handleChangeName = (record, value) => {
@@ -185,6 +187,10 @@ class DiscountDynamicField extends React.Component {
         dataSource: initData,
       });
     } else {
+      this.setState({
+        dataSource: [],
+      });
+
     }
     this.setState({
       count: count,
