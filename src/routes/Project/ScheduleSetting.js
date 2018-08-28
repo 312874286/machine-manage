@@ -1861,30 +1861,20 @@ export default class ScheduleSettingList extends PureComponent {
         }
       })
       this.setState({
-        maxNumber: 100,
-        targetData: [],
-        goodsCount: 0,
-        couponsCount: 0,
-        goodsInitData: [],
-        couponsInitData: [],
+        maxNumber: res.maxGoodsNum ? res.maxGoodsNum : '',
+        targetData: res.machines,
+        goodsCount: res.goods.length,
+        couponsCount: res.coupons.length,
+        goodsInitData: res.goods.length > 0 ? goodsInitDatas : [],
+        couponsInitData: res.coupons.length > 0 ? couponsInitDatas : [],
       }, () => {
-        console.log('couponsInitDatas', couponsInitDatas)
         this.setState({
-          maxNumber: res.maxGoodsNum ? res.maxGoodsNum : '',
-          targetData: res.machines,
-          goodsCount: res.goods.length,
-          couponsCount: res.coupons.length,
-          goodsInitData: res.goods.length > 0 ? goodsInitDatas : [],
-          couponsInitData: res.coupons.length > 0 ? couponsInitDatas : [],
-        }, () => {
-          this.setState({
-            modalVisible: true,
-            modalData: res,
-            modalType: false,
-          });
-          this.setModalData(res);
+          modalVisible: true,
+          modalData: res,
+          modalType: false,
         });
-      })
+        this.setModalData(res);
+      });
     });
   }
   onWatchClick = (item) => {
