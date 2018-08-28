@@ -735,25 +735,25 @@ export default class activitySettingList extends PureComponent {
       // console.log('targetData', data.shops)
       let key = 0
       // if (data.shops) {}
-      let goodsInitDatas = data.shops.map((item, index) => {
-        return {
-          key: key += 1,
-          id: item.id,
-          shopName: item.shopName,
-          isVip: item.isVip,
-          sessionKey: item.sessionKey,
-        }
-      })
-      this.setState({
-        targetData: goodsInitDatas,
-        goodsCount: data.shops.length,
-        goodsInitData: data.shops.length > 0 ? goodsInitDatas : [],
-      });
-      if (data.type === 1) {
-        this.setState({
-          selectTypeValue: 1
+      if (data.shops) {
+        let goodsInitDatas = data.shops.map((item, index) => {
+          return {
+            key: key += 1,
+            id: item.id,
+            shopName: item.shopName,
+            isVip: item.isVip,
+            sessionKey: item.sessionKey,
+          }
         })
+        this.setState({
+          targetData: goodsInitDatas,
+          goodsCount: data.shops.length,
+          goodsInitData: data.shops.length > 0 ? goodsInitDatas : [],
+        });
       }
+      this.setState({
+        selectTypeValue: data.type
+      })
       this.form.setFieldsValue({
         name: data.name || '',
         code: data.code || undefined,
