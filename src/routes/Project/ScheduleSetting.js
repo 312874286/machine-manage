@@ -1458,6 +1458,7 @@ export default class ScheduleSettingList extends PureComponent {
           })
         }
         let coupons = this.state.couponsInitData
+        console.log('this.state.couponsInitData', this.state.couponsInitData)
         if (this.state.couponsInitData) {
           if (!this.state.couponsShow) {
             // 派样活动
@@ -1503,6 +1504,12 @@ export default class ScheduleSettingList extends PureComponent {
               getDataStartDay: this.state.startTime,
               getDataEndDay: this.state.endTime,
               modalData: {},
+              maxNumber: 100,
+              targetData: [],
+              goodsCount: 0,
+              couponsCount: 0,
+              goodsInitData: [],
+              couponsInitData: [],
             }, () => {
               this.getLists();
             });

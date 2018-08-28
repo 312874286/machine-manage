@@ -199,6 +199,7 @@ class DiscountDynamicField extends React.Component {
         cell: EditableCell,
       },
     };
+    console.log('couponsInitDatas', dataSource)
     const children2 = [];
     let defaultValue2 = '';
 
@@ -273,7 +274,7 @@ class DiscountDynamicField extends React.Component {
             <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
               {rlist.map((item) => {
                 return (
-                  <Option key={item.id} value={item.id}>{item.name}</Option>
+                  <Option key={item.id} value={item.id}>{item.id}</Option>
                 );
               })}
             </Select>
@@ -320,7 +321,7 @@ class DiscountDynamicField extends React.Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={this.props.initData}
+          dataSource={dataSource}
           columns={columns}
           pagination={false}
           rowKey={record => record.key}
