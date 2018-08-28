@@ -14,7 +14,7 @@ import {
   Divider,
   Popconfirm,
   InputNumber,
-  Checkbox
+  Checkbox,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -40,11 +40,11 @@ const CreateForm = Form.create()(
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 4 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 20 },
       },
     };
     return (
@@ -59,6 +59,7 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
+        width={800}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
@@ -77,6 +78,27 @@ const CreateForm = Form.create()(
               rules: [{ required: true, whitespace: true, message: '请输入点72版本' }],
             })(<Input placeholder="请输入点72版本" />)}
           </FormItem>
+            <FormItem {...formItemLayout} label="商品数量">
+              <Col span={11}>
+                <FormItem label="最小数量">
+                  {getFieldDecorator('minGoodsNum', {
+                    rules: [{ required: true, message: '请输入最小数量' }],
+                  })(<InputNumber min={1} placeholder="请输入最小数量" />)}
+                </FormItem>
+              </Col>
+              <Col span={2}>
+                <span style={{ display: 'inline-block', width: '100%', textAlign: 'center' }}>
+                  -
+                </span>
+              </Col>
+              <Col span={11}>
+                <FormItem label="最大数量">
+                  {getFieldDecorator('maxGoodsNum', {
+                    rules: [{ required: true, message: '请输入最大数量' }],
+                  })(<InputNumber min={1} placeholder="请输入最大数量" />)}
+                </FormItem>
+              </Col>
+            </FormItem>
           <FormItem {...formItemLayout} label="备注描述">
             {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
@@ -253,6 +275,8 @@ export default class gameSettingList extends PureComponent {
         version: data.version || undefined,
         versionInno72: data.versionInno72 || undefined,
         remark: data.remark || undefined,
+        minGoodsNum: data.minGoodsNum || 10,
+        maxGoodsNum: data.maxGoodsNum || 100
       });
     } else {
       this.form.setFieldsValue({
@@ -260,6 +284,8 @@ export default class gameSettingList extends PureComponent {
         version: undefined,
         versionInno72: undefined,
         remark: undefined,
+        minGoodsNum: undefined,
+        maxGoodsNum: undefined
       });
     }
   }
@@ -376,7 +402,7 @@ export default class gameSettingList extends PureComponent {
       {
         title: '游戏名称',
         dataIndex: 'name',
-        width: '20%',
+        width: '10%',
       },
       {
         title: '版本',
@@ -386,7 +412,17 @@ export default class gameSettingList extends PureComponent {
       {
         title: '点72版本',
         dataIndex: 'versionInno72',
-        width: '20%',
+        width: '10%',
+      },
+      {
+        title: '商品数量',
+        width: '30%',
+        render: (text, item) => (
+          <Fragment>
+            <div>最小数量：{item.minGoodsNum}</div>
+            <div>最大数量：{item.maxGoodsNum}</div>
+          </Fragment>
+        )
       },
       {
         title: '备注描述',
@@ -456,7 +492,7 @@ export default class gameSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={800}
+              scrollX={1000}
             />
           </div>
         </Card>

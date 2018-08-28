@@ -331,11 +331,12 @@ body .ant-table-row-hover {
     border-color: #CACACA !important;
     color: #CACACA !important;
   }
-  .ant-pagination-item, .ant-pagination-jump-next {
+  .ant-pagination-item, .ant-pagination-jump-next, .ant-pagination-jump-prev {
     display: none !important;
   }
   .ant-pagination-prev {
-    margin-right: 120px !important;
+    margin-right: 34% !important;
+    margin-left: 5.5%;
   }
   .ant-table-pagination {
     position: relative;
@@ -360,7 +361,72 @@ body .ant-table-row-hover {
     line-height: 24px !important;
   }
   .ant-pagination-prev .ant-pagination-item-link:after, .ant-pagination-next .ant-pagination-item-link:after {
-    height: 24px !important;
+    height: 10% !important;
+  }
+  .ant-pagination-prev {
+    position: relative;
+    //right: 16%;
+  }
+  .ant-pagination-next {
+    position: relative;
+    //right: 13.5%;
+  }
+  .ant-table-pagination {
+    position: static;
+    width: 29.5%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .ant-pagination-total-text {
+      width: 100%;
+      display: flex;
+      justify-items: flex-start;
+      align-items: center;
+      position: absolute;
+      left: 0;
+      .paginationBox {
+        width: 100%;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        align-items: center;
+        div {
+          width: 25%;
+          justify-content: space-between;
+          flex-direction: row;
+          align-items: center;
+          display: flex;
+        }
+        div span:nth-child(2) {
+          display: flex;
+          width: 50%;
+          -ms-flex-pack: justify;
+          justify-content: flex-end;
+          align-items: center;
+          button {
+            max-width: 48px;
+            border-radius: 12px !important;
+            height: 24px !important;
+            background: #FED92C !important;
+            line-height: 24px;
+            color: #333333;
+            margin-left: 5px;
+          }
+          input {
+            width: 40px;
+            height: 24px;
+            background: #f8f8f8;
+            border-radius: 12px;
+            outline: none;
+            border: 1px solid #999;
+            margin: 0 2px;
+            padding: 0 5px;
+            text-align: center;
+          }
+        }
+      }
+    }
   }
   // ant-confirm-btns
   .ant-confirm-btns .ant-btn {

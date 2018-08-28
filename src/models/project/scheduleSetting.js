@@ -55,16 +55,14 @@ export default {
         for (let i = 0; i < data.length; i++) {
           machines = data[i].machines
           title = data[i].name + '(' + data[i].canUseNum + '/' + data[i].totalNum + ')'
-          if ((data[i].level === 4 || data[i].level === 5) && data[i].machines.length === 0) {
+          if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
             isLeaf = true;
           } else {
             isLeaf = false;
           }
-          // console.log("data[i].canUseNum === '0'", data[i].canUseNum === '0')
-          if (data[0].level !== 5 && data[i].canUseNum === '0') {
+          if (data[i].machines.length === 0) {
             disabled = true;
-          }
-          if (data[0].level !== 5 && data[i].canUseNum !== '0') {
+          } else {
             disabled = false;
           }
           if (data[0].level === 5) {
@@ -73,30 +71,28 @@ export default {
               machineId: data[i].code,
               state: 0}]
             title = data[i].name;
+            canUseNum = 1;
           }
-          // planed
-          if (data[0].level === 5 && data[i].planed === '1') {
-            disabled = true;
-          }
-          if (data[0].level === 5 && data[i].planed === '0') {
-            disabled = false;
-          }
-          // console.log('arr', data[0].planed === '1', data[0].planed === '0', disabled)
           const a = {
             value: data[i].code,
+            label: `${data[i].name}${canUseNum}`,
             isLeaf: isLeaf,
             title: title,
-            key: data[i].code,
+            key: i,
             level: data[i].level,
             province: data[i].province,
-            machines: machines,
+            // machines: machines,
+            machineCode: title,
+            machineId: data[i].code,
+            state: 0,
             disabledFlag: disabled,
-            canUseNum: data[i].canUseNum,
+            canUseNum: canUseNum,
+            disabled: disabled,
+            planed: data[i].planed,
           };
           arr.push(a);
         }
       }
-      console.log('arr', arr)
       return arr;
     },
   },

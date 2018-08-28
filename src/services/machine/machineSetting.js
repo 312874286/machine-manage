@@ -27,7 +27,7 @@ export async function deleteChannelMachineSetting({ params }) {
 }
 
 export async function getPointSettingList({ restParams }) {
-  return fetch.get(api.getPointSettingList, {
+  return fetch.get(api.getPointSettingLists, {
     restParams,
   });
 }
@@ -63,6 +63,11 @@ export async function installApp({ restParams }) {
 
 export async function machineUpdateInfo({ params }) {
   return fetch.post(api.machineUpdateInfo, {
+    body: stringify(params),
+  });
+}
+export async function updateMachineCode({ params }) {
+  return fetch.post(api.updateMachineCode, {
     body: stringify(params),
   });
 }

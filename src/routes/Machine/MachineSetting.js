@@ -33,6 +33,8 @@ import styles from './MachineSetting.less';
 import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
+import domain from "../../common/config/domain"
+
 
 
 const FormItem = Form.Item;
@@ -126,7 +128,7 @@ const CreateForm = Form.create()(
 });
 const EditPointForm = Form.create()(
   (props) => {
-    const { editPointmodalVisible, form, editPointHandleAddClick, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching } = props;
+    const { editPointmodalVisible, form, editPointHandleAddClick, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -135,7 +137,7 @@ const EditPointForm = Form.create()(
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 20 },
       },
     };
     return (
@@ -150,11 +152,14 @@ const EditPointForm = Form.create()(
         onOk={editPointHandleAddClick}
         onCancel={() => editPointHandleModalVisibleClick()}
         confirmLoading={editPointEditModalConfirmLoading}
+        width={800}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="当前点位">
-              {getFieldDecorator('localDesc')(<Input disabled />)}
+              {getFieldDecorator('localDesc')(
+                <span>{pointName}</span>
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label="新点位">
               {getFieldDecorator('locale', {
@@ -172,8 +177,19 @@ const EditPointForm = Form.create()(
                   // onPopupScroll={onPopupScroll}
                   onSelect={onSelect}
                   style={{ width: '100%' }}
-                  allowClear={true}
-                >{data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)}
+                  allowClear={true}>
+                  {/*{*/}
+                  {/*data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)*/}
+                  {/*}*/}
+                  {data.map((item) => {
+                    return (
+                        <Option value={item.text} key={item.id} data-id={item.id}>
+                          <a title={item.text}>
+                            {item.text}
+                          </a>
+                        </Option>
+                    );
+                  })}
                 </Select>
               )}
             </FormItem>
@@ -329,6 +345,23 @@ const WatchForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const machineColumns = [{
+      title: '图片地址',
+      dataIndex: 'imgUrl',
+      align: 'left',
+      width: '78%',
+      render (text, render) {
+        return (
+          <a href={`${domain.url}${render.imgUrl}`} target='_blank'>{`${domain.url}${render.imgUrl}`}</a>
+        )
+      }
+    }, {
+      title: '截屏时间',
+      dataIndex: 'createTime',
+      align: 'left',
+      width: '22%',
+    }];
+    // let machineDetailData = machineDetail.status ? (machineDetail.status.length > 0 ? machineDetail.status.splice(0, 10) : '') : ''
     return (
       <Modal
         title={
@@ -348,6 +381,7 @@ const WatchForm = Form.create()(
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
               <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
               <span>
+              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
               <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
               <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
             </span>
@@ -452,6 +486,49 @@ const WatchForm = Form.create()(
               </Col>
             </Row>
           </div>
+          <Table columns={machineColumns} dataSource={machineDetail.imgs} rowKey={record => record.id} pagination={false} />
+        </div>
+      </Modal>
+    );
+  });
+const EditMachineCodeForm = Form.create()(
+  (props) => {
+    const { editMachineCodemodalVisible, form,
+      editMachineCodeHandleAddClick, editMachineCodeHandleModalVisibleClick,
+      editMachineCodeEditModalConfirmLoading,} = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">修改编号</span>
+          </div>
+        }
+        visible={editMachineCodemodalVisible}
+        onOk={editMachineCodeHandleAddClick}
+        onCancel={() => editMachineCodeHandleModalVisibleClick()}
+        confirmLoading={editMachineCodeEditModalConfirmLoading}
+        width={800}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="机器编号">
+              {getFieldDecorator('machineCode', {
+                rules: [{ required: true, whitespace: true, message: '请填写机器编号' }],
+              })(<Input placeholder="请填写机器编号" />)}
+            </FormItem>
+          </Form>
         </div>
       </Modal>
     );
@@ -505,6 +582,9 @@ export default class machineSettingList extends PureComponent {
 
     options: [],
     code: '',
+    pointName: '',
+    editMachineCodemodalVisible: false,
+    editMachineCodeEditModalConfirmLoading: false
   };
   constructor(props) {
     super(props);
@@ -631,15 +711,21 @@ export default class machineSettingList extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
-      this.pointForm.setFieldsValue({
-        localDesc: data.localDesc,
-        locale: undefined,
-      });
+      this.setState({
+        pointName: data.localDesc
+      })
+      // this.pointForm.setFieldsValue({
+      //   localDesc: data.localDesc,
+      //   locale: undefined,
+      // });
     } else {
-      this.pointForm.setFieldsValue({
-        localDesc: undefined,
-        locale: undefined,
-      });
+      // this.pointForm.setFieldsValue({
+      //   localDesc: undefined,
+      //   locale: undefined,
+      // });
+      this.setState({
+        pointName: ''
+      })
     }
   }
   // 新增modal确认事件 开始
@@ -724,8 +810,8 @@ export default class machineSettingList extends PureComponent {
         const list = [];
         result.forEach((r) => {
           list.push({
-            value: r.areaName + r.mall + r.name + r.id,
-            text: r.areaName + r.mall + r.name + r.id,
+            value: r.areaName,
+            text: r.areaName,
             id: r.id,
           });
         });
@@ -739,6 +825,7 @@ export default class machineSettingList extends PureComponent {
     }
   }
   handleChange = (value) => {
+    console.log('value', value)
     this.setState({
       pointPageNo: 1,
       data: [],
@@ -811,6 +898,71 @@ export default class machineSettingList extends PureComponent {
     }
   }
   // 修改点位结束
+  // 修改机器code开始
+  // MachineCode
+  handleNoClick = (item) => {
+    this.setState({
+      modalVisible: false,
+      modalData: item,
+      editMachineCodemodalVisible: true,
+    }, () => {
+      this.MachineCodeForm.setFieldsValue({
+        machineCode: item.machineCode,
+      });
+    });
+  }
+  saveMachineCodeFormRef = (form) => {
+    this.MachineCodeForm = form;
+  }
+  editMachineCodeHandleAddClick = () => {
+    // 确认修ga编码
+    // console.log(this.state.dataId)
+    this.MachineCodeForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        editMachineCodeEditModalConfirmLoading: true,
+      });
+      let url = '';
+      let params = '';
+      console.log('modalData', this.state.modalData)
+      if (this.state.modalData.id) {
+        url = 'machineSetting/updateMachineCode';
+        params = { ...values, machineId: this.state.modalData.id};
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then((data) => {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.info(data.data)
+        this.getLists();
+        this.setState({
+          editMachineCodeEditModalConfirmLoading: false,
+          modalVisible: false,
+          modalData: {},
+          dataId: '',
+          data: [],
+          editPointmodalVisible: false,
+          ManageAppmodalVisible: false,
+          ManageAislemodalVisible: false,
+        });
+      });
+    });
+  }
+  editMachineCodeHandleModalVisibleClick = (flag) => {
+    this.setState({
+      editMachineCodemodalVisible: !!flag,
+    });
+  };
+  // 修改机器code结束
   // 管理App开始
   handleClose = () => {
     this.setState({
@@ -939,6 +1091,14 @@ export default class machineSettingList extends PureComponent {
   };
   appUpdate = (updateStatus) => {
     // console.log('点击了更新app', this.state.modalData, updateStatus);
+    let updateStatusText = ''
+    if (updateStatus === 1) {
+      updateStatusText = '更新'
+    } else if (updateStatus === 2) {
+      updateStatusText = '刷新'
+    } else {
+      updateStatusText = '截屏'
+    }
     this.props.dispatch({
       type: 'machineSetting/machineUpdateInfo',
       payload: {
@@ -954,7 +1114,7 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.success('更新成功');
+        message.success(updateStatusText + '成功');
       }
     });
   }
@@ -1199,7 +1359,7 @@ export default class machineSettingList extends PureComponent {
     });
   }
   getMachineStatus = (item) => {
-    // console.log('machineId', item.id);
+    console.log('machineId', item.id);
     // getMachineStatus
     this.setState({
       modalData: item,
@@ -1213,7 +1373,7 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((result) => {
-        // console.log(result)
+        console.log('result', result)
         this.setState({
           machineDetail: result.data,
         }, () => {
@@ -1319,10 +1479,10 @@ export default class machineSettingList extends PureComponent {
         width: '10%',
         dataIndex: 'netStatus',
         render(val) {
-          if (val === 1) {
-            return <Icon type="wifi" />;
-          } else {
-            return '网络异常';
+          if (val !== null) {
+            return <div className={styles.netStatusStyles}>
+              <img src={require(`../../assets/images/signalIcon/sign${val}.png`)}/>
+            </div>;
           }
         },
       },
@@ -1368,24 +1528,33 @@ export default class machineSettingList extends PureComponent {
       {
         fixed: 'right',
         title: '操作',
-        width: 240,
+        width: 180,
         render: (text, item) => (
-          (item.localDesc) ? (
-            <Fragment>
-              <a onClick={() => this.handleEditClick(item)}>重置点位</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
-            </Fragment>) : (
-            <Fragment>
-              <a style={{ color: 'grey', cursor: 'not-allowed' }}>重置点位</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
-            </Fragment>
-          )
+          // (item.localDesc) ? (
+          //   <Fragment>
+          //     <a onClick={() => this.handleEditClick(item)}>重置点位</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+          //   </Fragment>) : (
+          //   <Fragment>
+          //     <a style={{ color: 'grey', cursor: 'not-allowed' }}>重置点位</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+          //     <Divider type="vertical" />
+          //     <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+          //   </Fragment>
+          // )
+          <Fragment>
+            <a onClick={() => this.handleEditClick(item)}>重置点位</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleNoClick(item)}>修改编号</a>
+          </Fragment>
         ),
       },
     ];
@@ -1465,6 +1634,14 @@ export default class machineSettingList extends PureComponent {
           onSearch={this.getPointSettingList}
           fetching={this.state.fetching}
           // value={this.state.value}
+          pointName={this.state.pointName}
+        />
+        <EditMachineCodeForm
+          ref={this.saveMachineCodeFormRef}
+          editMachineCodemodalVisible={this.state.editMachineCodemodalVisible}
+          editMachineCodeHandleAddClick={this.editMachineCodeHandleAddClick}
+          editMachineCodeHandleModalVisibleClick={this.editMachineCodeHandleModalVisibleClick}
+          editMachineCodeEditModalConfirmLoading={this.state.editMachineCodeEditModalConfirmLoading}
         />
         <Modal
           title={

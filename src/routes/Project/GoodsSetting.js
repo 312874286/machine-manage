@@ -35,11 +35,23 @@ const getValue = obj =>
     .join(',');
 const RangePicker = DatePicker.RangePicker;
 
+function beforeUpload(file) {
+  // const isJPG = file.type === 'image/*' || file.type === 'video/*';
+  // if (!isJPG) {
+  //   message.error('仅支持JPG/PNG格式图片!');
+  // }
+  const isLt2M = file.size / 1024 < 10000;
+  if (!isLt2M) {
+    message.error('图片大小必须小于10MB');
+  }
+  return isLt2M;
+}
+
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
-      handleChange, handleCancel, normFile, onSelect, shopsLists } = props;
+      handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList, videoUrl, bannerHandleChange, handleUploadBanner } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -69,33 +81,38 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
+        width={800}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="淘宝商品ID">
+          <FormItem {...formItemLayout} label="商品ID">
             {getFieldDecorator('code', {
-              rules: [{ required: true, whitespace: true, message: '请输入淘宝商品ID' }],
-            })(modalType ? (<Input placeholder="请输入淘宝商品ID" disabled />) : (<Input placeholder="请输入淘宝商品ID" />))}
+              rules: [{ required: true, whitespace: true, message: '请输入商品ID' }],
+            })(modalType ? (<Input placeholder="请输入商品ID" disabled />) : (<Input placeholder="请输入商品ID" />))}
           </FormItem>
           <FormItem {...formItemLayout} label="商品名称">
             {getFieldDecorator('name', {
               rules: [{ required: true, whitespace: true, message: '请输入商品名称' }],
             })(<Input placeholder="请输入商品名称" />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="图片缩略图">
+          <FormItem {...formItemLayout} label="规格描述">
+            {getFieldDecorator('specRemark', {
+              rules: [{ required: false, whitespace: true, message: '请输入规格描述' }],
+            })(<Input placeholder="请输入规格描述" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="商品图片">
             {getFieldDecorator('img', {
               rules: [{ required: false, message: '请传照片' }],
               valuePropName: 'filelist',
             })(
               <div className="clearfix">
                 <Upload
-                  customRequest={(params) => { handleUpload(params, 2); }}
+                  customRequest={(params) => { handleUpload(params, 2, 'fileList'); }}
                   listType="picture-card"
                   fileList={fileList}
                   onPreview={handlePreview}
                   onChange={handleChange}
-                  accept="image/*"
-                >
+                  accept="image/*">
                   {fileList.length > 1 ? null : uploadButton}
                 </Upload>
                 <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
@@ -104,11 +121,49 @@ const CreateForm = Form.create()(
               </div>
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="商品banner">
+            {getFieldDecorator('banner', {
+              rules: [{ required: false, message: '请传照片' }],
+              valuePropName: 'filelist',
+            })(
+              <div className="clearfix">
+                  <Upload
+                    customRequest={(params) => { handleUploadBanner(params, 2, 'bannerfileList'); }}
+                    listType="picture-card"
+                    fileList={bannerfileList}
+                    onPreview={handlePreview}
+                    beforeUpload={beforeUpload}
+                    onChange={bannerHandleChange}
+                    accept="image/*, video/*"
+                  >
+                    {bannerfileList.length > 1 ? null : uploadButton}
+                  </Upload>
+                  <video id="videos" controls="controls"
+                         style={{ objectFit: 'fill', display:  videoUrl ? (videoUrl.url ? '' : 'none') : 'none', maxWidth: '600px', maxHeight: '500px'}}
+                         playsInline=""
+                         webkit-playsinline=""
+                         x5-video-player-fullscreen="true"
+                         x5-video-player-type="h5"
+                         x5-video-orientation="portraint"
+                         src={videoUrl ? videoUrl.url : ''}>
+                    Your browser does not support the Video tag.
+                  </video>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                    <img alt="example" style={{ width: '100%', display:  bannerfileList.length > 0 ? '' : 'none'}} src={previewImage} />
+                  </Modal>
+                </div>
+                )}
+          </FormItem>
           <FormItem {...formItemLayout} label="商品价格">
             {getFieldDecorator('price', {
               rules: [{ required: false, message: '请输入商品价格' }],
             })(<InputNumber placeholder="请输入商品价格" />)}
           </FormItem>
+            <FormItem {...formItemLayout} label="商品数量">
+              {getFieldDecorator('number', {
+                rules: [{ required: true, message: '请输入商品数量' }],
+              })(<InputNumber placeholder="请输入商品数量" />)}
+            </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
             {getFieldDecorator('sellerId', {
               rules: [{ required: true, message: '请选择商户' }],
@@ -143,6 +198,102 @@ const CreateForm = Form.create()(
       </Modal>
     );
 });
+const WatchForm = Form.create()(
+  (props) => {
+    const { watchModalVisible, modalData, handleWatchModalVisible,
+      previewImage, previewVisible, fileList, handlePreview,
+      handleChange, handleCancel, bannerfileList, videoUrl, bannerHandleChange, previewBannerVisible, previewBannerImage
+    } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看商品</span>
+          </div>
+        }
+        visible={watchModalVisible}
+        onCancel={() => handleWatchModalVisible()}
+        footer={null}
+        width={800}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="shop ID">
+              <span>{modalData.code}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品名称">
+              <span>{modalData.name}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="规格描述">
+              <span>{modalData.specRemark}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品图片">
+              <div>
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                >
+                </Upload>
+                <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                  <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                </Modal>
+              </div>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品banner">
+              <div className="clearfix">
+                <Upload
+                  listType="picture-card"
+                  fileList={bannerfileList}
+                  onPreview={handlePreview}
+                  onChange={bannerHandleChange}>
+                </Upload>
+                <Modal visible={previewBannerVisible} footer={null} onCancel={handleCancel}>
+                  <img alt="example" style={{ width: '100%' }} src={previewBannerImage} />
+                </Modal>
+                <video id="videos" controls="controls"
+                       style={{ objectFit: 'fill', display:  videoUrl.url ? '' : 'none', maxWidth: '600px', maxHeight: '500px' }}
+                       playsInline=""
+                       webkit-playsinline=""
+                       x5-video-player-fullscreen="true"
+                       x5-video-player-type="h5"
+                       x5-video-orientation="portraint"
+                       src={videoUrl.url}>
+                  Your browser does not support the Video tag.
+                </video>
+              </div>
+            </FormItem>
+            <FormItem {...formItemLayout} label="所属商户">
+              <span>{modalData.sellerName}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="所属店铺">
+              <span>{modalData.shop}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品价格">
+              <span>{modalData.price}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品数量">
+              <span>{modalData.number}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品详情">
+              <span>{modalData.remark}</span>
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, goodsSetting, log }) => ({
   common,
   goodsSetting,
@@ -172,6 +323,8 @@ export default class goodsSettingList extends PureComponent {
     previewVisible: false,
     previewImage: '',
     fileList: [],
+    bannerfileList: [],
+    videoUrl: {}
   };
   componentDidMount() {
     this.getLists();
@@ -225,19 +378,24 @@ export default class goodsSettingList extends PureComponent {
       previewVisible: true,
     });
   }
-
-  handleChange = (info) => {
-    console.log('222222')
-    let fileList = info.fileList;
-    fileList = fileList.slice(-1);
-    fileList = fileList.map((file) => {
-      if (file.response) {
-        file.url = file.response.url;
-      }
-      return file;
+  handleBannerPreview = (file) => {
+    this.setState({
+      previewBannerImage: file.url || file.thumbUrl,
+      previewBannerVisible: true,
     });
   }
-  handleUpload = ({ file, onError, onSuccess }, fileType) => {
+  // handleChange = (info) => {
+  //   console.log('222222')
+  //   let fileList = info.fileList;
+  //   fileList = fileList.slice(-1);
+  //   fileList = fileList.map((file) => {
+  //     if (file.response) {
+  //       file.url = file.response.url;
+  //     }
+  //     return file;
+  //   });
+  // }
+  handleUpload = ({ file, onError, onSuccess }, fileType, flag) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'common/upload',
@@ -248,15 +406,73 @@ export default class goodsSettingList extends PureComponent {
     }).then((resp) => {
       if (resp && resp.code === 0) {
         // console.log('resp', resp)
-        this.setState({
-          fileList: [{
+        if (this.imgFlag(resp.data)) {
+          let fList = [{
             uid: -2,
             name: 'xxx.png',
             status: 'done',
             url: domain.url + resp.data,
             data: resp.data,
-          }],
-        });
+          }]
+          if (flag === 'fileList') {
+            this.setState({
+              fileList: fList,
+            });
+          }
+          if (flag === 'bannerfileList') {
+            console.log('flag', flag)
+            this.setState({
+              bannerfileList: fList,
+            });
+          }
+        } else {
+          this.setState({
+            videoUrl: {
+              url: domain.url + resp.data,
+              data: resp.data
+            },
+          })
+        }
+        onSuccess(resp, file);
+        message.success('上传成功');
+      }
+    }).catch((e) => {
+      onError(e);
+    }).finally(() => {
+    });
+  }
+  handleUploadBanner = ({ file, onError, onSuccess }, fileType, flag) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'common/upload',
+      payload: {
+        params: { file },
+        restParams: { fileType, type: 'goods'  },
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        // console.log('resp', resp)
+        if (resp.data.indexOf('png') > 0 || resp.data.indexOf('jpg') > 0 || resp.data.indexOf('jpeg') > 0 || resp.data.indexOf('png') > 0) {
+          let fList = [{
+            uid: -2,
+            name: 'xxx.png',
+            status: 'done',
+            url: domain.url + resp.data,
+            data: resp.data,
+          }]
+          this.setState({
+            bannerfileList: fList,
+            videoUrl: {}
+          });
+        } else {
+          this.setState({
+            videoUrl: {
+              url: domain.url + resp.data,
+              data: resp.data
+            },
+            bannerfileList: []
+          })
+        }
         onSuccess(resp, file);
         message.success('上传成功');
       }
@@ -425,6 +641,41 @@ export default class goodsSettingList extends PureComponent {
     //   });
     // }
     if (data) {
+      let flist = [], videoUrl = {}
+      // if (data.banner) {
+      //   if (this.imgFlag(data.banner)) {
+      //     flist = [{
+      //       uid: -3,
+      //       name: 'xxx.png',
+      //       status: 'done',
+      //       url: data.banner,
+      //     }]
+      //   } else {
+      //     flist = []
+      //     videoUrl = {
+      //       url: data.banner
+      //     }
+      //   }
+      // }
+      if (data.banner) {
+        if (this.imgFlag(data.banner)) {
+          flist = [{
+            uid: -2,
+            name: 'xxx.png',
+            status: 'done',
+            url: data.banner,
+          }]
+          videoUrl = {}
+        } else if (this.videoFlag(data.banner)){
+          videoUrl = {
+            url: data.banner
+          }
+          flist = []
+        } else {
+          videoUrl = {}
+          flist = []
+        }
+      }
       this.setState({
         fileList: [{
           uid: -1,
@@ -432,6 +683,8 @@ export default class goodsSettingList extends PureComponent {
           status: 'done',
           url: data.img,
         }],
+        bannerfileList: flist,
+        videoUrl,
       });
       this.form.setFieldsValue({
         name: data.name || '',
@@ -441,10 +694,13 @@ export default class goodsSettingList extends PureComponent {
         remark: data.remark || undefined,
         img: data.img || undefined,
         shopId: data.shopId || undefined,
+        specRemark: data.specRemark || undefined,
       });
     } else {
       this.setState({
         fileList: [],
+        bannerfileList: [],
+        videoUrl: {}
       });
       this.form.setFieldsValue({
         name: undefined,
@@ -454,12 +710,29 @@ export default class goodsSettingList extends PureComponent {
         shopId: undefined,
         remark: undefined,
         img: undefined,
+        specRemark: undefined,
       });
     }
   }
   // 新增modal确认事件 开始
   saveFormRef = (form) => {
     this.form = form;
+  }
+  // 判断是否为图片
+  imgFlag = (resp) => {
+    if (resp.indexOf('png') > 0 || resp.indexOf('jpg') > 0 || resp.indexOf('jpeg') > 0 || resp.indexOf('png') > 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+  // 判断是否为视频
+  videoFlag = (resp) => {
+    if (resp.indexOf('mp4') > 0 || resp.indexOf('rmvb') > 0 || resp.indexOf('avi') > 0 || resp.indexOf('ts') > 0) {
+      return true
+    } else {
+      return false
+    }
   }
   // 编辑modal 确认事件
   handleAdd = () => {
@@ -472,7 +745,6 @@ export default class goodsSettingList extends PureComponent {
       };
       this.setState({
         editModalConfirmLoading: true,
-        modalData: {},
       });
       let messageTxt = '添加'
       let url = 'goodsSetting/saveGoodsSetting';
@@ -483,6 +755,12 @@ export default class goodsSettingList extends PureComponent {
       }
       if (this.state.fileList.length > 0) {
         params = { ...params, img: this.state.fileList[0].data };
+      }
+      if (this.state.bannerfileList.length > 0) {
+        params = { ...params, banner: this.state.bannerfileList[0].data };
+      }
+      if (this.state.videoUrl.data) {
+        params = { ...params, banner: this.state.videoUrl.data };
       }
       this.props.dispatch({
         type: url,
@@ -500,6 +778,7 @@ export default class goodsSettingList extends PureComponent {
             this.getLists();
           })
           this.setState({
+            modalData: {},
             editModalConfirmLoading: false,
             modalVisible: false,
           });
@@ -515,6 +794,70 @@ export default class goodsSettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
+  handleWatchClick = (item) => {
+    this.setState({
+      modalVisible: false,
+      watchModalVisible: true,
+      modalType: 'watch',
+    });
+    this.props.dispatch({
+      type: 'goodsSetting/getGoodsSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((resp) => {
+      let fList
+      if (resp.img) {
+        fList = [{
+          uid: -2,
+          name: 'xxx.png',
+          status: 'done',
+          url: resp.img,
+        }]
+        this.setState({
+          fileList: fList,
+        });
+      }
+      if (resp.banner) {
+        if (this.imgFlag(resp.banner)) {
+          fList = [{
+            uid: -2,
+            name: 'xxx.png',
+            status: 'done',
+            url: resp.banner,
+          }]
+          this.setState({
+            bannerfileList: fList,
+            videoUrl: {}
+          });
+        } else if (this.videoFlag(resp.banner)) {
+          this.setState({
+            videoUrl: {
+              url: resp.banner
+            },
+            bannerfileList: []
+          });
+        } else {
+          this.setState({
+            videoUrl: {},
+            bannerfileList: []
+          });
+        }
+      }
+      this.setState({
+        modalData: resp,
+      });
+    });
+  }
+  // 查看
+  handleWatchModalVisible = (flag) => {
+    this.setState({
+      watchModalVisible: !!flag,
+      modalData: {},
+    });
+  }
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -608,24 +951,30 @@ export default class goodsSettingList extends PureComponent {
   }
 
   handleChange = ({ fileList }) => this.setState({ fileList })
+  bannerHandleChange = ({ fileList }) => this.setState({ bannerfileList: fileList })
   render() {
     const { goodsSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = this.state;
     const { previewVisible, previewImage, fileList } = this.state
     const columns = [
       {
-        title: '淘宝商品ID',
-        width: '15%',
+        title: '商品ID',
+        width: '10%',
         dataIndex: 'code',
       },
       {
         title: '商品名称',
-        width: '15%',
+        width: '8%',
         dataIndex: 'name',
       },
       {
+        title: '规格描述',
+        width: '8%',
+        dataIndex: 'specRemark',
+      },
+      {
         title: '所属商户',
-        width: '10%',
+        width: '8%',
         dataIndex: 'sellerId',
       },
       {
@@ -633,24 +982,12 @@ export default class goodsSettingList extends PureComponent {
         width: '15%',
         dataIndex: 'shopId',
       },
-      // {
-      //   title: '图片缩略图',
-      //   width: 150,
-      //   dataIndex: 'img',
-      //   render(val) {
-      //     return (
-      //       <a target="_blank" href={val}>
-      //         <img src={val}  style={{ width: '80px' }} />
-      //       </a>
-      //     );
-      //   },
-      // },
       {
         title: '图片缩略图',
         width: 150,
         dataIndex: 'img',
         render: (text, item) => (
-          (item.img.length > 0) ? (
+          (item.img) ? (
             <div style={{ height: '68px', display: 'flex', alignItems: 'center', overflow: 'hidden' }} id="look">
               <Upload
                 // action="//jsonplaceholder.typicode.com/posts/"
@@ -669,7 +1006,7 @@ export default class goodsSettingList extends PureComponent {
               </Modal>
             </div>
           ) : (
-            <div></div>
+            null
           )
 
         )
@@ -678,6 +1015,11 @@ export default class goodsSettingList extends PureComponent {
         title: '商品价格',
         width: '10%',
         dataIndex: 'price',
+      },
+      {
+        title: '商品数量',
+        width: '10%',
+        dataIndex: 'number',
       },
       {
         title: '备注',
@@ -689,6 +1031,8 @@ export default class goodsSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
+            <a onClick={() => this.handleWatchClick(item)}>查看</a>
+            <Divider type="vertical" />
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
@@ -733,7 +1077,7 @@ export default class goodsSettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1100}
+                scrollX={1200}
               />
             </div>
           </Card>
@@ -754,6 +1098,28 @@ export default class goodsSettingList extends PureComponent {
             handleUpload={this.handleUpload}
             normFile={this.normFile}
             onSelect={this.onSelect}
+            bannerfileList={this.state.bannerfileList}
+            videoUrl={this.state.videoUrl}
+            bannerHandleChange={this.bannerHandleChange}
+            handleUploadBanner={this.handleUploadBanner}
+          />
+          <WatchForm
+            modalData={this.state.modalData}
+            watchModalVisible={this.state.watchModalVisible}
+            handleWatchModalVisible={this.handleWatchModalVisible}
+            bannerfileList={this.state.bannerfileList}
+            videoUrl={this.state.videoUrl}
+            bannerHandleChange={this.bannerHandleChange}
+            // handleUploadBanner={this.handleUploadBanner}
+            previewBannerVisible={this.state.previewBannerVisible}
+            previewBannerImage={this.state.previewBannerImage}
+            previewVisible={this.state.previewVisible}
+            previewImage={this.state.previewImage}
+            fileList={this.state.fileList}
+            handlePreview={this.handlePreview}
+            handleBannerPreview={this.handleBannerPreview}
+            handleChange={this.handleChange}
+            handleCancel={this.handleCancel}
           />
           <LogModal
             data={logList}

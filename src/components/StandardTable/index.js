@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import moment from 'moment';
-import { Table, Alert, Badge, Divider, Popconfirm } from 'antd';
+import { Table, Alert, Badge, Divider, Popconfirm, Button, Input } from 'antd';
 import styles from './index.less';
 
 const statusMap = ['default', 'processing', 'success', 'error'];
@@ -8,6 +8,8 @@ class StandardTable extends PureComponent {
   state = {
     selectedRowKeys: [],
     totalCallNo: 0,
+    No: '',
+    totalNo: 0
   };
 
   componentWillReceiveProps(nextProps) {
@@ -18,6 +20,11 @@ class StandardTable extends PureComponent {
         totalCallNo: 0,
       });
     }
+    const { page, } = this.props;
+    // console.log('page', page)
+    this.setState({
+      totalNo: Math.ceil(page.total/page.pageSize)
+    })
   }
 
   handleRowSelectChange = (selectedRowKeys, selectedRows) => {
@@ -33,14 +40,34 @@ class StandardTable extends PureComponent {
   }
 
   handleTableChange = (pagination, filters, sorter) => {
+    // console.log('change', pagination, filters, sorter)
     this.props.onChange(pagination, filters, sorter);
   }
 
   cleanSelectedKeys = () => {
     this.handleRowSelectChange([], []);
   }
+  go = () => {
+    const { totalNo, No } = this.state
+    if (No) {
+      if (No <= totalNo && No > 0) {
+        this.props.onChange({current: No, pageSize: 20 }, {}, {});
+      } else {
+        this.setState({
+          No: ''
+        })
+      }
+    } else {
+      return false
+    }
+  }
+  inputValue = (e) => {
+    this.setState({
+      No: e.target.value
+    })
+  }
   render() {
-    const { selectedRowKeys, totalCallNo } = this.state;
+    const { selectedRowKeys, totalCallNo, No } = this.state;
     const { data, page, loading, scrollX, columns, scrollY } = this.props;
     const status = ['关闭', '运行中', '已上线', '异常'];
     // const columns = [
@@ -128,10 +155,21 @@ class StandardTable extends PureComponent {
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
-        return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
+        return (
+          <div className="paginationBox">
+            <span>当前显示{page.pageSize}条/页，共{page.total}条</span>
+            <div>
+               <span>第{page.current}页 / 共{Math.ceil(total/page.pageSize)}页</span>
+               <span>
+                 <span>跳至 <Input value={No} onChange={this.inputValue}/>页</span>
+                 <Button type="primary" onClick={() => this.go()}>Go</Button>
+               </span>
+            </div>
+          </div>
+        )
       },
       ...page,
-      showQuickJumper: true,
+      showQuickJumper: false,
     };
     const rowSelection = {
       selectedRowKeys,

@@ -87,11 +87,28 @@ export default class homePageSetting extends PureComponent {
             </Card>
             <Card title={
               <div>
+                活动监控
+                <span className={styles.titleSpan}>(单位:个)</span>
+              </div>}>
+              <div className={styles.gridCardBox}>
+                <a onClick={() => this.props.history.push('/paiActivity')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/processed.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.paiActivityCount === 0 ? "0" : MachinePortalDataList.paiActivityCount}</span>
+                    <span>进行中的派样活动</span>
+                  </div>
+                </a>
+              </div>
+            </Card>
+            <Card title={
+              <div>
                 工单
                 <span className={styles.titleSpan}>(单位:条)</span>
               </div>}>
               <div className={styles.gridCardBox}>
-                <a>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 1}})}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/receiveOrder.png')}/>
                   </div>
@@ -100,7 +117,7 @@ export default class homePageSetting extends PureComponent {
                     <span>待接单</span>
                   </div>
                 </a>
-                <a>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 2}})}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/processed.png')}/>
                   </div>
@@ -109,7 +126,7 @@ export default class homePageSetting extends PureComponent {
                     <span>处理中</span>
                   </div>
                 </a>
-                <a>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 3}})}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/affirm.png')}/>
                   </div>

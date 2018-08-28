@@ -42,6 +42,7 @@ function handlehandleCostumStatus(response) {
   const { dispatch } = store;
   // 校验返回值Code;
   return response.clone().json().then((resp) => {
+    // console.log('resp', resp)
     if (resp.code === 999) {
       notification.error({
         message: '登录超时',

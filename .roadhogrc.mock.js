@@ -1007,7 +1007,7 @@ const proxy = {
       "code": 0,
       "data": {
         "machineStatus": {
-          "machineId": "1823951070679",
+          "machineId": "1823951070671111111111",
           "machineDoorStatus": 0,
           "dropGoodsSwitch": 1,
           "goodsChannelStatus": "[]",
@@ -1027,7 +1027,15 @@ const proxy = {
           "sdTotle": 5502,
           "ping": "23ms",
           "createTime": "2018-07-13 14:34:13"
-        }
+        },
+        "imgs": [
+          {
+            "id": "0022f24a0aef4fb9aca61d19c4a31bf5",
+            "machineCode": "18527298",
+            "imgUrl": "app/img/54e7f349ae5d49b592166c2f670b60a1.png",
+            "createTime": "2018-08-19 13:07:22"
+          }
+        ],
       },
       "msg": "成功"
     });
@@ -1108,6 +1116,13 @@ const proxy = {
           "isDelete": 0
         }
       ],
+      "msg": "成功"
+    })
+  },
+  'POST /machine/machine/updateMachineCode': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
       "msg": "成功"
     })
   },
@@ -1204,17 +1219,32 @@ const proxy = {
         "prePage": 1
       },
       "data": [{
-        areCode: null,
-        createId: "",
-        createTime: "2018-07-04 16:55:27",
-        id: "0be2a58e4e9845f8b4dd55acabaad3f3",
-        isDelete: 0,
-        mall: "汉光百货",
-        manager: "王小二",
-        mobile: "15688886666",
-        remark: "欢迎光临",
-        updateId: "",
-        updateTime: "2018-07-04 16:55:27",
+        "id": "3",
+        "merchantCode": "2",
+        "merchantName": "天猫",
+        "createId": "12",
+        "updateId": null,
+        "createTime": 1530499549000,
+        "updateTime": 1530499549000,
+        "isDelete": 0
+      }]
+    });
+  },
+  'GET /project/shops/selectActivityShops': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        "id": "1",
+        "shopName": "天猫小米旗舰店",
+        "shopCode": "10000@XXXAXX",
+        "sellerId": "1",
+        "isDelete": 0,
+        "remark": null,
+        "createId": "1",
+        "createTime": "2018-07-05 10:37:23",
+        "updateId": null,
+        "updateTime": "2018-07-05 10:37:23"
       }]
     });
   },
@@ -1231,6 +1261,24 @@ const proxy = {
         sellerId: "1",
         shopCode: "10000@XXXAXX",
         shopName: "天猫小米旗舰店",
+        updateId: "",
+        updateTime: "2018-07-05 18:43:09",
+      }]
+    });
+  },
+  'GET /project/shops/selectMerchantShops': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        createId: "1",
+        createTime: "2018-07-05 18:43:09",
+        id: "1",
+        isDelete: 0,
+        remark: null,
+        sellerId: "1",
+        shopCode: "10000@XXXAXX",
+        shopName: "商户1-天猫小米旗舰店",
         updateId: "",
         updateTime: "2018-07-05 18:43:09",
       }]
@@ -2401,7 +2449,7 @@ const proxy = {
       "msg": "计划进行中不能删除"
     })
   },
-  'GET /project/activityPlan/selectAreaMachines': (req, res) => {
+  'POST /project/activityPlan/selectAreaMachines': (req, res) => {
     res.send({
       "code": 0,
       "data": [
@@ -2531,34 +2579,7 @@ const proxy = {
   },
   'POST /check/fault/detail': (req, res) => {
     res.send(
-      {
-        "code": 0,
-        "data": {
-        "id": "f5fe616383454021aa65dc131a0aad0a",
-        "machineId": "2121231231231",
-        "type": null,
-        "submitUser": "王老五",
-        "finishUser": null,
-        "submitTime": 1531740076000,
-        "finishTime": null,
-        "status": null,
-        "finishRemark": null,
-        "remindStatus": null,
-        "remark": null,
-        "imgList": [
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=77ccabec44e24ebc3368873762ee50a6&imgtype=0&src=http%3A%2F%2Fwww.pptbz.com%2Fd%2Ffile%2Fp%2F201611%2F3620830f45bea359346b8272ededc4ed.jpg",
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=1395ac0860e40fcbe174545795784c22&imgtype=0&src=http%3A%2F%2Fpic11.photophoto.cn%2F20090410%2F0032018132798491_b.jpg",
-          "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=77ccabec44e24ebc3368873762ee50a6&imgtype=0&src=http%3A%2F%2Fwww.pptbz.com%2Fd%2Ffile%2Fp%2F201611%2F3620830f45bea359346b8272ededc4ed.jpg",
-          "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532674585325&di=77ccabec44e24ebc3368873762ee50a6&imgtype=0&src=http%3A%2F%2Fwww.pptbz.com%2Fd%2Ffile%2Fp%2F201611%2F3620830f45bea359346b8272ededc4ed.jpg",
-
-        ],
-        "answerList": [
-        "AAAAA",
-        "哈哈哈哈哈哈哈哈哈哈"
-        ]
-        },
-        "msg": "成功"
-        }
+      {"code":0,"data":{"id":"f0248d82649f4626a69c60843c010ae3","machineId":"123","code":"FUIWM0S20180808114338","title":null,"workType":1,"status":0,"source":1,"urgentStatus":1,"type":null,"remark":null,"submitUser":"赵飞龙","submitId":null,"submitUserType":null,"receiveUser":"赵飞龙","receiveId":null,"finishUser":null,"finishId":null,"submitTime":"2018-08-08 11:43:38","talkingTime":null,"finishTime":null,"updateTime":null,"finishRemark":null,"remindStatus":null,"machineCode":"123","answerList":[{"answer":"屏幕坏了","answerType":"1","answerName":null,"imgList":[{"imageTime":"2018-08-08 11:43:39","image":"https://inno72.oss-cn-beijing.aliyuncs.com/backend/check/5917744d26f44aebbbec24555cb317fb.jpeg","sort":1},{"imageTime":"2018-08-08 11:43:39","image":"https://inno72.oss-cn-beijing.aliyuncs.com/backend/check/11111.jpeg","sort":2}],"answerTime":"2018-08-08 11:43:39"}]},"msg":"成功"}
     )
   },
   'POST /check/fault/answer': (req, res) => {
@@ -3333,6 +3354,193 @@ const proxy = {
         "msg":"成功"
       }
     )
+  },
+  'GET /check/fault/getMachineUserList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "name": "wang",
+          "id": "980b257b09e243cda221eac56e6e8c40"
+        },
+        {
+          "name": "3224",
+          "id": "529e98dd96a94e6f906913a6419a9f70"
+        },
+        {
+          "name": "111111111",
+          "id": "71846dd7e11a4b1db79249dce8ce34a5"
+        },
+        {
+          "name": "3453453",
+          "id": "e1d3b999a2e94bedb7a91f4399a4ce71"
+        },
+        {
+          "name": "admin",
+          "id": "8844e91ae2684028acb5c55709783cdb"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /check/fault/save': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /check/fault/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /machine/locale/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "inno72Locale": {
+        "id": null,
+        "province": null,
+        "city": null,
+        "district": null,
+        "circle": null,
+        "mail": null,
+        "manager": null,
+        "mobile": null,
+        "state": null,
+        "remark": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null
+      },
+      "data": [{
+        "id": "0667732a80694a71ba021b7282337451",
+        "province": "1",
+        "city": "1",
+        "district": "1",
+        "circle": null,
+        "mail": "奥特莱是",
+        "manager": "王小二",
+        "mobile": "15688886666",
+        "state": 0,
+        "remark": "\b欢迎光临",
+        "createId": "",
+        "createTime": "2018-07-03 11:39:28",
+        "updateId": "",
+        "updateTime": "2018-07-03 11:39:28"
+      }, {
+        "id": "1",
+        "province": "1",
+        "city": "1",
+        "district": "1",
+        "circle": "朝阳大悦城",
+        "mail": "奥特莱是",
+        "manager": "王小二",
+        "mobile": "15688886666",
+        "state": 0,
+        "remark": "\b欢迎光临",
+        "createId": "",
+        "createTime": "2018-07-03 11:40:42",
+        "updateId": "",
+        "updateTime": "2018-07-03 11:40:42"
+      }]
+    })
+  },
+  'POST /pai/data/count/list': (req, res) => {
+    res.send({"code":0,"data":[{"activityName":"派样活动1","activityId":"111","activityPlanId":"aaaa","startTime":"2018-08-21 17:16:54","endTime":"2018-08-31 17:17:01","submitTime":"2018-08-21 17:17:08","inno72PaiNowDataList":[{"id":null,"activityId":null,"activityPlanId":null,"activityName":null,"goodsName":"测试商品1","goodsCount":10,"totalGoodsCount":500,"startTime":null,"endTime":null,"submitTime":null},{"id":null,"activityId":null,"activityPlanId":null,"activityName":null,"goodsName":"测试商品2","goodsCount":20,"totalGoodsCount":200,"startTime":null,"endTime":null,"submitTime":null}]}],"msg":"成功"})
+  },
+  'POST /pai/data/count/totalList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [{
+        "activityName": "测试活动1",
+        "activityId": "d6fff348101c46e5a31f895bfbbe2ddb",
+        "activityPlanId": "85f55fc9781a4dfc95c5e1073b0b87f8",
+        "startTime": "2018-08-27 00:00:00",
+        "endTime": "2018-08-27 13:00:59",
+        "submitTime": null,
+        "inno72PaiNowDataList": [{
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "果果",
+          "goodsCount": 0,
+          "totalGoodsCount": 11000,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "水果",
+          "goodsCount": 0,
+          "totalGoodsCount": 1000,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "矿泉水",
+          "goodsCount": 0,
+          "totalGoodsCount": 10000,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }]
+      }, {
+        "activityName": "摩卡达到",
+        "activityId": "e44a2bc820d14e43a06c42f3c79c00ea",
+        "activityPlanId": "e2397f839a2742ea8aabf2d2eaf7ba02",
+        "startTime": "2018-08-27 00:00:00",
+        "endTime": "2018-08-27 16:59:59",
+        "submitTime": null,
+        "inno72PaiNowDataList": [{
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "K9",
+          "goodsCount": 0,
+          "totalGoodsCount": 122888,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "雀巢珍致",
+          "goodsCount": 0,
+          "totalGoodsCount": 33,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }, {
+          "id": null,
+          "activityId": null,
+          "activityPlanId": null,
+          "activityName": null,
+          "goodsName": "雪诗雅",
+          "goodsCount": 0,
+          "totalGoodsCount": 33,
+          "startTime": null,
+          "endTime": null,
+          "submitTime": null
+        }]
+      }],
+      "msg": "成功"
+    })
   }
 };
 

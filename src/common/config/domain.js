@@ -1,3 +1,3 @@
-export const demain = { url: 'https://inno72.oss-cn-beijing.aliyuncs.com/' };
+export const demain = { url: 'http://inno72.oss.72solo.com/' };
 
 export default demain;

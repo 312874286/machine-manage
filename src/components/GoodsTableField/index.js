@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styles from './index.less'
-import { Table, Input, Button, Popconfirm, Form, Select } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Select, message } from 'antd';
+import {RegexTool} from "../../utils/utils";
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -52,13 +53,13 @@ class EditableCell extends Component {
     }
   }
 
-  save = () => {
+  save = (toggleEdit) => {
     const { record, handleSave } = this.props;
     this.form.validateFields((error, values) => {
       if (error) {
         return;
       }
-      this.toggleEdit();
+      // toggleEdit();
       handleSave({ ...record, ...values });
     });
   }
@@ -74,6 +75,7 @@ class EditableCell extends Component {
       handleSave,
       ...restProps
     } = this.props;
+    // console.log('v', record)
     return (
       <td ref={node => (this.cell = node)} {...restProps}>
         {editable ? (
@@ -86,7 +88,17 @@ class EditableCell extends Component {
                     {form.getFieldDecorator(dataIndex, {
                       rules: [{
                         required: true,
-                        message: `${title} is required.`,
+                        whitespace: true,
+                        message: `请输入${title}`,
+                      }, {
+                        validator(rule, value, callback) {
+                          if (title === '商品数量') {
+                            if (value.length > 8) {
+                              callback(`${title}输入过大`);
+                            }
+                          }
+                          callback();
+                        },
                       }],
                       initialValue: record[dataIndex],
                     })(
@@ -124,13 +136,16 @@ class GoodsTableField extends Component {
       rlist: [],
       currentValue: '',
       initData: [],
+      shopClist: [],
+      shopClistCurrentValue: '',
+      couponsShow: ''
     };
   }
   componentWillReceiveProps(nextProps) {
-    const {initData, clist, count} = nextProps;
-    console.log('initData, clist, count', initData, clist, count)
+    const {initData, clist, count, shopClist} = nextProps;
+    console.log('initData, clist, count', initData, clist, count, shopClist)
     // if (clist.length > 0) {
-    this.updateRenderDatas(initData, clist, count);
+    this.updateRenderDatas(initData, clist, count, shopClist);
     // }
   }
   componentDidMount() {
@@ -138,13 +153,18 @@ class GoodsTableField extends Component {
   }
   handleChangeName = (record, value) => {
     record.prizeId = value;
-    for (var i = 0; i < this.state.clist.length; i++ ) {
-      if (this.state.clist[i].id === value) {
-        record.name = this.state.clist[i].name;
-      }
-    }
-    console.log('record', record,this.state.clist);
-    this.props.goodsHandle(this.props.initData);
+    // let number = 0
+    // for (var i = 0; i < this.state.clist.length; i++ ) {
+    //   if (this.state.clist[i].id === value) {
+    //     // record.name = this.state.clist[i].name;
+    //     // number = this.state.clist[i].number
+    //   }
+    // }
+    // console.log('record', record, this.state.clist, this.props.initData, this.state.initData);
+    this.props.goodsHandle(this.state.initData, value, record, record.key);
+  }
+  handleShopChangeName = (value) => {
+    this.props.shopHandle(value);
   }
   handleChangeRule = (record, value) => {
     record.resultCode = value;
@@ -153,29 +173,56 @@ class GoodsTableField extends Component {
     this.props.goodsHandleDelete(key);
   }
 
-  handleAdd = () => {
+  handleAdd = (maxNumber) => {
+    if (this.state.initData.length >= maxNumber) {
+      if (maxNumber !== 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.warning(`最多只可添加${maxNumber}个商品`)
+        this.setState({
+          initData: this.state.initData.slice(0, maxNumber)
+        })
+      } else {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.warning(`请先添加游戏`)
+      }
+      return false
+    }
     this.props.goodsHandleAdd(this.state.initData, this.state.currentValue, this.props.count);
+
   }
 
   handleSave = (row) => {
-    console.log('row', row)
+    // console.log('row', row)
     this.props.goodsHandleChange(row);
   }
-  updateRenderDatas(initData, clist, count) {
+  updateRenderDatas(initData, clist, count, shopClist) {
+    let goodslist = clist
+    if (shopClist.length === 0 ) {
+      goodslist = []
+    }
     this.setState({
-      clist,
+      clist: goodslist,
     }, () => {
-      console.log('clist', this.state.clist)
-      if(this.state.clist.length === 0 ) {
-        this.setState({
-          currentValue: '',
-        });
-      } else {
-        this.setState({
-          currentValue: clist[0].name,
-        });
-      }
+      this.setState({
+        currentValue: this.state.clist.length === 0 ? '' : clist[0].name,
+      })
     });
+    this.setState({
+      shopClist,
+    }, () => {
+      this.setState({
+        shopClistCurrentValue: this.state.shopClist.length === 0 ? '' : shopClist[0].id,
+      })
+    });
+    // console.log('shopClistCurrentValue', this.state.shopClistCurrentValue)
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
@@ -205,8 +252,8 @@ class GoodsTableField extends Component {
     });
   }
   render() {
-    const { count } = this.props;
-    const { clist, rlist, initData } = this.state
+    const { count, couponsShow, maxNumber } = this.props;
+    const { clist, rlist, initData, shopClist, shopClistCurrentValue, currentValue } = this.state
     const components = {
       body: {
         row: EditableFormRow,
@@ -214,56 +261,126 @@ class GoodsTableField extends Component {
       },
     };
     // console.log('initData', initData)
-    this.columns = [{
-      title: '商品名称',
-      dataIndex: 'name',
-      render: (text, record) => {
-        return (
-          <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={record.name}>
-            {/*{children}*/}
-            {clist.map((item) => {
-              return (
-                <Option key={item.id} value={item.id}>{item.name}</Option>
-              );
-            })}
-          </Select>
-        );
-      },
-    }, {
-      title: '规则',
-      dataIndex: 'resultCode',
-      render: (text, record) => {
-        return (
-          <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-            {/*{children2}*/}
-            {rlist.map((item) => {
-              return (
-                <Option key={item.id} value={item.id}>{item.name}</Option>
-              );
-            })}
-          </Select>
+    if (couponsShow) {
+      this.columns = [{
+        title: '选择店铺',
+        dataIndex: 'shopName',
+        render: (text, record) => {
+          return (
+            <Select onChange={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
+              {/*{children}*/}
+              {shopClist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      },{
+        title: '商品名称',
+        dataIndex: 'name',
+        render: (text, record) => {
+          return (
+            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
+              {/*{children}*/}
+              {clist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.name}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      }, {
+        title: '商品数量',
+        dataIndex: 'number',
+        editable: true,
+        // render: (text, record) => {
+        //   return (
+        //     <Input value={record.number}/>
+        //   );
+        // },
+      },{
+        title: '操作',
+        dataIndex: 'operation',
+        render: (text, record) => {
+          return (
+            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+              <a>删除</a>
+            </Popconfirm>
+          );
+        },
+      }];
+    } else {
+      this.columns = [{
+        title: '选择店铺',
+        dataIndex: 'shopName',
+        render: (text, record) => {
+          return (
+            <Select onChange={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
+              {/*{children}*/}
+              {shopClist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      },{
+        title: '商品名称',
+        dataIndex: 'name',
+        render: (text, record) => {
+          return (
+            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
+              {/*{children}*/}
+              {clist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.name}</Option>
+                );
+              })}
+            </Select>
+          );
+        },
+      }, {
+        title: '规则',
+        dataIndex: 'resultCode',
+        render: (text, record) => {
+          return (
+            <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
+              {/*{children2}*/}
+              {rlist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.name}</Option>
+                );
+              })}
+            </Select>
 
-        );
-      },
-    }, {
-      title: '规则描述',
-      dataIndex: 'resultRemark',
-      editable: true,
-    }, {
-      title: '操作',
-      dataIndex: 'operation',
-      render: (text, record) => {
-        return (
-          <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
-            <a>删除</a>
-          </Popconfirm>
-        );
-      },
-    }];
+          );
+        },
+      }, {
+        title: '规则描述',
+        dataIndex: 'resultRemark',
+        editable: true,
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        render: (text, record) => {
+          return (
+            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
+              <a>删除</a>
+            </Popconfirm>
+          );
+        },
+      }];
+    }
+
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;
       }
+      // console.log('col', col)
       return {
         ...col,
         onCell: record => ({
@@ -278,7 +395,7 @@ class GoodsTableField extends Component {
 
     return (
       <div className={styles.antButtons}>
-        <Button icon="plus" onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+        <Button icon="plus" onClick={() => this.handleAdd(maxNumber)} type="primary" style={{ marginBottom: 16 }}>
           添加
         </Button>
         <Table

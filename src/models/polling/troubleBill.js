@@ -1,10 +1,11 @@
-import { getCheckFaultList, getCheckFaultDetail, getCheckFaultAnswer } from '../../services/polling/troubleBill';
+import { getCheckFaultList, getCheckFaultDetail, getCheckFaultAnswer, getMachineUserList, saveCheckFault, updateCheckStatus} from '../../services/polling/troubleBill';
 
 export default {
   namespace: 'troubleBill',
   state: {
     list: [],
     page: {},
+    totalNo: 1
   },
 
   effects: {
@@ -23,8 +24,19 @@ export default {
       const response = yield call(getCheckFaultAnswer, { params });
       return response;
     },
+    *getMachineUserList({ payload: { restParams } }, { call }) {
+      const response = yield call(getMachineUserList, { restParams });
+      return response.data;
+    },
+    *saveCheckFault({ payload: { params } }, { call }) {
+      const response = yield call(saveCheckFault, { params });
+      return response;
+    },
+    *updateCheckStatus({ payload: { params } }, { call }) {
+      const response = yield call(updateCheckStatus, { params });
+      return response;
+    },
   },
-
   reducers: {
     getCheckFaultListBack(state, { payload: { data, page } }) {
       return {
@@ -35,6 +47,7 @@ export default {
           pageSize: page.pageSize,
           current: page.pageNo,
         },
+        totalNo: Math.ceil(page.totalCount/page.pageSize)
       };
     },
   },

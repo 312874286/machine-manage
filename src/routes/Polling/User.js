@@ -123,9 +123,9 @@ const CreateForm = Form.create()(
           </FormItem>
           <FormItem {...formItemLayout} label="负责区域">
             {getFieldDecorator('area', {
-              rules: [{ required: true, type: 'array', message: '请选择负责区域' }, {
-                validator: verifyString,
-              }],
+              // rules: [{ required: false, message: '请选择负责区域' }, {
+              //   validator: verifyString, type: 'array'
+              // }],
             })(
               <Cascader
                 placeholder="请选择"
@@ -175,8 +175,10 @@ const WatchMachine = Form.create()(
   });
 const SelectMachineForm = Form.create()(
   (props) => {
-    const { editMachineModalVisible, form, onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
-      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll, onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
+    const { editMachineModalVisible, form,
+      onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
+      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll,
+      onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -564,7 +566,12 @@ export default class user extends PureComponent {
         this.setModalData(res);
       });
     } else {
-      this.setModalData(res);
+      this.areaList('')
+      this.setState({
+        defaultValue: [],
+      }, () => {
+        this.setModalData(res);
+      });
     }
 
     // 回显省市区商圈数据源
@@ -620,17 +627,37 @@ export default class user extends PureComponent {
       if (err) {
         return;
       }
-      this.setState({
-        editModalConfirmLoading: true,
-        modalData: {},
-      });
       let remark = ''
       let messageTxt = '添加'
       if (this.state.machineNum) {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
+      console.log('values.area', values.area)
+      if (values.area) {
+        if (values.area.length < 2 && values.area.length > 0 ) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.success('请选择完整的省市');
+          this.setState({
+            editModalConfirmLoading: false,
+          });
+          return false
+        }
+      }
+      this.setState({
+        editModalConfirmLoading: true,
+        modalData: {},
+      });
       let url = 'user/saveUser';
-      let params = { ...values, remark: remark, machines: this.state.machines, area: values.area[values.area.length - 1] };
+      let params = {
+        ...values,
+        remark: remark,
+        machines: this.state.machines,
+        area: values.area ? values.area[values.area.length - 1] : ''
+      };
       if (this.state.modalData.id) {
         url = 'user/updateUser';
         messageTxt = '编辑'
@@ -639,7 +666,7 @@ export default class user extends PureComponent {
           id: this.state.modalData.id,
           remark: remark ? remark : this.state.modalData.remark,
           machines: this.state.machines,
-          area: values.area[values.area.length - 1]
+          area: values.area.length > 0 ? values.area[values.area.length - 1] : ''
         };
       }
       this.props.dispatch({
@@ -1087,34 +1114,34 @@ export default class user extends PureComponent {
       {
         title: '姓名',
         dataIndex: 'name',
-        width: '10%',
+        width: '100px',
       },
       {
         title: '手机号',
         dataIndex: 'phone',
-        width: '20%',
+        width: '150px',
       },
       {
         title: '身份证号',
         dataIndex: 'cardNo',
-        width: '20%',
+        width: '200px',
       },
       {
         title: '公司',
         dataIndex: 'enterprise',
-        width: '10%',
+        width: '100px',
       },
       {
         title: '负责区域',
         dataIndex: 'area',
-        width: '10%',
+        width: '100px',
       },
       {
         title: '负责的机器',
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
-        width: '10%',
+        width: '200px',
       },
       {
         title: '状态',
@@ -1164,7 +1191,7 @@ export default class user extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1000}
+              scrollX={1100}
               scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}
             />
           </div>

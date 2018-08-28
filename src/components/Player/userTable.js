@@ -1,15 +1,42 @@
 import React, { PureComponent } from 'react';
-import { Table, Alert } from 'antd';
+import { Table, Alert, Input, Button } from 'antd';
 import styles from './userTable.less';
 
 export default class userTable extends PureComponent {
-  state = {};
-
+  state = {
+    No: '',
+    totalNo: 0
+  };
+  componentWillReceiveProps(nextProps) {
+    const { page, } = this.props;
+    this.setState({
+      totalNo: Math.ceil(page.total/page.pageSize)
+    })
+  }
   handleTableChange = (pagination, filters, sorter) => {
     this.props.handleTableChange(pagination, filters, sorter);
   }
-
+  go = () => {
+    const { totalNo, No } = this.state
+    if (No) {
+      if (No <= totalNo && No > 0) {
+        this.props.handleTableChange({current: No, pageSize: 20 }, {}, {});
+      } else {
+        this.setState({
+          No: ''
+        })
+      }
+    } else {
+      return false
+    }
+  }
+  inputValue = (e) => {
+    this.setState({
+      No: e.target.value
+    })
+  }
   render() {
+    const { No } = this.state;
     const {
       data,
       page,
@@ -49,10 +76,21 @@ export default class userTable extends PureComponent {
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
-        return `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`;
+        return (
+          <div className="paginationBox">
+            <span>当前显示{page.pageSize}条/页，共{page.total}条</span>
+            <div>
+              <span>第{page.current}页 / 共{Math.ceil(total/page.pageSize)}页</span>
+              <span>
+                 <span>跳至 <Input value={No} onChange={this.inputValue}/>页</span>
+                 <Button type="primary" onClick={() => this.go()}>Go</Button>
+               </span>
+            </div>
+          </div>
+        );
       },
       ...page,
-      showQuickJumper: true,
+      showQuickJumper: false,
     };
 
     return (
