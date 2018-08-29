@@ -810,7 +810,7 @@ export default class goodsSettingList extends PureComponent {
         },
       },
     }).then((resp) => {
-      let fList
+      let fList = []
       if (resp.img) {
         fList = [{
           uid: -2,
@@ -818,10 +818,10 @@ export default class goodsSettingList extends PureComponent {
           status: 'done',
           url: resp.img,
         }]
-        this.setState({
-          fileList: fList,
-        });
       }
+      this.setState({
+        fileList: fList,
+      });
       if (resp.banner) {
         if (this.imgFlag(resp.banner)) {
           fList = [{
