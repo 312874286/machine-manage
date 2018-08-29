@@ -11,7 +11,9 @@ import {
   Select,
   DatePicker,
   Modal,
-  Divider
+  Divider,
+  Cascader,
+  Alert
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TaskSetting.less'
@@ -390,7 +392,23 @@ export default class TaskSetting extends PureComponent {
     modalType: true,
     taskType: '',
     AisleList: [],
-    appLists: []
+    appLists: [],
+
+    editMachineModalVisible: false,
+    selectCity: [],
+    selectCityName: [],
+    editMachineEditModalConfirmLoading: false,
+    insertOptions: [],
+    targetData: [],
+    sourceData: [],
+    sourceKey: [],
+    targetKey: [],
+    selectAll: false,
+    selectedRows: [],
+    repeat: [],
+    selectedRowKeys: [],
+    options: [],
+    defaultValue: [],
   };
   componentDidMount() {
     this.getLists();
