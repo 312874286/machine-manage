@@ -1,4 +1,5 @@
 import { taskList, taskDelete, taskAdd, taskUpdate, taskSelectAppList, taskDetail, taskSelectAreaMachines } from '../../services/machine/taskSetting';
+import {selectAreaMachines} from "../../services/project/scheduleSetting";
 
 export default {
   namespace: 'taskSetting',
@@ -39,7 +40,54 @@ export default {
     },
     *taskSelectAreaMachines({ payload: { params } }, { call }) {
       const response = yield call(taskSelectAreaMachines, { params });
-      return response;
+      const { code, data } = response;
+      if (code !== 0) return;
+      const arr = [];
+      if (data) {
+        let isLeaf = false, disabled = false, machines = [], title, canUseNum;
+        for (let i = 0; i < data.length; i++) {
+          machines = data[i].machines
+          title = data[i].name
+          canUseNum = data[i].canUseNum + '/' + data[i].totalNum
+          if (data[0].level === 4) {
+            isLeaf = true;
+          }
+          if (data[i].machines.length === 0) {
+            disabled = true;
+          } else {
+            disabled = false;
+          }
+          if (data[0].level === 5) {
+            machines = [{
+              machineCode: '',
+              machineId: data[i].code,
+              state: 0}]
+            title = data[i].name;
+            canUseNum = 1;
+          }
+          const a = {
+            value: data[i].code,
+            label: `${data[i].name}${canUseNum}`,
+            isLeaf: isLeaf,
+            title: title,
+            key: i,
+            level: data[i].level,
+            province: data[i].province,
+            // machines: machines,
+            // machineCode: title,
+            // machineId: data[i].code,
+            // state: 0,
+            // disabledFlag: disabled,
+            // canUseNum: canUseNum,
+            // disabled: disabled,
+            code: data[i].code,
+            name: data[i].name,
+            planed: data[i].planed,
+          };
+          arr.push(a);
+        }
+      }
+      return arr;
     },
   },
   reducers: {

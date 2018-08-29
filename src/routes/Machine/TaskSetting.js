@@ -13,12 +13,14 @@ import {
   Modal,
   Divider,
   Cascader,
-  Alert
+  Alert,
+  Popconfirm
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TaskSetting.less'
 import TaskAisletable from '../../components/Machine/taskAisleTable'
 import moment from "moment/moment";
+import {message} from "antd/lib/index";
 const FormItem = Form.Item;
 const { Option } = Select;
 const taskTypeOptions = [{id: 1, name: '升级App'}, {id: 2, name: '卸载App'}, {id: 3, name: '合并货道'}, {id: 4, name: '拆分货道'}]
@@ -219,18 +221,21 @@ const SelectMachineForm = Form.create()(
       },
     };
     this.columns = [{
-      title: '名称',
-      dataIndex: 'machineCode',
-      // render: text => <a href="javascript:;">{text}</a>,
-      render: (text, record) => {
-        return (
-          record.planed === '1' ? (
-            <a href="javascript:;">{record.machineCode}<span style={{ color : 'red' }}>/已占用</span></a>
-          ) : (
-            <a href="javascript:;">{record.machineCode}</a>
-          )
-        )
-      }
+      title: '机器编号',
+      dataIndex: 'code',
+      width: '30%'
+    }, {
+      title: '机器点位',
+      dataIndex: 'name',
+      width: '50%'
+    }, {
+      title: '网络',
+      dataIndex: 'planed',
+      render(val) {
+        return <div className={styles.netStatusStyles}>
+          <img src={require(`../../assets/images/signalIcon/sign${val === null ? 0 : val}.png`)}/>
+        </div>;
+      },
     }];
     const columns = this.columns.map((col) => {
       if (!col.editable) {
@@ -302,7 +307,7 @@ const SelectMachineForm = Form.create()(
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
               <Col md={10} sm={24}>
                 <FormItem>
-                  {getFieldDecorator('provinceCityAreaTrade')(
+                  {getFieldDecorator('code')(
                     <Cascader
                       placeholder="请选择"
                       options={insertOptions}
@@ -312,7 +317,14 @@ const SelectMachineForm = Form.create()(
                   )}
                 </FormItem>
               </Col>
-              <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+              <Col md={10} sm={24}>
+                <FormItem>
+                  {getFieldDecorator('machineCode')(
+                    <Input />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={4} sm={24} style={{ paddingLeft: '3px' }}>
                 <FormItem>
                   <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
                     搜索
@@ -320,55 +332,57 @@ const SelectMachineForm = Form.create()(
                 </FormItem>
               </Col>
             </Row>
-            <FormItem {...formItemLayout}>
-              {getFieldDecorator('machine')(
-                <div style={{ display: 'flex' }}>
-                  <div>
-                    <Alert
-                      message={(
-                        <div>
-                          已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
-                        </div>
-                      )}
-                      type="info"
-                      showIcon
-                    />
-                    <Table
-                      rowKey={record => record.machineCode}
-                      rowSelection={rowSelection}
-                      columns={columns}
-                      dataSource={sourceData}
-                      id="leftTable"
-                      style={{ width: '460px', marginBottom: '20px', marginTop: '10px' }}
-                      scroll={{ y: 200 }}
-                      pagination={false}
-                    />
-                    <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
-                      添加
-                    </Button>
-                  </div>
-                  <div style={{ marginLeft: '20px' }}>
-                    <Alert
-                      message={(
-                        <div>
-                          已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
-                        </div>
-                      )}
-                      type="success"
-                      showIcon
-                    />
-                    <Table
-                      rowKey={record => record.machineCode}
-                      columns={columnsRight}
-                      dataSource={targetData}
-                      id="rightTable"
-                      style={{ width: '460px', marginTop: '10px' }}
-                      scroll={{ y: 200 }}
-                      pagination={false}/>
-                  </div>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={24} sm={24} style={{ paddingLeft: '3px' }}>
+                <div style={{ marginLeft: '20px', marginTop: '10px' }}>
+                  <Alert
+                    message={(
+                      <div>
+                        已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
+                      </div>
+                    )}
+                    type="info"
+                    showIcon
+                  />
+                  <Table
+                    rowKey={record => record.machineCode}
+                    rowSelection={rowSelection}
+                    columns={columns}
+                    dataSource={sourceData}
+                    id="leftTable"
+                    style={{ marginBottom: '20px', marginTop: '10px' }}
+                    scroll={{ y: 200 }}
+                    pagination={false}
+                  />
+                  <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
+                    添加
+                  </Button>
                 </div>
-              )}
-            </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={24} sm={24} style={{ paddingLeft: '3px' }}>
+                <div style={{ marginLeft: '20px' }}>
+                  <Alert
+                    message={(
+                      <div>
+                        已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                      </div>
+                    )}
+                    type="success"
+                    showIcon
+                  />
+                  <Table
+                    rowKey={record => record.machineCode}
+                    columns={columnsRight}
+                    dataSource={targetData}
+                    id="rightTable"
+                    style={{ marginTop: '10px' }}
+                    scroll={{ y: 200 }}
+                    pagination={false}/>
+                </div>
+              </Col>
+            </Row>
           </Form>
         </div>
       </Modal>
@@ -670,6 +684,247 @@ export default class TaskSetting extends PureComponent {
       });
     })
   }
+  // 选择机器开始
+  onEditMachineHandleAddClick = () => {
+    // console.log('选择机器确认');
+    // let selectCity = this.state.selectCity
+    // if (selectCity.length > 0) {
+    //   this.uniq(selectCity);
+    //   // console.log('selectCity', this.state.machines)
+    // } else {
+    //   message.error('请先选择机器');
+    // }
+    console.log('this.state.targetData.machines', this.state.targetData)
+    if (this.state.targetData.length >0) {
+      let arr = this.state.targetData
+      let selectCityName = []
+      for (var i = 0; i < arr.length; i++) {
+        var item = arr[i]
+        if (!(item['province'] in selectCityName)) {
+          selectCityName[item['province']] = item.province;
+        }
+      }
+      selectCityName = Object.values(selectCityName)
+      this.setState({
+        machineNum: this.state.targetData.length,
+        selectCityName,
+        machines: this.state.targetData,
+      }, () => {
+        // console.log(this.state.machines)
+        this.setState({
+          editMachineModalVisible: false,
+        });
+      });
+    } else {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('请先选择机器');
+    }
+  }
+  openSelectMachineModal = () => {
+    this.setState({
+      sourceData: [],
+      selectMachineFlag: true,
+      checkedKeys: [],
+      expandedKeys: [],
+      autoExpandParent: true,
+    }, () => {
+      this.setState({
+        editMachineModalVisible: true,
+      }, () => {
+        this.getAreaList({level: 1});
+      });
+      this.selectMachineform.setFieldsValue({
+        provinceCityAreaTrade: undefined
+      })
+    });
+  }
+  getAreaList = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    let params = { code: code }
+    if (selectedOptions) {
+      if (selectedOptions.level) {
+        params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+      } else if (selectedOptions.code) {
+        params = { code: selectedOptions.code, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+      } else {
+        targetOption = selectedOptions[selectedOptions.length - 1];
+        code = targetOption.value;
+        targetOption.loading = true;
+        params = { code: code, level: targetOption.level + 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime}
+      }
+    }
+    this.props.dispatch({
+      type: 'taskSetting/taskSelectAreaMachines',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (selectedOptions.level) {
+        this.setState({
+          insertOptions: res,
+        });
+      } else if (selectedOptions.code) {
+        this.setState({
+          sourceData: res,
+        });
+      } else {
+        targetOption.loading = false;
+        targetOption.children = res
+        this.setState({
+          insertOptions: [...this.state.insertOptions],
+        });
+      }
+    });
+  }
+  addData = async () => {
+    const selectedRows = this.state.selectedRows
+    for (let a of selectedRows) {
+      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
+      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
+      await this.handleDelete(a, a.machineCode)
+    }
+    // console.log(this.state.repeat)
+    if (this.state.repeat.length > 0) {
+      Modal.warning({
+        title: '以下机器和已选机器重复',
+        content: this.state.repeat.join('\n') + '',
+      });
+    }
+    this.setState({
+      selectAll: false
+    })
+  }
+  unique = (arr) => {
+    let targetData = []
+    let repeat = []
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i]
+      if (!(item['machineCode'] in targetData)) {
+        targetData[item['machineCode']] = item;
+      } else {
+        repeat = [...this.state.repeat, item.machineCode]
+      }
+    }
+    this.setState({
+      repeat,
+    })
+    return Object.values(targetData)
+  }
+  handleSave = (row) => {
+    const newData = [...this.state.sourceData];
+    const index = newData.findIndex(item => row.machineCode === item.machineCode);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    console.log('newDatahandleSave', newData)
+    this.setState({ sourceData: newData });
+  }
+  handleDelete = (a, key) => {
+    // console.log('key', key, this.state.targetData)
+    if (a.planed === '1') {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.error('该机器已占用，重新选择！')
+      return;
+    }
+    const dataSource = [...this.state.sourceData];
+    // console.log('dataSource', dataSource)
+    this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
+    let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
+    // console.log('targetData', targetData)
+    targetData = this.unique(targetData)
+    this.setState({ targetData });
+  }
+  targetHandleSave = (row) => {
+    const newData = [...this.state.targetData];
+    const index = newData.findIndex(item => row.machineCode === item.machineCode);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    console.log('newDatahandleSave', newData)
+    this.setState({ targetData: newData });
+  }
+  targetHandleDelete = (key) => {
+    // console.log('key', key)
+    const dataSource = [...this.state.targetData];
+    this.setState({ targetData: dataSource.filter(item => item.machineCode !== key) });
+  }
+  onChangeRowSelection = (selectedRowKeys, selectedRows) => {
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    this.setState({
+      sourceKey: selectedRowKeys,
+      selectedRowKeys,
+    })
+  }
+  onSelectAll = (selected, selectedRows, changeRows) => {
+    this.setState({
+      selectedRows,
+      selectAll: selected
+    })
+    console.log(selected, selectedRows, changeRows);
+  }
+  onLeftSelect = (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+    this.setState({
+      selectedRows,
+      selectAll: true
+    })
+  }
+  // 回显省市区商圈数据源结束
+  // 选择机器控件
+  findSourceData = () => {
+    this.selectMachineform.validateFields((err, fieldsValue) => {
+      if (err) return;
+      let localCode = ''
+      if (fieldsValue.code) {
+        if (fieldsValue.code.length > 0) {
+          localCode = fieldsValue.code[fieldsValue.code.length - 1]
+        }
+      }
+      // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
+      if (!localCode) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.error('请选择一个地区')
+        return;
+      }
+      this.getAreaList({code: localCode})
+    });
+  }
+  // openSelectMachineModal = () => {
+  //   this.setState({
+  //     editMachineModalVisible: true,
+  //   }, () => {
+  //     this.getAreaList({level: 1});
+  //   });
+  //   this.selectMachineform.setFieldsValue({
+  //     provinceCityAreaTrade: undefined
+  //   })
+  // }
+  onEditMachineHandleModalVisibleClick = () => {
+    this.setState({
+      editMachineModalVisible: false,
+    });
+  }
+  selectMachineFormRef = (form) => {
+    this.selectMachineform = form;
+  }
+  // 选择机器结束
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -733,7 +988,7 @@ export default class TaskSetting extends PureComponent {
       taskSetting: { list },
       loading,
     } = this.props;
-    const { modalType, modalVisible, taskType, AisleList, appLists } = this.state
+    const { modalType, modalVisible, taskType, AisleList, appLists, editModalConfirmLoading, selectCityName, machineNum } = this.state
     const columns = [
       {
         title: '任务ID',
@@ -842,7 +1097,7 @@ export default class TaskSetting extends PureComponent {
           visible={modalVisible}
           onOk={this.handleAdd}
           onCancel={() => this.handleModalVisible(false)}
-          // confirmLoading={editModalConfirmLoading}
+          confirmLoading={editModalConfirmLoading}
           width={1250} >
           <div className="manageAppBox">
             <Form>
@@ -856,7 +1111,11 @@ export default class TaskSetting extends PureComponent {
                 </Select>
               </FormItem>
               <FormItem {...formItemLayout} label="选择机器">
+                  {/*<div>*/}
+                    {/*<Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>*/}
+                  {/*</div>*/}
                   <div>
+                    { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : null }
                     <Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>
                   </div>
               </FormItem>
@@ -865,10 +1124,6 @@ export default class TaskSetting extends PureComponent {
                 <UpgradeAppForm
                   ref={this.saveUpgradeAppFormRef}
                   appLists={appLists}
-                  // handleAdd={this.handleAdd}
-                  // handleModalVisible={this.handleModalVisible}
-                  // editModalConfirmLoading={this.state.editModalConfirmLoading}
-                  // openSelectMachineModal={this.openSelectMachineModal}
                   disabledStartDate={this.disabledStartDate}
                   disabledTime={this.disabledTime}
                 />
@@ -878,10 +1133,6 @@ export default class TaskSetting extends PureComponent {
                 <UnloadAppForm
                   ref={this.saveUnloadAppFormRef}
                   appLists={appLists}
-                  // handleAdd={this.handleAdd}
-                  // handleModalVisible={this.handleModalVisible}
-                  // editModalConfirmLoading={this.state.editModalConfirmLoading}
-                  // openSelectMachineModal={this.openSelectMachineModal}
                   disabledStartDate={this.disabledStartDate}
                   disabledTime={this.disabledTime}
                 />
@@ -891,7 +1142,6 @@ export default class TaskSetting extends PureComponent {
                 <AisleTaskSettingForm
                   ref={this.saveAisleTaskSettingFormRef}
                   AisleList={AisleList}
-                  // handleAdd={this.handleAdd}
                   HandleAisle={this.HandleAisle}
                   disabledStartDate={this.disabledStartDate}
                   disabledTime={this.disabledTime}
