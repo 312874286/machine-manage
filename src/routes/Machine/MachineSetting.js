@@ -1500,31 +1500,31 @@ export default class machineSettingList extends PureComponent {
             <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
-        width: '9%',
+        // width: '9%',
       },
-      {
-        title: '货道故障',
-        width: '9%',
-        render: (text, item) => ((!item.channelStatus) ? (
-          <span>无</span>
-        ) : (
-          <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-          </Popover>
-        )),
-        // width: 100,
-      },
-      {
-        title: '机器状态',
-        dataIndex: 'machineStatus',
-        render(val) {
-          if (val) {
-            return <span>{machineStatus[val]}</span>
-          } else {
-            return <span>{machineStatus[0]}</span>
-          }
-        }
-      },
+      // {
+      //   title: '货道故障',
+      //   width: '9%',
+      //   render: (text, item) => ((!item.channelStatus) ? (
+      //     <span>无</span>
+      //   ) : (
+      //     <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
+      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
+      //     </Popover>
+      //   )),
+      //   // width: 100,
+      // },
+      // {
+      //   title: '机器状态',
+      //   dataIndex: 'machineStatus',
+      //   render(val) {
+      //     if (val) {
+      //       return <span>{machineStatus[val]}</span>
+      //     } else {
+      //       return <span>{machineStatus[0]}</span>
+      //     }
+      //   }
+      // },
       {
         fixed: 'right',
         title: '操作',
@@ -1615,7 +1615,7 @@ export default class machineSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1400}
+              scrollX={900}
               scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)}
             />
           </div>
