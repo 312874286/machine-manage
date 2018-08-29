@@ -1249,7 +1249,9 @@ export default class machineSettingList extends PureComponent {
         ManageAislemodalVisible: true,
       }, () => {
         let AisleList = []
-        for (let i = 0; i < 48; i++) {
+        const r = result[result.length - 1].code.slice(0, 1)
+        console.log('r', r)
+        for (let i = 0; i < 56; i++) {
           let r = {}
           // console.log('i', i)
           for (let j = 0; j < result.length; j++) {
@@ -1279,19 +1281,24 @@ export default class machineSettingList extends PureComponent {
             AisleList.push(r);
           }
         }
-        let tr1 = AisleList.filter(item => item.value <= 8)
-        let tr2 = AisleList.filter(item => item.value <= 18 && item.value >= 11)
-        let tr3 = AisleList.filter(item => item.value <= 28 && item.value >= 21)
-        let tr4 = AisleList.filter(item => item.value <= 38 && item.value >= 31)
-        let tr5 = AisleList.filter(item => item.value <= 48 && item.value >= 41)
-        AisleList = [...tr1, ...tr2, ...tr3, ...tr4, ...tr5]
+        let trLists = []
+        for (let i = 0; i <= r; i++) {
+          let tr = AisleList.filter(item => item.value <= ( i * 10 + 8 ) && item.value >= ( i * 10 + 1 ))
+          trLists = [...trLists, ...tr]
+        }
+        // let tr1 = AisleList.filter(item => item.value <= 8)
+        // let tr2 = AisleList.filter(item => item.value <= 18 && item.value >= 11)
+        // let tr3 = AisleList.filter(item => item.value <= 28 && item.value >= 21)
+        // let tr4 = AisleList.filter(item => item.value <= 38 && item.value >= 31)
+        // let tr5 = AisleList.filter(item => item.value <= 48 && item.value >= 41)
+        // let tr6 = AisleList.filter(item => item.value <= 58 && item.value >= 51)
         // console.log('AisleList.push(r);', AisleList)
         // result.forEach((item) => {
         //   let r = { key: item.id, code: item.code, goodsName: item.goodsName, goodsPrice: item.goodsPrice, volumeCount: item.volumeCount, goodsCount: item.goodsCount, workStatusreason: item.workStatusreason, isDelete: item.isDelete}
         //   AisleList.push(r);
         // })
         this.setState({
-          AisleList,
+          AisleList: trLists,
         });
       });
     });
