@@ -31,7 +31,7 @@ export default {
     },
     *taskSelectAppList({ payload: { params } }, { call }) {
       const response = yield call(taskSelectAppList, { params });
-      return response;
+      return response.data;
     },
     *taskDetail({ payload: { params } }, { call }) {
       const response = yield call(taskDetail, { params });

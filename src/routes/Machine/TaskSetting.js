@@ -10,10 +10,12 @@ import {
   Input,
   Select,
   DatePicker,
-  Modal
+  Modal,
+  Divider
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TaskSetting.less'
+import TaskAisletable from '../../components/Machine/taskAisleTable'
 import moment from "moment/moment";
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -156,9 +158,8 @@ const UnloadAppForm = Form.create()(
 const AisleTaskSettingForm = Form.create()(
   (props) => {
     const {
-      form, modalVisible, handleAdd, handleModalVisible,
-      editModalConfirmLoading, openSelectMachineModal,
-      disabledStartDate, modalType, disabledTime
+      form, AisleList,
+      disabledStartDate, HandleAisle, disabledTime
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -172,38 +173,17 @@ const AisleTaskSettingForm = Form.create()(
       },
     };
     return (
-      <Form>
-        <FormItem {...formItemLayout} label="选择App">
-          {getFieldDecorator('app', {
-            rules: [{ required: false, message: '请选择App' }],
-          })(<Select placeholder="请选择App">
-            {taskTypeOptions.map((item) => {
-              return (
-                <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
-              );
-            })}
-          </Select>)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="升级版本">
-          {getFieldDecorator('appVersion', {
-            rules: [{ required: false, message: '请填写升级版本' }],
-          })(<Input />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="升级链接">
-          {getFieldDecorator('appUrl', {
-            rules: [{ required: false, message: '请填写升级链接' }],
-          })(<Input />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="选择开始时间">
+      <div>
+        <FormItem {...formItemLayout} label="选择执行时间">
           {getFieldDecorator('doTimeStr', {
-            rules: [{ required: true, message: '选择开始时间' }],
+            rules: [{ required: true, message: '选择执行时间' }],
           })(
             <DatePicker
               disabledDate={disabledStartDate}
               disabledTime={disabledTime}
               showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
               format="YYYY-MM-DD HH:mm"
-              placeholder="选择开始时间"
+              placeholder="选择执行时间"
             />
           )}
         </FormItem>
@@ -220,7 +200,17 @@ const AisleTaskSettingForm = Form.create()(
             </Select>
           )}
         </FormItem>
-      </Form>
+        <FormItem>
+          <TaskAisletable
+            HandleAisle={HandleAisle}
+            AisleList={AisleList}
+            // handleStop={handleStop}
+            // handleStart={handleStart}
+            // message={message}
+            // updateGoodsCount={updateGoodsCount}
+          />
+        </FormItem>
+      </div>
     );
   });
 
@@ -240,6 +230,8 @@ export default class TaskSetting extends PureComponent {
     status: '',
     modalType: true,
     taskType: '',
+    AisleList: [],
+    appLists: []
   };
   componentDidMount() {
     this.getLists();
@@ -257,7 +249,19 @@ export default class TaskSetting extends PureComponent {
       },
     });
   }
-
+  getAppLists = () => {
+    this.props.dispatch({
+      type: 'taskSetting/taskSelectAppList',
+      payload: {
+        restParams: {
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        appLists: res
+      })
+    });
+  }
   // 重置
   handleFormReset = () => {
     const { form } = this.props;
@@ -346,7 +350,51 @@ export default class TaskSetting extends PureComponent {
     }
   }
   setModalAisleTaskSettingData = (data) => {
-    console.log('this.form', this.form)
+    let result = []
+    let p = []
+    if (result.length > 0) {
+      for (let i = 0; i < result.length; i++) {
+        p.push(result[i])
+        p.push(result[i] + 1)
+      }
+    }
+    let AisleList = []
+    for (let i = 0; i < 48; i++) {
+      let r = {}
+      for (let j = 0; j < p.length; j++) {
+        if (parseInt(p[j]) === (i+1)) {
+          r = {
+            value: i + 1,
+            key: i + 1,
+            code: i + 1,
+            isSelected: 1
+          }
+          AisleList.push(r);
+          break;
+        }
+      }
+      if (!AisleList[i]) {
+        r = {
+          value: i + 1,
+          key: i,
+          code: i + 1,
+        }
+        AisleList.push(r);
+      }
+    }
+    let tr1 = AisleList.filter(item => item.value <= 8)
+    let tr2 = AisleList.filter(item => item.value <= 18 && item.value >= 11)
+    let tr3 = AisleList.filter(item => item.value <= 28 && item.value >= 21)
+    let tr4 = AisleList.filter(item => item.value <= 38 && item.value >= 31)
+    let tr5 = AisleList.filter(item => item.value <= 48 && item.value >= 41)
+    AisleList = [...tr1, ...tr2, ...tr3, ...tr4, ...tr5]
+    let key = -1
+    AisleList = AisleList.map((item, index) => {
+      return { value: item.value, key: key += 1, code: item.code, isSelected: item.isSelected ? item.isSelected : 0 }
+    })
+    this.setState({
+      AisleList,
+    });
     if (this.AisleTaskSettingForm) {
       if (data) {
         this.AisleTaskSettingForm.setFieldsValue({
@@ -371,9 +419,11 @@ export default class TaskSetting extends PureComponent {
     console.log('value', value)
     if (value === 1) {
       this.setModalUpgradeAppData();
-    } else if (value === 1) {
+    } else if (value === 2) {
+      this.getAppLists()
       this.setModalUnloadAppData();
     } else {
+      this.getAppLists()
       this.setModalAisleTaskSettingData();
     }
     this.setState({
@@ -388,6 +438,16 @@ export default class TaskSetting extends PureComponent {
   }
   deleteTask = () => {
 
+  }
+  HandleAisle = (val) => {
+    console.log('val', val)
+    this.setState({
+      AisleList: []
+    }, () => {
+      this.setState({
+        AisleList: val,
+      });
+    })
   }
   renderAdvancedForm() {
     const { form } = this.props;
@@ -452,7 +512,7 @@ export default class TaskSetting extends PureComponent {
       taskSetting: { list },
       loading,
     } = this.props;
-    const { modalType, modalVisible, taskType } = this.state
+    const { modalType, modalVisible, taskType, AisleList } = this.state
     const columns = [
       {
         title: '任务ID',
@@ -508,7 +568,9 @@ export default class TaskSetting extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.watchTask(item)}>查看</a>
+            <Divider type="vertical" />
             <a onClick={() => this.editTask(item)}>编辑</a>
+            <Divider type="vertical" />
             <a onClick={() => this.deleteTask(item)}>删除</a>
           </Fragment>
         ),
@@ -560,7 +622,7 @@ export default class TaskSetting extends PureComponent {
           // onOk={handleAdd}
           onCancel={() => this.handleModalVisible(false)}
           // confirmLoading={editModalConfirmLoading}
-          width={800} >
+          width={1250} >
           <div className="manageAppBox">
             <Form>
               <FormItem {...formItemLayout} label="选择任务类型">
@@ -591,8 +653,29 @@ export default class TaskSetting extends PureComponent {
                 />
               </div>
               /*卸载App unload*/
-
+              <div style={{ display: taskType === 2 ? '' : 'none' }}>
+                <UnloadAppForm
+                  ref={this.saveUnloadAppFormRef}
+                  // modalVisible={this.state.modalVisible}
+                  handleAdd={this.handleAdd}
+                  // handleModalVisible={this.handleModalVisible}
+                  // editModalConfirmLoading={this.state.editModalConfirmLoading}
+                  // openSelectMachineModal={this.openSelectMachineModal}
+                  disabledStartDate={this.disabledStartDate}
+                  disabledTime={this.disabledTime}
+                />
+              </div>
               /*合并货道AisleTaskSetting*/
+              <div style={{ display: (taskType === 3 || taskType === 4) ? '' : 'none' }}>
+                <AisleTaskSettingForm
+                  ref={this.saveAisleTaskSettingFormRef}
+                  AisleList={AisleList}
+                  handleAdd={this.handleAdd}
+                  HandleAisle={this.HandleAisle}
+                  disabledStartDate={this.disabledStartDate}
+                  disabledTime={this.disabledTime}
+                />
+              </div>
             </Form>
           </div>
         </Modal>
