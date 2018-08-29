@@ -23,7 +23,7 @@ const taskStatusOptions = [{id: 0, name: '未执行'}, {id: 1, name: '待执行'
 const taskStatus = ['未执行', '待执行', '已执行']
 const doType = ['socket', 'push']
 
-const CreateForm = Form.create()(
+const UpgradeAppForm = Form.create()(
   (props) => {
     const {
       form, modalVisible, handleAdd, handleModalVisible,
@@ -42,40 +42,9 @@ const CreateForm = Form.create()(
       },
     };
     return (
-      <Modal
-        // title={
-        //   <div class="modalBox">
-        //     <span class="leftSpan"></span>
-        //     <span class="modalTitle">{!modalType ? '编辑任务' : '新增排期'}</span>
-        //   </div>
-        // }
-        // visible={modalVisible}
-        onOk={handleAdd}
-        // onCancel={() => handleModalVisible(false)}
-        confirmLoading={editModalConfirmLoading}
-        width={800} >
-        {/*<div className="manageAppBox">*/}
           <Form>
-            {/*<FormItem {...formItemLayout} label="选择任务类型">*/}
-              {/*{getFieldDecorator('activityId', {*/}
-                {/*rules: [{ required: false, message: '请选择任务类型' }],*/}
-              {/*})(<Select placeholder="请选择">*/}
-                {/*{taskTypeOptions.map((item) => {*/}
-                  {/*return (*/}
-                    {/*<Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>*/}
-                  {/*);*/}
-                {/*})}*/}
-              {/*</Select>)}*/}
-            {/*</FormItem>*/}
-            {/*<FormItem {...formItemLayout} label="选择机器">*/}
-              {/*{getFieldDecorator('remark')(*/}
-                {/*<div>*/}
-                  {/*<Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>*/}
-                {/*</div>)*/}
-              {/*}*/}
-            {/*</FormItem>*/}
             <FormItem {...formItemLayout} label="选择App">
-              {getFieldDecorator('activityName', {
+              {getFieldDecorator('app', {
                 rules: [{ required: false, message: '请选择App' }],
               })(<Select placeholder="请选择App">
                 {taskTypeOptions.map((item) => {
@@ -86,17 +55,17 @@ const CreateForm = Form.create()(
               </Select>)}
             </FormItem>
             <FormItem {...formItemLayout} label="升级版本">
-              {getFieldDecorator('activityName', {
+              {getFieldDecorator('appVersion', {
                 rules: [{ required: false, message: '请填写升级版本' }],
               })(<Input />)}
             </FormItem>
             <FormItem {...formItemLayout} label="升级链接">
-              {getFieldDecorator('activityName', {
+              {getFieldDecorator('appUrl', {
                 rules: [{ required: false, message: '请填写升级链接' }],
               })(<Input />)}
             </FormItem>
             <FormItem {...formItemLayout} label="选择开始时间">
-              {getFieldDecorator('startTimeStr', {
+              {getFieldDecorator('doTimeStr', {
                 rules: [{ required: true, message: '选择开始时间' }],
               })(
                 <DatePicker
@@ -109,7 +78,7 @@ const CreateForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="选择执行方式">
-              {getFieldDecorator('gameId', {
+              {getFieldDecorator('doType', {
                 rules: [{ required: false, message: '请选择执行方式' }],
               })(
                 <Select placeholder="请选择执行方式">
@@ -122,8 +91,136 @@ const CreateForm = Form.create()(
               )}
             </FormItem>
           </Form>
-        {/*</div>*/}
-      </Modal>
+    );
+  });
+const UnloadAppForm = Form.create()(
+  (props) => {
+    const {
+      form, modalVisible, handleAdd, handleModalVisible,
+      editModalConfirmLoading, openSelectMachineModal,
+      disabledStartDate, modalType, disabledTime
+    } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    return (
+      <Form>
+        <FormItem {...formItemLayout} label="选择App">
+          {getFieldDecorator('app', {
+            rules: [{ required: false, message: '请选择App' }],
+          })(<Select placeholder="请选择App">
+            {taskTypeOptions.map((item) => {
+              return (
+                <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
+              );
+            })}
+          </Select>)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="选择执行时间">
+          {getFieldDecorator('doTimeStr', {
+            rules: [{ required: true, message: '选择执行时间' }],
+          })(
+            <DatePicker
+              disabledDate={disabledStartDate}
+              disabledTime={disabledTime}
+              showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+              format="YYYY-MM-DD HH:mm"
+              placeholder="选择执行时间"
+            />
+          )}
+        </FormItem>
+        <FormItem {...formItemLayout} label="选择执行方式">
+          {getFieldDecorator('doType', {
+            rules: [{ required: false, message: '请选择执行方式' }],
+          })(
+            <Select placeholder="请选择执行方式">
+              {doType.map((item) => {
+                return (
+                  <Option key={item}>{item}</Option>
+                );
+              })}
+            </Select>
+          )}
+        </FormItem>
+      </Form>
+    );
+  });
+const AisleTaskSettingForm = Form.create()(
+  (props) => {
+    const {
+      form, modalVisible, handleAdd, handleModalVisible,
+      editModalConfirmLoading, openSelectMachineModal,
+      disabledStartDate, modalType, disabledTime
+    } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    return (
+      <Form>
+        <FormItem {...formItemLayout} label="选择App">
+          {getFieldDecorator('app', {
+            rules: [{ required: false, message: '请选择App' }],
+          })(<Select placeholder="请选择App">
+            {taskTypeOptions.map((item) => {
+              return (
+                <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
+              );
+            })}
+          </Select>)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="升级版本">
+          {getFieldDecorator('appVersion', {
+            rules: [{ required: false, message: '请填写升级版本' }],
+          })(<Input />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="升级链接">
+          {getFieldDecorator('appUrl', {
+            rules: [{ required: false, message: '请填写升级链接' }],
+          })(<Input />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="选择开始时间">
+          {getFieldDecorator('doTimeStr', {
+            rules: [{ required: true, message: '选择开始时间' }],
+          })(
+            <DatePicker
+              disabledDate={disabledStartDate}
+              disabledTime={disabledTime}
+              showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+              format="YYYY-MM-DD HH:mm"
+              placeholder="选择开始时间"
+            />
+          )}
+        </FormItem>
+        <FormItem {...formItemLayout} label="选择执行方式">
+          {getFieldDecorator('doType', {
+            rules: [{ required: false, message: '请选择执行方式' }],
+          })(
+            <Select placeholder="请选择执行方式">
+              {doType.map((item) => {
+                return (
+                  <Option key={item}>{item}</Option>
+                );
+              })}
+            </Select>
+          )}
+        </FormItem>
+      </Form>
     );
   });
 
@@ -142,6 +239,7 @@ export default class TaskSetting extends PureComponent {
     type: '',
     status: '',
     modalType: true,
+    taskType: '',
   };
   componentDidMount() {
     this.getLists();
@@ -187,9 +285,14 @@ export default class TaskSetting extends PureComponent {
     });
   };
   // 新增modal确认事件 开始
-  saveFormRef = (form) => {
-    this.form = form;
-    console.log('this.form', this.form)
+  saveUpgradeAppFormRef = (form) => {
+    this.UpgradeAppForm = form;
+  }
+  saveUnloadAppFormRef = (form) => {
+    this.UnloadAppForm = form;
+  }
+  saveAisleTaskSettingFormRef = (form) => {
+    this.AisleTaskSettingForm = form;
   }
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
@@ -198,31 +301,84 @@ export default class TaskSetting extends PureComponent {
       modalData: {},
       modalType: true,
     });
-    this.setModalData();
   };
   // 设置modal 数据
-  setModalData = (data) => {
+  setModalUpgradeAppData = (data) => {
+    if (this.UpgradeAppForm) {
+      if (data) {
+        this.UpgradeAppForm.setFieldsValue({
+          app: data.app || '',
+          appUrl: data.appUrl || undefined,
+          appVersion: data.appVersion || undefined,
+          doType: data.doType || undefined,
+          doTimeStr: data.doTimeStr || undefined,
+        });
+      } else {
+        this.UpgradeAppForm.setFieldsValue({
+          app: undefined,
+          appUrl: undefined,
+          appVersion: undefined,
+          doType: 'socket',
+          doTimeStr: undefined,
+        });
+      }
+    }
+  }
+  setModalUnloadAppData = (data) => {
+    if (this.UnloadAppForm) {
+      if (data) {
+        this.UnloadAppForm.setFieldsValue({
+          app: data.app || '',
+          appUrl: data.appUrl || undefined,
+          appVersion: data.appVersion || undefined,
+          doType: data.doType || undefined,
+          doTimeStr: data.doTimeStr || undefined,
+        });
+      } else {
+        this.UnloadAppForm.setFieldsValue({
+          app: undefined,
+          appUrl: undefined,
+          appVersion: undefined,
+          doType: 'socket',
+          doTimeStr: undefined,
+        });
+      }
+    }
+  }
+  setModalAisleTaskSettingData = (data) => {
     console.log('this.form', this.form)
-    if (data) {
-      this.form.setFieldsValue({
-        type: data.type || '',
-        doType: data.doType || undefined,
-        app: data.app || undefined,
-        appUrl: data.appUrl || undefined,
-        appVersion: data.appVersion,
-      });
-    } else {
-      this.form.setFieldsValue({
-        name: undefined,
-        code: undefined,
-        sellerId: undefined,
-        remark: undefined,
-        type: undefined,
-      });
+    if (this.AisleTaskSettingForm) {
+      if (data) {
+        this.AisleTaskSettingForm.setFieldsValue({
+          app: data.app || '',
+          appUrl: data.appUrl || undefined,
+          appVersion: data.appVersion || undefined,
+          doType: data.doType || undefined,
+          doTimeStr: data.doTimeStr || undefined,
+        });
+      } else {
+        this.AisleTaskSettingForm.setFieldsValue({
+          app: undefined,
+          appUrl: undefined,
+          appVersion: undefined,
+          doType: 'socket',
+          doTimeStr: undefined,
+        });
+      }
     }
   }
   taskType = (value) => {
     console.log('value', value)
+    if (value === 1) {
+      this.setModalUpgradeAppData();
+    } else if (value === 1) {
+      this.setModalUnloadAppData();
+    } else {
+      this.setModalAisleTaskSettingData();
+    }
+    this.setState({
+      taskType: value
+    })
   }
   watchTask = () => {
 
@@ -296,7 +452,7 @@ export default class TaskSetting extends PureComponent {
       taskSetting: { list },
       loading,
     } = this.props;
-    const { modalType, modalVisible } = this.state
+    const { modalType, modalVisible, taskType } = this.state
     const columns = [
       {
         title: '任务ID',
@@ -397,7 +553,7 @@ export default class TaskSetting extends PureComponent {
           title={
             <div class="modalBox">
               <span class="leftSpan"></span>
-              <span class="modalTitle">{!modalType ? '编辑任务' : '新增排期'}</span>
+              <span class="modalTitle">{!modalType ? '编辑任务' : '新增任务'}</span>
             </div>
           }
           visible={modalVisible}
@@ -408,28 +564,23 @@ export default class TaskSetting extends PureComponent {
           <div className="manageAppBox">
             <Form>
               <FormItem {...formItemLayout} label="选择任务类型">
-                {/*{getFieldDecorator('activityId', {*/}
-                  {/*rules: [{ required: false, message: '请选择任务类型' }],*/}
-                {/*})(*/}
-                  <Select placeholder="请选择" onSelect={() => this.taskType}>
+                  <Select placeholder="请选择" onSelect={this.taskType}>
                   {taskTypeOptions.map((item) => {
                     return (
                       <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
                     );
                   })}
                 </Select>
-                {/*)}*/}
               </FormItem>
               <FormItem {...formItemLayout} label="选择机器">
-                {/*{getFieldDecorator('remark')(*/}
                   <div>
                     <Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>
-                  </div>)
-                {/*}*/}
+                  </div>
               </FormItem>
-              {/*<div style={{ display: '' }}>*/}
-                <CreateForm
-                  ref={this.saveFormRef}
+              /*升级App*/
+              <div style={{ display: taskType === 1 ? '' : 'none' }}>
+                <UpgradeAppForm
+                  ref={this.saveUpgradeAppFormRef}
                   // modalVisible={this.state.modalVisible}
                   handleAdd={this.handleAdd}
                   // handleModalVisible={this.handleModalVisible}
@@ -438,7 +589,10 @@ export default class TaskSetting extends PureComponent {
                   disabledStartDate={this.disabledStartDate}
                   disabledTime={this.disabledTime}
                 />
-              {/*</div>*/}
+              </div>
+              /*卸载App unload*/
+
+              /*合并货道AisleTaskSetting*/
             </Form>
           </div>
         </Modal>
