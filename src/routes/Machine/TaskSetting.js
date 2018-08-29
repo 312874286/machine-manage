@@ -27,11 +27,7 @@ const doType = ['socket', 'push']
 
 const UpgradeAppForm = Form.create()(
   (props) => {
-    const {
-      form, modalVisible, handleAdd, handleModalVisible,
-      editModalConfirmLoading, openSelectMachineModal,
-      disabledStartDate, modalType, disabledTime
-    } = props;
+    const { form, appLists, disabledStartDate, disabledTime } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -47,9 +43,9 @@ const UpgradeAppForm = Form.create()(
           <Form>
             <FormItem {...formItemLayout} label="选择App">
               {getFieldDecorator('app', {
-                rules: [{ required: false, message: '请选择App' }],
+                rules: [{ required: true, message: '请选择App' }],
               })(<Select placeholder="请选择App">
-                {taskTypeOptions.map((item) => {
+                {appLists.map((item) => {
                   return (
                     <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
                   );
@@ -58,12 +54,12 @@ const UpgradeAppForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="升级版本">
               {getFieldDecorator('appVersion', {
-                rules: [{ required: false, message: '请填写升级版本' }],
+                rules: [{ required: true, message: '请填写升级版本' }],
               })(<Input />)}
             </FormItem>
             <FormItem {...formItemLayout} label="升级链接">
               {getFieldDecorator('appUrl', {
-                rules: [{ required: false, message: '请填写升级链接' }],
+                rules: [{ required: true, message: '请填写升级链接' }],
               })(<Input />)}
             </FormItem>
             <FormItem {...formItemLayout} label="选择开始时间">
@@ -81,7 +77,7 @@ const UpgradeAppForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="选择执行方式">
               {getFieldDecorator('doType', {
-                rules: [{ required: false, message: '请选择执行方式' }],
+                rules: [{ required: true, message: '请选择执行方式' }],
               })(
                 <Select placeholder="请选择执行方式">
                   {doType.map((item) => {
@@ -97,11 +93,7 @@ const UpgradeAppForm = Form.create()(
   });
 const UnloadAppForm = Form.create()(
   (props) => {
-    const {
-      form, modalVisible, handleAdd, handleModalVisible,
-      editModalConfirmLoading, openSelectMachineModal,
-      disabledStartDate, modalType, disabledTime
-    } = props;
+    const { form, appLists, disabledStartDate, disabledTime } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -117,9 +109,9 @@ const UnloadAppForm = Form.create()(
       <Form>
         <FormItem {...formItemLayout} label="选择App">
           {getFieldDecorator('app', {
-            rules: [{ required: false, message: '请选择App' }],
+            rules: [{ required: true, message: '请选择App' }],
           })(<Select placeholder="请选择App">
-            {taskTypeOptions.map((item) => {
+            {appLists.map((item) => {
               return (
                 <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
               );
@@ -141,7 +133,7 @@ const UnloadAppForm = Form.create()(
         </FormItem>
         <FormItem {...formItemLayout} label="选择执行方式">
           {getFieldDecorator('doType', {
-            rules: [{ required: false, message: '请选择执行方式' }],
+            rules: [{ required: true, message: '请选择执行方式' }],
           })(
             <Select placeholder="请选择执行方式">
               {doType.map((item) => {
@@ -157,10 +149,7 @@ const UnloadAppForm = Form.create()(
   });
 const AisleTaskSettingForm = Form.create()(
   (props) => {
-    const {
-      form, AisleList,
-      disabledStartDate, HandleAisle, disabledTime
-    } = props;
+    const { form, AisleList, disabledStartDate, HandleAisle, disabledTime } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -189,7 +178,7 @@ const AisleTaskSettingForm = Form.create()(
         </FormItem>
         <FormItem {...formItemLayout} label="选择执行方式">
           {getFieldDecorator('doType', {
-            rules: [{ required: false, message: '请选择执行方式' }],
+            rules: [{ required: true, message: '请选择执行方式' }],
           })(
             <Select placeholder="请选择执行方式">
               {doType.map((item) => {
@@ -204,10 +193,6 @@ const AisleTaskSettingForm = Form.create()(
           <TaskAisletable
             HandleAisle={HandleAisle}
             AisleList={AisleList}
-            // handleStop={handleStop}
-            // handleStart={handleStart}
-            // message={message}
-            // updateGoodsCount={updateGoodsCount}
           />
         </FormItem>
       </div>
@@ -322,7 +307,7 @@ export default class TaskSetting extends PureComponent {
           app: undefined,
           appUrl: undefined,
           appVersion: undefined,
-          doType: 'socket',
+          doType: undefined,
           doTimeStr: undefined,
         });
       }
@@ -343,7 +328,7 @@ export default class TaskSetting extends PureComponent {
           app: undefined,
           appUrl: undefined,
           appVersion: undefined,
-          doType: 'socket',
+          doType: undefined,
           doTimeStr: undefined,
         });
       }
@@ -409,7 +394,7 @@ export default class TaskSetting extends PureComponent {
           app: undefined,
           appUrl: undefined,
           appVersion: undefined,
-          doType: 'socket',
+          doType: undefined,
           doTimeStr: undefined,
         });
       }
@@ -418,17 +403,39 @@ export default class TaskSetting extends PureComponent {
   taskType = (value) => {
     console.log('value', value)
     if (value === 1) {
+      this.getAppLists()
       this.setModalUpgradeAppData();
     } else if (value === 2) {
       this.getAppLists()
       this.setModalUnloadAppData();
     } else {
-      this.getAppLists()
       this.setModalAisleTaskSettingData();
     }
     this.setState({
       taskType: value
     })
+  }
+  handleAdd = () => {
+    const { taskType } = this.state
+    if (taskType === 1) {
+      this.UpgradeAppForm.validateFields((err, values) => {
+        if (err) {
+          return;
+        }
+      })
+    } else if (taskType === 2) {
+      this.UnloadAppForm.validateFields((err, values) => {
+        if (err) {
+          return;
+        }
+      })
+    } else {
+      this.AisleTaskSettingForm.validateFields((err, values) => {
+        if (err) {
+          return;
+        }
+      })
+    }
   }
   watchTask = () => {
 
@@ -512,7 +519,7 @@ export default class TaskSetting extends PureComponent {
       taskSetting: { list },
       loading,
     } = this.props;
-    const { modalType, modalVisible, taskType, AisleList } = this.state
+    const { modalType, modalVisible, taskType, AisleList, appLists } = this.state
     const columns = [
       {
         title: '任务ID',
@@ -619,7 +626,7 @@ export default class TaskSetting extends PureComponent {
             </div>
           }
           visible={modalVisible}
-          // onOk={handleAdd}
+          onOk={this.handleAdd}
           onCancel={() => this.handleModalVisible(false)}
           // confirmLoading={editModalConfirmLoading}
           width={1250} >
@@ -639,12 +646,12 @@ export default class TaskSetting extends PureComponent {
                     <Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>
                   </div>
               </FormItem>
-              /*升级App*/
+              {/*升级App*/}
               <div style={{ display: taskType === 1 ? '' : 'none' }}>
                 <UpgradeAppForm
                   ref={this.saveUpgradeAppFormRef}
-                  // modalVisible={this.state.modalVisible}
-                  handleAdd={this.handleAdd}
+                  appLists={appLists}
+                  // handleAdd={this.handleAdd}
                   // handleModalVisible={this.handleModalVisible}
                   // editModalConfirmLoading={this.state.editModalConfirmLoading}
                   // openSelectMachineModal={this.openSelectMachineModal}
@@ -652,12 +659,12 @@ export default class TaskSetting extends PureComponent {
                   disabledTime={this.disabledTime}
                 />
               </div>
-              /*卸载App unload*/
+              {/*卸载App unload*/}
               <div style={{ display: taskType === 2 ? '' : 'none' }}>
                 <UnloadAppForm
                   ref={this.saveUnloadAppFormRef}
-                  // modalVisible={this.state.modalVisible}
-                  handleAdd={this.handleAdd}
+                  appLists={appLists}
+                  // handleAdd={this.handleAdd}
                   // handleModalVisible={this.handleModalVisible}
                   // editModalConfirmLoading={this.state.editModalConfirmLoading}
                   // openSelectMachineModal={this.openSelectMachineModal}
@@ -665,12 +672,12 @@ export default class TaskSetting extends PureComponent {
                   disabledTime={this.disabledTime}
                 />
               </div>
-              /*合并货道AisleTaskSetting*/
+              {/*合并货道AisleTaskSetting*/}
               <div style={{ display: (taskType === 3 || taskType === 4) ? '' : 'none' }}>
                 <AisleTaskSettingForm
                   ref={this.saveAisleTaskSettingFormRef}
                   AisleList={AisleList}
-                  handleAdd={this.handleAdd}
+                  // handleAdd={this.handleAdd}
                   HandleAisle={this.HandleAisle}
                   disabledStartDate={this.disabledStartDate}
                   disabledTime={this.disabledTime}
