@@ -83,7 +83,7 @@ const CreateForm = Form.create()(
                 <FormItem label="最小数量">
                   {getFieldDecorator('minGoodsNum', {
                     rules: [{ required: true, message: '请输入最小数量' }],
-                  })(<InputNumber min={0} placeholder="请输入最小数量" />)}
+                  })(<InputNumber min={1} placeholder="请输入最小数量" />)}
                 </FormItem>
               </Col>
               <Col span={2}>
@@ -275,7 +275,7 @@ export default class gameSettingList extends PureComponent {
         version: data.version || undefined,
         versionInno72: data.versionInno72 || undefined,
         remark: data.remark || undefined,
-        minGoodsNum: data.minGoodsNum || 0,
+        minGoodsNum: data.minGoodsNum || 1,
         maxGoodsNum: data.maxGoodsNum || 100
       });
     } else {
