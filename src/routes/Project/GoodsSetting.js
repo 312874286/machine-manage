@@ -682,7 +682,7 @@ export default class goodsSettingList extends PureComponent {
           name: 'xxx.png',
           status: 'done',
           url: data.img,
-        }] : null,
+        }] : [],
         bannerfileList: flist,
         videoUrl,
       });
