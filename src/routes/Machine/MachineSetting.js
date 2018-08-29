@@ -33,6 +33,8 @@ import styles from './MachineSetting.less';
 import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
+import domain from "../../common/config/domain"
+
 
 
 const FormItem = Form.Item;
@@ -343,6 +345,23 @@ const WatchForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const machineColumns = [{
+      title: '图片地址',
+      dataIndex: 'imgUrl',
+      align: 'left',
+      width: '78%',
+      render (text, render) {
+        return (
+          <a href={`${domain.url}${render.imgUrl}`} target='_blank'>{`${domain.url}${render.imgUrl}`}</a>
+        )
+      }
+    }, {
+      title: '截屏时间',
+      dataIndex: 'createTime',
+      align: 'left',
+      width: '22%',
+    }];
+    // let machineDetailData = machineDetail.status ? (machineDetail.status.length > 0 ? machineDetail.status.splice(0, 10) : '') : ''
     return (
       <Modal
         title={
@@ -467,6 +486,49 @@ const WatchForm = Form.create()(
               </Col>
             </Row>
           </div>
+          <Table columns={machineColumns} dataSource={machineDetail.imgs} rowKey={record => record.id} pagination={false} />
+        </div>
+      </Modal>
+    );
+  });
+const EditMachineCodeForm = Form.create()(
+  (props) => {
+    const { editMachineCodemodalVisible, form,
+      editMachineCodeHandleAddClick, editMachineCodeHandleModalVisibleClick,
+      editMachineCodeEditModalConfirmLoading,} = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">修改编号</span>
+          </div>
+        }
+        visible={editMachineCodemodalVisible}
+        onOk={editMachineCodeHandleAddClick}
+        onCancel={() => editMachineCodeHandleModalVisibleClick()}
+        confirmLoading={editMachineCodeEditModalConfirmLoading}
+        width={800}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="机器编号">
+              {getFieldDecorator('machineCode', {
+                rules: [{ required: true, whitespace: true, message: '请填写机器编号' }],
+              })(<Input placeholder="请填写机器编号" />)}
+            </FormItem>
+          </Form>
         </div>
       </Modal>
     );
@@ -520,7 +582,9 @@ export default class machineSettingList extends PureComponent {
 
     options: [],
     code: '',
-    pointName: ''
+    pointName: '',
+    editMachineCodemodalVisible: false,
+    editMachineCodeEditModalConfirmLoading: false
   };
   constructor(props) {
     super(props);
@@ -834,6 +898,71 @@ export default class machineSettingList extends PureComponent {
     }
   }
   // 修改点位结束
+  // 修改机器code开始
+  // MachineCode
+  handleNoClick = (item) => {
+    this.setState({
+      modalVisible: false,
+      modalData: item,
+      editMachineCodemodalVisible: true,
+    }, () => {
+      this.MachineCodeForm.setFieldsValue({
+        machineCode: item.machineCode,
+      });
+    });
+  }
+  saveMachineCodeFormRef = (form) => {
+    this.MachineCodeForm = form;
+  }
+  editMachineCodeHandleAddClick = () => {
+    // 确认修ga编码
+    // console.log(this.state.dataId)
+    this.MachineCodeForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        editMachineCodeEditModalConfirmLoading: true,
+      });
+      let url = '';
+      let params = '';
+      console.log('modalData', this.state.modalData)
+      if (this.state.modalData.id) {
+        url = 'machineSetting/updateMachineCode';
+        params = { ...values, machineId: this.state.modalData.id};
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then((data) => {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.info(data.data)
+        this.getLists();
+        this.setState({
+          editMachineCodeEditModalConfirmLoading: false,
+          modalVisible: false,
+          modalData: {},
+          dataId: '',
+          data: [],
+          editPointmodalVisible: false,
+          ManageAppmodalVisible: false,
+          ManageAislemodalVisible: false,
+        });
+      });
+    });
+  }
+  editMachineCodeHandleModalVisibleClick = (flag) => {
+    this.setState({
+      editMachineCodemodalVisible: !!flag,
+    });
+  };
+  // 修改机器code结束
   // 管理App开始
   handleClose = () => {
     this.setState({
@@ -964,6 +1093,14 @@ export default class machineSettingList extends PureComponent {
   };
   appUpdate = (updateStatus) => {
     // console.log('点击了更新app', this.state.modalData, updateStatus);
+    let updateStatusText = ''
+    if (updateStatus === 1) {
+      updateStatusText = '更新'
+    } else if (updateStatus === 2) {
+      updateStatusText = '刷新'
+    } else {
+      updateStatusText = '截屏'
+    }
     this.props.dispatch({
       type: 'machineSetting/machineUpdateInfo',
       payload: {
@@ -979,7 +1116,7 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.success('更新成功');
+        message.success(updateStatusText + '成功');
       }
     });
   }
@@ -1224,7 +1361,7 @@ export default class machineSettingList extends PureComponent {
     });
   }
   getMachineStatus = (item) => {
-    // console.log('machineId', item.id);
+    console.log('machineId', item.id);
     // getMachineStatus
     this.setState({
       modalData: item,
@@ -1238,7 +1375,7 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((result) => {
-        // console.log(result)
+        console.log('result', result)
         this.setState({
           machineDetail: result.data,
         }, () => {
@@ -1344,10 +1481,10 @@ export default class machineSettingList extends PureComponent {
         width: '10%',
         dataIndex: 'netStatus',
         render(val) {
-          if (val === 1) {
-            return <Icon type="wifi" />;
-          } else {
-            return '网络异常';
+          if (val !== null) {
+            return <div className={styles.netStatusStyles}>
+              <img src={require(`../../assets/images/signalIcon/sign${val}.png`)}/>
+            </div>;
           }
         },
       },
@@ -1393,7 +1530,7 @@ export default class machineSettingList extends PureComponent {
       {
         fixed: 'right',
         title: '操作',
-        width: 240,
+        width: 180,
         render: (text, item) => (
           // (item.localDesc) ? (
           //   <Fragment>
@@ -1417,6 +1554,8 @@ export default class machineSettingList extends PureComponent {
             <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
             <Divider type="vertical" />
             <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleNoClick(item)}>修改编号</a>
           </Fragment>
         ),
       },
@@ -1498,6 +1637,13 @@ export default class machineSettingList extends PureComponent {
           fetching={this.state.fetching}
           // value={this.state.value}
           pointName={this.state.pointName}
+        />
+        <EditMachineCodeForm
+          ref={this.saveMachineCodeFormRef}
+          editMachineCodemodalVisible={this.state.editMachineCodemodalVisible}
+          editMachineCodeHandleAddClick={this.editMachineCodeHandleAddClick}
+          editMachineCodeHandleModalVisibleClick={this.editMachineCodeHandleModalVisibleClick}
+          editMachineCodeEditModalConfirmLoading={this.state.editMachineCodeEditModalConfirmLoading}
         />
         <Modal
           title={

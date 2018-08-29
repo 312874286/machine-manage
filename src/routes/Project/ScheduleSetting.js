@@ -811,7 +811,7 @@ export default class ScheduleSettingList extends PureComponent {
     // return endValue.valueOf() <= startValue.valueOf() 时间戳
     // endValue <= moment(startValue.valueOf()) &&
     // console.log(typeof this.state.endValue)
-    return !this.state.modalType ? (endValue < moment().endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
+    return !this.state.modalType ? (endValue < moment(new Date().setDate(new Date().getDate() - 1)).endOf('day')) : (endValue.valueOf() <= startValue.valueOf()) ;
   }
 
   onChange = (field, value) => {
@@ -1362,8 +1362,8 @@ export default class ScheduleSettingList extends PureComponent {
   }
   discountHandleDelete = (key) => {
     const couponsInitData = [...this.state.couponsInitData];
-    this.setState({ couponsInitData: couponsInitData.filter(item => item.key !== key) });
-    // console.log('discountHandleDelete::', key, couponsInitData);
+    this.setState({ couponsInitData: couponsInitData.filter(item => item.key !== key), });
+    // console.log('discountHandleDelete::', key, couponsInitData.filter(item => item.key !== key));
   }
   discountHandleChange = (row) => {
     const newData = [...this.state.couponsInitData];
@@ -1457,10 +1457,24 @@ export default class ScheduleSettingList extends PureComponent {
             return { prizeId: item.prizeId, resultCode: item.resultCode, resultRemark: item.resultRemark }
           })
         }
+        let coupons = this.state.couponsInitData
+        console.log('this.state.couponsInitData', this.state.couponsInitData)
+        if (this.state.couponsInitData) {
+          if (!this.state.couponsShow) {
+            // 派样活动
+            coupons = coupons.map((item) => {
+              return { code: item.code, name: item.name, shopsId: item.shopsId}
+            })
+          } else {
+            coupons = coupons.map((item) => {
+              return {  code: item.code, name: item.name, shopsId: item.shopsId, resultCode: item.resultCode, resultRemark: item.resultRemark  }
+            })
+          }
+        }
         let params = {
           ...fieldsValue,
           goods,
-          coupons: this.state.couponsInitData,
+          coupons,
           machines: this.state.targetData,
           startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
@@ -1490,6 +1504,12 @@ export default class ScheduleSettingList extends PureComponent {
               getDataStartDay: this.state.startTime,
               getDataEndDay: this.state.endTime,
               modalData: {},
+              maxNumber: 100,
+              targetData: [],
+              goodsCount: 0,
+              couponsCount: 0,
+              goodsInitData: [],
+              couponsInitData: [],
             }, () => {
               this.getLists();
             });
@@ -1683,6 +1703,8 @@ export default class ScheduleSettingList extends PureComponent {
   }
   openSelectMachineModal = () => {
     this.setState({
+      sourceData: [],
+      targetData: [],
       selectMachineFlag: true,
       checkedKeys: [],
       expandedKeys: [],

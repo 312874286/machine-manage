@@ -195,6 +195,8 @@ class GoodsTableField extends Component {
       }
       return false
     }
+    console.log('val', this.state.initData, this.state.currentValue, this.props.count)
+
     this.props.goodsHandleAdd(this.state.initData, this.state.currentValue, this.props.count);
 
   }
@@ -226,7 +228,7 @@ class GoodsTableField extends Component {
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
-        id: i.toString(),
+        id: i,
         name: i.toString(),
       }
       rlist.push(newobj);
@@ -267,7 +269,7 @@ class GoodsTableField extends Component {
         dataIndex: 'shopName',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
+            <Select  onSelect={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
               {/*{children}*/}
               {shopClist.map((item) => {
                 return (
@@ -282,7 +284,7 @@ class GoodsTableField extends Component {
         dataIndex: 'name',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
+            <Select  onSelect={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
               {/*{children}*/}
               {clist.map((item) => {
                 return (
@@ -318,7 +320,7 @@ class GoodsTableField extends Component {
         dataIndex: 'shopName',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
+            <Select onSelect={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
               {/*{children}*/}
               {shopClist.map((item) => {
                 return (
@@ -333,7 +335,7 @@ class GoodsTableField extends Component {
         dataIndex: 'name',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
+            <Select onSelect={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
               {/*{children}*/}
               {clist.map((item) => {
                 return (

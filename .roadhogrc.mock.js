@@ -1014,7 +1014,7 @@ const proxy = {
       "code": 0,
       "data": {
         "machineStatus": {
-          "machineId": "1823951070679",
+          "machineId": "1823951070671111111111",
           "machineDoorStatus": 0,
           "dropGoodsSwitch": 1,
           "goodsChannelStatus": "[]",
@@ -1034,7 +1034,15 @@ const proxy = {
           "sdTotle": 5502,
           "ping": "23ms",
           "createTime": "2018-07-13 14:34:13"
-        }
+        },
+        "imgs": [
+          {
+            "id": "0022f24a0aef4fb9aca61d19c4a31bf5",
+            "machineCode": "18527298",
+            "imgUrl": "app/img/54e7f349ae5d49b592166c2f670b60a1.png",
+            "createTime": "2018-08-19 13:07:22"
+          }
+        ],
       },
       "msg": "成功"
     });
@@ -1115,6 +1123,13 @@ const proxy = {
           "isDelete": 0
         }
       ],
+      "msg": "成功"
+    })
+  },
+  'POST /machine/machine/updateMachineCode': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
       "msg": "成功"
     })
   },
