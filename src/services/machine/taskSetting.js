@@ -4,7 +4,7 @@ import api from './api';
 
 export async function taskAdd({ params }) {
   return fetch.postJSON(api.taskAdd, {
-    body: stringify(params),
+    body: JSON.stringify(params),
   });
 }
 

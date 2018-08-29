@@ -47,7 +47,7 @@ const UpgradeAppForm = Form.create()(
               })(<Select placeholder="请选择App">
                 {appLists.map((item) => {
                   return (
-                    <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
+                    <Option value={item.id} key={item.id} data-id={item.id}>{item.appName}</Option>
                   );
                 })}
               </Select>)}
@@ -113,7 +113,7 @@ const UnloadAppForm = Form.create()(
           })(<Select placeholder="请选择App">
             {appLists.map((item) => {
               return (
-                <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
+                <Option value={item.id} key={item.id} data-id={item.id}>{item.appName}</Option>
               );
             })}
           </Select>)}
@@ -196,6 +196,180 @@ const AisleTaskSettingForm = Form.create()(
           />
         </FormItem>
       </div>
+    );
+  });
+const SelectMachineForm = Form.create()(
+  (props) => {
+    const { editMachineModalVisible, form,
+      onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick, editMachineEditModalConfirmLoading, insertOptions,
+      loadData, addData, targetData, onChangeRowSelection, selectedRowKeys, onSelectAll, sourceData, handleSave, selectAll,
+      onLeftSelect, targetHandleSave, targetHandleDelete, findSourceData
+    } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 24 },
+      },
+    };
+    this.columns = [{
+      title: '名称',
+      dataIndex: 'machineCode',
+      // render: text => <a href="javascript:;">{text}</a>,
+      render: (text, record) => {
+        return (
+          record.planed === '1' ? (
+            <a href="javascript:;">{record.machineCode}<span style={{ color : 'red' }}>/已占用</span></a>
+          ) : (
+            <a href="javascript:;">{record.machineCode}</a>
+          )
+        )
+      }
+    }];
+    const columns = this.columns.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: handleSave,
+        }),
+      };
+    });
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: onChangeRowSelection,
+      onSelect: onLeftSelect,
+      onSelectAll: onSelectAll,
+    };
+    this.columnsRight = [{
+      title: '名称',
+      dataIndex: 'machineCode',
+      render: text => <a href="javascript:;">{text}</a>,
+    }, {
+      title: '操作',
+      width: 70,
+      dataIndex: 'operation',
+      render: (text, record) => {
+        return (
+          targetData.length > 0
+            ? (
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.machineCode)}>
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
+            ) : null
+        );
+      }
+    }];
+    const columnsRight = this.columnsRight.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: targetHandleSave,
+        }),
+      };
+    });
+
+    return (
+      <Modal
+        title="选择机器"
+        visible={editMachineModalVisible}
+        onOk={onEditMachineHandleAddClick}
+        onCancel={() => onEditMachineHandleModalVisibleClick()}
+        confirmLoading={editMachineEditModalConfirmLoading}
+        width={1000}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={10} sm={24}>
+                <FormItem>
+                  {getFieldDecorator('provinceCityAreaTrade')(
+                    <Cascader
+                      placeholder="请选择"
+                      options={insertOptions}
+                      loadData={loadData}
+                      changeOnSelect
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+                <FormItem>
+                  <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
+                    搜索
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('machine')(
+                <div style={{ display: 'flex' }}>
+                  <div>
+                    <Alert
+                      message={(
+                        <div>
+                          已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
+                        </div>
+                      )}
+                      type="info"
+                      showIcon
+                    />
+                    <Table
+                      rowKey={record => record.machineCode}
+                      rowSelection={rowSelection}
+                      columns={columns}
+                      dataSource={sourceData}
+                      id="leftTable"
+                      style={{ width: '460px', marginBottom: '20px', marginTop: '10px' }}
+                      scroll={{ y: 200 }}
+                      pagination={false}
+                    />
+                    <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
+                      添加
+                    </Button>
+                  </div>
+                  <div style={{ marginLeft: '20px' }}>
+                    <Alert
+                      message={(
+                        <div>
+                          已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                        </div>
+                      )}
+                      type="success"
+                      showIcon
+                    />
+                    <Table
+                      rowKey={record => record.machineCode}
+                      columns={columnsRight}
+                      dataSource={targetData}
+                      id="rightTable"
+                      style={{ width: '460px', marginTop: '10px' }}
+                      scroll={{ y: 200 }}
+                      pagination={false}/>
+                  </div>
+                </div>
+              )}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
     );
   });
 
@@ -374,7 +548,7 @@ export default class TaskSetting extends PureComponent {
     let tr5 = AisleList.filter(item => item.value <= 48 && item.value >= 41)
     AisleList = [...tr1, ...tr2, ...tr3, ...tr4, ...tr5]
     let key = -1
-    AisleList = AisleList.map((item, index) => {
+    AisleList = AisleList.map((item) => {
       return { value: item.value, key: key += 1, code: item.code, isSelected: item.isSelected ? item.isSelected : 0 }
     })
     this.setState({
@@ -401,7 +575,6 @@ export default class TaskSetting extends PureComponent {
     }
   }
   taskType = (value) => {
-    console.log('value', value)
     if (value === 1) {
       this.getAppLists()
       this.setModalUpgradeAppData();
@@ -417,25 +590,48 @@ export default class TaskSetting extends PureComponent {
   }
   handleAdd = () => {
     const { taskType } = this.state
+    let params = {};
     if (taskType === 1) {
       this.UpgradeAppForm.validateFields((err, values) => {
         if (err) {
           return;
         }
+        params = {
+          ...values,
+          doTimeStr: values.doTimeStr.format('YYYY-MM-DD HH:mm'),
+        };
       })
     } else if (taskType === 2) {
       this.UnloadAppForm.validateFields((err, values) => {
         if (err) {
           return;
         }
+        params = {
+          ...values,
+          doTimeStr: values.doTimeStr.format('YYYY-MM-DD HH:mm'),
+        };
       })
     } else {
       this.AisleTaskSettingForm.validateFields((err, values) => {
         if (err) {
           return;
         }
+        params = {
+          ...values,
+          doTimeStr: values.doTimeStr.format('YYYY-MM-DD HH:mm'),
+        };
       })
     }
+    this.props.dispatch({
+      type: 'taskSetting/taskAdd',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (res.code !== 0) {
+
+      }
+    });
   }
   watchTask = () => {
 
@@ -686,6 +882,28 @@ export default class TaskSetting extends PureComponent {
             </Form>
           </div>
         </Modal>
+        <SelectMachineForm
+          ref={this.selectMachineFormRef}
+          editMachineModalVisible={this.state.editMachineModalVisible}
+          onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
+          onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
+          editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
+          insertOptions={this.state.insertOptions}
+          loadData={this.getAreaList}
+          addData={this.addData}
+          targetData={this.state.targetData}
+          onChangeRowSelection={this.onChangeRowSelection}
+          onSelectAll={this.onSelectAll}
+          selectedRowKeys={this.state.selectedRowKeys}
+          sourceData={this.state.sourceData}
+          handleSave={this.handleSave}
+          // handleDelete={this.handleDelete}
+          selectAll={this.state.selectAll}
+          targetHandleSave={this.targetHandleSave}
+          targetHandleDelete={this.targetHandleDelete}
+          onLeftSelect={this.onLeftSelect}
+          findSourceData={this.findSourceData}
+        />
       </PageHeaderLayout>
     );
   }
