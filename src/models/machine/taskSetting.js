@@ -1,5 +1,4 @@
-import { taskList, taskDelete, taskAdd, taskUpdate, taskSelectAppList, taskDetail, taskSelectAreaMachines } from '../../services/machine/taskSetting';
-import {selectAreaMachines} from "../../services/project/scheduleSetting";
+import { taskList, taskDelete, taskAdd, taskUpdate, taskSelectAppList, taskDetail, taskSelectAreaMachines, taskUpdateStatus } from '../../services/machine/taskSetting';
 
 export default {
   namespace: 'taskSetting',
@@ -22,6 +21,10 @@ export default {
       const response = yield call(taskDelete, { params });
       return response;
     },
+    *taskUpdateStatus({ payload: { params } }, { call }) {
+      const response = yield call(taskUpdateStatus, { params });
+      return response;
+    },
     *taskAdd({ payload: { params } }, { call }) {
       const response = yield call(taskAdd, { params });
       return response;
@@ -36,7 +39,7 @@ export default {
     },
     *taskDetail({ payload: { params } }, { call }) {
       const response = yield call(taskDetail, { params });
-      return response;
+      return response.data;
     },
     *taskSelectAreaMachines({ payload: { params } }, { call }) {
       const response = yield call(taskSelectAreaMachines, { params });
@@ -48,7 +51,7 @@ export default {
         for (let i = 0; i < data.length; i++) {
           machines = data[i].machines
           title = data[i].name
-          canUseNum = data[i].canUseNum + '/' + data[i].totalNum
+          canUseNum = `(${data[i].totalNum})`
           if (data[0].level === 4) {
             isLeaf = true;
           }
@@ -79,8 +82,9 @@ export default {
             // state: 0,
             // disabledFlag: disabled,
             // canUseNum: canUseNum,
-            // disabled: disabled,
-            code: data[i].code,
+            disabled: disabled,
+            machineId: data[i].code,
+            machineCode: data[i].parentCode,
             name: data[i].name,
             planed: data[i].planed,
           };

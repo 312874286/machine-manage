@@ -26,8 +26,9 @@ const api = map({
   taskSelectAppList: '/machine/task/selectAppList',
   taskDetail: '/machine/task/detail',
   taskSelectAreaMachines: '/machine/task/selectAreaMachines',
-  getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
-  updateMachineCode: '/machine/machine/updateMachineCode'
+  // getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
+  updateMachineCode: '/machine/machine/updateMachineCode',
+  taskUpdateStatus: '/machine/task/updateStatus',
 });
 
 export default api;

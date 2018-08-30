@@ -116,7 +116,6 @@ class TaskAisleTable extends React.Component {
   }
   selectCode = (item, flag) => {
     const { AisleList } = this.props
-    console.log('item', item, AisleList)
     if (item.value % 2 !== 0) {
       if (flag === 'cancel') {
         item.isSelected = 0
@@ -134,7 +133,6 @@ class TaskAisleTable extends React.Component {
       message.error('请点击奇数货道号')
     }
     this.props.HandleAisle(AisleList)
-    console.log('AisleList', this.props.AisleList)
   }
   componentDidMount() {
     const data = this.props.AisleList;
@@ -204,7 +202,6 @@ class TaskAisleTable extends React.Component {
         cell: EditableCell,
       },
     };
-    console.log('AisleList', AisleList)
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;
