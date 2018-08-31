@@ -533,6 +533,59 @@ const EditMachineCodeForm = Form.create()(
       </Modal>
     );
   });
+
+// const UploadLogForm = Form.create()(
+//   (props) => {
+//     const {
+//       UploadLogVisible,
+//       UploadLogConfirmLoading,
+//       UploadLogVisibleClick,
+//       logUpdate,
+//       logRefresh,
+//       modalData,
+//       } = props;
+//     const formItemLayout = {
+//       labelCol: {
+//         xs: { span: 24 },
+//         sm: { span: 4 },
+//       },
+//       wrapperCol: {
+//         xs: { span: 24 },
+//         sm: { span: 16 },
+//       },
+//     };
+//     return (
+//       <Modal
+//         title={
+//           <div class="modalBox">
+//             <span class="leftSpan"></span>
+//             <span class="modalTitle">上传日志</span>
+//           </div>
+//         }
+//         width={800}
+//         visible={UploadLogVisible}
+//         onCancel={() => UploadLogVisibleClick()}
+//         confirmLoading={UploadLogConfirmLoading}
+//         footer={null}
+//       >
+//         <div style={{ padding: '0 30px 30px 30px' }}>
+//           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
+//             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
+//               <div>
+//                 <div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>
+//                 <div style={{ color: '#999'}}>上次更新时间：</div>
+//               </div>
+//               <div>
+//                 <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => logUpdate()}>更新</Button>
+//                 <Button style={{ width: '120px' }} type="Default" onClick={() => logRefresh()}>刷新</Button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </Modal>
+//     );
+//   });
+
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
   machineSetting,
@@ -584,7 +637,10 @@ export default class machineSettingList extends PureComponent {
     code: '',
     pointName: '',
     editMachineCodemodalVisible: false,
-    editMachineCodeEditModalConfirmLoading: false
+    editMachineCodeEditModalConfirmLoading: false,
+
+    UploadLogVisible: false,
+    UploadLogConfirmLoading: false
   };
   constructor(props) {
     super(props);
@@ -1308,6 +1364,64 @@ export default class machineSettingList extends PureComponent {
     });
   };
   // 管理货道结束
+  // 上传日志开始
+  // uploadLog = (item) => {
+  //   this.setState({
+  //     UploadLogVisible: true,
+  //     modalData: item,
+  //   })
+  // }
+  // UploadLogVisibleClick = (flag) => {
+  //   this.setState({
+  //     UploadLogVisible: flag,
+  //   });
+  // }
+  // logUpdate = (type) => {
+  //   // 更新
+  //   this.logOperation(type, '更新')
+  // }
+  // logRefresh = (type) => {
+  //   // 刷新
+  //   this.logOperation(type, '刷新')
+  // }
+  // logOperation = (type, keyWord) => {
+  //   this.props.dispatch({
+  //     type: 'machineSetting/updateLogStatus',
+  //     payload: {
+  //       params: {
+  //         type,
+  //       },
+  //     },
+  //   }).then((resp) => {
+  //     message.config({
+  //       top: 100,
+  //       duration: 2,
+  //       maxCount: 1,
+  //     });
+  //     if (resp && resp.code === 0) {
+  //       message.success(`${keyWord}成功`);
+  //     } else {
+  //       message.error(resp ? resp.msg : `${keyWord}失败`);
+  //     }
+  //   });
+  // }
+  // getLogDetail = () => {
+  //   this.props.dispatch({
+  //     type: 'log/getLogList',
+  //     payload: {
+  //       restParams: {
+  //         code: this.state.logId,
+  //         pageNo: this.state.logModalPageNo,
+  //         type: 1020403,
+  //       },
+  //     },
+  //   }).then(() => {
+  //     this.setState({
+  //       logModalLoading: false,
+  //     });
+  //   });
+  // }
+  // 上传日志结束
   // 日志相关开始
   getLogList = () => {
     this.props.dispatch({
@@ -1412,6 +1526,7 @@ export default class machineSettingList extends PureComponent {
       });
     });
   }
+
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -1493,6 +1608,15 @@ export default class machineSettingList extends PureComponent {
         width: '10%',
         dataIndex: 'activityName',
       },
+      // {
+      //   title: '上传日志',
+      //   width: '9%',
+      //   render: (text, item) => (
+      //     <div
+      //       style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }}
+      //       onClick={() => this.uploadLog(item)}>查看</div>
+      //   ),
+      // },
       {
         title: '商品缺货状态',
         render: (text, item) => ((!item.goodsStatus) ? (
@@ -1502,31 +1626,31 @@ export default class machineSettingList extends PureComponent {
             <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
           </Popover>
         )),
-        width: '9%',
+        // width: '9%',
       },
-      {
-        title: '货道故障',
-        width: '9%',
-        render: (text, item) => ((!item.channelStatus) ? (
-          <span>无</span>
-        ) : (
-          <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-          </Popover>
-        )),
-        // width: 100,
-      },
-      {
-        title: '机器状态',
-        dataIndex: 'machineStatus',
-        render(val) {
-          if (val) {
-            return <span>{machineStatus[val]}</span>
-          } else {
-            return <span>{machineStatus[0]}</span>
-          }
-        }
-      },
+      // {
+      //   title: '货道故障',
+      //   width: '9%',
+      //   render: (text, item) => ((!item.channelStatus) ? (
+      //     <span>无</span>
+      //   ) : (
+      //     <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
+      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
+      //     </Popover>
+      //   )),
+      //   // width: 100,
+      // },
+      // {
+      //   title: '机器状态',
+      //   dataIndex: 'machineStatus',
+      //   render(val) {
+      //     if (val) {
+      //       return <span>{machineStatus[val]}</span>
+      //     } else {
+      //       return <span>{machineStatus[0]}</span>
+      //     }
+      //   }
+      // },
       {
         fixed: 'right',
         title: '操作',
@@ -1618,7 +1742,7 @@ export default class machineSettingList extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={1400}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 120)}
             />
           </div>
         </Card>
@@ -1734,6 +1858,13 @@ export default class machineSettingList extends PureComponent {
           appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
         />
+        {/*<UploadLogForm*/}
+          {/*UploadLogVisible={this.state.UploadLogVisible}*/}
+          {/*UploadLogConfirmLoading={this.state.UploadLogConfirmLoading}*/}
+          {/*UploadLogVisibleClick={this.UploadLogVisibleClick}*/}
+          {/*logUpdate={this.logUpdate}*/}
+          {/*logRefresh={this.logRefresh}*/}
+        {/*/>*/}
         <LogModal
           data={logList}
           page={logPage}

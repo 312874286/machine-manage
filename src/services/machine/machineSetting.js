@@ -71,3 +71,9 @@ export async function updateMachineCode({ params }) {
     body: stringify(params),
   });
 }
+
+export async function updateLogStatus({ params }) {
+  return fetch.post(api.updateLogStatus, {
+    body: stringify(params),
+  });
+}

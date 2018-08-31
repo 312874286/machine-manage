@@ -29,6 +29,9 @@ const api = map({
   // getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
   updateMachineCode: '/machine/machine/updateMachineCode',
   taskUpdateStatus: '/machine/task/updateStatus',
+
+
+  updateLogStatus: '',
 });
 
 export default api;

@@ -3779,6 +3779,11 @@ const proxy = {
       "msg": "成功"
     })
   },
+  'POST ': (req, res) => {
+    res.send({
+
+    })
+  }
 };
 
 // export default noProxy ? {

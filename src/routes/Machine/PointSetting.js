@@ -680,33 +680,38 @@ export default class PointSettingList extends PureComponent {
     const columns = [
       {
         title: '所属省市区商圈',
-        width: 200,
+        width: '10%',
         dataIndex: 'areaName',
       },
       {
         title: '商场',
-        width: 150,
+        width: '10%',
         dataIndex: 'mall',
       },
       {
         title: '点位名称',
-        width: 150,
+        width: '10%',
         dataIndex: 'name',
       },
       {
         title: '运营人',
-        width: 100,
+        width: '10%',
         dataIndex: 'manager',
       },
       {
         title: '手机号',
-        width: 150,
+        width: '10%',
         dataIndex: 'mobile',
       },
       {
         title: '机器个数',
-        width: 150,
+        width: '10%',
         dataIndex: 'userNum',
+      },
+      {
+        title: '机器编号',
+        width: '15%',
+        dataIndex: 'machineCode',
       },
       {
         title: '备注描述',
@@ -769,7 +774,7 @@ export default class PointSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1200}
+              scrollX={1300}
               scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 150)}
             />
           </div>

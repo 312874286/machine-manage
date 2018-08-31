@@ -21,6 +21,8 @@ import styles from './TaskSetting.less'
 import TaskAisletable from '../../components/Machine/taskAisleTable'
 import moment from "moment/moment";
 import {message} from "antd/lib/index";
+import StandardTable from '../../components/StandardTable';
+
 const FormItem = Form.Item;
 const { Option } = Select;
 const taskTypeOptions = [{id: 1, name: '升级App'}, {id: 2, name: '卸载App'}, {id: 3, name: '合并货道'}, {id: 4, name: '拆分货道'}]
@@ -109,10 +111,27 @@ const  TaskForm = Form.create()(
       </Modal>
     );
   });
-const UpgradeAppForm = Form.create()(
+const UpgradeAppForm = Form.create({mapPropsToFields(props){
+    return {
+      appId:Form.createFormField({
+        value:props.data.appId
+      }),
+      appVersion:Form.createFormField({
+        value:props.data.appVersion
+      }),
+      appUrl:Form.createFormField({
+        value:props.data.appUrl
+      }),
+      doTimeStr:Form.createFormField({
+        value:props.data.doTimeStr
+      }),
+      doType:Form.createFormField({
+        value:props.data.doType
+      }),
+    }
+  }})(
   (props) => {
-    const { form, appLists, disabledStartDate, disabledTime, taskType,
-      selectCityName, modalData, machineNum, openSelectMachineModal} = props;
+    const { form, appLists, disabledStartDate, disabledTime} = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -126,12 +145,6 @@ const UpgradeAppForm = Form.create()(
     };
     return (
       <Form>
-          {/*<FormItem {...formItemLayout} label="选择机器">*/}
-            {/*<div>*/}
-              {/*{ modalData.remark ? modalData.remark : (selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : null) }*/}
-              {/*<Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>*/}
-            {/*</div>*/}
-          {/*</FormItem>*/}
             <FormItem {...formItemLayout} label="选择App">
               {getFieldDecorator('appId', {
                 rules: [{ required: true, message: '请选择App' }],
@@ -182,10 +195,21 @@ const UpgradeAppForm = Form.create()(
       </Form>
     );
   });
-const UnloadAppForm = Form.create()(
+const UnloadAppForm = Form.create({mapPropsToFields(props){
+    return {
+      appId:Form.createFormField({
+        value:props.data.appId
+      }),
+      doTimeStr:Form.createFormField({
+        value:moment(props.data.doTime)
+      }),
+      doType:Form.createFormField({
+        value:props.data.doType
+      }),
+    }
+  }})(
   (props) => {
-    const { form, appLists, disabledStartDate, disabledTime, taskType,
-      selectCityName, modalData, machineNum, openSelectMachineModal} = props;
+    const { form, appLists, disabledStartDate, disabledTime,} = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -199,12 +223,6 @@ const UnloadAppForm = Form.create()(
     };
     return (
       <Form>
-        {/*<FormItem {...formItemLayout} label="选择机器">*/}
-          {/*<div>*/}
-            {/*{ modalData.remark ? modalData.remark : (selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : null) }*/}
-            {/*<Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>*/}
-          {/*</div>*/}
-        {/*</FormItem>*/}
         <FormItem {...formItemLayout} label="选择App">
           {getFieldDecorator('appId', {
             rules: [{ required: true, message: '请选择App' }],
@@ -245,10 +263,18 @@ const UnloadAppForm = Form.create()(
       </Form>
     );
   });
-const AisleTaskSettingForm = Form.create()(
+const AisleTaskSettingForm = Form.create({mapPropsToFields(props){
+    return {
+      doTimeStr:Form.createFormField({
+        value:moment(props.data.doTime)
+      }),
+      doType:Form.createFormField({
+        value:props.data.doType
+      }),
+    }
+  }})(
   (props) => {
-    const { form, AisleList, disabledStartDate, HandleAisle, disabledTime, taskType,
-      selectCityName, modalData, machineNum, openSelectMachineModal} = props;
+    const { form, AisleList, disabledStartDate, HandleAisle, disabledTime, } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -262,12 +288,6 @@ const AisleTaskSettingForm = Form.create()(
     };
     return (
       <Form>
-        {/*<FormItem {...formItemLayout} label="选择机器">*/}
-          {/*<div>*/}
-            {/*{ modalData.remark ? modalData.remark : (selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : null) }*/}
-            {/*<Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>*/}
-          {/*</div>*/}
-        {/*</FormItem>*/}
         <FormItem {...formItemLayout} label="选择执行时间">
           {getFieldDecorator('doTimeStr', {
             rules: [{ required: true, message: '选择执行时间' }],
@@ -662,6 +682,55 @@ const WatchAisleTaskSettingForm = Form.create()(
     );
   });
 
+const GoOnForm = Form.create()(
+  (props) => {
+    const { form, editGoOnWayVisible, editGoOnWayAddClick, editGoOnWayVisibleClick, editGoOnWayConfirmLoading  } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">执行方式</span>
+          </div>
+        }
+        visible={editGoOnWayVisible}
+        onOk={editGoOnWayAddClick}
+        onCancel={() => editGoOnWayVisibleClick()}
+        confirmLoading={editGoOnWayConfirmLoading}
+        width={800}
+      >
+        <div className="manageAppBox">
+          <Form>
+            <FormItem {...formItemLayout} label="选择执行方式">
+              {getFieldDecorator('doType', {
+                rules: [{ required: true, message: '请选择执行方式' }],
+              })(
+                <Select placeholder="请选择执行方式">
+                  {doType.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id} >{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+
 
 @connect(({ common, loading, taskSetting }) => ({
   common,
@@ -674,6 +743,7 @@ export default class TaskSetting extends PureComponent {
     modalVisible: false,
     formValues: {},
     modalData: {},
+    selectedRows: [],
     editModalConfirmLoading: false,
     pageNo: 1,
     type: '',
@@ -699,11 +769,20 @@ export default class TaskSetting extends PureComponent {
     options: [],
     defaultValue: [],
 
-    WatchModalVisible: false
+    WatchModalVisible: false,
+    editGoOnWayVisible: false,
+    editGoOnWayConfirmLoading: false,
 
   };
   componentDidMount() {
     this.getLists();
+  }
+  componentDidUpdate(comp,state) {
+    // console.log(arguments)
+    // console.log('当前%s组件卸载app组件',comp.constructor === UpgradeAppForm.constructor?'是':'不是')
+    // if (this.state.modalVisible) {
+    //   this.setModalUnloadAppData(this.state.modalData)
+    // }
   }
   // 获取列表
   getLists = () => {
@@ -718,6 +797,33 @@ export default class TaskSetting extends PureComponent {
       },
     });
   }
+  // 分页
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    const { current } = pagination;
+    // console.log('params', params)
+    this.setState({
+      pageNo: current,
+    }, () => {
+      this.getLists();
+    });
+  };
   getAppLists = () => {
     this.props.dispatch({
       type: 'taskSetting/taskSelectAppList',
@@ -779,7 +885,6 @@ export default class TaskSetting extends PureComponent {
       this.setState({
         modalVisible: flag,
         modalData: {},
-        modalType: true,
       });
     })
   };
@@ -791,12 +896,10 @@ export default class TaskSetting extends PureComponent {
     this.setState({
       WatchModalVisible: flag,
       modalData: {},
-      modalType: true,
     });
   }
   // 设置modal 数据
   setModalUpgradeAppData = (data) => {
-    console.log('this.UpgradeAppForm', this.UpgradeAppForm)
     if (this.UpgradeAppForm) {
       if (data) {
         this.UpgradeAppForm.setFieldsValue({
@@ -818,7 +921,6 @@ export default class TaskSetting extends PureComponent {
     }
   }
   setModalUnloadAppData = (data) => {
-    console.log('this.UnloadAppForm', this.UnloadAppForm)
     if (this.UnloadAppForm) {
       if (data) {
         this.UnloadAppForm.setFieldsValue({
@@ -874,7 +976,7 @@ export default class TaskSetting extends PureComponent {
   }
   handleAdd = () => {
     let params = {};
-    const { taskType, AisleList } = this.state
+    const { taskType, AisleList, modalData } = this.state
     if (this.state.targetData.length === 0) {
       message.config({
         top: 100,
@@ -884,7 +986,7 @@ export default class TaskSetting extends PureComponent {
       message.error('请先选择机器')
       return;
     }
-    if (taskType === 1) {
+    if (taskType === 1 || modalData.type === 1) {
       this.UpgradeAppForm.validateFields((err, values) => {
         if (err) {
           return;
@@ -897,7 +999,7 @@ export default class TaskSetting extends PureComponent {
         };
         this.taskAdd(params)
       })
-    } else if (taskType === 2) {
+    } else if (taskType === 2 || modalData.type === 2) {
       this.UnloadAppForm.validateFields((err, values) => {
         if (err) {
           return;
@@ -995,7 +1097,7 @@ export default class TaskSetting extends PureComponent {
     const { modalData } = this.state
     if (modalData.id) {
       // 编辑
-      params = { ...params, id: modalData.id}
+      params = { ...params, id: modalData.id, type: modalData.type}
       this.props.dispatch({
         type: 'taskSetting/taskUpdate',
         payload: {
@@ -1020,6 +1122,7 @@ export default class TaskSetting extends PureComponent {
           this.setState({
             modalVisible: false,
           });
+          this.getLists();
         }
       });
     }
@@ -1031,7 +1134,6 @@ export default class TaskSetting extends PureComponent {
     let AisleList = await this.joinChannelCode(res)
     await this.setState({
       targetData: res.machineList,
-      taskType: res.type,
       WatchModalVisible: true,
       modalData,
       AisleList,
@@ -1039,27 +1141,23 @@ export default class TaskSetting extends PureComponent {
   }
   editTask = async (item) => {
     let res = await this.getTaskDetail(item)
+    this.getAppLists()
     this.setState({
       targetData: res.machineList,
-      taskType: res.type,
       modalData: res,
-    }, () => {
-      this.setState({
-        modalVisible: true,
-      }, () => {
-        setTimeout(() => {
-          if (res.type === 1) {
-            this.getAppLists()
-            this.setModalUpgradeAppData(res);
-          } else if (res.type === 2) {
-            this.getAppLists()
-            this.setModalUnloadAppData(res);
-          } else {
-            this.setModalAisleTaskSettingData(res);
-          }
-        }, 500)
-      })
+      modalVisible: true,
     })
+    // setTimeout(() => {
+    //   if (res.type === 1) {
+    //     this.getAppLists()
+    //     this.setModalUpgradeAppData(res);
+    //   } else if (res.type === 2) {
+    //     this.getAppLists()
+    //     this.setModalUnloadAppData(res);
+    //   } else {
+    //     this.setModalAisleTaskSettingData(res);
+    //   }
+    // }, 500)
     // taskUpdate
     // this.getLists();
   }
@@ -1083,7 +1181,7 @@ export default class TaskSetting extends PureComponent {
         },
       },
     }).then((res) => {
-      if (res.code !== 0) {
+      if (res.code === 0) {
         this.getLists();
       }
     });
@@ -1313,19 +1411,39 @@ export default class TaskSetting extends PureComponent {
   }
   // 选择机器结束
   // goOn继续执行
+  saveGoOnFormRef = (form) => {
+    this.GoOnForm = form;
+  }
   goOn = (item) => {
-    this.props.dispatch({
-      type: 'taskSetting/taskUpdateStatus',
-      payload: {
-        params: {
-          id: item.id,
-          status: 3,
-        },
-      },
-    }).then((res) => {
-      if (res.code !== 0) {
-        this.getLists();
+    this.setState({
+      editGoOnWayVisible: true,
+      modalData: item,
+    });
+  }
+  editGoOnWayAddClick = () => {
+    this.GoOnForm.validateFields((err, values) => {
+      if (err) {
+        return;
       }
+      this.props.dispatch({
+        type: 'taskSetting/taskUpdateStatus',
+        payload: {
+          params: {
+            id: this.state.modalData.id,
+            status: 3,
+            ...values,
+          },
+        },
+      }).then((res) => {
+        if (res.code === 0) {
+          this.getLists();
+        }
+      });
+    })
+  }
+  editGoOnWayVisibleClick = (flag) => {
+    this.setState({
+      editGoOnWayVisible: flag,
     });
   }
   renderAdvancedForm() {
@@ -1386,12 +1504,15 @@ export default class TaskSetting extends PureComponent {
       </Form>
     );
   }
+
   render() {
     const {
-      taskSetting: { list },
+      taskSetting: { list, page },
       loading,
     } = this.props;
-    const { modalType, WatchModalVisible, modalVisible, taskType, AisleList, appLists, editModalConfirmLoading, selectCityName, machineNum, modalData } = this.state
+    const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
+      appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
+      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows } = this.state
     const columns = [
       {
         title: '任务ID',
@@ -1478,14 +1599,25 @@ export default class TaskSetting extends PureComponent {
               </Button>
             </div>
             <div className={styles.tableList}>
-              <Table
+              {/*<Table*/}
+                {/*loading={loading}*/}
+                {/*rowKey={record => record.id}*/}
+                {/*dataSource={list}*/}
+                {/*columns={columns}*/}
+                {/*pagination={false}*/}
+                {/*onChange={this.handleTableChange}*/}
+                {/*scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}*/}
+              {/*/>*/}
+              <StandardTable
+                selectedRows={selectedRows}
                 loading={loading}
-                rowKey={record => record.id}
-                dataSource={list}
+                data={list}
+                page={page}
                 columns={columns}
-                pagination={false}
-                onChange={this.handleTableChange}
-                scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={1400}
+                scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
               />
             </div>
           </div>
@@ -1516,10 +1648,17 @@ export default class TaskSetting extends PureComponent {
               <FormItem {...formItemLayout} label="选择任务类型" style={{ display: modalData.id ? '' : 'none'}}>
                 <Input value={taskTypeLists[modalData.type]} disabled/>
               </FormItem>
+              <FormItem {...formItemLayout} label="选择机器">
+                <div>
+                  { modalData.remark ? modalData.remark : (selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : null) }
+                  <Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>
+                </div>
+              </FormItem>
             </Form>
             {/*升级App*/}
             <div style={{ display: (taskType === 1 || modalData.type === 1) ? '' : 'none' }}>
               <UpgradeAppForm
+                data={modalData}
                 taskType={taskType}
                 ref={this.saveUpgradeAppFormRef}
                 appLists={appLists}
@@ -1530,6 +1669,7 @@ export default class TaskSetting extends PureComponent {
             {/*卸载App unload*/}
             <div style={{ display: (taskType === 2 || modalData.type === 2) ? '' : 'none' }}>
               <UnloadAppForm
+                data={modalData}
                 taskType={taskType}
                 ref={this.saveUnloadAppFormRef}
                 appLists={appLists}
@@ -1540,6 +1680,7 @@ export default class TaskSetting extends PureComponent {
             {/*合并货道AisleTaskSetting*/}
             <div style={{ display: (taskType === 3 || modalData.type === 3 || taskType === 4 || modalData.type === 4) ? '' : 'none' }}>
               <AisleTaskSettingForm
+                data={modalData}
                 ref={this.saveAisleTaskSettingFormRef}
                 AisleList={AisleList}
                 HandleAisle={this.HandleAisle}
@@ -1549,40 +1690,6 @@ export default class TaskSetting extends PureComponent {
             </div>
           </div>
         </Modal>
-        {/*<UpgradeAppForm*/}
-          {/*selectCityName={selectCityName}*/}
-          {/*modalData={modalData}*/}
-          {/*machineNum={machineNum}*/}
-          {/*openSelectMachineModal={this.openSelectMachineModal}*/}
-          {/*taskType={taskType}*/}
-          {/*ref={this.saveUpgradeAppFormRef}*/}
-          {/*appLists={appLists}*/}
-          {/*disabledStartDate={this.disabledStartDate}*/}
-          {/*disabledTime={this.disabledTime}*/}
-        {/*/>*/}
-        {/*<UnloadAppForm*/}
-          {/*selectCityName={selectCityName}*/}
-          {/*modalData={modalData}*/}
-          {/*machineNum={machineNum}*/}
-          {/*openSelectMachineModal={this.openSelectMachineModal}*/}
-          {/*taskType={taskType}*/}
-          {/*ref={this.saveUnloadAppFormRef}*/}
-          {/*appLists={appLists}*/}
-          {/*disabledStartDate={this.disabledStartDate}*/}
-          {/*disabledTime={this.disabledTime}*/}
-        {/*/>*/}
-        {/*<AisleTaskSettingForm*/}
-          {/*selectCityName={selectCityName}*/}
-          {/*modalData={modalData}*/}
-          {/*machineNum={machineNum}*/}
-          {/*openSelectMachineModal={this.openSelectMachineModal}*/}
-          {/*taskType={taskType}*/}
-          {/*ref={this.saveAisleTaskSettingFormRef}*/}
-          {/*AisleList={AisleList}*/}
-          {/*HandleAisle={this.HandleAisle}*/}
-          {/*disabledStartDate={this.disabledStartDate}*/}
-          {/*disabledTime={this.disabledTime}*/}
-        {/*/>*/}
         {/*<TaskForm*/}
           {/*appLists={appLists}*/}
           {/*modalData={modalData}*/}
@@ -1614,19 +1721,19 @@ export default class TaskSetting extends PureComponent {
           width={1250} >
           <div className="manageAppBox">
             <Form>
-              <div style={{ display: taskType === 1 ? '' : 'none' }}>
+              <div style={{ display: (taskType === 1 || modalData.type === 1) ? '' : 'none' }}>
                 <WatchUpgradeAppForm
                   modalData={modalData}
                   goOn={this.goOn}
                 />
               </div>
-              <div style={{ display: taskType === 2 ? '' : 'none' }}>
+              <div style={{ display: (taskType === 2 || modalData.type === 2) ? '' : 'none' }}>
                 <WatchUnloadAppForm
                   modalData={modalData}
                   goOn={this.goOn}
                 />
               </div>
-              <div style={{ display: (taskType === 3 || taskType === 4) ? '' : 'none' }}>
+              <div style={{ display: (taskType === 3 || modalData.type === 3 || taskType === 4 || modalData.type === 4) ? '' : 'none' }}>
                 <WatchAisleTaskSettingForm
                   modalData={modalData}
                   AisleList={AisleList}
@@ -1636,6 +1743,13 @@ export default class TaskSetting extends PureComponent {
             </Form>
           </div>
         </Modal>
+        <GoOnForm
+          ref={this.saveGoOnFormRef}
+          editGoOnWayVisible={editGoOnWayVisible}
+          editGoOnWayAddClick={this.editGoOnWayAddClick}
+          editGoOnWayVisibleClick={this.editGoOnWayVisibleClick}
+          editGoOnWayConfirmLoading={editGoOnWayConfirmLoading}
+          />
         <SelectMachineForm
           ref={this.selectMachineFormRef}
           editMachineModalVisible={this.state.editMachineModalVisible}
