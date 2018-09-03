@@ -359,7 +359,7 @@ class MachineAisleTable extends React.Component {
     };
     // console.log('selectedRowKeys',selectedRowKeys)
     return (
-      <div id="editTable">
+      <div id="editTable" className={styles.editTable}>
         <div>
           <div>弹簧货道： 货道1~8 11~18 21~28 皮带货道： 31~38 41~47</div>
           <div><i className={styles.startStatus}></i>启动状态 <i className={styles.stopStatus}></i>停用状态</div>
