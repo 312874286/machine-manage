@@ -879,6 +879,7 @@ export default class TaskSetting extends PureComponent {
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
     this.setState({
+      remark: '',
       targetData: [],
       taskType: undefined,
     }, () => {
