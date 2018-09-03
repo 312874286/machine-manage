@@ -87,12 +87,12 @@ class TaskAisleTable extends React.Component {
         editable: false,
         render: (text, item) => (
           (item.code) ? ((item.isSelected === 1 &&  item.code <= 28) ? (
-            <div style={{ background: '#ffe8e4', height: '122px' }} onClick={() => this.selectCode(item, 'cancel')}>货道: {item.code}</div>
+            <div style={{ background: '#ffe8e4', height: '122px', cursor: 'pointer' }} onClick={() => this.selectCode(item, 'cancel')}>货道: {item.code}</div>
           ) : (
-            (item.code > 28) ? (
+            (item.code > this.state.selectedNo) ? (
               <div style={{ background: 'rgb(229, 247, 216, 0.4)', height: '122px' }}>货道: {item.code}</div>
             ) : (
-              <div style={{ background: '#e5f7d8', height: '122px' }}  onClick={() => this.selectCode(item, 'confirm')}>货道: {item.code}</div>
+              <div style={{ background: '#e5f7d8', height: '122px', cursor: 'pointer' }}  onClick={() => this.selectCode(item, 'confirm')}>货道: {item.code}</div>
             )
           )) : (<span />)
         )
@@ -102,16 +102,18 @@ class TaskAisleTable extends React.Component {
   state = {
     selectedRowKeys: [],
     totalCallNo: 0,
-    AisleList: []
+    AisleList: [],
+    selectedNo: 28,
   };
   isEditing = (record) => {
     return record.key === this.state.editingKey;
   };
 
   componentWillReceiveProps(nextProps) {
-    const { AisleList } = nextProps;
+    const { AisleList, selectedNo } = nextProps;
     this.setState({
       AisleList,
+      selectedNo
     })
   }
   selectCode = (item, flag) => {
@@ -228,10 +230,10 @@ class TaskAisleTable extends React.Component {
     // console.log('selectedRowKeys',selectedRowKeys)
     return (
       <div className={styles.taskAsileTable}>
-        <div>
-          <div>弹簧货道： 货道1~8 11~18 21~28 皮带货道： 31~38 41~47</div>
-          <div><i className={styles.startStatus}></i>启动状态 <i className={styles.stopStatus}></i>停用状态</div>
-        </div>
+        {/*<div>*/}
+          {/*<div>弹簧货道： 货道1~8 11~18 21~28 皮带货道： 31~38 41~47</div>*/}
+          {/*<div><i className={styles.startStatus}></i>启动状态 <i className={styles.stopStatus}></i>停用状态</div>*/}
+        {/*</div>*/}
         { selectedRowKeys ? ( selectedRowKeys.length > 0 ? (
           <div className={styles.BtnDiv}>
             <Button type="primary" onClick={() => {this.stopAisle()}}>停用货道</Button>

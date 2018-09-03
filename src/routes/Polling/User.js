@@ -1213,6 +1213,7 @@ export default class user extends PureComponent {
               onChange={this.handleStandardTableChange}
               scrollX={1100}
               scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
+
             />
           </div>
         </Card>

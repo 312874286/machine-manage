@@ -2156,7 +2156,7 @@ export default class ScheduleSettingList extends PureComponent {
       editMachineModalVisible: false,
     });
     this.setState({
-      targetData: this.state.modalData.machines,
+      targetData: this.state.modalData.machines ? this.state.modalData.machines : [],
     });
   }
   selectMachineFormRef = (form) => {

@@ -274,7 +274,7 @@ const AisleTaskSettingForm = Form.create({mapPropsToFields(props){
     }
   }})(
   (props) => {
-    const { form, AisleList, disabledStartDate, HandleAisle, disabledTime, } = props;
+    const { form, AisleList, disabledStartDate, HandleAisle, disabledTime, selectedNo } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -319,6 +319,7 @@ const AisleTaskSettingForm = Form.create({mapPropsToFields(props){
             HandleAisle={HandleAisle}
             modalData={false}
             AisleList={AisleList}
+            selectedNo={selectedNo}
           />
         </FormItem>
       </Form>
@@ -771,7 +772,10 @@ export default class TaskSetting extends PureComponent {
     WatchModalVisible: false,
     editGoOnWayVisible: false,
     editGoOnWayConfirmLoading: false,
-    remark: ''
+    remark: '',
+
+    machineNumber: '',
+    selectedNo: 28,
   };
   componentDidMount() {
     this.getLists();
@@ -943,10 +947,6 @@ export default class TaskSetting extends PureComponent {
     }
   }
   setModalAisleTaskSettingData = (data) => {
-    let AisleList = this.joinChannelCode(data)
-    this.setState({
-      AisleList,
-    });
     if (this.AisleTaskSettingForm) {
       if (data) {
         this.AisleTaskSettingForm.setFieldsValue({
@@ -1094,6 +1094,53 @@ export default class TaskSetting extends PureComponent {
       return { value: item.value, key: key += 1, code: item.code, isSelected: item.isSelected ? item.isSelected : 0 }
     })
   }
+  joinChannelCode19 = (data) => {
+    let result = data ? `${data.channelCode},` : []
+    let p = []
+    if (result.length > 0) {
+      result = result.split(',')
+      result = result.slice(0, result.length - 1)
+      for (let i = 0; i < result.length; i++) {
+        p.push(parseInt(result[i]))
+        p.push(parseInt(result[i]) + 1)
+      }
+    }
+    let AisleList = []
+    for (let i = 0; i < 56; i++) {
+      let r = {}
+      for (let j = 0; j < p.length; j++) {
+        if (parseInt(p[j]) === (i+1)) {
+          r = {
+            value: i + 1,
+            key: i + 1,
+            code: i + 1,
+            isSelected: 1
+          }
+          AisleList.push(r);
+          break;
+        }
+      }
+      if (!AisleList[i]) {
+        r = {
+          value: i + 1,
+          key: i,
+          code: i + 1,
+        }
+        AisleList.push(r);
+      }
+    }
+    let tr1 = AisleList.filter(item => item.value <= 8)
+    let tr2 = AisleList.filter(item => item.value <= 18 && item.value >= 11)
+    let tr3 = AisleList.filter(item => item.value <= 28 && item.value >= 21)
+    let tr4 = AisleList.filter(item => item.value <= 38 && item.value >= 31)
+    let tr5 = AisleList.filter(item => item.value <= 46 && item.value >= 41)
+    let tr6 = AisleList.filter(item => item.value <= 56 && item.value >= 51)
+    AisleList = [...tr1, ...tr2, ...tr3, ...tr4, ...tr5, ...tr6]
+    let key = -1
+    return AisleList.map((item) => {
+      return { value: item.value, key: key += 1, code: item.code, isSelected: item.isSelected ? item.isSelected : 0 }
+    })
+  }
   taskAdd = (params) => {
     const { modalData } = this.state
     if (modalData.id) {
@@ -1143,7 +1190,13 @@ export default class TaskSetting extends PureComponent {
   }
   editTask = async (item) => {
     let res = await this.getTaskDetail(item)
-    let AisleList = await this.joinChannelCode(res)
+    let AisleList
+    const selectedNo = res.machineList[0].machineCode.slice(0, 2)
+    if (selectedNo === '18') {
+      AisleList = await this.joinChannelCode(res)
+    } else if (selectedNo === '19') {
+      AisleList = await this.joinChannelCode19(res)
+    }
     this.getAppLists()
     this.setState({
       targetData: res.machineList,
@@ -1151,6 +1204,7 @@ export default class TaskSetting extends PureComponent {
       modalVisible: true,
       remark: res.remark,
       AisleList,
+      selectedNo: selectedNo === '18' ? 28 : 38
     })
     // setTimeout(() => {
     //   if (res.type === 1) {
@@ -1204,6 +1258,7 @@ export default class TaskSetting extends PureComponent {
   // 选择机器开始
   onEditMachineHandleAddClick = () => {
     console.log('this.state.targetData.machines', this.state.targetData)
+    const { taskType } = this.state
     if (this.state.targetData.length >0) {
       let arr = this.state.targetData
       let selectCityName = []
@@ -1224,6 +1279,23 @@ export default class TaskSetting extends PureComponent {
           editMachineModalVisible: false,
         });
       });
+      if (taskType === 3 || taskType === 4) {
+        //
+        const Number = this.state.targetData[0].machineCode.slice(0, 2)
+        if (Number === '18') {
+          let AisleList = this.joinChannelCode()
+          this.setState({
+            AisleList,
+            selectedNo: 28,
+          });
+        } else if (Number === '19') {
+          let AisleList = this.joinChannelCode19()
+          this.setState({
+            AisleList,
+            selectedNo: 38,
+          });
+        }
+      }
     } else {
       message.config({
         top: 100,
@@ -1293,9 +1365,18 @@ export default class TaskSetting extends PureComponent {
   }
   addData = async () => {
     const selectedRows = this.state.selectedRows
-    for (let a of selectedRows) {
+    for (let [i, a] of  new Map(selectedRows.map((item, i) => [i, item]))) {
       let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
+      console.log('selectedRowKeys', selectedRowKeys)
       this.state.selectedRowKeys.splice(selectedRowKeys, 1)
+      const machineNumber = await this.checkMachineNumber(selectedRows)
+      if (a.machineCode.slice(0, 2) !== machineNumber) {
+        Modal.warning({
+          content: '请选择同一批次的机器，否则无法执行操作',
+        });
+        return false
+      }
+      console.log('selectedRowKeys', a.machineCode.slice(0, 2), machineNumber)
       await this.handleDelete(a, a.machineCode)
     }
     // console.log(this.state.repeat)
@@ -1308,6 +1389,15 @@ export default class TaskSetting extends PureComponent {
     this.setState({
       selectAll: false
     })
+  }
+  checkMachineNumber = (arr) => {
+   for (let [i, a] of  new Map(arr.map((item, i) => [i, item]))) {
+     if (i === 0 && this.state.targetData.length === 0) {
+       return a.machineCode.slice(0, 2)
+     } else if (i === 0 && this.state.targetData.length > 0) {
+       return this.state.targetData[0].machineCode.slice(0, 2)
+     }
+   }
   }
   unique = (arr) => {
     let targetData = []
@@ -1337,12 +1427,9 @@ export default class TaskSetting extends PureComponent {
     this.setState({ sourceData: newData });
   }
   handleDelete = (a, key) => {
-    // console.log('key', key, this.state.targetData)
     const dataSource = [...this.state.sourceData];
-    // console.log('dataSource', dataSource)
     this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
     let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
-    // console.log('targetData', targetData)
     targetData = this.unique(targetData)
     this.setState({ targetData });
   }
@@ -1410,8 +1497,12 @@ export default class TaskSetting extends PureComponent {
   onEditMachineHandleModalVisibleClick = () => {
     this.setState({
       editMachineModalVisible: false,
-      targetData: this.state.modalData.machines,
     });
+    if (this.state.modalData.machines) {
+      this.setState({
+        targetData: this.state.modalData.machines,
+      })
+    }
   }
   selectMachineFormRef = (form) => {
     this.selectMachineform = form;
@@ -1523,7 +1614,7 @@ export default class TaskSetting extends PureComponent {
     } = this.props;
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
-      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark } = this.state
+      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo } = this.state
     console.log('taskType', taskType)
     const columns = [
       {
@@ -1707,6 +1798,7 @@ export default class TaskSetting extends PureComponent {
                 data={modalData}
                 ref={this.saveAisleTaskSettingFormRef}
                 AisleList={AisleList}
+                selectedNo={selectedNo}
                 HandleAisle={this.HandleAisle}
                 disabledStartDate={this.disabledStartDate}
                 disabledTime={this.disabledTime}
@@ -1761,6 +1853,7 @@ export default class TaskSetting extends PureComponent {
                 <WatchAisleTaskSettingForm
                   modalData={modalData}
                   AisleList={AisleList}
+                  selectedNo={selectedNo}
                   goOn={this.goOn}
                 />
               </div>
