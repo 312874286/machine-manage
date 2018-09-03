@@ -881,7 +881,7 @@ export default class TaskSetting extends PureComponent {
       remark: '',
       selectCityName: [],
       targetData: [],
-      taskType: '请选择',
+      taskType: undefined,
     }, () => {
       this.setState({
         modalVisible: flag,
@@ -1122,7 +1122,7 @@ export default class TaskSetting extends PureComponent {
         if (res.code === 0) {
           this.setState({
             modalVisible: false,
-            taskType: ''
+            taskType: undefined
           });
           this.getLists();
         }
@@ -1524,6 +1524,7 @@ export default class TaskSetting extends PureComponent {
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
       editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark } = this.state
+    console.log('taskType', taskType)
     const columns = [
       {
         title: '任务ID',
@@ -1650,7 +1651,7 @@ export default class TaskSetting extends PureComponent {
           <div className="manageAppBox">
             <Form>
               <FormItem {...formItemLayout} label="选择任务类型" style={{ display: modalData.id ? 'none' : ''}}>
-                  <Select placeholder="请选择" onSelect={this.taskType} defaultValue={taskType} >
+                  <Select placeholder="请选择" onSelect={this.taskType} value={taskType} >
                   {taskTypeOptions.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.name}</Option>
