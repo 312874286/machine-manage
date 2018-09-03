@@ -168,12 +168,12 @@ const UpgradeAppForm = Form.create({mapPropsToFields(props){
             </FormItem>
             <FormItem {...formItemLayout} label="选择开始时间">
               {getFieldDecorator('doTimeStr', {
-                rules: [{ required: true, message: '选择开始时间' }],
+                rules: [{ required: false, message: '选择开始时间' }],
               })(
                 <DatePicker
                   disabledDate={disabledStartDate}
                   disabledTime={disabledTime}
-                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                  // showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                   format="YYYY-MM-DD HH:mm"
                   placeholder="选择开始时间"
                 />
@@ -236,12 +236,12 @@ const UnloadAppForm = Form.create({mapPropsToFields(props){
         </FormItem>
         <FormItem {...formItemLayout} label="选择执行时间">
           {getFieldDecorator('doTimeStr', {
-            rules: [{ required: true, message: '选择执行时间' }],
+            rules: [{ required: false, message: '选择执行时间' }],
           })(
             <DatePicker
               disabledDate={disabledStartDate}
               disabledTime={disabledTime}
-              showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+              // showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
               format="YYYY-MM-DD HH:mm"
               placeholder="选择执行时间"
             />
@@ -290,12 +290,12 @@ const AisleTaskSettingForm = Form.create({mapPropsToFields(props){
       <Form>
         <FormItem {...formItemLayout} label="选择执行时间">
           {getFieldDecorator('doTimeStr', {
-            rules: [{ required: true, message: '选择执行时间' }],
+            rules: [{ required: false, message: '选择执行时间' }],
           })(
             <DatePicker
               disabledDate={disabledStartDate}
               disabledTime={disabledTime}
-              showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+              // showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
               format="YYYY-MM-DD HH:mm"
               placeholder="选择执行时间"
             />
@@ -880,8 +880,9 @@ export default class TaskSetting extends PureComponent {
   handleModalVisible = (flag) => {
     this.setState({
       remark: '',
+      selectCityName: [],
       targetData: [],
-      taskType: undefined,
+      taskType: '请选择',
     }, () => {
       this.setState({
         modalVisible: flag,
@@ -908,7 +909,7 @@ export default class TaskSetting extends PureComponent {
           appUrl: data.appUrl || undefined,
           appVersion: data.appVersion || undefined,
           doType: data.doType || undefined,
-          doTimeStr: moment(data.doTime) || undefined,
+          doTimeStr: data.doTime ? moment(data.doTime) : undefined || undefined,
         });
       } else {
         this.UpgradeAppForm.setFieldsValue({
@@ -995,7 +996,7 @@ export default class TaskSetting extends PureComponent {
         params = {
           type: taskType,
           ...values,
-          doTimeStr: values.doTimeStr.format('YYYY-MM-DD HH:mm'),
+          doTimeStr: values.doTimeStr ? values.doTimeStr.format('YYYY-MM-DD HH:mm') : undefined,
           machineList: this.state.targetData,
         };
         this.taskAdd(params)
@@ -1008,7 +1009,7 @@ export default class TaskSetting extends PureComponent {
         params = {
           type: taskType,
           ...values,
-          doTimeStr: values.doTimeStr.format('YYYY-MM-DD HH:mm'),
+          doTimeStr: values.doTimeStr ? values.doTimeStr.format('YYYY-MM-DD HH:mm') : undefined,
           machineList: this.state.targetData,
         };
         this.taskAdd(params)
@@ -1040,7 +1041,7 @@ export default class TaskSetting extends PureComponent {
         params = {
           type: taskType,
           ...values,
-          doTimeStr: values.doTimeStr.format('YYYY-MM-DD HH:mm'),
+          doTimeStr: values.doTimeStr ? values.doTimeStr.format('YYYY-MM-DD HH:mm') : undefined,
           machineList: this.state.targetData,
           channelCode
         };
@@ -1122,6 +1123,7 @@ export default class TaskSetting extends PureComponent {
         if (res.code === 0) {
           this.setState({
             modalVisible: false,
+            taskType: ''
           });
           this.getLists();
         }
