@@ -28,7 +28,7 @@ const { Option } = Select;
 const taskTypeOptions = [{id: 1, name: '升级App'}, {id: 2, name: '卸载App'}, {id: 3, name: '合并货道'}, {id: 4, name: '拆分货道'}]
 const taskTypeLists = ['', '升级App', '卸载App', '合并货道', '拆分货道']
 const taskStatusOptions = [{id: 0, name: '未执行'}, {id: 1, name: '待执行'}, {id: 2, name: '已执行'} ]
-const taskStatus = ['未执行', '待执行', '已执行', '已执行']
+const taskStatus = ['未执行', '待执行', '已执行', '待执行']
 const doType = [{id: 1, name: 'socket'}, {id: 2, name: 'push'}]
 const doTypeLists = ['', 'socket', 'push']
 const doStatus = ['未执行', '成功', '失败']
@@ -1683,12 +1683,13 @@ export default class TaskSetting extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)}>查看</a>
-            <Divider type="vertical" />
+            <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }} />
             <a onClick={item.status === 0 ? () => this.editTask(item) : null }
                style={{ display: item.status === 0 ? '' : 'none' }}
             >编辑</a>
             <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }}/>
-            <a onClick={() => this.deleteTask(item)}>删除</a>
+            <a onClick={item.status === 0 ? () => this.deleteTask(item) : null }
+               style={{ display: item.status === 0 ? '' : 'none' }}>删除</a>
           </Fragment>
         ),
       },
