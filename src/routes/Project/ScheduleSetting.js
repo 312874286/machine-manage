@@ -54,7 +54,7 @@ const CreateForm = Form.create()(
       goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData,
       onSelectShop, goodsLists, shopClist,
       disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, selectMachineFlag, disabledTime, disabledEndTime, couponsShow, shopHandle, onSelectGame, maxNumber
+      isDisabled, selectMachineFlag, disabledTime, disabledEndTime, couponsShow, shopHandle, onSelectGame, maxNumber, remark
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -181,10 +181,16 @@ const CreateForm = Form.create()(
             {getFieldDecorator('remark', {
               rule: [{ validator: verifyTimeRequire }],
             }) (
-                  <div>
-                    { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : (modalData.id ? (modalData.remark ? modalData.remark : '暂无') : '') }
-                    <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-                  </div>
+              <div>
+                  {
+                  (remark ? remark : (
+                    selectCityName.length > 0
+                      ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、')
+                      : ''
+                  ))
+                  }
+                 <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+              </div>
                )
             }
           </FormItem>
@@ -754,6 +760,7 @@ export default class ScheduleSettingList extends PureComponent {
 
     goodsTables: [],
     maxNumber: 100,
+    remark: '',
   };
   componentDidMount() {
     this.getSearchAreaList();
@@ -1219,6 +1226,9 @@ export default class ScheduleSettingList extends PureComponent {
           endValue: data.endTime,
         });
       }
+      this.setState({
+        remark: data.remark
+      })
       this.form.setFieldsValue({
         activityId: data.activityId,
         gameId: data.gameId,
@@ -1248,6 +1258,7 @@ export default class ScheduleSettingList extends PureComponent {
         goodsLists: [],
         endValue: '',
         startValue: '',
+        remark: ''
       });
     }
   }
@@ -1645,6 +1656,7 @@ export default class ScheduleSettingList extends PureComponent {
       }
       selectCityName = Object.values(selectCityName)
       this.setState({
+        remark: '',
         machineNum: this.state.targetData.length,
         selectCityName,
         machines: this.state.targetData,
@@ -1661,6 +1673,7 @@ export default class ScheduleSettingList extends PureComponent {
         maxCount: 1,
       });
       message.warn('请先选择机器');
+      return false
     }
   }
   uniq = (arr) => {
@@ -1758,14 +1771,14 @@ export default class ScheduleSettingList extends PureComponent {
       });
     });
   }
-  onEditMachineHandleModalVisibleClick = () => {
-    this.setState({
-      editMachineModalVisible: false,
-    });
-  }
-  selectMachineFormRef = (form) => {
-    this.selectMachineform = form;
-  }
+  // onEditMachineHandleModalVisibleClick = () => {
+  //   this.setState({
+  //     editMachineModalVisible: false,
+  //   });
+  // }
+  // selectMachineFormRef = (form) => {
+  //   this.selectMachineform = form;
+  // }
   // tree结束
   // 动态添加开始
   onRadioChange = (e) => {
@@ -2142,6 +2155,9 @@ export default class ScheduleSettingList extends PureComponent {
     this.setState({
       editMachineModalVisible: false,
     });
+    this.setState({
+      targetData: this.state.modalData.machines,
+    });
   }
   selectMachineFormRef = (form) => {
     this.selectMachineform = form;
@@ -2362,6 +2378,7 @@ export default class ScheduleSettingList extends PureComponent {
           selectMachineFlag={this.state.selectMachineFlag}
 
           couponsShow={this.state.couponsShow}
+          remark={this.state.remark}
         />
         {/*<SelectMachineForm*/}
           {/*ref={this.selectMachineFormRef}*/}

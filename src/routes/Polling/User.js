@@ -35,7 +35,12 @@ const getValue = obj =>
 const TreeNode = Tree.TreeNode;
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, modalData, selectCityName, openSelectMachineModal, machineNum, options, loadData, verifyString } = props;
+    const {
+      modalVisible, form, handleAdd,
+      handleModalVisible, editModalConfirmLoading,
+      modalType, modalData, selectCityName,
+      openSelectMachineModal, machineNum, options,
+      loadData, verifyString, remark } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -110,10 +115,12 @@ const CreateForm = Form.create()(
             }) ((modalData.id) ? (
               <div>
                 <div>
-                  { selectCityName.length > 0
-                    ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、')
-                    :
-                    (modalData ? modalData.remark : '暂无')
+                  {
+                    (remark ? remark : (
+                      selectCityName.length > 0
+                        ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、')
+                        : ''
+                    ))
                   }
                 </div>
                 <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
@@ -388,7 +395,8 @@ export default class user extends PureComponent {
     // level: 1,
     selectedRowKeys: [],
     options: [],
-    defaultValue: []
+    defaultValue: [],
+    remark: ''
   };
   componentDidMount() {
     this.getLists();
@@ -551,7 +559,7 @@ export default class user extends PureComponent {
       modalVisible: true,
       modalData: item,
       modalType: false,
-      // CreateFormLoading: true,
+      remark: item.remark,
     });
     const res = await this.getPointSettingDetail(item);
     if (!res) {
@@ -633,7 +641,7 @@ export default class user extends PureComponent {
       }
       let remark = ''
       let messageTxt = '添加'
-      if (this.state.machineNum) {
+      if (this.state.targetData) {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
       console.log('values.area', values.area)
@@ -669,7 +677,7 @@ export default class user extends PureComponent {
           ...values,
           id: this.state.modalData.id,
           remark: remark ? remark : this.state.modalData.remark,
-          machines: this.state.machines,
+          machines: this.state.targetData,
           area: values.area.length > 0 ? values.area[values.area.length - 1] : ''
         };
       }
@@ -819,6 +827,7 @@ export default class user extends PureComponent {
       }
       selectCityName = Object.values(selectCityName)
       this.setState({
+        remark: '',
         machineNum: this.state.targetData.length,
         selectCityName,
         machines: this.state.targetData,
@@ -830,7 +839,8 @@ export default class user extends PureComponent {
       });
     } else {
       this.setState({
-        selectCityName: []
+        selectCityName: [],
+        remark: '',
       })
       // message.config({
       //   top: 100,
@@ -1221,6 +1231,7 @@ export default class user extends PureComponent {
           options={this.state.options}
           loadData={this.areaList}
           verifyString={this.verifyString}
+          remark={this.state.remark}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}

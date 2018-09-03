@@ -772,7 +772,7 @@ export default class TaskSetting extends PureComponent {
     WatchModalVisible: false,
     editGoOnWayVisible: false,
     editGoOnWayConfirmLoading: false,
-
+    remark: ''
   };
   componentDidMount() {
     this.getLists();
@@ -1146,6 +1146,7 @@ export default class TaskSetting extends PureComponent {
       targetData: res.machineList,
       modalData: res,
       modalVisible: true,
+      remark: res.remark
     })
     // setTimeout(() => {
     //   if (res.type === 1) {
@@ -1210,6 +1211,7 @@ export default class TaskSetting extends PureComponent {
       }
       selectCityName = Object.values(selectCityName)
       this.setState({
+        remark: '',
         machineNum: this.state.targetData.length,
         selectCityName,
         machines: this.state.targetData,
@@ -1404,6 +1406,7 @@ export default class TaskSetting extends PureComponent {
   onEditMachineHandleModalVisibleClick = () => {
     this.setState({
       editMachineModalVisible: false,
+      targetData: this.state.modalData.machines,
     });
   }
   selectMachineFormRef = (form) => {
@@ -1512,7 +1515,7 @@ export default class TaskSetting extends PureComponent {
     } = this.props;
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
-      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows } = this.state
+      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark } = this.state
     const columns = [
       {
         title: '任务ID',
@@ -1649,8 +1652,18 @@ export default class TaskSetting extends PureComponent {
                 <Input value={taskTypeLists[modalData.type]} disabled/>
               </FormItem>
               <FormItem {...formItemLayout} label="选择机器">
+                {/*<div>*/}
+                  {/*{ modalData.remark ? modalData.remark : (selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : null) }*/}
+                  {/*<Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>*/}
+                {/*</div>*/}
                 <div>
-                  { modalData.remark ? modalData.remark : (selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : null) }
+                  {
+                    (remark ? remark : (
+                      selectCityName.length > 0
+                        ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、')
+                        : ''
+                    ))
+                  }
                   <Button type="primary" onClick={this.openSelectMachineModal}>+ 选择</Button>
                 </div>
               </FormItem>
