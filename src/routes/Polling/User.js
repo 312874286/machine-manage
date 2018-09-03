@@ -110,7 +110,11 @@ const CreateForm = Form.create()(
             }) ((modalData.id) ? (
               <div>
                 <div>
-                  { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : (modalData ? modalData.remark : '暂无') }
+                  { selectCityName.length > 0
+                    ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、')
+                    :
+                    (modalData ? modalData.remark : '暂无')
+                  }
                 </div>
                 <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
               </div>
@@ -825,13 +829,19 @@ export default class user extends PureComponent {
         });
       });
     } else {
-      message.config({
-        top: 100,
-        duration: 2,
-        maxCount: 1,
-      });
-      message.warn('请先选择机器');
+      this.setState({
+        selectCityName: []
+      })
+      // message.config({
+      //   top: 100,
+      //   duration: 2,
+      //   maxCount: 1,
+      // });
+      // message.warn('请先选择机器');
     }
+    this.setState({
+      editMachineModalVisible: false,
+    });
   }
   uniq = (arr) => {
     let max = [];
