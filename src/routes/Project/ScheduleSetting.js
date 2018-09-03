@@ -2325,7 +2325,7 @@ export default class ScheduleSettingList extends PureComponent {
           onWatchClick={this.onWatchClick}
           onDeleteClick={this.onDeleteClick}
           handleModalVisible={this.handleModalVisible}
-          minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 50)}
+          minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100)}
         />
         <CreateForm
           {...parentMethods}
