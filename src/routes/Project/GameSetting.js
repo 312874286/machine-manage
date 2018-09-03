@@ -275,7 +275,7 @@ export default class gameSettingList extends PureComponent {
         version: data.version || undefined,
         versionInno72: data.versionInno72 || undefined,
         remark: data.remark || undefined,
-        minGoodsNum: data.minGoodsNum || 0,
+        minGoodsNum: data.minGoodsNum || 1,
         maxGoodsNum: data.maxGoodsNum || 100
       });
     } else {

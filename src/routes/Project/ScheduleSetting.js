@@ -423,7 +423,6 @@ const SelectMachineForm = Form.create()(
         }),
       };
     });
-
     return (
       <Modal
         title="选择机器"
@@ -1210,6 +1209,7 @@ export default class ScheduleSettingList extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     // isDisabled
+    console.log('targetData', this.state.targetData)
     if (data) {
       if (moment(data.startTime) < new Date().getTime()) {
         // 活动开始比现在晚，可以更改日期
@@ -1704,7 +1704,6 @@ export default class ScheduleSettingList extends PureComponent {
   openSelectMachineModal = () => {
     this.setState({
       sourceData: [],
-      targetData: [],
       selectMachineFlag: true,
       checkedKeys: [],
       expandedKeys: [],
