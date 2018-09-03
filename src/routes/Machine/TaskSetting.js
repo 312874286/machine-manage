@@ -1048,7 +1048,7 @@ export default class TaskSetting extends PureComponent {
     }
   }
   joinChannelCode = (data) => {
-    let result = data.channelCode ? `${data.channelCode},` : []
+    let result = data ? `${data.channelCode},` : []
     let p = []
     if (result.length > 0) {
       result = result.split(',')
@@ -1440,6 +1440,10 @@ export default class TaskSetting extends PureComponent {
       }).then((res) => {
         if (res.code === 0) {
           this.getLists();
+          this.setState({
+            editGoOnWayVisible: false,
+            WatchModalVisible: false
+          });
         }
       });
     })
