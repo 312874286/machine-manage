@@ -15,6 +15,7 @@ import {
   Cascader,
   Popconfirm,
   Spin,
+  Popover,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -712,6 +713,18 @@ export default class PointSettingList extends PureComponent {
         title: '机器编号',
         width: '15%',
         dataIndex: 'machineCode',
+        render: (text, item) => (
+          (item.machineCode) ? (
+            <Popover content={item.machineCode} title="机器编号">
+              <div style={{ height: '45px', overflow: 'hidden' }}>
+                {`${item.machineCode ? item.machineCode : ''}...`}
+              </div>
+            </Popover>
+          ) : (
+            null
+          )
+
+        ),
       },
       {
         title: '备注描述',
