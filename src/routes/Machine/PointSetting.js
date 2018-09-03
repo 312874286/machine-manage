@@ -67,53 +67,53 @@ const CreateForm = Form.create()(
         confirmLoading={editModalConfirmLoading}
       >
         <div className="manageAppBox">
-         <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="省市区商圈">
-            {getFieldDecorator('provinceCityAreaTrade', {
-              rules: [{ required: true, message: '省市区商圈' }, {
-                validator: verifyString,
-              }],
-              // initialValue: { defaultValue },
-            })(
-              <Cascader
-                placeholder="请选择"
-                options={insertOptions}
-                loadData={loadData}
-                onChange={onChange}
-                changeOnSelect
-              />
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="商场名称">
-            {getFieldDecorator('mall', {
-              rules: [{ required: false,whitespace: true, message: '请输入商场名称' }],
-            })(<Input placeholder="请输入商场" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="点位名称">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
-            })(<Input placeholder="请输入点位名称" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="运营人员">
-            {getFieldDecorator('manager', {
-              rules: [{ required: true, whitespace: true, message: '请输入运营人员' }],
-            })(<Input placeholder="请输入运营人" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="手机号码">
-            {getFieldDecorator('mobile', {
-              rules: [{ required: true, message: '请输入手机号码' }, {
-                validator: verifyPhone,
-              }],
-            })(<Input placeholder="请输入手机" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="备注描述">
-            {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
-          </FormItem>
-        </Form>
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="省市区商圈">
+              {getFieldDecorator('provinceCityAreaTrade', {
+                rules: [{ required: true, message: '省市区商圈' }, {
+                  validator: verifyString,
+                }],
+                // initialValue: { defaultValue },
+              })(
+                <Cascader
+                  placeholder="请选择"
+                  options={insertOptions}
+                  loadData={loadData}
+                  onChange={onChange}
+                  changeOnSelect
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="商场名称">
+              {getFieldDecorator('mall', {
+                rules: [{ required: false,whitespace: true, message: '请输入商场名称' }],
+              })(<Input placeholder="请输入商场" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="点位名称">
+              {getFieldDecorator('name', {
+                rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
+              })(<Input placeholder="请输入点位名称" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="运营人员">
+              {getFieldDecorator('manager', {
+                rules: [{ required: true, whitespace: true, message: '请输入运营人员' }],
+              })(<Input placeholder="请输入运营人" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="手机号码">
+              {getFieldDecorator('mobile', {
+                rules: [{ required: true, message: '请输入手机号码' }, {
+                  validator: verifyPhone,
+                }],
+              })(<Input placeholder="请输入手机" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="备注描述">
+              {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            </FormItem>
+          </Form>
         </div>
       </Modal>
     );
-});
+  });
 @connect(({ common, loading, pointSetting, log }) => ({
   common,
   pointSetting,
@@ -680,33 +680,38 @@ export default class PointSettingList extends PureComponent {
     const columns = [
       {
         title: '所属省市区商圈',
-        width: 200,
+        width: '10%',
         dataIndex: 'areaName',
       },
       {
         title: '商场',
-        width: 150,
+        width: '10%',
         dataIndex: 'mall',
       },
       {
         title: '点位名称',
-        width: 150,
+        width: '10%',
         dataIndex: 'name',
       },
       {
         title: '运营人',
-        width: 100,
+        width: '10%',
         dataIndex: 'manager',
       },
       {
         title: '手机号',
-        width: 150,
+        width: '10%',
         dataIndex: 'mobile',
       },
       {
         title: '机器个数',
-        width: 150,
+        width: '10%',
         dataIndex: 'userNum',
+      },
+      {
+        title: '机器编号',
+        width: '15%',
+        dataIndex: 'machineCode',
       },
       {
         title: '备注描述',
@@ -717,14 +722,14 @@ export default class PointSettingList extends PureComponent {
         width: 150,
         title: '操作',
         render: (text, item) => (
-            <Fragment>
-              <a onClick={() => this.handleEditClick(item)}>编辑</a>
-              <Divider type="vertical" />
-              <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-                <a className={styles.delete}>删除</a>
-              </Popconfirm>
-            </Fragment>
-          ),
+          <Fragment>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <Divider type="vertical" />
+            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
+              <a className={styles.delete}>删除</a>
+            </Popconfirm>
+          </Fragment>
+        ),
       },
     ];
     // this.state.options = this.props.common.list
@@ -751,14 +756,14 @@ export default class PointSettingList extends PureComponent {
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
-                {/*<span>*/}
-                  {/*<Button>批量操作</Button>*/}
-                  {/*<Dropdown overlay={menu}>*/}
-                    {/*<Button>*/}
-                      {/*更多操作 <Icon type="down" />*/}
-                    {/*</Button>*/}
-                  {/*</Dropdown>*/}
-                {/*</span>*/}
+              {/*<span>*/}
+              {/*<Button>批量操作</Button>*/}
+              {/*<Dropdown overlay={menu}>*/}
+              {/*<Button>*/}
+              {/*更多操作 <Icon type="down" />*/}
+              {/*</Button>*/}
+              {/*</Dropdown>*/}
+              {/*</span>*/}
               {/*)}*/}
             </div>
             <StandardTable
@@ -769,26 +774,26 @@ export default class PointSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1200}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 150)}
+              scrollX={1300}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
             />
           </div>
         </Card>
         {/*<Spin tip="Loading...">*/}
-          <CreateForm
-            {...parentMethods}
-            ref={this.saveFormRef}
-            modalVisible={modalVisible}
-            insertOptions={options}
-            loadData={this.loadData}
-            onChange={this.onChange}
-            editModalConfirmLoading={editModalConfirmLoading}
-            modalData={modalData}
-            modalType={modalType}
-            verifyPhone={this.verifyPhone}
-            verifyString={this.verifyString}
-            verifyTrim={this.verifyTrim}
-          />
+        <CreateForm
+          {...parentMethods}
+          ref={this.saveFormRef}
+          modalVisible={modalVisible}
+          insertOptions={options}
+          loadData={this.loadData}
+          onChange={this.onChange}
+          editModalConfirmLoading={editModalConfirmLoading}
+          modalData={modalData}
+          modalType={modalType}
+          verifyPhone={this.verifyPhone}
+          verifyString={this.verifyString}
+          verifyTrim={this.verifyTrim}
+        />
         {/*</Spin>*/}
         {/*<Spin tip="Loading..." spinning={this.state.CreateFormLoading}></Spin>*/}
         <LogModal
