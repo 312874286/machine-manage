@@ -886,6 +886,8 @@ export default class TaskSetting extends PureComponent {
       selectCityName: [],
       targetData: [],
       taskType: undefined,
+      AisleList: [],
+      selectedNo: 28,
     }, () => {
       this.setState({
         modalVisible: flag,
@@ -1133,7 +1135,7 @@ export default class TaskSetting extends PureComponent {
     let tr2 = AisleList.filter(item => item.value <= 18 && item.value >= 11)
     let tr3 = AisleList.filter(item => item.value <= 28 && item.value >= 21)
     let tr4 = AisleList.filter(item => item.value <= 38 && item.value >= 31)
-    let tr5 = AisleList.filter(item => item.value <= 46 && item.value >= 41)
+    let tr5 = AisleList.filter(item => item.value <= 48 && item.value >= 41)
     let tr6 = AisleList.filter(item => item.value <= 56 && item.value >= 51)
     AisleList = [...tr1, ...tr2, ...tr3, ...tr4, ...tr5, ...tr6]
     let key = -1
@@ -1204,6 +1206,7 @@ export default class TaskSetting extends PureComponent {
       modalVisible: true,
       remark: res.remark,
       AisleList,
+      taskType: res.type,
       selectedNo: selectedNo === '18' ? 28 : 38
     })
     // setTimeout(() => {
@@ -1306,6 +1309,15 @@ export default class TaskSetting extends PureComponent {
     }
   }
   openSelectMachineModal = () => {
+    if (!this.state.taskType) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('请先选择任务类型');
+      return
+    }
     this.setState({
       sourceData: [],
       selectMachineFlag: true,
@@ -1367,7 +1379,7 @@ export default class TaskSetting extends PureComponent {
     const selectedRows = this.state.selectedRows
     for (let [i, a] of  new Map(selectedRows.map((item, i) => [i, item]))) {
       let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
-      console.log('selectedRowKeys', selectedRowKeys)
+      // console.log('selectedRowKeys', selectedRowKeys)
       this.state.selectedRowKeys.splice(selectedRowKeys, 1)
       const machineNumber = await this.checkMachineNumber(selectedRows)
       if (a.machineCode.slice(0, 2) !== machineNumber) {
@@ -1376,7 +1388,7 @@ export default class TaskSetting extends PureComponent {
         });
         return false
       }
-      console.log('selectedRowKeys', a.machineCode.slice(0, 2), machineNumber)
+      // console.log('selectedRowKeys', a.machineCode.slice(0, 2), machineNumber)
       await this.handleDelete(a, a.machineCode)
     }
     // console.log(this.state.repeat)
@@ -1672,10 +1684,10 @@ export default class TaskSetting extends PureComponent {
           <Fragment>
             <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)}>查看</a>
             <Divider type="vertical" />
-            <a onClick={item.status !== 0 ? () => this.editTask(item) : null }
-               style={{ display: item.status === 0 ? 'none' : '' }}
+            <a onClick={item.status === 0 ? () => this.editTask(item) : null }
+               style={{ display: item.status === 0 ? '' : 'none' }}
             >编辑</a>
-            <Divider type="vertical" style={{ display: item.status === 0 ? 'none' : '' }}/>
+            <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }}/>
             <a onClick={() => this.deleteTask(item)}>删除</a>
           </Fragment>
         ),

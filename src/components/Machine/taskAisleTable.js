@@ -90,7 +90,13 @@ class TaskAisleTable extends React.Component {
             <div style={{ background: '#ffe8e4', height: '122px', cursor: 'pointer' }} onClick={() => this.selectCode(item, 'cancel')}>货道: {item.code}</div>
           ) : (
             (item.code > this.state.selectedNo) ? (
-              <div style={{ background: 'rgb(229, 247, 216, 0.4)', height: '122px' }}>货道: {item.code}</div>
+              (
+                item.code > 46 &&  item.code <= 48
+              ) ? (
+                 null
+              ) : (
+                <div style={{ background: 'rgb(229, 247, 216, 0.4)', height: '122px' }}>货道: {item.code}</div>
+              )
             ) : (
               <div style={{ background: '#e5f7d8', height: '122px', cursor: 'pointer' }}  onClick={() => this.selectCode(item, 'confirm')}>货道: {item.code}</div>
             )

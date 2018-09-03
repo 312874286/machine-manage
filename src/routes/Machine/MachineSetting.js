@@ -1635,7 +1635,7 @@ export default class machineSettingList extends PureComponent {
       },
       {
         title: '货道故障',
-        width: '9%',
+        // width: '9%',
         render: (text, item) => ((!item.channelStatus) ? (
           <span>无</span>
         ) : (
