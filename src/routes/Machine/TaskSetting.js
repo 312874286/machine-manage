@@ -123,7 +123,7 @@ const UpgradeAppForm = Form.create({mapPropsToFields(props){
         value:props.data.appUrl
       }),
       doTimeStr:Form.createFormField({
-        value:props.data.doTimeStr
+        value:props.data.doTime ? moment(props.data.doTime) : undefined
       }),
       doType:Form.createFormField({
         value:props.data.doType
@@ -201,7 +201,7 @@ const UnloadAppForm = Form.create({mapPropsToFields(props){
         value:props.data.appId
       }),
       doTimeStr:Form.createFormField({
-        value:moment(props.data.doTime)
+        value:props.data.doTime ? moment(props.data.doTime) : undefined
       }),
       doType:Form.createFormField({
         value:props.data.doType
@@ -266,7 +266,7 @@ const UnloadAppForm = Form.create({mapPropsToFields(props){
 const AisleTaskSettingForm = Form.create({mapPropsToFields(props){
     return {
       doTimeStr:Form.createFormField({
-        value:moment(props.data.doTime)
+        value:props.data.doTime ? moment(props.data.doTime) : undefined
       }),
       doType:Form.createFormField({
         value:props.data.doType
@@ -763,7 +763,6 @@ export default class TaskSetting extends PureComponent {
     sourceKey: [],
     targetKey: [],
     selectAll: false,
-    selectedRows: [],
     repeat: [],
     selectedRowKeys: [],
     options: [],
@@ -1144,12 +1143,14 @@ export default class TaskSetting extends PureComponent {
   }
   editTask = async (item) => {
     let res = await this.getTaskDetail(item)
+    let AisleList = await this.joinChannelCode(res)
     this.getAppLists()
     this.setState({
       targetData: res.machineList,
       modalData: res,
       modalVisible: true,
-      remark: res.remark
+      remark: res.remark,
+      AisleList,
     })
     // setTimeout(() => {
     //   if (res.type === 1) {
@@ -1655,7 +1656,7 @@ export default class TaskSetting extends PureComponent {
                       <Option value={item.id} key={item.id}>{item.name}</Option>
                     );
                   })}
-                </Select>
+                 </Select>
               </FormItem>
               <FormItem {...formItemLayout} label="选择任务类型" style={{ display: modalData.id ? '' : 'none'}}>
                 <Input value={taskTypeLists[modalData.type]} disabled/>
