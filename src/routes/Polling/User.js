@@ -35,7 +35,12 @@ const getValue = obj =>
 const TreeNode = Tree.TreeNode;
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, modalData, selectCityName, openSelectMachineModal, machineNum, options, loadData, verifyString } = props;
+    const {
+      modalVisible, form, handleAdd,
+      handleModalVisible, editModalConfirmLoading,
+      modalType, modalData, selectCityName,
+      openSelectMachineModal, machineNum, options,
+      loadData, verifyString, remark } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -63,79 +68,85 @@ const CreateForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="姓名">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, whitespace: true, message: '请输入姓名' }],
-            })(<Input placeholder="请输入姓名" />)}
-          </FormItem>
-          <Form.Item {...formItemLayout} label="手机号码">
-            {getFieldDecorator('phone', {
-              validateFirst: true,
-              rules: [
-                { type: 'string', required: true, message: '请输入手机号' },
-                {
-                  validator(rule, value, callback) {
-                    if (!(RegexTool.mobile.test(value))) {
-                      callback('请输入正确的手机号');
-                    }
-                    callback();
+            <FormItem {...formItemLayout} label="姓名">
+              {getFieldDecorator('name', {
+                rules: [{ required: true, whitespace: true, message: '请输入姓名' }],
+              })(<Input placeholder="请输入姓名" />)}
+            </FormItem>
+            <Form.Item {...formItemLayout} label="手机号码">
+              {getFieldDecorator('phone', {
+                validateFirst: true,
+                rules: [
+                  { type: 'string', required: true, message: '请输入手机号' },
+                  {
+                    validator(rule, value, callback) {
+                      if (!(RegexTool.mobile.test(value))) {
+                        callback('请输入正确的手机号');
+                      }
+                      callback();
+                    },
+                  }],
+              })(<Input placeholder="请输入手机号码"  />)}
+            </Form.Item>
+            <Form.Item {...formItemLayout} label="身份证号">
+              {getFieldDecorator('cardNo', {
+                validateFirst: true,
+                rules: [
+                  { type: 'string', required: true, message: '请输入身份证号' },
+                  {
+                    validator(rule, value, callback) {
+                      if (!(RegexTool.idCard.test(value))) {
+                        callback('请输入正确的身份证号');
+                      }
+                      callback();
+                    },
                   },
-                }],
-            })(<Input placeholder="请输入手机号码"  />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="身份证号">
-            {getFieldDecorator('cardNo', {
-              validateFirst: true,
-              rules: [
-                { type: 'string', required: true, message: '请输入身份证号' },
-                {
-                  validator(rule, value, callback) {
-                    if (!(RegexTool.idCard.test(value))) {
-                      callback('请输入正确的身份证号');
-                    }
-                    callback();
-                  },
-                },
-              ],
-            })(<Input placeholder="请输入身份证号"  />)}
-          </Form.Item>
-          <FormItem {...formItemLayout} label="公司">
-            {getFieldDecorator('enterprise', {
-              rules: [{ required: true, whitespace: true, message: '请输入公司' }],
-            })(<Input placeholder="请输入公司" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="选择机器">
-            {getFieldDecorator('remark', {
-              rule: [{ validator: '' }],
-            }) ((modalData.id) ? (
-              <div>
+                ],
+              })(<Input placeholder="请输入身份证号"  />)}
+            </Form.Item>
+            <FormItem {...formItemLayout} label="公司">
+              {getFieldDecorator('enterprise', {
+                rules: [{ required: true, whitespace: true, message: '请输入公司' }],
+              })(<Input placeholder="请输入公司" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="选择机器">
+              {getFieldDecorator('remark', {
+                rule: [{ validator: '' }],
+              }) ((modalData.id) ? (
                 <div>
-                  { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : (modalData ? modalData.remark : '暂无') }
+                  <div>
+                    {
+                      (remark ? remark : (
+                        selectCityName.length > 0
+                          ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、')
+                          : ''
+                      ))
+                    }
+                  </div>
+                  <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
                 </div>
-                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-              </div>
-             ) : (
-              <div>
-                { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
-                <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-              </div>
-            ))}
-          </FormItem>
-          <FormItem {...formItemLayout} label="负责区域">
-            {getFieldDecorator('area', {
-              // rules: [{ required: false, message: '请选择负责区域' }, {
-              //   validator: verifyString, type: 'array'
-              // }],
-            })(
-              <Cascader
-                placeholder="请选择"
-                options={options}
-                loadData={loadData}
-                changeOnSelect
-              />
-            )}
-          </FormItem>
-        </Form>
+              ) : (
+                <div>
+                  { selectCityName.length > 0 ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、') : '' }
+                  <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
+                </div>
+              ))}
+            </FormItem>
+            <FormItem {...formItemLayout} label="负责区域">
+              {getFieldDecorator('area', {
+                // rules: [{ required: false, message: '请选择负责区域' }, {
+                //   validator: verifyString, type: 'array'
+                // }],
+              })(
+                <Cascader
+                  placeholder="请选择"
+                  options={options}
+                  loadData={loadData}
+                  changeOnSelect
+                />
+              )}
+            </FormItem>
+          </Form>
         </div>
       </Modal>
     );
@@ -167,9 +178,9 @@ const WatchMachine = Form.create()(
         onCancel={() => WatchMachineHandleModalVisibleClick()}
         footer={null}
       >
-          <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
-            <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
-         </div>
+        <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
+          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+        </div>
       </Modal>
     );
   });
@@ -263,77 +274,77 @@ const SelectMachineForm = Form.create()(
         width={1000}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-            <Col md={10} sm={24}>
-              <FormItem>
-                {getFieldDecorator('provinceCityAreaTrade')(
-                  <Cascader
-                  placeholder="请选择"
-                  options={insertOptions}
-                  loadData={loadData}
-                  changeOnSelect
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
-             <FormItem>
-               <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
-               搜索
-               </Button>
-             </FormItem>
-            </Col>
-          </Row>
-          <FormItem {...formItemLayout}>
-            {getFieldDecorator('machine')(
-              <div style={{ display: 'flex' }}>
-                <div>
-                  <Alert
-                  message={(
-                  <div>
-                    已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
-                  </div>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={10} sm={24}>
+                <FormItem>
+                  {getFieldDecorator('provinceCityAreaTrade')(
+                    <Cascader
+                      placeholder="请选择"
+                      options={insertOptions}
+                      loadData={loadData}
+                      changeOnSelect
+                    />
                   )}
-                  type="info"
-                  showIcon
-                  />
-                  <Table
-                    rowKey={record => record.machineCode}
-                    rowSelection={rowSelection}
-                    columns={columns}
-                    dataSource={sourceData}
-                    id="leftTable"
-                    style={{ width: '460px', marginBottom: '20px', marginTop: '10px' }}
-                    scroll={{ y: 200 }}
-                    pagination={false}
-                  />
-                  <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
-                    添加
+                </FormItem>
+              </Col>
+              <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+                <FormItem>
+                  <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
+                    搜索
                   </Button>
+                </FormItem>
+              </Col>
+            </Row>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('machine')(
+                <div style={{ display: 'flex' }}>
+                  <div>
+                    <Alert
+                      message={(
+                        <div>
+                          已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}/{sourceData.length} </a> 项
+                        </div>
+                      )}
+                      type="info"
+                      showIcon
+                    />
+                    <Table
+                      rowKey={record => record.machineCode}
+                      rowSelection={rowSelection}
+                      columns={columns}
+                      dataSource={sourceData}
+                      id="leftTable"
+                      style={{ width: '460px', marginBottom: '20px', marginTop: '10px' }}
+                      scroll={{ y: 200 }}
+                      pagination={false}
+                    />
+                    <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none' }}>
+                      添加
+                    </Button>
+                  </div>
+                  <div style={{ marginLeft: '20px' }}>
+                    <Alert
+                      message={(
+                        <div>
+                          已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                        </div>
+                      )}
+                      type="success"
+                      showIcon
+                    />
+                    <Table
+                      rowKey={record => record.machineCode}
+                      columns={columnsRight}
+                      dataSource={targetData}
+                      id="rightTable"
+                      style={{ width: '460px', marginTop: '10px' }}
+                      scroll={{ y: 200 }}
+                      pagination={false}/>
+                  </div>
                 </div>
-                <div style={{ marginLeft: '20px' }}>
-                  <Alert
-                    message={(
-                      <div>
-                        已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
-                      </div>
-                    )}
-                    type="success"
-                    showIcon
-                  />
-                  <Table
-                    rowKey={record => record.machineCode}
-                    columns={columnsRight}
-                    dataSource={targetData}
-                    id="rightTable"
-                    style={{ width: '460px', marginTop: '10px' }}
-                    scroll={{ y: 200 }}
-                    pagination={false}/>
-                </div>
-              </div>
-            )}
-          </FormItem>
-        </Form>
+              )}
+            </FormItem>
+          </Form>
         </div>
       </Modal>
     );
@@ -384,7 +395,8 @@ export default class user extends PureComponent {
     // level: 1,
     selectedRowKeys: [],
     options: [],
-    defaultValue: []
+    defaultValue: [],
+    remark: ''
   };
   componentDidMount() {
     this.getLists();
@@ -547,7 +559,7 @@ export default class user extends PureComponent {
       modalVisible: true,
       modalData: item,
       modalType: false,
-      // CreateFormLoading: true,
+      remark: item.remark,
     });
     const res = await this.getPointSettingDetail(item);
     if (!res) {
@@ -629,7 +641,7 @@ export default class user extends PureComponent {
       }
       let remark = ''
       let messageTxt = '添加'
-      if (this.state.machineNum) {
+      if (this.state.targetData) {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
       console.log('values.area', values.area)
@@ -665,7 +677,7 @@ export default class user extends PureComponent {
           ...values,
           id: this.state.modalData.id,
           remark: remark ? remark : this.state.modalData.remark,
-          machines: this.state.machines,
+          machines: this.state.targetData,
           area: values.area.length > 0 ? values.area[values.area.length - 1] : ''
         };
       }
@@ -815,6 +827,7 @@ export default class user extends PureComponent {
       }
       selectCityName = Object.values(selectCityName)
       this.setState({
+        remark: '',
         machineNum: this.state.targetData.length,
         selectCityName,
         machines: this.state.targetData,
@@ -825,13 +838,20 @@ export default class user extends PureComponent {
         });
       });
     } else {
-      message.config({
-        top: 100,
-        duration: 2,
-        maxCount: 1,
-      });
-      message.warn('请先选择机器');
+      this.setState({
+        selectCityName: [],
+        remark: '',
+      })
+      // message.config({
+      //   top: 100,
+      //   duration: 2,
+      //   maxCount: 1,
+      // });
+      // message.warn('请先选择机器');
     }
+    this.setState({
+      editMachineModalVisible: false,
+    });
   }
   uniq = (arr) => {
     let max = [];
@@ -1192,7 +1212,8 @@ export default class user extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={1100}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
+
             />
           </div>
         </Card>
@@ -1211,6 +1232,7 @@ export default class user extends PureComponent {
           options={this.state.options}
           loadData={this.areaList}
           verifyString={this.verifyString}
+          remark={this.state.remark}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}
