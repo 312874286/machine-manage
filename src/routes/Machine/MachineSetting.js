@@ -1581,7 +1581,7 @@ export default class machineSettingList extends PureComponent {
     const columns = [
       {
         title: '机器编号',
-        width: '10%',
+        width: '15%',
         dataIndex: 'machineCode',
       },
       {
@@ -1622,29 +1622,27 @@ export default class machineSettingList extends PureComponent {
       //       onClick={() => this.uploadLog(item)}>查看</div>
       //   ),
       // },
-      {
-        title: '商品缺货状态',
-        render: (text, item) => ((!item.goodsStatus) ? (
-          <span>正常</span>
-        ) : (
-          <Popover placement="left" content={item.goodsStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-          </Popover>
-        )),
-        width: '9%',
-      },
-      {
-        title: '货道故障',
-        // width: '9%',
-        render: (text, item) => ((!item.channelStatus) ? (
-          <span>无</span>
-        ) : (
-          <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-          </Popover>
-        )),
-        // width: 100,
-      },
+      // {
+      //   title: '商品缺货状态',
+      //   render: (text, item) => ((!item.goodsStatus) ? (
+      //     <span>正常</span>
+      //   ) : (
+      //     <Popover placement="left" content={item.goodsStatus} title={null} trigger="hover">
+      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
+      //     </Popover>
+      //   )),
+      // },
+      // {
+      //   title: '货道故障',
+      //   render: (text, item) => ((!item.channelStatus) ? (
+      //     <span>无</span>
+      //   ) : (
+      //     <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
+      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
+      //     </Popover>
+      //   )),
+      //   // width: 100,
+      // },
       // {
       //   title: '货道故障',
       //   width: '9%',
@@ -1657,17 +1655,17 @@ export default class machineSettingList extends PureComponent {
       //   )),
       //   // width: 100,
       // },
-      // {
-      //   title: '机器状态',
-      //   dataIndex: 'machineStatus',
-      //   render(val) {
-      //     if (val) {
-      //       return <span>{machineStatus[val]}</span>
-      //     } else {
-      //       return <span>{machineStatus[0]}</span>
-      //     }
-      //   }
-      // },
+      {
+        title: '机器状态',
+        dataIndex: 'machineStatus',
+        render(val) {
+          if (val) {
+            return <span>{machineStatus[val]}</span>
+          } else {
+            return <span>{machineStatus[0]}</span>
+          }
+        }
+      },
       {
         fixed: 'right',
         title: '操作',
@@ -1758,7 +1756,7 @@ export default class machineSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1400}
+              scrollX={1000}
               scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 120)}
             />
           </div>
