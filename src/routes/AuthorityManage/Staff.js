@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Col, Row, Button, Input, Modal, message, Tree } from 'antd';
+import { Card, Table, Col, Row, Button, Input, Modal, message, Tree, Divider } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const { TreeNode } = Tree;
@@ -166,7 +166,7 @@ export default class Staff extends PureComponent {
     }).then((res) => {
       const { code, data } = res;
       // if(!code) return;
-      console.log(data);
+      // console.log(data);
       this.getSystemUserQueryUserRoles(data);
 
     });
@@ -174,7 +174,7 @@ export default class Staff extends PureComponent {
   hideOKModal = () => {
 
     if (this.state.checkedKeys.length === 0) {
-      console.log('请授权::');
+      // console.log('请授权::');
       message.info('请授权');
       return;
     }
@@ -216,13 +216,13 @@ export default class Staff extends PureComponent {
       });
       this.getSystemUserList();
     });
-    console.log('hideOKModal::');
+    // console.log('hideOKModal::');
   }
   hideCancelModal = () => {
     this.setState({
       visible: false,
     });
-    console.log('hideCancelModal::');
+    // console.log('hideCancelModal::');
   }
   handleTableChange = (pagination, filters, sorter) => {
     this.setState({
@@ -231,7 +231,7 @@ export default class Staff extends PureComponent {
       this.getSystemUserList();
     });
 
-    console.log(pagination, filters, sorter);
+    // console.log(pagination, filters, sorter);
   }
   renderTreeNodes = (data) => {
     return data.map((item) => {
@@ -270,43 +270,79 @@ export default class Staff extends PureComponent {
       No: e.target.value
     })
   }
+  // 操作
+  getMachineStatus = () => {
+    //查看权限
+  }
+  handleAllotClick = () => {
+    // 分配权限
+  }
+  handleAreaClick = () => {
+   // 区域设置
+  }
+  handleDataClick = () => {
+   // 数据
+  }
+  handleStopClick = () => {
+   // 停用
+  }
   render() {
     const { allList, checkedKeys, isJiaoLeft, userName, No } = this.state;
     const { staff: { list, page, totalNo } } = this.props;
     // console.log(111, list, page, allList, 222);
     const columns = [
       {
-        title: '姓名',
+        title: '用户名',
         dataIndex: 'name',
         key: 'name',
         width: '15%'
       }, {
-        title: '员工手机',
+        title: '手机号码',
         dataIndex: 'mobile',
         key: 'mobile',
         width: '15%'
+      },{
+        title: '角色',
+        dataIndex: 'roles',
+        key: 'roles',
+        width: '10%'
+      }, {
+        title: '所属部门',
+        dataIndex: 'deptName',
+        key: 'deptName',
       }, {
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
+        width: '10%'
+      }, {
+        title: '权限',
+        width: '10%',
+        render: (text, item) => (
+          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }}
+               onClick={() => this.getMachineStatus(item)} >查看</div>
+        ),
+      }, {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
         width: '15%'
       }, {
-        title: '角色',
-        dataIndex: 'roles',
-        key: 'roles',
-        width: '20%'
-      }, {
-        title: '部门名称',
-        dataIndex: 'deptName',
-        key: 'deptName',
-      }, {
-        title: '授权',
+        title: '操作',
         dataIndex: '',
         width: '15%',
         key: '',
-        render: (record) => {
-          return <a onClick={this.onToAuthorization.bind(this, record)}>授权</a>;
-        },
+        render: (text, record) => (
+          <Fragment>
+            <a onClick={() => this.onToAuthorization(record)}>授权</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleAreaClick(record)}>区域设置</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleDataClick(record)}>数据</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleStopClick(record)}>停用</a>
+          </Fragment>
+        ),
       },
     ];
     // const { userName } = this.state;
@@ -344,7 +380,7 @@ export default class Staff extends PureComponent {
     //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     //   },
     // };
-    console.log(111, checkedKeys);
+    // console.log(111, checkedKeys);
     return (
       <PageHeaderLayout>
         <Modal

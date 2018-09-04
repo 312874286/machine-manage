@@ -292,6 +292,16 @@ export default class Account extends PureComponent {
     });
   }
   renderTreeNodes = (data) => {
+    // return data.map((item) => {
+    //   if (item.children) {
+    //     return (
+    //       <TreeNode title={item.title} key={item.key} dataRef={item}>
+    //         {this.renderTreeNodes(item.children)}
+    //       </TreeNode>
+    //     );
+    //   }
+    //   return <TreeNode {...item} />;
+    // });
     return data.map((item) => {
       if (item.children) {
         return (
@@ -301,6 +311,7 @@ export default class Account extends PureComponent {
         );
       }
       return <TreeNode {...item} />;
+      // return (item.children.length === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />)
     });
   }
   handleTableChange = (pagination, filters, sorter) => {
@@ -358,7 +369,8 @@ export default class Account extends PureComponent {
         render: (record) => {
           return (
             <div>
-              <a onClick={this.onToEdit.bind(this, record)}>修改</a>
+              <a onClick={() => this.onToEdit(record)}>分配权限</a>
+              {/*<a onClick={this.onToEdit.bind(this, record)}>修改</a>*/}
               &nbsp;&nbsp;
               <Popconfirm title="是否删除?" onConfirm={this.onToDel.bind(this, record)} onCancel={this.onComnfirmCancel.bind(this)} okText="删除" cancelText="取消">
                 <a className={styles.delete}>删除</a>
