@@ -125,7 +125,7 @@ const CreateForm = Form.create()(
         </Form>
       </Modal>
     );
-});
+  });
 const EditPointForm = Form.create()(
   (props) => {
     const { editPointmodalVisible, form, editPointHandleAddClick, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName } = props;
@@ -1581,7 +1581,7 @@ export default class machineSettingList extends PureComponent {
     const columns = [
       {
         title: '机器编号',
-        width: '10%',
+        width: '15%',
         dataIndex: 'machineCode',
       },
       {
@@ -1622,29 +1622,17 @@ export default class machineSettingList extends PureComponent {
       //       onClick={() => this.uploadLog(item)}>查看</div>
       //   ),
       // },
-      {
-        title: '商品缺货状态',
-        render: (text, item) => ((!item.goodsStatus) ? (
-          <span>正常</span>
-        ) : (
-          <Popover placement="left" content={item.goodsStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-          </Popover>
-        )),
-        width: '9%',
-      },
-      {
-        title: '货道故障',
-        // width: '9%',
-        render: (text, item) => ((!item.channelStatus) ? (
-          <span>无</span>
-        ) : (
-          <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
-            <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-          </Popover>
-        )),
-        // width: 100,
-      },
+      // {
+      //   title: '货道故障',
+      //   render: (text, item) => ((!item.channelStatus) ? (
+      //     <span>无</span>
+      //   ) : (
+      //     <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
+      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
+      //     </Popover>
+      //   )),
+      //   // width: 100,
+      // },
       // {
       //   title: '货道故障',
       //   width: '9%',
@@ -1657,17 +1645,17 @@ export default class machineSettingList extends PureComponent {
       //   )),
       //   // width: 100,
       // },
-      // {
-      //   title: '机器状态',
-      //   dataIndex: 'machineStatus',
-      //   render(val) {
-      //     if (val) {
-      //       return <span>{machineStatus[val]}</span>
-      //     } else {
-      //       return <span>{machineStatus[0]}</span>
-      //     }
-      //   }
-      // },
+      {
+        title: '机器状态',
+        dataIndex: 'machineStatus',
+        render(val) {
+          if (val) {
+            return <span>{machineStatus[val]}</span>
+          } else {
+            return <span>{machineStatus[0]}</span>
+          }
+        }
+      },
       {
         fixed: 'right',
         title: '操作',
@@ -1758,7 +1746,7 @@ export default class machineSettingList extends PureComponent {
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
-              scrollX={1400}
+              scrollX={1000}
               scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 120)}
             />
           </div>
@@ -1788,16 +1776,16 @@ export default class machineSettingList extends PureComponent {
         />
         <Modal
           title={
-          <div className="modalBox">
-            <span className="leftSpan"></span>
-            <span className="modalTitle">管理App</span>
-          </div>}
+            <div className="modalBox">
+              <span className="leftSpan"></span>
+              <span className="modalTitle">管理App</span>
+            </div>}
           visible={this.state.ManageAppmodalVisible}
           onCancel={() => this.ManageAppHandleModalVisibleClick()}
           width={800}
           footer={null}
           confirmLoading={this.state.ManageAppEditModalConfirmLoading}
-         >
+        >
           <div id="manageAppBox">
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>
               <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>
@@ -1839,20 +1827,20 @@ export default class machineSettingList extends PureComponent {
           </div>
         </Modal>
         {/*<ManageForm*/}
-          {/*ManageAppmodalVisible={this.state.ManageAppmodalVisible}*/}
-          {/*ManageAppHandleModalVisibleClick={this.ManageAppHandleModalVisibleClick()}*/}
-          {/*ManageAppEditModalConfirmLoading={this.state.ManageAppEditModalConfirmLoading}*/}
-          {/*appUpdate={this.appUpdate}*/}
-          {/*appRefresh={this.appRefresh}*/}
-          {/*columns1={columns1}*/}
-          {/*updateList={updateList}*/}
-          {/*ManageCutAppFormRef={this.ManageCutAppFormRef}*/}
-          {/*appLists={appLists}*/}
-          {/*okCutApp={this.okCutApp}*/}
-          {/*ManageUpdateAppFormRef={this.ManageUpdateAppFormRef}*/}
-          {/*appLists2={appLists2}*/}
-          {/*okRefreshApp={this.okRefreshApp}*/}
-       {/*/>*/}
+        {/*ManageAppmodalVisible={this.state.ManageAppmodalVisible}*/}
+        {/*ManageAppHandleModalVisibleClick={this.ManageAppHandleModalVisibleClick()}*/}
+        {/*ManageAppEditModalConfirmLoading={this.state.ManageAppEditModalConfirmLoading}*/}
+        {/*appUpdate={this.appUpdate}*/}
+        {/*appRefresh={this.appRefresh}*/}
+        {/*columns1={columns1}*/}
+        {/*updateList={updateList}*/}
+        {/*ManageCutAppFormRef={this.ManageCutAppFormRef}*/}
+        {/*appLists={appLists}*/}
+        {/*okCutApp={this.okCutApp}*/}
+        {/*ManageUpdateAppFormRef={this.ManageUpdateAppFormRef}*/}
+        {/*appLists2={appLists2}*/}
+        {/*okRefreshApp={this.okRefreshApp}*/}
+        {/*/>*/}
         <ManageAisleForm
           ref={this.saveManageAisleFormRef}
           ManageAislemodalVisible={this.state.ManageAislemodalVisible}
@@ -1876,11 +1864,11 @@ export default class machineSettingList extends PureComponent {
           machineDetail={this.state.machineDetail}
         />
         {/*<UploadLogForm*/}
-          {/*UploadLogVisible={this.state.UploadLogVisible}*/}
-          {/*UploadLogConfirmLoading={this.state.UploadLogConfirmLoading}*/}
-          {/*UploadLogVisibleClick={this.UploadLogVisibleClick}*/}
-          {/*logUpdate={this.logUpdate}*/}
-          {/*logRefresh={this.logRefresh}*/}
+        {/*UploadLogVisible={this.state.UploadLogVisible}*/}
+        {/*UploadLogConfirmLoading={this.state.UploadLogConfirmLoading}*/}
+        {/*UploadLogVisibleClick={this.UploadLogVisibleClick}*/}
+        {/*logUpdate={this.logUpdate}*/}
+        {/*logRefresh={this.logRefresh}*/}
         {/*/>*/}
         <LogModal
           data={logList}
