@@ -534,11 +534,15 @@ const SelectMachineForm = Form.create()(
 const watchColumns = [{
   title: '机器编号',
   dataIndex: 'machineCode',
-  width: '30%'
+  width: '20%'
 }, {
   title: '机器点位',
   dataIndex: 'name',
-  width: '50%'
+  width: '30%'
+}, {
+  title: '执行时间',
+  dataIndex: 'doTime',
+  width: '30%'
 }, {
   title: '执行结果',
   dataIndex: 'doStatus',
@@ -1631,7 +1635,7 @@ export default class TaskSetting extends PureComponent {
     const columns = [
       {
         title: '任务ID',
-        dataIndex: 'id',
+        dataIndex: 'code',
         width: '10%',
       },
       {
