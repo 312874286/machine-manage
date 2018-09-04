@@ -21,7 +21,7 @@ import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './PointSetting.less';
 import LogModal from '../../components/LogModal';
-
+import { getAccountMenus } from '../../utils/authority';
 
 const FormItem = Form.Item;
 const { TextArea } = Input
@@ -141,6 +141,7 @@ export default class PointSettingList extends PureComponent {
     code: '',
     modalType: true,
     CreateFormLoading: false,
+    account: {}
   };
   componentWillMount() {
     // 查询省
@@ -148,6 +149,18 @@ export default class PointSettingList extends PureComponent {
   componentDidMount() {
     this.getAreaList();
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+      .children.filter((item) => item.path === 'point-setting')
+    var obj = {}
+    pointSettingMenu[0].children.forEach((item, e) => {
+      obj[item.path] = true;
+    })
+    this.setState({
+      account: obj
+    })
   }
   // 获取城市列表
   getAreaList = () => {
@@ -677,7 +690,7 @@ export default class PointSettingList extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, account } = this.state;
     const columns = [
       {
         title: '所属省市区商圈',
@@ -736,10 +749,12 @@ export default class PointSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <a onClick={() => account.update ? this.handleEditClick(item) : null} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
             <Divider type="vertical" />
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
+            <Popconfirm title="确定要删除吗" onConfirm={() => !account.delete ? null : this.handleDelClick(item)} okText="Yes" cancelText="No">
+              <a className={styles.delete}
+                 style={{ display: !account.delete ? 'none' : ''}}
+              >删除</a>
             </Popconfirm>
           </Fragment>
         ),
@@ -765,7 +780,7 @@ export default class PointSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus-circle-o" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus-circle-o" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -779,17 +794,19 @@ export default class PointSettingList extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={1300}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
-            />
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={1300}
+                scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
+              />
+            </div>
           </div>
         </Card>
         {/*<Spin tip="Loading...">*/}
