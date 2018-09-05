@@ -641,7 +641,7 @@ export default class user extends PureComponent {
       }
       let remark = ''
       let messageTxt = '添加'
-      if (this.state.targetData) {
+      if (this.state.targetData.length > 0) {
         remark = '已选择' + this.state.machineNum + '台机器，分别位于' + this.state.selectCityName.join('、');
       }
       console.log('values.area', values.area)

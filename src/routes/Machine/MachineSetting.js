@@ -380,11 +380,16 @@ const WatchForm = Form.create()(
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
               <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
-              <span>
-              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
-              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
-              <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
-            </span>
+              <div>
+                <div style={{ marginBottom: '18px' }}>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(4)}>返回桌面</Button>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
+                </div>
+                <div>
+                   <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
+                   <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
+                </div>
+              </div>
             </div>
           </div>
           <div style={{ padding: '0px' }}>
