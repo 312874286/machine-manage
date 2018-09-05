@@ -88,14 +88,22 @@ const CreateForm = Form.create()(
                   }],
               })(<Input placeholder="请输入手机号码"  />)}
             </Form.Item>
+            <Form.Item {...formItemLayout} label="公司">
+              {getFieldDecorator('enterprise', {
+                rules: [{ required: true, whitespace: true, message: '请输入公司' }],
+              })(<Input placeholder="请输入公司" />)}
+            </Form.Item>
             <Form.Item {...formItemLayout} label="身份证号">
               {getFieldDecorator('cardNo', {
                 validateFirst: true,
                 rules: [
-                  { type: 'string', required: true, message: '请输入身份证号' },
+                  { type: 'string', required: false, message: '请输入身份证号' },
                   {
                     validator(rule, value, callback) {
-                      if (!(RegexTool.idCard.test(value))) {
+                      if (!value) {
+                        callback();
+                      }
+                      if (value && !(RegexTool.idCard.test(value))) {
                         callback('请输入正确的身份证号');
                       }
                       callback();
@@ -104,12 +112,7 @@ const CreateForm = Form.create()(
                 ],
               })(<Input placeholder="请输入身份证号"  />)}
             </Form.Item>
-            <FormItem {...formItemLayout} label="公司">
-              {getFieldDecorator('enterprise', {
-                rules: [{ required: true, whitespace: true, message: '请输入公司' }],
-              })(<Input placeholder="请输入公司" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择机器">
+            <Form.Item {...formItemLayout} label="选择机器">
               {getFieldDecorator('remark', {
                 rule: [{ validator: '' }],
               }) ((modalData.id) ? (
@@ -131,7 +134,7 @@ const CreateForm = Form.create()(
                   <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
                 </div>
               ))}
-            </FormItem>
+            </Form.Item>
             <FormItem {...formItemLayout} label="负责区域">
               {getFieldDecorator('area', {
                 // rules: [{ required: false, message: '请选择负责区域' }, {
