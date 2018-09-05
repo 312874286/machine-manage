@@ -111,25 +111,27 @@ const  TaskForm = Form.create()(
       </Modal>
     );
   });
-const UpgradeAppForm = Form.create({mapPropsToFields(props){
-    return {
-      appId:Form.createFormField({
-        value:props.data.appId
-      }),
-      appVersion:Form.createFormField({
-        value:props.data.appVersion
-      }),
-      appUrl:Form.createFormField({
-        value:props.data.appUrl
-      }),
-      doTimeStr:Form.createFormField({
-        value:props.data.doTime ? moment(props.data.doTime) : undefined
-      }),
-      doType:Form.createFormField({
-        value:props.data.doType
-      }),
-    }
-  }})(
+const UpgradeAppForm = Form.create(
+  // {mapPropsToFields(props){
+  //   return {
+  //     appId:Form.createFormField({
+  //       value:props.data.appId
+  //     }),
+  //     appVersion:Form.createFormField({
+  //       value:props.data.appVersion
+  //     }),
+  //     appUrl:Form.createFormField({
+  //       value:props.data.appUrl
+  //     }),
+  //     doTimeStr:Form.createFormField({
+  //       value:props.data.doTime ? moment(props.data.doTime) : undefined
+  //     }),
+  //     doType:Form.createFormField({
+  //       value:props.data.doType
+  //     }),
+  //   }
+  // }}
+  )(
   (props) => {
     const { form, appLists, disabledStartDate, disabledTime} = props;
     const { getFieldDecorator } = form;
@@ -195,19 +197,21 @@ const UpgradeAppForm = Form.create({mapPropsToFields(props){
       </Form>
     );
   });
-const UnloadAppForm = Form.create({mapPropsToFields(props){
-    return {
-      appId:Form.createFormField({
-        value:props.data.appId
-      }),
-      doTimeStr:Form.createFormField({
-        value:props.data.doTime ? moment(props.data.doTime) : undefined
-      }),
-      doType:Form.createFormField({
-        value:props.data.doType
-      }),
-    }
-  }})(
+const UnloadAppForm = Form.create(
+  // {mapPropsToFields(props){
+  //   return {
+  //     appId:Form.createFormField({
+  //       value:props.data.appId
+  //     }),
+  //     doTimeStr:Form.createFormField({
+  //       value:props.data.doTime ? moment(props.data.doTime) : undefined
+  //     }),
+  //     doType:Form.createFormField({
+  //       value:props.data.doType
+  //     }),
+  //   }
+  // }}
+  )(
   (props) => {
     const { form, appLists, disabledStartDate, disabledTime,} = props;
     const { getFieldDecorator } = form;
@@ -263,16 +267,18 @@ const UnloadAppForm = Form.create({mapPropsToFields(props){
       </Form>
     );
   });
-const AisleTaskSettingForm = Form.create({mapPropsToFields(props){
-    return {
-      doTimeStr:Form.createFormField({
-        value:props.data.doTime ? moment(props.data.doTime) : undefined
-      }),
-      doType:Form.createFormField({
-        value:props.data.doType
-      }),
-    }
-  }})(
+const AisleTaskSettingForm = Form.create(
+  // {mapPropsToFields(props){
+  //   return {
+  //     doTimeStr:Form.createFormField({
+  //       value:props.data.doTime ? moment(props.data.doTime) : undefined
+  //     }),
+  //     doType:Form.createFormField({
+  //       value:props.data.doType
+  //     }),
+  //   }
+  // }}
+  )(
   (props) => {
     const { form, AisleList, disabledStartDate, HandleAisle, disabledTime, selectedNo } = props;
     const { getFieldDecorator } = form;
@@ -787,9 +793,18 @@ export default class TaskSetting extends PureComponent {
   componentDidUpdate(comp,state) {
     // console.log(arguments)
     // console.log('当前%s组件卸载app组件',comp.constructor === UpgradeAppForm.constructor?'是':'不是')
-    // if (this.state.modalVisible) {
-    //   this.setModalUnloadAppData(this.state.modalData)
-    // }
+    if (this.state.modalVisible && this.state.modalData.taskType) {
+      this.setModalUnloadAppData(this.state.modalData)
+      if (this.state.taskType === 1) {
+        // this.getAppLists()
+        this.setModalUpgradeAppData(this.state.modalData);
+      } else if (this.state.taskType === 2) {
+        // this.getAppLists()
+        this.setModalUnloadAppData(this.state.modalData);
+      } else {
+        this.setModalAisleTaskSettingData(this.state.modalData);
+      }
+    }
   }
   // 获取列表
   getLists = () => {
@@ -1631,7 +1646,6 @@ export default class TaskSetting extends PureComponent {
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
       editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo } = this.state
-    console.log('taskType', taskType)
     const columns = [
       {
         title: '任务ID',
@@ -1790,7 +1804,7 @@ export default class TaskSetting extends PureComponent {
             {/*升级App*/}
             <div style={{ display: (taskType === 1 || modalData.type === 1) ? '' : 'none' }}>
               <UpgradeAppForm
-                data={modalData}
+                // data={modalData}
                 taskType={taskType}
                 ref={this.saveUpgradeAppFormRef}
                 appLists={appLists}
@@ -1801,7 +1815,7 @@ export default class TaskSetting extends PureComponent {
             {/*卸载App unload*/}
             <div style={{ display: (taskType === 2 || modalData.type === 2) ? '' : 'none' }}>
               <UnloadAppForm
-                data={modalData}
+                // data={modalData}
                 taskType={taskType}
                 ref={this.saveUnloadAppFormRef}
                 appLists={appLists}
@@ -1812,7 +1826,7 @@ export default class TaskSetting extends PureComponent {
             {/*合并货道AisleTaskSetting*/}
             <div style={{ display: (taskType === 3 || modalData.type === 3 || taskType === 4 || modalData.type === 4) ? '' : 'none' }}>
               <AisleTaskSettingForm
-                data={modalData}
+                // data={modalData}
                 ref={this.saveAisleTaskSettingFormRef}
                 AisleList={AisleList}
                 selectedNo={selectedNo}
