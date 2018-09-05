@@ -695,11 +695,11 @@ export default class Staff extends PureComponent {
       });
     });
   }
-  // onEditMachineHandleModalVisibleClick = () => {
-  //   this.setState({
-  //     editMachineModalVisible: false,
-  //   });
-  // }
+  onEditMachineHandleModalVisibleClick = () => {
+    this.setState({
+      editMachineModalVisible: false,
+    });
+  }
   // selectMachineFormRef = (form) => {
   //   this.selectMachineform = form;
   // }
