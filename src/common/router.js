@@ -309,7 +309,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['authorityManage/account'], () => import('../routes/AuthorityManage/Account')),
     },
     '/authorityManage/staff': {
-      component: dynamicWrapper(app, ['authorityManage/staff'], () => import('../routes/AuthorityManage/Staff')),
+      component: dynamicWrapper(app, ['authorityManage/staff', 'common'], () => import('../routes/AuthorityManage/Staff')),
     },
     '/authorityManage/jurisdiction': {
       component: dynamicWrapper(app, ['authorityManage/jurisdiction'], () => import('../routes/AuthorityManage/Jurisdiction')),

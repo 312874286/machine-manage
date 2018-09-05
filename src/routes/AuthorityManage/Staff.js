@@ -1,8 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Col, Row, Button, Input, Modal, message, Tree, Divider } from 'antd';
+import { Card, Table, Col, Row, Button, Input, Modal, message, Tree, Divider, Alert, Popconfirm } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import {Form} from "antd/lib/index";
 
+const FormItem = Form.Item;
 const { TreeNode } = Tree;
 
 // var treeData = [{
@@ -41,8 +43,119 @@ const { TreeNode } = Tree;
 //   key: '0-2',
 // }];
 
+const SelectAreaForm = Form.create()(
+  (props) => {
+    const { editMachineModalVisible, form,
+      onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick,
+      editMachineEditModalConfirmLoading,
+    renderTreeNodes, treeData, onLoadData,
+      onExpand, expandedKeys, autoExpandParent,
+      checkedKeys, selectedKeys, onCheck, onSelect,
+      targetData,targetHandleDelete,  } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    this.columnsRight = [{
+      title: '区域名称',
+      dataIndex: 'name',
+      width: '90%'
+    }, {
+      title: '操作',
+      width: 70,
+      dataIndex: 'operation',
+      render: (text, record) => {
+        return (
+          targetData.length > 0
+            ? (
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.key)}>
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
+            ) : null
+        );
+      }
+    }];
+    const columnsRight = this.columnsRight.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+        }),
+      };
+    });
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">选择区域</span>
+          </div>
+        }
+        visible={editMachineModalVisible}
+        onOk={onEditMachineHandleAddClick}
+        onCancel={() => onEditMachineHandleModalVisibleClick()}
+        confirmLoading={editMachineEditModalConfirmLoading}
+        width={800}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={4} sm={24} style={{ paddingLeft: '3px' }}>
+                <Tree
+                  loadData={onLoadData}
+                  // checkable
+                  onExpand={onExpand}
+                  expandedKeys={expandedKeys}
+                  autoExpandParent={autoExpandParent}
+                  // onCheck={onCheck}
+                  checkedKeys={checkedKeys}
+                  onSelect={onSelect}
+                  selectedKeys={selectedKeys}
+                >
+                  {renderTreeNodes(treeData)}
+                </Tree>
+              </Col>
+              <Col md={20} sm={24} style={{ paddingLeft: '3px' }}>
+                <div style={{ marginLeft: '20px', marginTop: '10px' }}>
+                  <Alert
+                    message={(
+                      <div>
+                        已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                      </div>
+                    )}
+                    type="success"
+                    showIcon
+                  />
+                  <Table
+                    rowKey={record => record.value}
+                    columns={columnsRight}
+                    dataSource={targetData}
+                    id="rightTable"
+                    style={{ marginTop: '10px' }}
+                    scroll={{ y: 1000 }}
+                    pagination={false}/>
+                </div>
+              </Col>
+            </Row>
+          </Form>
+        </div>
+      </Modal>
+    );
+});
 
-@connect(({ staff }) => ({ staff }))
+@connect(({ staff, common }) => ({ staff, common }))
 export default class Staff extends PureComponent {
   state = {
     userName: '',
@@ -50,12 +163,41 @@ export default class Staff extends PureComponent {
     allList: [],
     currentUserId: '',
     // selectedRows: [],
+    // expandedKeys: [],
+    // autoExpandParent: true,
+    // checkedKeys: [],
+    // selectedKeys: [],
+    isJiaoLeft: 'none',
+    pageNo: 1,
+
+    editMachineModalVisible: false,
+    confirmLoading: false,
+    treeData: [
+      // { title: 'Expand to load', key: '0' },
+      // { title: 'Expand to load', key: '1' },
+      // { title: 'Tree Node', key: '2', isLeaf: true },
+    ],
+    selectCity: [],
+    selectCityName: [],
     expandedKeys: [],
     autoExpandParent: true,
     checkedKeys: [],
     selectedKeys: [],
-    isJiaoLeft: 'none',
-    pageNo: 1,
+    editMachineEditModalConfirmLoading: false,
+    selectStatus: '0',
+    insertOptions: [],
+    targetData: [],
+    sourceData: [],
+    sourceKey: [],
+    targetKey: [],
+    selectAll: false,
+    selectedRows: [],
+    code: '',
+    repeat: [],
+    level: 1,
+    selectedRowKeys: [],
+    options: [],
+    defaultValue: [],
   }
   componentDidMount = () => {
     this.getSystemUserList();
@@ -233,19 +375,6 @@ export default class Staff extends PureComponent {
 
     // console.log(pagination, filters, sorter);
   }
-  renderTreeNodes = (data) => {
-    return data.map((item) => {
-      // console.log(item);
-      if (item.children) {
-        return (
-          <TreeNode title={item.title} key={item.key} dataRef={item}>
-            {this.renderTreeNodes(item.children)}
-          </TreeNode>
-        );
-      }
-      return <TreeNode {...item} />;
-    });
-  }
   handleReset = () => {
     this.setState({
       userName: '',
@@ -274,11 +403,27 @@ export default class Staff extends PureComponent {
   getMachineStatus = () => {
     //查看权限
   }
-  handleAllotClick = () => {
-    // 分配权限
-  }
   handleAreaClick = () => {
    // 区域设置
+    this.props.dispatch({
+      type: 'common/getStaffArea',
+      payload: {
+        restParams: {
+          code: this.state.code,
+          level: 1,
+          startTime: this.state.machineStartTime,
+          endTime: this.state.machineEndTime,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        treeData: res,
+      }, () => {
+        this.setState({
+          editMachineModalVisible: true,
+        });
+      });
+    });
   }
   handleDataClick = () => {
    // 数据
@@ -286,6 +431,279 @@ export default class Staff extends PureComponent {
   handleStopClick = () => {
    // 停用
   }
+  targetHandleDelete = () => {
+
+  }
+  // tree开始
+  getAreaList = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    let params = { code: code }
+    if (selectedOptions) {
+      if (selectedOptions.level) {
+        params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+      } else if (selectedOptions.code) {
+        params = { code: selectedOptions.code, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+      } else {
+        targetOption = selectedOptions[selectedOptions.length - 1];
+        code = targetOption.value;
+        targetOption.loading = true;
+        params = { code: code, level: targetOption.level + 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime}
+      }
+    }
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (selectedOptions.level) {
+        this.setState({
+          insertOptions: res,
+        });
+      } else if (selectedOptions.code) {
+        this.setState({
+          sourceData: res,
+        });
+      } else {
+        targetOption.loading = false;
+        targetOption.children = res
+        this.setState({
+          insertOptions: [...this.state.insertOptions],
+        });
+      }
+    });
+  }
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      // parseInt(item.canUseNum) === 0
+      return (item.disabledFlag) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
+    });
+  }
+  onLoadData = (treeNode) => {
+    return new Promise((resolve) => {
+      if (treeNode.props.children) {
+        resolve();
+        return;
+      }
+      // console.log('treeNode.props.dataRef', treeNode.props.dataRef.value, treeNode.props.children)
+      const targetOption = treeNode.props.dataRef;
+      // targetOption.loading = true;
+      this.setState({
+        code: targetOption.value,
+      }, () => {
+        this.props.dispatch({
+          type: 'common/getStaffArea',
+          payload: {
+            restParams: {
+              code: targetOption.value,
+              level: targetOption.level + 1,
+              startTime: this.state.machineStartTime,
+              endTime: this.state.machineEndTime,
+            },
+          },
+        }).then((res) => {
+          // targetOption.loading = false;
+          targetOption.children = res
+          console.log('res', res)
+          this.setState({
+            treeData: [...this.state.treeData],
+          });
+          resolve();
+        });
+      });
+    });
+  }
+  onExpand = (expandedKeys, node) => {
+    // console.log('onExpand展开/收起节点时触发', expandedKeys, node);
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  }
+  onCheck = (checkedKeys, node) => {
+    // .checkedNodes[0].props.dataRef.value
+    console.log('onCheck点击复选框触发', checkedKeys, node);
+
+    // let node =
+    this.setState({ checkedKeys, selectCity: node.checkedNodes });
+  }
+  onSelect = (selectedKeys, info) => {
+    console.log('onSelect点击树节点触发', selectedKeys, info, [...this.state.targetData, info.selectedNodes[0].props.dataRef]);
+    // this.setState({ selectedKeys });
+    // if (info.props.dataRef.level !== 3) {
+    //   message.warn('')
+    // }
+    let targetData = [info.selectedNodes[0].props.dataRef].map((item) => {
+      return {
+        isLeaf: item.isLeaf,
+        key: item.isLeaf,
+        label: item.isLeaf,
+        level: item.isLeaf,
+        name: item.isLeaf,
+        province: item.isLeaf,
+        title: item.isLeaf,
+        value: item.isLeaf,
+      }
+    })
+    this.setState({
+      targetData: [...this.state.targetData, targetData]
+    })
+  }
+  onEditMachineHandleAddClick = () => {
+    // console.log('选择机器确认');
+    // let selectCity = this.state.selectCity
+    // if (selectCity.length > 0) {
+    //   this.uniq(selectCity);
+    //   // console.log('selectCity', this.state.machines)
+    // } else {
+    //   message.error('请先选择机器');
+    // }
+    console.log('this.state.targetData.machines', this.state.targetData)
+    if (this.state.targetData.length >0) {
+      let arr = this.state.targetData
+      let selectCityName = []
+      for (var i = 0; i < arr.length; i++) {
+        var item = arr[i]
+        if (!(item['province'] in selectCityName)) {
+          selectCityName[item['province']] = item.province;
+        }
+      }
+      selectCityName = Object.values(selectCityName)
+      this.setState({
+        remark: '',
+        machineNum: this.state.targetData.length,
+        selectCityName,
+        machines: this.state.targetData,
+      }, () => {
+        // console.log(this.state.machines)
+        this.setState({
+          editMachineModalVisible: false,
+        });
+      });
+    } else {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('请先选择机器');
+      return false
+    }
+  }
+  uniq = (arr) => {
+    let max = [];
+    let selectCityName = []
+    // for(var i=0;i<arr.length;i++) {
+    //   var item = arr[i].props.dataRef;
+    //   if(!(item['province'] in max) || (item['level'] > max[item['province']]['level'])){
+    //     // init compare
+    //     max[item['province']] = item;
+    //   }
+    // }
+    // Object.values(max)
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i].props.dataRef
+      if (!item.children) {
+        item.machines.forEach((MItem) => {
+          max.push(MItem);
+        });
+        if (!(item['province'] in selectCityName)) {
+          selectCityName[item['province']] = item.province;
+        }
+        // selectCityName.push(item.province)
+      }
+    }
+    selectCityName = Object.values(selectCityName)
+    this.setState({
+      machineNum: max.length,
+      selectCityName,
+      machines: max,
+    }, () => {
+      console.log(this.state.machines)
+      this.setState({
+        editMachineModalVisible: false,
+      });
+    });
+  }
+  timeFormRef = (form) => {
+    this.timeFormRef = form;
+  }
+  openSelectMachineModal = () => {
+    this.setState({
+      sourceData: [],
+      selectMachineFlag: true,
+      checkedKeys: [],
+      expandedKeys: [],
+      autoExpandParent: true,
+    }, () => {
+      this.form.validateFields((err, fieldsValue) => {
+        //     console.log('224', err, fieldsValue)
+        if (err) return;
+        // if (fieldsValue.gameId)
+        // if (fieldsValue.remark)
+        // if (fieldsValue.userMaxTimes)
+        console.log('fieldsValue', fieldsValue)
+        let params = {
+          ...fieldsValue,
+          code: this.state.code,
+          level: 1,
+          startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
+          endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
+        };
+        this.setState({
+          machineStartTime: params.startTimeStr,
+          machineEndTime: params.endTimeStr,
+        }, () => {
+          // this.props.dispatch({
+          //   type: 'scheduleSetting/selectAreaMachines',
+          //   payload: {
+          //     restParams: {
+          //       code: this.state.code,
+          //       level: 1,
+          //       startTime: this.state.machineStartTime,
+          //       endTime: this.state.machineEndTime,
+          //     },
+          //   },
+          // }).then((res) => {
+          //   this.setState({
+          //     treeData: res,
+          //   }, () => {
+          //     this.setState({
+          //       editMachineModalVisible: true,
+          //     });
+          //   });
+          // });
+          this.setState({
+            editMachineModalVisible: true,
+          }, () => {
+            this.getAreaList({level: 1});
+          });
+          this.selectMachineform.setFieldsValue({
+            provinceCityAreaTrade: undefined
+          })
+        });
+      });
+    });
+  }
+  // onEditMachineHandleModalVisibleClick = () => {
+  //   this.setState({
+  //     editMachineModalVisible: false,
+  //   });
+  // }
+  // selectMachineFormRef = (form) => {
+  //   this.selectMachineform = form;
+  // }
+  // tree结束
   render() {
     const { allList, checkedKeys, isJiaoLeft, userName, No } = this.state;
     const { staff: { list, page, totalNo } } = this.props;
@@ -435,6 +853,26 @@ export default class Staff extends PureComponent {
             scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
           />
         </Card>
+        <SelectAreaForm
+          ref={this.selectMachineFormRef}
+          editMachineModalVisible={this.state.editMachineModalVisible}
+          onEditMachineHandleAddClick={this.onEditMachineHandleAddClick}
+          onEditMachineHandleModalVisibleClick={this.onEditMachineHandleModalVisibleClick}
+          editMachineEditModalConfirmLoading={this.state.editMachineEditModalConfirmLoading}
+          renderTreeNodes={this.renderTreeNodes}
+          treeData={this.state.treeData}
+          onLoadData={this.onLoadData}
+          expandedKeys={this.state.expandedKeys}
+          autoExpandParent={this.state.autoExpandParent}
+          checkedKeys={this.state.checkedKeys}
+          selectedKeys={this.state.selectedKeys}
+          onExpand={this.onExpand}
+          onCheck={this.onCheck}
+          onSelect={this.onSelect}
+
+          targetData={this.state.targetData}
+          targetHandleDelete={this.targetHandleDelete}
+        />
       </PageHeaderLayout>
     );
   }
