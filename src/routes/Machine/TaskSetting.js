@@ -998,7 +998,7 @@ export default class TaskSetting extends PureComponent {
   }
   handleAdd = () => {
     let params = {};
-    const { taskType, AisleList, modalData } = this.state
+    const { taskType, AisleList, modalData, targetData } = this.state
     if (this.state.targetData.length === 0) {
       message.config({
         top: 100,
@@ -1008,6 +1008,12 @@ export default class TaskSetting extends PureComponent {
       message.error('请先选择机器')
       return;
     }
+    const machineList = (targetData.length > 0 && targetData.map((item) => {
+      return {
+        machineCode: item.machineCode,
+        machineId: item.machineId
+      }
+    })) || []
     if (taskType === 1 || modalData.type === 1) {
       this.UpgradeAppForm.validateFields((err, values) => {
         if (err) {
@@ -1017,7 +1023,7 @@ export default class TaskSetting extends PureComponent {
           type: taskType,
           ...values,
           doTimeStr: values.doTimeStr ? values.doTimeStr.format('YYYY-MM-DD HH:mm') : undefined,
-          machineList: this.state.targetData,
+          machineList,
         };
         this.taskAdd(params)
       })
@@ -1030,7 +1036,7 @@ export default class TaskSetting extends PureComponent {
           type: taskType,
           ...values,
           doTimeStr: values.doTimeStr ? values.doTimeStr.format('YYYY-MM-DD HH:mm') : undefined,
-          machineList: this.state.targetData,
+          machineList,
         };
         this.taskAdd(params)
       })
@@ -1062,7 +1068,7 @@ export default class TaskSetting extends PureComponent {
           type: taskType,
           ...values,
           doTimeStr: values.doTimeStr ? values.doTimeStr.format('YYYY-MM-DD HH:mm') : undefined,
-          machineList: this.state.targetData,
+          machineList,
           channelCode
         };
         this.taskAdd(params)
