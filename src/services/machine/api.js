@@ -32,6 +32,7 @@ const api = map({
 
 
   updateLogStatus: '',
+  returnDeskTop: '/machine/machine/cutDesktop',
 });
 
 export default api;

@@ -3779,9 +3779,11 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'POST ': (req, res) => {
+  'POST /machine/machine/cutDesktop': (req, res) => {
     res.send({
-
+      "code": 0,
+      "data": null,
+      "msg": "成功"
     })
   }
 };

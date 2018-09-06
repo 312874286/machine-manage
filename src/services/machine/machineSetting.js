@@ -77,3 +77,9 @@ export async function updateLogStatus({ params }) {
     body: stringify(params),
   });
 }
+
+export async function returnDeskTop({ params }) {
+  return fetch.post(api.returnDeskTop, {
+    body: stringify(params),
+  });
+}
