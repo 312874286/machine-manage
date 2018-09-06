@@ -468,7 +468,7 @@ const SelectMachineForm = Form.create()(
               <Col md={10} sm={24}>
                 <FormItem>
                   {getFieldDecorator('machineCode')(
-                    <Input />
+                    <Input placeholder="请填写机器编号"/>
                   )}
                 </FormItem>
               </Col>
@@ -1362,19 +1362,41 @@ export default class TaskSetting extends PureComponent {
     });
   }
   getAreaList = (selectedOptions) => {
+    console.log('machineCode', selectedOptions)
     let code = '';
     let targetOption = null;
     let params = { code: code }
     if (selectedOptions) {
       if (selectedOptions.level) {
-        params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+        params = {
+          ...params,
+          level: 1,
+          startTime: this.state.machineStartTime,
+          endTime: this.state.machineEndTime,
+          machineCode: selectedOptions.machineCode || '',
+        }
       } else if (selectedOptions.code) {
-        params = { code: selectedOptions.code, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+        params = {
+          code: selectedOptions.code,
+          startTime: this.state.machineStartTime,
+          endTime: this.state.machineEndTime,
+          machineCode: selectedOptions.machineCode || ''
+        }
       } else {
-        targetOption = selectedOptions[selectedOptions.length - 1];
-        code = targetOption.value;
-        targetOption.loading = true;
-        params = { code: code, level: targetOption.level + 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime}
+        let level = ''
+        if (selectedOptions[selectedOptions.length - 1]) {
+          targetOption = selectedOptions[selectedOptions.length - 1];
+          code = targetOption.value;
+          targetOption.loading = true;
+          level = targetOption.level + 1
+        }
+        params = {
+          code: code,
+          level: level,
+          startTime: this.state.machineStartTime,
+          endTime: this.state.machineEndTime,
+          machineCode: selectedOptions.machineCode || ''
+        }
       }
     }
     this.props.dispatch({
@@ -1392,11 +1414,17 @@ export default class TaskSetting extends PureComponent {
           sourceData: res,
         });
       } else {
-        targetOption.loading = false;
-        targetOption.children = res
-        this.setState({
-          insertOptions: [...this.state.insertOptions],
-        });
+        if (targetOption) {
+          targetOption.loading = false;
+          targetOption.children = res
+          this.setState({
+            insertOptions: [...this.state.insertOptions],
+          });
+        } else {
+          this.setState({
+            sourceData: res,
+          });
+        }
       }
     });
   }
@@ -1512,23 +1540,26 @@ export default class TaskSetting extends PureComponent {
   findSourceData = () => {
     this.selectMachineform.validateFields((err, fieldsValue) => {
       if (err) return;
-      let localCode = ''
+      let localCode = '', machineCode = ''
       if (fieldsValue.code) {
         if (fieldsValue.code.length > 0) {
           localCode = fieldsValue.code[fieldsValue.code.length - 1]
         }
       }
+      console.log('machineCode', fieldsValue)
+      machineCode = fieldsValue.machineCode
+      console.log('machineCode', !localCode || !machineCode)
       // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
-      if (!localCode) {
+      if (!localCode && !machineCode) {
         message.config({
           top: 100,
           duration: 2,
           maxCount: 1,
         });
-        message.error('请选择一个地区')
+        message.error('请选择一个地区或者机器编号')
         return;
       }
-      this.getAreaList({code: localCode})
+      this.getAreaList({code: localCode, machineCode,})
     });
   }
   onEditMachineHandleModalVisibleClick = () => {
