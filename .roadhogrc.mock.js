@@ -3779,9 +3779,86 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'POST ': (req, res) => {
+  'POST /user/function/area/updateFunctionArea': (req, res) => {
     res.send({
-
+      "code": 0,
+      "data": [
+        {
+          "code": "100000000",
+          "parentCode": null,
+          "name": "北京",
+          "province": "北京",
+          "city": "",
+          "district": null,
+          "circle": null,
+          "level": 1
+        },
+        {
+          "code": "110000000",
+          "parentCode": null,
+          "name": "天津",
+          "province": "天津",
+          "city": "",
+          "district": null,
+          "circle": null,
+          "level": 1
+        }
+      ],
+      "msg": "有重复区域"
+    })
+  },
+  'GET /user/function/area/list': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "186f6f31c39544b5b52e690ec709f41b",
+          "userId": "936451df9a7443c3a59102b193e3b7ff",
+          "areaCode": "110000000",
+          "areaName": "天津",
+          "province": "天津",
+          "city": "",
+          "level": 1,
+          "createId": "936451df9a7443c3a59102b193e3b7ff",
+          "createTime": "2018-09-05 15:28:41"
+        },
+        {
+          "id": "39655a1b5e8143ae8e645784e54735ad",
+          "userId": "936451df9a7443c3a59102b193e3b7ff",
+          "areaCode": "100101000",
+          "areaName": "东城区",
+          "province": "北京",
+          "city": "北京市",
+          "level": 3,
+          "createId": "936451df9a7443c3a59102b193e3b7ff",
+          "createTime": "2018-09-05 15:28:41"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /user/function/data/updateFunctionData': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /user/function/data/list': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "1",
+          "functionDepict": "货机管理-机器管理-机器编号",
+          "functionPath": null,
+          "parentId": null,
+          "voName": "com.inno72.machine.vo.MachineListVo",
+          "voColumn": "machineCode",
+          "seq": null
+        }
+      ],
+      "msg": "成功"
     })
   }
 };

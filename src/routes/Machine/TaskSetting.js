@@ -22,6 +22,7 @@ import TaskAisletable from '../../components/Machine/taskAisleTable'
 import moment from "moment/moment";
 import {message} from "antd/lib/index";
 import StandardTable from '../../components/StandardTable';
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -776,9 +777,25 @@ export default class TaskSetting extends PureComponent {
 
     machineNumber: '',
     selectedNo: 28,
+
+    account: {}
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+      .children.filter((item) => item.path === 'task-setting')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   componentDidUpdate(comp,state) {
     // console.log(arguments)
@@ -1626,7 +1643,7 @@ export default class TaskSetting extends PureComponent {
     } = this.props;
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
-      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo } = this.state
+      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo, account } = this.state
     console.log('taskType', taskType)
     const columns = [
       {
@@ -1682,14 +1699,14 @@ export default class TaskSetting extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)}>查看</a>
+            <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)} style={{ display: !account.detail ? 'none' : ''}}>查看</a>
             <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }} />
             <a onClick={item.status === 0 ? () => this.editTask(item) : null }
-               style={{ display: item.status === 0 ? '' : 'none' }}
+               style={{ display: (item.status !== 0 && !account.update) ? 'none' : '' }}
             >编辑</a>
             <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }}/>
             <a onClick={item.status === 0 ? () => this.deleteTask(item) : null }
-               style={{ display: item.status === 0 ? '' : 'none' }}>删除</a>
+               style={{ display: (item.status !== 0 && !account.delete) ? 'none' : '' }}>删除</a>
           </Fragment>
         ),
       },
@@ -1712,20 +1729,11 @@ export default class TaskSetting extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : '' }}>
                 新建
               </Button>
             </div>
-            <div className={styles.tableList}>
-              {/*<Table*/}
-                {/*loading={loading}*/}
-                {/*rowKey={record => record.id}*/}
-                {/*dataSource={list}*/}
-                {/*columns={columns}*/}
-                {/*pagination={false}*/}
-                {/*onChange={this.handleTableChange}*/}
-                {/*scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}*/}
-              {/*/>*/}
+            <div className={styles.tableList} style={{ display: !account.list ? 'none' : ''}}>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}

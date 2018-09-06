@@ -305,7 +305,7 @@ class ScheduleTable extends PureComponent {
   }
   render() {
     const { dateTwoWeeksArr, currentDay, currentDayAfter } = this.state;
-    const { minHeight, dateList, onEditClick, onWatchClick, onDeleteClick, handleModalVisible } = this.props;
+    const { minHeight, dateList, onEditClick, onWatchClick, onDeleteClick, handleModalVisible, account } = this.props;
     // console.log('res', dateTwoWeeksArr, dateList);
     return (
       <div id="scheduleBox">
@@ -316,7 +316,9 @@ class ScheduleTable extends PureComponent {
                 <span class="leftSpan"></span>
                 <span class="modalTitle">活动排期一览表</span>
               </div>
-              <Button icon="plus" type="primary" style={{ width: '120px' }} onClick={() => handleModalVisible(true)}>
+              <Button icon="plus" type="primary" style={{ width: '120px', display: !account.add ? 'none' : '' }}
+                      onClick={() => handleModalVisible(true)}
+              >
                 新建
               </Button>
             </div>
@@ -364,10 +366,11 @@ class ScheduleTable extends PureComponent {
                                 <span>结束时间：{item.endTime}</span>
                               </div>
                               <div className={styles.editBox}>
-                                <div  onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} >
+                                <div  onClick={() => onEditClick(item)}
+                                      style={{ display: (moment(item.endTime) > new Date().getTime() && account.update)  ? '' : 'none' }} >
                                   编辑
                                 </div>
-                                <div  onClick={() => onWatchClick(item)}>查看</div>
+                                <div  onClick={() => onWatchClick(item)} style={{ display: !account.detail ? 'none' : ''}}>查看</div>
                               </div>
                             </div>
                           }
@@ -376,14 +379,16 @@ class ScheduleTable extends PureComponent {
                                      <span>活动名称: {item.name}</span>
                                      <div>
                                        <Popconfirm title="确定要删除吗" onConfirm={() => onDeleteClick(item)} okText="Yes" cancelText="No">
-                                         <div className={styles.anticonDelete} style={{ display: moment(item.endTime) <= new Date().getTime() ? '' : (moment(item.startTime) >= new Date().getTime() ? '' : 'none') }}>
+                                         <div className={styles.anticonDelete}
+                                              style={{ display:
+                                                  (moment(item.endTime) <= new Date().getTime() && account.delete) ? '' : ((moment(item.startTime) >= new Date().getTime() && account.delete) ? '' : 'none') }}>
                                            清除
                                          </div>
                                        </Popconfirm>
                                      </div>
                                    </div>
                                  } trigger="hover">
-                            <div style={{
+                              <div style={{
                                  background: moment(item.endTime) < new Date().getTime()  ? 'rgba(242,242,242,1)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)'),
                                  color: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
                                  width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',

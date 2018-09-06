@@ -5,6 +5,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TroubleBill.less';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import {getAccountMenus} from "../../utils/authority";
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -230,6 +231,8 @@ export default class troubleBill extends PureComponent {
     defaultValue: [],
     statusValue: undefined,
     sourceValue: undefined,
+
+    account: {}
   };
   constructor(props) {
     super(props);
@@ -259,6 +262,20 @@ export default class troubleBill extends PureComponent {
       }
     } else {
       this.getLists();
+    }
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+      .children.filter((item) => item.path === 'fault')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
     }
   }
   onChange = (e) => {
@@ -721,7 +738,7 @@ export default class troubleBill extends PureComponent {
     })
   }
   render() {
-    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId, No } = this.state;
+    const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId, No, account } = this.state;
     const { troubleBill: { list, page, totalNo } } = this.props;
 
     var arr = ['未解决','已解决'];
@@ -816,14 +833,24 @@ export default class troubleBill extends PureComponent {
       width: 150,
       render: (text, record) => (
         <Fragment>
-          <a href="javascript:;" onClick={this.onReplyHandle.bind(this, record)} style={{ display: record.status === 1 || record.status === 2 ? '' : 'none' }}>编辑</a>
-          <a href="javascript:;" onClick={this.onSeeHandle.bind(this, record)} style={{ display: record.status === 3 || record.status === 4 || record.status === 5 ? '' : 'none' }}>查看</a>
+          <a href="javascript:;"
+             onClick={this.onReplyHandle.bind(this, record)}
+             style={{ display: ((record.status === 1 || record.status === 2) && account.update) ? '' : 'none' }}
+          >编辑</a>
+          <a href="javascript:;"
+             onClick={this.onSeeHandle.bind(this, record)}
+             style={{ display: ((record.status === 3 || record.status === 4 || record.status === 5) && account.detail) ? '' : 'none' }}
+          >查看</a>
            <a href="javascript:;" onClick={() => (record.status === 1 || record.status === 2) ? this.closeFault(record) : null}
-           style={{ cursor: (record.status !== 1 && record.status !== 2) ? 'not-allowed' : '', color: (record.status !== 1 && record.status !== 2) ? '#999' : ''}}
+           style={{
+             cursor: (record.status !== 1 && record.status !== 2) ? 'not-allowed' : '',
+             color: (record.status !== 1 && record.status !== 2) ? '#999' : '',
+             display: !account.close ? 'none' : ''}}
            >关闭</a>
           <a href="javascript:;" onClick={() => (record.status === 3) ? this.okFault(record) : null}
-             style={{ cursor: (record.status !== 3) ? 'not-allowed' : '', color: (record.status !== 3) ? '#999' : ''}}
-          >确认</a>
+             style={{ cursor: (record.status !== 3) ? 'not-allowed' : '',
+               color: (record.status !== 3) ? '#999' : '',
+               display: !account.confirm ? 'none' : ''}}>确认</a>
         </Fragment>
       ),
     }];
@@ -918,16 +945,21 @@ export default class troubleBill extends PureComponent {
           </Card>
           <Card bordered={false}>
             <div className="tableListOperator">
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>派单</Button>
+              <Button icon="plus" type="primary"
+                      onClick={() => this.handleModalVisible(true)}
+                      style={{ display: !account.add ? 'none' : ''}}
+              >派单</Button>
             </div>
-            <Table
-              columns={columns}
-              dataSource={list}
-              rowKey={record => record.id}
-              onChange={this.handleTableChange}
-              pagination={paginationProps}
-              scroll={{ x: 1800, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100) }}
-            />
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <Table
+                columns={columns}
+                dataSource={list}
+                rowKey={record => record.id}
+                onChange={this.handleTableChange}
+                pagination={paginationProps}
+                scroll={{ x: 1800, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100) }}
+              />
+            </div>
           </Card>
         </div>
 

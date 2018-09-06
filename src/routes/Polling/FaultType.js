@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Form, Icon, Tree, message, Popconfirm, List } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './FaultType.less';
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 @connect(({ faultType }) => ({ faultType }))
@@ -18,9 +19,25 @@ export default class FaultType extends PureComponent {
       type: '',
       currentRecord: {},
       pageNo: 1,
+
+      account: {}
     };
     componentDidMount = () => {
       this.getLists();
+      this.getAccountMenus(getAccountMenus())
+    }
+    getAccountMenus = (setAccountMenusList) => {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+        .children.filter((item) => item.path === 'fault')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
     }
     onChange = (e) => {
       this.setState({ userName: e.target.value });
@@ -293,7 +310,7 @@ export default class FaultType extends PureComponent {
       })
     }
     render() {
-      const { visible, solutionsLists, userName, No } = this.state;
+      const { visible, solutionsLists, userName, No, account } = this.state;
       const { faultType: { list, page, totalNo } } = this.props;
     //   console.log('list::', faultType);
       const columns = [
@@ -301,7 +318,8 @@ export default class FaultType extends PureComponent {
         { title: '故障解决方案', dataIndex: 'parentName', key: 'parentName', width: '22%' },
         { title: '添加时间', dataIndex: 'createTime', key: 'createTime', width: '22%' },
         { title: '添加人', dataIndex: 'createId', key: 'createId', width: '22%' },
-        { title: '操作', dataIndex: '', key: 'action', render: (text, record) => <a href="javascript:;" onClick={this.onEdit.bind(this, record)}>编辑</a> },
+        { title: '操作', dataIndex: '', key: 'action', render: (text, record) => <a href="javascript:;"
+                                                                                  onClick={this.onEdit.bind(this, record)} style={{ display: !account.update ? 'none' : '' }}>编辑</a> },
       ];
     //   const data = [
     //     { code: 1, name: 'John Brown', parentName: 32, createId: 'New York No. 1 Lake Park', createTime: '11' },
@@ -360,16 +378,21 @@ export default class FaultType extends PureComponent {
           <Card bordered={false}>
             <div className="tableList">
               <div className="tableListOperator">
-                <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
+                <Button icon="plus" type="primary"
+                        onClick={() => this.handleModalAdd(true)}
+                        style={{ display: !account.add ? 'none' : ''}}
+                >新建</Button>
               </div>
-              <Table
-                columns={columns}
-                dataSource={list}
-                rowKey="code"
-                pagination={paginationProps}
-                onChange={this.handleTableChange}
-                scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-              />
+              <div style={{ display: !account.list ? 'none' : ''}}>
+                <Table
+                  columns={columns}
+                  dataSource={list}
+                  rowKey="code"
+                  pagination={paginationProps}
+                  onChange={this.handleTableChange}
+                  scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+                />
+              </div>
             </div>
             {/*<Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>*/}
             {/*<br /><br />*/}

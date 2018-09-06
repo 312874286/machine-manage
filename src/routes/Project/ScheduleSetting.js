@@ -30,6 +30,7 @@ import DiscountDynamicField from '../../components/DiscountDynamicField';
 import ScheduleTable from '../../components/ScheduleTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ScheduleSetting.less';
+import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
@@ -761,10 +762,26 @@ export default class ScheduleSettingList extends PureComponent {
     goodsTables: [],
     maxNumber: 100,
     remark: '',
+
+    account: {}
   };
   componentDidMount() {
     this.getSearchAreaList();
     // this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+      .children.filter((item) => item.path === 'schedule')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取城市列表
   getSearchAreaList = () => {
@@ -2232,7 +2249,8 @@ export default class ScheduleSettingList extends PureComponent {
       scheduleSetting: { list, page },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, gameLists, activityLists, goodsLists, shopClist } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType,
+      options, gameLists, activityLists, goodsLists, shopClist, account } = this.state;
     const columns = [
       {
         title: '所属省市区商圈',
@@ -2318,15 +2336,18 @@ export default class ScheduleSettingList extends PureComponent {
             {/*</div>*/}
           {/*</div>*/}
         {/*</Card>*/}
-        <ScheduleTable
-          dateList={this.state.dateList}
-          handleDays={this.handleDays}
-          onEditClick={this.onEditClick}
-          onWatchClick={this.onWatchClick}
-          onDeleteClick={this.onDeleteClick}
-          handleModalVisible={this.handleModalVisible}
-          minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 120)}
-        />
+        <div style={{ display: !account.list ? 'none' : ''}}>
+          <ScheduleTable
+            account={account}
+            dateList={this.state.dateList}
+            handleDays={this.handleDays}
+            onEditClick={this.onEditClick}
+            onWatchClick={this.onWatchClick}
+            onDeleteClick={this.onDeleteClick}
+            handleModalVisible={this.handleModalVisible}
+            minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 120)}
+          />
+        </div>
         <CreateForm
           {...parentMethods}
           ref={this.saveFormRef}

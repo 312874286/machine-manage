@@ -25,6 +25,7 @@ import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ShopSetting.less';
 import LogModal from '../../components/LogModal/index';
+import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
@@ -117,9 +118,24 @@ export default class shopSettingList extends PureComponent {
     logModalPageNo: 1,
     modalType: true,
     merchantLists: [],
+    account: {}
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+      .children.filter((item) => item.path === 'shop')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取列表
   getLists = () => {
@@ -420,7 +436,7 @@ export default class shopSettingList extends PureComponent {
   }
   render() {
     const { shopSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, account } = this.state;
     const columns = [
       // {
       //   title: '店铺ID',
@@ -449,12 +465,12 @@ export default class shopSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
             <Divider type="vertical" />
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
+              <a className={styles.delete} style={{ display: !account.delete ? 'none' : ''}}>删除</a>
             </Popconfirm>
           </Fragment>
         ),
@@ -480,7 +496,7 @@ export default class shopSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -494,16 +510,18 @@ export default class shopSettingList extends PureComponent {
                 {/*</span>*/}
               {/*)}*/}
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={700}
-            />
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={700}
+              />
+            </div>
           </div>
         </Card>
         <CreateForm

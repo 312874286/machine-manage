@@ -15,6 +15,7 @@ import {
 import StandardTable from '../../components/StandardTable/index';
 import styles from './SignInRecord.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
@@ -41,10 +42,26 @@ export default class signInRecord extends PureComponent {
     options: [],
     startTime: '',
     endTime: '',
+
+    account: {}
   };
   componentDidMount() {
     this.getAreaList();
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+      .children.filter((item) => item.path === 'signIn')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取列表
   getLists = () => {
@@ -259,7 +276,7 @@ export default class signInRecord extends PureComponent {
       signInRecord: { list, page },
       loading,
     } = this.props;
-    const { selectedRows } = this.state;
+    const { selectedRows, account } = this.state;
     const columns = [
       {
         title: '姓名',
@@ -300,7 +317,10 @@ export default class signInRecord extends PureComponent {
         <Card bordered={false}>
           <div className="tableList">
             <div className="tableListOperator">
-              <Button icon="export" type="primary" onClick={() => this.handleModalVisible(true)}>导出</Button>
+              <Button icon="export" type="primary"
+                      onClick={() => this.handleModalVisible(true)}
+                      style={{ display: !account.excell ? 'none' : ''}}
+              >导出</Button>
             </div>
           {/*<div className={styles.tableList}>*/}
             {/*<div className={styles.tableListOperator}>*/}
@@ -311,17 +331,20 @@ export default class signInRecord extends PureComponent {
               {/*/!*</a>*!/*/}
               {/*/!**!/*/}
             {/*</div>*/}
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={700}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 120)}
-            />
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={700}
+                scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 120)}
+              />
+            </div>
+
             {/*<Table */}
               {/*columns={columns}*/}
               {/*dataSource={list} */}

@@ -28,6 +28,7 @@ import CountModal from '../../components/Project/CountModal';
 import GoodsModal from '../../components/Project/GoodsModal';
 import VipModal from '../../components/Project/VipModal'
 import moment from "moment/moment";
+import {getAccountMenus} from "../../utils/authority";
 
 // const status = ['全部','未开始', '进行中', '已结束'];
 const ActivityStatus = [{ id: 0, name: '全部' }, { id: 1, name: '未开始' }, { id: 2, name: '进行中' }, { id: 3, name: '已结束' }, { id: 4, name: '未排期' }];
@@ -503,7 +504,9 @@ export default class activitySettingList extends PureComponent {
     goodsCount: 0,
     goodsLists: [],
     shopClist: [],
-    vipTables: []
+    vipTables: [],
+
+    account: {}
   };
 // {/*<Select*/}
 // {/*// mode="multiple"*/}
@@ -521,6 +524,20 @@ export default class activitySettingList extends PureComponent {
 // {/*>{data.map(d => <Option key={d.key} value={d.value} data-id={d.id}>{d.text}</Option>)}*/}
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+      .children.filter((item) => item.path === 'activity')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取列表
   getLists = () => {
@@ -1427,7 +1444,7 @@ export default class activitySettingList extends PureComponent {
 
   render() {
     const { activitySetting: { list, page }, loading, activitySetting: { activityCountList, count }, activitySetting: { activityPaiCountList, PaiCount } } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData, account } = this.state;
     const columns = [
       {
         title: '活动名称',
@@ -1479,40 +1496,30 @@ export default class activitySettingList extends PureComponent {
         width: 200,
         title: '操作',
         render: (text, item) => (
-          (item.state === '已结束') ? (
-            <Fragment>
-              <a onClick={() => this.handleWatchClick(item)}>查看</a>
-              <Divider type="vertical" />
-              <a disabled style={{ cursor: 'not-allowed' }}>编辑</a>
-              <Divider type="vertical" />
-              <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-                <a className={styles.delete}>删除</a>
-              </Popconfirm>
-              <Divider type="vertical" />
-              {/*活动统计*/}
-              <a style={{display: item.type === 0 ? '' : 'none'}} onClick={item.type === 0 ? () => this.handleCountClick(item) : null}>统计</a>
-              {/*<Divider type="vertical" />*/}
-              {/*商品统计*/}
-              <a style={{display: item.type === 0 ? 'none' : ''}} onClick={item.type === 1 ? () => this.handleGoodsClick(item) : null}>统计</a>
-            </Fragment>
-          ) : (
-            <Fragment>
-              <a onClick={() => this.handleWatchClick(item)}>查看</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleEditClick(item)}>编辑</a>
-              {/*<Divider type="vertical" />*/}
-              {/*<a onClick={() => this.handleCountClick(item)}>日志</a>*/}
-              {/*<Divider type="vertical" />*/}
-              <Divider type="vertical" />
-              <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-                <a className={styles.delete}>删除</a>
-              </Popconfirm>
-              <Divider type="vertical" />
-              <a style={{display: item.type === 0 ? '' : 'none'}} onClick={item.type === 0 ? () => this.handleCountClick(item) : null}>统计</a>
-              {/*<Divider type="vertical" />*/}
-              <a style={{display: item.type === 0 ? 'none' : ''}} onClick={item.type === 1 ? () => this.handleGoodsClick(item) : null}>统计</a>
-            </Fragment>
-          )
+          <Fragment>
+            <a onClick={() => this.handleWatchClick(item)}
+               style={{ display: !account.detail ? 'none' : ''}}
+            >查看</a>
+            <Divider type="vertical" style={{ display: !account.detail ? 'none' : ''}}/>
+            <a style={{ cursor: item.state === '已结束' ? 'not-allowed' : 'pointer' }}
+               onClick={() => item.state === '已结束' ? null : this.handleEditClick(item)}
+               style={{ display: !account.update ? 'none' : ''}}
+            >编辑</a>
+            <Divider type="vertical" style={{ display: !account.update ? 'none' : ''}}/>
+            <Popconfirm title="确定要删除吗" onConfirm={() => !account.delete ? null : this.handleDelClick(item)} okText="Yes" cancelText="No">
+              <a className={styles.delete}
+                 style={{ display: !account.delete ? 'none' : ''}}
+              >删除</a>
+            </Popconfirm>
+            <Divider type="vertical" style={{ display: !account.delete ? 'none' : ''}}/>
+            {/*活动统计*/}
+            <a style={{display: (item.type === 0 && account.statistics) ? '' : 'none'}}
+               onClick={item.type === 0 ? () => this.handleCountClick(item) : null}>统计</a>
+            {/*<Divider type="vertical" />*/}
+            {/*商品统计*/}
+            <a style={{display: (item.type === 1 && account.statistics) ? '' : 'none'}}
+               onClick={item.type === 1 ? () => this.handleGoodsClick(item) : null}>统计</a>
+          </Fragment>
         ),
       },
     ];
@@ -1536,7 +1543,7 @@ export default class activitySettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -1549,11 +1556,12 @@ export default class activitySettingList extends PureComponent {
                   {/*</Dropdown>*/}
                 {/*</span>*/}
               {/*)}*/}
-              <Button type="primary" onClick={() => this.handleEditActivityClick(true)}>
+              <Button type="primary" onClick={() => this.handleEditActivityClick(true)} style={{ display: !account.setDefault ? 'none' : ''}}>
                 设置默认活动
               </Button>
             </div>
-            <StandardTable
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               data={list}
@@ -1562,7 +1570,8 @@ export default class activitySettingList extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={1000}
-            />
+             />
+            </div>
           </div>
         </Card>
         <CreateForm

@@ -15,6 +15,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './replenish.less'
 import StandardTable from '../../components/StandardTable/index';
+import {getAccountMenus} from "../../utils/authority";
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
@@ -68,11 +69,27 @@ export default class replenish extends PureComponent {
     endTime: '',
     areaCode: '',
     selectedRows: [],
-    options: []
+    options: [],
+
+    account: {}
   };
   componentDidMount() {
     this.getLists();
     this.getAreaList('')
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+      .children.filter((item) => item.path === 'fault')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取列表
   getLists = () => {
@@ -273,7 +290,7 @@ export default class replenish extends PureComponent {
       replenish: { list, page },
       loading,
     } = this.props;
-    const { selectedRows } = this.state;
+    const { selectedRows, account } = this.state;
     const columns = [
       {
         title: '补货时间',
@@ -320,7 +337,7 @@ export default class replenish extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <div className={styles.tableList}>
+          <div className={styles.tableList} style={{ display: !account.list ? 'none' : ''}}>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

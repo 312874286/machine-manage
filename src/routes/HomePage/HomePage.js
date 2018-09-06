@@ -6,6 +6,9 @@ import {
   Form,
   Card,
 } from 'antd';
+import {getAccountMenus} from "../../utils/authority";
+
+
 @connect(({ common, loading, homePageSetting }) => ({
   common,
   homePageSetting,
@@ -14,9 +17,18 @@ import {
 @Form.create()
 export default class homePageSetting extends PureComponent {
   state = {
+    account: []
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const account = setAccountMenusList.filter((item) => item.path === 'check')[0]
+      .children.filter((item) => item.path === 'fault')
+    this.setState({
+      account,
+    })
   }
   // 获取列表
   getLists = () => {
@@ -32,6 +44,7 @@ export default class homePageSetting extends PureComponent {
     const {
       homePageSetting: { MachinePortalDataList },
     } = this.props;
+    const { account } = this.state
     const gridStyle = {
       width: '25%',
       textAlign: 'center',
@@ -102,43 +115,44 @@ export default class homePageSetting extends PureComponent {
                 </a>
               </div>
             </Card>
-            <Card title={
-              <div>
-                工单
-                <span className={styles.titleSpan}>(单位:条)</span>
-              </div>}>
-              <div className={styles.gridCardBox}>
-                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 1}})}>
-                  <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/receiveOrder.png')}/>
-                  </div>
-                  <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.waitOrder === 0 ? "0" : MachinePortalDataList.waitOrder}</span>
-                    <span>待接单</span>
-                  </div>
-                </a>
-                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 2}})}>
-                  <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/processed.png')}/>
-                  </div>
-                  <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.processed === 0 ? "0" : MachinePortalDataList.processed}</span>
-                    <span>处理中</span>
-                  </div>
-                </a>
-                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 3}})}>
-                  <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/affirm.png')}/>
-                  </div>
-                  <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.waitConfirm === 0 ? "0" : MachinePortalDataList.waitConfirm}</span>
-                    <span>待确认</span>
-                  </div>
-                </a>
-              </div>
-            </Card>
+            <div style={{ display: account.length === 0 ? 'none' : ''}}>
+              <Card title={
+                <div>
+                  工单
+                  <span className={styles.titleSpan}>(单位:条)</span>
+                </div>}>
+                <div className={styles.gridCardBox} >
+                  <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 1}})}>
+                    <div className={styles.machineLeftBox}>
+                      <img src={require('../../assets/images/indexPage/receiveOrder.png')}/>
+                    </div>
+                    <div className={styles.machineRightBox}>
+                      <span>{MachinePortalDataList.waitOrder === 0 ? "0" : MachinePortalDataList.waitOrder}</span>
+                      <span>待接单</span>
+                    </div>
+                  </a>
+                  <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 2}})}>
+                    <div className={styles.machineLeftBox}>
+                      <img src={require('../../assets/images/indexPage/processed.png')}/>
+                    </div>
+                    <div className={styles.machineRightBox}>
+                      <span>{MachinePortalDataList.processed === 0 ? "0" : MachinePortalDataList.processed}</span>
+                      <span>处理中</span>
+                    </div>
+                  </a>
+                  <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {statusValue: 3}})}>
+                    <div className={styles.machineLeftBox}>
+                      <img src={require('../../assets/images/indexPage/affirm.png')}/>
+                    </div>
+                    <div className={styles.machineRightBox}>
+                      <span>{MachinePortalDataList.waitConfirm === 0 ? "0" : MachinePortalDataList.waitConfirm}</span>
+                      <span>待确认</span>
+                    </div>
+                  </a>
+                </div>
+              </Card>
+            </div>
           </div>
-
         </PageHeaderLayout>
       </div>
     );

@@ -25,6 +25,7 @@ import StandardTable from '../../components/StandardTable/index';
 import styles from './User.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {RegexTool} from "../../utils/utils";
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -396,10 +397,26 @@ export default class user extends PureComponent {
     selectedRowKeys: [],
     options: [],
     defaultValue: [],
-    remark: ''
+    remark: '',
+
+    account: {}
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+      .children.filter((item) => item.path === 'user')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取列表
   getLists = () => {
@@ -1129,7 +1146,7 @@ export default class user extends PureComponent {
       user: { list, page },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists, account } = this.state;
     const columns = [
       {
         title: '姓名',
@@ -1176,13 +1193,13 @@ export default class user extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' :''}}>编辑</a>
             <Divider type="vertical" />
-            <a onClick={() => this.stopClick(item)} style={{display: item.status === 1 ? 'none' : ''}}>停用</a>
-            <a onClick={() => this.startClick(item)} style={{display: item.status === 0 ? 'none' : ''}}>启用</a>
-            <Divider type="vertical" style={{display: item.status === 0 ? 'none' : ''}} />
+            <a onClick={() => this.stopClick(item)} style={{display: (item.status !== 1 && account.btn) ? '' : 'none'}}>停用</a>
+            <a onClick={() => this.startClick(item)} style={{display: (item.status !== 0 && account.btn) ? '' : 'none'}}>启用</a>
+            <Divider type="vertical" style={{display: (item.status && account.btn) ? '' : 'none'}} />
             <Popconfirm title="确定要删除吗" onConfirm={() => this.deleteClick(item)} okText="Yes" cancelText="No">
-              <a style={{display: item.status === 0 ? 'none' : ''}}>删除</a>
+              <a style={{display: (item.status !== 0 && account.delete) ? '' : 'none'}}>删除</a>
             </Popconfirm>
           </Fragment>
         ),
@@ -1201,20 +1218,24 @@ export default class user extends PureComponent {
         <Card bordered={false}>
           <div className="tableList">
             <div className="tableListOperator">
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>新建</Button>
+              <Button icon="plus" type="primary"
+                      onClick={() => this.handleModalVisible(true)}
+                      style={{ display: !account.add ? 'none' : ''}}
+              >新建</Button>
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={1100}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
-
-            />
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={1100}
+                scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
+              />
+            </div>
           </div>
         </Card>
         <CreateForm

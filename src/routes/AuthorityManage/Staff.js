@@ -3,46 +3,11 @@ import { connect } from 'dva';
 import { Card, Table, Col, Row, Button, Input, Modal, message, Tree, Divider, Alert, Popconfirm } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {Form} from "antd/lib/index";
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
-
-// var treeData = [{
-//   title: '0-0',
-//   key: '0-0',
-//   children: [{
-//     title: '0-0-0',
-//     key: '0-0-0',
-//     children: [
-//       { title: '0-0-0-0', key: '0-0-0-0' },
-//       { title: '0-0-0-1', key: '0-0-0-1' },
-//       { title: '0-0-0-2', key: '0-0-0-2' },
-//     ],
-//   }, {
-//     title: '0-0-1',
-//     key: '0-0-1',
-//     children: [
-//       { title: '0-0-1-0', key: '0-0-1-0' },
-//       { title: '0-0-1-1', key: '0-0-1-1' },
-//       { title: '0-0-1-2', key: '0-0-1-2' },
-//     ],
-//   }, {
-//     title: '0-0-2',
-//     key: '0-0-2',
-//   }],
-// }, {
-//   title: '0-1',
-//   key: '0-1',
-//   children: [
-//     { title: '0-1-0-0', key: '0-1-0-0' },
-//     { title: '0-1-0-1', key: '0-1-0-1' },
-//     { title: '0-1-0-2', key: '0-1-0-2' },
-//   ],
-// }, {
-//   title: '0-2',
-//   key: '0-2',
-// }];
-
+const confirm = Modal.confirm;
 const SelectAreaForm = Form.create()(
   (props) => {
     const { editMachineModalVisible, form,
@@ -65,8 +30,15 @@ const SelectAreaForm = Form.create()(
     };
     this.columnsRight = [{
       title: '区域名称',
-      dataIndex: 'name',
-      width: '90%'
+      // dataIndex: 'tableName',
+      width: '90%',
+      render: (text, record) => {
+        return (
+          <div>
+            {record.province ? record.province : ''}-{record.city ? record.city : ''}-{record.district ? record.district : ''}
+          </div>
+        );
+      }
     }, {
       title: '操作',
       width: 70,
@@ -75,7 +47,7 @@ const SelectAreaForm = Form.create()(
         return (
           targetData.length > 0
             ? (
-              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.key)}>
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.code)}>
                 <a href="javascript:;">删除</a>
               </Popconfirm>
             ) : null
@@ -101,7 +73,7 @@ const SelectAreaForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">选择区域</span>
+            <span class="modalTitle">区域设置</span>
           </div>
         }
         visible={editMachineModalVisible}
@@ -139,7 +111,7 @@ const SelectAreaForm = Form.create()(
                     showIcon
                   />
                   <Table
-                    rowKey={record => record.value}
+                    rowKey={record => record.code}
                     columns={columnsRight}
                     dataSource={targetData}
                     id="rightTable"
@@ -154,6 +126,125 @@ const SelectAreaForm = Form.create()(
       </Modal>
     );
 });
+
+const SelectDataForm = Form.create()(
+  (props) => {
+    const { editMachineModalVisible, form,
+      onEditMachineHandleAddClick, onEditMachineHandleModalVisibleClick,
+      editMachineEditModalConfirmLoading,
+      renderTreeNodes, treeData, onLoadData,
+      onExpand, expandedKeys, autoExpandParent,
+      checkedKeys, selectedKeys, onCheck, onSelect,
+      targetData,targetHandleDelete,  } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    this.columnsRight = [{
+      title: '区域名称',
+      // dataIndex: 'tableName',
+      width: '90%',
+      render: (text, record) => {
+        return (
+          <div>
+            {record.province ? record.province : ''}-{record.city ? record.city : ''}-{record.district ? record.district : ''}
+          </div>
+        );
+      }
+    }, {
+      title: '操作',
+      width: 70,
+      dataIndex: 'operation',
+      render: (text, record) => {
+        return (
+          targetData.length > 0
+            ? (
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.code)}>
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
+            ) : null
+        );
+      }
+    }];
+    const columnsRight = this.columnsRight.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+        }),
+      };
+    });
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">区域设置</span>
+          </div>
+        }
+        visible={editMachineModalVisible}
+        onOk={onEditMachineHandleAddClick}
+        onCancel={() => onEditMachineHandleModalVisibleClick()}
+        confirmLoading={editMachineEditModalConfirmLoading}
+        width={800}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+              <Col md={4} sm={24} style={{ paddingLeft: '3px' }}>
+                <Tree
+                  // loadData={onLoadData}
+                  // checkable
+                  // onExpand={onExpand}
+                  // expandedKeys={expandedKeys}
+                  // autoExpandParent={autoExpandParent}
+                  // onCheck={onCheck}
+                  // checkedKeys={checkedKeys}
+                  onSelect={onSelect}
+                  // selectedKeys={selectedKeys}
+                >
+                  {renderTreeNodes(treeData)}
+                </Tree>
+              </Col>
+              <Col md={20} sm={24} style={{ paddingLeft: '3px' }}>
+                <div style={{ marginLeft: '20px', marginTop: '10px' }}>
+                  <Alert
+                    message={(
+                      <div>
+                        已有 <a style={{ fontWeight: 600 }}>{targetData.length}</a> 项
+                      </div>
+                    )}
+                    type="success"
+                    showIcon
+                  />
+                  <Table
+                    rowKey={record => record.code}
+                    columns={columnsRight}
+                    dataSource={targetData}
+                    id="rightTable"
+                    style={{ marginTop: '10px' }}
+                    scroll={{ y: 1000 }}
+                    pagination={false}/>
+                </div>
+              </Col>
+            </Row>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
 
 @connect(({ staff, common }) => ({ staff, common }))
 export default class Staff extends PureComponent {
@@ -172,13 +263,7 @@ export default class Staff extends PureComponent {
 
     editMachineModalVisible: false,
     confirmLoading: false,
-    treeData: [
-      // { title: 'Expand to load', key: '0' },
-      // { title: 'Expand to load', key: '1' },
-      // { title: 'Tree Node', key: '2', isLeaf: true },
-    ],
-    selectCity: [],
-    selectCityName: [],
+    treeData: [],
     expandedKeys: [],
     autoExpandParent: true,
     checkedKeys: [],
@@ -187,10 +272,7 @@ export default class Staff extends PureComponent {
     selectStatus: '0',
     insertOptions: [],
     targetData: [],
-    sourceData: [],
-    sourceKey: [],
     targetKey: [],
-    selectAll: false,
     selectedRows: [],
     code: '',
     repeat: [],
@@ -198,9 +280,32 @@ export default class Staff extends PureComponent {
     selectedRowKeys: [],
     options: [],
     defaultValue: [],
+    modelData: [],
+
+    //
+    editDataModalVisible: false,
+    editDataEditModalConfirmLoading: false,
+    DataTreeData: [],
+    DataTargetData: [],
+    account: {}
+
   }
   componentDidMount = () => {
     this.getSystemUserList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'authorityManage')[0]
+      .children.filter((item) => item.path === 'staff')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   onChange = (e) => {
     this.setState({ userName: e.target.value });
@@ -224,26 +329,26 @@ export default class Staff extends PureComponent {
     // this.state.currentUserId = record.id;
     console.log(record.id);
   }
-  onExpand = (expandedKeys) => {
-    console.log('onExpand', expandedKeys);
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    this.setState({
-      expandedKeys,
-      autoExpandParent: false,
-    });
-  }
-  onCheck = (checkedKeys) => {
-    // this.setState({
-    //   selectedRows: checkedKeys,
-    // });
-    console.log('onCheck', checkedKeys);
-    this.setState({ checkedKeys });
-  }
-  onSelect = (selectedKeys, info) => {
-    console.log('onSelect', info);
-    this.setState({ selectedKeys });
-  }
+  // onExpand = (expandedKeys) => {
+  //   console.log('onExpand', expandedKeys);
+  //   // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+  //   // or, you can remove all expanded children keys.
+  //   this.setState({
+  //     expandedKeys,
+  //     autoExpandParent: false,
+  //   });
+  // }
+  // onCheck = (checkedKeys) => {
+  //   // this.setState({
+  //   //   selectedRows: checkedKeys,
+  //   // });
+  //   console.log('onCheck', checkedKeys);
+  //   this.setState({ checkedKeys });
+  // }
+  // onSelect = (selectedKeys, info) => {
+  //   console.log('onSelect', info);
+  //   this.setState({ selectedKeys });
+  // }
   getSystemUserList = () => {
     this.props.dispatch({
       type: 'staff/getSystemUserList',
@@ -403,8 +508,23 @@ export default class Staff extends PureComponent {
   getMachineStatus = () => {
     //查看权限
   }
-  handleAreaClick = () => {
+  handleAreaClick = (item) => {
    // 区域设置
+   //  id: item.id
+    this.props.dispatch({
+      type: 'staff/getFunctionArea',
+      payload: {
+        restParams: {
+          userId: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        modelData: item,
+        targetData: res.data,
+      })
+    });
+
     this.props.dispatch({
       type: 'common/getStaffArea',
       payload: {
@@ -431,49 +551,12 @@ export default class Staff extends PureComponent {
   handleStopClick = () => {
    // 停用
   }
-  targetHandleDelete = () => {
-
+  targetHandleDelete = (key) => {
+    this.setState({
+      targetData: this.state.targetData.filter((item) => item.key !== key)
+    })
   }
   // tree开始
-  getAreaList = (selectedOptions) => {
-    let code = '';
-    let targetOption = null;
-    let params = { code: code }
-    if (selectedOptions) {
-      if (selectedOptions.level) {
-        params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
-      } else if (selectedOptions.code) {
-        params = { code: selectedOptions.code, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
-      } else {
-        targetOption = selectedOptions[selectedOptions.length - 1];
-        code = targetOption.value;
-        targetOption.loading = true;
-        params = { code: code, level: targetOption.level + 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime}
-      }
-    }
-    this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
-      payload: {
-        params,
-      },
-    }).then((res) => {
-      if (selectedOptions.level) {
-        this.setState({
-          insertOptions: res,
-        });
-      } else if (selectedOptions.code) {
-        this.setState({
-          sourceData: res,
-        });
-      } else {
-        targetOption.loading = false;
-        targetOption.children = res
-        this.setState({
-          insertOptions: [...this.state.insertOptions],
-        });
-      }
-    });
-  }
   renderTreeNodes = (data) => {
     return data.map((item) => {
       if (item.children) {
@@ -521,74 +604,82 @@ export default class Staff extends PureComponent {
       });
     });
   }
-  onExpand = (expandedKeys, node) => {
-    // console.log('onExpand展开/收起节点时触发', expandedKeys, node);
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    this.setState({
-      expandedKeys,
-      autoExpandParent: false,
-    });
-  }
-  onCheck = (checkedKeys, node) => {
-    // .checkedNodes[0].props.dataRef.value
-    console.log('onCheck点击复选框触发', checkedKeys, node);
-
-    // let node =
-    this.setState({ checkedKeys, selectCity: node.checkedNodes });
-  }
   onSelect = (selectedKeys, info) => {
-    console.log('onSelect点击树节点触发', selectedKeys, info, [...this.state.targetData, info.selectedNodes[0].props.dataRef]);
-    // this.setState({ selectedKeys });
-    // if (info.props.dataRef.level !== 3) {
-    //   message.warn('')
-    // }
+    // console.log('onSelect点击树节点触发', selectedKeys, info, [...this.state.targetData, info.selectedNodes[0].props.dataRef]);
     let targetData = [info.selectedNodes[0].props.dataRef].map((item) => {
       return {
         isLeaf: item.isLeaf,
-        key: item.isLeaf,
-        label: item.isLeaf,
-        level: item.isLeaf,
-        name: item.isLeaf,
-        province: item.isLeaf,
-        title: item.isLeaf,
-        value: item.isLeaf,
+        key: item.key,
+        label: item.label,
+        level: item.level,
+        code: item.key,
+        province: item.province,
+        title: item.title,
+        value: item.value,
+        name: item.name,
+        city: item.city,
+        district: item.district,
+        tableName: item.tableName,
       }
     })
+    for (const item of this.state.targetData) {
+      if (item.key === targetData[0].key) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.warn(`${item.name}已存在，请重新选择`)
+        return
+      }
+    }
     this.setState({
-      targetData: [...this.state.targetData, targetData]
+      targetData: [...this.state.targetData, ...targetData]
+    }, () => {
+      console.log('targetData', this.state.targetData)
     })
   }
   onEditMachineHandleAddClick = () => {
-    // console.log('选择机器确认');
-    // let selectCity = this.state.selectCity
-    // if (selectCity.length > 0) {
-    //   this.uniq(selectCity);
-    //   // console.log('selectCity', this.state.machines)
-    // } else {
-    //   message.error('请先选择机器');
-    // }
-    console.log('this.state.targetData.machines', this.state.targetData)
+    let self = this
     if (this.state.targetData.length >0) {
-      let arr = this.state.targetData
-      let selectCityName = []
-      for (var i = 0; i < arr.length; i++) {
-        var item = arr[i]
-        if (!(item['province'] in selectCityName)) {
-          selectCityName[item['province']] = item.province;
+      this.props.dispatch({
+        type: 'staff/updateFunctionArea',
+        payload: {
+          params: {
+            userId: this.state.modelData.id,
+            areaList: this.state.targetData
+          },
+        },
+      }).then((res) => {
+        if (res.msg !== '成功') {
+          confirm({
+            content: '经检测有重复区域，是否需要进行合并',
+            onOk() {
+              return new Promise((resolve, reject) => {
+                setTimeout(
+                  self.setState({
+                      targetData: res.data.map((item) => {
+                        return {
+                          key: item.code,
+                          level: item.level,
+                          code: item.code,
+                          province: item.province,
+                          name: item.name,
+                          city: item.city,
+                          district: item.district,
+                          parentCode: item.parentCode,
+                        }
+                      })
+                    }) ? resolve : reject, 1000);
+              }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() {},
+          });
+        } else if (res.msg === '成功') {
+          this.setState({
+            editMachineModalVisible: false,
+          })
         }
-      }
-      selectCityName = Object.values(selectCityName)
-      this.setState({
-        remark: '',
-        machineNum: this.state.targetData.length,
-        selectCityName,
-        machines: this.state.targetData,
-      }, () => {
-        // console.log(this.state.machines)
-        this.setState({
-          editMachineModalVisible: false,
-        });
       });
     } else {
       message.config({
@@ -596,7 +687,7 @@ export default class Staff extends PureComponent {
         duration: 2,
         maxCount: 1,
       });
-      message.warn('请先选择机器');
+      message.warn('请先选择');
       return false
     }
   }
@@ -638,63 +729,6 @@ export default class Staff extends PureComponent {
   timeFormRef = (form) => {
     this.timeFormRef = form;
   }
-  openSelectMachineModal = () => {
-    this.setState({
-      sourceData: [],
-      selectMachineFlag: true,
-      checkedKeys: [],
-      expandedKeys: [],
-      autoExpandParent: true,
-    }, () => {
-      this.form.validateFields((err, fieldsValue) => {
-        //     console.log('224', err, fieldsValue)
-        if (err) return;
-        // if (fieldsValue.gameId)
-        // if (fieldsValue.remark)
-        // if (fieldsValue.userMaxTimes)
-        console.log('fieldsValue', fieldsValue)
-        let params = {
-          ...fieldsValue,
-          code: this.state.code,
-          level: 1,
-          startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
-          endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
-        };
-        this.setState({
-          machineStartTime: params.startTimeStr,
-          machineEndTime: params.endTimeStr,
-        }, () => {
-          // this.props.dispatch({
-          //   type: 'scheduleSetting/selectAreaMachines',
-          //   payload: {
-          //     restParams: {
-          //       code: this.state.code,
-          //       level: 1,
-          //       startTime: this.state.machineStartTime,
-          //       endTime: this.state.machineEndTime,
-          //     },
-          //   },
-          // }).then((res) => {
-          //   this.setState({
-          //     treeData: res,
-          //   }, () => {
-          //     this.setState({
-          //       editMachineModalVisible: true,
-          //     });
-          //   });
-          // });
-          this.setState({
-            editMachineModalVisible: true,
-          }, () => {
-            this.getAreaList({level: 1});
-          });
-          this.selectMachineform.setFieldsValue({
-            provinceCityAreaTrade: undefined
-          })
-        });
-      });
-    });
-  }
   onEditMachineHandleModalVisibleClick = () => {
     this.setState({
       editMachineModalVisible: false,
@@ -704,8 +738,120 @@ export default class Staff extends PureComponent {
   //   this.selectMachineform = form;
   // }
   // tree结束
+  selectDataFormRef = () => {
+
+  }
+  onEditDataHandleAddClick = () => {
+    let self = this
+    if (this.state.DataTargetData.length >0) {
+      this.props.dispatch({
+        type: 'staff/updateFunctionArea',
+        payload: {
+          params: {
+            userId: this.state.modelData.id,
+            areaList: this.state.targetData
+          },
+        },
+      }).then((res) => {
+        if (res.msg !== '成功') {
+          confirm({
+            content: '经检测有重复区域，是否需要进行合并',
+            onOk() {
+              return new Promise((resolve, reject) => {
+                setTimeout(
+                  self.setState({
+                    DataTargetData: res.data.map((item) => {
+                      return {
+                        key: item.code,
+                        level: item.level,
+                        code: item.code,
+                        province: item.province,
+                        name: item.name,
+                        city: item.city,
+                        district: item.district,
+                        parentCode: item.parentCode,
+                      }
+                    })
+                  }) ? resolve : reject, 1000);
+              }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() {},
+          });
+        } else if (res.msg === '成功') {
+          this.setState({
+            editDataModalVisible: false,
+          })
+        }
+      });
+    } else {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('请先选择');
+      return false
+    }
+  }
+  onEditDataHandleModalVisibleClick = () => {
+    this.setState({
+      editDataModalVisible: false,
+    });
+  }
+  renderDataTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      // parseInt(item.canUseNum) === 0
+      return (item.disabledFlag) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />);
+    });
+  }
+  onDataSelect = (selectedKeys, info) => {
+    let targetData = [info.selectedNodes[0].props.dataRef].map((item) => {
+      return {
+        isLeaf: item.isLeaf,
+        key: item.key,
+        label: item.label,
+        level: item.level,
+        code: item.key,
+        province: item.province,
+        title: item.title,
+        value: item.value,
+        name: item.name,
+        city: item.city,
+        district: item.district,
+        tableName: item.tableName,
+      }
+    })
+    for (const item of this.state.DataTargetData) {
+      if (item.key === DataTargetData[0].key) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.warn(`${item.name}已存在，请重新选择`)
+        return
+      }
+    }
+    this.setState({
+      DataTargetData: [...this.state.DataTargetData, ...targetData]
+    }, () => {
+      console.log('targetData', this.state.DataTargetData)
+    })
+  }
+  DataTargetHandleDelete = () => {
+    this.setState({
+      DataTargetData: this.state.DataTargetData.filter((item) => item.key !== key)
+    })
+  }
   render() {
-    const { allList, checkedKeys, isJiaoLeft, userName, No } = this.state;
+    const { allList, checkedKeys, isJiaoLeft, userName, No, account } = this.state;
     const { staff: { list, page, totalNo } } = this.props;
     // console.log(111, list, page, allList, 222);
     const columns = [
@@ -752,13 +898,13 @@ export default class Staff extends PureComponent {
         key: '',
         render: (text, record) => (
           <Fragment>
-            <a onClick={() => this.onToAuthorization(record)}>授权</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.handleAreaClick(record)}>区域设置</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.handleDataClick(record)}>数据</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.handleStopClick(record)}>停用</a>
+            <a onClick={() => this.onToAuthorization(record)} style={{ display: !account.update ? 'none' : ''}}>授权</a>
+            <Divider type="vertical" style={{ display: !account.update ? 'none' : ''}}/>
+            <a onClick={() => this.handleAreaClick(record)} style={{ display: !account.areaSet ? 'none' : ''}}>区域设置</a>
+            <Divider type="vertical" style={{ display: !account.areaSet ? 'none' : ''}}/>
+            <a onClick={() => this.handleDataClick(record)} style={{ display: !account.data ? 'none' : ''}}>数据</a>
+            <Divider type="vertical" style={{ display: !account.data ? 'none' : ''}}/>
+            <a onClick={() => this.handleStopClick(record)} style={{ display: !account.btn ? 'none' : ''}}>停用</a>
           </Fragment>
         ),
       },
@@ -844,14 +990,16 @@ export default class Staff extends PureComponent {
             {/*onChange={this.handleTableChange}*/}
             {/*rowKey="id"*/}
           {/*/>*/}
-          <Table
-            columns={columns}
-            dataSource={list}
-            rowKey="id"
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
-            scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-          />
+          <div style={{ display: !account.list ? 'none' : ''}}>
+            <Table
+              columns={columns}
+              dataSource={list}
+              rowKey="id"
+              pagination={paginationProps}
+              onChange={this.handleTableChange}
+              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+            />
+          </div>
         </Card>
         <SelectAreaForm
           ref={this.selectMachineFormRef}
@@ -872,6 +1020,20 @@ export default class Staff extends PureComponent {
 
           targetData={this.state.targetData}
           targetHandleDelete={this.targetHandleDelete}
+        />
+
+        <SelectDataForm
+          ref={this.selectDataFormRef}
+          editMachineModalVisible={this.state.editDataModalVisible}
+          onEditMachineHandleAddClick={this.onEditDataHandleAddClick}
+          onEditMachineHandleModalVisibleClick={this.onEditDataHandleModalVisibleClick}
+          editMachineEditModalConfirmLoading={this.state.editDataEditModalConfirmLoading}
+          renderTreeNodes={this.renderDataTreeNodes}
+          treeData={this.state.DataTreeData}
+          onSelect={this.onDataSelect}
+
+          targetData={this.state.DataTargetData}
+          targetHandleDelete={this.DataTargetHandleDelete}
         />
       </PageHeaderLayout>
     );

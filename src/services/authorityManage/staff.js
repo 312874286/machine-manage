@@ -26,4 +26,26 @@ export async function getSystemUserQueryUserRoles({ params, restParams }) {
   });
 }
 
+export async function updateFunctionArea({ params }) {
+  return fetch.postJSON(api.updateFunctionArea, {
+    body: JSON.stringify(params),
+  });
+}
 
+export async function getFunctionArea({ restParams }) {
+  return fetch.get(api.getFunctionArea, {
+    restParams,
+  });
+}
+
+export async function updateFunctionData({ params }) {
+  return fetch.postJSON(api.updateFunctionData, {
+    body: JSON.stringify(params),
+  });
+}
+
+export async function getFunctionData({ restParams }) {
+  return fetch.get(api.getFunctionData, {
+    restParams,
+  });
+}

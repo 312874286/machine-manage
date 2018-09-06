@@ -2,15 +2,31 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import {getAccountMenus} from "../../utils/authority";
 
 @connect(({ jurisdiction }) => ({ jurisdiction }))
 export default class Jurisdiction extends PureComponent {
   state = {
     userName: '',
     pageNo: 1,
+    account: {},
   }
   componentDidMount = () => {
     this.getSystemFunctionList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'authorityManage')[0]
+      .children.filter((item) => item.path === 'jurisdiction')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   onToAuthorization = (record) => {
     console.log(record, this);
@@ -68,7 +84,7 @@ export default class Jurisdiction extends PureComponent {
     })
   }
   render() {
-    const { userName, No } = this.state;
+    const { userName, No, account } = this.state;
     const { jurisdiction: { list, page, totalNo } } = this.props;
     // console.log(111,list,page);
     const columns = [
@@ -148,14 +164,16 @@ export default class Jurisdiction extends PureComponent {
             {/*onChange={this.handleTableChange}*/}
             {/*rowKey="id"*/}
           {/*/>*/}
-          <Table
-            columns={columns}
-            dataSource={list}
-            rowKey="id"
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
-            scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-          />
+          <div style={{ display: !account.list ? 'none' : ''}}>
+            <Table
+              columns={columns}
+              dataSource={list}
+              rowKey="id"
+              pagination={paginationProps}
+              onChange={this.handleTableChange}
+              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+            />
+          </div>
         </Card>
       </PageHeaderLayout>
     );

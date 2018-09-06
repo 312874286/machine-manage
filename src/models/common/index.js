@@ -61,9 +61,13 @@ export default {
             label: data[i].name,
             isLeaf, title: data[i].name,
             key: data[i].code,
+            code: data[i].code,
             level: data[i].level,
             province: data[i].province,
-            name: `${data[i].province}-${data[i].city ? data[i].city : ''}-${data[i].district ? data[i].district : ''}`
+            name: data[i].name,
+            city: data[i].city,
+            district: data[i].district,
+            tableName: `${data[i].province}-${data[i].city ? data[i].city : ''}-${data[i].district ? data[i].district : ''}`
           };
           arr.push(a);
         }

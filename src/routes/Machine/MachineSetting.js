@@ -34,8 +34,7 @@ import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
-
-
+import { getAccountMenus } from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -640,7 +639,9 @@ export default class machineSettingList extends PureComponent {
     editMachineCodeEditModalConfirmLoading: false,
 
     UploadLogVisible: false,
-    UploadLogConfirmLoading: false
+    UploadLogConfirmLoading: false,
+
+    account: {},
   };
   constructor(props) {
     super(props);
@@ -650,6 +651,20 @@ export default class machineSettingList extends PureComponent {
   componentDidMount() {
     this.getLists();
     this.getAreaList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+      .children.filter((item) => item.path === 'machine-setting')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   getInput = () => {
     if (this.props.inputType === 'number') {
@@ -1577,7 +1592,8 @@ export default class machineSettingList extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData,
+      updateList, appLists, AisleList, message, appLists2, createTime, account } = this.state;
     const columns = [
       {
         title: '机器编号',
@@ -1678,13 +1694,13 @@ export default class machineSettingList extends PureComponent {
           //   </Fragment>
           // )
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>重置点位</a>
+            <a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+            <a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+            <a onClick={() => !account.manageAisle ? null : this.handleManageAisleClick(item)} style={{ display: !account.manageAisle ? 'none' : ''}}>管理货道</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleNoClick(item)}>修改编号</a>
+            <a onClick={() => !!account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>
           </Fragment>
         ),
       },
@@ -1737,7 +1753,7 @@ export default class machineSettingList extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <div className={styles.tableList}>
+          <div className={styles.tableList} style={{ display: !account.list ? 'none' : ''}}>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
