@@ -1,4 +1,5 @@
-import { getSystemUserList, getSystemRoleAll, getSystemUserAuth, getSystemUserQueryUserRoles, updateFunctionArea, getFunctionArea } from '../../services/authorityManage/staff';
+import { getSystemUserList, getSystemRoleAll, getSystemUserAuth, getSystemUserQueryUserRoles,
+  updateFunctionArea, getFunctionArea, functionTree, userStatus, updateFunctionData, getFunctionData  } from '../../services/authorityManage/staff';
 
 export default {
   namespace: 'staff',
@@ -48,6 +49,23 @@ export default {
       const response = yield call(getFunctionArea, { restParams });
       return response;
     },
+    *updateFunctionData({ payload: { params } }, { call }) {
+      const response = yield call(updateFunctionData, { params });
+      return response;
+    },
+    *getFunctionData({ payload: { restParams } }, { call }) {
+      const response = yield call(getFunctionData, { restParams });
+      return response;
+    },
+    *functionTree({ payload: { params } }, { call }) {
+      const response = yield call(functionTree, { params });
+      return response.data.tree;
+    },
+    *userStatus({ payload: { params } }, { call }) {
+      const response = yield call(userStatus, { params });
+      return response;
+    },
+
   },
 
   reducers: {

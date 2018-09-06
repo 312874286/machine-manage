@@ -285,7 +285,7 @@ export default class Staff extends PureComponent {
     //
     editDataModalVisible: false,
     editDataEditModalConfirmLoading: false,
-    DataTreeData: [],
+    dataTreeData: [],
     DataTargetData: [],
     account: {}
 
@@ -545,8 +545,52 @@ export default class Staff extends PureComponent {
       });
     });
   }
-  handleDataClick = () => {
+  handleDataClick = (item) => {
    // 数据
+    this.props.dispatch({
+      type: 'staff/getFunctionData',
+      payload: {
+        restParams: {
+          userId: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        modelData: item,
+        DataTargetData: res.data,
+      })
+    });
+
+    this.props.dispatch({
+      type: 'staff/functionTree',
+      payload: {
+
+      },
+    }).then((res) => {
+      const otherData = res.children;
+      for (const i in otherData) {
+        if (otherData[i].children) {
+          this.bianlijson(otherData[i].children);
+        }
+        otherData[i].key = otherData[i].id;
+      }
+      console.log('tree', otherData)
+      this.setState({
+        dataTreeData: otherData,
+      }, () => {
+        this.setState({
+          editDataModalVisible: true,
+        });
+      });
+    });
+  }
+  bianlijson = (data) => {
+    for (const i in data) {
+      if (data[i].children) {
+        this.bianlijson(data[i].children);
+      }
+      data[i].key = data[i].id;
+    }
   }
   handleStopClick = () => {
    // 停用
@@ -690,41 +734,6 @@ export default class Staff extends PureComponent {
       message.warn('请先选择');
       return false
     }
-  }
-  uniq = (arr) => {
-    let max = [];
-    let selectCityName = []
-    // for(var i=0;i<arr.length;i++) {
-    //   var item = arr[i].props.dataRef;
-    //   if(!(item['province'] in max) || (item['level'] > max[item['province']]['level'])){
-    //     // init compare
-    //     max[item['province']] = item;
-    //   }
-    // }
-    // Object.values(max)
-    for (var i = 0; i < arr.length; i++) {
-      var item = arr[i].props.dataRef
-      if (!item.children) {
-        item.machines.forEach((MItem) => {
-          max.push(MItem);
-        });
-        if (!(item['province'] in selectCityName)) {
-          selectCityName[item['province']] = item.province;
-        }
-        // selectCityName.push(item.province)
-      }
-    }
-    selectCityName = Object.values(selectCityName)
-    this.setState({
-      machineNum: max.length,
-      selectCityName,
-      machines: max,
-    }, () => {
-      console.log(this.state.machines)
-      this.setState({
-        editMachineModalVisible: false,
-      });
-    });
   }
   timeFormRef = (form) => {
     this.timeFormRef = form;
@@ -1029,7 +1038,7 @@ export default class Staff extends PureComponent {
           onEditMachineHandleModalVisibleClick={this.onEditDataHandleModalVisibleClick}
           editMachineEditModalConfirmLoading={this.state.editDataEditModalConfirmLoading}
           renderTreeNodes={this.renderDataTreeNodes}
-          treeData={this.state.DataTreeData}
+          treeData={this.state.dataTreeData}
           onSelect={this.onDataSelect}
 
           targetData={this.state.DataTargetData}

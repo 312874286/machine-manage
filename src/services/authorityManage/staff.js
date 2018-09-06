@@ -49,3 +49,15 @@ export async function getFunctionData({ restParams }) {
     restParams,
   });
 }
+
+export async function functionTree({ params }) {
+  return fetch.get(api.functionTree, {
+    body: JSON.stringify(params),
+  });
+}
+
+export async function userStatus({ params }) {
+  return fetch.post(api.userStatus, {
+    body: stringify(params),
+  });
+}

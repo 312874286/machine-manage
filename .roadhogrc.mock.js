@@ -3860,6 +3860,254 @@ const proxy = {
       ],
       "msg": "成功"
     })
+  },
+  'GET /user/function/data/all': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "functions": null,
+        "tree": {
+          "title": "机器管理系统",
+          "id": "XX",
+          "voName": null,
+          "column": null,
+          "children": [
+            {
+              "title": "货机管理",
+              "id": "1",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "机器管理",
+                  "id": "2",
+                  "voName": null,
+                  "column": null,
+                  "children": [
+                    {
+                      "title": "机器编号",
+                      "id": "1",
+                      "voName": "com.inno72.machine.vo.MachineListVo",
+                      "column": "machineCode",
+                      "children": null
+                    },
+                    {
+                      "title": "机器点位",
+                      "id": "2",
+                      "voName": "com.inno72.machine.vo.MachineListVo",
+                      "column": "localDesc",
+                      "children": null
+                    }
+                  ]
+                },
+                {
+                  "title": "点位管理",
+                  "id": "3",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "机器任务",
+                  "id": "31",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "订单管理",
+              "id": "12",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "订单管理",
+                  "id": "13",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "系统管理",
+              "id": "15",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "员工管理",
+                  "id": "16",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "部门管理",
+                  "id": "17",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "权限管理",
+                  "id": "18",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "角色管理",
+                  "id": "19",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "用户管理",
+              "id": "21",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "用户管理",
+                  "id": "22",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "巡检管理",
+              "id": "23",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "人员管理",
+                  "id": "24",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "工单管理",
+                  "id": "25",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "打卡记录",
+                  "id": "26",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "故障类型管理",
+                  "id": "27",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "补货记录",
+                  "id": "30",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "首页",
+              "id": "29",
+              "voName": null,
+              "column": null,
+              "children": []
+            },
+            {
+              "title": "项目管理",
+              "id": "4",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "游戏管理",
+                  "id": "10",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "商品管理",
+                  "id": "11",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "活动排期",
+                  "id": "20",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "机器排期",
+                  "id": "28",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "渠道管理",
+                  "id": "5",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "商户管理",
+                  "id": "6",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "店铺管理",
+                  "id": "7",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "活动管理",
+                  "id": "8",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "msg": "成功"
+    })
+  },
+  'post /system/user/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
   }
 };
 

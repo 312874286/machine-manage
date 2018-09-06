@@ -17,8 +17,9 @@ const api = map({
   updateFunctionArea: '/user/function/area/updateFunctionArea',
   getFunctionArea: '/user/function/area/list?userId={userId}',
   updateFunctionData: '/user/function/data/updateFunctionData',
-  getFunctionData: '/user/function/data/list?userId={userId}'
-
+  getFunctionData: '/user/function/data/list?userId={userId}',
+  functionTree: '/user/function/data/all',
+  userStatus: '/system/user/delete',
 });
 
 export default api;
