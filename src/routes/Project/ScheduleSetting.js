@@ -1002,6 +1002,7 @@ export default class ScheduleSettingList extends PureComponent {
         }
         // console.log('activityArrs', activityArrs)
         let dateList = this.drawLine(activityArrs)
+        console.log('dateList', dateList)
         this.setState({
           resList: activityArrs,
           dateList,
@@ -1056,7 +1057,8 @@ export default class ScheduleSettingList extends PureComponent {
         startTime: item.startTime,
         endTime: item.endTime,
         name: item.activityName,
-        id: item.id
+        id: item.id,
+        isDelete: item.isDelete,
       }
       activityArr.push(tmp);
     })
