@@ -51,16 +51,18 @@ export default class signInRecord extends PureComponent {
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
-    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
-      .children.filter((item) => item.path === 'signIn')
-    var obj = {}
-    if (pointSettingMenu[0].children) {
-      pointSettingMenu[0].children.forEach((item, e) => {
-        obj[item.path] = true;
-      })
-      this.setState({
-        account: obj
-      })
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+        .children.filter((item) => item.path === 'signIn')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
     }
   }
   // 获取列表

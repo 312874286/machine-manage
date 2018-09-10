@@ -152,15 +152,17 @@ export default class PointSettingList extends PureComponent {
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
-    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
-      .children.filter((item) => item.path === 'point-setting')
-    var obj = {}
-    pointSettingMenu[0].children.forEach((item, e) => {
-      obj[item.path] = true;
-    })
-    this.setState({
-      account: obj
-    })
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+        .children.filter((item) => item.path === 'point-setting')
+      var obj = {}
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取城市列表
   getAreaList = () => {

@@ -654,16 +654,18 @@ export default class machineSettingList extends PureComponent {
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
-    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
-      .children.filter((item) => item.path === 'machine-setting')
-    var obj = {}
-    if (pointSettingMenu[0].children) {
-      pointSettingMenu[0].children.forEach((item, e) => {
-        obj[item.path] = true;
-      })
-      this.setState({
-        account: obj
-      })
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+        .children.filter((item) => item.path === 'machine-setting')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
     }
   }
   getInput = () => {

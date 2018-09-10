@@ -45,16 +45,18 @@ export default class Order extends PureComponent {
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
-    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'order')[0]
-      .children.filter((item) => item.path === 'order')
-    var obj = {}
-    if (pointSettingMenu[0].children) {
-      pointSettingMenu[0].children.forEach((item, e) => {
-        obj[item.path] = true;
-      })
-      this.setState({
-        account: obj
-      })
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'order')[0]
+        .children.filter((item) => item.path === 'order')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
     }
   }
 

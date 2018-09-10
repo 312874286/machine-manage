@@ -67,16 +67,18 @@ export default class Account extends PureComponent {
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
-    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'authorityManage')[0]
-      .children.filter((item) => item.path === 'account')
-    var obj = {}
-    if (pointSettingMenu[0].children) {
-      pointSettingMenu[0].children.forEach((item, e) => {
-        obj[item.path] = true;
-      })
-      this.setState({
-        account: obj
-      })
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'authorityManage')[0]
+        .children.filter((item) => item.path === 'account')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
     }
   }
   onToEdit = (record) => {
