@@ -25,6 +25,8 @@ import {
   Spin,
   Popover,
   Cascader,
+  TimePicker,
+  Switch
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
@@ -127,7 +129,7 @@ const CreateForm = Form.create()(
   });
 const EditPointForm = Form.create()(
   (props) => {
-    const { editPointmodalVisible, form, editPointHandleAddClick, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName } = props;
+    const { editPointmodalVisible, form, editPointHandleAddClick, handleSupervisorySwitch, switchStatus, handleSupervisoryStartTime, handleSupervisoryEndTime, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName, modalData } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -139,12 +141,15 @@ const EditPointForm = Form.create()(
         sm: { span: 20 },
       },
     };
+    const config = {
+      rules: [{ type: 'object', required: true, message: 'Please select time!' }],
+    };
     return (
       <Modal
         title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">重置点位</span>
+          <div className="modalBox">
+            <span className="leftSpan"></span>
+            <span className="modalTitle">机器设置</span>
           </div>
         }
         visible={editPointmodalVisible}
@@ -154,6 +159,7 @@ const EditPointForm = Form.create()(
         width={800}
       >
         <div className="manageAppBox">
+          <h3>重置点位</h3>
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="当前点位">
               {getFieldDecorator('localDesc')(
@@ -161,9 +167,7 @@ const EditPointForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="新点位">
-              {getFieldDecorator('locale', {
-                rules: [{ required: true, message: '请输入新点位' }],
-              })(
+              {getFieldDecorator('locale')(
                 <Select
                   // mode="multiple"
                   // labelInValue
@@ -180,7 +184,7 @@ const EditPointForm = Form.create()(
                   {/*{*/}
                   {/*data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)*/}
                   {/*}*/}
-                  {data.map((item) => {
+                  {data.map((item,index) => {
                     return (
                         <Option value={item.text} key={item.id} data-id={item.id}>
                           <a title={item.text}>
@@ -191,6 +195,32 @@ const EditPointForm = Form.create()(
                   })}
                 </Select>
               )}
+            </FormItem>
+
+          </Form>
+          <h3>监控设置</h3>
+
+          <Form>
+            <FormItem
+              label="开启监控"
+              {...formItemLayout}
+            >
+              {/*{getFieldDecorator('radio-group')(*/}
+                {/*<RadioGroup>*/}
+                  {/*<Radio value="on">开启</Radio>*/}
+                  {/*<Radio value="off">关闭</Radio>*/}
+                {/*</RadioGroup>*/}
+              {/*)}*/}
+              <Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="监控时间"
+            >
+              <TimePicker defaultValue={moment('00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
+              <span>-</span>
+              <TimePicker defaultValue={moment('23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
+
             </FormItem>
           </Form>
         </div>
@@ -608,6 +638,10 @@ export default class machineSettingList extends PureComponent {
     logId: '',
     logModalPageNo: 1,
 
+    switchStatus: false,
+    supervisoryStartTime: '',
+    supervisoryEndTime: '',
+
     data: [],
     dataId: '',
     value: '',
@@ -707,7 +741,6 @@ export default class machineSettingList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     const { current } = pagination;
-    // console.log('params', params)
     this.setState({
       pageNo: current,
     }, () => {
@@ -772,13 +805,27 @@ export default class machineSettingList extends PureComponent {
   // 删除modal 删除事件
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
-    this.setState({
-      modalVisible: false,
-      modalData: item,
-      editPointmodalVisible: true,
-      data: [],
-    }, () => {
-      this.setModalData(item);
+    this.props.dispatch({
+      type: 'machineSetting/findMachineInfoById',
+      payload: {
+        params: {
+          machineId: item.id
+        }
+      },
+    }).then( (res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          modalVisible: false,
+          modalData: res.data,
+          switchStatus: !res.data.openStatus,
+          supervisoryStartTime: res.data.monitorStart,
+          supervisoryEndTime: res.data.monitorEnd,
+          editPointmodalVisible: true,
+          data: [],
+        }, () => {
+          this.setModalData(res.data);
+        });
+      }
     });
   }
   // 设置modal 数据
@@ -907,8 +954,14 @@ export default class machineSettingList extends PureComponent {
     });
   }
   editPointHandleAddClick = () => {
+
+    console.log('old localeId',this.state.modalData.localeId)
+    console.log('new localeId',this.state.dataId)
+    let localeId;
+    if (this.state.dataId == '') {
+      localeId = this.state.modalData.localeId
+    }
     // 确认修改点位
-    // console.log(this.state.dataId)
     this.pointForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -916,14 +969,20 @@ export default class machineSettingList extends PureComponent {
       this.setState({
         editPointEditModalConfirmLoading: true,
       });
-      let url = '';
-      let params = '';
-      if (this.state.modalData.id) {
-        url = 'machineSetting/updateLocaleMachineSetting';
-        params = { id: this.state.modalData.id, localeId: this.state.dataId };
-      }
+      let params = {
+        machineId: this.state.modalData.id,
+        localeId: localeId,
+        openStatus: this.state.switchStatus ? 0 : 1,
+        monitorStart: this.state.supervisoryStartTime,
+        monitorEnd: this.state.supervisoryEndTime
+      };
+      // if (this.state.modalData.id) {
+        // url = 'machineSetting/updateLocaleMachineSetting';
+        // url = 'machineSetting/updateMachine';
+        console.log('updateMachine params ==== ',params)
+      // }
       this.props.dispatch({
-        type: url,
+        type: 'machineSetting/updateLocaleMachineSetting',
         payload: {
           params,
         },
@@ -971,6 +1030,36 @@ export default class machineSettingList extends PureComponent {
     }
   }
   // 修改点位结束
+
+  // 监控开关
+  handleSupervisorySwitch = (value) => {
+    if (value == true) {
+      this.setState({
+        switchStatus: value,
+        supervisoryStartTime: '00:00:00',
+        supervisoryEndTime: '23:59:59'
+      });
+    } else {
+      this.setState({
+        switchStatus: value,
+        supervisoryStartTime: '',
+        supervisoryEndTime: ''
+      });
+    }
+  }
+  // 监控开始时间获取
+  handleSupervisoryStartTime = (time,timeString) => {
+    this.setState({
+      supervisoryStartTime: timeString
+    })
+  }
+  // 监控结束诗句获取
+  handleSupervisoryEndTime = (time,timeString) => {
+    this.setState({
+      supervisoryEndTime: timeString
+    })
+  }
+
   // 修改机器code开始
   // MachineCode
   handleNoClick = (item) => {
@@ -1702,7 +1791,8 @@ export default class machineSettingList extends PureComponent {
           //   </Fragment>
           // )
           <Fragment>
-            <a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>
+            {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
+            <a onClick={() => !account.setPoint ? null : this.handleEditClick(item)} style={{ display: !account.setPoint ? 'none' : ''}}>机器设置</a>
             <Divider type="vertical" />
             <a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>
             <Divider type="vertical" />
@@ -1812,8 +1902,13 @@ export default class machineSettingList extends PureComponent {
           onSelect={this.onSelect}
           onSearch={this.getPointSettingList}
           fetching={this.state.fetching}
+          handleSupervisorySwitch={this.handleSupervisorySwitch}
+          handleSupervisoryStartTime={this.handleSupervisoryStartTime}
+          handleSupervisoryEndTime={this.handleSupervisoryEndTime}
           // value={this.state.value}
-          pointName={this.state.pointName}
+          modalData={this.state.modalData}
+          pointName={this.state.modalData.localStr}
+          switchStatus={this.state.switchStatus}
         />
         <EditMachineCodeForm
           ref={this.saveMachineCodeFormRef}
