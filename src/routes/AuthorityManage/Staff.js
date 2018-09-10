@@ -889,9 +889,9 @@ export default class Staff extends PureComponent {
           },
         },
       }).then((res) => {
-        if (res.msg.indexOf('重复') > -1) {
+        if (res.msg.indexOf('父节点') > -1) {
           confirm({
-            content: '经检测有重复，是否需要进行合并',
+            content: res.msg,
             onOk() {
               return new Promise((resolve, reject) => {
                 setTimeout(
