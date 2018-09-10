@@ -129,7 +129,11 @@ const CreateForm = Form.create()(
   });
 const EditPointForm = Form.create()(
   (props) => {
-    const { editPointmodalVisible, form, editPointHandleAddClick, handleSupervisorySwitch, switchStatus, handleSupervisoryStartTime, handleSupervisoryEndTime, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName, modalData } = props;
+    const { editPointmodalVisible, form, editPointHandleAddClick,
+      handleSupervisorySwitch, switchStatus, handleSupervisoryStartTime,
+      handleSupervisoryEndTime, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading,
+      onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName, modalData,
+      supervisoryStartTime, supervisoryEndTime} = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -215,11 +219,10 @@ const EditPointForm = Form.create()(
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label="监控时间"
-            >
-              <TimePicker defaultValue={moment('00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
+              label="监控时间">
+              <TimePicker defaultValue={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
               <span>-</span>
-              <TimePicker defaultValue={moment('23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
+              <TimePicker defaultValue={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
 
             </FormItem>
           </Form>
@@ -818,8 +821,8 @@ export default class machineSettingList extends PureComponent {
           modalVisible: false,
           modalData: res.data,
           switchStatus: !res.data.openStatus,
-          supervisoryStartTime: res.data.monitorStart,
-          supervisoryEndTime: res.data.monitorEnd,
+          supervisoryStartTime: res.data.monitorStart || '00:00:00',
+          supervisoryEndTime: res.data.monitorEnd || '23:59:59',
           editPointmodalVisible: true,
           data: [],
         }, () => {
@@ -957,8 +960,8 @@ export default class machineSettingList extends PureComponent {
 
     console.log('old localeId',this.state.modalData.localeId)
     console.log('new localeId',this.state.dataId)
-    let localeId;
-    if (this.state.dataId == '') {
+    let localeId = this.state.dataId;
+    if (localeId == '') {
       localeId = this.state.modalData.localeId
     }
     // 确认修改点位
@@ -1893,6 +1896,8 @@ export default class machineSettingList extends PureComponent {
           modalData={this.state.modalData}
           pointName={this.state.modalData.localStr}
           switchStatus={this.state.switchStatus}
+          supervisoryStartTime={this.state.supervisoryStartTime}
+          supervisoryEndTime={this.state.supervisoryEndTime}
         />
         <EditMachineCodeForm
           ref={this.saveMachineCodeFormRef}
