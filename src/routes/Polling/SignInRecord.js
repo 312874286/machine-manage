@@ -330,6 +330,10 @@ export default class signInRecord extends PureComponent {
         }
       }
     }
+    const width = 100/(columns.length)
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].width = width + '%'
+    }
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>

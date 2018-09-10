@@ -336,6 +336,15 @@ export default class FaultType extends PureComponent {
           }
         }
       }
+      const width = 90/(columns.length - 1)
+      for (let i = 0; i < columns.length; i++) {
+        if (i < columns.length - 2) {
+          columns[i].width = width + '%'
+        }
+        if (i === columns.length - 2) {
+          columns[i].width = ''
+        }
+      }
     //   const data = [
     //     { code: 1, name: 'John Brown', parentName: 32, createId: 'New York No. 1 Lake Park', createTime: '11' },
     //   ];

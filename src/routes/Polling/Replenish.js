@@ -316,7 +316,8 @@ export default class replenish extends PureComponent {
         title: '补货人',
         dataIndex: 'name',
         width: '10%',
-        key: 'name'
+        key: 'name',
+        align: 'center'
       },
       {
         title: '手机号',
@@ -352,7 +353,11 @@ export default class replenish extends PureComponent {
         }
       }
     }
-    console.log('list', list)
+    const width = 100/(columns.length)
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].width = width + '%'
+    }
+    // console.log('list', list)
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>

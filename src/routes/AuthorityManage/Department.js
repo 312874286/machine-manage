@@ -113,6 +113,10 @@ export default class Department extends PureComponent {
         }
       }
     }
+    const width = 100/(columns.length)
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].width = width + '%'
+    }
     // const { userName } = this.state;
     const paginationProps = {
       showTotal: (total) => {

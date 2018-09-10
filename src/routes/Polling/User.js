@@ -1227,6 +1227,15 @@ export default class user extends PureComponent {
         }
       }
     }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,

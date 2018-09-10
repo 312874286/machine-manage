@@ -973,7 +973,7 @@ export default class Staff extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.warn(`${item.title}已存在，请重新选择`)
+        message.warn(`${dataTargetData[0].functionDepict}已存在，请重新选择`)
         return
       }
     }
@@ -1056,6 +1056,28 @@ export default class Staff extends PureComponent {
         ),
       },
     ]
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // const { userName } = this.state;
     const paginationProps = {
       showTotal: (total) => {

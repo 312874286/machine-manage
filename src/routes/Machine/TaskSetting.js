@@ -1707,11 +1707,11 @@ export default class TaskSetting extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)} style={{ display: !account.detail ? 'none' : ''}}>查看</a>
-            <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }} />
+            <Divider type="vertical" style={{ display: (item.status !== 0 && !account.update) ? 'none' : '' }} />
             <a onClick={item.status === 0 ? () => this.editTask(item) : null }
                style={{ display: (item.status !== 0 && !account.update) ? 'none' : '' }}
             >编辑</a>
-            <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }}/>
+            <Divider type="vertical" style={{ display: (item.status !== 0 && !account.delete) ? 'none' : '' }}/>
             <a onClick={item.status === 0 ? () => this.deleteTask(item) : null }
                style={{ display: (item.status !== 0 && !account.delete) ? 'none' : '' }}>删除</a>
           </Fragment>
@@ -1730,6 +1730,15 @@ export default class TaskSetting extends PureComponent {
             }
           }
         }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
       }
     }
     const formItemLayout = {

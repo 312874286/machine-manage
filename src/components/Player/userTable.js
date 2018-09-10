@@ -90,6 +90,10 @@ export default class userTable extends PureComponent {
         }
       }
     }
+    const width = 100/(columns.length)
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].width = width + '%'
+    }
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
