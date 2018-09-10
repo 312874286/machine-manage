@@ -83,3 +83,9 @@ export async function returnDeskTop({ params }) {
     body: stringify(params),
   });
 }
+
+export async function findMachineInfoById({ params }) {
+  return fetch.post(api.findMachineInfoById, {
+    body: stringify(params),
+  });
+}

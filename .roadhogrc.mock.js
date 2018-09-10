@@ -1133,10 +1133,23 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'POST /machine/machine/updateLocale':  (req, res) => {
+  'POST /machine/machine/updateMachine':  (req, res) => {
     res.send({
       "code": 0,
       "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /machine/machine/findMachineInfoById': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "6628a821f2e44a538e0e0801e494a2be",
+        "openStatus": 0,
+        "monitorStart": null,
+        "monitorEnd": null,
+        "localStr": "北京市-北京市-西城区-小西天-灯市口-YPY"
+      },
       "msg": "成功"
     })
   },
