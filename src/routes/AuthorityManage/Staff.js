@@ -889,7 +889,7 @@ export default class Staff extends PureComponent {
           },
         },
       }).then((res) => {
-        if (res.msg.indexOf('父节点') > -1) {
+        if (res.msg.indexOf('父级节点') > -1) {
           confirm({
             content: res.msg,
             onOk() {
