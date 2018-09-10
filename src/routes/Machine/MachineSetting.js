@@ -1792,7 +1792,7 @@ export default class machineSettingList extends PureComponent {
           // )
           <Fragment>
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
-            <a onClick={() => !account.setPoint ? null : this.handleEditClick(item)} style={{ display: !account.setPoint ? 'none' : ''}}>机器设置</a>
+            <a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>
             <Divider type="vertical" />
             <a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>
             <Divider type="vertical" />
