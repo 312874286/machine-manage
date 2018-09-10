@@ -1638,18 +1638,18 @@ export default class TaskSetting extends PureComponent {
 
   render() {
     const {
-      taskSetting: { list, page },
+      taskSetting: { list, page, unColumn },
       loading,
     } = this.props;
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
       editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo, account } = this.state
-    console.log('taskType', taskType)
-    const columns = [
+    let columns = [
       {
         title: '任务ID',
         dataIndex: 'id',
         width: '10%',
+        key: 'id',
       },
       {
         title: '任务类型',
@@ -1658,12 +1658,13 @@ export default class TaskSetting extends PureComponent {
         render(val) {
           return <span>{taskTypeLists[val]}</span>;
         },
+        key: 'type'
       },
       {
         title: '执行时间',
         width: '15%',
         dataIndex: 'doTime',
-
+        key: 'doTime'
       },
       {
         title: '任务状态',
@@ -1672,6 +1673,7 @@ export default class TaskSetting extends PureComponent {
         render(val) {
           return <span>{taskStatus[val]}</span>;
         },
+        key: 'status'
       },
       {
         title: '执行结果',
@@ -1682,16 +1684,19 @@ export default class TaskSetting extends PureComponent {
             <div>成功任务数：{item.taskSuss}</div>
             <div>执行失败： {item.taskAll - item.taskSuss}</div>
           </div>
-        )
+        ),
+        key: 'result'
       },
       {
         title: '创建人',
         width: '10%',
         dataIndex: 'creater',
+        key: 'creater'
       },
       {
         title: '创建时间',
         dataIndex: 'createTime',
+        key: 'createTime'
       },
       {
         fixed: 'right',
@@ -1711,6 +1716,20 @@ export default class TaskSetting extends PureComponent {
         ),
       },
     ];
+    // unColumn
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },

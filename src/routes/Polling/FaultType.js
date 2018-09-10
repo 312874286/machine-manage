@@ -311,9 +311,9 @@ export default class FaultType extends PureComponent {
     }
     render() {
       const { visible, solutionsLists, userName, No, account } = this.state;
-      const { faultType: { list, page, totalNo } } = this.props;
+      const { faultType: { list, page, totalNo, unColumn } } = this.props;
     //   console.log('list::', faultType);
-      const columns = [
+      let columns = [
         { title: '故障类型名称', dataIndex: 'name', key: 'name', width: '22%' },
         { title: '故障解决方案', dataIndex: 'parentName', key: 'parentName', width: '22%' },
         { title: '添加时间', dataIndex: 'createTime', key: 'createTime', width: '22%' },
@@ -321,6 +321,19 @@ export default class FaultType extends PureComponent {
         { title: '操作', dataIndex: '', key: 'action', render: (text, record) => <a href="javascript:;"
                                                                                   onClick={this.onEdit.bind(this, record)} style={{ display: !account.update ? 'none' : '' }}>编辑</a> },
       ];
+      if (unColumn) {
+        let leg = columns.length
+        for (let i = leg - 1; i >= 0; i--) {
+          for (let j = 0; j < unColumn.length; j++) {
+            if (columns[i]) {
+              if (columns[i].key === unColumn[j]) {
+                columns.splice(i, 1)
+                continue;
+              }
+            }
+          }
+        }
+      }
     //   const data = [
     //     { code: 1, name: 'John Brown', parentName: 32, createId: 'New York No. 1 Lake Park', createTime: '11' },
     //   ];

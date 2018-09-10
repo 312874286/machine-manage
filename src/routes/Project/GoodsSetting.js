@@ -972,34 +972,39 @@ export default class goodsSettingList extends PureComponent {
   handleChange = ({ fileList }) => this.setState({ fileList })
   bannerHandleChange = ({ fileList }) => this.setState({ bannerfileList: fileList })
   render() {
-    const { goodsSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
+    const { goodsSetting: { list, page, unColumn }, loading, log: { logList, logPage }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, account } = this.state;
     const { previewVisible, previewImage, fileList } = this.state
-    const columns = [
+    let columns = [
       {
         title: '商品ID',
         width: '10%',
         dataIndex: 'code',
+        key: 'code'
       },
       {
         title: '商品名称',
         width: '8%',
         dataIndex: 'name',
+        key: 'name'
       },
       {
         title: '规格描述',
         width: '8%',
         dataIndex: 'specRemark',
+        key: 'specRemark'
       },
       {
         title: '所属商户',
         width: '8%',
         dataIndex: 'sellerId',
+        key: 'sellerId'
       },
       {
         title: '所属店铺',
         width: '15%',
         dataIndex: 'shopId',
+        key: 'shopId'
       },
       {
         title: '图片缩略图',
@@ -1028,21 +1033,25 @@ export default class goodsSettingList extends PureComponent {
             null
           )
 
-        )
+        ),
+        key: 'img'
       },
       {
         title: '商品价格',
         width: '10%',
         dataIndex: 'price',
+        key: 'price'
       },
       {
         title: '商品数量',
         width: '10%',
         dataIndex: 'number',
+        key: 'number'
       },
       {
         title: '备注',
         dataIndex: 'remark',
+        key: 'remark'
       },
       {
         fixed: 'right',
@@ -1067,6 +1076,19 @@ export default class goodsSettingList extends PureComponent {
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

@@ -1588,22 +1588,24 @@ export default class machineSettingList extends PureComponent {
   }
   render() {
     const {
-      machineSetting: { list, page },
+      machineSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData,
       updateList, appLists, AisleList, message, appLists2, createTime, account } = this.state;
-    const columns = [
+    let columns = [
       {
         title: '机器编号',
         width: '15%',
         dataIndex: 'machineCode',
+        key: 'machineCode',
       },
       {
         title: '机器点位',
         width: '18%',
         dataIndex: 'localDesc',
+        key: 'localDesc'
       },
       {
         title: '系统状态',
@@ -1611,6 +1613,7 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
+        key: 'detail'
       },
       {
         title: '网络',
@@ -1619,15 +1622,17 @@ export default class machineSettingList extends PureComponent {
         render(val) {
           if (val !== null) {
             return <div className={styles.netStatusStyles}>
-              <img src={require(`../../assets/images/signalIcon/sign${val}.png`)}/>
+              <img src={require(`../../assets/images/signalIcon/sign${val ? val : 0}.png`)}/>
             </div>;
           }
         },
+        key: 'netStatus'
       },
       {
         title: '当前活动',
         width: '10%',
         dataIndex: 'activityName',
+        key: 'activityName'
       },
       // {
       //   title: '上传日志',
@@ -1670,7 +1675,8 @@ export default class machineSettingList extends PureComponent {
           } else {
             return <span>{machineStatus[0]}</span>
           }
-        }
+        },
+        key: 'machineStatus'
       },
       {
         fixed: 'right',
@@ -1705,6 +1711,20 @@ export default class machineSettingList extends PureComponent {
         ),
       },
     ];
+    // unColumn
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

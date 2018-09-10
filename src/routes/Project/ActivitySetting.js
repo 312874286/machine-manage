@@ -1443,18 +1443,20 @@ export default class activitySettingList extends PureComponent {
   }
 
   render() {
-    const { activitySetting: { list, page }, loading, activitySetting: { activityCountList, count }, activitySetting: { activityPaiCountList, PaiCount } } = this.props;
+    const { activitySetting: { list, page, unColumn }, loading, activitySetting: { activityCountList, count }, activitySetting: { activityPaiCountList, PaiCount } } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, watchModalVisible, modalData, account } = this.state;
-    const columns = [
+    let columns = [
       {
         title: '活动名称',
         width: '15%',
         dataIndex: 'name',
+        key: 'name'
       },
       {
         title: '活动编码',
         width: '15%',
         dataIndex: 'code',
+        key: 'code'
       },
       // {
       //   title: '所属商户',
@@ -1468,6 +1470,7 @@ export default class activitySettingList extends PureComponent {
         render(val) {
           return <span>{activityTypeLine[val]}</span>;
         },
+        key: 'type'
       },
       // {
       //   title: '商品/优惠券',
@@ -1486,10 +1489,12 @@ export default class activitySettingList extends PureComponent {
         title: '负责人',
         width: '10%',
         dataIndex: 'managerId',
+        key: 'managerId'
       },
       {
         title: '创建时间',
         dataIndex: 'createTime',
+        key: 'createTime'
       },
       {
         fixed: 'right',
@@ -1523,6 +1528,19 @@ export default class activitySettingList extends PureComponent {
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

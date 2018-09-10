@@ -686,41 +686,47 @@ export default class PointSettingList extends PureComponent {
   }
   render() {
     const {
-      pointSetting: { list, page },
+      pointSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, account } = this.state;
-    const columns = [
+    let columns = [
       {
         title: '所属省市区商圈',
         width: '10%',
         dataIndex: 'areaName',
+        key: 'areaName'
       },
       {
         title: '商场',
         width: '10%',
         dataIndex: 'mall',
+        key: 'mall'
       },
       {
         title: '点位名称',
         width: '10%',
         dataIndex: 'name',
+        key: 'name'
       },
       {
         title: '运营人',
         width: '10%',
         dataIndex: 'manager',
+        key: 'manager'
       },
       {
         title: '手机号',
         width: '10%',
         dataIndex: 'mobile',
+        key: 'mobile'
       },
       {
         title: '机器个数',
         width: '10%',
         dataIndex: 'userNum',
+        key: 'userNum'
       },
       {
         title: '机器编号',
@@ -738,10 +744,12 @@ export default class PointSettingList extends PureComponent {
           )
 
         ),
+        key: 'machineCode'
       },
       {
         title: '备注描述',
         dataIndex: 'remark',
+        key: 'remark'
       },
       {
         fixed: 'right',
@@ -760,6 +768,20 @@ export default class PointSettingList extends PureComponent {
         ),
       },
     ];
+    // unColumn
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

@@ -435,9 +435,9 @@ export default class shopSettingList extends PureComponent {
     );
   }
   render() {
-    const { shopSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
+    const { shopSetting: { list, page, unColumn }, loading, log: { logList, logPage }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, account } = this.state;
-    const columns = [
+    let columns = [
       // {
       //   title: '店铺ID',
       //   width: 200,
@@ -448,16 +448,19 @@ export default class shopSettingList extends PureComponent {
         title: 'Shop ID',
         width: '30%',
         dataIndex: 'shopCode',
+        key: 'shopCode'
       },
       {
         title: '所属商户',
         width: '30%',
         dataIndex: 'sellerId',
+        key: 'sellerId'
       },
       {
         title: '店铺名称',
         // width: 200,
         dataIndex: 'shopName',
+        key: 'shopName'
       },
       {
         fixed: 'right',
@@ -476,6 +479,19 @@ export default class shopSettingList extends PureComponent {
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

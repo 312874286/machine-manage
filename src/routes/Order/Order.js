@@ -197,7 +197,7 @@ export default class Order extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { order: { list, page }, log: { logList, logPage }, loading } = this.props;
+    const { order: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
     const { areaCode, keyword, areaList, account } = this.state;
 
     return (
@@ -252,6 +252,7 @@ export default class Order extends PureComponent {
               loading={loading}
               data={list}
               page={page}
+              unColumn={unColumn}
               handleTableChange={this.handleTableChange}
               onLogClick={this.handleLogClick}
             />

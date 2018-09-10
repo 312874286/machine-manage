@@ -739,14 +739,15 @@ export default class troubleBill extends PureComponent {
   }
   render() {
     const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId, No, account } = this.state;
-    const { troubleBill: { list, page, totalNo } } = this.props;
+    const { troubleBill: { list, page, totalNo, unColumn } } = this.props;
 
     var arr = ['未解决','已解决'];
     // console.log(11111, list, page);
     const columns = [{
       title: '故障单ID',
       dataIndex: 'code',
-      width: '10%'
+      width: '10%',
+      key: 'code'
     }, {
       title: '机器ID',
       dataIndex: 'machineCode',
@@ -854,6 +855,19 @@ export default class troubleBill extends PureComponent {
         </Fragment>
       ),
     }];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)

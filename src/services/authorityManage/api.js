@@ -20,6 +20,9 @@ const api = map({
   getFunctionData: '/user/function/data/list?userId={userId}',
   functionTree: '/user/function/data/all',
   userStatus: '/system/user/delete',
+
+  queryUserAuth: '/system/user/queryUserAuth?userId={userId}',
+  updateStatus: '/system/user/updateStatus',
 });
 
 export default api;

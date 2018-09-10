@@ -413,23 +413,26 @@ export default class gameSettingList extends PureComponent {
     );
   }
   render() {
-    const { gameSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
+    const { gameSetting: { list, page, unColumn }, loading, log: { logList, logPage }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, account} = this.state;
     const columns = [
       {
         title: '游戏名称',
         dataIndex: 'name',
         width: '10%',
+        key: 'name'
       },
       {
         title: '版本',
         dataIndex: 'version',
         width: '20%',
+        key: 'version'
       },
       {
         title: '点72版本',
         dataIndex: 'versionInno72',
         width: '10%',
+        key: 'versionInno72'
       },
       {
         title: '商品数量',
@@ -439,11 +442,13 @@ export default class gameSettingList extends PureComponent {
             <div>最小数量：{item.minGoodsNum}</div>
             <div>最大数量：{item.maxGoodsNum}</div>
           </Fragment>
-        )
+        ),
+        key: 'number'
       },
       {
         title: '备注描述',
         dataIndex: 'remark',
+        key: 'remark'
       },
       {
         fixed: 'right',
@@ -464,6 +469,19 @@ export default class gameSettingList extends PureComponent {
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

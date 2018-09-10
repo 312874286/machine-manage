@@ -392,12 +392,12 @@ export default class channelSettingList extends PureComponent {
   }
   render() {
     const {
-      channelSetting: { list, page },
+      channelSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, account } = this.state;
-    const columns = [
+    let columns = [
       // {
       //   title: '渠道ID',
       //   width: 200,
@@ -408,6 +408,7 @@ export default class channelSettingList extends PureComponent {
         title: '渠道编码',
         width: '45%',
         dataIndex: 'channelCode',
+        key: 'channelCode'
       },
       // {
       //   title: '渠道状态',
@@ -439,6 +440,7 @@ export default class channelSettingList extends PureComponent {
       {
         title: '渠道名称',
         dataIndex: 'channelName',
+        key: 'channelName'
       },
       {
         fixed: 'right',
@@ -457,6 +459,19 @@ export default class channelSettingList extends PureComponent {
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>

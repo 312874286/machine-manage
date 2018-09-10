@@ -44,47 +44,56 @@ export default class orderTable extends PureComponent {
       data,
       page,
       loading,
+      unColumn
     } = this.props;
     const columns = [
       {
         title: '订单号',
         dataIndex: 'orderNum',
         width: 200,
+        key: 'orderNum'
       },
       {
         title: '用户Id',
         dataIndex: 'userId',
         width: 300,
+        key: 'userId'
       },
       {
         title: '用户姓名',
         dataIndex: 'nickName',
         width: 100,
+        key: 'nickName'
       },
       {
         title: '店铺',
         dataIndex: 'shopsName',
         width: 100,
+        key: 'shopsName'
       },
       {
         title: '机器点位',
         dataIndex: 'merPointAddress',
         width: 200,
+        key: 'merPointAddress'
       },
       {
         title: '机器编号',
         dataIndex: 'machineCode',
         width: 100,
+        key: 'machineCode'
       },
       {
         title: '活动名称',
         dataIndex: 'activityName',
         width: 100,
+        key: 'activityName'
       },
       {
         title: '游戏名称',
         dataIndex: 'gameName',
         width: 100,
+        key: 'gameName'
       },
       {
         title: '是否掉货',
@@ -93,6 +102,7 @@ export default class orderTable extends PureComponent {
         render: (value) => {
           return value === 1 ? '已出货' : '未出货';
         },
+        key: 'goodsStatus'
       },
       {
         title: '商品名称',
@@ -105,6 +115,7 @@ export default class orderTable extends PureComponent {
           });
           return nameList.join('、');
         },
+        key: 'orderGoodsList'
       },
       // {
       //   title: '掉货数量',
@@ -118,6 +129,7 @@ export default class orderTable extends PureComponent {
         title: '下单时间',
         dataIndex: 'orderTime',
         width: 200,
+        key: 'orderTime'
       },
       // {
       //   title: '订单金额',
@@ -127,6 +139,7 @@ export default class orderTable extends PureComponent {
         title: '订单类型',
         dataIndex: 'orderType',
         width: 100,
+        key: 'orderType'
       },
       {
         title: '支付状态',
@@ -139,11 +152,13 @@ export default class orderTable extends PureComponent {
             return '支付失败';
           }
         },
+        key: 'payStatus'
       },
       {
         title: '支付时间',
         dataIndex: 'payTime',
         width: 200,
+        key: 'payTime'
       },
       // {
       //   title: '操作',
@@ -154,6 +169,19 @@ export default class orderTable extends PureComponent {
       //   ),
       // },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`
     const paginationProps = {
       showTotal: (total) => {

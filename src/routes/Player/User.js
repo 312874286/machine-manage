@@ -142,7 +142,7 @@ export default class PlayerUser extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { player: { list, page }, log: { logList, logPage }, loading } = this.props;
+    const { player: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
     const { keyword, account } = this.state;
 
     return (
@@ -181,6 +181,7 @@ export default class PlayerUser extends PureComponent {
               loading={loading}
               data={list}
               page={page}
+              unColumn={unColumn}
               handleTableChange={this.handleTableChange}
               onLogClick={this.handleLogClick}
             />

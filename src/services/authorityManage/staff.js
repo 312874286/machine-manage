@@ -61,3 +61,15 @@ export async function userStatus({ params }) {
     body: stringify(params),
   });
 }
+
+export async function queryUserAuth({ restParams }) {
+  return fetch.get(api.queryUserAuth, {
+    restParams,
+  });
+}
+
+export async function updateStatus({ params }) {
+  return fetch.post(api.updateStatus, {
+    body: stringify(params),
+  });
+}

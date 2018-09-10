@@ -1143,35 +1143,40 @@ export default class user extends PureComponent {
   }
   render() {
     const {
-      user: { list, page },
+      user: { list, page, unColumn },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists, account } = this.state;
-    const columns = [
+    let columns = [
       {
         title: '姓名',
         dataIndex: 'name',
         width: '100px',
+        key: 'name'
       },
       {
         title: '手机号',
         dataIndex: 'phone',
         width: '150px',
+        key: 'phone'
       },
       {
         title: '身份证号',
         dataIndex: 'cardNo',
         width: '200px',
+        key: 'cardNo'
       },
       {
         title: '公司',
         dataIndex: 'enterprise',
         width: '100px',
+        key: 'enterprise'
       },
       {
         title: '负责区域',
         dataIndex: 'area',
         width: '100px',
+        key: 'area'
       },
       {
         title: '负责的机器',
@@ -1179,13 +1184,15 @@ export default class user extends PureComponent {
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
         width: '200px',
+        key: 'detail'
       },
       {
         title: '状态',
         dataIndex: 'status',
         render(val) {
           return <span>{userStatus[val]}</span>
-        }
+        },
+        key: 'status'
       },
       {
         fixed: 'right',
@@ -1205,6 +1212,19 @@ export default class user extends PureComponent {
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,

@@ -273,42 +273,61 @@ export default class signInRecord extends PureComponent {
   }
   render() {
     const {
-      signInRecord: { list, page },
+      signInRecord: { list, page, unColumn },
       loading,
     } = this.props;
     const { selectedRows, account } = this.state;
-    const columns = [
+    let columns = [
       {
         title: '姓名',
         dataIndex: 'name',
         width: 150,
+        key: 'name'
       },
       {
         title: '手机号',
         dataIndex: 'phone',
         width: 200,
+        key: 'phone'
       },
       {
         title: '公司',
         dataIndex: 'enterprise',
         width: 150,
+        key: 'enterprise'
       },
       {
         title: '机器点位',
         dataIndex: 'localeName',
         width: 200,
+        key: 'localeName'
       },
       {
         title: '机器编号',
         dataIndex: 'machineCode',
         width: 200,
+        key: 'machineCode'
       },
       {
         title: '打卡时间',
         dataIndex: 'createTime',
         width: 250,
+        key: 'createTime'
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>

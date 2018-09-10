@@ -287,40 +287,46 @@ export default class replenish extends PureComponent {
   }
   render() {
     const {
-      replenish: { list, page },
+      replenish: { list, page, unColumn },
       loading,
     } = this.props;
     const { selectedRows, account } = this.state;
-    const columns = [
+    let columns = [
       {
         title: '补货时间',
         dataIndex: 'createTime',
         width: '15%',
+        key: 'createTime'
       },
       {
         title: '机器编号',
         width: '10%',
         dataIndex: 'machineCode',
+        key: 'machineCode'
       },
       {
         title: '机器点位',
         dataIndex: 'localeStr',
         width: '30%',
+        key: 'localeStr'
       },
       {
         title: '补货人',
         dataIndex: 'name',
         width: '10%',
+        key: 'name'
       },
       {
         title: '手机号',
         width: '10%',
         dataIndex: 'phone',
+        key: 'phone'
       },
       {
         title: '负责区域',
         dataIndex: 'area',
         width: '10%',
+        key: 'area'
       },
       {
         title: '补货明细',
@@ -328,8 +334,22 @@ export default class replenish extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
+        key: 'detail'
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     console.log('list', list)
     return (
       <PageHeaderLayout>

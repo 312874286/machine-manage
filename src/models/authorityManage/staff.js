@@ -1,5 +1,6 @@
 import { getSystemUserList, getSystemRoleAll, getSystemUserAuth, getSystemUserQueryUserRoles,
-  updateFunctionArea, getFunctionArea, functionTree, userStatus, updateFunctionData, getFunctionData  } from '../../services/authorityManage/staff';
+  updateFunctionArea, getFunctionArea, functionTree, userStatus, updateFunctionData, getFunctionData,
+  queryUserAuth, updateStatus} from '../../services/authorityManage/staff';
 
 export default {
   namespace: 'staff',
@@ -54,15 +55,39 @@ export default {
       return response;
     },
     *getFunctionData({ payload: { restParams } }, { call }) {
-      const response = yield call(getFunctionData, { restParams });
-      return response;
+      const response = yield call(getFunctionData, {restParams});
+      return response
     },
     *functionTree({ payload: { params } }, { call }) {
       const response = yield call(functionTree, { params });
       return response.data.tree;
+        // const { code, data } = response;
+        // if (code !== 0) return;
+        // const arr = [];
+        // if (data.tree) {
+        //   for (let i = 0; i < data.length; i++) {
+        //     const a = {
+        //       key: data[i].id,
+        //       title: data[i].title,
+        //       functionId: data[i].id,
+        //       voName: data[i].voName,
+        //       voColumn: data[i].voColumn
+        //     };
+        //     arr.push(a);
+        //   }
+        // }
+        // return arr;
     },
     *userStatus({ payload: { params } }, { call }) {
       const response = yield call(userStatus, { params });
+      return response;
+    },
+    *queryUserAuth({ payload: { restParams } }, { call }) {
+      const response = yield call(queryUserAuth, { restParams });
+      return response.data;
+    },
+    *updateStatus({ payload: { params } }, { call }) {
+      const response = yield call(updateStatus, { params });
       return response;
     },
 

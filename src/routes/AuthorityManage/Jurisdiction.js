@@ -85,9 +85,9 @@ export default class Jurisdiction extends PureComponent {
   }
   render() {
     const { userName, No, account } = this.state;
-    const { jurisdiction: { list, page, totalNo } } = this.props;
+    const { jurisdiction: { list, page, totalNo, unColumn } } = this.props;
     // console.log(111,list,page);
-    const columns = [
+    let columns = [
       {
         title: '权限名称',
         dataIndex: 'functionDepict',
@@ -120,6 +120,19 @@ export default class Jurisdiction extends PureComponent {
         width: '15%'
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
     // const { userName } = this.state;
     const paginationProps = {
       showTotal: (total) => {
