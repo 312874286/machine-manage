@@ -366,7 +366,7 @@ const ManageAisleForm = Form.create()(
 const WatchForm = Form.create()(
   (props) => {
     const { form, ManageWatchModalVisible, ManageWatchEditModalConfirmLoading, ManageWatchHandleModalVisibleClick,
-      appUpdate,appRefresh, machineDetail } = props;
+      appUpdate,appRefresh, machineDetail, returnBtn } = props;
     // const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -413,13 +413,20 @@ const WatchForm = Form.create()(
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
               <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
-              <span>
-              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
-              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
-              <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
-            </span>
+              <div>
+                <div style={{ marginBottom: '18px' }}>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
+                </div>
+                <div>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
+                  <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
+                </div>
+              </div>
             </div>
           </div>
+
           <div style={{ padding: '0px' }}>
             <Row gutter={16}>
               <Col span={12}>
@@ -1271,6 +1278,27 @@ export default class machineSettingList extends PureComponent {
       }
     });
   }
+  returnBtn = (returnStatus) => {
+    this.props.dispatch({
+      type: 'machineSetting/returnDeskTop',
+      payload: {
+        params: {
+          machineId: this.state.modalData.id,
+          status:  returnStatus ? returnStatus : '',
+        },
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.success('发送成功');
+      }
+    });
+  }
+
   appRefresh = () => {
     // console.log('刷新了app', this.state.modalData);
     this.handleManageAppClick(this.state.modalData);
@@ -1982,6 +2010,7 @@ export default class machineSettingList extends PureComponent {
           appUpdate={this.appUpdate}
           appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
+          returnBtn={this.returnBtn}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}
