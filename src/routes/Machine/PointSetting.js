@@ -152,6 +152,7 @@ export default class PointSettingList extends PureComponent {
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
+    console.log('setAccountMenusList', setAccountMenusList)
     if (setAccountMenusList) {
       const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
         .children.filter((item) => item.path === 'point-setting')
