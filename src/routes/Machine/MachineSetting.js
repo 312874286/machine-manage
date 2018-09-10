@@ -25,6 +25,8 @@ import {
   Spin,
   Popover,
   Cascader,
+  TimePicker,
+  Switch
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
@@ -34,8 +36,6 @@ import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
-
-
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -128,7 +128,11 @@ const CreateForm = Form.create()(
   });
 const EditPointForm = Form.create()(
   (props) => {
-    const { editPointmodalVisible, form, editPointHandleAddClick, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading, onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName } = props;
+    const { editPointmodalVisible, form, editPointHandleAddClick,
+      handleSupervisorySwitch, switchStatus, handleSupervisoryStartTime,
+      handleSupervisoryEndTime, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading,
+      onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName, modalData,
+      supervisoryStartTime, supervisoryEndTime} = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -140,12 +144,15 @@ const EditPointForm = Form.create()(
         sm: { span: 20 },
       },
     };
+    const config = {
+      rules: [{ type: 'object', required: true, message: 'Please select time!' }],
+    };
     return (
       <Modal
         title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">重置点位</span>
+          <div className="modalBox">
+            <span className="leftSpan"></span>
+            <span className="modalTitle">机器设置</span>
           </div>
         }
         visible={editPointmodalVisible}
@@ -155,6 +162,7 @@ const EditPointForm = Form.create()(
         width={800}
       >
         <div className="manageAppBox">
+          <h3>重置点位</h3>
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="当前点位">
               {getFieldDecorator('localDesc')(
@@ -163,7 +171,7 @@ const EditPointForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="新点位">
               {getFieldDecorator('locale', {
-                rules: [{ required: true, message: '请输入新点位' }],
+                initialValue: undefined,
               })(
                 <Select
                   // mode="multiple"
@@ -181,7 +189,7 @@ const EditPointForm = Form.create()(
                   {/*{*/}
                   {/*data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)*/}
                   {/*}*/}
-                  {data.map((item) => {
+                  {data.map((item,index) => {
                     return (
                       <Option value={item.text} key={item.id} data-id={item.id}>
                         <a title={item.text}>
@@ -192,6 +200,31 @@ const EditPointForm = Form.create()(
                   })}
                 </Select>
               )}
+            </FormItem>
+
+          </Form>
+          <h3>监控设置</h3>
+
+          <Form>
+            <FormItem
+              label="开启监控"
+              {...formItemLayout}
+            >
+              {/*{getFieldDecorator('radio-group')(*/}
+              {/*<RadioGroup>*/}
+              {/*<Radio value="on">开启</Radio>*/}
+              {/*<Radio value="off">关闭</Radio>*/}
+              {/*</RadioGroup>*/}
+              {/*)}*/}
+              <Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="监控时间">
+              <TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
+              <span>-</span>
+              <TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
+
             </FormItem>
           </Form>
         </div>
@@ -333,7 +366,7 @@ const ManageAisleForm = Form.create()(
 const WatchForm = Form.create()(
   (props) => {
     const { form, ManageWatchModalVisible, ManageWatchEditModalConfirmLoading, ManageWatchHandleModalVisibleClick,
-      appUpdate,appRefresh, machineDetail, returnBtn } = props;
+      appUpdate,appRefresh, machineDetail } = props;
     // const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -380,17 +413,11 @@ const WatchForm = Form.create()(
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
               <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
-              <div>
-                <div style={{ marginBottom: '18px' }}>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
-                </div>
-                <div>
-                   <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
-                   <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
-                </div>
-              </div>
+              <span>
+              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
+              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
+              <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
+            </span>
             </div>
           </div>
           <div style={{ padding: '0px' }}>
@@ -615,6 +642,10 @@ export default class machineSettingList extends PureComponent {
     logId: '',
     logModalPageNo: 1,
 
+    switchStatus: false,
+    supervisoryStartTime: '',
+    supervisoryEndTime: '',
+
     data: [],
     dataId: '',
     value: '',
@@ -646,7 +677,8 @@ export default class machineSettingList extends PureComponent {
     editMachineCodeEditModalConfirmLoading: false,
 
     UploadLogVisible: false,
-    UploadLogConfirmLoading: false
+    UploadLogConfirmLoading: false,
+
   };
   constructor(props) {
     super(props);
@@ -696,7 +728,6 @@ export default class machineSettingList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     const { current } = pagination;
-    // console.log('params', params)
     this.setState({
       pageNo: current,
     }, () => {
@@ -761,20 +792,36 @@ export default class machineSettingList extends PureComponent {
   // 删除modal 删除事件
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
-    this.setState({
-      modalVisible: false,
-      modalData: item,
-      editPointmodalVisible: true,
-      data: [],
-    }, () => {
-      this.setModalData(item);
+    this.props.dispatch({
+      type: 'machineSetting/findMachineInfoById',
+      payload: {
+        params: {
+          machineId: item.id
+        }
+      },
+    }).then( (res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          modalVisible: false,
+          modalData: res.data,
+          switchStatus: !res.data.openStatus,
+          supervisoryStartTime: res.data.monitorStart || '00:00:00',
+          supervisoryEndTime: res.data.monitorEnd || '23:59:59',
+          editPointmodalVisible: true,
+          data: [],
+        }, () => {
+          this.setModalData(res.data);
+        });
+      }
     });
   }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
+      this.pointForm.resetFields()
       this.setState({
-        pointName: data.localDesc
+        pointName: data.localDesc,
+        data: []
       })
       // this.pointForm.setFieldsValue({
       //   localDesc: data.localDesc,
@@ -785,8 +832,10 @@ export default class machineSettingList extends PureComponent {
       //   localDesc: undefined,
       //   locale: undefined,
       // });
+      this.pointForm.resetFields()
       this.setState({
-        pointName: ''
+        pointName: '',
+        data: []
       })
     }
   }
@@ -896,8 +945,14 @@ export default class machineSettingList extends PureComponent {
     });
   }
   editPointHandleAddClick = () => {
+
+    console.log('old localeId',this.state.modalData.localeId)
+    console.log('new localeId',this.state.dataId)
+    let localeId = this.state.dataId;
+    if (localeId == '') {
+      localeId = this.state.modalData.localeId
+    }
     // 确认修改点位
-    // console.log(this.state.dataId)
     this.pointForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -905,14 +960,20 @@ export default class machineSettingList extends PureComponent {
       this.setState({
         editPointEditModalConfirmLoading: true,
       });
-      let url = '';
-      let params = '';
-      if (this.state.modalData.id) {
-        url = 'machineSetting/updateLocaleMachineSetting';
-        params = { id: this.state.modalData.id, localeId: this.state.dataId };
-      }
+      let params = {
+        machineId: this.state.modalData.id,
+        localeId: localeId,
+        openStatus: this.state.switchStatus ? 0 : 1,
+        monitorStart: this.state.supervisoryStartTime,
+        monitorEnd: this.state.supervisoryEndTime
+      };
+      // if (this.state.modalData.id) {
+      // url = 'machineSetting/updateLocaleMachineSetting';
+      // url = 'machineSetting/updateMachine';
+      console.log('updateMachine params ==== ',params)
+      // }
       this.props.dispatch({
-        type: url,
+        type: 'machineSetting/updateLocaleMachineSetting',
         payload: {
           params,
         },
@@ -960,6 +1021,36 @@ export default class machineSettingList extends PureComponent {
     }
   }
   // 修改点位结束
+
+  // 监控开关
+  handleSupervisorySwitch = (value) => {
+    if (value == true) {
+      this.setState({
+        switchStatus: value,
+        supervisoryStartTime: '00:00:00',
+        supervisoryEndTime: '23:59:59'
+      });
+    } else {
+      this.setState({
+        switchStatus: value,
+        supervisoryStartTime: '',
+        supervisoryEndTime: ''
+      });
+    }
+  }
+  // 监控开始时间获取
+  handleSupervisoryStartTime = (time,timeString) => {
+    this.setState({
+      supervisoryStartTime: timeString
+    })
+  }
+  // 监控结束诗句获取
+  handleSupervisoryEndTime = (time,timeString) => {
+    this.setState({
+      supervisoryEndTime: timeString
+    })
+  }
+
   // 修改机器code开始
   // MachineCode
   handleNoClick = (item) => {
@@ -1177,26 +1268,6 @@ export default class machineSettingList extends PureComponent {
           maxCount: 1,
         });
         message.success(updateStatusText + '成功');
-      }
-    });
-  }
-  returnBtn = (returnStatus) => {
-    this.props.dispatch({
-      type: 'machineSetting/returnDeskTop',
-      payload: {
-        params: {
-          machineId: this.state.modalData.id,
-          status:  returnStatus ? returnStatus : '',
-        },
-      },
-    }).then((resp) => {
-      if (resp && resp.code === 0) {
-        message.config({
-          top: 100,
-          duration: 2,
-          maxCount: 1,
-        });
-        message.success('发送成功');
       }
     });
   }
@@ -1599,21 +1670,24 @@ export default class machineSettingList extends PureComponent {
   }
   render() {
     const {
-      machineSetting: { list, page },
+      machineSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
-    const columns = [
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData,
+      updateList, appLists, AisleList, message, appLists2, createTime, account } = this.state;
+    let columns = [
       {
         title: '机器编号',
         width: '15%',
         dataIndex: 'machineCode',
+        key: 'machineCode',
       },
       {
         title: '机器点位',
         width: '18%',
         dataIndex: 'localDesc',
+        key: 'localDesc'
       },
       {
         title: '系统状态',
@@ -1621,6 +1695,7 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
+        key: 'detail'
       },
       {
         title: '网络',
@@ -1629,15 +1704,17 @@ export default class machineSettingList extends PureComponent {
         render(val) {
           if (val !== null) {
             return <div className={styles.netStatusStyles}>
-              <img src={require(`../../assets/images/signalIcon/sign${val}.png`)}/>
+              <img src={require(`../../assets/images/signalIcon/sign${val ? val : 0}.png`)}/>
             </div>;
           }
         },
+        key: 'netStatus'
       },
       {
         title: '当前活动',
         width: '10%',
         dataIndex: 'activityName',
+        key: 'activityName'
       },
       // {
       //   title: '上传日志',
@@ -1647,16 +1724,6 @@ export default class machineSettingList extends PureComponent {
       //       style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }}
       //       onClick={() => this.uploadLog(item)}>查看</div>
       //   ),
-      // },
-      // {
-      //   title: '商品缺货状态',
-      //   render: (text, item) => ((!item.goodsStatus) ? (
-      //     <span>正常</span>
-      //   ) : (
-      //     <Popover placement="left" content={item.goodsStatus} title={null} trigger="hover">
-      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-      //     </Popover>
-      //   )),
       // },
       // {
       //   title: '货道故障',
@@ -1690,33 +1757,19 @@ export default class machineSettingList extends PureComponent {
           } else {
             return <span>{machineStatus[0]}</span>
           }
-        }
+        },
+        key: 'machineStatus'
       },
       {
         fixed: 'right',
         title: '操作',
         width: 180,
         render: (text, item) => (
-          // (item.localDesc) ? (
-          //   <Fragment>
-          //     <a onClick={() => this.handleEditClick(item)}>重置点位</a>
-          //     <Divider type="vertical" />
-          //     <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
-          //     <Divider type="vertical" />
-          //     <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
-          //   </Fragment>) : (
-          //   <Fragment>
-          //     <a style={{ color: 'grey', cursor: 'not-allowed' }}>重置点位</a>
-          //     <Divider type="vertical" />
-          //     <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
-          //     <Divider type="vertical" />
-          //     <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
-          //   </Fragment>
-          // )
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>重置点位</a>
+            {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
+            <a onClick={() => this.handleEditClick(item)}>机器设置</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleManageAppClick(item)}>管理App</a>
+            <a onClick={() => this.handleManageAppClick(item)} >管理App</a>
             <Divider type="vertical" />
             <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
             <Divider type="vertical" />
@@ -1725,6 +1778,30 @@ export default class machineSettingList extends PureComponent {
         ),
       },
     ];
+    // unColumn
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
+    // console.log('columns', columns, width)
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -1800,8 +1877,15 @@ export default class machineSettingList extends PureComponent {
           onSelect={this.onSelect}
           onSearch={this.getPointSettingList}
           fetching={this.state.fetching}
+          handleSupervisorySwitch={this.handleSupervisorySwitch}
+          handleSupervisoryStartTime={this.handleSupervisoryStartTime}
+          handleSupervisoryEndTime={this.handleSupervisoryEndTime}
           // value={this.state.value}
-          pointName={this.state.pointName}
+          modalData={this.state.modalData}
+          pointName={this.state.modalData.localStr}
+          switchStatus={this.state.switchStatus}
+          supervisoryStartTime={this.state.supervisoryStartTime}
+          supervisoryEndTime={this.state.supervisoryEndTime}
         />
         <EditMachineCodeForm
           ref={this.saveMachineCodeFormRef}
@@ -1898,7 +1982,6 @@ export default class machineSettingList extends PureComponent {
           appUpdate={this.appUpdate}
           appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
-          returnBtn={this.returnBtn}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}
