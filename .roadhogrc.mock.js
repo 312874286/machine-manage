@@ -193,6 +193,230 @@ const proxy = {
           merchantAdmin: 1,
           merchantId: 'asdnoasndasjd',
         },
+        // functions: [
+        //   {
+        //     id: 'a33',
+        //     functionDepict: '首页',
+        //     functionPath: 'homePage',
+        //     parentId: null,
+        //     functionLevel: 1,
+        //     functionIcon: 'homePage',
+        //   },
+        //   {
+        //     id: 'a1',
+        //     functionDepict: '货机管理',
+        //     functionPath: 'machine',
+        //     parentId: null,
+        //     functionLevel: 1,
+        //     functionIcon: 'machine',
+        //     color: '#ffd322'
+        //   },
+        //   {
+        //     id: 'a2',
+        //     functionDepict: '机器管理',
+        //     functionPath: 'machine-setting',
+        //     parentId: 'a1',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a4',
+        //     functionDepict: '点位管理',
+        //     functionPath: 'point-setting',
+        //     parentId: 'a1',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a33',
+        //     functionDepict: '任务管理',
+        //     functionPath: 'task-setting',
+        //     parentId: 'a1',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a6',
+        //     functionDepict: '项目管理',
+        //     functionPath: 'project',
+        //     parentId: null,
+        //     functionLevel: 1,
+        //     functionIcon: 'project',
+        //   },
+        //   {
+        //     id: 'a7',
+        //     functionDepict: '渠道管理',
+        //     functionPath: 'channel',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a8',
+        //     functionDepict: '商户管理',
+        //     functionPath: 'merchant',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a9',
+        //     functionDepict: '活动管理',
+        //     functionPath: 'activity',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a20',
+        //     functionDepict: '活动排期',
+        //     functionPath: 'schedule',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a10',
+        //     functionDepict: '店铺管理',
+        //     functionPath: 'shop',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a19',
+        //     functionDepict: '游戏管理',
+        //     functionPath: 'game',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a25',
+        //     functionDepict: '商品管理',
+        //     functionPath: 'goods',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a34',
+        //     functionDepict: '机器排期',
+        //     functionPath: 'machinePlan',
+        //     parentId: 'a6',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a14',
+        //     functionDepict: '系统管理',
+        //     functionPath: 'system',
+        //     parentId: null,
+        //     functionLevel: 1,
+        //     functionIcon: 'system',
+        //     color: '#ff4c72'
+        //   },
+        //   {
+        //     id: 'a15',
+        //     functionDepict: '角色管理',
+        //     functionPath: 'account',
+        //     parentId: 'a14',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a16',
+        //     functionDepict: '权限管理',
+        //     functionPath: 'jurisdiction',
+        //     parentId: 'a14',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a17',
+        //     functionDepict: '部门管理',
+        //     functionPath: 'department',
+        //     parentId: 'a14',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a18',
+        //     functionDepict: '员工管理',
+        //     functionPath: 'staff',
+        //     parentId: 'a14',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a21',
+        //     functionDepict: '订单管理',
+        //     functionPath: 'order',
+        //     parentId: null,
+        //     functionLevel: 1,
+        //     functionIcon: 'order',
+        //     color: 'green'
+        //   },
+        //   {
+        //     id: 'a22',
+        //     functionDepict: '订单管理',
+        //     functionPath: 'order',
+        //     parentId: 'a21',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a23',
+        //     functionDepict: '用户管理',
+        //     functionPath: 'player',
+        //     parentId: null,
+        //     functionLevel: 1,
+        //     functionIcon: 'player',
+        //     color: 'yellow'
+        //   },
+        //   {
+        //     id: 'a24',
+        //     functionDepict: '用户管理',
+        //     functionPath: 'user',
+        //     parentId: 'a23',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a26',
+        //     functionDepict: '巡检管理',
+        //     functionPath: 'check',
+        //     parentId: null,
+        //     functionLevel: 1,
+        //     functionIcon: 'check',
+        //     color: '#174a79'
+        //   },
+        //   {
+        //     id: 'a27',
+        //     functionDepict: '故障单管理',
+        //     functionPath: 'fault',
+        //     parentId: 'a26',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a28',
+        //     functionDepict: '人员管理',
+        //     functionPath: 'user',
+        //     parentId: 'a26',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a29',
+        //     functionDepict: '打卡记录',
+        //     functionPath: 'signIn',
+        //     parentId: 'a26',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a30',
+        //     functionDepict: '故障类型',
+        //     functionPath: 'faultType',
+        //     parentId: 'a26',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a31',
+        //     functionDepict: '工单管理',
+        //     functionPath: 'workOrder',
+        //     parentId: 'a26',
+        //     functionLevel: 2,
+        //   },
+        //   {
+        //     id: 'a32',
+        //     functionDepict: '补货记录',
+        //     functionPath: 'replenish',
+        //     parentId: 'a26',
+        //     functionLevel: 2,
+        //   },
+        // ],
         functions: [
           {
             id: 'a33',
@@ -3793,9 +4017,505 @@ const proxy = {
     })
   },
   'POST /machine/machine/cutDesktop': (req, res) => {
+  'POST /user/function/area/updateFunctionArea': (req, res) => {
     res.send({
       "code": 0,
       "data": null,
+      "msg": "成功"
+      "code": 0,
+      "data": [
+        {
+          "code": "100000000",
+          "parentCode": null,
+          "name": "北京",
+          "province": "北京",
+          "city": "",
+          "district": null,
+          "circle": null,
+          "level": 1
+        },
+        {
+          "code": "110000000",
+          "parentCode": null,
+          "name": "天津",
+          "province": "天津",
+          "city": "",
+          "district": null,
+          "circle": null,
+          "level": 1
+        }
+      ],
+      "msg": "有重复区域"
+    })
+  },
+  'GET /user/function/area/list': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "186f6f31c39544b5b52e690ec709f41b",
+          "userId": "936451df9a7443c3a59102b193e3b7ff",
+          "areaCode": "110000000",
+          "areaName": "天津",
+          "province": "天津",
+          "city": "",
+          "level": 1,
+          "createId": "936451df9a7443c3a59102b193e3b7ff",
+          "createTime": "2018-09-05 15:28:41"
+        },
+        {
+          "id": "39655a1b5e8143ae8e645784e54735ad",
+          "userId": "936451df9a7443c3a59102b193e3b7ff",
+          "areaCode": "100101000",
+          "areaName": "东城区",
+          "province": "北京",
+          "city": "北京市",
+          "level": 3,
+          "createId": "936451df9a7443c3a59102b193e3b7ff",
+          "createTime": "2018-09-05 15:28:41"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /user/function/data/updateFunctionData': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /user/function/data/list': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "1",
+          "functionDepict": "货机管理-机器管理-机器编号",
+          "functionPath": null,
+          "parentId": null,
+          "voName": "com.inno72.machine.vo.MachineListVo",
+          "voColumn": "machineCode",
+          "seq": null
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'GET /user/function/data/all': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "functions": null,
+        "tree": {
+          "title": "机器管理系统",
+          "id": "XX",
+          "voName": null,
+          "column": null,
+          "children": [
+            {
+              "title": "货机管理",
+              "id": "1",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "机器管理",
+                  "id": "2",
+                  "voName": null,
+                  "column": null,
+                  "children": [
+                    {
+                      "title": "机器编号",
+                      "id": "1",
+                      "voName": "com.inno72.machine.vo.MachineListVo",
+                      "column": "machineCode",
+                      "children": null
+                    },
+                    {
+                      "title": "机器点位",
+                      "id": "2",
+                      "voName": "com.inno72.machine.vo.MachineListVo",
+                      "column": "localDesc",
+                      "children": null
+                    }
+                  ]
+                },
+                {
+                  "title": "点位管理",
+                  "id": "3",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "机器任务",
+                  "id": "31",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "订单管理",
+              "id": "12",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "订单管理",
+                  "id": "13",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "系统管理",
+              "id": "15",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "员工管理",
+                  "id": "16",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "部门管理",
+                  "id": "17",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "权限管理",
+                  "id": "18",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "角色管理",
+                  "id": "19",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "用户管理",
+              "id": "21",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "用户管理",
+                  "id": "22",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "巡检管理",
+              "id": "23",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "人员管理",
+                  "id": "24",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "工单管理",
+                  "id": "25",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "打卡记录",
+                  "id": "26",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "故障类型管理",
+                  "id": "27",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "补货记录",
+                  "id": "30",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "title": "首页",
+              "id": "29",
+              "voName": null,
+              "column": null,
+              "children": []
+            },
+            {
+              "title": "项目管理",
+              "id": "4",
+              "voName": null,
+              "column": null,
+              "children": [
+                {
+                  "title": "游戏管理",
+                  "id": "10",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "商品管理",
+                  "id": "11",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "活动排期",
+                  "id": "20",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "机器排期",
+                  "id": "28",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "渠道管理",
+                  "id": "5",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "商户管理",
+                  "id": "6",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "店铺管理",
+                  "id": "7",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                },
+                {
+                  "title": "活动管理",
+                  "id": "8",
+                  "voName": null,
+                  "column": null,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "msg": "成功"
+    })
+  },
+  'post /system/user/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /system/user/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /system/user/queryUserAuth': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "functionData": [
+          {
+            "id": "asdasdasdas",
+            "userId": null,
+            "functionId": "wdwd",
+            "voName": "com.inno72.machine.vo.Inno72LocaleVo",
+            "voColumn": "mall",
+            "createId": null,
+            "createTime": null,
+            "functionDepict": "货机管理-点位管理-商场",
+            "functionLevel": null
+          },
+          {
+            "id": "c49ce150d66641b68337bb1bb8e0c1df",
+            "userId": null,
+            "functionId": "ddd",
+            "voName": "com.inno72.machine.vo.Inno72LocaleVo",
+            "voColumn": "areaName",
+            "createId": null,
+            "createTime": null,
+            "functionDepict": "货机管理-点位管理-省市商圈",
+            "functionLevel": null
+          }
+        ],
+        "functionArea": [
+          {
+            "id": "2c3110e948af4502b0d00df48bc7e032",
+            "userId": "936451df9a7443c3a59102b193e3b7ff",
+            "code": "110000000",
+            "name": "天津",
+            "province": "天津",
+            "city": "",
+            "district": null,
+            "level": 1,
+            "createId": "936451df9a7443c3a59102b193e3b7ff",
+            "createTime": "2018-09-06 18:35:16"
+          },
+          {
+            "id": "9129e8f19af94decb8995c9c99aab61f",
+            "userId": "936451df9a7443c3a59102b193e3b7ff",
+            "code": "100101000",
+            "name": "东城区",
+            "province": "北京",
+            "city": "北京市",
+            "district": "东城区",
+            "level": 3,
+            "createId": "936451df9a7443c3a59102b193e3b7ff",
+            "createTime": "2018-09-06 18:35:16"
+          }
+        ],
+        "function": [
+          "超级管理员---首页",
+          "超级管理员--货机管理-机器管理",
+          "超级管理员--货机管理-点位管理",
+          "超级管理员--货机管理-机器任务",
+          "超级管理员--项目管理-渠道管理",
+          "超级管理员--项目管理-商户管理",
+          "超级管理员--项目管理-店铺管理",
+          "超级管理员--项目管理-活动管理",
+          "超级管理员--项目管理-机器排期",
+          "超级管理员--项目管理-商品管理",
+          "超级管理员--项目管理-游戏管理",
+          "超级管理员--项目管理-活动排期",
+          "超级管理员--订单管理-订单管理",
+          "超级管理员--用户管理-用户管理",
+          "超级管理员--系统管理-角色管理",
+          "超级管理员--系统管理-权限管理",
+          "超级管理员--系统管理-部门管理",
+          "超级管理员--系统管理-员工管理",
+          "超级管理员--巡检管理-人员管理",
+          "超级管理员--巡检管理-打卡记录",
+          "超级管理员--巡检管理-工单管理",
+          "超级管理员--巡检管理-故障类型管理",
+          "超级管理员--巡检管理-补货记录",
+          "超级管理员-货机管理-机器管理-查询",
+          "超级管理员-货机管理-机器管理-重置点位",
+          "超级管理员-货机管理-机器管理-管理货道",
+          "超级管理员-货机管理-机器管理-修改编号",
+          "超级管理员-货机管理-机器管理-管理APP",
+          "超级管理员-货机管理-点位管理-查看",
+          "超级管理员-货机管理-点位管理-新建",
+          "超级管理员-货机管理-点位管理-编辑",
+          "超级管理员-货机管理-点位管理-删除",
+          "超级管理员-货机管理-机器任务-查看",
+          "超级管理员-货机管理-机器任务-查询",
+          "超级管理员-货机管理-机器任务-新建",
+          "超级管理员-货机管理-机器任务-编辑",
+          "超级管理员-货机管理-机器任务-删除",
+          "超级管理员-项目管理-渠道管理-查询",
+          "超级管理员-项目管理-渠道管理-新建",
+          "超级管理员-项目管理-渠道管理-编辑",
+          "超级管理员-项目管理-渠道管理-删除",
+          "超级管理员-项目管理-商户管理-查询",
+          "超级管理员-项目管理-商户管理-新建",
+          "超级管理员-项目管理-商户管理-编辑",
+          "超级管理员-项目管理-商户管理-删除",
+          "超级管理员-项目管理-店铺管理-查询",
+          "超级管理员-项目管理-店铺管理-新建",
+          "超级管理员-项目管理-店铺管理-编辑",
+          "超级管理员-项目管理-店铺管理-删除",
+          "超级管理员-项目管理-活动管理-查询",
+          "超级管理员-项目管理-活动管理-查看",
+          "超级管理员-项目管理-活动管理-设置默认活动",
+          "超级管理员-项目管理-活动管理-新建",
+          "超级管理员-项目管理-活动管理-编辑",
+          "超级管理员-项目管理-活动管理-删除",
+          "超级管理员-项目管理-活动管理-统计",
+          "超级管理员-项目管理-商品管理-查看",
+          "超级管理员-项目管理-商品管理-查询",
+          "超级管理员-项目管理-机器排期-查询",
+          "超级管理员-项目管理-商品管理-新建",
+          "超级管理员-项目管理-商品管理-编辑",
+          "超级管理员-项目管理-商品管理-删除",
+          "超级管理员-项目管理-游戏管理-查询",
+          "超级管理员-项目管理-游戏管理-新建",
+          "超级管理员-项目管理-游戏管理-编辑",
+          "超级管理员-项目管理-游戏管理-删除",
+          "超级管理员-项目管理-活动排期-清除",
+          "超级管理员-项目管理-活动排期-查询",
+          "超级管理员-项目管理-活动排期-查看",
+          "超级管理员-项目管理-活动排期-新建",
+          "超级管理员-项目管理-活动排期-编辑",
+          "超级管理员-项目管理-活动排期-删除",
+          "超级管理员-订单管理-订单管理-查询",
+          "超级管理员-用户管理-用户管理-查询",
+          "超级管理员-系统管理-角色管理-查询",
+          "超级管理员-系统管理-角色管理-新建",
+          "超级管理员-系统管理-角色管理-修改",
+          "超级管理员-系统管理-角色管理-删除",
+          "超级管理员-系统管理-权限管理-查询",
+          "超级管理员-系统管理-部门管理-查询",
+          "超级管理员-系统管理-员工管理-停用开启",
+          "超级管理员-系统管理-员工管理-授权",
+          "超级管理员-系统管理-员工管理-查询",
+          "超级管理员-系统管理-员工管理-区域设置",
+          "超级管理员-系统管理-员工管理-数据",
+          "超级管理员-巡检管理-人员管理-查询",
+          "超级管理员-巡检管理-人员管理-停用开启",
+          "超级管理员-巡检管理-人员管理-删除",
+          "超级管理员-巡检管理-人员管理-新建",
+          "超级管理员-巡检管理-人员管理-编辑",
+          "超级管理员-巡检管理-打卡记录-查询",
+          "超级管理员-巡检管理-打卡记录-导出",
+          "超级管理员-巡检管理-工单管理-编辑",
+          "超级管理员-巡检管理-工单管理-查询",
+          "超级管理员-巡检管理-工单管理-确认",
+          "超级管理员-巡检管理-工单管理-关闭",
+          "超级管理员-巡检管理-工单管理-派单",
+          "超级管理员-巡检管理-工单管理-查看",
+          "超级管理员-巡检管理-故障类型管理-查询",
+          "超级管理员-巡检管理-故障类型管理-新建",
+          "超级管理员-巡检管理-故障类型管理-编辑",
+          "超级管理员-巡检管理-补货记录-查询"
+        ]
+      },
       "msg": "成功"
     })
   }

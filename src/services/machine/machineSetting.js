@@ -66,6 +66,11 @@ export async function machineUpdateInfo({ params }) {
     body: stringify(params),
   });
 }
+export async function findMachineInfoById({ params }) {
+  return fetch.post(api.findMachineInfoById, {
+    body: stringify(params),
+  });
+}
 export async function updateMachineCode({ params }) {
   return fetch.post(api.updateMachineCode, {
     body: stringify(params),

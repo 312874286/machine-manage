@@ -4,6 +4,7 @@ import { Card, Table, Button, Row, Col, Input, Modal, Tree, message, Popconfirm,
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
 import styles from './Account.less'
+import {getAccountMenus} from "../../utils/authority";
 
 
 const { TreeNode } = Tree;
@@ -58,9 +59,27 @@ export default class Account extends PureComponent {
     clickType: 0,
     currentSelectID: '',
     pageNo: 1,
+
+    account: {}
   }
   componentDidMount = () => {
     this.getSystemRoleList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'authorityManage')[0]
+        .children.filter((item) => item.path === 'account')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   onToEdit = (record) => {
     this.setState({
@@ -292,6 +311,16 @@ export default class Account extends PureComponent {
     });
   }
   renderTreeNodes = (data) => {
+    // return data.map((item) => {
+    //   if (item.children) {
+    //     return (
+    //       <TreeNode title={item.title} key={item.key} dataRef={item}>
+    //         {this.renderTreeNodes(item.children)}
+    //       </TreeNode>
+    //     );
+    //   }
+    //   return <TreeNode {...item} />;
+    // });
     return data.map((item) => {
       if (item.children) {
         return (
@@ -301,6 +330,7 @@ export default class Account extends PureComponent {
         );
       }
       return <TreeNode {...item} />;
+      // return (item.children.length === 0) ? (<TreeNode {...item} dataRef={item} disabled />) : (<TreeNode {...item} dataRef={item} />)
     });
   }
   handleTableChange = (pagination, filters, sorter) => {
@@ -337,10 +367,10 @@ export default class Account extends PureComponent {
     })
   }
   render() {
-    const { treeData, addUserName, userName, No } = this.state;
-    const { account: { list, page, totalNo } } = this.props;
+    const { treeData, addUserName, userName, No, account } = this.state;
+    const { account: { list, page, totalNo, unColumn } } = this.props;
     // console.log(111,list,page);
-    const columns = [
+    let columns = [
       {
         title: '角色名称',
         dataIndex: 'name',
@@ -358,16 +388,39 @@ export default class Account extends PureComponent {
         render: (record) => {
           return (
             <div>
-              <a onClick={this.onToEdit.bind(this, record)}>修改</a>
+              <a onClick={() => this.onToEdit(record)} style={{ display: !account.update ? 'none' : '' }}>分配权限</a>
+              {/*<a onClick={this.onToEdit.bind(this, record)}>修改</a>*/}
               &nbsp;&nbsp;
               <Popconfirm title="是否删除?" onConfirm={this.onToDel.bind(this, record)} onCancel={this.onComnfirmCancel.bind(this)} okText="删除" cancelText="取消">
-                <a className={styles.delete}>删除</a>
+                <a className={styles.delete} style={{ display: !account.delete ? 'none' : '' }}>删除</a>
               </Popconfirm>
             </div>
           );
         },
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // const { userName } = this.state;
     const paginationProps = {
       showTotal: (total) => {
@@ -429,7 +482,9 @@ export default class Account extends PureComponent {
         <Card bordered={false}>
           <div class="tableList">
             <div class="tableListOperator">
-              <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
+              <Button icon="plus" type="primary"
+                      onClick={() => this.handleModalAdd(true)}
+                      style={{ display: !account.add ? 'none' : '' }}>新建</Button>
             </div>
             {/*<Table*/}
               {/*dataSource={list}*/}
@@ -438,14 +493,16 @@ export default class Account extends PureComponent {
               {/*onChange={this.handleTableChange}*/}
               {/*rowKey="id"*/}
             {/*/>*/}
-            <Table
-              columns={columns}
-              dataSource={list}
-              rowKey="id"
-              pagination={paginationProps}
-              onChange={this.handleTableChange}
-              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-            />
+            <div style={{ display: !account.list ? 'none' : '' }}>
+              <Table
+                columns={columns}
+                dataSource={list}
+                rowKey="id"
+                pagination={paginationProps}
+                onChange={this.handleTableChange}
+                scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+              />
+            </div>
           </div>
         </Card>
 

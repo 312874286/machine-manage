@@ -13,6 +13,16 @@ const api = map({
   getSystemRoleUpdate: '/system/role/update?id={id}&name={name}&auths={auths}',
   getSystemRoleDelete: '/system/role/delete?id={id}',
   getSystemUserQueryUserRoles: '/system/user/queryUserRoles?userId={userId}',
+
+  updateFunctionArea: '/user/function/area/updateFunctionArea',
+  getFunctionArea: '/user/function/area/list?userId={userId}',
+  updateFunctionData: '/user/function/data/updateFunctionData',
+  getFunctionData: '/user/function/data/list?userId={userId}',
+  functionTree: '/user/function/data/all',
+  userStatus: '/system/user/delete',
+
+  queryUserAuth: '/system/user/queryUserAuth?userId={userId}',
+  updateStatus: '/system/user/updateStatus',
 });
 
 export default api;

@@ -9,6 +9,7 @@ import {
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './OffLine.less'
+import {getAccountMenus} from "../../utils/authority";
 
 
 const WatchMachine = Form.create()(
@@ -54,9 +55,26 @@ export default class stockOut extends PureComponent {
   state = {
     WatchMachineModalVisible: false,
     machineList: [],
+    account: {}
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const account = setAccountMenusList.filter((item) => item.path === 'check')[0]
+      .children.filter((item) => item.path === 'fault')
+    var obj = {}
+    if (account.length > 0) {
+      if (account[0].children) {
+        account[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取列表
   getLists = () => {
@@ -99,6 +117,7 @@ export default class stockOut extends PureComponent {
       homePageSetting: { ExceptionMachineList },
       loading,
     } = this.props;
+    const { account } = this.state
     const columns = [
       {
         title: '机器编号',
@@ -123,7 +142,9 @@ export default class stockOut extends PureComponent {
         title: '操作',
         render: () => (
           <Fragment>
-            <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}>创建工单</a>
+            <a
+              onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}
+              style={{ display: !account.add ? 'none' : '' }}>创建工单</a>
           </Fragment>
         ),
       },

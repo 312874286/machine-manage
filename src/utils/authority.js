@@ -29,6 +29,9 @@ function parseMenuData(source, pid) {
     source.filter(filter)
       .forEach((item) => {
         if (item) {
+          if (item.flag && item.functionLevel === 3) {
+            return result
+          }
           const menu = {
             name: item.functionDepict,
             path: item.functionPath,
@@ -51,15 +54,25 @@ function parseMenuData(source, pid) {
 function setMenus(data) {
   if (data) {
     const functionList = data.map((item) => {
-      return { ...item, functionId: item.id };
+      return { ...item, functionId: item.id, flag: 1 };
     });
     setSessionData('siteMenu', parseMenuData(functionList));
+  }
+}
+
+function setAccountMenus(data) {
+  if (data) {
+    const functionList = data.map((item) => {
+      return { ...item, functionId: item.id };
+    });
+    setSessionData('setAccountMenus', parseMenuData(functionList));
   }
 }
 
 export function setLogin(loginInfo) {
   if (loginInfo) {
     const { user, token, functions } = loginInfo;
+    setAccountMenus(functions)
     setToken(token);
     setUser(user);
     setMenus(functions);
@@ -80,8 +93,13 @@ export function getMenus() {
   return getSessionData('siteMenu');
 }
 
+export function getAccountMenus() {
+  return getSessionData('setAccountMenus');
+}
+
 export function setLogout() {
   removeSessionData('token');
   removeSessionData('userInfo');
   removeSessionData('siteMenu');
+  removeSessionData('setAccountMenus')
 }
