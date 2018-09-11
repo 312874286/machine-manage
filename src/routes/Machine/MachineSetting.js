@@ -1810,7 +1810,7 @@ export default class machineSettingList extends PureComponent {
             <Divider type="vertical" />
             <a onClick={() => !account.manageAisle ? null : this.handleManageAisleClick(item)} style={{ display: !account.manageAisle ? 'none' : ''}}>管理货道</a>
             <Divider type="vertical" />
-            <a onClick={() => !!account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>
+            <a onClick={() => !account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>
           </Fragment>
         ),
       },
