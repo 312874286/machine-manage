@@ -1700,8 +1700,6 @@ export default class TaskSetting extends PureComponent {
     } = this.props;
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
-      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo } = this.state
-    const columns = [
       editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo, account } = this.state
     let columns = [
       {

@@ -25,6 +25,8 @@ import {
   Spin,
   Popover,
   Cascader,
+  Switch,
+  TimePicker
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
@@ -677,7 +679,9 @@ export default class machineSettingList extends PureComponent {
     editMachineCodeEditModalConfirmLoading: false,
 
     UploadLogVisible: false,
-    UploadLogConfirmLoading: false
+    UploadLogConfirmLoading: false,
+
+    account: {}
   };
   constructor(props) {
     super(props);
@@ -1707,11 +1711,11 @@ export default class machineSettingList extends PureComponent {
   }
   render() {
     const {
-      machineSetting: { list, page },
+      machineSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
+    const { account, selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
     const columns = [
       {
         title: '机器编号',

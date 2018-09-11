@@ -141,6 +141,8 @@ export default class PointSettingList extends PureComponent {
     code: '',
     modalType: true,
     CreateFormLoading: false,
+
+    account: {}
   };
   componentWillMount() {
     // 查询省

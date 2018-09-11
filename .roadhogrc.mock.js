@@ -299,7 +299,7 @@ const proxy = {
         //   {
         //     id: 'a14',
         //     functionDepict: '系统管理',
-        //     functionPath: 'system',
+        //     functionPath: 'authorityManage',
         //     parentId: null,
         //     functionLevel: 1,
         //     functionIcon: 'system',
@@ -419,228 +419,1221 @@ const proxy = {
         // ],
         functions: [
           {
-            id: 'a33',
-            functionDepict: '首页',
-            functionPath: 'homePage',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'homePage',
+            "id": "29",
+            "functionDepict": "首页",
+            "functionPath": "homePage",
+            "parentId": null,
+            "functionLevel": 1,
+            "functionIcon": "homePage",
+            "color": null,
+            "seq": 0,
+            "parentName": null
           },
           {
-            id: 'a1',
-            functionDepict: '货机管理',
-            functionPath: 'machine',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'machine',
-            color: '#ffd322'
+            "id": "1",
+            "functionDepict": "货机管理",
+            "functionPath": "machine",
+            "parentId": null,
+            "functionLevel": 1,
+            "functionIcon": "machine",
+            "color": "",
+            "seq": 1,
+            "parentName": null
           },
           {
-            id: 'a2',
-            functionDepict: '机器管理',
-            functionPath: 'machine-setting',
-            parentId: 'a1',
-            functionLevel: 2,
+            "id": "4",
+            "functionDepict": "项目管理",
+            "functionPath": "project",
+            "parentId": null,
+            "functionLevel": 1,
+            "functionIcon": "project",
+            "color": "",
+            "seq": 2,
+            "parentName": null
           },
           {
-            id: 'a4',
-            functionDepict: '点位管理',
-            functionPath: 'point-setting',
-            parentId: 'a1',
-            functionLevel: 2,
+            "id": "12",
+            "functionDepict": "订单管理",
+            "functionPath": "order",
+            "parentId": null,
+            "functionLevel": 1,
+            "functionIcon": "order",
+            "color": "",
+            "seq": 3,
+            "parentName": null
           },
           {
-            id: 'a33',
-            functionDepict: '任务管理',
-            functionPath: 'task-setting',
-            parentId: 'a1',
-            functionLevel: 2,
+            "id": "21",
+            "functionDepict": "用户管理",
+            "functionPath": "player",
+            "parentId": null,
+            "functionLevel": 1,
+            "functionIcon": "player",
+            "color": "",
+            "seq": 4,
+            "parentName": null
           },
           {
-            id: 'a6',
-            functionDepict: '项目管理',
-            functionPath: 'project',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'project',
+            "id": "15",
+            "functionDepict": "系统管理",
+            "functionPath": "authorityManage",
+            "parentId": "",
+            "functionLevel": 1,
+            "functionIcon": "system",
+            "color": "",
+            "seq": 5,
+            "parentName": null
           },
           {
-            id: 'a7',
-            functionDepict: '渠道管理',
-            functionPath: 'channel',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "23",
+            "functionDepict": "巡检管理",
+            "functionPath": "check",
+            "parentId": null,
+            "functionLevel": 1,
+            "functionIcon": "check",
+            "color": "",
+            "seq": 6,
+            "parentName": null
           },
           {
-            id: 'a8',
-            functionDepict: '商户管理',
-            functionPath: 'merchant',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "24",
+            "functionDepict": "人员管理",
+            "functionPath": "user",
+            "parentId": "23",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
           },
           {
-            id: 'a9',
-            functionDepict: '活动管理',
-            functionPath: 'activity',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "13",
+            "functionDepict": "订单管理",
+            "functionPath": "order",
+            "parentId": "12",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
           },
           {
-            id: 'a20',
-            functionDepict: '活动排期',
-            functionPath: 'schedule',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "5",
+            "functionDepict": "渠道管理",
+            "functionPath": "channel",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
           },
           {
-            id: 'a10',
-            functionDepict: '店铺管理',
-            functionPath: 'shop',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "19",
+            "functionDepict": "角色管理",
+            "functionPath": "account",
+            "parentId": "15",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
           },
           {
-            id: 'a19',
-            functionDepict: '游戏管理',
-            functionPath: 'game',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "2",
+            "functionDepict": "机器管理",
+            "functionPath": "machine-setting",
+            "parentId": "1",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
           },
           {
-            id: 'a25',
-            functionDepict: '商品管理',
-            functionPath: 'goods',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "22",
+            "functionDepict": "用户管理",
+            "functionPath": "user",
+            "parentId": "21",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
           },
           {
-            id: 'a34',
-            functionDepict: '机器排期',
-            functionPath: 'machinePlan',
-            parentId: 'a6',
-            functionLevel: 2,
+            "id": "6",
+            "functionDepict": "商户管理",
+            "functionPath": "merchant",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
           },
           {
-            id: 'a14',
-            functionDepict: '系统管理',
-            functionPath: 'system',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'system',
-            color: '#ff4c72'
+            "id": "3",
+            "functionDepict": "点位管理",
+            "functionPath": "point-setting",
+            "parentId": "1",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
           },
           {
-            id: 'a15',
-            functionDepict: '角色管理',
-            functionPath: 'account',
-            parentId: 'a14',
-            functionLevel: 2,
+            "id": "18",
+            "functionDepict": "权限管理",
+            "functionPath": "jurisdiction",
+            "parentId": "15",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
           },
           {
-            id: 'a16',
-            functionDepict: '权限管理',
-            functionPath: 'jurisdiction',
-            parentId: 'a14',
-            functionLevel: 2,
+            "id": "26",
+            "functionDepict": "打卡记录",
+            "functionPath": "signIn",
+            "parentId": "23",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
           },
           {
-            id: 'a17',
-            functionDepict: '部门管理',
-            functionPath: 'department',
-            parentId: 'a14',
-            functionLevel: 2,
+            "id": "17",
+            "functionDepict": "部门管理",
+            "functionPath": "department",
+            "parentId": "15",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
           },
           {
-            id: 'a18',
-            functionDepict: '员工管理',
-            functionPath: 'staff',
-            parentId: 'a14',
-            functionLevel: 2,
+            "id": "7",
+            "functionDepict": "店铺管理",
+            "functionPath": "shop",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
           },
           {
-            id: 'a21',
-            functionDepict: '订单管理',
-            functionPath: 'order',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'order',
-            color: 'green'
+            "id": "31",
+            "functionDepict": "机器任务",
+            "functionPath": "task-setting",
+            "parentId": "1",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
           },
           {
-            id: 'a22',
-            functionDepict: '订单管理',
-            functionPath: 'order',
-            parentId: 'a21',
-            functionLevel: 2,
+            "id": "25",
+            "functionDepict": "工单管理",
+            "functionPath": "fault",
+            "parentId": "23",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
           },
           {
-            id: 'a23',
-            functionDepict: '用户管理',
-            functionPath: 'player',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'player',
-            color: 'yellow'
+            "id": "27",
+            "functionDepict": "故障类型管理",
+            "functionPath": "faultType",
+            "parentId": "23",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
           },
           {
-            id: 'a24',
-            functionDepict: '用户管理',
-            functionPath: 'user',
-            parentId: 'a23',
-            functionLevel: 2,
+            "id": "16",
+            "functionDepict": "员工管理",
+            "functionPath": "staff",
+            "parentId": "15",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
           },
           {
-            id: 'a26',
-            functionDepict: '巡检管理',
-            functionPath: 'check',
-            parentId: null,
-            functionLevel: 1,
-            functionIcon: 'check',
-            color: '#174a79'
+            "id": "8",
+            "functionDepict": "活动管理",
+            "functionPath": "activity",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
           },
           {
-            id: 'a27',
-            functionDepict: '故障单管理',
-            functionPath: 'fault',
-            parentId: 'a26',
-            functionLevel: 2,
+            "id": "30",
+            "functionDepict": "补货记录",
+            "functionPath": "replenish",
+            "parentId": "23",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 5,
+            "parentName": null
           },
           {
-            id: 'a28',
-            functionDepict: '人员管理',
-            functionPath: 'user',
-            parentId: 'a26',
-            functionLevel: 2,
+            "id": "28",
+            "functionDepict": "机器排期",
+            "functionPath": "machinePlan",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 5,
+            "parentName": null
           },
           {
-            id: 'a29',
-            functionDepict: '打卡记录',
-            functionPath: 'signIn',
-            parentId: 'a26',
-            functionLevel: 2,
+            "id": "11",
+            "functionDepict": "商品管理",
+            "functionPath": "goods",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 5,
+            "parentName": null
           },
           {
-            id: 'a30',
-            functionDepict: '故障类型',
-            functionPath: 'faultType',
-            parentId: 'a26',
-            functionLevel: 2,
+            "id": "10",
+            "functionDepict": "游戏管理",
+            "functionPath": "game",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 6,
+            "parentName": null
           },
           {
-            id: 'a31',
-            functionDepict: '工单管理',
-            functionPath: 'workOrder',
-            parentId: 'a26',
-            functionLevel: 2,
+            "id": "20",
+            "functionDepict": "活动排期",
+            "functionPath": "schedule",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 7,
+            "parentName": null
           },
           {
-            id: 'a32',
-            functionDepict: '补货记录',
-            functionPath: 'replenish',
-            parentId: 'a26',
-            functionLevel: 2,
+            "id": "c0db2c98-b17e-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "24",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
           },
+          {
+            "id": "45e4c60c-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "导出",
+            "functionPath": "excell",
+            "parentId": "26",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "4598bc05-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "5",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45ad5426-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查看",
+            "functionPath": "detail",
+            "parentId": "8",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "c0dddfcf-b17e-11e8-9cb0-00163e08",
+            "functionDepict": "清除",
+            "functionPath": "delete",
+            "parentId": "20",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45bd757b-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "10",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45ca0a77-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "28",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45dacea6-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "数据",
+            "functionPath": "data",
+            "parentId": "16",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45a9b497-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "8",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45dc28ec-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "停用开启",
+            "functionPath": "btn",
+            "parentId": "16",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45d7ec17-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "授权",
+            "functionPath": "update",
+            "parentId": "16",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45ed25ff-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "27",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "c0dc9998-b17e-11e8-9cb0-00163e08",
+            "functionDepict": "查看",
+            "functionPath": "detail",
+            "parentId": "25",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45b62e7a-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "11",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45ebba0e-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "关闭",
+            "functionPath": "close",
+            "parentId": "25",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45f16ece-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "30",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45d50d33-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "17",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "459100db-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "31",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45ea656d-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "确认",
+            "functionPath": "confirm",
+            "parentId": "25",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "457fdf26-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "重置点位",
+            "functionPath": "setPoint",
+            "parentId": "2",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45d39c98-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "18",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "d498e22b-b00c-11e8-9cb0-00163e08",
+            "functionDepict": "查看",
+            "functionPath": "list",
+            "parentId": "3",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45ce34c4-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "19",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45dd9917-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "24",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45cb72d4-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "13",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45e1a825-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "停用开启",
+            "functionPath": "btn",
+            "parentId": "24",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45d94962-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "区域设置",
+            "functionPath": "areaSet",
+            "parentId": "16",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45cccbf0-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "22",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45b7a0bf-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查看",
+            "functionPath": "detail",
+            "parentId": "11",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45e3187e-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "26",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "458146f6-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "管理APP",
+            "functionPath": "manageApp",
+            "parentId": "2",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45883573-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "管理货道",
+            "functionPath": "manageAisle",
+            "parentId": "2",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "c0d86fa8-b17e-11e8-9cb0-00163e08",
+            "functionDepict": "查看",
+            "functionPath": "detail",
+            "parentId": "20",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45e8e77d-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "25",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "459e36ac-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "6",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45e76ea2-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "派单",
+            "functionPath": "add",
+            "parentId": "25",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "4589abcf-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "修改编号",
+            "functionPath": "editCode",
+            "parentId": "2",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45a3b3cc-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "7",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45d69674-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "16",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45e6196d-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "25",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45931782-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查看",
+            "functionPath": "detail",
+            "parentId": "31",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45aebee8-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "设置默认活动",
+            "functionPath": "setDefault",
+            "parentId": "8",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45c3fe28-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "20",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "457e6666-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "查询",
+            "functionPath": "list",
+            "parentId": "2",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 1,
+            "parentName": null
+          },
+          {
+            "id": "45c5af78-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "20",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45ee8943-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "27",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "d49a86d1-b00c-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "3",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45bf3550-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "10",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45b01023-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "8",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "459a12d4-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "5",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45cf7f21-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "19",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "459fa55f-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "6",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45def762-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "24",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45a54724-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "7",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45b9121b-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "11",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45947723-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "新建",
+            "functionPath": "add",
+            "parentId": "31",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "45e05853-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "24",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "459600ac-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "31",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45c72abd-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "20",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "d49c0a3d-b00c-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "3",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45f00b14-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "27",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45c0979e-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "10",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45b17cbb-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "8",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45a10d9d-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "6",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45d0f31d-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "修改",
+            "functionPath": "update",
+            "parentId": "19",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "459b7361-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "5",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45ba7363-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "11",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45a6afaf-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "编辑",
+            "functionPath": "update",
+            "parentId": "7",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 3,
+            "parentName": null
+          },
+          {
+            "id": "45975dc2-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "31",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45b34b8d-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "8",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45c8a1fd-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "20",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45a27d2a-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "6",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45a80d94-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "7",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45d24b1e-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "19",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "459cda40-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "5",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45c1f9b1-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "10",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45b4cb48-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "统计",
+            "functionPath": "statistics",
+            "parentId": "8",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "d49d8ccd-b00c-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "3",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          },
+          {
+            "id": "45bbd137-b0e6-11e8-9cb0-00163e08",
+            "functionDepict": "删除",
+            "functionPath": "delete",
+            "parentId": "11",
+            "functionLevel": 3,
+            "functionIcon": null,
+            "color": null,
+            "seq": 4,
+            "parentName": null
+          }
+        ],
+        "functionArea": [
+          {
+            "id": "2c3110e948af4502b0d00df48bc7e032",
+            "userId": "936451df9a7443c3a59102b193e3b7ff",
+            "code": "110000000",
+            "name": "天津",
+            "province": "天津",
+            "city": "",
+            "district": null,
+            "level": 2,
+            "createId": "936451df9a7443c3a59102b193e3b7ff",
+            "createTime": "2018-09-06 18:35:16"
+          },
+          {
+            "id": "9129e8f19af94decb8995c9c99aab61f",
+            "userId": "936451df9a7443c3a59102b193e3b7ff",
+            "code": "100101000",
+            "name": "东城区",
+            "province": "北京",
+            "city": "北京市",
+            "district": "东城区",
+            "level": 6,
+            "createId": "936451df9a7443c3a59102b193e3b7ff",
+            "createTime": "2018-09-06 18:35:16"
+          }
         ]
+
       };
       res.send({
         code: 0,
@@ -1357,23 +2350,10 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'POST /machine/machine/updateMachine':  (req, res) => {
+  'POST /machine/machine/updateLocale':  (req, res) => {
     res.send({
       "code": 0,
       "data": null,
-      "msg": "成功"
-    })
-  },
-  'POST /machine/machine/findMachineInfoById': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": {
-        "id": "6628a821f2e44a538e0e0801e494a2be",
-        "openStatus": 0,
-        "monitorStart": null,
-        "monitorEnd": null,
-        "localStr": "北京市-北京市-西城区-小西天-灯市口-YPY"
-      },
       "msg": "成功"
     })
   },
@@ -4017,505 +4997,9 @@ const proxy = {
     })
   },
   'POST /machine/machine/cutDesktop': (req, res) => {
-  'POST /user/function/area/updateFunctionArea': (req, res) => {
     res.send({
       "code": 0,
       "data": null,
-      "msg": "成功"
-      "code": 0,
-      "data": [
-        {
-          "code": "100000000",
-          "parentCode": null,
-          "name": "北京",
-          "province": "北京",
-          "city": "",
-          "district": null,
-          "circle": null,
-          "level": 1
-        },
-        {
-          "code": "110000000",
-          "parentCode": null,
-          "name": "天津",
-          "province": "天津",
-          "city": "",
-          "district": null,
-          "circle": null,
-          "level": 1
-        }
-      ],
-      "msg": "有重复区域"
-    })
-  },
-  'GET /user/function/area/list': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": [
-        {
-          "id": "186f6f31c39544b5b52e690ec709f41b",
-          "userId": "936451df9a7443c3a59102b193e3b7ff",
-          "areaCode": "110000000",
-          "areaName": "天津",
-          "province": "天津",
-          "city": "",
-          "level": 1,
-          "createId": "936451df9a7443c3a59102b193e3b7ff",
-          "createTime": "2018-09-05 15:28:41"
-        },
-        {
-          "id": "39655a1b5e8143ae8e645784e54735ad",
-          "userId": "936451df9a7443c3a59102b193e3b7ff",
-          "areaCode": "100101000",
-          "areaName": "东城区",
-          "province": "北京",
-          "city": "北京市",
-          "level": 3,
-          "createId": "936451df9a7443c3a59102b193e3b7ff",
-          "createTime": "2018-09-05 15:28:41"
-        }
-      ],
-      "msg": "成功"
-    })
-  },
-  'POST /user/function/data/updateFunctionData': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": null,
-      "msg": "成功"
-    })
-  },
-  'GET /user/function/data/list': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": [
-        {
-          "id": "1",
-          "functionDepict": "货机管理-机器管理-机器编号",
-          "functionPath": null,
-          "parentId": null,
-          "voName": "com.inno72.machine.vo.MachineListVo",
-          "voColumn": "machineCode",
-          "seq": null
-        }
-      ],
-      "msg": "成功"
-    })
-  },
-  'GET /user/function/data/all': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": {
-        "functions": null,
-        "tree": {
-          "title": "机器管理系统",
-          "id": "XX",
-          "voName": null,
-          "column": null,
-          "children": [
-            {
-              "title": "货机管理",
-              "id": "1",
-              "voName": null,
-              "column": null,
-              "children": [
-                {
-                  "title": "机器管理",
-                  "id": "2",
-                  "voName": null,
-                  "column": null,
-                  "children": [
-                    {
-                      "title": "机器编号",
-                      "id": "1",
-                      "voName": "com.inno72.machine.vo.MachineListVo",
-                      "column": "machineCode",
-                      "children": null
-                    },
-                    {
-                      "title": "机器点位",
-                      "id": "2",
-                      "voName": "com.inno72.machine.vo.MachineListVo",
-                      "column": "localDesc",
-                      "children": null
-                    }
-                  ]
-                },
-                {
-                  "title": "点位管理",
-                  "id": "3",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "机器任务",
-                  "id": "31",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                }
-              ]
-            },
-            {
-              "title": "订单管理",
-              "id": "12",
-              "voName": null,
-              "column": null,
-              "children": [
-                {
-                  "title": "订单管理",
-                  "id": "13",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                }
-              ]
-            },
-            {
-              "title": "系统管理",
-              "id": "15",
-              "voName": null,
-              "column": null,
-              "children": [
-                {
-                  "title": "员工管理",
-                  "id": "16",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "部门管理",
-                  "id": "17",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "权限管理",
-                  "id": "18",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "角色管理",
-                  "id": "19",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                }
-              ]
-            },
-            {
-              "title": "用户管理",
-              "id": "21",
-              "voName": null,
-              "column": null,
-              "children": [
-                {
-                  "title": "用户管理",
-                  "id": "22",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                }
-              ]
-            },
-            {
-              "title": "巡检管理",
-              "id": "23",
-              "voName": null,
-              "column": null,
-              "children": [
-                {
-                  "title": "人员管理",
-                  "id": "24",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "工单管理",
-                  "id": "25",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "打卡记录",
-                  "id": "26",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "故障类型管理",
-                  "id": "27",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "补货记录",
-                  "id": "30",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                }
-              ]
-            },
-            {
-              "title": "首页",
-              "id": "29",
-              "voName": null,
-              "column": null,
-              "children": []
-            },
-            {
-              "title": "项目管理",
-              "id": "4",
-              "voName": null,
-              "column": null,
-              "children": [
-                {
-                  "title": "游戏管理",
-                  "id": "10",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "商品管理",
-                  "id": "11",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "活动排期",
-                  "id": "20",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "机器排期",
-                  "id": "28",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "渠道管理",
-                  "id": "5",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "商户管理",
-                  "id": "6",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "店铺管理",
-                  "id": "7",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "title": "活动管理",
-                  "id": "8",
-                  "voName": null,
-                  "column": null,
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "msg": "成功"
-    })
-  },
-  'post /system/user/delete': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": null,
-      "msg": "成功"
-    })
-  },
-  'POST /system/user/updateStatus': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": null,
-      "msg": "成功"
-    })
-  },
-  'GET /system/user/queryUserAuth': (req, res) => {
-    res.send({
-      "code": 0,
-      "data": {
-        "functionData": [
-          {
-            "id": "asdasdasdas",
-            "userId": null,
-            "functionId": "wdwd",
-            "voName": "com.inno72.machine.vo.Inno72LocaleVo",
-            "voColumn": "mall",
-            "createId": null,
-            "createTime": null,
-            "functionDepict": "货机管理-点位管理-商场",
-            "functionLevel": null
-          },
-          {
-            "id": "c49ce150d66641b68337bb1bb8e0c1df",
-            "userId": null,
-            "functionId": "ddd",
-            "voName": "com.inno72.machine.vo.Inno72LocaleVo",
-            "voColumn": "areaName",
-            "createId": null,
-            "createTime": null,
-            "functionDepict": "货机管理-点位管理-省市商圈",
-            "functionLevel": null
-          }
-        ],
-        "functionArea": [
-          {
-            "id": "2c3110e948af4502b0d00df48bc7e032",
-            "userId": "936451df9a7443c3a59102b193e3b7ff",
-            "code": "110000000",
-            "name": "天津",
-            "province": "天津",
-            "city": "",
-            "district": null,
-            "level": 1,
-            "createId": "936451df9a7443c3a59102b193e3b7ff",
-            "createTime": "2018-09-06 18:35:16"
-          },
-          {
-            "id": "9129e8f19af94decb8995c9c99aab61f",
-            "userId": "936451df9a7443c3a59102b193e3b7ff",
-            "code": "100101000",
-            "name": "东城区",
-            "province": "北京",
-            "city": "北京市",
-            "district": "东城区",
-            "level": 3,
-            "createId": "936451df9a7443c3a59102b193e3b7ff",
-            "createTime": "2018-09-06 18:35:16"
-          }
-        ],
-        "function": [
-          "超级管理员---首页",
-          "超级管理员--货机管理-机器管理",
-          "超级管理员--货机管理-点位管理",
-          "超级管理员--货机管理-机器任务",
-          "超级管理员--项目管理-渠道管理",
-          "超级管理员--项目管理-商户管理",
-          "超级管理员--项目管理-店铺管理",
-          "超级管理员--项目管理-活动管理",
-          "超级管理员--项目管理-机器排期",
-          "超级管理员--项目管理-商品管理",
-          "超级管理员--项目管理-游戏管理",
-          "超级管理员--项目管理-活动排期",
-          "超级管理员--订单管理-订单管理",
-          "超级管理员--用户管理-用户管理",
-          "超级管理员--系统管理-角色管理",
-          "超级管理员--系统管理-权限管理",
-          "超级管理员--系统管理-部门管理",
-          "超级管理员--系统管理-员工管理",
-          "超级管理员--巡检管理-人员管理",
-          "超级管理员--巡检管理-打卡记录",
-          "超级管理员--巡检管理-工单管理",
-          "超级管理员--巡检管理-故障类型管理",
-          "超级管理员--巡检管理-补货记录",
-          "超级管理员-货机管理-机器管理-查询",
-          "超级管理员-货机管理-机器管理-重置点位",
-          "超级管理员-货机管理-机器管理-管理货道",
-          "超级管理员-货机管理-机器管理-修改编号",
-          "超级管理员-货机管理-机器管理-管理APP",
-          "超级管理员-货机管理-点位管理-查看",
-          "超级管理员-货机管理-点位管理-新建",
-          "超级管理员-货机管理-点位管理-编辑",
-          "超级管理员-货机管理-点位管理-删除",
-          "超级管理员-货机管理-机器任务-查看",
-          "超级管理员-货机管理-机器任务-查询",
-          "超级管理员-货机管理-机器任务-新建",
-          "超级管理员-货机管理-机器任务-编辑",
-          "超级管理员-货机管理-机器任务-删除",
-          "超级管理员-项目管理-渠道管理-查询",
-          "超级管理员-项目管理-渠道管理-新建",
-          "超级管理员-项目管理-渠道管理-编辑",
-          "超级管理员-项目管理-渠道管理-删除",
-          "超级管理员-项目管理-商户管理-查询",
-          "超级管理员-项目管理-商户管理-新建",
-          "超级管理员-项目管理-商户管理-编辑",
-          "超级管理员-项目管理-商户管理-删除",
-          "超级管理员-项目管理-店铺管理-查询",
-          "超级管理员-项目管理-店铺管理-新建",
-          "超级管理员-项目管理-店铺管理-编辑",
-          "超级管理员-项目管理-店铺管理-删除",
-          "超级管理员-项目管理-活动管理-查询",
-          "超级管理员-项目管理-活动管理-查看",
-          "超级管理员-项目管理-活动管理-设置默认活动",
-          "超级管理员-项目管理-活动管理-新建",
-          "超级管理员-项目管理-活动管理-编辑",
-          "超级管理员-项目管理-活动管理-删除",
-          "超级管理员-项目管理-活动管理-统计",
-          "超级管理员-项目管理-商品管理-查看",
-          "超级管理员-项目管理-商品管理-查询",
-          "超级管理员-项目管理-机器排期-查询",
-          "超级管理员-项目管理-商品管理-新建",
-          "超级管理员-项目管理-商品管理-编辑",
-          "超级管理员-项目管理-商品管理-删除",
-          "超级管理员-项目管理-游戏管理-查询",
-          "超级管理员-项目管理-游戏管理-新建",
-          "超级管理员-项目管理-游戏管理-编辑",
-          "超级管理员-项目管理-游戏管理-删除",
-          "超级管理员-项目管理-活动排期-清除",
-          "超级管理员-项目管理-活动排期-查询",
-          "超级管理员-项目管理-活动排期-查看",
-          "超级管理员-项目管理-活动排期-新建",
-          "超级管理员-项目管理-活动排期-编辑",
-          "超级管理员-项目管理-活动排期-删除",
-          "超级管理员-订单管理-订单管理-查询",
-          "超级管理员-用户管理-用户管理-查询",
-          "超级管理员-系统管理-角色管理-查询",
-          "超级管理员-系统管理-角色管理-新建",
-          "超级管理员-系统管理-角色管理-修改",
-          "超级管理员-系统管理-角色管理-删除",
-          "超级管理员-系统管理-权限管理-查询",
-          "超级管理员-系统管理-部门管理-查询",
-          "超级管理员-系统管理-员工管理-停用开启",
-          "超级管理员-系统管理-员工管理-授权",
-          "超级管理员-系统管理-员工管理-查询",
-          "超级管理员-系统管理-员工管理-区域设置",
-          "超级管理员-系统管理-员工管理-数据",
-          "超级管理员-巡检管理-人员管理-查询",
-          "超级管理员-巡检管理-人员管理-停用开启",
-          "超级管理员-巡检管理-人员管理-删除",
-          "超级管理员-巡检管理-人员管理-新建",
-          "超级管理员-巡检管理-人员管理-编辑",
-          "超级管理员-巡检管理-打卡记录-查询",
-          "超级管理员-巡检管理-打卡记录-导出",
-          "超级管理员-巡检管理-工单管理-编辑",
-          "超级管理员-巡检管理-工单管理-查询",
-          "超级管理员-巡检管理-工单管理-确认",
-          "超级管理员-巡检管理-工单管理-关闭",
-          "超级管理员-巡检管理-工单管理-派单",
-          "超级管理员-巡检管理-工单管理-查看",
-          "超级管理员-巡检管理-故障类型管理-查询",
-          "超级管理员-巡检管理-故障类型管理-新建",
-          "超级管理员-巡检管理-故障类型管理-编辑",
-          "超级管理员-巡检管理-补货记录-查询"
-        ]
-      },
       "msg": "成功"
     })
   }
