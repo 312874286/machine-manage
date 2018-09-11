@@ -201,7 +201,7 @@ class StandardTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 50)}}
+          scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100)}}
         />
       </div>
     );

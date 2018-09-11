@@ -9,7 +9,7 @@ const api = map({
   deletePointSetting: '/machine/locale/delete',
   getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&machineCode={machineCode}&localCode={localCode}',
   updateGoodsCountMachineSetting: '/machine/machine/updateGoodsCount',
-  updateLocaleMachineSetting: '/machine/machine/updateLocale',
+  // updateLocaleMachineSetting: '/machine/machine/updateLocale',
   deleteChannelMachineSetting: '/machine/machine/deleteChannel',
   getAisleList: '/machine/machine/channelInfo?machineId={machineId}',
   getMachineStatus: '/machine/machine/machineStatus?machineId={machineId}',
@@ -18,7 +18,23 @@ const api = map({
   installApp: '/machine/machine/installApp?machineId={machineId}&appPackageName={appPackageName}&url={url}&versionCode={versionCode}',
   machineUpdateInfo: '/machine/machine/updateInfo',
   getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
-  updateMachineCode: '/machine/machine/updateMachineCode'
+
+  taskList: '/machine/task/list?pageNo={pageNo}&type={type}&status={status}',
+  taskDelete: '/machine/task/delete',
+  taskAdd: '/machine/task/add',
+  taskUpdate: '/machine/task/update',
+  taskSelectAppList: '/machine/task/selectAppList',
+  taskDetail: '/machine/task/detail',
+  taskSelectAreaMachines: '/machine/task/selectAreaMachines',
+  // getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
+  updateMachineCode: '/machine/machine/updateMachineCode',
+  taskUpdateStatus: '/machine/task/updateStatus',
+
+
+  updateLogStatus: '',
+  returnDeskTop: '/machine/machine/cutDesktop',
+  updateLocaleMachineSetting: '/machine/machine/updateMachine',
+  findMachineInfoById: '/machine/machine/findMachineInfoById',
 });
 
 export default api;

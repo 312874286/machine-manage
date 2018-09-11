@@ -275,10 +275,10 @@ const WatchForm = Form.create()(
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label="所属商户">
-              <span>{modalData.sellerName}</span>
+              <span>{modalData.merchantName}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="所属店铺">
-              <span>{modalData.shop}</span>
+              <span>{modalData.shopName}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="商品价格">
               <span>{modalData.price}</span>
@@ -677,12 +677,12 @@ export default class goodsSettingList extends PureComponent {
         }
       }
       this.setState({
-        fileList: [{
+        fileList: data.img ? [{
           uid: -1,
           name: 'xxx.png',
           status: 'done',
           url: data.img,
-        }],
+        }] : [],
         bannerfileList: flist,
         videoUrl,
       });
@@ -695,6 +695,7 @@ export default class goodsSettingList extends PureComponent {
         img: data.img || undefined,
         shopId: data.shopId || undefined,
         specRemark: data.specRemark || undefined,
+        number: data.number || undefined,
       });
     } else {
       this.setState({
@@ -711,6 +712,7 @@ export default class goodsSettingList extends PureComponent {
         remark: undefined,
         img: undefined,
         specRemark: undefined,
+        number: undefined,
       });
     }
   }
@@ -808,7 +810,7 @@ export default class goodsSettingList extends PureComponent {
         },
       },
     }).then((resp) => {
-      let fList
+      let fList = []
       if (resp.img) {
         fList = [{
           uid: -2,
@@ -816,10 +818,10 @@ export default class goodsSettingList extends PureComponent {
           status: 'done',
           url: resp.img,
         }]
-        this.setState({
-          fileList: fList,
-        });
       }
+      this.setState({
+        fileList: fList,
+      });
       if (resp.banner) {
         if (this.imgFlag(resp.banner)) {
           fList = [{

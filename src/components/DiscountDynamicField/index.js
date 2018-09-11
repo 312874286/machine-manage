@@ -139,12 +139,15 @@ class DiscountDynamicField extends React.Component {
     this.props.discountHandle(this.state.dataSource);
   }
   handleDelete = (key) => {
+    console.log(key)
     this.props.discountHandleDelete(key);
   }
   handleAdd = () => {
+    console.log('val', this.state.dataSource, this.state.currentValue, this.props.count)
     this.props.discountHandleAdd(this.state.dataSource, this.state.currentValue, this.props.count);
   }
   handleChangeName = (record, value) => {
+    console.log('val', value)
     record.shopsId = value;
     // let number = 0
     // for (var i = 0; i < this.state.clist.length; i++ ) {
@@ -154,7 +157,7 @@ class DiscountDynamicField extends React.Component {
     //   }
     // }
     console.log('val', record, this.state.dataSource, this.props.initData);
-    this.props.discountHandle(this.props.initData);
+    this.props.discountHandle(this.state.dataSource);
   }
   handleSave = (row) => {
     this.props.discountHandleChange(row);
@@ -170,19 +173,24 @@ class DiscountDynamicField extends React.Component {
     let rlist = [];
     for (let i = 1; i <= 10; i++) {
       let newobj = {
-        id: i.toString(),
+        id: i,
         name: i.toString(),
       }
       rlist.push(newobj);
     }
     this.setState({
-      rlist: rlist,
+      rlist,
     });
-    if (this.props.initData.length !== 0) {
+    console.log('couponsInitDatas', initData)
+    if (initData.length !== 0) {
       this.setState({
         dataSource: initData,
       });
     } else {
+      this.setState({
+        dataSource: [],
+      });
+
     }
     this.setState({
       count: count,
@@ -190,7 +198,7 @@ class DiscountDynamicField extends React.Component {
 
   }
   render() {
-    const { dataSource } = this.state;
+    const { dataSource, rlist } = this.state;
     const { count, couponsShow, shopClist } = this.props;
     // console.log('discount::', count);
     const components = {
@@ -199,6 +207,7 @@ class DiscountDynamicField extends React.Component {
         cell: EditableCell,
       },
     };
+    console.log('couponsInitDatas', dataSource)
     const children2 = [];
     let defaultValue2 = '';
 
@@ -212,7 +221,7 @@ class DiscountDynamicField extends React.Component {
         dataIndex: 'shopName',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleChangeName.bind(this, record)} defaultValue={ record.shopName } placeholder="请选择店铺">
+            <Select onSelect={this.handleChangeName.bind(this, record)} defaultValue={ record.shopName } placeholder="请选择店铺">
               {/*{children}*/}
               {shopClist.map((item) => {
                 return (
@@ -247,7 +256,7 @@ class DiscountDynamicField extends React.Component {
         dataIndex: 'shopName',
         render: (text, record) => {
           return (
-            <Select defaultValue={ record.shopName } placeholder="请选择店铺">
+            <Select onSelect={this.handleChangeName.bind(this, record)}  defaultValue={ record.shopName } placeholder="请选择店铺">
               {/*{children}*/}
               {shopClist.map((item) => {
                 return (
@@ -271,7 +280,11 @@ class DiscountDynamicField extends React.Component {
         render: (text, record) => {
           return (
             <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-              {children2}
+              {rlist.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.id}</Option>
+                );
+              })}
             </Select>
 
           );
@@ -316,7 +329,7 @@ class DiscountDynamicField extends React.Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={this.props.initData}
+          dataSource={dataSource}
           columns={columns}
           pagination={false}
           rowKey={record => record.key}

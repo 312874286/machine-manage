@@ -364,7 +364,7 @@ class ScheduleTable extends PureComponent {
                                 <span>结束时间：{item.endTime}</span>
                               </div>
                               <div className={styles.editBox}>
-                                <div  onClick={() => onEditClick(item)} style={{ display: moment(item.endTime) < new Date().getTime() ? 'none' : '' }} >
+                                <div  onClick={() => onEditClick(item)} style={{ display: ((moment(item.endTime) < new Date().getTime()) || item.isDelete === 2) ? 'none' : '' }} >
                                   编辑
                                 </div>
                                 <div  onClick={() => onWatchClick(item)}>查看</div>
@@ -384,8 +384,8 @@ class ScheduleTable extends PureComponent {
                                    </div>
                                  } trigger="hover">
                             <div style={{
-                                 background: moment(item.endTime) < new Date().getTime()  ? 'rgba(242,242,242,1)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)'),
-                                 color: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
+                                 background: ((moment(item.endTime) < new Date().getTime()) || item.isDelete === 2 )  ? 'rgba(242,242,242,1)' : (moment(item.startTime) > new Date().getTime() ? 'rgba(235,242,255,1)' : 'rgba(229,247,216,1)'),
+                                 color: ((moment(item.endTime) < new Date().getTime()) || item.isDelete === 2 )  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#5076FF' : '#48AB00'),
                                  width: item.width, top: item.top, left: item.left, position: 'absolute', display: 'flex',
                                  justifyContent: 'space-between', zIndex: 999, height: '40px',alignItems: 'center', borderRadius: '0px 34px 34px 0px' }}>
 
