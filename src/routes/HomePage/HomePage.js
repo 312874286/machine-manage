@@ -25,11 +25,13 @@ export default class homePageSetting extends PureComponent {
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
-      const account = setAccountMenusList.filter((item) => item.path === 'check')[0]
-        .children.filter((item) => item.path === 'fault')
-      this.setState({
-        account,
-      })
+      let account = setAccountMenusList.filter((item) => item.path === 'check')
+        if (account[0]) {
+          this.setState({
+            account: account.children.filter((item) => item.path === 'fault'),
+          })
+        }
+
     }
   }
   // 获取列表

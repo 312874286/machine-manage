@@ -62,10 +62,23 @@ export default class stockOut extends PureComponent {
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
-    const account = setAccountMenusList.filter((item) => item.path === 'check')[0]
-      .children.filter((item) => item.path === 'fault')
+    // const account = setAccountMenusList.filter((item) => item.path === 'check')[0]
+    //   .children.filter((item) => item.path === 'fault')
+    // var obj = {}
+    // if (account.length > 0) {
+    //   if (account[0].children) {
+    //     account[0].children.forEach((item, e) => {
+    //       obj[item.path] = true;
+    //     })
+    //     this.setState({
+    //       account: obj
+    //     })
+    //   }
+    // }
+    let account = setAccountMenusList.filter((item) => item.path === 'check')
     var obj = {}
-    if (account.length > 0) {
+    if (account[0]) {
+      account = account[0].children.filter((item) => item.path === 'fault')
       if (account[0].children) {
         account[0].children.forEach((item, e) => {
           obj[item.path] = true;
