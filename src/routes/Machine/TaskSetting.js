@@ -28,8 +28,8 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const taskTypeOptions = [{id: 1, name: '升级App'}, {id: 2, name: '卸载App'}, {id: 3, name: '合并货道'}, {id: 4, name: '拆分货道'}]
 const taskTypeLists = ['', '升级App', '卸载App', '合并货道', '拆分货道']
-const taskStatusOptions = [{id: 0, name: '未执行'}, {id: 1, name: '待执行'}, {id: 2, name: '已执行'} ]
-const taskStatus = ['未执行', '待执行', '已执行', '待执行']
+const taskStatusOptions = [{id: 1, name: '未执行'}, {id: 2, name: '已执行'} ]
+const taskStatus = ['未执行', '未执行', '已执行', '待执行']
 const doType = [{id: 1, name: 'socket'}, {id: 2, name: 'push'}]
 const doTypeLists = ['', 'socket', 'push']
 const doStatus = ['未执行', '成功', '失败']
@@ -812,18 +812,18 @@ export default class TaskSetting extends PureComponent {
   componentDidUpdate(comp,state) {
     // console.log(arguments)
     // console.log('当前%s组件卸载app组件',comp.constructor === UpgradeAppForm.constructor?'是':'不是')
-    if (this.state.modalVisible && this.state.modalData.type) {
-      this.setModalUnloadAppData(this.state.modalData)
-      if (this.state.taskType === 1) {
-        // this.getAppLists()
-        this.setModalUpgradeAppData(this.state.modalData);
-      } else if (this.state.taskType === 2) {
-        // this.getAppLists()
-        this.setModalUnloadAppData(this.state.modalData);
-      } else {
-        this.setModalAisleTaskSettingData(this.state.modalData);
-      }
-    }
+    // if (this.state.modalVisible && this.state.modalData.type) {
+    //   this.setModalUnloadAppData(this.state.modalData)
+    //   if (this.state.taskType === 1) {
+    //     // this.getAppLists()
+    //     this.setModalUpgradeAppData(this.state.modalData);
+    //   } else if (this.state.taskType === 2) {
+    //     // this.getAppLists()
+    //     this.setModalUnloadAppData(this.state.modalData);
+    //   } else {
+    //     this.setModalAisleTaskSettingData(this.state.modalData);
+    //   }
+    // }
   }
   // 获取列表
   getLists = () => {
@@ -1254,17 +1254,17 @@ export default class TaskSetting extends PureComponent {
       taskType: res.type,
       selectedNo: selectedNo === '18' ? 28 : 38
     })
-    // setTimeout(() => {
-    //   if (res.type === 1) {
-    //     this.getAppLists()
-    //     this.setModalUpgradeAppData(res);
-    //   } else if (res.type === 2) {
-    //     this.getAppLists()
-    //     this.setModalUnloadAppData(res);
-    //   } else {
-    //     this.setModalAisleTaskSettingData(res);
-    //   }
-    // }, 500)
+    setTimeout(() => {
+      if (res.type === 1) {
+        this.getAppLists()
+        this.setModalUpgradeAppData(res);
+      } else if (res.type === 2) {
+        this.getAppLists()
+        this.setModalUnloadAppData(res);
+      } else {
+        this.setModalAisleTaskSettingData(res);
+      }
+    }, 500)
     // taskUpdate
     // this.getLists();
   }
@@ -1764,13 +1764,13 @@ export default class TaskSetting extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)} style={{ display: !account.detail ? 'none' : ''}}>查看</a>
-            <Divider type="vertical" style={{ display: (item.status !== 0 && !account.update) ? 'none' : '' }} />
+            <Divider type="vertical" style={{ display: (item.status !== 0 && account.update) ? 'none' : '' }} />
             <a onClick={item.status === 0 ? () => this.editTask(item) : null }
-               style={{ display: (item.status !== 0 && !account.update) ? 'none' : '' }}
+               style={{ display: (item.status !== 0 && account.update) ? 'none' : '' }}
             >编辑</a>
-            <Divider type="vertical" style={{ display: (item.status !== 0 && !account.delete) ? 'none' : '' }}/>
+            <Divider type="vertical" style={{ display: (item.status !== 0 && account.delete) ? 'none' : '' }}/>
             <a onClick={item.status === 0 ? () => this.deleteTask(item) : null }
-               style={{ display: (item.status !== 0 && !account.delete) ? 'none' : '' }}>删除</a>
+               style={{ display: (item.status !== 0 && account.delete) ? 'none' : '' }}>删除</a>
           </Fragment>
         ),
       },
