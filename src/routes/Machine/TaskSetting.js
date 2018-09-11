@@ -793,7 +793,7 @@ export default class TaskSetting extends PureComponent {
   componentDidUpdate(comp,state) {
     // console.log(arguments)
     // console.log('当前%s组件卸载app组件',comp.constructor === UpgradeAppForm.constructor?'是':'不是')
-    if (this.state.modalVisible && this.state.modalData.taskType) {
+    if (this.state.modalVisible && this.state.modalData.type) {
       this.setModalUnloadAppData(this.state.modalData)
       if (this.state.taskType === 1) {
         // this.getAppLists()
@@ -926,10 +926,11 @@ export default class TaskSetting extends PureComponent {
   }
   // 设置modal 数据
   setModalUpgradeAppData = (data) => {
+    console.log('data', data)
     if (this.UpgradeAppForm) {
       if (data) {
         this.UpgradeAppForm.setFieldsValue({
-          app: data.app || '',
+          appId: data.appId || '',
           appUrl: data.appUrl || undefined,
           appVersion: data.appVersion || undefined,
           doType: data.doType || undefined,
