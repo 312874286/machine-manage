@@ -416,6 +416,22 @@ const proxy = {
             parentId: 'a26',
             functionLevel: 2,
           },
+          {
+            id: 'a34',
+            functionDepict: '数据统计',
+            functionPath: 'data',
+            parentId: null,
+            functionLevel: 1,
+            functionIcon: 'player',
+            color: 'yellow'
+          },
+          {
+            id: 'a35',
+            functionDepict: '数据统计',
+            functionPath: 'dataStatistics',
+            parentId: 'a34',
+            functionLevel: 2,
+          },
         ]
       };
       res.send({
@@ -3798,7 +3814,41 @@ const proxy = {
       "data": null,
       "msg": "成功"
     })
-  }
+  },
+  'GET /statistics//sta TemplateDelete': (req, res) => {
+    res.send({
+      "code": 0,
+      "msg": "成功"
+    })
+  },
+  'POST /statistics/TemplateInsert': (req, res) => {
+    res.send({
+        "code": 0,
+        "msg": "成功"
+      })
+  },
+  'POST /statistics/TemplateUpdate': (req, res) => {
+    res.send({
+      "code": 0,
+      "msg": "成功"
+    })
+  },
+  'GET /statistics/TemplateQuery': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": [{
+          name:"1212",
+          opType: 1,
+          template:"asdasdasdasd",
+          titles:["a", "b","c"],
+          createTime:"2017-1-1 12:12:12",
+          updateTime:"2017-1-1 12:12:12"
+        }],
+        "msg": "成功"
+      }
+
+    )
+  },
 };
 
 // export default noProxy ? {

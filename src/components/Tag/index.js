@@ -13,6 +13,7 @@ class EditableTagGroup extends PureComponent {
   };
   componentWillReceiveProps(nextProps) {
     const { value, } = nextProps;
+    console.log('tags', value)
     if (value.tags) {
       this.setState({
         tags: value.tags,

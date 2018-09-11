@@ -320,6 +320,9 @@ export const getRouterData = (app) => {
     '/player/user': {
       component: dynamicWrapper(app, ['player/player'], () => import('../routes/Player/User')),
     },
+    '/data/dataStatistics': {
+      component: dynamicWrapper(app, ['data/dataStatistics'], () => import('../routes/Data/DataStatistics')),
+    },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
