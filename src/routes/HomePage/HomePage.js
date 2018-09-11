@@ -28,7 +28,7 @@ export default class homePageSetting extends PureComponent {
       let account = setAccountMenusList.filter((item) => item.path === 'check')
         if (account[0]) {
           this.setState({
-            account: account.children.filter((item) => item.path === 'fault'),
+            account: account[0].children.filter((item) => item.path === 'fault'),
           })
         }
 
