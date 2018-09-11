@@ -171,17 +171,23 @@ const UpgradeAppForm = Form.create(
             </FormItem>
             <FormItem {...formItemLayout} label="选择开始时间">
               {getFieldDecorator('doTimeStr', {
-                rules: [{ required: false, message: '选择开始时间' }],
+                rules: [{ required: true, message: '选择开始时间' }],
               })(
                 <DatePicker
-                  disabledDate={disabledStartDate}
-                  disabledTime={disabledTime}
-                  // showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                  format="YYYY-MM-DD HH:mm"
-                  placeholder="选择开始时间"
+                format="YYYY-MM-DD HH:mm:ss"
+                disabledDate={disabledStartDate}
+                disabledTime={disabledTime}
+                showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 />
               )}
             </FormItem>
+            {/*<DatePicker*/}
+            {/*disabledDate={disabledStartDate}*/}
+            {/*disabledTime={disabledTime}*/}
+            {/*// showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}*/}
+            {/*format="YYYY-MM-DD HH:mm"*/}
+            {/*placeholder="选择开始时间"*/}
+            {/*/>*/}
             <FormItem {...formItemLayout} label="选择执行方式">
               {getFieldDecorator('doType', {
                 rules: [{ required: true, message: '请选择执行方式' }],
