@@ -1236,6 +1236,7 @@ export default class TaskSetting extends PureComponent {
   }
   editTask = async (item) => {
     let res = await this.getTaskDetail(item)
+    console.log('item', res)
     let AisleList
     const selectedNo = res.machineList[0].machineCode.slice(0, 2)
     if (selectedNo === '18') {
@@ -1268,6 +1269,7 @@ export default class TaskSetting extends PureComponent {
     // this.getLists();
   }
   getTaskDetail = async(item) => {
+    console.log('item', item)
     return await this.props.dispatch({
       type: 'taskSetting/taskDetail',
       payload: {
