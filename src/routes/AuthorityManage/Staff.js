@@ -4,6 +4,7 @@ import { Card, Table, Col, Row, Button, Input, Modal, message, Tree, Divider, Al
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {Form} from "antd/lib/index";
 import {getAccountMenus} from "../../utils/authority";
+import styles from './Staff.less'
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
@@ -157,11 +158,10 @@ const SelectDataForm = Form.create()(
     this.columnsRight = [{
       title: '名称',
       dataIndex: 'functionDepict',
-      width: '90%',
+      width: '75%',
     }, {
       title: '操作',
       width: 70,
-      dataIndex: 'operation',
       render: (text, record) => {
         return (
           targetData.length > 0
@@ -241,7 +241,7 @@ const SelectDataForm = Form.create()(
                 </Tree>
               </Col>
               <Col md={20} sm={24} style={{ paddingLeft: '3px' }}>
-                <div style={{ marginLeft: '20px', marginTop: '10px' }}>
+                <div style={{ marginLeft: '20px', marginTop: '10px' }} className={styles.tableBox}>
                   <Alert
                     message={(
                       <div>
@@ -1267,28 +1267,29 @@ export default class Staff extends PureComponent {
           targetData={this.state.targetData}
           targetHandleDelete={this.targetHandleDelete}
         />
+        <div >
+          <SelectDataForm
+            ref={this.selectDataFormRef}
+            editDataModalVisible={this.state.editDataModalVisible}
+            onEditDataHandleAddClick={this.onEditDataHandleAddClick}
+            onEditDataHandleModalVisibleClick={this.onEditDataHandleModalVisibleClick}
+            editDataEditModalConfirmLoading={this.state.editDataEditModalConfirmLoading}
+            renderTreeNodes={this.renderDataTreeNodes}
+            treeData={this.state.dataTreeData}
+            onSelect={this.onDataSelect}
 
-        <SelectDataForm
-          ref={this.selectDataFormRef}
-          editDataModalVisible={this.state.editDataModalVisible}
-          onEditDataHandleAddClick={this.onEditDataHandleAddClick}
-          onEditDataHandleModalVisibleClick={this.onEditDataHandleModalVisibleClick}
-          editDataEditModalConfirmLoading={this.state.editDataEditModalConfirmLoading}
-          renderTreeNodes={this.renderDataTreeNodes}
-          treeData={this.state.dataTreeData}
-          onSelect={this.onDataSelect}
+            targetData={this.state.dataTargetData}
+            targetHandleDelete={this.DataTargetHandleDelete}
 
-          targetData={this.state.dataTargetData}
-          targetHandleDelete={this.DataTargetHandleDelete}
-
-          selectedRowKeys={this.state.selectedRowKeys}
-          onChangeRowSelection={this.onChangeRowSelection}
-          onLeftSelect={this.onLeftSelect}
-          onSelectAll={this.onSelectAll}
-          handleSave={this.handleSave}
-          addData={this.addData}
-          selectAll={this.state.selectAll}
-        />
+            selectedRowKeys={this.state.selectedRowKeys}
+            onChangeRowSelection={this.onChangeRowSelection}
+            onLeftSelect={this.onLeftSelect}
+            onSelectAll={this.onSelectAll}
+            handleSave={this.handleSave}
+            addData={this.addData}
+            selectAll={this.state.selectAll}
+          />
+        </div>
         <DetailDataForm
           DetailDataVisible={this.state.DetailDataVisible}
           modelData={this.state.modelData}
