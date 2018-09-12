@@ -12,11 +12,11 @@ class EditableTagGroup extends PureComponent {
     tags: [],
   };
   componentWillReceiveProps(nextProps) {
-    const { value, } = nextProps;
-    console.log('tags', value)
-    if (value.tags) {
+    const { value, tags } = nextProps;
+    // console.log('tags', value, tags)
+    if (tags) {
       this.setState({
-        tags: value.tags,
+        tags,
       });
     }
   }

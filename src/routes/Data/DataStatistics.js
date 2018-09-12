@@ -75,13 +75,14 @@ const ModalForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="机器标签">
+            <FormItem {...formItemLayout} label="标签">
               {getFieldDecorator('titles', {
                 rules: [{ required: false }],
                 initialValue: { tags: modalData.tags },
               })(
                 <EditableTagGroup
                   handleTags={handleTags}
+                  tags={modalData.tags}
                 />
               )}
             </FormItem>
@@ -89,7 +90,7 @@ const ModalForm = Form.create()(
               {getFieldDecorator('template', {
                 rules: [{ required: true, message: '请填写模版信息' }],
               })(
-                <Input.TextArea rows={4} placeholder="请填写模版信息" />
+                <Input.TextArea rows={8} placeholder="请填写模版信息" />
               )}
             </FormItem>
           </Form>
@@ -295,6 +296,8 @@ export default class DataStatistics extends PureComponent {
       modalVisible: flag,
       modalData: { },
       currentData: {}
+    }, () => {
+      this.setModalData()
     });
   };
   // tag设置开始
@@ -311,6 +314,7 @@ export default class DataStatistics extends PureComponent {
       modalGoOnVisible: true,
       currentData: item
     })
+    this.setGoOnModalData()
   }
   edit = (item) => {
     // currentData
@@ -326,8 +330,12 @@ export default class DataStatistics extends PureComponent {
           },
         },
       }).then((res) => {
-        if (res.code === 0) {
-          this.setModalData(res.data[0])
+        if (res.code === 0 && res.data.length > 0) {
+          this.setState({
+            modalData: { tags: res.data[0].titles },
+          }, () => {
+            this.setModalData(res.data[0])
+          })
         }
       });
     });
@@ -348,30 +356,39 @@ export default class DataStatistics extends PureComponent {
           maxCount: 1,
         });
         message.success('删除成功')
+        this.getLists('')
       }
     });
   }
   setModalData = (data) => {
     if (data) {
-      console.log('data.title', data.title)
       this.setState({
         modalData: { tags: data.titles },
+      }, () => {
+        this.ModalForm.setFieldsValue({
+          name: data.name || '',
+          template: data.template || undefined,
+          opType: data.opType || undefined,
+        });
       })
-      this.ModalForm.setFieldsValue({
-        name: data.name || '',
-        template: data.template || undefined,
-        opType: data.opType || undefined,
-      });
     } else {
       this.setState({
-        modalData: {},
+        modalData: { tags: [] },
+      }, () => {
+        this.ModalForm.setFieldsValue({
+          name: undefined,
+          template: undefined,
+          opType: undefined,
+        });
       })
-      this.ModalForm.setFieldsValue({
-        name: undefined,
-        template: undefined,
-        opType: undefined,
-      });
     }
+  }
+  setGoOnModalData = () => {
+    this.GoOnModalForm.setFieldsValue({
+      startTime: undefined,
+      endTime: undefined,
+      activityCode: undefined
+    });
   }
   // goOn继续执行
   saveModalFormRef = (form) => {
