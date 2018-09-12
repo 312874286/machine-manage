@@ -25,6 +25,7 @@ import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ChannelSetting.less';
 import LogModal from '../../components/LogModal/index';
+import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
@@ -109,9 +110,26 @@ export default class channelSettingList extends PureComponent {
     logId: '',
     logModalPageNo: 1,
     modalType: true,
+    account: {}
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+        .children.filter((item) => item.path === 'channel')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取点位管理列表
   getLists = () => {
@@ -376,12 +394,12 @@ export default class channelSettingList extends PureComponent {
   }
   render() {
     const {
-      channelSetting: { list, page },
+      channelSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType } = this.state;
-    const columns = [
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, account } = this.state;
+    let columns = [
       // {
       //   title: '渠道ID',
       //   width: 200,
@@ -392,6 +410,7 @@ export default class channelSettingList extends PureComponent {
         title: '渠道编码',
         width: '45%',
         dataIndex: 'channelCode',
+        key: 'channelCode'
       },
       // {
       //   title: '渠道状态',
@@ -423,6 +442,7 @@ export default class channelSettingList extends PureComponent {
       {
         title: '渠道名称',
         dataIndex: 'channelName',
+        key: 'channelName'
       },
       {
         fixed: 'right',
@@ -430,17 +450,39 @@ export default class channelSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
             {/*<Divider type="vertical" />*/}
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             <Divider type="vertical" />
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
+              <a className={styles.delete} style={{ display: !account.delete ? 'none' : '' }}>删除</a>
             </Popconfirm>
           </Fragment>
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -461,7 +503,9 @@ export default class channelSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}
+                style={{ display: !account.add ? 'none' : '' }}
+              >
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -475,16 +519,18 @@ export default class channelSettingList extends PureComponent {
                 {/*</span>*/}
               {/*)}*/}
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={500}
-            />
+            <div style={{ display: !account.list ? 'none' : '' }}>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={500}
+              />
+            </div>
           </div>
         </Card>
         <CreateForm

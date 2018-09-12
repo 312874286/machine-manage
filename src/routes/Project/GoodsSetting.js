@@ -24,6 +24,7 @@ import LogModal from '../../components/LogModal/index';
 import moment from "moment/moment";
 import {message} from "antd/lib/index";
 import domain from "../../common/config/domain"
+import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
@@ -324,10 +325,28 @@ export default class goodsSettingList extends PureComponent {
     previewImage: '',
     fileList: [],
     bannerfileList: [],
-    videoUrl: {}
+    videoUrl: {},
+
+    account: {},
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+        .children.filter((item) => item.path === 'goods')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取列表
   getLists = () => {
@@ -955,34 +974,39 @@ export default class goodsSettingList extends PureComponent {
   handleChange = ({ fileList }) => this.setState({ fileList })
   bannerHandleChange = ({ fileList }) => this.setState({ bannerfileList: fileList })
   render() {
-    const { goodsSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists } = this.state;
+    const { goodsSetting: { list, page, unColumn }, loading, log: { logList, logPage }, } = this.props;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, account } = this.state;
     const { previewVisible, previewImage, fileList } = this.state
-    const columns = [
+    let columns = [
       {
         title: '商品ID',
         width: '10%',
         dataIndex: 'code',
+        key: 'code'
       },
       {
         title: '商品名称',
         width: '8%',
         dataIndex: 'name',
+        key: 'name'
       },
       {
         title: '规格描述',
         width: '8%',
         dataIndex: 'specRemark',
+        key: 'specRemark'
       },
       {
         title: '所属商户',
         width: '8%',
         dataIndex: 'sellerId',
+        key: 'sellerId'
       },
       {
         title: '所属店铺',
         width: '15%',
         dataIndex: 'shopId',
+        key: 'shopId'
       },
       {
         title: '图片缩略图',
@@ -1011,21 +1035,25 @@ export default class goodsSettingList extends PureComponent {
             null
           )
 
-        )
+        ),
+        key: 'img'
       },
       {
         title: '商品价格',
         width: '10%',
         dataIndex: 'price',
+        key: 'price'
       },
       {
         title: '商品数量',
         width: '10%',
         dataIndex: 'number',
+        key: 'number'
       },
       {
         title: '备注',
         dataIndex: 'remark',
+        key: 'remark'
       },
       {
         fixed: 'right',
@@ -1033,19 +1061,45 @@ export default class goodsSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleWatchClick(item)}>查看</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            <Divider type="vertical" />
+            <a onClick={() => this.handleWatchClick(item)}
+               style={{ display: !account.detail ? 'none' : ''}}
+            >查看</a>
+            <Divider type="vertical" style={{ display: !account.detail ? 'none' : ''}}/>
+            <a onClick={() => this.handleEditClick(item)}
+               style={{ display: !account.update ? 'none' : ''}}
+            >编辑</a>
+            <Divider type="vertical" style={{ display: !account.update ? 'none' : ''}}/>
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
+              <a className={styles.delete} style={{ display: !account.delete ? 'none' : ''}}>删除</a>
             </Popconfirm>
           </Fragment>
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -1067,20 +1121,22 @@ export default class goodsSettingList extends PureComponent {
           <Card bordered={false}>
             <div className={styles.tableList}>
               <div className={styles.tableListOperator}>
-                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                   新建
                 </Button>
               </div>
-              <StandardTable
-                selectedRows={selectedRows}
-                loading={loading}
-                data={list}
-                page={page}
-                columns={columns}
-                onSelectRow={this.handleSelectRows}
-                onChange={this.handleStandardTableChange}
-                scrollX={1200}
-              />
+              <div style={{ display: !account.list ? 'none' : ''}}>
+                <StandardTable
+                  selectedRows={selectedRows}
+                  loading={loading}
+                  data={list}
+                  page={page}
+                  columns={columns}
+                  onSelectRow={this.handleSelectRows}
+                  onChange={this.handleStandardTableChange}
+                  scrollX={1200}
+                />
+              </div>
             </div>
           </Card>
           <CreateForm

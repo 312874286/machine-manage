@@ -6,6 +6,7 @@ export default {
     list: [],
     page: {},
     datas: {},
+    unColumn: []
   },
 
   effects: {
@@ -35,7 +36,7 @@ export default {
   },
 
   reducers: {
-    saveList(state, { payload: { data, page } }) {
+    saveList(state, { payload: { data, page, unColumn } }) {
       return {
         ...state,
         list: data,
@@ -44,6 +45,7 @@ export default {
           pageSize: page.pageSize,
           current: page.pageNo,
         },
+        unColumn,
       };
     },
   },

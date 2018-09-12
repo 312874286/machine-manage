@@ -2,15 +2,33 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import {getAccountMenus} from "../../utils/authority";
 
 @connect(({ jurisdiction }) => ({ jurisdiction }))
 export default class Jurisdiction extends PureComponent {
   state = {
     userName: '',
     pageNo: 1,
+    account: {},
   }
   componentDidMount = () => {
     this.getSystemFunctionList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'authorityManage')[0]
+        .children.filter((item) => item.path === 'jurisdiction')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   onToAuthorization = (record) => {
     console.log(record, this);
@@ -68,10 +86,10 @@ export default class Jurisdiction extends PureComponent {
     })
   }
   render() {
-    const { userName, No } = this.state;
-    const { jurisdiction: { list, page, totalNo } } = this.props;
+    const { userName, No, account } = this.state;
+    const { jurisdiction: { list, page, totalNo, unColumn } } = this.props;
     // console.log(111,list,page);
-    const columns = [
+    let columns = [
       {
         title: '权限名称',
         dataIndex: 'functionDepict',
@@ -104,6 +122,28 @@ export default class Jurisdiction extends PureComponent {
         width: '15%'
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // const { userName } = this.state;
     const paginationProps = {
       showTotal: (total) => {
@@ -148,14 +188,16 @@ export default class Jurisdiction extends PureComponent {
             {/*onChange={this.handleTableChange}*/}
             {/*rowKey="id"*/}
           {/*/>*/}
-          <Table
-            columns={columns}
-            dataSource={list}
-            rowKey="id"
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
-            scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-          />
+          <div style={{ display: !account.list ? 'none' : ''}}>
+            <Table
+              columns={columns}
+              dataSource={list}
+              rowKey="id"
+              pagination={paginationProps}
+              onChange={this.handleTableChange}
+              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+            />
+          </div>
         </Card>
       </PageHeaderLayout>
     );

@@ -41,15 +41,18 @@ export default class userTable extends PureComponent {
       data,
       page,
       loading,
+      unColumn,
     } = this.props;
-    const columns = [
+    let columns = [
       {
         title: '用户Id',
         dataIndex: 'id',
+        key: 'id'
       },
       {
         title: '用户昵称',
         dataIndex: 'userNick',
+        key: 'userNick'
       },
       // {
       //   title: '手机号',
@@ -58,10 +61,12 @@ export default class userTable extends PureComponent {
       {
         title: '渠道名称',
         dataIndex: 'channelName',
+        key: 'channelName'
       },
       {
         title: '创建时间',
         dataIndex: 'createTime',
+        key: 'createTime'
       },
       // {
       //   title: '操作',
@@ -72,7 +77,23 @@ export default class userTable extends PureComponent {
       //   ),
       // },
     ];
-
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 100/(columns.length)
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].width = width + '%'
+    }
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)

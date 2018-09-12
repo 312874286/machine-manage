@@ -15,6 +15,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './replenish.less'
 import StandardTable from '../../components/StandardTable/index';
+import {getAccountMenus} from "../../utils/authority";
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
@@ -68,11 +69,29 @@ export default class replenish extends PureComponent {
     endTime: '',
     areaCode: '',
     selectedRows: [],
-    options: []
+    options: [],
+
+    account: {}
   };
   componentDidMount() {
     this.getLists();
     this.getAreaList('')
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+        .children.filter((item) => item.path === 'fault')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取列表
   getLists = () => {
@@ -270,40 +289,47 @@ export default class replenish extends PureComponent {
   }
   render() {
     const {
-      replenish: { list, page },
+      replenish: { list, page, unColumn },
       loading,
     } = this.props;
-    const { selectedRows } = this.state;
-    const columns = [
+    const { selectedRows, account } = this.state;
+    let columns = [
       {
         title: '补货时间',
         dataIndex: 'createTime',
         width: '15%',
+        key: 'createTime'
       },
       {
         title: '机器编号',
         width: '10%',
         dataIndex: 'machineCode',
+        key: 'machineCode'
       },
       {
         title: '机器点位',
         dataIndex: 'localeStr',
         width: '30%',
+        key: 'localeStr'
       },
       {
         title: '补货人',
         dataIndex: 'name',
         width: '10%',
+        key: 'name',
+        align: 'center'
       },
       {
         title: '手机号',
         width: '10%',
         dataIndex: 'phone',
+        key: 'phone'
       },
       {
         title: '负责区域',
         dataIndex: 'area',
         width: '10%',
+        key: 'area'
       },
       {
         title: '补货明细',
@@ -311,16 +337,34 @@ export default class replenish extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
+        key: 'detail'
       },
     ];
-    console.log('list', list)
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 100/(columns.length)
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].width = width + '%'
+    }
+    // console.log('list', list)
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <div className={styles.tableList}>
+          <div className={styles.tableList} style={{ display: !account.list ? 'none' : ''}}>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

@@ -25,8 +25,8 @@ import {
   Spin,
   Popover,
   Cascader,
-  TimePicker,
-  Switch
+  Switch,
+  TimePicker
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
@@ -36,6 +36,8 @@ import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
+
+import { getAccountMenus } from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -170,9 +172,7 @@ const EditPointForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="新点位">
-              {getFieldDecorator('locale', {
-                initialValue: undefined,
-              })(
+              {getFieldDecorator('locale')(
                 <Select
                   // mode="multiple"
                   // labelInValue
@@ -189,7 +189,7 @@ const EditPointForm = Form.create()(
                   {/*{*/}
                   {/*data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)*/}
                   {/*}*/}
-                  {data.map((item,index) => {
+                  {data.map((item) => {
                     return (
                       <Option value={item.text} key={item.id} data-id={item.id}>
                         <a title={item.text}>
@@ -230,7 +230,7 @@ const EditPointForm = Form.create()(
         </div>
       </Modal>
     );
-  });
+});
 const ManageCutAppForm = Form.create()(
   (props) => {
     const { form, appLists, okCutApp, } = props;
@@ -426,7 +426,6 @@ const WatchForm = Form.create()(
               </div>
             </div>
           </div>
-
           <div style={{ padding: '0px' }}>
             <Row gutter={16}>
               <Col span={12}>
@@ -649,10 +648,6 @@ export default class machineSettingList extends PureComponent {
     logId: '',
     logModalPageNo: 1,
 
-    switchStatus: false,
-    supervisoryStartTime: '',
-    supervisoryEndTime: '',
-
     data: [],
     dataId: '',
     value: '',
@@ -686,6 +681,7 @@ export default class machineSettingList extends PureComponent {
     UploadLogVisible: false,
     UploadLogConfirmLoading: false,
 
+    account: {}
   };
   constructor(props) {
     super(props);
@@ -695,6 +691,22 @@ export default class machineSettingList extends PureComponent {
   componentDidMount() {
     this.getLists();
     this.getAreaList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+        .children.filter((item) => item.path === 'machine-setting')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   getInput = () => {
     if (this.props.inputType === 'number') {
@@ -960,6 +972,7 @@ export default class machineSettingList extends PureComponent {
       localeId = this.state.modalData.localeId
     }
     // 确认修改点位
+    // console.log(this.state.dataId)
     this.pointForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -1702,20 +1715,17 @@ export default class machineSettingList extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData,
-      updateList, appLists, AisleList, message, appLists2, createTime, account } = this.state;
-    let columns = [
+    const { account, selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
+    const columns = [
       {
         title: '机器编号',
         width: '15%',
         dataIndex: 'machineCode',
-        key: 'machineCode',
       },
       {
         title: '机器点位',
         width: '18%',
         dataIndex: 'localDesc',
-        key: 'localDesc'
       },
       {
         title: '系统状态',
@@ -1723,7 +1733,6 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
         ),
-        key: 'detail'
       },
       {
         title: '网络',
@@ -1795,13 +1804,13 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
-            <a onClick={() => this.handleEditClick(item)}>机器设置</a>
+            <a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleManageAppClick(item)} >管理App</a>
+            <a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
+            <a onClick={() => !account.manageAisle ? null : this.handleManageAisleClick(item)} style={{ display: !account.manageAisle ? 'none' : ''}}>管理货道</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleNoClick(item)}>修改编号</a>
+            <a onClick={() => !account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>
           </Fragment>
         ),
       },
@@ -1878,7 +1887,7 @@ export default class machineSettingList extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <div className={styles.tableList}>
+          <div className={styles.tableList} style={{ display: !account.list ? 'none' : ''}}>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

@@ -21,7 +21,7 @@ import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './PointSetting.less';
 import LogModal from '../../components/LogModal';
-
+import { getAccountMenus } from '../../utils/authority';
 
 const FormItem = Form.Item;
 const { TextArea } = Input
@@ -141,6 +141,8 @@ export default class PointSettingList extends PureComponent {
     code: '',
     modalType: true,
     CreateFormLoading: false,
+
+    account: {}
   };
   componentWillMount() {
     // 查询省
@@ -148,6 +150,22 @@ export default class PointSettingList extends PureComponent {
   componentDidMount() {
     this.getAreaList();
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+        .children.filter((item) => item.path === 'point-setting')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取城市列表
   getAreaList = () => {
@@ -673,41 +691,47 @@ export default class PointSettingList extends PureComponent {
   }
   render() {
     const {
-      pointSetting: { list, page },
+      pointSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options } = this.state;
-    const columns = [
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, account } = this.state;
+    let columns = [
       {
         title: '所属省市区商圈',
         width: '10%',
         dataIndex: 'areaName',
+        key: 'areaName'
       },
       {
         title: '商场',
         width: '10%',
         dataIndex: 'mall',
+        key: 'mall'
       },
       {
         title: '点位名称',
         width: '10%',
         dataIndex: 'name',
+        key: 'name'
       },
       {
         title: '运营人',
         width: '10%',
         dataIndex: 'manager',
+        key: 'manager'
       },
       {
         title: '手机号',
         width: '10%',
         dataIndex: 'mobile',
+        key: 'mobile'
       },
       {
         title: '机器个数',
         width: '10%',
         dataIndex: 'userNum',
+        key: 'userNum'
       },
       {
         title: '机器编号',
@@ -725,10 +749,12 @@ export default class PointSettingList extends PureComponent {
           )
 
         ),
+        key: 'machineCode'
       },
       {
         title: '备注描述',
         dataIndex: 'remark',
+        key: 'remark'
       },
       {
         fixed: 'right',
@@ -736,15 +762,40 @@ export default class PointSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <a onClick={() => account.update ? this.handleEditClick(item) : null} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
             <Divider type="vertical" />
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
+            <Popconfirm title="确定要删除吗" onConfirm={() => !account.delete ? null : this.handleDelClick(item)} okText="Yes" cancelText="No">
+              <a className={styles.delete}
+                 style={{ display: !account.delete ? 'none' : ''}}
+              >删除</a>
             </Popconfirm>
           </Fragment>
         ),
       },
     ];
+    // unColumn
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -765,7 +816,7 @@ export default class PointSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus-circle-o" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus-circle-o" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -779,17 +830,19 @@ export default class PointSettingList extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={1300}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
-            />
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={1300}
+                scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
+              />
+            </div>
           </div>
         </Card>
         {/*<Spin tip="Loading...">*/}

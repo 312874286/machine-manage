@@ -12,6 +12,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './User.less';
 import UserTable from '../../components/Player/userTable';
 import LogModal from '../../components/LogModal';
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 @connect(({ player, loading, log }) => ({
@@ -28,13 +29,29 @@ export default class PlayerUser extends PureComponent {
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
+
+    account: {}
   };
 
   componentDidMount = () => {
     this.getList();
+    this.getAccountMenus(getAccountMenus())
   }
-
-
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'player')[0]
+        .children.filter((item) => item.path === 'user')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
+  }
   // 获取列表
   getList = () => {
     this.props.dispatch({
@@ -127,8 +144,8 @@ export default class PlayerUser extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { player: { list, page }, log: { logList, logPage }, loading } = this.props;
-    const { keyword } = this.state;
+    const { player: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
+    const { keyword, account } = this.state;
 
     return (
       <PageHeaderLayout>
@@ -161,13 +178,16 @@ export default class PlayerUser extends PureComponent {
           </div>
         </Card>
         <Card bordered={false}>
-          <UserTable
-            loading={loading}
-            data={list}
-            page={page}
-            handleTableChange={this.handleTableChange}
-            onLogClick={this.handleLogClick}
-          />
+          <div style={{ display: !account.list ? 'none' : '' }}>
+            <UserTable
+              loading={loading}
+              data={list}
+              page={page}
+              unColumn={unColumn}
+              handleTableChange={this.handleTableChange}
+              onLogClick={this.handleLogClick}
+            />
+          </div>
         </Card>
         <LogModal
           data={logList}
