@@ -2019,6 +2019,7 @@ export default class machineSettingList extends PureComponent {
           appUpdate={this.appUpdate}
           appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
+          returnBtn={this.returnBtn}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}
