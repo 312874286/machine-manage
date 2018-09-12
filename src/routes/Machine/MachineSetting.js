@@ -558,8 +558,7 @@ const EditMachineCodeForm = Form.create()(
         onOk={editMachineCodeHandleAddClick}
         onCancel={() => editMachineCodeHandleModalVisibleClick()}
         confirmLoading={editMachineCodeEditModalConfirmLoading}
-        width={800}
-      >
+        width={800}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="机器编号">

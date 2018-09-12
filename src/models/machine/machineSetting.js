@@ -1,7 +1,7 @@
 import {
   getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting,
   deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus,
-  cutApp, installApp, machineUpdateInfo, updateLogStatus, returnDeskTop, findMachineInfoById
+  cutApp, installApp, machineUpdateInfo, updateLogStatus, returnDeskTop, findMachineInfoById, updateMachineCode
 } from '../../services/machine/machineSetting';
 
 export default {
