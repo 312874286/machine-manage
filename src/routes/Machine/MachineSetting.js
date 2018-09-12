@@ -26,7 +26,8 @@ import {
   Popover,
   Cascader,
   TimePicker,
-  Switch
+  Switch,
+  Tabs,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
@@ -626,6 +627,33 @@ const EditMachineCodeForm = Form.create()(
 //     );
 //   });
 
+const EditMonitoringForm = Form.create()(
+  (props) => {
+    const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick } = props;
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">监控</span>
+          </div>
+        }
+        visible={editMonitoringFormVisible}
+        onCancel={() => editMonitoringHandleModalVisibleClick()}
+        footer={null}
+        width={800}>
+        <div className="manageAppBox">
+          <Tabs onChange={callback} type="card">
+            <TabPane tab="Tab 1" key="1">Content of Tab Pane 1</TabPane>
+            <TabPane tab="Tab 2" key="2">Content of Tab Pane 2</TabPane>
+            <TabPane tab="Tab 3" key="3">Content of Tab Pane 3</TabPane>
+          </Tabs>
+        </div>
+      </Modal>
+    );
+  });
+
+
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
   machineSetting,
@@ -685,6 +713,8 @@ export default class machineSettingList extends PureComponent {
 
     UploadLogVisible: false,
     UploadLogConfirmLoading: false,
+
+    editMonitoringFormVisible: false,
 
   };
   constructor(props) {
@@ -1656,7 +1686,15 @@ export default class machineSettingList extends PureComponent {
       });
     });
   }
+  // handleMonitoringClick 监控
+  handleMonitoringClick = () => {
 
+  }
+  editMonitoringHandleModalVisibleClick = () => {
+    this.setState({
+      editMonitoringFormVisible: false,
+    });
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -1795,6 +1833,8 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
+            <a onClick={() => this.handleMonitoringClick(item)}>监控</a>
+            <Divider type="vertical" />
             <a onClick={() => this.handleEditClick(item)}>机器设置</a>
             <Divider type="vertical" />
             <a onClick={() => this.handleManageAppClick(item)} >管理App</a>
@@ -2011,6 +2051,10 @@ export default class machineSettingList extends PureComponent {
           appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
           returnBtn={this.returnBtn}
+        />
+        <EditMonitoringForm
+          editMonitoringFormVisible={this.state.editMonitoringFormVisible}
+          editMonitoringHandleModalVisibleClick={this.editMonitoringHandleModalVisibleClick}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}
