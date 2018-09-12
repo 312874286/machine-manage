@@ -16,7 +16,9 @@ const SelectAreaForm = Form.create()(
     renderTreeNodes, treeData, onLoadData,
       onExpand, expandedKeys, autoExpandParent,
       checkedKeys, selectedKeys, onCheck, onSelect,
-      targetData,targetHandleDelete,  } = props;
+      targetData,targetHandleDelete,
+
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -68,6 +70,7 @@ const SelectAreaForm = Form.create()(
         }),
       };
     });
+
     return (
       <Modal
         title={
@@ -135,7 +138,11 @@ const SelectDataForm = Form.create()(
       renderTreeNodes, treeData, onLoadData,
       onExpand, expandedKeys, autoExpandParent,
       checkedKeys, selectedKeys, onCheck, onSelect,
-      targetData,targetHandleDelete,  } = props;
+      targetData,targetHandleDelete,
+
+      selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll, handleSave, addData, selectAll
+
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -166,6 +173,20 @@ const SelectDataForm = Form.create()(
         );
       }
     }];
+    // const columnsRight = this.columnsRight.map((col) => {
+    //   if (!col.editable) {
+    //     return col;
+    //   }
+    //   return {
+    //     ...col,
+    //     onCell: record => ({
+    //       record,
+    //       editable: col.editable,
+    //       dataIndex: col.dataIndex,
+    //       title: col.title,
+    //     }),
+    //   };
+    // });
     const columnsRight = this.columnsRight.map((col) => {
       if (!col.editable) {
         return col;
@@ -177,9 +198,17 @@ const SelectDataForm = Form.create()(
           editable: col.editable,
           dataIndex: col.dataIndex,
           title: col.title,
+          handleSave: handleSave,
         }),
       };
     });
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: onChangeRowSelection,
+      onSelect: onLeftSelect,
+      onSelectAll: onSelectAll,
+    };
     return (
       <Modal
         title={
@@ -222,7 +251,11 @@ const SelectDataForm = Form.create()(
                     type="success"
                     showIcon
                   />
+                  <Button onClick={() => addData()} style={{ display: selectAll ? 'block' : 'none', marginTop: '10px' }}>
+                    删除
+                  </Button>
                   <Table
+                    rowSelection={rowSelection}
                     rowKey={record => record.functionId}
                     columns={columnsRight}
                     dataSource={targetData}
@@ -362,7 +395,15 @@ export default class Staff extends PureComponent {
     account: {},
     areaList: [],
 
-    DetailDataVisible: false
+    DetailDataVisible: false,
+
+
+
+    sourceData: [],
+    sourceKey: [],
+    selectAll: false,
+    // code: '',
+    // level: 1,
 
   }
   componentDidMount = () => {
@@ -811,55 +852,45 @@ export default class Staff extends PureComponent {
   }
   onEditMachineHandleAddClick = () => {
     let self = this
-    if (this.state.targetData.length >0) {
-      this.props.dispatch({
-        type: 'staff/updateFunctionArea',
-        payload: {
-          params: {
-            userId: this.state.modelData.id,
-            areaList: this.state.targetData
-          },
+    this.props.dispatch({
+      type: 'staff/updateFunctionArea',
+      payload: {
+        params: {
+          userId: this.state.modelData.id,
+          areaList: this.state.targetData
         },
-      }).then((res) => {
-        if (res.msg.indexOf('重复') > -1) {
-          confirm({
-            content: '经检测有重复区域，是否需要进行合并',
-            onOk() {
-              return new Promise((resolve, reject) => {
-                setTimeout(
-                  self.setState({
-                      targetData: res.data.map((item) => {
-                        return {
-                          key: item.code,
-                          level: item.level,
-                          code: item.code,
-                          province: item.province,
-                          name: item.name,
-                          city: item.city,
-                          district: item.district,
-                          parentCode: item.parentCode,
-                        }
-                      })
-                    }) ? resolve : reject, 1000);
-              }).catch(() => console.log('Oops errors!'));
-            },
-            onCancel() {},
-          });
-        } else if (res.msg === '成功') {
-          this.setState({
-            editMachineModalVisible: false,
-          })
-        }
-      });
-    } else {
-      message.config({
-        top: 100,
-        duration: 2,
-        maxCount: 1,
-      });
-      message.warn('请先选择');
-      return false
-    }
+      },
+    }).then((res) => {
+      if (res.msg.indexOf('重复') > -1) {
+        confirm({
+          content: '经检测有重复区域，是否需要进行合并',
+          onOk() {
+            return new Promise((resolve, reject) => {
+              setTimeout(
+                self.setState({
+                    targetData: res.data.map((item) => {
+                      return {
+                        key: item.code,
+                        level: item.level,
+                        code: item.code,
+                        province: item.province,
+                        name: item.name,
+                        city: item.city,
+                        district: item.district,
+                        parentCode: item.parentCode,
+                      }
+                    })
+                  }) ? resolve : reject, 1000);
+            }).catch(() => console.log('Oops errors!'));
+          },
+          onCancel() {},
+        });
+      } else if (res.msg === '成功') {
+        this.setState({
+          editMachineModalVisible: false,
+        })
+      }
+    });
   }
   timeFormRef = (form) => {
     this.timeFormRef = form;
@@ -879,7 +910,16 @@ export default class Staff extends PureComponent {
   }
   onEditDataHandleAddClick = () => {
     let self = this
-    if (this.state.dataTargetData.length >0) {
+    if (this.state.selectedRows.length > 0) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.warn('点击左上角批量删除后再确定');
+      return false
+    }
+    // if (this.state.dataTargetData.length >0) {
       this.props.dispatch({
         type: 'staff/updateFunctionData',
         payload: {
@@ -918,15 +958,11 @@ export default class Staff extends PureComponent {
           })
         }
       });
-    } else {
-      message.config({
-        top: 100,
-        duration: 2,
-        maxCount: 1,
-      });
-      message.warn('请先选择');
-      return false
-    }
+    // } else {
+    //   this.setState({
+    //     editDataModalVisible: false,
+    //   })
+    // }
   }
   onEditDataHandleModalVisibleClick = () => {
     this.setState({
@@ -984,6 +1020,47 @@ export default class Staff extends PureComponent {
   DataTargetHandleDelete = (key) => {
     this.setState({
       dataTargetData: this.state.dataTargetData.filter((item) => item.functionId !== key)
+    })
+  }
+  // 数据设置
+  addData = async () => {
+    const selectedRows = this.state.selectedRows
+    console.log('selectedRows', selectedRows)
+    for (let a of selectedRows) {
+      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.functionId)
+      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
+      await this.handleDelete(a.functionId)
+    }
+    this.setState({
+      selectedRows: [],
+      selectAll: false
+    })
+  }
+  handleDelete = (key) => {
+    // console.log('key', key, this.state.targetData)
+    const dataTargetData = [...this.state.dataTargetData];
+    this.setState({ dataTargetData: dataTargetData.filter(item => item.functionId !== key) });
+    console.log('selectedRows', this.state.dataTargetData)
+  }
+  onChangeRowSelection = (selectedRowKeys, selectedRows) => {
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    this.setState({
+      sourceKey: selectedRowKeys,
+      selectedRowKeys,
+    })
+  }
+  onSelectAll = (selected, selectedRows, changeRows) => {
+    this.setState({
+      selectedRows,
+      selectAll: selected
+    })
+    console.log(selected, selectedRows, changeRows);
+  }
+  onLeftSelect = (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+    this.setState({
+      selectedRows,
+      selectAll: true
     })
   }
   render() {
@@ -1203,6 +1280,14 @@ export default class Staff extends PureComponent {
 
           targetData={this.state.dataTargetData}
           targetHandleDelete={this.DataTargetHandleDelete}
+
+          selectedRowKeys={this.state.selectedRowKeys}
+          onChangeRowSelection={this.onChangeRowSelection}
+          onLeftSelect={this.onLeftSelect}
+          onSelectAll={this.onSelectAll}
+          handleSave={this.handleSave}
+          addData={this.addData}
+          selectAll={this.state.selectAll}
         />
         <DetailDataForm
           DetailDataVisible={this.state.DetailDataVisible}
