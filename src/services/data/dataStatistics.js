@@ -24,6 +24,18 @@ export async function templateQuery({ restParams }) {
   });
 }
 
+export async function templateList({ restParams }) {
+  return fetch.get(api.templateList, {
+    restParams,
+  });
+}
+
+export async function getActivityList({ restParams }) {
+  return fetch.get(api.getActivityList, {
+    restParams,
+  });
+}
+
 export async function templateExecute({ restParams }) {
-  window.location.href = `${api.templateExecute}?activityCode=${restParams.activityCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
+  window.location.href = `${api.templateExecute}?name=${restParams.name}&activityCode=${restParams.activityCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
 }

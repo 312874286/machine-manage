@@ -12,19 +12,22 @@ import {
   DatePicker,
   Modal,
   Divider,
+  Popconfirm,
+  message,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './DataStatistics.less'
 import StandardTable from '../../components/StandardTable';
 import EditableTagGroup from '../../components/Tag';
 import {templateQuery} from "../../services/data/dataStatistics";
+import moment from "moment/moment";
 
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const opType = [{id: 1, name: 'mysql'}, {id: 2, name: 'mongo'}, {id: 3, name: 'redis'}, {id: 4, name: 'hibrid'}]
 const opTypeLists = ['', 'mysql', 'mongo', 'redis', 'hibrid']
-const GoOnForm = Form.create()(
+const ModalForm = Form.create()(
   (props) => {
     const { form, modalVisible, editModalAddClick, editModalVisibleClick, editModalConfirmLoading, modalData, handleTags  } = props;
     const { getFieldDecorator } = form;
@@ -95,6 +98,89 @@ const GoOnForm = Form.create()(
     );
   });
 
+const GoOnForm = Form.create()(
+  (props) => {
+    const { form,
+      modalGoOnVisible, editGoOnModalAddClick, editGoOnModalVisibleClick, editGoOnModalConfirmLoading, activityLists,
+      disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange,
+      endOpen, disabledTime, disabledEndTime,
+    } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">执行</span>
+          </div>
+        }
+        visible={modalGoOnVisible}
+        onOk={editGoOnModalAddClick}
+        onCancel={() => editGoOnModalVisibleClick()}
+        confirmLoading={editGoOnModalConfirmLoading}
+        width={800}>
+        <div className="manageAppBox">
+          <Form>
+            <FormItem {...formItemLayout} label="选择活动">
+              {getFieldDecorator('activityCode', {
+                rules: [{ required: false, message: '请选择活动' }],
+              })(<Select placeholder="请选择" >
+                {activityLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                  );
+                })}
+              </Select>)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="选择开始时间">
+              {getFieldDecorator('startTime', {
+                rules: [{ required: false, message: '选择开始时间' }],
+              })(
+                <DatePicker
+                  disabledDate={disabledStartDate}
+                  disabledTime={disabledTime}
+                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                  format="YYYY-MM-DD HH:mm"
+                  // value={startValue}
+                  placeholder="选择开始时间"
+                  onChange={onStartChange}
+                  onOpenChange={handleStartOpenChange}
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="选择结束时间">
+              {getFieldDecorator('endTime', {
+                rules: [{ required: false, message: '选择结束时间' }],
+              })(
+                <DatePicker
+                  disabledTime={disabledEndTime}
+                  disabledDate={disabledEndDate}
+                  showTime={{ defaultValue: moment('23:59:59', 'HH:mm:ss') }}
+                  format="YYYY-MM-DD HH:mm"
+                  // value={endValue}
+                  placeholder="选择结束时间"
+                  onChange={onEndChange}
+                  open={endOpen}
+                  onOpenChange={handleEndOpenChange}
+                />
+              )}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+
 
 @connect(({ common, loading, dataStatistics }) => ({
   common,
@@ -107,14 +193,24 @@ export default class DataStatistics extends PureComponent {
     formValues: {},
     modalData: { },
     pageNo: 1,
-    type: '',
+    name: '',
     selectedRows: [],
 
     modalVisible: false,
     editModalConfirmLoading: false,
+    currentData: {},
+    activityLists: [],
+
+    modalGoOnVisible: false,
+    editGoOnModalConfirmLoading: false,
+
+
+    startValue: null,
+    endValue: null,
+    endOpen: false,
   };
   componentDidMount() {
-    this.getLists();
+    this.getLists('');
   }
   componentDidUpdate(comp,state) {
   }
@@ -124,11 +220,24 @@ export default class DataStatistics extends PureComponent {
       type: 'dataStatistics/templateQuery',
       payload: {
         restParams: {
-          pageNo: this.state.pageNo,
-          status: this.state.status,
-          type: this.state.type,
+          name: this.state.name,
         },
       },
+    });
+  }
+  getActivityLists = () => {
+    this.props.dispatch({
+      type: 'scheduleSetting/activityList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      res = res.map((item) => {
+        return { type: item.type, id: item.id, name: item.name }
+      })
+      this.setState({
+        activityLists: res,
+      });
     });
   }
   // 分页
@@ -155,7 +264,7 @@ export default class DataStatistics extends PureComponent {
     this.setState({
       pageNo: current,
     }, () => {
-      this.getLists();
+      this.getLists('');
     });
   };
   // 重置
@@ -164,9 +273,7 @@ export default class DataStatistics extends PureComponent {
     form.resetFields();
     this.setState({
       formValues: {},
-      pageNo: 1,
-      type: '',
-      status: '',
+      name: ''
     });
   };
   // 搜索
@@ -176,11 +283,9 @@ export default class DataStatistics extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       this.setState({
-        pageNo: 1,
-        type: fieldsValue.type >= 0 ? fieldsValue.type : '',
-        status: fieldsValue.status >= 0 ? fieldsValue.status : ''
+        name: fieldsValue.name
       }, () => {
-        this.getLists();
+        this.getLists('');
       });
     });
   };
@@ -189,6 +294,7 @@ export default class DataStatistics extends PureComponent {
     this.setState({
       modalVisible: flag,
       modalData: { },
+      currentData: {}
     });
   };
   // tag设置开始
@@ -200,27 +306,30 @@ export default class DataStatistics extends PureComponent {
   }
   // tag设置结束
   goOn = (item) => {
-    this.props.dispatch({
-      type: 'dataStatistics/templateExecute',
-      payload: {
-        params: {
-          pageNo: this.state.pageNo,
-          status: this.state.status,
-          type: this.state.type,
-        },
-      },
-    });
+    this.getActivityLists()
+    this.setState({
+      modalGoOnVisible: true,
+      currentData: item
+    })
   }
   edit = (item) => {
-    this.props.dispatch({
-      type: 'dataStatistics/templateUpdate',
-      payload: {
-        restParams: {
-          pageNo: this.state.pageNo,
-          status: this.state.status,
-          type: this.state.type,
+    // currentData
+    this.setState({
+      modalVisible: true,
+      currentData: item
+    }, () => {
+      this.props.dispatch({
+        type: 'dataStatistics/templateList',
+        payload: {
+          restParams: {
+            name: item.name,
+          },
         },
-      },
+      }).then((res) => {
+        if (res.code === 0) {
+          this.setModalData(res.data[0])
+        }
+      });
     });
   }
   delete = (item) => {
@@ -228,12 +337,41 @@ export default class DataStatistics extends PureComponent {
       type: 'dataStatistics/templateDelete',
       payload: {
         restParams: {
-          pageNo: this.state.pageNo,
-          status: this.state.status,
-          type: this.state.type,
+          name: item.name,
         },
       },
+    }).then((res) => {
+      if (res.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.success('删除成功')
+      }
     });
+  }
+  setModalData = (data) => {
+    if (data) {
+      console.log('data.title', data.title)
+      this.setState({
+        modalData: { tags: data.titles },
+      })
+      this.ModalForm.setFieldsValue({
+        name: data.name || '',
+        template: data.template || undefined,
+        opType: data.opType || undefined,
+      });
+    } else {
+      this.setState({
+        modalData: {},
+      })
+      this.ModalForm.setFieldsValue({
+        name: undefined,
+        template: undefined,
+        opType: undefined,
+      });
+    }
   }
   // goOn继续执行
   saveModalFormRef = (form) => {
@@ -245,14 +383,19 @@ export default class DataStatistics extends PureComponent {
       if (err) {
         return;
       }
+      let url = 'dataStatistics/templateInsert'
+      let params = {
+        ...values,
+        titles: this.state.modalData ? this.state.modalData.tags : ''
+      }
+      if (this.state.currentData.name) {
+        url = 'dataStatistics/templateUpdate'
+        params = { ...params,  name: this.state.currentData.name}
+      }
       this.props.dispatch({
-        type: 'dataStatistics/templateInsert',
+        type: url,
         payload: {
-          params: {
-            id: this.state.modalData.id,
-            status: 3,
-            ...values,
-          },
+          params,
         },
       }).then((res) => {
         if (res.code === 0) {
@@ -269,6 +412,94 @@ export default class DataStatistics extends PureComponent {
       modalVisible: flag,
     });
   }
+  // saveGoOnModalFormRef
+  saveGoOnModalFormRef= (form) => {
+    this.GoOnModalForm = form;
+  }
+  // 时间控件开始
+  range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+  disabledTime = () => {
+    return {
+      disabledSeconds: () => this.range(1, 60),
+    };
+  }
+  disabledEndTime = () => {
+    return {
+      disabledSeconds: () => this.range(0, 59),
+    };
+  }
+  disabledStartDate = (startValue) => {
+    return startValue < moment(new Date().setDate(new Date().getDate() - 1)).endOf('day');
+  }
+  disabledEndDate = (endValue) => {
+    const startValue = this.state.startValue;
+    if (!endValue || !startValue) {
+      return false;
+    }
+    return endValue.valueOf() <= startValue.valueOf();
+  }
+  onChange = (field, value) => {
+    this.setState({
+      [field]: value,
+    });
+  }
+  onStartChange = (value) => {
+    this.onChange('startValue', value);
+  }
+
+  onEndChange = (value) => {
+    this.onChange('endValue', value);
+  }
+
+  handleStartOpenChange = (open) => {
+    if (!open) {
+      this.setState({ endOpen: true });
+    }
+  }
+
+  handleEndOpenChange = (open) => {
+    this.setState({ endOpen: open });
+  }
+  // 时间控件结束
+  editGoOnModalAddClick = () => {
+    this.GoOnModalForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      let url = 'dataStatistics/templateExecute'
+      let restParams = {
+        ...values,
+        startTime: values.startTime.format('YYYY-MM-DD HH:mm:ss'),
+        endTime: values.endTime.format('YYYY-MM-DD HH:mm:ss'),
+        name: this.state.currentData.name
+      }
+      console.log('params', restParams)
+      this.props.dispatch({
+        type: url,
+        payload: {
+          restParams,
+        },
+      }).then((res) => {
+        this.getLists();
+        this.setState({
+          modalGoOnVisible: false,
+        });
+      });
+    })
+  }
+  editGoOnModalVisibleClick = (flag) => {
+    this.setState({
+      modalGoOnVisible: flag,
+    });
+  }
+
+
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -353,9 +584,11 @@ export default class DataStatistics extends PureComponent {
           <Fragment>
             <a onClick={() => this.goOn(item)}>执行</a>
             <Divider type="vertical" />
-            <a onClick={item.status === 0 ? () => this.edit(item) : null }>编辑</a>
+            <a onClick={() => this.edit(item)}>编辑</a>
             <Divider type="vertical" />
-            <a onClick={item.status === 0 ? () => this.delete(item) : null }>删除</a>
+            <Popconfirm title="确定要删除吗" onConfirm={() => this.delete(item)} okText="Yes" cancelText="No">
+              <a>删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },
@@ -406,7 +639,7 @@ export default class DataStatistics extends PureComponent {
             </div>
           </div>
         </Card>
-        <GoOnForm
+        <ModalForm
           ref={this.saveModalFormRef}
           modalVisible={modalVisible}
           editModalAddClick={this.editModalAddClick}
@@ -414,6 +647,24 @@ export default class DataStatistics extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalData={modalData}
           handleTags={this.handleTags}
+        />
+        <GoOnForm
+          ref={this.saveGoOnModalFormRef}
+          modalGoOnVisible={this.state.modalGoOnVisible}
+          editGoOnModalAddClick={this.editGoOnModalAddClick}
+          editGoOnModalVisibleClick={this.editGoOnModalVisibleClick}
+          editGoOnModalConfirmLoading={this.state.editGoOnModalConfirmLoading}
+          activityLists={this.state.activityLists}
+          disabledStartDate={this.disabledStartDate}
+          onStartChange={this.onStartChange}
+          disabledEndDate={this.disabledEndDate}
+          onEndChange={this.onEndChange}
+          handleStartOpenChange={this.handleStartOpenChange}
+          handleEndOpenChange={this.handleEndOpenChange}
+          endOpen={this.state.endOpen}
+          disabledTime={this.disabledTime}
+          disabledEndTime={this.disabledEndTime}
+
         />
       </PageHeaderLayout>
     );
