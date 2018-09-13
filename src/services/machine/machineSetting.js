@@ -89,3 +89,9 @@ export async function findMachineInfoById({ params }) {
     body: stringify(params),
   });
 }
+
+export async function machinePointLog({ restParams }) {
+  return fetch.get(api.machinePointLog, {
+    restParams,
+  });
+}

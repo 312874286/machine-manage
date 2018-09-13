@@ -1,7 +1,7 @@
 import {
   getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting,
   deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus,
-  cutApp, installApp, machineUpdateInfo, updateLogStatus, returnDeskTop, findMachineInfoById
+  cutApp, installApp, machineUpdateInfo, updateLogStatus, returnDeskTop, findMachineInfoById, machinePointLog
 } from '../../services/machine/machineSetting';
 
 export default {
@@ -51,8 +51,12 @@ export default {
       }
       return response;
     },
-    *getAppStatus({ payload: { restParams } }, { call, put }) {
+    *getAppStatus({ payload: { restParams } }, { call }) {
       const response = yield call(getAppStatus, { restParams });
+      return response.data;
+    },
+    *machinePointLog({ payload: { restParams } }, { call }) {
+      const response = yield call(machinePointLog, { restParams });
       return response.data;
     },
     *cutApp({ payload: { restParams } }, { call, put }) {

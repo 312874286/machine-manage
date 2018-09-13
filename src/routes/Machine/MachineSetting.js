@@ -37,7 +37,9 @@ import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
+import rAF from '../../utils/rAF'
 
+const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const { Option } = Select;
 const RadioGroup = Radio.Group;
@@ -56,6 +58,9 @@ message.config({
   duration: 2,
   maxCount: 1,
 });
+
+let mySetInterval = null
+let myLogSetInterval = null
 
 const CreateForm = Form.create()(
   (props) => {
@@ -629,7 +634,9 @@ const EditMachineCodeForm = Form.create()(
 
 const EditMonitoringForm = Form.create()(
   (props) => {
-    const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick } = props;
+    const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick, callback,
+      noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval, handleMouseOver, handleMouseOut, mouseOver} = props;
+    console.log('noticePosition', noticePosition)
     return (
       <Modal
         title={
@@ -641,12 +648,51 @@ const EditMonitoringForm = Form.create()(
         visible={editMonitoringFormVisible}
         onCancel={() => editMonitoringHandleModalVisibleClick()}
         footer={null}
+        className={styles.manageAppBox}
         width={800}>
-        <div className="manageAppBox">
-          <Tabs onChange={callback} type="card">
-            <TabPane tab="Tab 1" key="1">Content of Tab Pane 1</TabPane>
-            <TabPane tab="Tab 2" key="2">Content of Tab Pane 2</TabPane>
-            <TabPane tab="Tab 3" key="3">Content of Tab Pane 3</TabPane>
+        <div class="manageAppBox">
+          <Tabs type="card">
+             <TabPane tab="实时日志" key="1">
+               <div>
+                 <Button style={{ width: '120px', marginBottom: '10px' }}
+                         type="Default"
+                         onClick={() => watchTop(machineCode)}>
+                   查看以前
+                 </Button>
+                 <div style={{ display: flagTop ? '' : 'none' }} className={ styles.logTopLists }>
+                   {
+                     logTopLists.map((item) => {
+                       return (
+                         <p><a>{item.machineCode}{item.type}{item.tag}{item.detail}</a><span>{item.pointTime}</span></p>
+                       );
+                     })}
+                 </div>
+                 <Button style={{ width: '120px', marginTop: '10px', display: flagTop ? '' : 'none' }}
+                         type="Default"
+                         onClick={() => returnInterval(machineCode)}>
+                   返回
+                 </Button>
+               </div>
+               <div className={styles.showNotice}
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                    style={{ display: !flagTop ? '' : 'none', overflow: mouseOver ? 'scroll' : 'hidden' }}>
+                <div className={styles.showList}
+                     style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
+                  {
+                    logLists.map((item) => {
+                      return (
+                        <p><a>{item.machineCode}{item.type}{item.tag}{item.detail}</a><span>{item.pointTime}</span></p>
+                      );
+                  })}
+                </div>
+              </div>
+            </TabPane>
+          <TabPane tab="定制日志" key="2">
+            <div>
+
+            </div>
+          </TabPane>
           </Tabs>
         </div>
       </Modal>
@@ -669,7 +715,7 @@ export default class machineSettingList extends PureComponent {
     formValues: {},
     editModalConfirmLoading: false,
     pageNo: 1,
-    machineCode: '',
+    // machineCode: '',
     localCode: '',
     modalData: {},
     logModalVisible: false,
@@ -716,7 +762,20 @@ export default class machineSettingList extends PureComponent {
 
     editMonitoringFormVisible: false,
 
+    noticePosition: 0,
+    notices: [],
+    logLists: [],
+    machineCode: '',
+    logTopLists: [],
+    flagTop: false,
+    mouseOver: false
   };
+  // type: Array,
+  // required: true,
+  // coerce (data) {
+  //   data.push(data[0])
+  //   return data
+  // }
   constructor(props) {
     super(props);
     this.getPointSettingList = debounce(this.getPointSettingList, 800);
@@ -1687,10 +1746,167 @@ export default class machineSettingList extends PureComponent {
     });
   }
   // handleMonitoringClick 监控
-  handleMonitoringClick = () => {
-
+  handleMonitoringClick = (machineCode) => {
+    // machinePointLog
+    this.props.dispatch({
+      type: 'machineSetting/machinePointLog',
+      payload: {
+        restParams: {
+          machineCode: machineCode,
+          startTime: '',
+          endTime: '',
+        },
+      },
+    }).then((res) => {
+      console.log('res', res)
+      this.setState({
+        editMonitoringFormVisible: true,
+        logLists: res,
+        machineCode,
+      }, () => {
+        let destination = 30
+        mySetInterval = setInterval(() => {
+          if (destination / 30 < res.length ) {
+            this.move(destination, 500)
+            destination += 30
+          } else { // 列表到底
+            this.noticePosition = 0 // 设置列表为开始位置
+            destination = 30
+            this.move(destination, 500)
+            destination += 30
+          }
+        }, 1500)
+      });
+    });
+    this.getLogLists()
+  }
+  getLogLists = () => {
+    myLogSetInterval = setInterval(() => {
+      this.props.dispatch({
+        type: 'machineSetting/machinePointLog',
+        payload: {
+          restParams: {
+            machineCode: this.state.machineCode,
+            startTime: this.state.logLists[this.state.logLists.length - 1].pointTime,
+            endTime: '',
+          },
+        },
+      }).then((res) => {
+        this.setState({
+          logLists: [...this.state.logLists, ...res],
+        });
+      });
+    }, 3000)
+  }
+  move = (destination, duration) => {
+    // 实现滚动动画
+    let speed = ((destination - this.noticePosition) * 1000) / (duration * 60)
+    let count = 0
+    let step = () => {
+      this.noticePosition += speed
+      count++
+      // console.log('noticePosition', this.noticePosition)
+      rAF(() => {
+        if (this.noticePosition < destination) {
+          step()
+        } else {
+          this.noticePosition = destination
+        }
+      })
+      this.setState({
+        noticePosition: this.noticePosition
+      })
+    }
+    step()
+  }
+  watchTop = (machineCode) => {
+    clearInterval(mySetInterval)
+    clearInterval(myLogSetInterval)
+    let endTime = null
+    if (this.state.logTopLists.length === 0) {
+      endTime = this.state.logLists[this.state.logLists.length - 1].pointTime
+    } else {
+      endTime = this.state.logTopLists[this.state.logTopLists.length - 1].pointTime
+    }
+    this.props.dispatch({
+      type: 'machineSetting/machinePointLog',
+      payload: {
+        restParams: {
+          machineCode: machineCode,
+          startTime: '',
+          endTime,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        flagTop: true,
+        logTopLists: res,
+      }, () => {
+      });
+    });
+  }
+  returnInterval = (machineCode) => {
+    this.getLogLists()
+    this.props.dispatch({
+      type: 'machineSetting/machinePointLog',
+      payload: {
+        restParams: {
+          machineCode: machineCode,
+          startTime: '',
+          endTime: '',
+        },
+      },
+    }).then((res) => {
+      console.log('res', res)
+      this.setState({
+        flagTop: false,
+        editMonitoringFormVisible: true,
+        logLists: res,
+        machineCode: machineCode
+      }, () => {
+        let destination = 30
+        mySetInterval = setInterval(() => {
+          if (destination / 30 < res.length ) {
+            this.move(destination, 500)
+            destination += 30
+          } else { // 列表到底
+            this.noticePosition = 0 // 设置列表为开始位置
+            destination = 30
+            this.move(destination, 500)
+            destination += 30
+          }
+        }, 1500)
+      });
+    });
+  }
+  handleMouseOver = () => {
+    this.setState({
+      mouseOver: true
+    })
+    clearInterval(mySetInterval)
+    // clearInterval(myLogSetInterval)
+  }
+  handleMouseOut = () => {
+    this.setState({
+      mouseOver: false
+    })
+    let destination = 30
+    mySetInterval = setInterval(() => {
+      if (destination / 30 < this.state.logLists.length ) {
+        this.move(destination, 500)
+        destination += 30
+      } else { // 列表到底
+        this.noticePosition = 0 // 设置列表为开始位置
+        destination = 30
+        this.move(destination, 500)
+        destination += 30
+      }
+    }, 1500)
+    // this.handleMonitoringClick(this.state.machineCode)
   }
   editMonitoringHandleModalVisibleClick = () => {
+    clearInterval(mySetInterval)
+    clearInterval(myLogSetInterval)
     this.setState({
       editMonitoringFormVisible: false,
     });
@@ -1833,7 +2049,7 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
-            <a onClick={() => this.handleMonitoringClick(item)}>监控</a>
+            <a onClick={() => this.handleMonitoringClick(item.machineCode)}>监控</a>
             <Divider type="vertical" />
             <a onClick={() => this.handleEditClick(item)}>机器设置</a>
             <Divider type="vertical" />
@@ -1994,24 +2210,24 @@ export default class machineSettingList extends PureComponent {
               dataSource={updateList}
               rowKey={record => record.appPackageName}
               pagination={false} />
-            <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <div className={styles.leftBox}>
-                    {/*<Card title="切换App" bordered={false}>*/}
-                    <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+              <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <div className={styles.leftBox}>
+                      {/*<Card title="切换App" bordered={false}>*/}
+                      <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+                      {/*</Card>*/}
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    {/*<Card title="升级App" bordered={false}>*/}
+                    <div className={styles.rightBox}>
+                      <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
+                    </div>
                     {/*</Card>*/}
-                  </div>
-                </Col>
-                <Col span={12}>
-                  {/*<Card title="升级App" bordered={false}>*/}
-                  <div className={styles.rightBox}>
-                    <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
-                  </div>
-                  {/*</Card>*/}
-                </Col>
-              </Row>
-            </div>
+                  </Col>
+                </Row>
+              </div>
           </div>
         </Modal>
         {/*<ManageForm*/}
@@ -2055,6 +2271,16 @@ export default class machineSettingList extends PureComponent {
         <EditMonitoringForm
           editMonitoringFormVisible={this.state.editMonitoringFormVisible}
           editMonitoringHandleModalVisibleClick={this.editMonitoringHandleModalVisibleClick}
+          noticePosition={this.state.noticePosition}
+          logLists={this.state.logLists}
+          machineCode={this.state.machineCode}
+          watchTop={this.watchTop}
+          flagTop={this.state.flagTop}
+          logTopLists={this.state.logTopLists}
+          returnInterval={this.returnInterval}
+          handleMouseOver={this.handleMouseOver}
+          handleMouseOut={this.handleMouseOut}
+          mouseOver={this.state.mouseOver}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}

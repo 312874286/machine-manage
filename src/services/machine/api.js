@@ -35,6 +35,8 @@ const api = map({
   returnDeskTop: '/machine/machine/cutDesktop',
   updateLocaleMachineSetting: '/machine/machine/updateMachine',
   findMachineInfoById: '/machine/machine/findMachineInfoById',
+
+  machinePointLog: '/mechine/machine/machinePointLog?machineCode={machineCode}&startTime={startTime}&endTime={endTime}',
 });
 
 export default api;

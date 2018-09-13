@@ -186,6 +186,11 @@ table tr:nth-child(odd) {
   .leftBox {
     margin-right: -6px;
   }
+  :global {
+    .ant-tabs-bar {
+      //margin: 0 0 260px 0;
+    }
+  }
 }
 .appTable {
   padding: 0 10px;
@@ -225,4 +230,20 @@ table tr:nth-child(odd) {
   img {
     width: 100%;
   }
+}
+.showNoticeBox {
+  overflow: hidden;
+}
+.showNotice{
+  height: 300px;
+  vertical-align: middle;
+  .showList p {
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+  }
+}
+.logTopLists {
+  height: 300px;
+  overflow-y: scroll;
 }
