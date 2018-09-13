@@ -95,3 +95,6 @@ export async function machinePointLog({ restParams }) {
     restParams,
   });
 }
+export async function exportMachinePointLog({ restParams }) {
+  window.location.href = `${api.exportMachinePointLog}?machineCode=${restParams.machineCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
+}

@@ -39,6 +39,7 @@ import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
 import rAF from '../../utils/rAF'
 
+const { RangePicker } = DatePicker;
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -635,8 +636,8 @@ const EditMachineCodeForm = Form.create()(
 const EditMonitoringForm = Form.create()(
   (props) => {
     const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick, callback,
-      noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval, handleMouseOver, handleMouseOut, mouseOver} = props;
-    console.log('noticePosition', noticePosition)
+      noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
+      handleMouseOver, handleMouseOut, mouseOver, onChange, excell } = props;
     return (
       <Modal
         title={
@@ -648,7 +649,7 @@ const EditMonitoringForm = Form.create()(
         visible={editMonitoringFormVisible}
         onCancel={() => editMonitoringHandleModalVisibleClick()}
         footer={null}
-        className={styles.manageAppBox}
+        // className={styles.manageAppBox}
         width={800}>
         <div class="manageAppBox">
           <Tabs type="card">
@@ -663,7 +664,7 @@ const EditMonitoringForm = Form.create()(
                    {
                      logTopLists.map((item) => {
                        return (
-                         <p><a>{item.machineCode}{item.type}{item.tag}{item.detail}</a><span>{item.pointTime}</span></p>
+                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}><a>{item.machineCode}{item.type}{item.tag}{item.detail}</a><span>{item.pointTime}</span></p>
                        );
                      })}
                  </div>
@@ -690,7 +691,12 @@ const EditMonitoringForm = Form.create()(
             </TabPane>
           <TabPane tab="定制日志" key="2">
             <div>
-
+              <RangePicker onChange={onChange} />
+              <Button style={{ width: '120px', marginTop: '10px' }}
+                      type="Default"
+                      onClick={() => excell(machineCode)}>
+                导出
+              </Button>
             </div>
           </TabPane>
           </Tabs>
@@ -768,7 +774,8 @@ export default class machineSettingList extends PureComponent {
     machineCode: '',
     logTopLists: [],
     flagTop: false,
-    mouseOver: false
+    mouseOver: false,
+    excelTimeRange: []
   };
   // type: Array,
   // required: true,
@@ -1712,7 +1719,7 @@ export default class machineSettingList extends PureComponent {
         this.setState({
           machineDetail: result.data,
         }, () => {
-          console.log('machineDetail', this.state.machineDetail)
+          // console.log('machineDetail', this.state.machineDetail)
           this.setState({
             ManageWatchModalVisible: true,
           })
@@ -1758,27 +1765,29 @@ export default class machineSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      console.log('res', res)
+      // console.log('res', res)
       this.setState({
         editMonitoringFormVisible: true,
         logLists: res,
         machineCode,
       }, () => {
-        let destination = 30
-        mySetInterval = setInterval(() => {
-          if (destination / 30 < res.length ) {
-            this.move(destination, 500)
-            destination += 30
-          } else { // 列表到底
-            this.noticePosition = 0 // 设置列表为开始位置
-            destination = 30
-            this.move(destination, 500)
-            destination += 30
-          }
-        }, 1500)
+        if (res.length > 20) {
+          let destination = 30
+          mySetInterval = setInterval(() => {
+            if (destination / 30 < res.length ) {
+              this.move(destination, 500)
+              destination += 30
+            } else { // 列表到底
+              this.noticePosition = 0 // 设置列表为开始位置
+              destination = 30
+              this.move(destination, 500)
+              destination += 30
+            }
+          }, 1500)
+        }
+        this.getLogLists()
       });
     });
-    this.getLogLists()
   }
   getLogLists = () => {
     myLogSetInterval = setInterval(() => {
@@ -1787,14 +1796,16 @@ export default class machineSettingList extends PureComponent {
         payload: {
           restParams: {
             machineCode: this.state.machineCode,
-            startTime: this.state.logLists[this.state.logLists.length - 1].pointTime,
+            startTime: this.state.logLists.length > 0 ? this.state.logLists[this.state.logLists.length - 1].pointTime : '',
             endTime: '',
           },
         },
       }).then((res) => {
-        this.setState({
-          logLists: [...this.state.logLists, ...res],
-        });
+        if (res.length !== 0) {
+          this.setState({
+            logLists: [...this.state.logLists, ...res],
+          });
+        }
       });
     }, 3000)
   }
@@ -1824,9 +1835,9 @@ export default class machineSettingList extends PureComponent {
     clearInterval(myLogSetInterval)
     let endTime = null
     if (this.state.logTopLists.length === 0) {
-      endTime = this.state.logLists[this.state.logLists.length - 1].pointTime
+      endTime = this.state.logLists.length > 0 ? this.state.logLists[this.state.logLists.length - 1].pointTime : ''
     } else {
-      endTime = this.state.logTopLists[this.state.logTopLists.length - 1].pointTime
+      endTime = this.state.logTopLists.length > 0 ? this.state.logTopLists[this.state.logTopLists.length - 1].pointTime : ''
     }
     this.props.dispatch({
       type: 'machineSetting/machinePointLog',
@@ -1864,18 +1875,20 @@ export default class machineSettingList extends PureComponent {
         logLists: res,
         machineCode: machineCode
       }, () => {
-        let destination = 30
-        mySetInterval = setInterval(() => {
-          if (destination / 30 < res.length ) {
-            this.move(destination, 500)
-            destination += 30
-          } else { // 列表到底
-            this.noticePosition = 0 // 设置列表为开始位置
-            destination = 30
-            this.move(destination, 500)
-            destination += 30
-          }
-        }, 1500)
+        if (res.length > 20) {
+          let destination = 30
+          mySetInterval = setInterval(() => {
+            if (destination / 30 < res.length ) {
+              this.move(destination, 500)
+              destination += 30
+            } else { // 列表到底
+              this.noticePosition = 0 // 设置列表为开始位置
+              destination = 30
+              this.move(destination, 500)
+              destination += 30
+            }
+          }, 1500)
+        }
       });
     });
   }
@@ -1891,18 +1904,42 @@ export default class machineSettingList extends PureComponent {
       mouseOver: false
     })
     let destination = 30
-    mySetInterval = setInterval(() => {
-      if (destination / 30 < this.state.logLists.length ) {
-        this.move(destination, 500)
-        destination += 30
-      } else { // 列表到底
-        this.noticePosition = 0 // 设置列表为开始位置
-        destination = 30
-        this.move(destination, 500)
-        destination += 30
-      }
-    }, 1500)
+    if (this.state.logLists.length > 20) {
+      mySetInterval = setInterval(() => {
+        if (destination / 30 < this.state.logLists.length ) {
+          this.move(destination, 500)
+          destination += 30
+        } else { // 列表到底
+          this.noticePosition = 0 // 设置列表为开始位置
+          destination = 30
+          this.move(destination, 500)
+          destination += 30
+        }
+      }, 1500)
+    }
     // this.handleMonitoringClick(this.state.machineCode)
+  }
+  onChange = (date, dateString) => {
+    console.log(date, dateString);
+    this.setState({
+      excelTimeRange: dateString,
+    })
+  }
+  excell = (machineCode) => {
+    if (this.state.excelTimeRange.length === 0) {
+      message.warn('请先选择时间')
+      return false
+    }
+    this.props.dispatch({
+      type: 'machineSetting/exportMachinePointLog',
+      payload: {
+        restParams: {
+          machineCode,
+          startTime: this.state.excelTimeRange[0],
+          endTime: this.state.excelTimeRange[1],
+        },
+      },
+    })
   }
   editMonitoringHandleModalVisibleClick = () => {
     clearInterval(mySetInterval)
@@ -2281,6 +2318,8 @@ export default class machineSettingList extends PureComponent {
           handleMouseOver={this.handleMouseOver}
           handleMouseOut={this.handleMouseOut}
           mouseOver={this.state.mouseOver}
+          onChange={this.onChange}
+          excell={this.excell}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}

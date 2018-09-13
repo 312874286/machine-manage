@@ -3799,7 +3799,7 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'GET /mechine/machine/machinePointLog': (req, res) => {
+  'GET /machine/machine/machinePointLog': (req, res) => {
     res.send({
       "code": 0,
       "data": [{
@@ -3919,7 +3919,7 @@ const proxy = {
       },],
       "msg": "成功"
     })
-  }
+  },
 };
 
 // export default noProxy ? {
