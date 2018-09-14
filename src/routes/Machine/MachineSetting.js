@@ -679,14 +679,16 @@ const EditMonitoringForm = Form.create()(
               <div className={styles.showNotice}
                 // onMouseOver={handleMouseOver}
                 // onMouseOut={handleMouseOut}
+                   id="logTip"
                    style={{ display: !flagTop ? '' : 'none', overflow: mouseOver ? 'scroll' : 'hidden', height: '300px' }}>
                 <div className={styles.showList}
+                     id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
                   {
                     logLists.map((item) => {
                       return (
                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
-                          <span>{item.pointTime}：</span>
+                          <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
                         </p>
                       );
@@ -1793,7 +1795,7 @@ export default class machineSettingList extends PureComponent {
               this.move(destination, 500, res.length)
               destination += 30
             } else { // 列表到底
-              clearInterval(mySetInterval)
+              // clearInterval(mySetInterval)
               // this.noticePosition = 0 // 设置列表为开始位置
               // destination = 30
               // this.move(destination, 500, res.length)
@@ -1828,12 +1830,12 @@ export default class machineSettingList extends PureComponent {
                 this.move(destination, 500)
                 destination += 30
               } else { // 列表到底
-                clearInterval(mySetInterval)
+                // clearInterval(mySetInterval)
               }
             }, 1500)
           })
         } else {
-          clearInterval(mySetInterval)
+          // clearInterval(mySetInterval)
           // let destination = 30
           // mySetInterval = setInterval(() => {
           //   if (destination / 30 < res.length ) {
@@ -1926,7 +1928,7 @@ export default class machineSettingList extends PureComponent {
             this.move(destination, 500, res.length)
             destination += 30
           } else { // 列表到底
-            clearInterval(mySetInterval)
+            // clearInterval(mySetInterval)
           }
         }, 1500)
         this.getLogLists()
@@ -1937,6 +1939,10 @@ export default class machineSettingList extends PureComponent {
     this.setState({
       mouseOver: true
     })
+    document.getElementById('logTip').scrollTo = (this.state.logLists.length - 10) * 30
+    // transform: none;
+    document.getElementById('logTipDiv').setAttribute('transform', 'none')
+    console.log('scrollTo', document.getElementById('logTip').scrollTo)
     clearInterval(mySetInterval)
     // clearInterval(myLogSetInterval)
   }
