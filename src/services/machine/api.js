@@ -36,6 +36,9 @@ const api = map({
   updateMachineCode: '/machine/machine/updateMachineCode',
   findMachineInfoById: '/machine/machine/findMachineInfoById',
 
+  machinePointLog: '/machine/machine/machinePointLog?machineCode={machineCode}&startTime={startTime}&endTime={endTime}',
+  exportMachinePointLog: '/machine/machine/exportMachinePointLog',
+
 });
 
 export default api;

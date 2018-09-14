@@ -232,17 +232,17 @@ const CreateForm = Form.create()(
               {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
             {/*})(<Input placeholder="请填写同一用户获得商品次数" disabled />)}*/}
           {/*</FormItem>*/}
-            <FormItem {...formItemLayout} label="同一用户每天获得商品次数">
+            <FormItem {...formItemLayout} label="同一用户每天获得商品总次数">
               {getFieldDecorator('dayUserMaxTimes', {
-                rules: [{ required: false, whitespace: true, message: '请填写同一用户每天获得商品次数' }],
-              })(<Input placeholder="请填写同一用户每天获得商品次数" />)}
+                rules: [{ required: false, whitespace: true, message: '请填写同一用户每天获得商品总次数' }],
+              })(<Input placeholder="请填写同一用户每天获得商品总次数" />)}
             </FormItem>
             {/*<FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
               {/*{getFieldDecorator('dayUserMaxTimes', {*/}
                 {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
               {/*})(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}*/}
             {/*</FormItem>*/}
-          <FormItem label={`填写商品信息：最多可添加${maxNumber || 100}个商品`}>
+          <FormItem label={`填写商品信息：最多可添加${maxNumber}个商品`}>
             {/*<Table*/}
               {/*columns={goodsColumns}*/}
               {/*dataSource={goodsInitData}*/}
@@ -558,6 +558,10 @@ const WatchForm = Form.create()(
       title: '数量',
       dataIndex: 'number',
       align: 'center',
+    }, {
+      title: '同一用户每天获得商品次数',
+      dataIndex: 'userDayNumber',
+      align: 'center',
     }];
     const couponsColumns = [{
       title: '店铺名称',
@@ -760,7 +764,7 @@ export default class ScheduleSettingList extends PureComponent {
     couponsShow: true,
 
     goodsTables: [],
-    maxNumber: 100,
+    maxNumber: 0,
     remark: '',
 
     account: {}
@@ -1337,6 +1341,7 @@ export default class ScheduleSettingList extends PureComponent {
       shopName: '',
       prizeId: '',
       number: 0,
+      userDayNumber: 0,
       resultCode: '1',
       resultRemark: '描述',
       prizeType: '1',
@@ -1470,7 +1475,7 @@ export default class ScheduleSettingList extends PureComponent {
             return;
           }
           goods = goods.map((item) => {
-             return { prizeId: item.prizeId, number: item.number }
+             return { prizeId: item.prizeId, number: item.number, userDayNumber: item.userDayNumber }
           })
         } else {
           // 非派样活动
@@ -1872,6 +1877,7 @@ export default class ScheduleSettingList extends PureComponent {
           id: item.shopId,
           shopName: item.shopName,
           number: item.number,
+          userDayNumber: item.userDayNumber,
           name: item.activityPlanId,
           prizeId: item.prizeId,
           prizeType: item.prizeType,

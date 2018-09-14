@@ -14,6 +14,7 @@ import {
   Menu,
   InputNumber,
   DatePicker,
+  Tabs,
   Modal,
   message,
   Badge,
@@ -36,8 +37,11 @@ import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
-
+import rAF from '../../utils/rAF'
 import { getAccountMenus } from "../../utils/authority";
+
+const { RangePicker } = DatePicker;
+const TabPane = Tabs.TabPane;
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -57,6 +61,9 @@ message.config({
   duration: 2,
   maxCount: 1,
 });
+
+let mySetInterval = null
+let myLogSetInterval = null
 
 const CreateForm = Form.create()(
   (props) => {
@@ -624,6 +631,85 @@ const EditMachineCodeForm = Form.create()(
 //     );
 //   });
 
+const EditMonitoringForm = Form.create()(
+  (props) => {
+    const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick, callback,
+      noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
+      handleMouseOver, handleMouseOut, mouseOver, onChange, excell, watchBtn } = props;
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">监控</span>
+          </div>
+        }
+        visible={editMonitoringFormVisible}
+        onCancel={() => editMonitoringHandleModalVisibleClick()}
+        footer={null}
+        // className={styles.manageAppBox}
+        width={900}>
+        <div class="manageAppBox">
+          <Tabs type="card" onChange={callback}>
+            <TabPane tab="实时日志" key="1">
+              <div>
+                <Button style={{ width: '120px', marginBottom: '10px', display: watchBtn ? '' : 'none' }}
+                        type="Default"
+                        onClick={() => watchTop(machineCode)}>
+                  查看以前
+                </Button>
+                <div style={{ display: flagTop ? '' : 'none', height: '300px', overflowY: 'scroll' }} className={ styles.logTopLists }>
+                  {(logTopLists.length === 0) ? '暂无数据' : (
+                    logTopLists.map((item) => {
+                      return (
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                          <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
+                          <a style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }} >{item.detail}</a>
+                        </p>
+                      );
+                    }))}
+                </div>
+                <Button style={{ width: '120px', marginTop: '10px', display: flagTop ? '' : 'none' }}
+                        type="Default"
+                        onClick={() => returnInterval(machineCode)}>
+                  返回
+                </Button>
+              </div>
+              <div className={styles.showNotice}
+                // onMouseOver={handleMouseOver}
+                // onMouseOut={handleMouseOut}
+                   id="logTip"
+                   style={{ display: !flagTop ? '' : 'none', overflow: 'scroll', height: '300px' }}>
+                <div className={styles.showList}
+                     id="logTipDiv"
+                     style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
+                  {(logLists.length === 0) ? '暂无数据' : (logLists.map((item) => {
+                      return (
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                          <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
+                          <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
+                        </p>
+                      );
+                    }))}
+                </div>
+              </div>
+            </TabPane>
+            <TabPane tab="定制日志" key="2">
+              <div>
+                <RangePicker onChange={onChange} />
+                <Button style={{ width: '120px', marginTop: '10px' }}
+                        type="Default"
+                        onClick={() => excell(machineCode)}>
+                  导出
+                </Button>
+              </div>
+            </TabPane>
+          </Tabs>
+        </div>
+      </Modal>
+    );
+  });
+
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
   machineSetting,
@@ -639,7 +725,7 @@ export default class machineSettingList extends PureComponent {
     formValues: {},
     editModalConfirmLoading: false,
     pageNo: 1,
-    machineCode: '',
+    // machineCode: '',
     localCode: '',
     modalData: {},
     logModalVisible: false,
@@ -680,7 +766,19 @@ export default class machineSettingList extends PureComponent {
     UploadLogVisible: false,
     UploadLogConfirmLoading: false,
 
-    account: {}
+    editMonitoringFormVisible: false,
+
+    noticePosition: 0,
+    notices: [],
+    logLists: [],
+    machineCode: '',
+    logTopLists: [],
+    flagTop: false,
+    mouseOver: false,
+    excelTimeRange: [],
+
+    account: {},
+    watchBtn: true,
   };
   constructor(props) {
     super(props);
@@ -691,6 +789,14 @@ export default class machineSettingList extends PureComponent {
     this.getLists();
     this.getAreaList();
     this.getAccountMenus(getAccountMenus())
+  }
+  componentDidUpdate() {
+    if (this.state.editMonitoringFormVisible) {
+      // console.log('document.getElementById()', document.getElementById('logTip'))
+      // document.getElementById('logTip').scrollTo = (this.state.logLists.length - 10) * 30
+      // transform: none;
+      // console.log('scrollTo', document.getElementById('logTip').scrollTo)
+    }
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -971,7 +1077,6 @@ export default class machineSettingList extends PureComponent {
       localeId = this.state.modalData.localeId
     }
     // 确认修改点位
-    // console.log(this.state.dataId)
     this.pointForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -1635,7 +1740,7 @@ export default class machineSettingList extends PureComponent {
         this.setState({
           machineDetail: result.data,
         }, () => {
-          console.log('machineDetail', this.state.machineDetail)
+          // console.log('machineDetail', this.state.machineDetail)
           this.setState({
             ManageWatchModalVisible: true,
           })
@@ -1668,7 +1773,269 @@ export default class machineSettingList extends PureComponent {
       });
     });
   }
+  // handleMonitoringClick 监控
+  handleMonitoringClick = (machineCode) => {
+    // machinePointLog
+    this.setState({
+      editMonitoringFormVisible: true,
+      flagTop: false,
+      logTopLists: [],
+      logLists: [],
+      watchBtn: true,
+      machineCode,
+    }, () => {
+      this.props.dispatch({
+        type: 'machineSetting/machinePointLog',
+        payload: {
+          restParams: {
+            machineCode,
+            startTime: '',
+            endTime: '',
+          },
+        },
+      }).then((res) => {
+        // console.log('res', res)
+        if (res.length > 0) {
+          this.setState({
+            editMonitoringFormVisible: true,
+            logLists: res,
+            machineCode,
+          }, () => {
+            // let destination = 30
+            // this.noticePosition = (res.length - 10) * 30
+            this.setState({
+              noticePosition: this.noticePosition
+            })
+            setTimeout(()=>{
+              document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
+            },0)
+            // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
+            // console.log('scrollTo', document.getElementById('logTip').scrollTo)
 
+            // mySetInterval = setInterval(() => {
+            //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
+            //   if (destination / 30 < this.state.logLists.length ) {
+            //     this.move(destination, 500, res.length)
+            //     destination += 30
+            //   } else { // 列表到底
+            //     // clearInterval(mySetInterval)
+            //     // this.noticePosition = 0 // 设置列表为开始位置
+            //     // destination = 30
+            //     // this.move(destination, 500, res.length)
+            //     // destination += 30
+            //   }
+            // }, 1500)
+            this.getLogLists()
+          });
+        }
+      });
+    })
+  }
+  getLogLists = () => {
+    myLogSetInterval = setInterval(() => {
+      this.props.dispatch({
+        type: 'machineSetting/machinePointLog',
+        payload: {
+          restParams: {
+            machineCode: this.state.machineCode,
+            startTime: this.state.logLists.length > 0 ? this.state.logLists[this.state.logLists.length - 1].pointTime : '',
+            endTime: '',
+          },
+        },
+      }).then((res) => {
+        if (res.length !== 0) {
+          this.setState({
+            logLists: [...this.state.logLists, ...res],
+          }, () => {
+            setTimeout(()=>{
+              document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
+            },0)
+          })
+        } else {
+          // clearInterval(mySetInterval)
+          // let destination = 30
+          // mySetInterval = setInterval(() => {
+          //   if (destination / 30 < res.length ) {
+          //     this.move(destination, 500, res.length)
+          //     destination += 30
+          //   } else { // 列表到底
+          //     this.noticePosition = 0 // 设置列表为开始位置
+          //     destination = 30
+          //     this.move(destination, 500, res.length)
+          //     destination += 30
+          //   }
+          // }, 1500)
+        }
+      });
+    }, 3000)
+  }
+  move = (destination, duration, len) => {
+    console.log('noticePosition2', this.state.noticePosition)
+    // 实现滚动动画
+    let speed = ((destination - this.noticePosition) * 1000) / (duration * 60)
+    let count = 0
+    let step = () => {
+      this.noticePosition += speed
+      count++
+      console.log('noticePosition', this.state.noticePosition)
+      rAF(() => {
+        if (this.noticePosition < destination) {
+          step()
+        } else {
+          this.noticePosition = destination
+        }
+      })
+      this.setState({
+        noticePosition: this.noticePosition
+      })
+    }
+    step()
+  }
+  watchTop = (machineCode) => {
+    console.log('machineCode', machineCode, this.state.machineCode)
+    // clearInterval(mySetInterval)
+    // clearInterval(myLogSetInterval)
+    let endTime = null
+    if (this.state.logTopLists.length === 0) {
+      endTime = this.state.logLists.length > 0 ? this.state.logLists[this.state.logLists.length - 1].pointTime : ''
+    } else {
+      endTime = this.state.logTopLists.length > 0 ? this.state.logTopLists[this.state.logTopLists.length - 1].pointTime : ''
+    }
+    this.props.dispatch({
+      type: 'machineSetting/machinePointLog',
+      payload: {
+        restParams: {
+          machineCode,
+          startTime: '',
+          endTime,
+        },
+      },
+    }).then((res) => {
+      if (res) {
+        if (res.length > 0) {
+          this.setState({
+            flagTop: true,
+            logTopLists: [...this.state.logTopLists, ...res],
+          });
+        } else {
+          this.setState({
+            watchBtn: false
+          })
+        }
+      }
+    });
+  }
+  returnInterval = (machineCode) => {
+    this.setState({
+      flagTop: false,
+    }, () => {
+      this.handleMonitoringClick(machineCode)
+    })
+    // this.getLogLists()
+    // this.props.dispatch({
+    //   type: 'machineSetting/machinePointLog',
+    //   payload: {
+    //     restParams: {
+    //       machineCode: machineCode,
+    //       startTime: '',
+    //       endTime: '',
+    //     },
+    //   },
+    // }).then((res) => {
+    //   console.log('res', res)
+    //   this.setState({
+    //     flagTop: false,
+    //     editMonitoringFormVisible: true,
+    //     logLists: res,
+    //     machineCode: machineCode
+    //   }, () => {
+    //     let destination = res.length * 30
+    //     this.noticePosition = (res.length - 10) * 30
+    //     this.setState({
+    //       noticePosition: this.noticePosition
+    //     })
+    //     mySetInterval = setInterval(() => {
+    //       if (destination / 30 < res.length ) {
+    //         this.move(destination, 500, res.length)
+    //         destination += 30
+    //       } else { // 列表到底
+    //         // clearInterval(mySetInterval)
+    //       }
+    //     }, 1500)
+    //     this.getLogLists()
+    //   });
+    // });
+  }
+  handleMouseOver = () => {
+    this.setState({
+      mouseOver: true
+    })
+
+    clearInterval(mySetInterval)
+    // clearInterval(myLogSetInterval)
+  }
+  handleMouseOut = () => {
+    this.setState({
+      mouseOver: false
+    })
+    let destination = this.state.logLists.length * 30
+    this.noticePosition = (this.state.logLists.length - 10) * 30
+    this.setState({
+      noticePosition: this.noticePosition
+    })
+    if (this.state.logLists.length > 20) {
+      mySetInterval = setInterval(() => {
+        if (destination / 30 < this.state.logLists.length ) {
+          this.move(destination, 500)
+          destination += 30
+        } else { // 列表到底
+          clearInterval(mySetInterval)
+          // this.noticePosition = 0 // 设置列表为开始位置
+          // destination = 30
+          // this.move(destination, 500)
+          // destination += 30
+        }
+      }, 1500)
+    }
+    // this.handleMonitoringClick(this.state.machineCode)
+  }
+  onChange = (date, dateString) => {
+    console.log(date, dateString);
+    this.setState({
+      excelTimeRange: dateString,
+    })
+  }
+  excell = (machineCode) => {
+    if (this.state.excelTimeRange.length === 0) {
+      message.warn('请先选择时间')
+      return false
+    }
+    this.props.dispatch({
+      type: 'machineSetting/exportMachinePointLog',
+      payload: {
+        restParams: {
+          machineCode,
+          startTime: this.state.excelTimeRange[0],
+          endTime: this.state.excelTimeRange[1],
+        },
+      },
+    })
+  }
+  callback = (key) => {
+    if (key === '2') {
+      clearInterval(mySetInterval)
+      clearInterval(myLogSetInterval)
+    } else {
+      this.handleMonitoringClick(this.state.machineCode)
+    }
+  }
+  editMonitoringHandleModalVisibleClick = () => {
+    clearInterval(mySetInterval)
+    clearInterval(myLogSetInterval)
+    this.setState({
+      editMonitoringFormVisible: false,
+    });
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -1720,11 +2087,13 @@ export default class machineSettingList extends PureComponent {
         title: '机器编号',
         width: '15%',
         dataIndex: 'machineCode',
+        key: 'machineCode',
       },
       {
         title: '机器点位',
         width: '18%',
         dataIndex: 'localDesc',
+        key: 'localDesc'
       },
       {
         title: '系统状态',
@@ -1803,6 +2172,8 @@ export default class machineSettingList extends PureComponent {
         width: 180,
         render: (text, item) => (
           <Fragment>
+            <a onClick={() => this.handleMonitoringClick(item.machineCode)}>监控</a>
+            <Divider type="vertical" />
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
             <a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>
             <Divider type="vertical" />
@@ -1963,24 +2334,24 @@ export default class machineSettingList extends PureComponent {
               dataSource={updateList}
               rowKey={record => record.appPackageName}
               pagination={false} />
-            <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <div className={styles.leftBox}>
-                    {/*<Card title="切换App" bordered={false}>*/}
-                    <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+              <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <div className={styles.leftBox}>
+                      {/*<Card title="切换App" bordered={false}>*/}
+                      <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+                      {/*</Card>*/}
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    {/*<Card title="升级App" bordered={false}>*/}
+                    <div className={styles.rightBox}>
+                      <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
+                    </div>
                     {/*</Card>*/}
-                  </div>
-                </Col>
-                <Col span={12}>
-                  {/*<Card title="升级App" bordered={false}>*/}
-                  <div className={styles.rightBox}>
-                    <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
-                  </div>
-                  {/*</Card>*/}
-                </Col>
-              </Row>
-            </div>
+                  </Col>
+                </Row>
+              </div>
           </div>
         </Modal>
         {/*<ManageForm*/}
@@ -2020,6 +2391,24 @@ export default class machineSettingList extends PureComponent {
           appRefresh={this.appMachineRefresh}
           machineDetail={this.state.machineDetail}
           returnBtn={this.returnBtn}
+        />
+        <EditMonitoringForm
+          editMonitoringFormVisible={this.state.editMonitoringFormVisible}
+          editMonitoringHandleModalVisibleClick={this.editMonitoringHandleModalVisibleClick}
+          noticePosition={this.state.noticePosition}
+          logLists={this.state.logLists}
+          machineCode={this.state.machineCode}
+          watchTop={this.watchTop}
+          flagTop={this.state.flagTop}
+          logTopLists={this.state.logTopLists}
+          returnInterval={this.returnInterval}
+          handleMouseOver={this.handleMouseOver}
+          handleMouseOut={this.handleMouseOut}
+          mouseOver={this.state.mouseOver}
+          onChange={this.onChange}
+          excell={this.excell}
+          callback={this.callback}
+          watchBtn={this.state.watchBtn}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}
