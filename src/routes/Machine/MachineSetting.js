@@ -1830,7 +1830,7 @@ export default class machineSettingList extends PureComponent {
                 this.move(destination, 500)
                 destination += 30
               } else { // 列表到底
-                // clearInterval(mySetInterval)
+                clearInterval(mySetInterval)
               }
             }, 1500)
           })
@@ -1853,6 +1853,7 @@ export default class machineSettingList extends PureComponent {
     }, 3000)
   }
   move = (destination, duration, len) => {
+    console.log('noticePosition2', this.noticePosition)
     // 实现滚动动画
     let speed = ((destination - this.noticePosition) * 1000) / (duration * 60)
     let count = 0
