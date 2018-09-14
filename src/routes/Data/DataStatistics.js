@@ -513,8 +513,8 @@ export default class DataStatistics extends PureComponent {
       let url = 'dataStatistics/templateExecute'
       let restParams = {
         ...values,
-        startTime: values.startTime.format('YYYY-MM-DD HH:mm:ss'),
-        endTime: values.endTime.format('YYYY-MM-DD HH:mm:ss'),
+        startTime: values.startTime ? values.startTime.format('YYYY-MM-DD HH:mm:ss') : '',
+        endTime: values.endTime ? values.endTime.format('YYYY-MM-DD HH:mm:ss') : '',
         name: this.state.currentData.name
       }
       console.log('params', restParams)
