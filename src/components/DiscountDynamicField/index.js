@@ -116,7 +116,6 @@ class EditableCell extends Component {
 class DiscountDynamicField extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       dataSource: [],
       count:0,
