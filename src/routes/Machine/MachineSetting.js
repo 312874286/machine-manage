@@ -1776,51 +1776,55 @@ export default class machineSettingList extends PureComponent {
   // handleMonitoringClick 监控
   handleMonitoringClick = (machineCode) => {
     // machinePointLog
-    this.props.dispatch({
-      type: 'machineSetting/machinePointLog',
-      payload: {
-        restParams: {
-          machineCode,
-          startTime: '',
-          endTime: '',
+    this.setState({
+      editMonitoringFormVisible: true,
+    }, () => {
+      this.props.dispatch({
+        type: 'machineSetting/machinePointLog',
+        payload: {
+          restParams: {
+            machineCode,
+            startTime: '',
+            endTime: '',
+          },
         },
-      },
-    }).then((res) => {
-      // console.log('res', res)
-      if (res.length > 0) {
-        this.setState({
-          editMonitoringFormVisible: true,
-          logLists: res,
-          machineCode,
-        }, () => {
-          // let destination = 30
-          // this.noticePosition = (res.length - 10) * 30
+      }).then((res) => {
+        // console.log('res', res)
+        if (res.length > 0) {
           this.setState({
-            noticePosition: this.noticePosition
-          })
-          setTimeout(()=>{
-            document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
-          },0)
-          // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
-          // console.log('scrollTo', document.getElementById('logTip').scrollTo)
+            editMonitoringFormVisible: true,
+            logLists: res,
+            machineCode,
+          }, () => {
+            // let destination = 30
+            // this.noticePosition = (res.length - 10) * 30
+            this.setState({
+              noticePosition: this.noticePosition
+            })
+            setTimeout(()=>{
+              document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
+            },0)
+            // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
+            // console.log('scrollTo', document.getElementById('logTip').scrollTo)
 
-          // mySetInterval = setInterval(() => {
-          //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
-          //   if (destination / 30 < this.state.logLists.length ) {
-          //     this.move(destination, 500, res.length)
-          //     destination += 30
-          //   } else { // 列表到底
-          //     // clearInterval(mySetInterval)
-          //     // this.noticePosition = 0 // 设置列表为开始位置
-          //     // destination = 30
-          //     // this.move(destination, 500, res.length)
-          //     // destination += 30
-          //   }
-          // }, 1500)
-          this.getLogLists()
-        });
-      }
-    });
+            // mySetInterval = setInterval(() => {
+            //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
+            //   if (destination / 30 < this.state.logLists.length ) {
+            //     this.move(destination, 500, res.length)
+            //     destination += 30
+            //   } else { // 列表到底
+            //     // clearInterval(mySetInterval)
+            //     // this.noticePosition = 0 // 设置列表为开始位置
+            //     // destination = 30
+            //     // this.move(destination, 500, res.length)
+            //     // destination += 30
+            //   }
+            // }, 1500)
+            this.getLogLists()
+          });
+        }
+      });
+    })
   }
   getLogLists = () => {
     myLogSetInterval = setInterval(() => {
@@ -1883,6 +1887,7 @@ export default class machineSettingList extends PureComponent {
     step()
   }
   watchTop = (machineCode) => {
+    console.log('machineCode', machineCode, this.state.machineCode)
     clearInterval(mySetInterval)
     clearInterval(myLogSetInterval)
     let endTime = null
@@ -1909,7 +1914,11 @@ export default class machineSettingList extends PureComponent {
     });
   }
   returnInterval = (machineCode) => {
-    this.handleMonitoringClick(machineCode)
+    this.setState({
+      flagTop: false,
+    }, () => {
+      this.handleMonitoringClick(machineCode)
+    })
     // this.getLogLists()
     // this.props.dispatch({
     //   type: 'machineSetting/machinePointLog',
