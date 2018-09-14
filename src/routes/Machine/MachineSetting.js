@@ -1837,6 +1837,10 @@ export default class machineSettingList extends PureComponent {
         if (res.length !== 0) {
           this.setState({
             logLists: [...this.state.logLists, ...res],
+          }, () => {
+            setTimeout(()=>{
+              document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
+            },0)
           })
         } else {
           // clearInterval(mySetInterval)
@@ -1905,40 +1909,41 @@ export default class machineSettingList extends PureComponent {
     });
   }
   returnInterval = (machineCode) => {
-    this.getLogLists()
-    this.props.dispatch({
-      type: 'machineSetting/machinePointLog',
-      payload: {
-        restParams: {
-          machineCode: machineCode,
-          startTime: '',
-          endTime: '',
-        },
-      },
-    }).then((res) => {
-      console.log('res', res)
-      this.setState({
-        flagTop: false,
-        editMonitoringFormVisible: true,
-        logLists: res,
-        machineCode: machineCode
-      }, () => {
-        let destination = res.length * 30
-        this.noticePosition = (res.length - 10) * 30
-        this.setState({
-          noticePosition: this.noticePosition
-        })
-        mySetInterval = setInterval(() => {
-          if (destination / 30 < res.length ) {
-            this.move(destination, 500, res.length)
-            destination += 30
-          } else { // 列表到底
-            // clearInterval(mySetInterval)
-          }
-        }, 1500)
-        this.getLogLists()
-      });
-    });
+    this.handleMonitoringClick(machineCode)
+    // this.getLogLists()
+    // this.props.dispatch({
+    //   type: 'machineSetting/machinePointLog',
+    //   payload: {
+    //     restParams: {
+    //       machineCode: machineCode,
+    //       startTime: '',
+    //       endTime: '',
+    //     },
+    //   },
+    // }).then((res) => {
+    //   console.log('res', res)
+    //   this.setState({
+    //     flagTop: false,
+    //     editMonitoringFormVisible: true,
+    //     logLists: res,
+    //     machineCode: machineCode
+    //   }, () => {
+    //     let destination = res.length * 30
+    //     this.noticePosition = (res.length - 10) * 30
+    //     this.setState({
+    //       noticePosition: this.noticePosition
+    //     })
+    //     mySetInterval = setInterval(() => {
+    //       if (destination / 30 < res.length ) {
+    //         this.move(destination, 500, res.length)
+    //         destination += 30
+    //       } else { // 列表到底
+    //         // clearInterval(mySetInterval)
+    //       }
+    //     }, 1500)
+    //     this.getLogLists()
+    //   });
+    // });
   }
   handleMouseOver = () => {
     this.setState({
