@@ -22,13 +22,14 @@ import TaskAisletable from '../../components/Machine/taskAisleTable'
 import moment from "moment/moment";
 import {message} from "antd/lib/index";
 import StandardTable from '../../components/StandardTable';
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const taskTypeOptions = [{id: 1, name: '升级App'}, {id: 2, name: '卸载App'}, {id: 3, name: '合并货道'}, {id: 4, name: '拆分货道'}]
 const taskTypeLists = ['', '升级App', '卸载App', '合并货道', '拆分货道']
-const taskStatusOptions = [{id: 0, name: '未执行'}, {id: 1, name: '待执行'}, {id: 2, name: '已执行'} ]
-const taskStatus = ['未执行', '待执行', '已执行', '待执行']
+const taskStatusOptions = [{id: 1, name: '未执行'}, {id: 2, name: '已执行'} ]
+const taskStatus = ['未执行', '未执行', '已执行', '待执行']
 const doType = [{id: 1, name: 'socket'}, {id: 2, name: 'push'}]
 const doTypeLists = ['', 'socket', 'push']
 const doStatus = ['未执行', '成功', '失败']
@@ -170,17 +171,23 @@ const UpgradeAppForm = Form.create(
             </FormItem>
             <FormItem {...formItemLayout} label="选择开始时间">
               {getFieldDecorator('doTimeStr', {
-                rules: [{ required: false, message: '选择开始时间' }],
+                rules: [{ required: true, message: '选择开始时间' }],
               })(
                 <DatePicker
-                  disabledDate={disabledStartDate}
-                  disabledTime={disabledTime}
-                  // showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                  format="YYYY-MM-DD HH:mm"
-                  placeholder="选择开始时间"
+                format="YYYY-MM-DD HH:mm:ss"
+                disabledDate={disabledStartDate}
+                disabledTime={disabledTime}
+                showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 />
               )}
             </FormItem>
+            {/*<DatePicker*/}
+            {/*disabledDate={disabledStartDate}*/}
+            {/*disabledTime={disabledTime}*/}
+            {/*// showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}*/}
+            {/*format="YYYY-MM-DD HH:mm"*/}
+            {/*placeholder="选择开始时间"*/}
+            {/*/>*/}
             <FormItem {...formItemLayout} label="选择执行方式">
               {getFieldDecorator('doType', {
                 rules: [{ required: true, message: '请选择执行方式' }],
@@ -786,25 +793,43 @@ export default class TaskSetting extends PureComponent {
 
     machineNumber: '',
     selectedNo: 28,
+
+    account: {}
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+        .children.filter((item) => item.path === 'task-setting')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   componentDidUpdate(comp,state) {
     // console.log(arguments)
     // console.log('当前%s组件卸载app组件',comp.constructor === UpgradeAppForm.constructor?'是':'不是')
-    if (this.state.modalVisible && this.state.modalData.taskType) {
-      this.setModalUnloadAppData(this.state.modalData)
-      if (this.state.taskType === 1) {
-        // this.getAppLists()
-        this.setModalUpgradeAppData(this.state.modalData);
-      } else if (this.state.taskType === 2) {
-        // this.getAppLists()
-        this.setModalUnloadAppData(this.state.modalData);
-      } else {
-        this.setModalAisleTaskSettingData(this.state.modalData);
-      }
-    }
+    // if (this.state.modalVisible && this.state.modalData.type) {
+    //   this.setModalUnloadAppData(this.state.modalData)
+    //   if (this.state.taskType === 1) {
+    //     // this.getAppLists()
+    //     this.setModalUpgradeAppData(this.state.modalData);
+    //   } else if (this.state.taskType === 2) {
+    //     // this.getAppLists()
+    //     this.setModalUnloadAppData(this.state.modalData);
+    //   } else {
+    //     this.setModalAisleTaskSettingData(this.state.modalData);
+    //   }
+    // }
   }
   // 获取列表
   getLists = () => {
@@ -929,7 +954,7 @@ export default class TaskSetting extends PureComponent {
     if (this.UpgradeAppForm) {
       if (data) {
         this.UpgradeAppForm.setFieldsValue({
-          app: data.app || '',
+          appId: data.appId || '',
           appUrl: data.appUrl || undefined,
           appVersion: data.appVersion || undefined,
           doType: data.doType || undefined,
@@ -1217,6 +1242,7 @@ export default class TaskSetting extends PureComponent {
   }
   editTask = async (item) => {
     let res = await this.getTaskDetail(item)
+    console.log('item', res)
     let AisleList
     const selectedNo = res.machineList[0].machineCode.slice(0, 2)
     if (selectedNo === '18') {
@@ -1234,21 +1260,22 @@ export default class TaskSetting extends PureComponent {
       taskType: res.type,
       selectedNo: selectedNo === '18' ? 28 : 38
     })
-    // setTimeout(() => {
-    //   if (res.type === 1) {
-    //     this.getAppLists()
-    //     this.setModalUpgradeAppData(res);
-    //   } else if (res.type === 2) {
-    //     this.getAppLists()
-    //     this.setModalUnloadAppData(res);
-    //   } else {
-    //     this.setModalAisleTaskSettingData(res);
-    //   }
-    // }, 500)
+    setTimeout(() => {
+      if (res.type === 1) {
+        this.getAppLists()
+        this.setModalUpgradeAppData(res);
+      } else if (res.type === 2) {
+        this.getAppLists()
+        this.setModalUnloadAppData(res);
+      } else {
+        this.setModalAisleTaskSettingData(res);
+      }
+    }, 500)
     // taskUpdate
     // this.getLists();
   }
   getTaskDetail = async(item) => {
+    console.log('item', item)
     return await this.props.dispatch({
       type: 'taskSetting/taskDetail',
       payload: {
@@ -1362,7 +1389,6 @@ export default class TaskSetting extends PureComponent {
     });
   }
   getAreaList = (selectedOptions) => {
-    console.log('machineCode', selectedOptions)
     let code = '';
     let targetOption = null;
     let params = { code: code }
@@ -1677,17 +1703,18 @@ export default class TaskSetting extends PureComponent {
 
   render() {
     const {
-      taskSetting: { list, page },
+      taskSetting: { list, page, unColumn },
       loading,
     } = this.props;
     const { modalType, WatchModalVisible, modalVisible, taskType, AisleList,
       appLists, editModalConfirmLoading, selectCityName, machineNum, modalData,
-      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo } = this.state
-    const columns = [
+      editGoOnWayVisible, editGoOnWayConfirmLoading, selectedRows, remark, selectedNo, account } = this.state
+    let columns = [
       {
         title: '任务ID',
         dataIndex: 'code',
         width: '10%',
+        key: 'id',
       },
       {
         title: '任务类型',
@@ -1696,12 +1723,13 @@ export default class TaskSetting extends PureComponent {
         render(val) {
           return <span>{taskTypeLists[val]}</span>;
         },
+        key: 'type'
       },
       {
         title: '执行时间',
         width: '15%',
         dataIndex: 'doTime',
-
+        key: 'doTime'
       },
       {
         title: '任务状态',
@@ -1710,6 +1738,7 @@ export default class TaskSetting extends PureComponent {
         render(val) {
           return <span>{taskStatus[val]}</span>;
         },
+        key: 'status'
       },
       {
         title: '执行结果',
@@ -1720,16 +1749,19 @@ export default class TaskSetting extends PureComponent {
             <div>成功任务数：{item.taskSuss}</div>
             <div>执行失败： {item.taskAll - item.taskSuss}</div>
           </div>
-        )
+        ),
+        key: 'result'
       },
       {
         title: '创建人',
         width: '10%',
         dataIndex: 'creater',
+        key: 'creater'
       },
       {
         title: '创建时间',
         dataIndex: 'createTime',
+        key: 'createTime'
       },
       {
         fixed: 'right',
@@ -1737,18 +1769,41 @@ export default class TaskSetting extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)}>查看</a>
-            <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }} />
+            <a onClick={() => this.watchTask(item, item.taskAll - item.taskSuss)} style={{ display: !account.detail ? 'none' : ''}}>查看</a>
+            <Divider type="vertical" style={{ display: (item.status !== 0 && account.update) ? 'none' : '' }} />
             <a onClick={item.status === 0 ? () => this.editTask(item) : null }
-               style={{ display: item.status === 0 ? '' : 'none' }}
+               style={{ display: (item.status !== 0 && account.update) ? 'none' : '' }}
             >编辑</a>
-            <Divider type="vertical" style={{ display: item.status === 0 ? '' : 'none' }}/>
+            <Divider type="vertical" style={{ display: (item.status !== 0 && account.delete) ? 'none' : '' }}/>
             <a onClick={item.status === 0 ? () => this.deleteTask(item) : null }
-               style={{ display: item.status === 0 ? '' : 'none' }}>删除</a>
+               style={{ display: (item.status !== 0 && account.delete) ? 'none' : '' }}>删除</a>
           </Fragment>
         ),
       },
     ];
+    // unColumn
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -1767,20 +1822,11 @@ export default class TaskSetting extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : '' }}>
                 新建
               </Button>
             </div>
-            <div className={styles.tableList}>
-              {/*<Table*/}
-                {/*loading={loading}*/}
-                {/*rowKey={record => record.id}*/}
-                {/*dataSource={list}*/}
-                {/*columns={columns}*/}
-                {/*pagination={false}*/}
-                {/*onChange={this.handleTableChange}*/}
-                {/*scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}*/}
-              {/*/>*/}
+            <div className={styles.tableList} style={{ display: !account.list ? 'none' : ''}}>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}

@@ -25,9 +25,8 @@ import {
   Spin,
   Popover,
   Cascader,
-  TimePicker,
   Switch,
-  Tabs,
+  TimePicker
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
@@ -37,10 +36,9 @@ import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
-import rAF from '../../utils/rAF'
 
-const { RangePicker } = DatePicker;
-const TabPane = Tabs.TabPane;
+import { getAccountMenus } from "../../utils/authority";
+
 const FormItem = Form.Item;
 const { Option } = Select;
 const RadioGroup = Radio.Group;
@@ -177,9 +175,7 @@ const EditPointForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="新点位">
-              {getFieldDecorator('locale', {
-                initialValue: undefined,
-              })(
+              {getFieldDecorator('locale')(
                 <Select
                   // mode="multiple"
                   // labelInValue
@@ -196,7 +192,7 @@ const EditPointForm = Form.create()(
                   {/*{*/}
                   {/*data.map(d => <Option key={d.value} data-id={d.id}>{d.text}</Option>)*/}
                   {/*}*/}
-                  {data.map((item,index) => {
+                  {data.map((item) => {
                     return (
                       <Option value={item.text} key={item.id} data-id={item.id}>
                         <a title={item.text}>
@@ -237,7 +233,7 @@ const EditPointForm = Form.create()(
         </div>
       </Modal>
     );
-  });
+});
 const ManageCutAppForm = Form.create()(
   (props) => {
     const { form, appLists, okCutApp, } = props;
@@ -433,7 +429,6 @@ const WatchForm = Form.create()(
               </div>
             </div>
           </div>
-
           <div style={{ padding: '0px' }}>
             <Row gutter={16}>
               <Col span={12}>
@@ -633,79 +628,6 @@ const EditMachineCodeForm = Form.create()(
 //     );
 //   });
 
-const EditMonitoringForm = Form.create()(
-  (props) => {
-    const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick, callback,
-      noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
-      handleMouseOver, handleMouseOut, mouseOver, onChange, excell } = props;
-    return (
-      <Modal
-        title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">监控</span>
-          </div>
-        }
-        visible={editMonitoringFormVisible}
-        onCancel={() => editMonitoringHandleModalVisibleClick()}
-        footer={null}
-        // className={styles.manageAppBox}
-        width={900}>
-        <div class="manageAppBox">
-          <Tabs type="card" onChange={callback}>
-             <TabPane tab="实时日志" key="1">
-               <div>
-                 <Button style={{ width: '120px', marginBottom: '10px' }}
-                         type="Default"
-                         onClick={() => watchTop(machineCode)}>
-                   查看以前
-                 </Button>
-                 <div style={{ display: flagTop ? '' : 'none' }} className={ styles.logTopLists }>
-                   {
-                     logTopLists.map((item) => {
-                       return (
-                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}><a style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }} >{item.detail}</a><span>{item.pointTime}</span></p>
-                       );
-                     })}
-                 </div>
-                 <Button style={{ width: '120px', marginTop: '10px', display: flagTop ? '' : 'none' }}
-                         type="Default"
-                         onClick={() => returnInterval(machineCode)}>
-                   返回
-                 </Button>
-               </div>
-               <div className={styles.showNotice}
-                    // onMouseOver={handleMouseOver}
-                    // onMouseOut={handleMouseOut}
-                    style={{ display: !flagTop ? '' : 'none', overflow: mouseOver ? 'scroll' : 'hidden' }}>
-                <div className={styles.showList}
-                     style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
-                  {
-                    logLists.map((item) => {
-                      return (
-                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}><a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a><span>{item.pointTime}</span></p>
-                      );
-                  })}
-                </div>
-              </div>
-            </TabPane>
-             <TabPane tab="定制日志" key="2">
-               <div>
-                <RangePicker onChange={onChange} />
-                <Button style={{ width: '120px', marginTop: '10px' }}
-                        type="Default"
-                        onClick={() => excell(machineCode)}>
-                  导出
-                </Button>
-               </div>
-            </TabPane>
-          </Tabs>
-        </div>
-      </Modal>
-    );
-  });
-
-
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
   machineSetting,
@@ -728,10 +650,6 @@ export default class machineSettingList extends PureComponent {
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
-
-    switchStatus: false,
-    supervisoryStartTime: '',
-    supervisoryEndTime: '',
 
     data: [],
     dataId: '',
@@ -776,6 +694,7 @@ export default class machineSettingList extends PureComponent {
     flagTop: false,
     mouseOver: false,
     excelTimeRange: []
+    account: {}
   };
   // type: Array,
   // required: true,
@@ -791,6 +710,22 @@ export default class machineSettingList extends PureComponent {
   componentDidMount() {
     this.getLists();
     this.getAreaList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+        .children.filter((item) => item.path === 'machine-setting')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   getInput = () => {
     if (this.props.inputType === 'number') {
@@ -2007,9 +1942,8 @@ export default class machineSettingList extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData,
-      updateList, appLists, AisleList, message, appLists2, createTime, account } = this.state;
-    let columns = [
+    const { account, selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
+    const columns = [
       {
         title: '机器编号',
         width: '15%',
@@ -2100,15 +2034,13 @@ export default class machineSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
-            <a onClick={() => this.handleMonitoringClick(item.machineCode)}>监控</a>
+            <a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleEditClick(item)}>机器设置</a>
+            <a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleManageAppClick(item)} >管理App</a>
+            <a onClick={() => !account.manageAisle ? null : this.handleManageAisleClick(item)} style={{ display: !account.manageAisle ? 'none' : ''}}>管理货道</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleManageAisleClick(item)}>管理货道</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.handleNoClick(item)}>修改编号</a>
+            <a onClick={() => !account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>
           </Fragment>
         ),
       },
@@ -2185,7 +2117,7 @@ export default class machineSettingList extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <div className={styles.tableList}>
+          <div className={styles.tableList} style={{ display: !account.list ? 'none' : ''}}>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

@@ -16,6 +16,7 @@ import styles from './machinePlanSetting.less'
 // import MachinePlanTable  from '../../components/Project/machinePlanTable'
 import MachinePlan  from '../../components/Project/machinePlan'
 import moment from "moment/moment";
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -38,10 +39,26 @@ export default class machinePlanSettingList extends PureComponent {
     handleDays: {},
     getDataStartDay: '',
     getDataEndDay: '',
+
+    account: {},
   };
   componentDidMount() {
     // this.getLists();
     this.getAreaList('')
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+      .children.filter((item) => item.path === 'machinePlan')
+    var obj = {}
+    if (pointSettingMenu[0].children) {
+      pointSettingMenu[0].children.forEach((item, e) => {
+        obj[item.path] = true;
+      })
+      this.setState({
+        account: obj
+      })
+    }
   }
   // 获取列表
   getLists = () => {
@@ -288,16 +305,18 @@ export default class machinePlanSettingList extends PureComponent {
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
-          <MachinePlan
-            // dateList={this.state.dateList}
-            handleDays={this.handleDays}
-            // onEditClick={this.onEditClick}
-            // onWatchClick={this.onWatchClick}
-            // onDeleteClick={this.onDeleteClick}
-            // handleModalVisible={this.handleModalVisible}
-            resource={this.state.resource}
-            minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 50)}
-          />
+          <div style={{ display: !this.state.account.list ? 'none' : '' }}>
+            <MachinePlan
+              // dateList={this.state.dateList}
+              handleDays={this.handleDays}
+              // onEditClick={this.onEditClick}
+              // onWatchClick={this.onWatchClick}
+              // onDeleteClick={this.onDeleteClick}
+              // handleModalVisible={this.handleModalVisible}
+              resource={this.state.resource}
+              minHeight={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 50)}
+            />
+          </div>
         </Card>
         <Card bordered={false}>
           {/*<MachinePlanTable*/}

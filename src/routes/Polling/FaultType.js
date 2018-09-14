@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Form, Icon, Tree, message, Popconfirm, List } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './FaultType.less';
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 @connect(({ faultType }) => ({ faultType }))
@@ -18,9 +19,27 @@ export default class FaultType extends PureComponent {
       type: '',
       currentRecord: {},
       pageNo: 1,
+
+      account: {}
     };
     componentDidMount = () => {
       this.getLists();
+      this.getAccountMenus(getAccountMenus())
+    }
+    getAccountMenus = (setAccountMenusList) => {
+      if (setAccountMenusList) {
+        const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'check')[0]
+          .children.filter((item) => item.path === 'fault')
+        var obj = {}
+        if (pointSettingMenu[0].children) {
+          pointSettingMenu[0].children.forEach((item, e) => {
+            obj[item.path] = true;
+          })
+          this.setState({
+            account: obj
+          })
+        }
+      }
     }
     onChange = (e) => {
       this.setState({ userName: e.target.value });
@@ -293,16 +312,39 @@ export default class FaultType extends PureComponent {
       })
     }
     render() {
-      const { visible, solutionsLists, userName, No } = this.state;
-      const { faultType: { list, page, totalNo } } = this.props;
+      const { visible, solutionsLists, userName, No, account } = this.state;
+      const { faultType: { list, page, totalNo, unColumn } } = this.props;
     //   console.log('list::', faultType);
-      const columns = [
+      let columns = [
         { title: '故障类型名称', dataIndex: 'name', key: 'name', width: '22%' },
         { title: '故障解决方案', dataIndex: 'parentName', key: 'parentName', width: '22%' },
         { title: '添加时间', dataIndex: 'createTime', key: 'createTime', width: '22%' },
         { title: '添加人', dataIndex: 'createId', key: 'createId', width: '22%' },
-        { title: '操作', dataIndex: '', key: 'action', render: (text, record) => <a href="javascript:;" onClick={this.onEdit.bind(this, record)}>编辑</a> },
+        { title: '操作', dataIndex: '', key: 'action', render: (text, record) => <a href="javascript:;"
+                                                                                  onClick={this.onEdit.bind(this, record)} style={{ display: !account.update ? 'none' : '' }}>编辑</a> },
       ];
+      if (unColumn) {
+        let leg = columns.length
+        for (let i = leg - 1; i >= 0; i--) {
+          for (let j = 0; j < unColumn.length; j++) {
+            if (columns[i]) {
+              if (columns[i].key === unColumn[j]) {
+                columns.splice(i, 1)
+                continue;
+              }
+            }
+          }
+        }
+      }
+      const width = 90/(columns.length - 1)
+      for (let i = 0; i < columns.length; i++) {
+        if (i < columns.length - 2) {
+          columns[i].width = width + '%'
+        }
+        if (i === columns.length - 2) {
+          columns[i].width = ''
+        }
+      }
     //   const data = [
     //     { code: 1, name: 'John Brown', parentName: 32, createId: 'New York No. 1 Lake Park', createTime: '11' },
     //   ];
@@ -360,16 +402,21 @@ export default class FaultType extends PureComponent {
           <Card bordered={false}>
             <div className="tableList">
               <div className="tableListOperator">
-                <Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>
+                <Button icon="plus" type="primary"
+                        onClick={() => this.handleModalAdd(true)}
+                        style={{ display: !account.add ? 'none' : ''}}
+                >新建</Button>
               </div>
-              <Table
-                columns={columns}
-                dataSource={list}
-                rowKey="code"
-                pagination={paginationProps}
-                onChange={this.handleTableChange}
-                scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-              />
+              <div style={{ display: !account.list ? 'none' : ''}}>
+                <Table
+                  columns={columns}
+                  dataSource={list}
+                  rowKey="code"
+                  pagination={paginationProps}
+                  onChange={this.handleTableChange}
+                  scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+                />
+              </div>
             </div>
             {/*<Button icon="plus" type="primary" onClick={() => this.handleModalAdd(true)}>新建</Button>*/}
             {/*<br /><br />*/}

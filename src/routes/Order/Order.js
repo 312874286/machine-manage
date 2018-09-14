@@ -13,6 +13,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Order.less';
 import OrderTable from '../../components/Order/orderTable';
 import LogModal from '../../components/LogModal';
+import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 
@@ -34,11 +35,29 @@ export default class Order extends PureComponent {
     logId: '',
     logModalPageNo: 1,
     areaList: [],
+
+    account: {},
   };
 
   componentDidMount = () => {
     this.getList();
     this.getArea('');
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'order')[0]
+        .children.filter((item) => item.path === 'order')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
 
 
@@ -180,8 +199,8 @@ export default class Order extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { order: { list, page }, log: { logList, logPage }, loading } = this.props;
-    const { areaCode, keyword, areaList } = this.state;
+    const { order: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
+    const { areaCode, keyword, areaList, account } = this.state;
 
     return (
       <PageHeaderLayout>
@@ -230,13 +249,16 @@ export default class Order extends PureComponent {
           </div>
         </Card>
         <Card bordered={false}>
-          <OrderTable
-            loading={loading}
-            data={list}
-            page={page}
-            handleTableChange={this.handleTableChange}
-            onLogClick={this.handleLogClick}
-          />
+          <div style={{ display: !account.list ? 'none' : ''}}>
+            <OrderTable
+              loading={loading}
+              data={list}
+              page={page}
+              unColumn={unColumn}
+              handleTableChange={this.handleTableChange}
+              onLogClick={this.handleLogClick}
+            />
+          </div>
         </Card>
         <LogModal
           data={logList}

@@ -21,6 +21,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './GameSetting.less';
 import LogModal from '../../components/LogModal/index';
 import moment from "moment/moment";
+import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
@@ -130,9 +131,27 @@ export default class gameSettingList extends PureComponent {
     logId: '',
     logModalPageNo: 1,
     modalType: true,
+
+    account: {}
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+        .children.filter((item) => item.path === 'game')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取列表
   getLists = () => {
@@ -396,23 +415,26 @@ export default class gameSettingList extends PureComponent {
     );
   }
   render() {
-    const { gameSetting: { list, page }, loading, log: { logList, logPage }, } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, } = this.state;
+    const { gameSetting: { list, page, unColumn }, loading, log: { logList, logPage }, } = this.props;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, account} = this.state;
     const columns = [
       {
         title: '游戏名称',
         dataIndex: 'name',
         width: '10%',
+        key: 'name'
       },
       {
         title: '版本',
         dataIndex: 'version',
         width: '20%',
+        key: 'version'
       },
       {
         title: '点72版本',
         dataIndex: 'versionInno72',
         width: '10%',
+        key: 'versionInno72'
       },
       {
         title: '商品数量',
@@ -422,11 +444,13 @@ export default class gameSettingList extends PureComponent {
             <div>最小数量：{item.minGoodsNum}</div>
             <div>最大数量：{item.maxGoodsNum}</div>
           </Fragment>
-        )
+        ),
+        key: 'number'
       },
       {
         title: '备注描述',
         dataIndex: 'remark',
+        key: 'remark'
       },
       {
         fixed: 'right',
@@ -434,12 +458,12 @@ export default class gameSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            <Divider type="vertical" />
+            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
+            <Divider type="vertical" style={{ display: !account.update ? 'none' : ''}}/>
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
+              <a className={styles.delete} style={{ display: !account.delete ? 'none' : ''}}>删除</a>
             </Popconfirm>
             {/*<Divider type="vertical" />*/}
             {/*<a onClick={() => this.setMachineClick(item)}>设置机器</a>*/}
@@ -447,6 +471,28 @@ export default class gameSettingList extends PureComponent {
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -470,7 +516,7 @@ export default class gameSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -484,16 +530,18 @@ export default class gameSettingList extends PureComponent {
                 {/*</span>*/}
               {/*)}*/}
             </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={list}
-              page={page}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              scrollX={1000}
-            />
+            <div style={{ display: !account.list ? 'none' : ''}}>
+              <StandardTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={list}
+                page={page}
+                columns={columns}
+                onSelectRow={this.handleSelectRows}
+                onChange={this.handleStandardTableChange}
+                scrollX={1000}
+              />
+            </div>
           </div>
         </Card>
         <CreateForm

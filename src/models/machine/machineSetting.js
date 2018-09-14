@@ -1,7 +1,7 @@
 import {
   getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting,
   deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus,
-  cutApp, installApp, machineUpdateInfo, updateLogStatus, returnDeskTop, findMachineInfoById, machinePointLog, exportMachinePointLog
+  cutApp, installApp, machineUpdateInfo, updateLogStatus, returnDeskTop, findMachineInfoById, machinePointLog, exportMachinePointLog, updateMachineCode
 } from '../../services/machine/machineSetting';
 
 export default {
@@ -10,6 +10,7 @@ export default {
     list: [],
     page: {},
     datas: {},
+    unColumn: []
   },
 
   effects: {
@@ -71,6 +72,10 @@ export default {
       const response = yield call(machineUpdateInfo, { params });
       return response;
     },
+    *findMachineInfoById({ payload: { params } }, { call, put }) {
+      const response = yield call(findMachineInfoById, { params });
+      return response;
+    },
     *updateMachineCode({ payload: { params } }, { call, put }) {
       const response = yield call(updateMachineCode, { params });
       return response;
@@ -93,7 +98,7 @@ export default {
     },
   },
   reducers: {
-    saveList(state, { payload: { data, page } }) {
+    saveList(state, { payload: { data, page, unColumn } }) {
       return {
         ...state,
         list: data,
@@ -102,6 +107,7 @@ export default {
           pageSize: page.pageSize,
           current: page.pageNo,
         },
+        unColumn: unColumn
       };
     },
   },

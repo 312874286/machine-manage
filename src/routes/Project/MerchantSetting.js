@@ -25,6 +25,7 @@ import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './MerchantSetting.less';
 import LogModal from '../../components/LogModal/index';
+import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
@@ -126,9 +127,27 @@ export default class merchantSettingList extends PureComponent {
     logModalPageNo: 1,
     modalType: true,
     channelLists: [],
+
+    account: {},
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+        .children.filter((item) => item.path === 'merchant')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取列表
   getLists = () => {
@@ -428,12 +447,12 @@ export default class merchantSettingList extends PureComponent {
   }
   render() {
     const {
-      merchantSetting: { list, page },
+      merchantSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists } = this.state;
-    const columns = [
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists, account } = this.state;
+    let columns = [
       // {
       //   title: '商户ID',
       //   width: 200,
@@ -444,25 +463,30 @@ export default class merchantSettingList extends PureComponent {
         title: 'sellerID',
         width: '17%',
         dataIndex: 'merchantCode',
+        key: 'merchantCode'
       },
       {
         title: '商户名称',
         width: '17%',
         dataIndex: 'merchantName',
+        key: 'merchantName'
       },
       {
         title: '所属渠道',
         width: '17%',
         dataIndex: 'channelId',
+        key: 'channelId'
       },
       {
         title: '原始标识',
         width: '17%',
         dataIndex: 'originFlag',
+        key: 'originFlag'
       },
       {
         title: '品牌名称',
         dataIndex: 'brandName',
+        key: 'brandName'
       },
       {
         fixed: 'right',
@@ -470,17 +494,39 @@ export default class merchantSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
             <Divider type="vertical" />
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
+              <a className={styles.delete} style={{ display: !account.delete ? 'none' : '' }}>删除</a>
             </Popconfirm>
           </Fragment>
         ),
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 90/(columns.length - 1)
+    for (let i = 0; i < columns.length; i++) {
+      if (i < columns.length - 2) {
+        columns[i].width = width + '%'
+      }
+      if (i === columns.length - 2) {
+        columns[i].width = ''
+      }
+    }
     // this.state.options = this.props.common.list
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -501,7 +547,7 @@ export default class merchantSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : '' }}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -515,7 +561,8 @@ export default class merchantSettingList extends PureComponent {
                 {/*</span>*/}
               {/*)}*/}
             </div>
-            <StandardTable
+            <div style={{ display: !account.list ? 'none' : '' }}>
+              <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               data={list}
@@ -524,7 +571,8 @@ export default class merchantSettingList extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={700}
-            />
+              />
+            </div>
           </div>
         </Card>
         <CreateForm

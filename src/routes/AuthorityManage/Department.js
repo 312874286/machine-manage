@@ -2,15 +2,33 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Card, Table, Button, Row, Col, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import {getAccountMenus} from "../../utils/authority";
 
 @connect(({ department }) => ({ department }))
 export default class Department extends PureComponent {
   state = {
     userName: '',
     pageNo: 1,
+    account: {}
   }
   componentDidMount = () => {
     this.getSystemDeptList();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    if (setAccountMenusList) {
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'authorityManage')[0]
+        .children.filter((item) => item.path === 'department')
+      var obj = {}
+      if (pointSettingMenu[0].children) {
+        pointSettingMenu[0].children.forEach((item, e) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   onToAuthorization = (record) => {
     console.log(record, this);
@@ -68,10 +86,10 @@ export default class Department extends PureComponent {
     })
   }
   render() {
-    const { userName, No } = this.state;
-    const { department: { list, page, totalNo } } = this.props;
+    const { userName, No, account } = this.state;
+    const { department: { list, page, totalNo, unColumn } } = this.props;
     // console.log(111,list,page);
-    const columns = [
+    let columns = [
       {
         title: '部门名称',
         dataIndex: 'name',
@@ -82,6 +100,23 @@ export default class Department extends PureComponent {
         key: 'mobile',
       },
     ];
+    if (unColumn) {
+      let leg = columns.length
+      for (let i = leg - 1; i >= 0; i--) {
+        for (let j = 0; j < unColumn.length; j++) {
+          if (columns[i]) {
+            if (columns[i].key === unColumn[j]) {
+              columns.splice(i, 1)
+              continue;
+            }
+          }
+        }
+      }
+    }
+    const width = 100/(columns.length)
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].width = width + '%'
+    }
     // const { userName } = this.state;
     const paginationProps = {
       showTotal: (total) => {
@@ -126,14 +161,16 @@ export default class Department extends PureComponent {
             {/*onChange={this.handleTableChange}*/}
             {/*rowKey="id"*/}
           {/*/>*/}
-          <Table
-            columns={columns}
-            dataSource={list}
-            rowKey="id"
-            pagination={paginationProps}
-            onChange={this.handleTableChange}
-            scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
-          />
+          <div style={{ display: !account.list ? 'none' : ''}}>
+            <Table
+              columns={columns}
+              dataSource={list}
+              rowKey="id"
+              pagination={paginationProps}
+              onChange={this.handleTableChange}
+              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100) }}
+            />
+          </div>
         </Card>
       </PageHeaderLayout>
     );
