@@ -304,6 +304,15 @@ class GoodsTableField extends Component {
         //   );
         // },
       },{
+        title: '同一用户每天获得商品次数',
+        dataIndex: 'userDayNumber',
+        editable: true,
+        // render: (text, record) => {
+        //   return (
+        //     <Input value={record.number}/>
+        //   );
+        // },
+      },{
         title: '操作',
         dataIndex: 'operation',
         render: (text, record) => {

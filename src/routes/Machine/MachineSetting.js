@@ -650,9 +650,9 @@ const EditMonitoringForm = Form.create()(
         onCancel={() => editMonitoringHandleModalVisibleClick()}
         footer={null}
         // className={styles.manageAppBox}
-        width={800}>
+        width={900}>
         <div class="manageAppBox">
-          <Tabs type="card">
+          <Tabs type="card" onChange={callback}>
              <TabPane tab="实时日志" key="1">
                <div>
                  <Button style={{ width: '120px', marginBottom: '10px' }}
@@ -664,7 +664,7 @@ const EditMonitoringForm = Form.create()(
                    {
                      logTopLists.map((item) => {
                        return (
-                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}><a>{item.machineCode}{item.type}{item.tag}{item.detail}</a><span>{item.pointTime}</span></p>
+                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}><a style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }} >{item.detail}</a><span>{item.pointTime}</span></p>
                        );
                      })}
                  </div>
@@ -675,30 +675,30 @@ const EditMonitoringForm = Form.create()(
                  </Button>
                </div>
                <div className={styles.showNotice}
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
+                    // onMouseOver={handleMouseOver}
+                    // onMouseOut={handleMouseOut}
                     style={{ display: !flagTop ? '' : 'none', overflow: mouseOver ? 'scroll' : 'hidden' }}>
                 <div className={styles.showList}
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
                   {
                     logLists.map((item) => {
                       return (
-                        <p><a>{item.machineCode}{item.type}{item.tag}{item.detail}</a><span>{item.pointTime}</span></p>
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}><a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a><span>{item.pointTime}</span></p>
                       );
                   })}
                 </div>
               </div>
             </TabPane>
-          <TabPane tab="定制日志" key="2">
-            <div>
-              <RangePicker onChange={onChange} />
-              <Button style={{ width: '120px', marginTop: '10px' }}
-                      type="Default"
-                      onClick={() => excell(machineCode)}>
-                导出
-              </Button>
-            </div>
-          </TabPane>
+             <TabPane tab="定制日志" key="2">
+               <div>
+                <RangePicker onChange={onChange} />
+                <Button style={{ width: '120px', marginTop: '10px' }}
+                        type="Default"
+                        onClick={() => excell(machineCode)}>
+                  导出
+                </Button>
+               </div>
+            </TabPane>
           </Tabs>
         </div>
       </Modal>
@@ -1759,7 +1759,7 @@ export default class machineSettingList extends PureComponent {
       type: 'machineSetting/machinePointLog',
       payload: {
         restParams: {
-          machineCode: machineCode,
+          machineCode,
           startTime: '',
           endTime: '',
         },
@@ -1804,6 +1804,12 @@ export default class machineSettingList extends PureComponent {
         if (res.length !== 0) {
           this.setState({
             logLists: [...this.state.logLists, ...res],
+          });
+        } else {
+          let logLists = this.state.logLists
+          logLists.push(...this.state.logLists)
+          this.setState({
+            logLists,
           });
         }
       });
@@ -1940,6 +1946,14 @@ export default class machineSettingList extends PureComponent {
         },
       },
     })
+  }
+  callback = (key) => {
+    if (key === '2') {
+      clearInterval(mySetInterval)
+      clearInterval(myLogSetInterval)
+    } else {
+      this.handleMonitoringClick(this.state.machineCode)
+    }
   }
   editMonitoringHandleModalVisibleClick = () => {
     clearInterval(mySetInterval)
@@ -2320,6 +2334,7 @@ export default class machineSettingList extends PureComponent {
           mouseOver={this.state.mouseOver}
           onChange={this.onChange}
           excell={this.excell}
+          callback={this.callback}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}
