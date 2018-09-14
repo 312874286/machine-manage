@@ -664,8 +664,8 @@ const EditMonitoringForm = Form.create()(
                     logTopLists.map((item) => {
                       return (
                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                          <span>{item.pointTime}：</span>
                           <a style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }} >{item.detail}</a>
-                          <span>{item.pointTime}</span>
                         </p>
                       );
                     })}
@@ -686,8 +686,8 @@ const EditMonitoringForm = Form.create()(
                     logLists.map((item) => {
                       return (
                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                          <span>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
-                          <span>{item.pointTime}</span>
                         </p>
                       );
                     })}
@@ -1777,27 +1777,32 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((res) => {
       // console.log('res', res)
-      this.setState({
-        editMonitoringFormVisible: true,
-        logLists: res,
-        machineCode,
-      }, () => {
-        if (res.length > 20) {
-          let destination = 30
+      if (res.length > 0) {
+        this.setState({
+          editMonitoringFormVisible: true,
+          logLists: res,
+          machineCode,
+        }, () => {
+          let destination = res.length * 30
+          this.noticePosition = (res.length - 10) * 30
+          this.setState({
+            noticePosition: this.noticePosition
+          })
           mySetInterval = setInterval(() => {
             if (destination / 30 < res.length ) {
-              this.move(destination, 500)
+              this.move(destination, 500, res.length)
               destination += 30
             } else { // 列表到底
-              this.noticePosition = 0 // 设置列表为开始位置
-              destination = 30
-              this.move(destination, 500)
-              destination += 30
+              clearInterval(mySetInterval)
+              // this.noticePosition = 0 // 设置列表为开始位置
+              // destination = 30
+              // this.move(destination, 500, res.length)
+              // destination += 30
             }
           }, 1500)
-        }
-        this.getLogLists()
-      });
+          this.getLogLists()
+        });
+      }
     });
   }
   getLogLists = () => {
@@ -1812,21 +1817,40 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((res) => {
+        let destination = this.state.logLists.length * 30
+        this.noticePosition = (this.state.logLists.length - 10) * 30
         if (res.length !== 0) {
           this.setState({
             logLists: [...this.state.logLists, ...res],
-          });
+          }, () => {
+            mySetInterval = setInterval(() => {
+              if (destination / 30 < this.state.logLists.length ) {
+                this.move(destination, 500)
+                destination += 30
+              } else { // 列表到底
+                clearInterval(mySetInterval)
+              }
+            }, 1500)
+          })
         } else {
-          let logLists = this.state.logLists
-          logLists.push(...this.state.logLists)
-          this.setState({
-            logLists,
-          });
+          clearInterval(mySetInterval)
+          // let destination = 30
+          // mySetInterval = setInterval(() => {
+          //   if (destination / 30 < res.length ) {
+          //     this.move(destination, 500, res.length)
+          //     destination += 30
+          //   } else { // 列表到底
+          //     this.noticePosition = 0 // 设置列表为开始位置
+          //     destination = 30
+          //     this.move(destination, 500, res.length)
+          //     destination += 30
+          //   }
+          // }, 1500)
         }
       });
     }, 3000)
   }
-  move = (destination, duration) => {
+  move = (destination, duration, len) => {
     // 实现滚动动画
     let speed = ((destination - this.noticePosition) * 1000) / (duration * 60)
     let count = 0
@@ -1892,20 +1916,20 @@ export default class machineSettingList extends PureComponent {
         logLists: res,
         machineCode: machineCode
       }, () => {
-        if (res.length > 20) {
-          let destination = 30
-          mySetInterval = setInterval(() => {
-            if (destination / 30 < res.length ) {
-              this.move(destination, 500)
-              destination += 30
-            } else { // 列表到底
-              this.noticePosition = 0 // 设置列表为开始位置
-              destination = 30
-              this.move(destination, 500)
-              destination += 30
-            }
-          }, 1500)
-        }
+        let destination = res.length * 30
+        this.noticePosition = (res.length - 10) * 30
+        this.setState({
+          noticePosition: this.noticePosition
+        })
+        mySetInterval = setInterval(() => {
+          if (destination / 30 < res.length ) {
+            this.move(destination, 500, res.length)
+            destination += 30
+          } else { // 列表到底
+            clearInterval(mySetInterval)
+          }
+        }, 1500)
+        this.getLogLists()
       });
     });
   }
@@ -1920,17 +1944,22 @@ export default class machineSettingList extends PureComponent {
     this.setState({
       mouseOver: false
     })
-    let destination = 30
+    let destination = this.state.logLists.length * 30
+    this.noticePosition = (this.state.logLists.length - 10) * 30
+    this.setState({
+      noticePosition: this.noticePosition
+    })
     if (this.state.logLists.length > 20) {
       mySetInterval = setInterval(() => {
         if (destination / 30 < this.state.logLists.length ) {
           this.move(destination, 500)
           destination += 30
         } else { // 列表到底
-          this.noticePosition = 0 // 设置列表为开始位置
-          destination = 30
-          this.move(destination, 500)
-          destination += 30
+          clearInterval(mySetInterval)
+          // this.noticePosition = 0 // 设置列表为开始位置
+          // destination = 30
+          // this.move(destination, 500)
+          // destination += 30
         }
       }, 1500)
     }
