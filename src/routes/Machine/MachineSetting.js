@@ -14,6 +14,7 @@ import {
   Menu,
   InputNumber,
   DatePicker,
+  Tabs,
   Modal,
   message,
   Badge,
@@ -36,8 +37,11 @@ import LogModal from '../../components/LogModal';
 import EditableTagGroup from '../../components/Tag';
 import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
-
+import rAF from '../../utils/rAF'
 import { getAccountMenus } from "../../utils/authority";
+
+const { RangePicker } = DatePicker;
+const TabPane = Tabs.TabPane;
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -628,6 +632,84 @@ const EditMachineCodeForm = Form.create()(
 //     );
 //   });
 
+const EditMonitoringForm = Form.create()(
+  (props) => {
+    const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick, callback,
+      noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
+      handleMouseOver, handleMouseOut, mouseOver, onChange, excell } = props;
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">监控</span>
+          </div>
+        }
+        visible={editMonitoringFormVisible}
+        onCancel={() => editMonitoringHandleModalVisibleClick()}
+        footer={null}
+        // className={styles.manageAppBox}
+        width={900}>
+        <div class="manageAppBox">
+          <Tabs type="card" onChange={callback}>
+            <TabPane tab="实时日志" key="1">
+              <div>
+                <Button style={{ width: '120px', marginBottom: '10px' }}
+                        type="Default"
+                        onClick={() => watchTop(machineCode)}>
+                  查看以前
+                </Button>
+                <div style={{ display: flagTop ? '' : 'none', height: '300px', overflowY: 'scroll' }} className={ styles.logTopLists }>
+                  {
+                    logTopLists.map((item) => {
+                      return (
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                          <a style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }} >{item.detail}</a>
+                          <span>{item.pointTime}</span>
+                        </p>
+                      );
+                    })}
+                </div>
+                <Button style={{ width: '120px', marginTop: '10px', display: flagTop ? '' : 'none' }}
+                        type="Default"
+                        onClick={() => returnInterval(machineCode)}>
+                  返回
+                </Button>
+              </div>
+              <div className={styles.showNotice}
+                // onMouseOver={handleMouseOver}
+                // onMouseOut={handleMouseOut}
+                   style={{ display: !flagTop ? '' : 'none', overflow: mouseOver ? 'scroll' : 'hidden', height: '300px' }}>
+                <div className={styles.showList}
+                     style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
+                  {
+                    logLists.map((item) => {
+                      return (
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                          <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
+                          <span>{item.pointTime}</span>
+                        </p>
+                      );
+                    })}
+                </div>
+              </div>
+            </TabPane>
+            <TabPane tab="定制日志" key="2">
+              <div>
+                <RangePicker onChange={onChange} />
+                <Button style={{ width: '120px', marginTop: '10px' }}
+                        type="Default"
+                        onClick={() => excell(machineCode)}>
+                  导出
+                </Button>
+              </div>
+            </TabPane>
+          </Tabs>
+        </div>
+      </Modal>
+    );
+  });
+
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
   machineSetting,
@@ -693,15 +775,9 @@ export default class machineSettingList extends PureComponent {
     logTopLists: [],
     flagTop: false,
     mouseOver: false,
-    excelTimeRange: []
+    excelTimeRange: [],
     account: {}
   };
-  // type: Array,
-  // required: true,
-  // coerce (data) {
-  //   data.push(data[0])
-  //   return data
-  // }
   constructor(props) {
     super(props);
     this.getPointSettingList = debounce(this.getPointSettingList, 800);
@@ -1741,11 +1817,11 @@ export default class machineSettingList extends PureComponent {
             logLists: [...this.state.logLists, ...res],
           });
         } else {
-          let logLists = this.state.logLists
-          logLists.push(...this.state.logLists)
-          this.setState({
-            logLists,
-          });
+          // let logLists = this.state.logLists
+          // logLists.push(...this.state.logLists)
+          // this.setState({
+          //   logLists,
+          // });
         }
       });
     }, 3000)
@@ -1757,7 +1833,7 @@ export default class machineSettingList extends PureComponent {
     let step = () => {
       this.noticePosition += speed
       count++
-      // console.log('noticePosition', this.noticePosition)
+      console.log('noticePosition', this.noticePosition)
       rAF(() => {
         if (this.noticePosition < destination) {
           step()
@@ -2033,6 +2109,8 @@ export default class machineSettingList extends PureComponent {
         width: 180,
         render: (text, item) => (
           <Fragment>
+            <a onClick={() => this.handleMonitoringClick(item.machineCode)}>监控</a>
+            <Divider type="vertical" />
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
             <a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>
             <Divider type="vertical" />
