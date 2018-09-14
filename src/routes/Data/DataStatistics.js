@@ -29,7 +29,7 @@ const opType = [{id: 1, name: 'mysql'}, {id: 2, name: 'mongo'}, {id: 3, name: 'r
 const opTypeLists = ['', 'mysql', 'mongo', 'redis', 'hibrid']
 const ModalForm = Form.create()(
   (props) => {
-    const { form, modalVisible, editModalAddClick, editModalVisibleClick, editModalConfirmLoading, modalData, handleTags  } = props;
+    const { form, modalVisible, editModalAddClick, editModalVisibleClick, editModalConfirmLoading, modalData, handleTags, modalFlag  } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -46,7 +46,7 @@ const ModalForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">新增数据统计模板</span>
+            <span class="modalTitle">{!modalFlag ? '新增' : '编辑'}数据统计模板</span>
           </div>
         }
         visible={modalVisible}
@@ -57,16 +57,34 @@ const ModalForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form>
-            <FormItem {...formItemLayout} label="名称">
+            <FormItem {...formItemLayout} label="名称" style={{ display: modalFlag ? 'none' : ''}}>
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: '请填写名称' }],
-              })(<Input />)}
+              })(<Input placeholder="请填写名称"/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择执行类型">
+            <FormItem {...formItemLayout} label="名称" style={{ display: !modalFlag ? 'none' : ''}}>
+              {getFieldDecorator('name', {
+                rules: [{ required: true, message: '请填写名称' }],
+              })(<Input disabled />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="选择执行类型" style={{ display: modalFlag ? 'none' : ''}}>
               {getFieldDecorator('opType', {
                 rules: [{ required: true, message: '请选择执行类型' }],
               })(
                 <Select placeholder="请选择执行类型">
+                  {opType.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id} >{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="选择执行类型" style={{ display: !modalFlag ? 'none' : ''}}>
+              {getFieldDecorator('opType', {
+                rules: [{ required: true, message: '请选择执行类型' }],
+              })(
+                <Select placeholder="请选择执行类型" disabled>
                   {opType.map((item) => {
                     return (
                       <Option key={item.id} value={item.id} >{item.name}</Option>
@@ -209,6 +227,7 @@ export default class DataStatistics extends PureComponent {
     startValue: null,
     endValue: null,
     endOpen: false,
+    modalFlag: false,
   };
   componentDidMount() {
     this.getLists('');
@@ -295,7 +314,8 @@ export default class DataStatistics extends PureComponent {
     this.setState({
       modalVisible: flag,
       modalData: { },
-      currentData: {}
+      currentData: {},
+      modalFlag: false
     }, () => {
       this.setModalData()
     });
@@ -320,7 +340,8 @@ export default class DataStatistics extends PureComponent {
     // currentData
     this.setState({
       modalVisible: true,
-      currentData: item
+      currentData: item,
+      modalFlag: true
     }, () => {
       this.props.dispatch({
         type: 'dataStatistics/templateList',
@@ -664,6 +685,7 @@ export default class DataStatistics extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalData={modalData}
           handleTags={this.handleTags}
+          modalFlag={this.state.modalFlag}
         />
         <GoOnForm
           ref={this.saveGoOnModalFormRef}
