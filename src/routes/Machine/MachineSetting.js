@@ -636,7 +636,7 @@ const EditMonitoringForm = Form.create()(
   (props) => {
     const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick, callback,
       noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
-      handleMouseOver, handleMouseOut, mouseOver, onChange, excell } = props;
+      handleMouseOver, handleMouseOut, mouseOver, onChange, excell, watchBtn } = props;
     return (
       <Modal
         title={
@@ -654,7 +654,7 @@ const EditMonitoringForm = Form.create()(
           <Tabs type="card" onChange={callback}>
             <TabPane tab="实时日志" key="1">
               <div>
-                <Button style={{ width: '120px', marginBottom: '10px' }}
+                <Button style={{ width: '120px', marginBottom: '10px', display: watchBtn ? '' : 'none' }}
                         type="Default"
                         onClick={() => watchTop(machineCode)}>
                   查看以前
@@ -777,7 +777,9 @@ export default class machineSettingList extends PureComponent {
     flagTop: false,
     mouseOver: false,
     excelTimeRange: [],
-    account: {}
+
+    account: {},
+    watchBtn: true,
   };
   constructor(props) {
     super(props);
@@ -1777,6 +1779,11 @@ export default class machineSettingList extends PureComponent {
     // machinePointLog
     this.setState({
       editMonitoringFormVisible: true,
+      flagTop: false,
+      logTopLists: [],
+      logLists: [],
+      watchBtn: true,
+      machineCode,
     }, () => {
       this.props.dispatch({
         type: 'machineSetting/machinePointLog',
@@ -1886,9 +1893,9 @@ export default class machineSettingList extends PureComponent {
     step()
   }
   watchTop = (machineCode) => {
-    // console.log('machineCode', machineCode, this.state.machineCode)
-    clearInterval(mySetInterval)
-    clearInterval(myLogSetInterval)
+    console.log('machineCode', machineCode, this.state.machineCode)
+    // clearInterval(mySetInterval)
+    // clearInterval(myLogSetInterval)
     let endTime = null
     if (this.state.logTopLists.length === 0) {
       endTime = this.state.logLists.length > 0 ? this.state.logLists[this.state.logLists.length - 1].pointTime : ''
@@ -1899,17 +1906,24 @@ export default class machineSettingList extends PureComponent {
       type: 'machineSetting/machinePointLog',
       payload: {
         restParams: {
-          machineCode: machineCode,
+          machineCode,
           startTime: '',
           endTime,
         },
       },
     }).then((res) => {
-      this.setState({
-        flagTop: true,
-        logTopLists: [...this.state.logTopLists, ...res],
-      }, () => {
-      });
+      if (res) {
+        if (res.length > 0) {
+          this.setState({
+            flagTop: true,
+            logTopLists: [...this.state.logTopLists, ...res],
+          });
+        } else {
+          this.setState({
+            watchBtn: false
+          })
+        }
+      }
     });
   }
   returnInterval = (machineCode) => {
@@ -2395,6 +2409,7 @@ export default class machineSettingList extends PureComponent {
           onChange={this.onChange}
           excell={this.excell}
           callback={this.callback}
+          watchBtn={this.state.watchBtn}
         />
         {/*<UploadLogForm*/}
         {/*UploadLogVisible={this.state.UploadLogVisible}*/}
