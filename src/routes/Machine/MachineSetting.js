@@ -680,7 +680,7 @@ const EditMonitoringForm = Form.create()(
                 // onMouseOver={handleMouseOver}
                 // onMouseOut={handleMouseOut}
                    id="logTip"
-                   style={{ display: !flagTop ? '' : 'none', overflow: mouseOver ? 'scroll' : 'hidden', height: '300px' }}>
+                   style={{ display: !flagTop ? '' : 'none', overflow: 'scroll', height: '300px' }}>
                 <div className={styles.showList}
                      id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
@@ -789,6 +789,14 @@ export default class machineSettingList extends PureComponent {
     this.getLists();
     this.getAreaList();
     this.getAccountMenus(getAccountMenus())
+  }
+  componentDidUpdate() {
+    if (this.state.editMonitoringFormVisible) {
+      // console.log('document.getElementById()', document.getElementById('logTip'))
+      // document.getElementById('logTip').scrollTo = (this.state.logLists.length - 10) * 30
+      // transform: none;
+      // console.log('scrollTo', document.getElementById('logTip').scrollTo)
+    }
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -1785,23 +1793,30 @@ export default class machineSettingList extends PureComponent {
           logLists: res,
           machineCode,
         }, () => {
-          let destination = res.length * 30
-          this.noticePosition = (res.length - 10) * 30
+          // let destination = 30
+          // this.noticePosition = (res.length - 10) * 30
           this.setState({
             noticePosition: this.noticePosition
           })
-          mySetInterval = setInterval(() => {
-            if (destination / 30 < res.length ) {
-              this.move(destination, 500, res.length)
-              destination += 30
-            } else { // 列表到底
-              // clearInterval(mySetInterval)
-              // this.noticePosition = 0 // 设置列表为开始位置
-              // destination = 30
-              // this.move(destination, 500, res.length)
-              // destination += 30
-            }
-          }, 1500)
+          setTimeout(()=>{
+            document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
+          },0)
+          // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
+          // console.log('scrollTo', document.getElementById('logTip').scrollTo)
+
+          // mySetInterval = setInterval(() => {
+          //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
+          //   if (destination / 30 < this.state.logLists.length ) {
+          //     this.move(destination, 500, res.length)
+          //     destination += 30
+          //   } else { // 列表到底
+          //     // clearInterval(mySetInterval)
+          //     // this.noticePosition = 0 // 设置列表为开始位置
+          //     // destination = 30
+          //     // this.move(destination, 500, res.length)
+          //     // destination += 30
+          //   }
+          // }, 1500)
           this.getLogLists()
         });
       }
@@ -1819,20 +1834,9 @@ export default class machineSettingList extends PureComponent {
           },
         },
       }).then((res) => {
-        let destination = this.state.logLists.length * 30
-        this.noticePosition = (this.state.logLists.length - 10) * 30
         if (res.length !== 0) {
           this.setState({
             logLists: [...this.state.logLists, ...res],
-          }, () => {
-            mySetInterval = setInterval(() => {
-              if (destination / 30 < this.state.logLists.length ) {
-                this.move(destination, 500)
-                destination += 30
-              } else { // 列表到底
-                clearInterval(mySetInterval)
-              }
-            }, 1500)
           })
         } else {
           // clearInterval(mySetInterval)
@@ -1853,14 +1857,14 @@ export default class machineSettingList extends PureComponent {
     }, 3000)
   }
   move = (destination, duration, len) => {
-    console.log('noticePosition2', this.noticePosition)
+    console.log('noticePosition2', this.state.noticePosition)
     // 实现滚动动画
     let speed = ((destination - this.noticePosition) * 1000) / (duration * 60)
     let count = 0
     let step = () => {
       this.noticePosition += speed
       count++
-      console.log('noticePosition', this.noticePosition)
+      console.log('noticePosition', this.state.noticePosition)
       rAF(() => {
         if (this.noticePosition < destination) {
           step()
@@ -1940,10 +1944,7 @@ export default class machineSettingList extends PureComponent {
     this.setState({
       mouseOver: true
     })
-    document.getElementById('logTip').scrollTo = (this.state.logLists.length - 10) * 30
-    // transform: none;
-    document.getElementById('logTipDiv').setAttribute('transform', 'none')
-    console.log('scrollTo', document.getElementById('logTip').scrollTo)
+
     clearInterval(mySetInterval)
     // clearInterval(myLogSetInterval)
   }
