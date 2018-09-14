@@ -660,15 +660,15 @@ const EditMonitoringForm = Form.create()(
                   查看以前
                 </Button>
                 <div style={{ display: flagTop ? '' : 'none', height: '300px', overflowY: 'scroll' }} className={ styles.logTopLists }>
-                  {
+                  {(logTopLists.length === 0) ? '暂无数据' : (
                     logTopLists.map((item) => {
                       return (
                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
-                          <span>{item.pointTime}：</span>
+                          <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }} >{item.detail}</a>
                         </p>
                       );
-                    })}
+                    }))}
                 </div>
                 <Button style={{ width: '120px', marginTop: '10px', display: flagTop ? '' : 'none' }}
                         type="Default"
@@ -684,15 +684,14 @@ const EditMonitoringForm = Form.create()(
                 <div className={styles.showList}
                      id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
-                  {
-                    logLists.map((item) => {
+                  {(logLists.length === 0) ? '暂无数据' : (logLists.map((item) => {
                       return (
                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
                           <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
                         </p>
                       );
-                    })}
+                    }))}
                 </div>
               </div>
             </TabPane>
@@ -1887,7 +1886,7 @@ export default class machineSettingList extends PureComponent {
     step()
   }
   watchTop = (machineCode) => {
-    console.log('machineCode', machineCode, this.state.machineCode)
+    // console.log('machineCode', machineCode, this.state.machineCode)
     clearInterval(mySetInterval)
     clearInterval(myLogSetInterval)
     let endTime = null
@@ -1908,7 +1907,7 @@ export default class machineSettingList extends PureComponent {
     }).then((res) => {
       this.setState({
         flagTop: true,
-        logTopLists: res,
+        logTopLists: [...this.state.logTopLists, ...res],
       }, () => {
       });
     });
