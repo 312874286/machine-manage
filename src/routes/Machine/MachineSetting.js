@@ -1817,11 +1817,11 @@ export default class machineSettingList extends PureComponent {
             logLists: [...this.state.logLists, ...res],
           });
         } else {
-          // let logLists = this.state.logLists
-          // logLists.push(...this.state.logLists)
-          // this.setState({
-          //   logLists,
-          // });
+          let logLists = this.state.logLists
+          logLists.push(...this.state.logLists)
+          this.setState({
+            logLists,
+          });
         }
       });
     }, 3000)
