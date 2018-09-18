@@ -125,6 +125,7 @@ export default class areaSettingList extends PureComponent {
     this.getLists();
     // this.getAccountMenus(getAccountMenus())
     //
+    //
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
