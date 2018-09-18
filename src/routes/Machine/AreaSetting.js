@@ -275,9 +275,7 @@ export default class areaSettingList extends PureComponent {
 
     const districtRes = await this.getAreas(parentCode)
     const arrCity = province[provinceIndex].children
-
     // const forInDistrictRes = this.forIn(arrCity, parentCode, districtRes)
-
     // const cityIndex = forInDistrictRes.index
     // const circleRes = await this.getAreas(district)
     // const arrDistrict = province[provinceIndex].children[cityIndex].children
