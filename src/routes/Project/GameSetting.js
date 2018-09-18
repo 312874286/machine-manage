@@ -320,7 +320,6 @@ export default class gameSettingList extends PureComponent {
       };
       this.setState({
         editModalConfirmLoading: true,
-        modalData: {},
       });
       let url = 'gameSetting/saveGameSetting';
       if (this.state.modalData.id) {
@@ -332,11 +331,16 @@ export default class gameSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.getLists();
+      }).then((res) => {
+        if (res && res.code) {
+          this.getLists();
+          this.setState({
+            modalVisible: false,
+            modalData: {},
+          });
+        }
         this.setState({
           editModalConfirmLoading: false,
-          modalVisible: false,
         });
       });
     });
