@@ -60,7 +60,7 @@ const CreateForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{modalType ? '编辑渠道' : '新建渠道'}</span>
+            <span class="modalTitle">{modalType ? '编辑省市' : '新建省市'}</span>
           </div>
         }
         visible={modalVisible}
@@ -319,10 +319,6 @@ export default class areaSettingList extends PureComponent {
       }
     }
   }
-
-
-
-
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
