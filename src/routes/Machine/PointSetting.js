@@ -419,7 +419,7 @@ export default class PointSettingList extends PureComponent {
       TagLists: []
     });
     this.setModalData();
-    this.getTagList()
+    this.getTagList('')
   };
   // 删除modal 删除事件
   handleDelClick = (item) => {
