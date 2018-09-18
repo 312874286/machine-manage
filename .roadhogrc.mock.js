@@ -5458,6 +5458,42 @@ const proxy = {
       },
       "msg": "成功"
     })
+  },
+  'post /machine/machine/updateTemperature': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /machine/machine/findTemperature': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /machine/machine/grabLog': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'GET /machine/machine/getLogs': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "6d56b10c641e4224b93c60640a31998e",
+          "logType": 1,
+          "reciveTime": "2018-07-24 19:18:52",
+          "logUrl": "app/log/7589ae2ccf764157bd619a011658176b.zip",
+          "machineCode": "1234"
+        }
+      ],
+      "msg": "成功"
+    })
   }
 };
 

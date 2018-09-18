@@ -7,7 +7,11 @@ const api = map({
   savePointSetting: '/machine/locale/add',
   updatePointSetting: '/machine/locale/update',
   deletePointSetting: '/machine/locale/delete',
-  getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&machineCode={machineCode}&localCode={localCode}',
+  // startTime: '',
+  // endTime: '',
+  // machineType: '',
+  // machineStatus: '',
+  getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&machineCode={machineCode}&localCode={localCode}&startTime={startTime}&endTime={endTime}&machineType={machineType}&machineStatus={machineStatus}',
   updateGoodsCountMachineSetting: '/machine/machine/updateGoodsCount',
   deleteChannelMachineSetting: '/machine/machine/deleteChannel',
   getAisleList: '/machine/machine/channelInfo?machineId={machineId}',
@@ -48,6 +52,11 @@ const api = map({
   areaList: '/admin/area/pageList?pageNo={pageNo}&code={code}',
   areaDetail: '/admin/area/detail?code={code}',
 
+
+  grabLog: '/machine/machine/grabLog',
+  getLogs: '/machine/machine/getLogs?machineId={machineId}',
+  findTemperature: '/machine/machine/findTemperature?machineId={machineId}',
+  updateTemperature: '/machine/machine/updateTemperature'
 });
 
 export default api;
