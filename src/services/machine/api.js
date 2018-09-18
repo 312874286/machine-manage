@@ -16,6 +16,7 @@ const api = map({
   cutApp: '/machine/machine/cutApp?machineId={machineId}&appPackageName={appPackageName}',
   installApp: '/machine/machine/installApp?machineId={machineId}&appPackageName={appPackageName}&url={url}&versionCode={versionCode}',
   machineUpdateInfo: '/machine/machine/updateInfo',
+
   getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
 
   taskList: '/machine/task/list?pageNo={pageNo}&type={type}&status={status}',
@@ -38,6 +39,14 @@ const api = map({
 
   machinePointLog: '/machine/machine/machinePointLog?machineCode={machineCode}&startTime={startTime}&endTime={endTime}',
   exportMachinePointLog: '/machine/machine/exportMachinePointLog',
+
+  tagList: '/machine/locale/tagList?pageNo={pageNo}&keyword={keyword}',
+  getTagList: '/machine/locale/getTagList?name={name}',
+
+  addArea: '/admin/area/add',
+  updateArea: 'admin/area/update',
+  areaList: '/admin/area/pageList?pageNo={pageNo}&code={code}',
+  areaDetail: '/admin/area/detail?code={code}',
 
 });
 

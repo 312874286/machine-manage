@@ -173,6 +173,12 @@ export const getRouterData = (app) => {
     '/machine/machine-setting': {
       component: dynamicWrapper(app, ['machine/machineSetting', 'log/log', 'common'], () => import('../routes/Machine/MachineSetting')),
     },
+    '/machine/label-setting': {
+      component: dynamicWrapper(app, ['machine/labelSetting', 'log/log', 'common'], () => import('../routes/Machine/LabelSetting')),
+    },
+    '/machine/area-setting': {
+      component: dynamicWrapper(app, ['machine/areaSetting', 'log/log', 'common'], () => import('../routes/Machine/AreaSetting')),
+    },
     '/machine/task-setting': {
       component: dynamicWrapper(app, ['machine/taskSetting', 'log/log', 'common'], () => import('../routes/Machine/TaskSetting')),
     },

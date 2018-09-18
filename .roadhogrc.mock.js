@@ -551,6 +551,21 @@ const proxy = {
             "parentName": null
           },
           {
+            id: 'a36',
+            functionDepict: '标签管理',
+            functionPath: 'label-setting',
+            parentId: '1',
+            functionLevel: 2,
+            color: null
+          },
+          {
+            id: 'a37',
+            functionDepict: '省市区管理',
+            functionPath: 'area-setting',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
             "id": "22",
             "functionDepict": "用户管理",
             "functionPath": "user",
@@ -5152,6 +5167,298 @@ const proxy = {
       "msg": "成功"
     })
   },
+  'GET /machine/locale/tagList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 3,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": "5b62878af83b4828a5dee850db445d25",
+          "name": "商场"
+        },
+        {
+          "id": "a30836b1ed474b2a8b4ca159e0be411a",
+          "name": "电影院"
+        },
+        {
+          "id": "e86afea001794461a5616d4f46545c3d",
+          "name": "KTV"
+        }
+      ],
+      "unColumn": ""
+    })
+  },
+  'GET /machine/locale/getTagList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "5b62878af83b4828a5dee850db445d25",
+          "name": "商场"
+        },
+        {
+          "id": "a30836b1ed474b2a8b4ca159e0be411a",
+          "name": "电影院"
+        },
+        {
+          "id": "e86afea001794461a5616d4f46545c3d",
+          "name": "KTV"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /admin/area/add': (req, res) => {
+    res.send({
+        "code":0,
+        "data":null,
+        "msg":""
+      })
+  },
+  'POST /admin/area/update': (req, res) => {
+    res.send({
+      "code":0,
+      "data":null,
+      "msg":""
+    })
+  },
+  'GET /admin/area/pageList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "data": [
+        {
+          "code": "100101000",
+          "parentCode": "100100000",
+          "name": "东城区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "东城区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100102000",
+          "parentCode": "100100000",
+          "name": "西城区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "西城区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100103000",
+          "parentCode": "100100000",
+          "name": "崇文区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "崇文区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100104000",
+          "parentCode": "100100000",
+          "name": "宣武区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "宣武区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100105000",
+          "parentCode": "100100000",
+          "name": "朝阳区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "朝阳区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100106000",
+          "parentCode": "100100000",
+          "name": "丰台区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "丰台区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100107000",
+          "parentCode": "100100000",
+          "name": "石景山区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "石景山区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100108000",
+          "parentCode": "100100000",
+          "name": "海淀区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "海淀区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100109000",
+          "parentCode": "100100000",
+          "name": "门头沟区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "门头沟区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100110000",
+          "parentCode": "100100000",
+          "name": "房山区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "房山区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100111000",
+          "parentCode": "100100000",
+          "name": "通州区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "通州区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100112000",
+          "parentCode": "100100000",
+          "name": "顺义区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "顺义区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100113000",
+          "parentCode": "100100000",
+          "name": "昌平区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "昌平区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100114000",
+          "parentCode": "100100000",
+          "name": "大兴区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "大兴区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100115000",
+          "parentCode": "100100000",
+          "name": "怀柔区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "怀柔区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100116000",
+          "parentCode": "100100000",
+          "name": "平谷区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "平谷区",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100117000",
+          "parentCode": "100100000",
+          "name": "密云县",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "密云县",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100118000",
+          "parentCode": "100100000",
+          "name": "延庆县",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "延庆县",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100119000",
+          "parentCode": "100100000",
+          "name": "其他",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "其他",
+          "circle": null,
+          "level": 3
+        },
+        {
+          "code": "100120000",
+          "parentCode": "100100000",
+          "name": "特殊服务区",
+          "province": "北京市",
+          "city": "北京市",
+          "district": "特殊服务区",
+          "circle": null,
+          "level": 3
+        }
+      ],
+      "code": 0
+    })
+  },
+  'GET /admin/area/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "code": "100120000",
+        "parentCode": "100100000",
+        "name": "特殊服务区",
+        "province": "北京市",
+        "city": "北京市",
+        "district": "特殊服务区",
+        "circle": null,
+        "level": 3
+      },
+      "msg": "成功"
+    })
+  }
 };
 
 // export default noProxy ? {

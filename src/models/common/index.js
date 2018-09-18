@@ -18,7 +18,24 @@ export default {
       const arr = [];
       if (data) {
         let isLeaf = false;
-        if (data[0].level === 4) {
+        if (data[0].level === 3) {
+          isLeaf = true;
+        }
+        for (let i = 0; i < data.length; i++) {
+          const a = { value: data[i].code, label: data[i].name, isLeaf, title: data[i].name, key: data[i].code, level: data[i].level, province: data[i].province };
+          arr.push(a);
+        }
+      }
+      return arr;
+    },
+    *getProvinceCity({ payload: { restParams } }, { call }) {
+      const response = yield call(getProvinceCityAreaTradeArea, { restParams });
+      const { code, data } = response;
+      if (code !== 0) return;
+      const arr = [];
+      if (data) {
+        let isLeaf = false;
+        if (data[0].level === 2) {
           isLeaf = true;
         }
         for (let i = 0; i < data.length; i++) {

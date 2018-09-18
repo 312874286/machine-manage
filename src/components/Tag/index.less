@@ -1,0 +1,26 @@
+.inputBox {
+  position: relative;
+  display: inline-block;
+  :global {
+    .ant-list {
+      width: 78px;
+      top: 31px;
+      position: absolute;
+      z-index: 999;
+      background: #fff;
+    }
+    .ant-list-bordered.ant-list-sm .ant-list-item {
+      padding: 0;
+    }
+    .ant-list-item-content-single {
+      justify-content: center;
+    }
+    .ant-list-empty-text {
+      font-size: 12px;
+      padding: 0;
+    }
+    .ant-list-bordered .ant-list-item {
+      border: 0;
+    }
+  }
+}
