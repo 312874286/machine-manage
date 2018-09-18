@@ -42,7 +42,7 @@ const CreateForm = Form.create()(
     const {
       modalVisible, form, handleAdd, handleModalVisible,
       editModalConfirmLoading, modalType, verifyString,
-      areaList, getArea, onChange,
+      areaList, getArea, modalData,
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -84,21 +84,8 @@ const CreateForm = Form.create()(
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择省市" style={{ display: modalType ? '' : 'none' }}>
-              {getFieldDecorator('parentCode', {
-                rules: [{ required: true, message: '省市' }, {
-                  validator: verifyString,
-                }],
-                // initialValue: { defaultValue },
-              })(
-                <Cascader
-                  placeholder="请选择"
-                  options={areaList}
-                  loadData={getArea}
-                  changeOnSelect
-                  disabled
-                />
-              )}
+            <FormItem {...formItemLayout} label="省市" style={{ display: modalType ? '' : 'none' }}>
+              <span>{modalData.province}{modalData.city}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="区名称">
               {getFieldDecorator('name', {
@@ -139,6 +126,7 @@ export default class areaSettingList extends PureComponent {
   };
   componentDidMount() {
     this.getLists();
+    this.getAreaSerach('')
     // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
@@ -178,7 +166,6 @@ export default class areaSettingList extends PureComponent {
       code = targetOption.value;
       targetOption.loading = true;
     }
-
     this.props.dispatch({
       type: 'common/getProvinceCity',
       payload: {
@@ -190,13 +177,41 @@ export default class areaSettingList extends PureComponent {
       if (selectedOptions) {
         targetOption.loading = false;
         targetOption.children = data;
-
         this.setState({
           areaList: [...this.state.areaList],
         });
       } else {
         this.setState({
           areaList: data,
+        });
+      }
+    });
+  }
+  getAreaSerach = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      code = targetOption.value;
+      targetOption.loading = true;
+    }
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        restParams: {
+          code,
+        },
+      },
+    }).then((data) => {
+      if (selectedOptions) {
+        targetOption.loading = false;
+        targetOption.children = data;
+        this.setState({
+          options: [...this.state.options]
+        });
+      } else {
+        this.setState({
+          options: data,
         });
       }
     });
@@ -251,8 +266,15 @@ export default class areaSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+        }
+      }
       this.setState({
         pageNo: 1,
+        code: localCode,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
       }, () => {
         this.getLists();
@@ -280,8 +302,7 @@ export default class areaSettingList extends PureComponent {
     if (!res) {
       return
     }
-    const { parentCode, district, circle, code } = res.data;
-    console.log('parentCode', parentCode, res)
+    const { parentCode, code } = res.data;
     const provinceRes = await this.getAreas('')
     let province = provinceRes;
     const cityRes = await this.getAreas(parentCode)
@@ -290,11 +311,10 @@ export default class areaSettingList extends PureComponent {
       areaList: province,
       parentCode: [parentCode, code],
     }, () => {
-      this.setModalData(res);
+      this.setModalData(res.data);
     });
   }
   getPointSettingDetail = (item) => {
-    console.log('item', item)
     return this.props.dispatch({
       type: 'areaSetting/areaDetail',
       payload: {
@@ -402,7 +422,7 @@ export default class areaSettingList extends PureComponent {
                 <Cascader
                   placeholder="请选择"
                   options={this.state.options}
-                  loadData={this.getArea}
+                  loadData={this.getAreaSerach}
                   changeOnSelect
                 />
               )}
@@ -525,6 +545,7 @@ export default class areaSettingList extends PureComponent {
           modalVisible={modalVisible}
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
+          modalData={modalData}
 
           areaList={areaList}
           getArea={this.getArea}
