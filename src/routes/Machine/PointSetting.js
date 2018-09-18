@@ -664,7 +664,6 @@ export default class PointSettingList extends PureComponent {
       };
       this.setState({
         editModalConfirmLoading: true,
-        modalData: {},
       });
       let url = 'pointSetting/savePointSetting';
       if (this.state.modalData.id) {
@@ -676,15 +675,18 @@ export default class PointSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.setState({
-          code: '',
-        }, () => {
-          this.getLists();
-        })
+      }).then((res) => {
+        if (res && res.code === 0) {
+          this.setState({
+            code: '',
+            modalVisible: false,
+            modalData: {},
+          }, () => {
+            this.getLists();
+          })
+        }
         this.setState({
           editModalConfirmLoading: false,
-          modalVisible: false,
         });
       });
     });
