@@ -3,8 +3,8 @@ import fetch from '../../utils/fetch';
 import api from './api';
 
 export async function savePointSetting({ params }) {
-  return fetch.postJSON(api.savePointSetting, {
-    body: JSON.stringify(params),
+  return fetch.post(api.savePointSetting, {
+    body: stringify(params),
   });
 }
 

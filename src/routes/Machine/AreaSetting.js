@@ -66,11 +66,10 @@ const CreateForm = Form.create()(
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
-        confirmLoading={editModalConfirmLoading}
-      >
+        confirmLoading={editModalConfirmLoading}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="选择省市">
+            <FormItem {...formItemLayout} label="选择省市" style={{ display: modalType ? 'none' : '' }}>
               {getFieldDecorator('parentCode', {
                 rules: [{ required: true, message: '省市' }, {
                   validator: verifyString,
@@ -85,10 +84,26 @@ const CreateForm = Form.create()(
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="渠道名称">
+            <FormItem {...formItemLayout} label="选择省市" style={{ display: modalType ? '' : 'none' }}>
+              {getFieldDecorator('parentCode', {
+                rules: [{ required: true, message: '省市' }, {
+                  validator: verifyString,
+                }],
+                // initialValue: { defaultValue },
+              })(
+                <Cascader
+                  placeholder="请选择"
+                  options={areaList}
+                  loadData={getArea}
+                  changeOnSelect
+                  disabled
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="区名称">
               {getFieldDecorator('name', {
-                rules: [{ required: true, whitespace: true, message: '请输入渠道名称' }],
-              })(<Input placeholder="请输入渠道名称" />)}
+                rules: [{ required: true, whitespace: true, message: '请输入区名称' }],
+              })(<Input placeholder="请输入区名称" />)}
             </FormItem>
           </Form>
         </div>
@@ -120,12 +135,11 @@ export default class areaSettingList extends PureComponent {
     account: {},
     areaList: [],
     parentCode: '',
+    options: []
   };
   componentDidMount() {
     this.getLists();
     // this.getAccountMenus(getAccountMenus())
-    //
-    //
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -266,26 +280,15 @@ export default class areaSettingList extends PureComponent {
     if (!res) {
       return
     }
-    const { parentCode, district, circle } = res.data;
+    const { parentCode, district, circle, code } = res.data;
     console.log('parentCode', parentCode, res)
     const provinceRes = await this.getAreas('')
     let province = provinceRes;
     const cityRes = await this.getAreas(parentCode)
-    const forInCityRes = this.forIn(province, res.data.code, cityRes)
-    console.log('province, res.data.code, cityRes', province, res.data.code, cityRes)
-    const provinceIndex = forInCityRes.index
-
-    const districtRes = await this.getAreas(parentCode)
-    const arrCity = province[provinceIndex].children
-    // const forInDistrictRes = this.forIn(arrCity, parentCode, districtRes)
-    // const cityIndex = forInDistrictRes.index
-    // const circleRes = await this.getAreas(district)
-    // const arrDistrict = province[provinceIndex].children[cityIndex].children
-    // this.forIn(arrDistrict, district, circleRes)
-    console.log('province', province)
+    await this.forIn(province, parentCode, cityRes)
     this.setState({
       areaList: province,
-      parentCode: [res.data.code, parentCode],
+      parentCode: [parentCode, code],
     }, () => {
       this.setModalData(res);
     });
@@ -296,7 +299,7 @@ export default class areaSettingList extends PureComponent {
       type: 'areaSetting/areaDetail',
       payload: {
         restParams: {
-          code: item.parentCode,
+          code: item.code,
         },
       },
     })
@@ -326,13 +329,12 @@ export default class areaSettingList extends PureComponent {
     if (data) {
       this.form.setFieldsValue({
         parentCode: this.state.parentCode,
-        channelCode: data.channelCode || '',
-        channelName: data.channelName || '',
+        name: data.district || undefined,
       });
     } else {
       this.form.setFieldsValue({
-        channelCode: '',
-        channelName: '',
+        parentCode: undefined,
+        name: undefined,
       });
     }
   }
@@ -388,48 +390,6 @@ export default class areaSettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
-  // 日志相关
-  getLogList = () => {
-    this.props.dispatch({
-      type: 'log/getLogList',
-      payload: {
-        restParams: {
-          code: this.state.logId,
-          pageNo: this.state.logModalPageNo,
-          type: 1020403,
-        },
-      },
-    }).then(() => {
-      this.setState({
-        logModalLoading: false,
-      });
-    });
-  }
-
-  handleLogClick = (data) => {
-    this.setState({
-      logModalVisible: !!data,
-      logModalLoading: true,
-      logId: data.id,
-    }, () => {
-      this.getLogList();
-    });
-  }
-
-  logModalHandleCancel = () => {
-    this.setState({
-      logModalVisible: false,
-    });
-  }
-
-  logModalhandleTableChange = (pagination) => {
-    const { current } = pagination;
-    this.setState({
-      logModalPageNo: current,
-    }, () => {
-      this.getLogList();
-    });
-  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -437,8 +397,15 @@ export default class areaSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入渠道编码、渠道名称" />)}
+            <FormItem label="省市区商圈">
+              {getFieldDecorator('provinceCityAreaTrade')(
+                <Cascader
+                  placeholder="请选择"
+                  options={this.state.options}
+                  loadData={this.getArea}
+                  changeOnSelect
+                />
+              )}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
@@ -562,14 +529,6 @@ export default class areaSettingList extends PureComponent {
           areaList={areaList}
           getArea={this.getArea}
           verifyString={this.verifyString}
-        />
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
         />
       </PageHeaderLayout>
     );

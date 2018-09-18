@@ -38,6 +38,8 @@ const getValue = obj =>
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 
+const pointTypeOptions = [{id: 0, name: '活动点位'}, {id: 1, name: '渠道点位'}]
+
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, insertOptions,
@@ -229,7 +231,8 @@ export default class PointSettingList extends PureComponent {
     supervisoryEndTime: '23:59:59',
     TagLists: [],
 
-    switchStatus: true
+    switchStatus: true,
+    type: ''
 
   };
   componentWillMount() {
@@ -279,6 +282,7 @@ export default class PointSettingList extends PureComponent {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
           code: this.state.code,
+          type: this.state.type
         },
       },
     });
@@ -405,6 +409,7 @@ export default class PointSettingList extends PureComponent {
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
+        type: fieldsValue.type >= 0 ? fieldsValue.type : ''
       }, () => {
         this.getLists();
       });
@@ -654,7 +659,7 @@ export default class PointSettingList extends PureComponent {
         areaCode: provinceCityAreaTradeTmp[provinceCityAreaTradeTmp.length - 1],
         monitorStart: this.state.switchStatus ? (fieldsValue.monitorStart ? fieldsValue.monitorStart.format('HH:mm:ss') : undefined) : '',
         monitorEnd: this.state.switchStatus ? (fieldsValue.monitorEnd ? fieldsValue.monitorEnd.format('HH:mm:ss') : undefined) : '',
-        tag: this.state.modalData.tags,
+        tag: this.state.modalData.tags ? JSON.stringify(this.state.modalData.tags) : '',
         monitor: this.state.switchStatus ? 0 : 1
       };
       this.setState({
@@ -834,9 +839,24 @@ export default class PointSettingList extends PureComponent {
           {/*label="关键字"*/}
           <Col md={7} sm={24} lg={8}>
             <FormItem >
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机号搜索" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入点位、具体位置、标签、运营人姓名搜索" />)}
             </FormItem>
           </Col>
+          <Col md={7} sm={24} lg={8}>
+            <FormItem label="选择点位类型">
+              {getFieldDecorator('type')(
+                <Select placeholder="选择点位类型">
+                  {pointTypeOptions.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24} lg={8}>
             <span>
                <FormItem>
@@ -988,16 +1008,6 @@ export default class PointSettingList extends PureComponent {
               <Button icon="plus-circle-o" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                 新建
               </Button>
-              {/*{selectedRows.length > 0 && (*/}
-              {/*<span>*/}
-              {/*<Button>批量操作</Button>*/}
-              {/*<Dropdown overlay={menu}>*/}
-              {/*<Button>*/}
-              {/*更多操作 <Icon type="down" />*/}
-              {/*</Button>*/}
-              {/*</Dropdown>*/}
-              {/*</span>*/}
-              {/*)}*/}
             </div>
             <div style={{ display: !account.list ? 'none' : ''}}>
               <StandardTable
