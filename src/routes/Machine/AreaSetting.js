@@ -319,6 +319,8 @@ export default class areaSettingList extends PureComponent {
       }
     }
   }
+
+
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
