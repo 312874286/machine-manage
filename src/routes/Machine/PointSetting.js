@@ -923,8 +923,8 @@ export default class PointSettingList extends PureComponent {
       {
         title: '点位',
         width: '10%',
-        dataIndex: 'mail',
-        key: 'mail'
+        dataIndex: 'mall',
+        key: 'mall'
       },
       {
         title: '具体位置',
