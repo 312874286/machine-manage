@@ -46,7 +46,8 @@ const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, insertOptions,
       loadData, onChange, editModalConfirmLoading, modalType, verifyPhone,
-      verifyString, handleChange, getTagList, TagLists, handleTags, modalData, handleSupervisorySwitch, switchStatus, handTagLists
+      verifyString, handleChange, getTagList, TagLists, handleTags, modalData, handleSupervisorySwitch, switchStatus, handTagLists,
+      modalDataTags
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -195,7 +196,7 @@ const CreateForm = Form.create()(
               })(
                 <EditableTagGroup
                   handleTags={handleTags}
-                  tags={modalData.tags}
+                  tags={modalDataTags.tags}
                   search={true}
                   handTagLists={handTagLists}
                   data={TagLists}
@@ -256,7 +257,8 @@ export default class PointSettingList extends PureComponent {
     TagLists: [],
 
     switchStatus: true,
-    type: ''
+    type: '',
+    modalDataTags: { tags: [] }
 
   };
   componentWillMount() {
@@ -630,7 +632,7 @@ export default class PointSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.setState({
-        modalData: {
+        modalDataTags: {
           tags: data.tags ? data.tags : []
         },
         switchStatus: parseInt(data.monitor) === 0 ? true : false
@@ -649,7 +651,7 @@ export default class PointSettingList extends PureComponent {
       })
     } else {
       this.setState({
-        modalData:  { tags: [] },
+        modalDataTags:  { tags: [] },
         switchStatus: true,
       }, () => {
         this.form.setFieldsValue({
@@ -683,7 +685,7 @@ export default class PointSettingList extends PureComponent {
         areaCode: provinceCityAreaTradeTmp[provinceCityAreaTradeTmp.length - 1],
         monitorStart: this.state.switchStatus ? (fieldsValue.monitorStart ? fieldsValue.monitorStart.format('HH:mm:ss') : undefined) : '',
         monitorEnd: this.state.switchStatus ? (fieldsValue.monitorEnd ? fieldsValue.monitorEnd.format('HH:mm:ss') : undefined) : '',
-        tag: this.state.modalData.tags ? JSON.stringify(this.state.modalData.tags) : '',
+        tag: this.state.modalDataTags.tags ? JSON.stringify(this.state.modalDataTags.tags) : '',
         monitor: this.state.switchStatus ? 0 : 1
       };
       this.setState({
@@ -764,7 +766,7 @@ export default class PointSettingList extends PureComponent {
   handleTags = (val) => {
     // tags: ["445", "6789"]
     this.setState({
-      modalData: { tags: val },
+      modalDataTags: { tags: val },
     });
   }
   handTagLists = (val) => {
@@ -1107,6 +1109,7 @@ export default class PointSettingList extends PureComponent {
           handleSupervisorySwitch={this.handleSupervisorySwitch}
           switchStatus={this.state.switchStatus}
           handTagLists={this.handTagLists}
+          modalDataTags={this.state.modalDataTags}
         />
         {/*</Spin>*/}
         {/*<Spin tip="Loading..." spinning={this.state.CreateFormLoading}></Spin>*/}
