@@ -58,9 +58,9 @@ const machineStatus = ['未知', '已开机', '已初始化', '已通过测试',
 const appStatus = ['未启动', '前台运行', '后台运行']
 const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-const pointTypeOptions = [{id: 0, name: '活动点位'}, {id: 1, name: '渠道点位'}]
+const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}]
 const pointStatusOptions = [{id: 1, name: '机器开机'}, {id: 2, name: '初始化机器 '}, {id: 3, name: '通过测试'}, {id: 4, name: '设置在点位'}]
-const machineType = ['渠道机器', '', '活动机器']
+const machineType = ['渠道机器', '活动机器']
 
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
