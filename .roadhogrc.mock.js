@@ -5505,7 +5505,319 @@ const proxy = {
       ],
       "msg": "成功"
     })
-  }
+  },
+  'GET /project/interact/list': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": "10001",
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/merchant/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/next': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/merchant/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/merchant/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/goods/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        "id": "1111111",
+        "name": "怡宝款泉水",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": null,
+        "createTime": "2018-07-03 14:51:05",
+        "updateId": null,
+        "updateTime": "2018-07-03 14:51:05"
+      }, {
+        "id": "88511198f5214404beb1cd8a3a29359e",
+        "name": "来一桶shui",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": "",
+        "createTime": "2018-07-03 10:55:28",
+        "updateId": "",
+        "updateTime": "2018-07-03 10:55:28"
+      }],
+      "inno72Goods": {
+        "id": null,
+        "name": null,
+        "code": null,
+        "price": null,
+        "sellerId": null,
+        "img": null,
+        "state": 0,
+        "remark": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null
+      }
+    })
+  },
+  'get /project/interact/merchant/getList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "3",
+          "merchantCode": "2",
+          "merchantName": "天猫",
+          "createId": "12",
+          "updateId": null,
+          "createTime": 1530499549000,
+          "updateTime": 1530499549000,
+          "isDelete": 0
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/shops/getList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "3",
+          "merchantCode": "2",
+          "merchantName": "天猫",
+          "createId": "12",
+          "updateId": null,
+          "createTime": 1530499549000,
+          "updateTime": 1530499549000,
+          "isDelete": 0
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/machine/planList': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "data": [
+          {
+            "id": "6b4cd639883d42999254878b52b1cc20",
+            "machineCode": "18978050",
+            "localDesc": "北京市北京市西城区小西天灯市口",
+            "planTime": [{
+              "activityName": "测试别删",
+              "startTime": "2018-07-25 00:00:00",
+              "endTime": "2018-07-29 00:00:59"
+            }]
+          },
+          {
+            "id": "123",
+            "machineCode": "123",
+            "localDesc": "天津市天津市和平区鞍山道沿线大沽口",
+            "planTime": [{
+              "activityName": "测试别删",
+              "startTime": "2018-07-16 09:00:00",
+              "endTime": "2018-10-06 23:00:00"
+            }]
+          },
+          {
+            "id": "6893a2ada9dd4f7eb8dc33adfc6eda73",
+            "machineCode": "18022789",
+            "localDesc": "北京市北京市西城区小西天灯市口",
+            "planTime": [{
+              "activityName": "测试别删",
+              "startTime": "2018-07-31 00:00:00",
+              "endTime": "2018-08-03 23:59:59"
+            }]
+          }
+        ],
+        "code": 0
+      }
+    )
+  },
+  'post /project/interact/machine/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/machine/goods/add': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+      }
+
+    )
+  },
+  'post /project/interact/machine/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/goods/getAllList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        "id": "1111111",
+        "name": "怡宝款泉水",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": null,
+        "createTime": "2018-07-03 14:51:05",
+        "updateId": null,
+        "updateTime": "2018-07-03 14:51:05"
+      }, {
+        "id": "88511198f5214404beb1cd8a3a29359e",
+        "name": "来一桶shui",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": "",
+        "createTime": "2018-07-03 10:55:28",
+        "updateId": "",
+        "updateTime": "2018-07-03 10:55:28"
+      }],
+      "inno72Goods": {
+        "id": null,
+        "name": null,
+        "code": null,
+        "price": null,
+        "sellerId": null,
+        "img": null,
+        "state": 0,
+        "remark": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null
+      }
+    })
+  },
+  'post /project/interact/machine/goodsList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "data": [
+        {
+          "id": "6b4cd639883d4",
+          "goods_id": "2999254878b52b1cc20",
+          "number": 1000,
+          "seq": 1,
+          "type": 0
+        },
+        {
+          "id": "6b4cd639883d4",
+          "goods_id": "2999254878b52b1cc20",
+          "number": 1000,
+          "seq": 1,
+          "type": 0
+        },
+        {
+          "id": "6b4cd639883d4",
+          "goods_id": "2999254878b52b1cc20",
+          "number": 1000,
+          "seq": 1,
+          "type": 0
+        },
+      ],
+      "code": 0
+    })
+  },
+  'post /project/interact/rule': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
 };
 
 // export default noProxy ? {

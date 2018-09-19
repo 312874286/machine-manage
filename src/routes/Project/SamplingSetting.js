@@ -23,7 +23,7 @@ import {
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './AreaSetting.less';
+import styles from './SamplingSetting.less';
 import LogModal from '../../components/LogModal/index';
 import {getAccountMenus} from "../../utils/authority";
 

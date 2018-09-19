@@ -64,6 +64,33 @@ const api = map({
   paiActivity: '/pai/data/count/list',
 
   // 互派活动
+  interactLists: '/project/interact/list?status={status}&keyword={keyword}&pageNo={pageNo}',
+  interactAdd: '/project/interact/add',
+  // 第二步 商户商品信息
+  merchantAdd: '/project/interact/merchant/add',
+  shopsAdd: '/project/interact/shops/add',
+  goodsAdd: '/project/interact/goods/add',
+  interactNext: '/project/interact/next',
+  updateGoods: '/project/interact/goods/update',
+  updateMerchant: '/project/interact/merchant/update',
+  updateShops: '/project/interact/shops/update',
+  deleteGoods: '/project/interact/goods/delete',
+  deleteMerchant: '/project/interact/merchant/delete',
+  deleteShops: '/project/interact/shops/delete',
+  getInteractGoodsList: '/project/interact/goods/getList',
+  getInteractMerchantList: '/project/interact/merchant/getList',
+  getInteractShopsList: '/project/interact/shops/getList',
+
+  // 第三步 选择机器
+  getInteractMachinePlanList: '/project/interact/machine/planList',
+  addInteractMachine: '/project/interact/machine/add',
+  addInteractMachineGoods: '/project/interact/machine/goods/add',
+  deleteInteractMachine: '/project/interact/machine/delete',
+  getInteractAllGoodsList: '/project/interact/goods/getAllList',
+  getInteractMachineGoodsList: '/project/interact/machine/goodsList',
+  // 第四步 规则设置
+  ruleInteract: '/project/interact/rule',
+
 
 });
 
