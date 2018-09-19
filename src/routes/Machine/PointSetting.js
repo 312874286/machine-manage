@@ -18,6 +18,7 @@ import {
   Popover,
   TimePicker,
   Switch,
+  Tag
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -931,7 +932,17 @@ export default class PointSettingList extends PureComponent {
         title: '标签',
         width: '10%',
         dataIndex: 'tags',
-        key: 'tags'
+        key: 'tags',
+        render: (text, item) => (
+          (item.tags) ? (
+            item.tags.map((res) => {
+              return <Tag>{res}</Tag>
+            })
+          ) : (
+            null
+          )
+
+        ),
       },
       {
         title: '备注描述',
