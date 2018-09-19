@@ -39,6 +39,7 @@ const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 
 const pointTypeOptions = [{id: 0, name: '活动点位'}, {id: 1, name: '渠道点位'}]
+const type = ['活动点位', '渠道点位']
 
 const CreateForm = Form.create()(
   (props) => {
@@ -889,34 +890,59 @@ export default class PointSettingList extends PureComponent {
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, account } = this.state;
     let columns = [
       {
-        title: '所属省市区商圈',
+        title: '省市区',
         width: '10%',
         dataIndex: 'areaName',
         key: 'areaName'
       },
       {
-        title: '商场',
+        title: '点位',
         width: '10%',
-        dataIndex: 'mall',
-        key: 'mall'
+        dataIndex: 'mail',
+        key: 'mail'
       },
       {
-        title: '点位名称',
+        title: '具体位置',
         width: '10%',
         dataIndex: 'name',
         key: 'name'
+      },
+      {
+        title: '点位类型',
+        width: '10%',
+        dataIndex: 'type',
+        key: 'type',
+        render(val) {
+          if (val !== null) {
+            return <span>{type[val]}</span>;
+          }
+        },
+      },
+      {
+        title: '监控时间',
+        width: '10%',
+        dataIndex: 'time',
+        key: 'time',
+        render: (text, item) => (
+          <div>{`${item.monitorStart ? item.monitorStart : ''}-${item.monitorEnd ? item.monitorEnd : ''}`}</div>
+        ),
+      },
+      {
+        title: '标签',
+        width: '10%',
+        dataIndex: 'tags',
+        key: 'tags'
+      },
+      {
+        title: '备注描述',
+        dataIndex: 'remark',
+        key: 'remark'
       },
       {
         title: '运营人',
         width: '10%',
         dataIndex: 'manager',
         key: 'manager'
-      },
-      {
-        title: '手机号',
-        width: '10%',
-        dataIndex: 'mobile',
-        key: 'mobile'
       },
       {
         title: '机器个数',
@@ -943,9 +969,9 @@ export default class PointSettingList extends PureComponent {
         key: 'machineCode'
       },
       {
-        title: '备注描述',
-        dataIndex: 'remark',
-        key: 'remark'
+        title: '手机号',
+        dataIndex: 'mobile',
+        key: 'mobile'
       },
       {
         fixed: 'right',
@@ -1020,7 +1046,7 @@ export default class PointSettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1300}
+                scrollX={1400}
                 scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
               />
             </div>
