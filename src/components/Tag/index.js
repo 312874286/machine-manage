@@ -65,7 +65,7 @@ class EditableTagGroup extends PureComponent {
         search,
       });
     }
-    if (data && data.length > 0) {
+    if (data) {
       this.setState({
         data,
       });
@@ -126,9 +126,7 @@ class EditableTagGroup extends PureComponent {
     this.setState({ inputValue: e.target.value }, () => {
       this.select.focus()
     });
-    if (e.target.value) {
-      this.props.handTagLists( e.target.value)
-    }
+    this.props.handTagLists(e.target.value)
   }
   saveInputRef = input => this.input = input
   saveSelectRef = select => this.select = select
@@ -136,6 +134,7 @@ class EditableTagGroup extends PureComponent {
     const { tags, inputVisible, inputValue, search, data } = this.state;
     // console.log('tags444444', tags, data)
     const options = this.state.data.map(d => <Option key={d.name}>{d.name}</Option>);
+    console.log('tags6666', data)
     return (
       <div>
         {tags.map((tag, index) => {
@@ -173,14 +172,17 @@ class EditableTagGroup extends PureComponent {
                 // onBlur={this.handleInputConfirm}
                 onPressEnter={this.handleInputConfirm}
               />
-              <List
-                size="small"
-                bordered
-                dataSource={data}
-                renderItem={item => (<List.Item>
-                  <div style={{ cursor: 'pointer' }} onClick={() => this.clickItem(item)}>{item.name}</div>
-                </List.Item>)}
-              />
+              <div style={{ display: data.length > 0 ? '' : 'none'}}>
+                <List
+                  size="small"
+                  bordered
+                  dataSource={data}
+                  renderItem={item => (<List.Item>
+                    <div style={{ cursor: 'pointer' }} onClick={() => this.clickItem(item)}>{item.name}</div>
+                  </List.Item>)}
+                />
+              </div>
+
             </div>
           // )
 

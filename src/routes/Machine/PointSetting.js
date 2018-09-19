@@ -83,7 +83,7 @@ const CreateForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="省市区">
+            <FormItem {...formItemLayout} label="省市区" style={{ display: modalType ? '' : 'none' }}>
               {getFieldDecorator('provinceCityAreaTrade', {
                 rules: [{ required: true, message: '省市区' }, {
                   validator: verifyString,
@@ -99,10 +99,32 @@ const CreateForm = Form.create()(
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="点位名称">
+            <FormItem {...formItemLayout} label="省市区" style={{ display: modalType ? 'none' : '' }}>
+              {getFieldDecorator('provinceCityAreaTrade', {
+                rules: [{ required: true, message: '省市区' }, {
+                  validator: verifyString,
+                }],
+                // initialValue: { defaultValue },
+              })(
+                <Cascader
+                  placeholder="请选择"
+                  options={insertOptions}
+                  loadData={loadData}
+                  onChange={onChange}
+                  changeOnSelect
+                  disabled
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="点位名称" style={{ display: modalType ? '' : 'none' }}>
               {getFieldDecorator('mall', {
                 rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
               })(<Input placeholder="请输入点位" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="点位名称" style={{ display: modalType ? 'none' : '' }}>
+              {getFieldDecorator('mall', {
+                rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
+              })(<Input placeholder="请输入点位" disabled/>)}
             </FormItem>
             <FormItem {...formItemLayout} label="具体位置">
               {getFieldDecorator('name', {
@@ -426,7 +448,7 @@ export default class PointSettingList extends PureComponent {
       TagLists: []
     });
     this.setModalData();
-    this.getTagList('')
+    // this.getTagList('')
   };
   // 删除modal 删除事件
   handleDelClick = (item) => {
