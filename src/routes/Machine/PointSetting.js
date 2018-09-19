@@ -18,6 +18,7 @@ import {
   Popover,
   TimePicker,
   Switch,
+  Tag
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -146,24 +147,24 @@ const CreateForm = Form.create()(
               )}
             </FormItem>
             {/*<FormItem {...formItemLayout} label="标签">*/}
-              {/*{getFieldDecorator('tag', {*/}
-                {/*initialValue: []*/}
-              {/*})(*/}
-                {/*<Select*/}
-                  {/*mode="multiple"*/}
-                  {/*style={{ width: '100%' }}*/}
-                  {/*placeholder="请选择标签"*/}
-                  {/*// defaultValue={['a10', 'c12']}*/}
-                  {/*onChange={handleChange}*/}
-                  {/*// onSearch={getTagList}*/}
-                {/*>*/}
-                  {/*{TagLists.map((item) => {*/}
-                    {/*return (*/}
-                      {/*<Option value={item.id} key={item.name}>{item.name}</Option>*/}
-                    {/*);*/}
-                  {/*})}*/}
-                {/*</Select>*/}
-              {/*)}*/}
+            {/*{getFieldDecorator('tag', {*/}
+            {/*initialValue: []*/}
+            {/*})(*/}
+            {/*<Select*/}
+            {/*mode="multiple"*/}
+            {/*style={{ width: '100%' }}*/}
+            {/*placeholder="请选择标签"*/}
+            {/*// defaultValue={['a10', 'c12']}*/}
+            {/*onChange={handleChange}*/}
+            {/*// onSearch={getTagList}*/}
+            {/*>*/}
+            {/*{TagLists.map((item) => {*/}
+            {/*return (*/}
+            {/*<Option value={item.id} key={item.name}>{item.name}</Option>*/}
+            {/*);*/}
+            {/*})}*/}
+            {/*</Select>*/}
+            {/*)}*/}
             {/*</FormItem>*/}
             <FormItem {...formItemLayout} label="标签">
               {getFieldDecorator('titles', {
@@ -931,7 +932,17 @@ export default class PointSettingList extends PureComponent {
         title: '标签',
         width: '10%',
         dataIndex: 'tags',
-        key: 'tags'
+        key: 'tags',
+        render: (text, item) => (
+          (item.tags) ? (
+            item.tags.map((res) => {
+              return <Tag>{res}</Tag>
+            })
+          ) : (
+            null
+          )
+
+        ),
       },
       {
         title: '备注描述',
