@@ -37,7 +37,7 @@ export async function getActivityList({ restParams }) {
 }
 
 export async function templateExecute({ restParams }) {
-  window.location.href = `${api.templateExecute}?name=${restParams.name}&activityCode=${restParams.activityCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
+  window.location.href = `${api.templateExecute}?name=${restParams.name}&user=${restParams.user}&activityCode=${restParams.activityCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
 }
 
 export async function getUserInfo() {
