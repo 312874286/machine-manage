@@ -60,6 +60,7 @@ const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 const pointTypeOptions = [{id: 0, name: '活动点位'}, {id: 1, name: '渠道点位'}]
 const pointStatusOptions = [{id: 1, name: '机器开机'}, {id: 2, name: '初始化机器 '}, {id: 3, name: '通过测试'}, {id: 4, name: '设置在点位'}]
+const machineType = ['渠道机器', '', '活动机器']
 
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
@@ -2315,14 +2316,25 @@ export default class machineSettingList extends PureComponent {
         dataIndex: 'localDesc',
         key: 'localDesc'
       },
-      {
-        title: '系统状态',
-        width: '10%',
-        render: (text, item) => (
-          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
-        ),
-        key: 'detail'
+      { // machineType
+        title: '机器类型',
+        width: '18%',
+        dataIndex: 'machineType',
+        key: 'machineType',
+        render(val) {
+          if (val !== null) {
+            return <span>{machineType[val]}</span>;
+          }
+        },
       },
+      // {
+      //   title: '系统状态',
+      //   width: '10%',
+      //   render: (text, item) => (
+      //     <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+      //   ),
+      //   key: 'detail'
+      // },
       {
         title: '网络',
         width: '10%',
@@ -2341,6 +2353,12 @@ export default class machineSettingList extends PureComponent {
         width: '10%',
         dataIndex: 'activityName',
         key: 'activityName'
+      },
+      {
+        title: '入场时间',
+        width: '10%',
+        dataIndex: 'insideTime',
+        key: 'insideTime'
       },
       {
         title: '机器状态',
