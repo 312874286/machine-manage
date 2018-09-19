@@ -62,6 +62,9 @@ const api = map({
   getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}',
 
   paiActivity: '/pai/data/count/list',
+
+  // 互派活动
+
 });
 
 export default api;

@@ -197,6 +197,9 @@ export const getRouterData = (app) => {
     '/project/schedule': {
       component: dynamicWrapper(app, ['project/scheduleSetting', 'log/log'], () => import('../routes/Project/ScheduleSetting')),
     },
+    '/project/sampling-setting': {
+      component: dynamicWrapper(app, ['project/samplingSetting', 'log/log'], () => import('../routes/Project/SamplingSetting')),
+    },
     '/project/game': {
       component: dynamicWrapper(app, ['project/gameSetting', 'log/log'], () => import('../routes/Project/GameSetting')),
     },

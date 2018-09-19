@@ -753,6 +753,17 @@ const proxy = {
             "parentName": null
           },
           {
+            "id": "38",
+            "functionDepict": "互派管理",
+            "functionPath": "sampling-setting",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 7,
+            "parentName": null
+          },
+          {
             "id": "c0db2c98-b17e-11e8-9cb0-00163e08",
             "functionDepict": "删除",
             "functionPath": "delete",
