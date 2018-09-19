@@ -2,75 +2,121 @@ import { stringify } from 'qs';
 import fetch from '../../utils/fetch/index';
 import api from './api';
 
-export async function saveActivitySetting({ params }) {
-  return fetch.postJSON(api.saveActivitySetting, {
-    body: JSON.stringify(params),
+export async function interactLists({ params }) {
+  return fetch.post(api.interactLists, {
+    body: stringify(params),
   });
 }
-
-export async function getActivitySettingList({ params, restParams }) {
-  return fetch.get(api.getActivitySettingList, {
-    body: JSON.stringify(params),
-    restParams,
+export async function interactAdd({ params }) {
+  return fetch.post(api.interactAdd, {
+    body: stringify(params),
   });
 }
-
-export async function getActivityCount({ restParams }) {
-  return fetch.postJSON(api.getActivityCount, {
-    body: JSON.stringify(restParams),
+export async function merchantAdd({ params }) {
+  return fetch.post(api.merchantAdd, {
+    body: stringify(params),
   });
 }
-
-export async function getActivitySettingDetail({ restParams }) {
-  return fetch.get(api.getActivitySettingDetail, {
-    restParams,
+export async function shopsAdd({ params }) {
+  return fetch.post(api.shopsAdd, {
+    body: stringify(params),
   });
 }
-
-export async function getMerchantsList({ restParams }) {
-  return fetch.get(api.getMerchantsList, {
-    restParams,
+export async function goodsAdd({ params }) {
+  return fetch.post(api.goodsAdd, {
+    body: stringify(params),
   });
 }
-
-export async function getMerchantShops({ restParams }) {
-  return fetch.get(api.getMerchantShops, {
-    restParams,
+export async function interactNext({ params }) {
+  return fetch.post(api.interactNext, {
+    body: stringify(params),
   });
 }
-
-export async function getShopsList({ restParams }) {
-  return fetch.get(api.getShopsList, {
-    restParams,
+export async function updateGoods({ params }) {
+  return fetch.post(api.updateGoods, {
+    body: stringify(params),
   });
 }
-
-export async function editActivitySetting({ params }) {
-  return fetch.postJSON(api.updateActivitySetting, {
-    body: JSON.stringify(params),
+export async function updateMerchant({ params }) {
+  return fetch.post(api.updateMerchant, {
+    body: stringify(params),
   });
 }
-
-export async function delActivitySetting({ params }) {
-  return fetch.post(api.deleteActivitySetting, {
+export async function updateShops({ params }) {
+  return fetch.post(api.updateShops, {
+    body: stringify(params),
+  });
+}
+export async function deleteGoods({ params }) {
+  return fetch.post(api.deleteGoods, {
+    body: stringify(params),
+  });
+}
+export async function deleteMerchant({ params }) {
+  return fetch.post(api.deleteMerchant, {
+    body: stringify(params),
+  });
+}
+export async function deleteShops({ params }) {
+  return fetch.post(api.deleteShops, {
+    body: stringify(params),
+  });
+}
+export async function getInteractGoodsList({ params }) {
+  return fetch.post(api.getInteractGoodsList, {
+    body: stringify(params),
+  });
+}
+export async function getInteractMerchantList({ params }) {
+  return fetch.post(api.getInteractMerchantList, {
+    body: stringify(params),
+  });
+}
+export async function getInteractShopsList({ params }) {
+  return fetch.post(api.getInteractShopsList, {
+    body: stringify(params),
+  });
+}
+export async function getInteractMachinePlanList({ params }) {
+  return fetch.post(api.getInteractMachinePlanList, {
     body: stringify(params),
   });
 }
 
-export async function getGameList({ params }) {
-  return fetch.post(api.getGameList, {
+export async function addInteractMachine({ params }) {
+  return fetch.postJSON(api.addInteractMachine, {
+    body: JSON.stringify(params),
+  });
+}
+
+export async function addInteractMachineGoods({ params }) {
+  return fetch.postJSON(api.addInteractMachineGoods, {
+    body: JSON.stringify(params),
+  });
+}
+export async function deleteInteractMachine({ params }) {
+  return fetch.post(api.deleteInteractMachine, {
     body: stringify(params),
   });
 }
-
-export async function getDefaultActivity({ restParams }) {
-  return fetch.get(api.getDefaultActivity, {
-    restParams,
+export async function getInteractAllGoodsList({ params }) {
+  return fetch.post(api.getInteractAllGoodsList, {
+    body: stringify(params),
   });
 }
-
-export async function paiActivity({ restParams }) {
-  return fetch.postJSON(api.paiActivity, {
-    body: JSON.stringify(restParams),
+export async function getInteractMachineGoodsList({ params }) {
+  return fetch.post(api.getInteractMachineGoodsList, {
+    body: stringify(params),
+  });
+}
+export async function ruleInteract({ params }) {
+  return fetch.postJSON(api.ruleInteract, {
+    body: stringify(params),
+  });
+}
+export async function getChannelSettingList({ params, restParams }) {
+  return fetch.get(api.getChannelSettingList, {
+    body: stringify(params),
+    restParams,
   });
 }

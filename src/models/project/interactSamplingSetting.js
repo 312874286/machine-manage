@@ -1,4 +1,26 @@
-import { addArea, updateArea, areaList, areaDetail } from '../../services/machine/areaSetting';
+import { interactLists,
+  interactAdd,
+  merchantAdd,
+  shopsAdd,
+  goodsAdd,
+  interactNext,
+  updateGoods,
+  updateMerchant,
+  updateShops,
+  deleteGoods,
+  deleteMerchant,
+  deleteShops,
+  getInteractGoodsList,
+  getInteractMerchantList,
+  getInteractShopsList,
+  getInteractMachinePlanList,
+  addInteractMachine,
+  addInteractMachineGoods,
+  deleteInteractMachine,
+  getInteractAllGoodsList,
+  getInteractMachineGoodsList,
+  ruleInteract } from '../../services/project/interactSamplingSetting';
+
 
 export default {
   namespace: 'interactSamplingSetting',
