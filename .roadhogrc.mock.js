@@ -5508,9 +5508,37 @@ const proxy = {
   },
   'GET /project/interact/list': (req, res) => {
     res.send({
+      "msg": "成功",
       "code": 0,
-      "data": null,
-      "msg": "成功"
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "name": "派样活动",
+          "gameName": "世界杯",
+          "merchantNum": 2,
+          "goodsNum": "10",
+          "realDay": "2",
+          "day": "2",
+          "realNum": 2,
+          "number": 2,
+          "manager": "如意",
+          "createTime": "2018-09-19 15:24:26.0",
+          "status": "0"
+        }
+      ],
+      "unColumn": ""
     })
   },
   'post /project/interact/add': (req, res) => {

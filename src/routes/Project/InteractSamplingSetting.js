@@ -23,7 +23,7 @@ import {
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './SamplingSetting.less';
+import styles from './InteractSamplingSetting.less';
 import LogModal from '../../components/LogModal/index';
 import {getAccountMenus} from "../../utils/authority";
 
@@ -97,10 +97,10 @@ const CreateForm = Form.create()(
       </Modal>
     );
   });
-@connect(({ common, loading, areaSetting, log }) => ({
+@connect(({ common, loading, interactSamplingSetting, log }) => ({
   common,
-  areaSetting,
-  loading: loading.models.areaSetting,
+  interactSamplingSetting,
+  loading: loading.models.interactSamplingSetting,
   log,
 }))
 @Form.create()
@@ -132,7 +132,7 @@ export default class areaSettingList extends PureComponent {
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
       const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
-        .children.filter((item) => item.path === 'areaSetting')
+        .children.filter((item) => item.path === 'interactSamplingSetting')
       var obj = {}
       if (pointSettingMenu[0].children) {
         pointSettingMenu[0].children.forEach((item, e) => {
@@ -147,7 +147,7 @@ export default class areaSettingList extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'areaSetting/areaList',
+      type: 'interactSamplingSetting/areaList',
       payload: {
         restParams: {
           code: this.state.code,
@@ -316,7 +316,7 @@ export default class areaSettingList extends PureComponent {
   }
   getPointSettingDetail = (item) => {
     return this.props.dispatch({
-      type: 'areaSetting/areaDetail',
+      type: 'interactSamplingSetting/areaDetail',
       payload: {
         restParams: {
           code: item.code,
@@ -380,13 +380,13 @@ export default class areaSettingList extends PureComponent {
         editModalConfirmLoading: true,
       });
       const parentCode = values.parentCode
-      let url = 'areaSetting/addArea';
+      let url = 'interactSamplingSetting/addArea';
       let params = {
         ...values,
         parentCode: parentCode[parentCode.length - 1],
       };
       if (this.state.modalData.id) {
-        url = 'areaSetting/updateArea';
+        url = 'interactSamplingSetting/updateArea';
         params = { ...params, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -446,7 +446,7 @@ export default class areaSettingList extends PureComponent {
   }
   render() {
     const {
-      areaSetting: { list, page, unColumn },
+      interactSamplingSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;

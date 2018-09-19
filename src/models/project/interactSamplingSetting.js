@@ -1,7 +1,7 @@
 import { addArea, updateArea, areaList, areaDetail } from '../../services/machine/areaSetting';
 
 export default {
-  namespace: 'samplingSetting',
+  namespace: 'interactSamplingSetting',
   state: {
     list: [],
     page: {},
