@@ -462,14 +462,14 @@ export default class DataStatistics extends PureComponent {
       if (err) {
         return;
       }
-      console.log(getUser())
+
       let url = 'dataStatistics/templateInsert'
       let params = {
         ...values,
         owner:getUser().userId,
         titles: this.state.modalData ? this.state.modalData.tags : ''
       }
-      console.log(getUser())
+
       if (this.state.currentData.name) {
         url = 'dataStatistics/templateUpdate'
         params = { ...params, name: this.state.currentData.name}
