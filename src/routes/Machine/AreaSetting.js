@@ -385,9 +385,9 @@ export default class areaSettingList extends PureComponent {
         ...values,
         parentCode: parentCode[parentCode.length - 1],
       };
-      if (this.state.modalData.id) {
+      if (this.state.modalData.code) {
         url = 'areaSetting/updateArea';
-        params = { ...params, id: this.state.modalData.id };
+        params = { ...params, code: this.state.modalData.code };
       }
       this.props.dispatch({
         type: url,

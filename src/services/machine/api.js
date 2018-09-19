@@ -48,7 +48,7 @@ const api = map({
   getTagList: '/machine/locale/getTagList?name={name}',
 
   addArea: '/admin/area/add',
-  updateArea: 'admin/area/update',
+  updateArea: '/admin/area/update',
   areaList: '/admin/area/pageList?pageNo={pageNo}&code={code}',
   areaDetail: '/admin/area/detail?code={code}',
 
