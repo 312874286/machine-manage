@@ -646,7 +646,7 @@ export default class PointSettingList extends PureComponent {
           remark: data.remark || '',
           monitorStart: data.monitorStart ? moment(data.monitorStart, 'HH:mm:ss') : undefined,
           monitorEnd: data.monitorEnd ? moment(data.monitorEnd, 'HH:mm:ss') : undefined,
-          type: data.type.toString()
+          type: data.type ? data.type.toString() : ''
         });
       })
     } else {
