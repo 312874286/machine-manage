@@ -521,14 +521,14 @@ export default class PointSettingList extends PureComponent {
     const provinceIndex = forInCityRes.index
     const districtRes = await this.getArea(city)
     const arrCity = province[provinceIndex].children
-    const forInDistrictRes = this.forIn(arrCity, city, districtRes)
-    const cityIndex = forInDistrictRes.index
-    const circleRes = await this.getArea(district)
-    const arrDistrict = province[provinceIndex].children[cityIndex].children
-    this.forIn(arrDistrict, district, circleRes)
+    this.forIn(arrCity, city, districtRes)
+    // const cityIndex = forInDistrictRes.index
+    // const circleRes = await this.getArea(district)
+    // const arrDistrict = province[provinceIndex].children[cityIndex].children
+    // this.forIn(arrDistrict, district, circleRes)
     this.setState({
       options: province,
-      defaultValue: [res.province, city, district, circle],
+      defaultValue: [res.province, city, district],
     }, () => {
       this.setModalData(res);
       // this.setState({
