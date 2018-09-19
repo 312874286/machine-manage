@@ -1747,7 +1747,7 @@ export default class ScheduleSettingList extends PureComponent {
       autoExpandParent: true,
     }, () => {
       this.form.validateFields((err, fieldsValue) => {
-        //     console.log('224', err, fieldsValue)
+        console.log('224', this.state.isDisabled)
         if (err) return;
         // if (fieldsValue.gameId)
         // if (fieldsValue.remark)
@@ -1757,7 +1757,7 @@ export default class ScheduleSettingList extends PureComponent {
           ...fieldsValue,
           code: this.state.code,
           level: 1,
-          startTimeStr: fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm'),
+          startTimeStr: !this.state.isDisabled ? fieldsValue.startTimeStr.format('YYYY-MM-DD HH:mm') : moment().format('YYYY-MM-DD HH:mm'),
           endTimeStr: fieldsValue.endTimeStr.format('YYYY-MM-DD HH:mm'),
         };
         this.setState({
