@@ -1,4 +1,5 @@
-import { interactLists,
+import {
+  interactLists,
   interactAdd,
   merchantAdd,
   shopsAdd,
@@ -19,7 +20,8 @@ import { interactLists,
   deleteInteractMachine,
   getInteractAllGoodsList,
   getInteractMachineGoodsList,
-  ruleInteract } from '../../services/project/interactSamplingSetting';
+  ruleInteract
+} from '../../services/project/interactSamplingSetting';
 
 
 export default {
@@ -32,23 +34,95 @@ export default {
   },
 
   effects: {
-    *areaList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(areaList, { restParams });
+    *interactLists({ payload: { restParams } }, { call, put }) {
+      const response = yield call(interactLists, { restParams });
       yield put({
         type: 'saveList',
         payload: response,
       });
     },
-    *addArea({ payload: { params } }, { call }) {
-      const response = yield call(addArea, { params });
+    *interactAdd({ payload: { params } }, { call }) {
+      const response = yield call(interactAdd, { params });
       return response;
     },
-    *updateArea({ payload: { params } }, { call }) {
-      const response = yield call(updateArea, { params });
+    *merchantAdd({ payload: { params } }, { call }) {
+      const response = yield call(merchantAdd, { params });
       return response;
     },
-    *areaDetail({ payload: { restParams } }, { call }) {
-      const response = yield call(areaDetail, { restParams });
+    *shopsAdd({ payload: { params } }, { call }) {
+      const response = yield call(shopsAdd, { params });
+      return response;
+    },
+    *goodsAdd({ payload: { params } }, { call, put }) {
+      const response = yield call(goodsAdd, { params });
+      return response;
+    },
+    *interactNext({ payload: { restParams } }, { call }) {
+      const response = yield call(interactNext, { restParams });
+      return response;
+    },
+    *updateGoods({ payload: { params } }, { call }) {
+      const response = yield call(updateGoods, { params });
+      return response;
+    },
+    *updateMerchant({ payload: { params } }, { call }) {
+      const response = yield call(updateMerchant, { params });
+      return response;
+    },
+    *updateShops({ payload: { params } }, { call }) {
+      const response = yield call(updateShops, { params });
+      return response;
+    },
+    *deleteGoods({ payload: { params } }, { call }) {
+      const response = yield call(deleteGoods, { params });
+      return response;
+    },
+    *deleteMerchant({ payload: { params } }, { call }) {
+      const response = yield call(deleteMerchant, { params });
+      return response;
+    },
+    *deleteShops({ payload: { params } }, { call }) {
+      const response = yield call(deleteShops, { params });
+      return response;
+    },
+    *getInteractGoodsList({ payload: { restParams } }, { call }) {
+      const response = yield call(getInteractGoodsList, { restParams });
+      return response;
+    },
+    *getInteractMerchantList({ payload: { restParams } }, { call }) {
+      const response = yield call(getInteractMerchantList, { restParams });
+      return response;
+    },
+    *getInteractShopsList({ payload: { restParams } }, { call }) {
+      const response = yield call(getInteractShopsList, { restParams });
+      return response;
+    },
+    *getInteractMachinePlanList({ payload: { restParams } }, { call }) {
+      const response = yield call(getInteractMachinePlanList, { restParams });
+      return response;
+    },
+    *addInteractMachine({ payload: { params } }, { call, put }) {
+      const response = yield call(addInteractMachine, { params });
+      return response;
+    },
+    *addInteractMachineGoods({ payload: { params } }, { call }) {
+      const response = yield call(addInteractMachineGoods, { params });
+      return response;
+    },
+    *deleteInteractMachine({ payload: { params } }, { call }) {
+      const response = yield call(deleteInteractMachine, { params });
+      return response;
+    },
+    *getInteractAllGoodsList({ payload: { restParams } }, { call }) {
+      const response = yield call(getInteractAllGoodsList, { restParams });
+      return response;
+    },
+    *getInteractMachineGoodsList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getInteractMachineGoodsList, { restParams });
+      return response;
+    },
+    *ruleInteract({ payload: { params } }, { call }) {
+      const response = yield call(ruleInteract, { params });
       return response;
     },
   },

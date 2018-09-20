@@ -2,9 +2,9 @@ import { stringify } from 'qs';
 import fetch from '../../utils/fetch/index';
 import api from './api';
 
-export async function interactLists({ params }) {
-  return fetch.post(api.interactLists, {
-    body: stringify(params),
+export async function interactLists({ restParams }) {
+  return fetch.get(api.interactLists, {
+    restParams,
   });
 }
 export async function interactAdd({ params }) {
@@ -27,9 +27,9 @@ export async function goodsAdd({ params }) {
     body: stringify(params),
   });
 }
-export async function interactNext({ params }) {
-  return fetch.post(api.interactNext, {
-    body: stringify(params),
+export async function interactNext({ restParams }) {
+  return fetch.get(api.interactNext, {
+    restParams,
   });
 }
 export async function updateGoods({ params }) {
@@ -62,24 +62,24 @@ export async function deleteShops({ params }) {
     body: stringify(params),
   });
 }
-export async function getInteractGoodsList({ params }) {
-  return fetch.post(api.getInteractGoodsList, {
-    body: stringify(params),
+export async function getInteractGoodsList({ restParams }) {
+  return fetch.get(api.getInteractGoodsList, {
+    restParams,
   });
 }
-export async function getInteractMerchantList({ params }) {
+export async function getInteractMerchantList({ restParams }) {
   return fetch.post(api.getInteractMerchantList, {
-    body: stringify(params),
+    restParams,
   });
 }
-export async function getInteractShopsList({ params }) {
+export async function getInteractShopsList({ restParams }) {
   return fetch.post(api.getInteractShopsList, {
-    body: stringify(params),
+    restParams,
   });
 }
-export async function getInteractMachinePlanList({ params }) {
+export async function getInteractMachinePlanList({ restParams }) {
   return fetch.post(api.getInteractMachinePlanList, {
-    body: stringify(params),
+    restParams,
   });
 }
 
@@ -99,14 +99,14 @@ export async function deleteInteractMachine({ params }) {
     body: stringify(params),
   });
 }
-export async function getInteractAllGoodsList({ params }) {
+export async function getInteractAllGoodsList({ restParams }) {
   return fetch.post(api.getInteractAllGoodsList, {
-    body: stringify(params),
+    restParams,
   });
 }
-export async function getInteractMachineGoodsList({ params }) {
+export async function getInteractMachineGoodsList({ restParams }) {
   return fetch.post(api.getInteractMachineGoodsList, {
-    body: stringify(params),
+    restParams,
   });
 }
 export async function ruleInteract({ params }) {

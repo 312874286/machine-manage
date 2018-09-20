@@ -112,7 +112,7 @@ export default class areaSettingList extends PureComponent {
     id: '',
     editModalConfirmLoading: false,
     pageNo: 1,
-    code: '',
+    status: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
@@ -147,11 +147,12 @@ export default class areaSettingList extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'interactSamplingSetting/areaList',
+      type: 'interactSamplingSetting/interactLists',
       payload: {
         restParams: {
-          code: this.state.code,
+          status: this.state.status,
           pageNo: this.state.pageNo,
+          keyword: this.state.keyword
         },
       },
     });
@@ -448,23 +449,63 @@ export default class areaSettingList extends PureComponent {
     const {
       interactSamplingSetting: { list, page, unColumn },
       loading,
-      log: { logList, logPage },
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, account, areaList } = this.state;
     let columns = [
       {
-        title: '省',
+        title: '互派名称',
         width: '30%',
-        dataIndex: 'province',
-        key: 'province'
+        dataIndex: 'name',
+        key: 'name'
       },
       {
-        title: '市',
-        dataIndex: 'city',
-        key: 'city'
+        title: '互动游戏',
+        dataIndex: 'gameName',
+        key: 'gameName'
       },
       {
-        title: '区',
+        title: '互派机器数',
+        dataIndex: 'merchantNum',
+        key: 'merchantNum'
+      },
+      {
+        title: '互派商品数',
+        width: '30%',
+        dataIndex: 'goodsNum',
+        key: 'goodsNum'
+      },
+      {
+        title: '互派持续时长',
+        dataIndex: 'realDay',
+        key: 'realDay',
+        render: (text, item) => (
+          <Fragment>
+            <span>{item.realDay}{item.day}</span>
+          </Fragment>
+        ),
+      },
+      {
+        title: '发放率',
+        dataIndex: 'realNum',
+        key: 'realNum',
+        render: (text, item) => (
+          <Fragment>
+            <span>{item.realNum}{item.number}</span>
+          </Fragment>
+        ),
+      },
+      {
+        title: '负责人 创建时间',
+        dataIndex: 'managerCreateTime',
+        key: 'managerCreateTime',
+        render: (text, item) => (
+          <Fragment>
+            <span>{item.manager}{item.createTime}</span>
+          </Fragment>
+        ),
+      },
+      {
+        title: '状态',
         dataIndex: 'district',
         key: 'district'
       },
