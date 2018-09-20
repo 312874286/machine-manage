@@ -588,7 +588,9 @@ const EditMonitoringForm = Form.create()(
       noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
       handleMouseOver, handleMouseOut, mouseOver, onChange, excell, watchBtn,
       logRefresh, logUpdate, pointType, grabLogOnChange, machineLogLists, pointChange, machineId,
-      appUpdate, appRefresh, returnBtn, machineDetail, monitorKey
+      appUpdate, appRefresh, returnBtn, machineDetail, monitorKey,
+      logStartTime, logEndTime,
+      customLogEndTime, customLogStartTime
     } = props;
     const formItemLayout = {
       labelCol: {
@@ -632,6 +634,7 @@ const EditMonitoringForm = Form.create()(
       align: 'left',
       width: '22%',
     }];
+    const dateFormat = 'YYYY-MM-DD';
     return (
       <Modal
         title={
@@ -705,7 +708,9 @@ const EditMonitoringForm = Form.create()(
             </TabPane>
             <TabPane tab="定制日志" key="2">
               <div>
-                <RangePicker onChange={onChange} />
+                <RangePicker onChange={onChange}
+                             value={[customLogStartTime ? moment(customLogStartTime, dateFormat) : undefined, customLogEndTime ? moment(customLogEndTime, dateFormat) : undefined]}
+                />
                 <Button style={{ width: '120px', marginTop: '10px' }}
                         type="Default"
                         onClick={() => excell(machineCode)}>
@@ -718,7 +723,7 @@ const EditMonitoringForm = Form.create()(
               <Form onSubmit={this.handleSearch} style={{ marginTop: '10px' }}>
                 <FormItem {...formItemLayout} label="日志类型">
                   <div style={{ display: 'flex' }}>
-                    <Select placeholder="选择点位类型" value={ pointType } onChange={pointChange}>
+                    <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
                       {logOptions.map((item) => {
                         return (
                           <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -730,7 +735,9 @@ const EditMonitoringForm = Form.create()(
                 </FormItem>
                 <FormItem {...formItemLayout} label="时间范围">
                   <div style={{ display: 'flex' }}>
-                    <RangePicker onChange={grabLogOnChange} />
+                    <RangePicker onChange={grabLogOnChange}
+                                 value={[logStartTime ? moment(logStartTime, dateFormat) : undefined, logEndTime ? moment(logEndTime, dateFormat) : undefined]}
+                    />
                     <Button style={{ width: '120px', marginLeft: '10px' }} type="primary" onClick={() => logUpdate(machineId)}>刷新</Button>
                   </div>
                 </FormItem>
@@ -838,6 +845,9 @@ export default class machineSettingList extends PureComponent {
     endTime: '',
     machineType: '',
     machineStatus: '',
+
+    customLogStartTime: '',
+    customLogEndTime: '',
   };
   constructor(props) {
     super(props);
@@ -1784,6 +1794,8 @@ export default class machineSettingList extends PureComponent {
   handleMonitoringClick = (item) => {
     // machinePointLog
     this.setState({
+      logStartTime: '',
+      logEndTime: '',
       editMonitoringFormVisible: true,
       flagTop: false,
       logTopLists: [],
@@ -2028,6 +2040,8 @@ export default class machineSettingList extends PureComponent {
     console.log(date, dateString);
     this.setState({
       excelTimeRange: dateString,
+      customLogStartTime: dateString[0],
+      customLogEndTime: dateString[1],
     })
   }
   excell = (machineCode) => {
@@ -2118,6 +2132,9 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
+        this.setState({
+          pointType: undefined,
+        })
         message.success(res.message ? res.message : '发送成功')
       } else {
         message.config({
@@ -2224,7 +2241,7 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.info(data.data)
+        message.info(data.data ? data.data : '修改成功')
       }
     });
   }
@@ -2638,6 +2655,11 @@ export default class machineSettingList extends PureComponent {
           returnBtn={this.returnBtn}
 
           monitorKey={this.state.monitorKey}
+          logStartTime={this.state.logStartTime}
+          logEndTime={this.state.logEndTime}
+
+          customLogStartTime={this.state.customLogStartTime}
+          customLogEndTime={this.state.customLogEndTime}
         />
         <Modal
           title={
