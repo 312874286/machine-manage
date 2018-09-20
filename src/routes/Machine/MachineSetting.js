@@ -1949,9 +1949,9 @@ export default class machineSettingList extends PureComponent {
         logTopLists: [],
         logLists: [],
         watchBtn: true,
-        machineCode: item.machineCode,
-        machineId: item.id,
-        modalData: item,
+        machineCode: this.state.modalData.machineCode,
+        machineId: this.state.modalData.id,
+        modalData: this.state.modalData,
         monitorKey: '1',
       }, () => {
         this.getMachineStatus(this.state.modalData);
