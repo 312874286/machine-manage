@@ -89,7 +89,15 @@ const CreateForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="区名称">
               {getFieldDecorator('name', {
-                rules: [{ required: true, whitespace: true, message: '请输入区名称' }],
+                rules: [{ required: true, whitespace: true, message: '请输入区名称' }, {
+                  validator: (rule, value, callback) => {
+                    if (value.length > 16) {
+                      callback('区名称不能超过15个字符');
+                    } else {
+                      callback();
+                    }
+                  },
+                }],
               })(<Input placeholder="请输入区名称" />)}
             </FormItem>
           </Form>
