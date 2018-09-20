@@ -27,7 +27,8 @@ import {
   Popover,
   Cascader,
   Switch,
-  TimePicker
+  TimePicker,
+  Alert
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import MachineAisleTable from '../../components/MachineAisleTable';
@@ -39,6 +40,7 @@ import debounce from 'lodash/debounce'
 import domain from "../../common/config/domain"
 import rAF from '../../utils/rAF'
 import { getAccountMenus } from "../../utils/authority";
+import {findTemperature} from "../../services/machine/machineSetting";
 
 const { RangePicker } = DatePicker;
 const TabPane = Tabs.TabPane;
@@ -54,6 +56,12 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
 const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位']
 const appStatus = ['未启动', '前台运行', '后台运行']
+const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
+const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}]
+const pointStatusOptions = [{id: 1, name: '机器开机'}, {id: 2, name: '初始化机器 '}, {id: 3, name: '通过测试'}, {id: 4, name: '设置在点位'}]
+const machineType = ['渠道机器', '活动机器']
+
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
 message.config({
@@ -141,7 +149,9 @@ const EditPointForm = Form.create()(
       handleSupervisorySwitch, switchStatus, handleSupervisoryStartTime,
       handleSupervisoryEndTime, editPointHandleModalVisibleClick, editPointEditModalConfirmLoading,
       onSelect, data, value, handleChange, onPopupScroll, onSearch, fetching, pointName, modalData,
-      supervisoryStartTime, supervisoryEndTime} = props;
+      supervisoryStartTime, supervisoryEndTime,
+      editManageHandleModalVisibleClick,
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -157,20 +167,7 @@ const EditPointForm = Form.create()(
       rules: [{ type: 'object', required: true, message: 'Please select time!' }],
     };
     return (
-      <Modal
-        title={
-          <div className="modalBox">
-            <span className="leftSpan"></span>
-            <span className="modalTitle">机器设置</span>
-          </div>
-        }
-        visible={editPointmodalVisible}
-        onOk={editPointHandleAddClick}
-        onCancel={() => editPointHandleModalVisibleClick()}
-        confirmLoading={editPointEditModalConfirmLoading}
-        width={800}
-      >
-        <div className="manageAppBox">
+      <div className="manageAppBox">
           <h3>重置点位</h3>
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="当前点位">
@@ -208,34 +205,35 @@ const EditPointForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-
-          </Form>
-          <h3>监控设置</h3>
-
-          <Form>
-            <FormItem
-              label="开启监控"
-              {...formItemLayout}
-            >
-              {/*{getFieldDecorator('radio-group')(*/}
-              {/*<RadioGroup>*/}
-              {/*<Radio value="on">开启</Radio>*/}
-              {/*<Radio value="off">关闭</Radio>*/}
-              {/*</RadioGroup>*/}
-              {/*)}*/}
-              <Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="监控时间">
-              <TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
-              <span>-</span>
-              <TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
-
+            <FormItem>
+              <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => editManageHandleModalVisibleClick()}>取消</Button>
+              <Button style={{ width: '120px' }} type="Default" onClick={() => editPointHandleAddClick()}>确定</Button>
             </FormItem>
           </Form>
-        </div>
-      </Modal>
+          {/*<h3>监控设置</h3>*/}
+          {/*<Form>*/}
+            {/*<FormItem*/}
+              {/*label="开启监控"*/}
+              {/*{...formItemLayout}*/}
+            {/*>*/}
+              {/*/!*{getFieldDecorator('radio-group')(*!/*/}
+              {/*/!*<RadioGroup>*!/*/}
+              {/*/!*<Radio value="on">开启</Radio>*!/*/}
+              {/*/!*<Radio value="off">关闭</Radio>*!/*/}
+              {/*/!*</RadioGroup>*!/*/}
+              {/*/!*)}*!/*/}
+              {/*<Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>*/}
+            {/*</FormItem>*/}
+            {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label="监控时间">*/}
+              {/*<TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>*/}
+              {/*<span>-</span>*/}
+              {/*<TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>*/}
+
+            {/*</FormItem>*/}
+          {/*</Form>*/}
+      </div>
     );
 });
 const ManageCutAppForm = Form.create()(
@@ -343,21 +341,7 @@ const ManageAisleForm = Form.create()(
       },
     };
     return (
-      <Modal
-        title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">管理货道</span>
-          </div>
-        }
-        width={1250}
-        visible={ManageAislemodalVisible}
-        onOk={ManageAisleHandleAddClick}
-        onCancel={() => ManageAisleHandleModalVisibleClick()}
-        confirmLoading={ManageAisleEditModalConfirmLoading}
-        footer={null}
-      >
-        <div className="manageAppBox">
+        <div>
           <MachineAisleTable
             handleClose={handleClose}
             AisleList={AisleList}
@@ -367,7 +351,6 @@ const ManageAisleForm = Form.create()(
             updateGoodsCount={updateGoodsCount}
           />
         </div>
-      </Modal>
     );
   });
 const WatchForm = Form.create()(
@@ -385,48 +368,17 @@ const WatchForm = Form.create()(
         sm: { span: 16 },
       },
     };
-    const machineColumns = [{
-      title: '图片地址',
-      dataIndex: 'imgUrl',
-      align: 'left',
-      width: '78%',
-      render (text, render) {
-        return (
-          <a href={`${domain.url}${render.imgUrl}`} target='_blank'>{`${domain.url}${render.imgUrl}`}</a>
-        )
-      }
-    }, {
-      title: '截屏时间',
-      dataIndex: 'createTime',
-      align: 'left',
-      width: '22%',
-    }];
     // let machineDetailData = machineDetail.status ? (machineDetail.status.length > 0 ? machineDetail.status.splice(0, 10) : '') : ''
     return (
-      <Modal
-        title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">查看机器状态</span>
-          </div>
-        }
-        width={800}
-        visible={ManageWatchModalVisible}
-        onCancel={() => ManageWatchHandleModalVisibleClick()}
-        confirmLoading={ManageWatchEditModalConfirmLoading}
-        footer={null}
-      >
         <div style={{ padding: '0 30px 30px 30px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column' }}>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
               <span style={{ color: '#999'}}>请您先点击更新，获取最新数据</span>
               <div>
                 <div style={{ marginBottom: '18px' }}>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
-                </div>
-                <div>
+                  {/*<Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>*/}
+                  {/*<Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>*/}
+                  {/*<Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>*/}
                   <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(1)}>更新</Button>
                   <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh()}>刷新</Button>
                 </div>
@@ -532,9 +484,8 @@ const WatchForm = Form.create()(
               </Col>
             </Row>
           </div>
-          <Table columns={machineColumns} dataSource={machineDetail.imgs} rowKey={record => record.id} pagination={false} />
+          {/*<Table columns={machineColumns} dataSource={machineDetail.imgs} rowKey={record => record.id} pagination={false} />*/}
         </div>
-      </Modal>
     );
   });
 const EditMachineCodeForm = Form.create()(
@@ -635,7 +586,55 @@ const EditMonitoringForm = Form.create()(
   (props) => {
     const { editMonitoringFormVisible, editMonitoringHandleModalVisibleClick, callback,
       noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
-      handleMouseOver, handleMouseOut, mouseOver, onChange, excell, watchBtn } = props;
+      handleMouseOver, handleMouseOut, mouseOver, onChange, excell, watchBtn,
+      logRefresh, logUpdate, pointType, grabLogOnChange, machineLogLists, pointChange, machineId,
+      appUpdate, appRefresh, returnBtn, machineDetail, monitorKey,
+      logStartTime, logEndTime,
+      customLogEndTime, customLogStartTime, getLogMessage
+    } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 10 },
+      },
+    };
+    const imgsColumns = [{
+      title: '图片地址',
+      dataIndex: 'imgUrl',
+      align: 'left',
+      width: '78%',
+      render (text, render) {
+        return (
+          <a href={`${domain.url}${render.imgUrl}`} target='_blank'>{`${domain.url}${render.imgUrl}`}</a>
+        )
+      }
+    }, {
+      title: '截屏时间',
+      dataIndex: 'createTime',
+      align: 'left',
+      width: '22%',
+    }];
+    const machineColumns = [{
+      title: '日志文件',
+      dataIndex: 'logUrl',
+      align: 'left',
+      width: '78%',
+      render (text, render) {
+        return (
+          <a href={`${domain.url}${render.logUrl}`} target='_blank'>{`${domain.url}${render.logUrl}`}</a>
+        )
+      }
+    }, {
+      title: '获取时间',
+      dataIndex: 'reciveTime',
+      align: 'left',
+      width: '22%',
+    }];
+    const dateFormat = 'YYYY-MM-DD';
     return (
       <Modal
         title={
@@ -650,7 +649,20 @@ const EditMonitoringForm = Form.create()(
         // className={styles.manageAppBox}
         width={900}>
         <div class="manageAppBox">
-          <Tabs type="card" onChange={callback}>
+          <Tabs type="card" onChange={callback} activeKey={ monitorKey }>
+            <TabPane tab="截屏" key="0">
+              <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingBottom: '15px', borderBottom: '1px solid #F2F2F2' }}>
+                <div style={{ marginBottom: '18px' }}>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => appUpdate(3)}>截屏</Button>
+                  <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh(machineId)}>刷新</Button>
+                </div>
+                <div>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>
+                </div>
+              </div>
+              <Table columns={imgsColumns} dataSource={machineDetail.imgs} rowKey={record => record.id} pagination={false} />
+            </TabPane>
             <TabPane tab="实时日志" key="1">
               <div>
                 <Button style={{ width: '120px', marginBottom: '10px', display: watchBtn ? '' : 'none' }}
@@ -683,9 +695,12 @@ const EditMonitoringForm = Form.create()(
                 <div className={styles.showList}
                      id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
+                  <span style={{ display: getLogMessage !== '正在获取' ? 'none' : '' }}>
+                    {getLogMessage}
+                  </span>
                   {(logLists.length === 0) ? '暂无数据' : (logLists.map((item) => {
                       return (
-                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999', display: getLogMessage === '正在获取' ? 'none' : '' }}>
                           <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
                         </p>
@@ -696,7 +711,9 @@ const EditMonitoringForm = Form.create()(
             </TabPane>
             <TabPane tab="定制日志" key="2">
               <div>
-                <RangePicker onChange={onChange} />
+                <RangePicker onChange={onChange}
+                             value={[customLogStartTime ? moment(customLogStartTime, dateFormat) : undefined, customLogEndTime ? moment(customLogEndTime, dateFormat) : undefined]}
+                />
                 <Button style={{ width: '120px', marginTop: '10px' }}
                         type="Default"
                         onClick={() => excell(machineCode)}>
@@ -704,11 +721,43 @@ const EditMonitoringForm = Form.create()(
                 </Button>
               </div>
             </TabPane>
+            <TabPane tab="获取日志" key="3">
+              <Alert message="此功能用于获取异常数据日志，选择日志类型和时间，通过点击“更新”发起获取日志指令，通过点击“刷新”获取日志。" type="info" showIcon />
+              <Form onSubmit={this.handleSearch} style={{ marginTop: '10px' }}>
+                <FormItem {...formItemLayout} label="日志类型">
+                  <div style={{ display: 'flex' }}>
+                    <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
+                      {logOptions.map((item) => {
+                        return (
+                          <Option key={item.id} value={item.id}>{item.name}</Option>
+                        );
+                      })}
+                    </Select>
+                    <Button style={{ width: '120px', marginLeft: '10px' }} type="Default" onClick={() => logRefresh(machineId)}>更新</Button>
+                  </div>
+                </FormItem>
+                <FormItem {...formItemLayout} label="时间范围">
+                  <div style={{ display: 'flex' }}>
+                    <RangePicker onChange={grabLogOnChange}
+                                 value={[logStartTime ? moment(logStartTime, dateFormat) : undefined, logEndTime ? moment(logEndTime, dateFormat) : undefined]}
+                    />
+                    <Button style={{ width: '120px', marginLeft: '10px' }} type="primary" onClick={() => logUpdate(machineId)}>刷新</Button>
+                  </div>
+                </FormItem>
+                <FormItem>
+                  <Table columns={machineColumns}
+                         dataSource={machineLogLists}
+                         rowKey={record => record.id}
+                         pagination={false} />
+                </FormItem>
+              </Form>
+            </TabPane>
           </Tabs>
         </div>
       </Modal>
     );
   });
+
 
 @connect(({ common, loading, machineSetting, log }) => ({
   common,
@@ -779,6 +828,31 @@ export default class machineSettingList extends PureComponent {
 
     account: {},
     watchBtn: true,
+
+    machineLogLists: [],
+    pointType: undefined,
+    logStartTime: '',
+    logEndTime: '',
+    machineId: '',
+
+    Temperature: '',
+    editManageFormVisible: false,
+    TemperatureSelected: undefined,
+    machineCodeNew: '',
+    localeName: '',
+
+    managekey: '0',
+    monitorKey: '0',
+
+    startTime: '',
+    endTime: '',
+    machineType: '',
+    machineStatus: '',
+
+    customLogStartTime: '',
+    customLogEndTime: '',
+    getLogMessage: '正在获取',
+    machineCodeOld: '',
   };
   constructor(props) {
     super(props);
@@ -828,6 +902,10 @@ export default class machineSettingList extends PureComponent {
           pageNo: this.state.pageNo,
           localCode: this.state.localCode,
           machineCode: this.state.machineCode,
+          startTime: this.state.startTime,
+          endTime: this.state.endTime,
+          machineType: this.state.machineType,
+          machineStatus: this.state.machineStatus,
         },
       },
     });
@@ -900,6 +978,10 @@ export default class machineSettingList extends PureComponent {
         pageNo: 1,
         machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
         localCode: localCode,
+        startTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[0].format('YYYY-MM-DD') : '',
+        endTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[1].format('YYYY-MM-DD') : '',
+        machineType: fieldsValue.machineType >= 0 ? fieldsValue.machineType : '',
+        machineStatus: fieldsValue.machineStatus >= 0 ? fieldsValue.machineStatus : '',
       }, () => {
         this.getLists();
       });
@@ -944,18 +1026,10 @@ export default class machineSettingList extends PureComponent {
     if (data) {
       this.pointForm.resetFields()
       this.setState({
-        pointName: data.localDesc,
+        pointName: data.localStr,
         data: []
       })
-      // this.pointForm.setFieldsValue({
-      //   localDesc: data.localDesc,
-      //   locale: undefined,
-      // });
     } else {
-      // this.pointForm.setFieldsValue({
-      //   localDesc: undefined,
-      //   locale: undefined,
-      // });
       this.pointForm.resetFields()
       this.setState({
         pointName: '',
@@ -1073,23 +1147,27 @@ export default class machineSettingList extends PureComponent {
     console.log('old localeId',this.state.modalData.localeId)
     console.log('new localeId',this.state.dataId)
     let localeId = this.state.dataId;
-    if (localeId == '') {
+    if (localeId === '') {
       localeId = this.state.modalData.localeId
+    }
+    if (localeId === this.state.modalData.localeId) {
+      message.success('当前无修改')
+      return false
     }
     // 确认修改点位
     this.pointForm.validateFields((err, values) => {
       if (err) {
         return;
       }
-      this.setState({
-        editPointEditModalConfirmLoading: true,
-      });
+      // this.setState({
+      //   editPointEditModalConfirmLoading: true,
+      // });
       let params = {
         machineId: this.state.modalData.id,
         localeId: localeId,
-        openStatus: this.state.switchStatus ? 0 : 1,
-        monitorStart: this.state.supervisoryStartTime,
-        monitorEnd: this.state.supervisoryEndTime
+        // openStatus: this.state.switchStatus ? 0 : 1,
+        // monitorStart: this.state.supervisoryStartTime,
+        // monitorEnd: this.state.supervisoryEndTime
       };
       // if (this.state.modalData.id) {
       // url = 'machineSetting/updateLocaleMachineSetting';
@@ -1101,18 +1179,27 @@ export default class machineSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.getLists();
-        this.setState({
-          editPointEditModalConfirmLoading: false,
-          modalVisible: false,
-          modalData: {},
-          dataId: '',
-          data: [],
-          editPointmodalVisible: false,
-          ManageAppmodalVisible: false,
-          ManageAislemodalVisible: false,
-        });
+      }).then((res) => {
+        if (res && res.code === 0) {
+          console.log('onselect', this.state.localeName)
+          if (localeId !== this.state.modalData.localeId) {
+            this.setState({
+              pointName: this.state.localeName
+            })
+          }
+          message.success('修改成功')
+        }
+        this.pointForm.resetFields();
+        // this.setState({
+        //   editPointEditModalConfirmLoading: false,
+        //   modalVisible: false,
+        //   modalData: {},
+        //   dataId: '',
+        //   data: [],
+        //   editPointmodalVisible: false,
+        //   ManageAppmodalVisible: false,
+        //   ManageAislemodalVisible: false,
+        // });
       });
     });
   }
@@ -1126,8 +1213,14 @@ export default class machineSettingList extends PureComponent {
     // this.pointForm.setFieldsValue({
     //   keyword2: v,
     // });
-    this.setState({ data: [], dataId: option.props['data-id'], value: '', });
-    // console.log('onselect', value, option.props['data-id'], this.state.value);
+    this.setState({
+      data: [],
+      dataId: option.props['data-id'],
+      localeName: value,
+    }, () => {
+      console.log('onselect', value, option.props['data-id'], this.state.localeName);
+
+    });
   }
   editPointHandleModalVisibleClick = (flag) => {
     this.setState({
@@ -1446,19 +1539,6 @@ export default class machineSettingList extends PureComponent {
     this.setState({
       updateList,
     });
-    // 获取数据
-    // this.props.dispatch({
-    //   type: 'machineSetting/getAppStatus',
-    //   payload: {
-    //     restParams: {
-    //       id: this.state.modalData.id
-    //     },
-    //   },
-    // }).then((result) => {
-    //   this.setState({
-    //     updateList: result,
-    //   });
-    // });
   }
   // 管理App结束
   // 管理货道开始
@@ -1611,64 +1691,6 @@ export default class machineSettingList extends PureComponent {
     });
   };
   // 管理货道结束
-  // 上传日志开始
-  // uploadLog = (item) => {
-  //   this.setState({
-  //     UploadLogVisible: true,
-  //     modalData: item,
-  //   })
-  // }
-  // UploadLogVisibleClick = (flag) => {
-  //   this.setState({
-  //     UploadLogVisible: flag,
-  //   });
-  // }
-  // logUpdate = (type) => {
-  //   // 更新
-  //   this.logOperation(type, '更新')
-  // }
-  // logRefresh = (type) => {
-  //   // 刷新
-  //   this.logOperation(type, '刷新')
-  // }
-  // logOperation = (type, keyWord) => {
-  //   this.props.dispatch({
-  //     type: 'machineSetting/updateLogStatus',
-  //     payload: {
-  //       params: {
-  //         type,
-  //       },
-  //     },
-  //   }).then((resp) => {
-  //     message.config({
-  //       top: 100,
-  //       duration: 2,
-  //       maxCount: 1,
-  //     });
-  //     if (resp && resp.code === 0) {
-  //       message.success(`${keyWord}成功`);
-  //     } else {
-  //       message.error(resp ? resp.msg : `${keyWord}失败`);
-  //     }
-  //   });
-  // }
-  // getLogDetail = () => {
-  //   this.props.dispatch({
-  //     type: 'log/getLogList',
-  //     payload: {
-  //       restParams: {
-  //         code: this.state.logId,
-  //         pageNo: this.state.logModalPageNo,
-  //         type: 1020403,
-  //       },
-  //     },
-  //   }).then(() => {
-  //     this.setState({
-  //       logModalLoading: false,
-  //     });
-  //   });
-  // }
-  // 上传日志结束
   // 日志相关开始
   getLogList = () => {
     this.props.dispatch({
@@ -1741,9 +1763,9 @@ export default class machineSettingList extends PureComponent {
           machineDetail: result.data,
         }, () => {
           // console.log('machineDetail', this.state.machineDetail)
-          this.setState({
-            ManageWatchModalVisible: true,
-          })
+          // this.setState({
+          //   ManageWatchModalVisible: true,
+          // })
         });
       });
     })
@@ -1774,62 +1796,74 @@ export default class machineSettingList extends PureComponent {
     });
   }
   // handleMonitoringClick 监控
-  handleMonitoringClick = (machineCode) => {
+  handleMonitoringClick = (item) => {
     // machinePointLog
     this.setState({
+      customLogStartTime: '',
+      customLogEndTime: '',
+      logStartTime: '',
+      logEndTime: '',
       editMonitoringFormVisible: true,
       flagTop: false,
       logTopLists: [],
       logLists: [],
       watchBtn: true,
-      machineCode,
+      machineCode: item.machineCode,
+      machineId: item.id,
+      modalData: item,
+      monitorKey: '0',
     }, () => {
-      this.props.dispatch({
-        type: 'machineSetting/machinePointLog',
-        payload: {
-          restParams: {
-            machineCode,
-            startTime: '',
-            endTime: '',
-          },
-        },
-      }).then((res) => {
-        // console.log('res', res)
-        if (res.length > 0) {
-          this.setState({
-            editMonitoringFormVisible: true,
-            logLists: res,
-            machineCode,
-          }, () => {
-            // let destination = 30
-            // this.noticePosition = (res.length - 10) * 30
-            this.setState({
-              noticePosition: this.noticePosition
-            })
-            setTimeout(()=>{
-              document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
-            },0)
-            // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
-            // console.log('scrollTo', document.getElementById('logTip').scrollTo)
-
-            // mySetInterval = setInterval(() => {
-            //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
-            //   if (destination / 30 < this.state.logLists.length ) {
-            //     this.move(destination, 500, res.length)
-            //     destination += 30
-            //   } else { // 列表到底
-            //     // clearInterval(mySetInterval)
-            //     // this.noticePosition = 0 // 设置列表为开始位置
-            //     // destination = 30
-            //     // this.move(destination, 500, res.length)
-            //     // destination += 30
-            //   }
-            // }, 1500)
-            this.getLogLists()
-          });
-        }
-      });
+      this.getMachineStatus(this.state.modalData);
     })
+  }
+  getLogs = (item) => {
+    this.props.dispatch({
+      type: 'machineSetting/machinePointLog',
+      payload: {
+        restParams: {
+          machineCode: item.machineCode,
+          startTime: '',
+          endTime: '',
+        },
+      },
+    }).then((res) => {
+      // console.log('res', res)
+      if (res.length > 0) {
+        this.setState({
+          editMonitoringFormVisible: true,
+          logLists: res,
+        }, () => {
+          // let destination = 30
+          // this.noticePosition = (res.length - 10) * 30
+          this.setState({
+            noticePosition: this.noticePosition
+          })
+          setTimeout(()=>{
+            document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
+          },0)
+          // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
+          // console.log('scrollTo', document.getElementById('logTip').scrollTo)
+
+          // mySetInterval = setInterval(() => {
+          //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
+          //   if (destination / 30 < this.state.logLists.length ) {
+          //     this.move(destination, 500, res.length)
+          //     destination += 30
+          //   } else { // 列表到底
+          //     // clearInterval(mySetInterval)
+          //     // this.noticePosition = 0 // 设置列表为开始位置
+          //     // destination = 30
+          //     // this.move(destination, 500, res.length)
+          //     // destination += 30
+          //   }
+          // }, 1500)
+          this.getLogLists()
+        });
+      }
+      this.setState({
+        getLogMessage: '获取完成'
+      })
+    });
   }
   getLogLists = () => {
     myLogSetInterval = setInterval(() => {
@@ -1926,10 +1960,23 @@ export default class machineSettingList extends PureComponent {
     });
   }
   returnInterval = (machineCode) => {
+    console.log('returnInterval', machineCode, this.state.machineCode, this.state.modalData)
     this.setState({
       flagTop: false,
     }, () => {
-      this.handleMonitoringClick(machineCode)
+      // this.handleMonitoringClick(this.state.modalData)
+      this.setState({
+        editMonitoringFormVisible: true,
+        logTopLists: [],
+        logLists: [],
+        watchBtn: true,
+        machineCode: this.state.modalData.machineCode,
+        machineId: this.state.modalData.id,
+        modalData: this.state.modalData,
+        monitorKey: '1',
+      }, () => {
+        this.getMachineStatus(this.state.modalData);
+      })
     })
     // this.getLogLists()
     // this.props.dispatch({
@@ -2003,10 +2050,17 @@ export default class machineSettingList extends PureComponent {
     console.log(date, dateString);
     this.setState({
       excelTimeRange: dateString,
+      customLogStartTime: dateString[0],
+      customLogEndTime: dateString[1],
     })
   }
   excell = (machineCode) => {
     if (this.state.excelTimeRange.length === 0) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.warn('请先选择时间')
       return false
     }
@@ -2022,11 +2076,20 @@ export default class machineSettingList extends PureComponent {
     })
   }
   callback = (key) => {
+    this.setState({
+      monitorKey: key
+    })
     if (key === '2') {
-      clearInterval(mySetInterval)
+    } else if (key === '1') {
+      this.getLogs(this.state.modalData)
+    } else if (key === '3') {
+      this.logUpdate(this.state.modalData.id)
+    } else if (key === '0') {
+
+    }
+    if (key !== '1') {
+      // clearInterval(mySetInterval)
       clearInterval(myLogSetInterval)
-    } else {
-      this.handleMonitoringClick(this.state.machineCode)
     }
   }
   editMonitoringHandleModalVisibleClick = () => {
@@ -2036,9 +2099,219 @@ export default class machineSettingList extends PureComponent {
       editMonitoringFormVisible: false,
     });
   }
+  // logRefresh监控
+  pointChange = (value) => {
+    this.setState({
+      pointType: value
+    })
+  }
+  grabLogOnChange = (date, dateString) => {
+    console.log(date, dateString);
+    if (dateString.length ===  2) {
+      this.setState({
+        logStartTime: dateString[0],
+        logEndTime: dateString[1],
+      })
+    }
+  }
+  logRefresh = (machineId) => {
+    const { pointType, logStartTime, logEndTime } = this.state
+    if (!pointType || !logStartTime || !logEndTime) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.error('请填写时间或者选择日志类型')
+      return false
+    }
+    this.props.dispatch({
+      type: 'machineSetting/grabLog',
+      payload: {
+        params: {
+          machineId,
+          logType: pointType,
+          startTime: logStartTime,
+          endTime: logEndTime,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        this.setState({
+          pointType: undefined,
+        })
+        message.success(res.message ? res.message : '发送成功')
+      } else {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        message.error(res.message)
+      }
+    })
+  }
+  logUpdate = (machineId) => {
+    this.props.dispatch({
+      type: 'machineSetting/getLogs',
+      payload: {
+        restParams: {
+          machineId,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          machineLogLists: res.data
+        })
+      }
+    })
+  }
+
+  // handleManageClick 管理
+  handleManageClick = (item) => {
+    this.setState({
+      modalData: item,
+      editManageFormVisible: true,
+      managekey: '0',
+      TemperatureSelected: undefined,
+      machineCodeOld: item.machineCode,
+      machineCodeNew: undefined,
+    });
+    this.handleEditClick(item)
+  }
+  editManageHandleModalVisibleClick = () => {
+    this.setState({
+      editManageFormVisible: false,
+    });
+  }
+  temperatureSubmit = () => {
+    const { TemperatureSelected } = this.state
+    if (!TemperatureSelected) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.error('请先选择温度再提交')
+      return false
+    }
+    this.props.dispatch({
+      type: 'machineSetting/updateTemperature',
+      payload: {
+        params: {
+          machineId: this.state.modalData.id,
+          temperature: this.state.TemperatureSelected
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        this.setState({
+          Temperature: this.state.TemperatureSelected
+        })
+        message.success('修改成功')
+      }
+    })
+  }
+  inputCodeChange = (e) => {
+    this.setState({
+      machineCodeNew: e.target.value,
+    })
+  }
+  machineCodeSubmit = () => {
+    const { machineCodeNew } = this.state
+    if (!machineCodeNew) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.error('请填写编码后再保存')
+      return false
+    }
+    let url = 'machineSetting/updateMachineCode'
+    let params = {
+        machineCode: machineCodeNew,
+        machineId: this.state.modalData.id
+      };
+
+    this.props.dispatch({
+      type: url,
+      payload: {
+        params,
+      },
+    }).then((data) => {
+      if (data && data.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        this.setState({
+          machineCodeOld: this.state.machineCodeNew
+        })
+        message.info(data.data ? data.data : '修改成功')
+      }
+    });
+  }
+  onTemperatureSelected = (value) => {
+    this.setState({
+      TemperatureSelected: value
+    })
+  }
+  // manageCallBack
+  manageCallBack = (key) => {
+    this.setState({
+      managekey: key
+    })
+    if (key === '3') {
+      // 机器温度
+      this.getTemperature(this.state.modalData.id)
+    } else if (key === '0') {
+      // 重置点位
+      this.handleEditClick(this.state.modalData)
+    } else if (key === '1') {
+      // 管理APP
+    } else if (key === '2') {
+      // 管理货道
+      this.handleManageAisleClick(this.state.modalData)
+    } else if (key === '4') {
+      // 修改编号
+    } else if (key === '5') {
+      // 系统状态
+      this.getMachineStatus(this.state.modalData)
+    }
+  }
+  getTemperature = (machineId) => {
+    this.props.dispatch({
+      type: 'machineSetting/findTemperature',
+      payload: {
+        restParams: {
+          machineId,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          Temperature: res.data
+        })
+      }
+    })
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
+    // <RangePicker onChange={onChange} />
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -2056,7 +2329,44 @@ export default class machineSettingList extends PureComponent {
           </Col>
           <Col md={9} sm={24}>
             <FormItem>
-              {getFieldDecorator('machineCode')(<Input placeholder="请输入机器编号" />)}
+              {getFieldDecorator('rangeTime')(
+                <RangePicker />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}>
+            <FormItem>
+              {getFieldDecorator('machineType')(
+                <Select placeholder="选择机器类型">
+                  {pointTypeOptions.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem>
+              {getFieldDecorator('machineCode')(
+                <Input placeholder="请输入机器编号" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={9} sm={24}>
+            <FormItem>
+              {getFieldDecorator('machineStatus')(
+                <Select placeholder="选择机器状态">
+                  {pointStatusOptions.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
@@ -2095,14 +2405,25 @@ export default class machineSettingList extends PureComponent {
         dataIndex: 'localDesc',
         key: 'localDesc'
       },
-      {
-        title: '系统状态',
-        width: '10%',
-        render: (text, item) => (
-          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
-        ),
-        key: 'detail'
+      { // machineType
+        title: '机器类型',
+        width: '18%',
+        dataIndex: 'machineType',
+        key: 'machineType',
+        render(val) {
+          if (val !== null) {
+            return <span>{machineType[val]}</span>;
+          }
+        },
       },
+      // {
+      //   title: '系统状态',
+      //   width: '10%',
+      //   render: (text, item) => (
+      //     <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
+      //   ),
+      //   key: 'detail'
+      // },
       {
         title: '网络',
         width: '10%',
@@ -2122,38 +2443,12 @@ export default class machineSettingList extends PureComponent {
         dataIndex: 'activityName',
         key: 'activityName'
       },
-      // {
-      //   title: '上传日志',
-      //   width: '9%',
-      //   render: (text, item) => (
-      //     <div
-      //       style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }}
-      //       onClick={() => this.uploadLog(item)}>查看</div>
-      //   ),
-      // },
-      // {
-      //   title: '货道故障',
-      //   render: (text, item) => ((!item.channelStatus) ? (
-      //     <span>无</span>
-      //   ) : (
-      //     <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
-      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-      //     </Popover>
-      //   )),
-      //   // width: 100,
-      // },
-      // {
-      //   title: '货道故障',
-      //   width: '9%',
-      //   render: (text, item) => ((!item.channelStatus) ? (
-      //     <span>无</span>
-      //   ) : (
-      //     <Popover placement="left" content={item.channelStatus} title={null} trigger="hover">
-      //       <div style={{ color: 'red', border: 0, background: 'transparent' }}>缺货</div>
-      //     </Popover>
-      //   )),
-      //   // width: 100,
-      // },
+      {
+        title: '入场时间',
+        width: '10%',
+        dataIndex: 'insideTime',
+        key: 'insideTime'
+      },
       {
         title: '机器状态',
         dataIndex: 'machineStatus',
@@ -2172,16 +2467,18 @@ export default class machineSettingList extends PureComponent {
         width: 180,
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleMonitoringClick(item.machineCode)}>监控</a>
+            <a onClick={() => this.handleMonitoringClick(item)}>监控</a>
             <Divider type="vertical" />
+            <a onClick={() => this.handleManageClick(item)}>管理</a>
+            {/*<Divider type="vertical" />*/}
             {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
-            <a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>
-            <Divider type="vertical" />
-            <a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>
-            <Divider type="vertical" />
-            <a onClick={() => !account.manageAisle ? null : this.handleManageAisleClick(item)} style={{ display: !account.manageAisle ? 'none' : ''}}>管理货道</a>
-            <Divider type="vertical" />
-            <a onClick={() => !account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>
+            {/*<a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>*/}
+            {/*<Divider type="vertical" />*/}
+            {/*<a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>*/}
+            {/*<Divider type="vertical" />*/}
+            {/*<a onClick={() => !account.manageAisle ? null : this.handleManageAisleClick(item)} style={{ display: !account.manageAisle ? 'none' : ''}}>管理货道</a>*/}
+            {/*<Divider type="vertical" />*/}
+            {/*<a onClick={() => !account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>*/}
           </Fragment>
         ),
       },
@@ -2220,6 +2517,16 @@ export default class machineSettingList extends PureComponent {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+    };
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
     };
     const columns1 = [{
       title: 'APP名称',
@@ -2268,33 +2575,11 @@ export default class machineSettingList extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={1000}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 120)}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 180)}
             />
           </div>
         </Card>
-        <EditPointForm
-          ref={this.savePointFormRef}
-          editPointmodalVisible={this.state.editPointmodalVisible}
-          editPointHandleAddClick={this.editPointHandleAddClick}
-          editPointHandleModalVisibleClick={this.editPointHandleModalVisibleClick}
-          editPointEditModalConfirmLoading={this.state.editPointEditModalConfirmLoading}
-          data={this.state.data}
-          // modalData={this.state.modalData}
-          handleChange={this.handleChange}
-          onPopupScroll={this.onPopupScroll}
-          onSelect={this.onSelect}
-          onSearch={this.getPointSettingList}
-          fetching={this.state.fetching}
-          handleSupervisorySwitch={this.handleSupervisorySwitch}
-          handleSupervisoryStartTime={this.handleSupervisoryStartTime}
-          handleSupervisoryEndTime={this.handleSupervisoryEndTime}
-          // value={this.state.value}
-          modalData={this.state.modalData}
-          pointName={this.state.modalData.localStr}
-          switchStatus={this.state.switchStatus}
-          supervisoryStartTime={this.state.supervisoryStartTime}
-          supervisoryEndTime={this.state.supervisoryEndTime}
-        />
+
         <EditMachineCodeForm
           ref={this.saveMachineCodeFormRef}
           editMachineCodemodalVisible={this.state.editMachineCodemodalVisible}
@@ -2302,96 +2587,59 @@ export default class machineSettingList extends PureComponent {
           editMachineCodeHandleModalVisibleClick={this.editMachineCodeHandleModalVisibleClick}
           editMachineCodeEditModalConfirmLoading={this.state.editMachineCodeEditModalConfirmLoading}
         />
-        <Modal
-          title={
-            <div className="modalBox">
-              <span className="leftSpan"></span>
-              <span className="modalTitle">管理App</span>
-            </div>}
-          visible={this.state.ManageAppmodalVisible}
-          onCancel={() => this.ManageAppHandleModalVisibleClick()}
-          width={800}
-          footer={null}
-          confirmLoading={this.state.ManageAppEditModalConfirmLoading}
-        >
-          <div id="manageAppBox">
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>
-              <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>
-                <div>
-                  <div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>
-                  <div style={{ color: '#999'}}>上次更新时间：{createTime}</div>
-                </div>
-                <div>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>
-                  <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button>
-                </div>
-              </div>
-            </div>
-            <Table
-              id="appTable"
-              className={styles.appTable}
-              columns={columns1}
-              dataSource={updateList}
-              rowKey={record => record.appPackageName}
-              pagination={false} />
-              <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <div className={styles.leftBox}>
-                      {/*<Card title="切换App" bordered={false}>*/}
-                      <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
-                      {/*</Card>*/}
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    {/*<Card title="升级App" bordered={false}>*/}
-                    <div className={styles.rightBox}>
-                      <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
-                    </div>
-                    {/*</Card>*/}
-                  </Col>
-                </Row>
-              </div>
-          </div>
-        </Modal>
-        {/*<ManageForm*/}
-        {/*ManageAppmodalVisible={this.state.ManageAppmodalVisible}*/}
-        {/*ManageAppHandleModalVisibleClick={this.ManageAppHandleModalVisibleClick()}*/}
-        {/*ManageAppEditModalConfirmLoading={this.state.ManageAppEditModalConfirmLoading}*/}
-        {/*appUpdate={this.appUpdate}*/}
-        {/*appRefresh={this.appRefresh}*/}
-        {/*columns1={columns1}*/}
-        {/*updateList={updateList}*/}
-        {/*ManageCutAppFormRef={this.ManageCutAppFormRef}*/}
-        {/*appLists={appLists}*/}
-        {/*okCutApp={this.okCutApp}*/}
-        {/*ManageUpdateAppFormRef={this.ManageUpdateAppFormRef}*/}
-        {/*appLists2={appLists2}*/}
-        {/*okRefreshApp={this.okRefreshApp}*/}
-        {/*/>*/}
-        <ManageAisleForm
-          ref={this.saveManageAisleFormRef}
-          ManageAislemodalVisible={this.state.ManageAislemodalVisible}
-          ManageAisleEditModalConfirmLoading={this.state.ManageAisleEditModalConfirmLoading}
-          ManageAisleHandleAddClick={this.ManageAisleHandleAddClick}
-          ManageAisleHandleModalVisibleClick={this.ManageAisleHandleModalVisibleClick}
-          handleClose={this.handleClose}
-          AisleList={AisleList}
-          handleStop={this.handleStop}
-          handleStart={this.handleStart}
-          message={message}
-          updateGoodsCount={this.updateGoodsCount}
-        />
-        <WatchForm
-          ref={this.ManageWatchFormRef}
-          ManageWatchModalVisible={this.state.ManageWatchModalVisible}
-          ManageWatchEditModalConfirmLoading={this.state.ManageWatchEditModalConfirmLoading}
-          ManageWatchHandleModalVisibleClick={this.ManageWatchHandleModalVisibleClick}
-          appUpdate={this.appUpdate}
-          appRefresh={this.appMachineRefresh}
-          machineDetail={this.state.machineDetail}
-          returnBtn={this.returnBtn}
-        />
+        {/*<Modal*/}
+          {/*title={*/}
+            {/*<div className="modalBox">*/}
+              {/*<span className="leftSpan"></span>*/}
+              {/*<span className="modalTitle">管理App</span>*/}
+            {/*</div>}*/}
+          {/*visible={this.state.ManageAppmodalVisible}*/}
+          {/*onCancel={() => this.ManageAppHandleModalVisibleClick()}*/}
+          {/*width={800}*/}
+          {/*footer={null}*/}
+          {/*confirmLoading={this.state.ManageAppEditModalConfirmLoading}*/}
+        {/*>*/}
+          {/*<div id="manageAppBox">*/}
+            {/*<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>*/}
+              {/*<div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>*/}
+                {/*<div>*/}
+                  {/*<div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>*/}
+                  {/*<div style={{ color: '#999'}}>上次更新时间：{createTime}</div>*/}
+                {/*</div>*/}
+                {/*<div>*/}
+                  {/*<Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>*/}
+                  {/*<Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button>*/}
+                {/*</div>*/}
+              {/*</div>*/}
+            {/*</div>*/}
+            {/*<Table*/}
+              {/*id="appTable"*/}
+              {/*className={styles.appTable}*/}
+              {/*columns={columns1}*/}
+              {/*dataSource={updateList}*/}
+              {/*rowKey={record => record.appPackageName}*/}
+              {/*pagination={false} />*/}
+            {/*<div style={{ padding: '10px' }}  className={styles.manageAppBox}>*/}
+              {/*<Row gutter={16}>*/}
+                {/*<Col span={12}>*/}
+                  {/*<div className={styles.leftBox}>*/}
+                    {/*/!*<Card title="切换App" bordered={false}>*!/*/}
+                    {/*<ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />*/}
+                    {/*/!*</Card>*!/*/}
+                  {/*</div>*/}
+                {/*</Col>*/}
+                {/*<Col span={12}>*/}
+                  {/*/!*<Card title="升级App" bordered={false}>*!/*/}
+                  {/*<div className={styles.rightBox}>*/}
+                    {/*<ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />*/}
+                  {/*</div>*/}
+                  {/*/!*</Card>*!/*/}
+                {/*</Col>*/}
+              {/*</Row>*/}
+            {/*</div>*/}
+          {/*</div>*/}
+        {/*</Modal>*/}
+
         <EditMonitoringForm
           editMonitoringFormVisible={this.state.editMonitoringFormVisible}
           editMonitoringHandleModalVisibleClick={this.editMonitoringHandleModalVisibleClick}
@@ -2409,22 +2657,176 @@ export default class machineSettingList extends PureComponent {
           excell={this.excell}
           callback={this.callback}
           watchBtn={this.state.watchBtn}
+
+
+          logRefresh={this.logRefresh}
+          logUpdate={this.logUpdate}
+          pointType={this.state.pointType}
+          grabLogOnChange={this.grabLogOnChange}
+          machineLogLists={this.state.machineLogLists}
+          pointChange={this.pointChange}
+          machineId={this.state.machineId}
+
+
+          appUpdate={this.appUpdate}
+          appRefresh={this.appMachineRefresh}
+          machineDetail={this.state.machineDetail}
+          returnBtn={this.returnBtn}
+
+          monitorKey={this.state.monitorKey}
+          logStartTime={this.state.logStartTime}
+          logEndTime={this.state.logEndTime}
+
+          customLogStartTime={this.state.customLogStartTime}
+          customLogEndTime={this.state.customLogEndTime}
+
+          getLogMessage={this.state.getLogMessage}
         />
-        {/*<UploadLogForm*/}
-        {/*UploadLogVisible={this.state.UploadLogVisible}*/}
-        {/*UploadLogConfirmLoading={this.state.UploadLogConfirmLoading}*/}
-        {/*UploadLogVisibleClick={this.UploadLogVisibleClick}*/}
-        {/*logUpdate={this.logUpdate}*/}
-        {/*logRefresh={this.logRefresh}*/}
-        {/*/>*/}
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
-        />
+        <Modal
+          title={
+            <div class="modalBox">
+              <span class="leftSpan"></span>
+              <span class="modalTitle">管理</span>
+            </div>
+          }
+          visible={this.state.editManageFormVisible}
+          onCancel={() => this.editManageHandleModalVisibleClick()}
+          footer={null}
+          width={1250}>
+          <div class="manageAppBox">
+            <Tabs type="card" onChange={this.manageCallBack} activeKey={ this.state.managekey }>
+              <TabPane tab="重置点位" key="0">
+                <EditPointForm
+                  ref={this.savePointFormRef}
+                  editPointmodalVisible={this.state.editPointmodalVisible}
+                  editPointHandleAddClick={this.editPointHandleAddClick}
+                  editPointHandleModalVisibleClick={this.editPointHandleModalVisibleClick}
+                  editPointEditModalConfirmLoading={this.state.editPointEditModalConfirmLoading}
+                  data={this.state.data}
+                  // modalData={this.state.modalData}
+                  handleChange={this.handleChange}
+                  onPopupScroll={this.onPopupScroll}
+                  onSelect={this.onSelect}
+                  onSearch={this.getPointSettingList}
+                  fetching={this.state.fetching}
+                  handleSupervisorySwitch={this.handleSupervisorySwitch}
+                  handleSupervisoryStartTime={this.handleSupervisoryStartTime}
+                  handleSupervisoryEndTime={this.handleSupervisoryEndTime}
+                  // value={this.state.value}
+                  modalData={this.state.modalData}
+                  pointName={this.state.pointName}
+                  switchStatus={this.state.switchStatus}
+                  supervisoryStartTime={this.state.supervisoryStartTime}
+                  supervisoryEndTime={this.state.supervisoryEndTime}
+
+                  editManageHandleModalVisibleClick={this.editManageHandleModalVisibleClick}
+                />
+              </TabPane>
+              <TabPane tab="管理APP" key="1">
+                <div id="manageAppBox">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>
+                    <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>
+                      <div>
+                        <div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>
+                        <div style={{ color: '#999'}}>上次更新时间：{createTime}</div>
+                      </div>
+                      <div>
+                        <Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>
+                        <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button>
+                      </div>
+                    </div>
+                  </div>
+                  <Table
+                    id="appTable"
+                    className={styles.appTable}
+                    columns={columns1}
+                    dataSource={updateList}
+                    rowKey={record => record.appPackageName}
+                    pagination={false} />
+                  <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <div className={styles.leftBox}>
+                          {/*<Card title="切换App" bordered={false}>*/}
+                          <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+                          {/*</Card>*/}
+                        </div>
+                      </Col>
+                      <Col span={12}>
+                        {/*<Card title="升级App" bordered={false}>*/}
+                        <div className={styles.rightBox}>
+                          <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
+                        </div>
+                        {/*</Card>*/}
+                      </Col>
+                    </Row>
+                  </div>
+                </div>
+              </TabPane>
+              <TabPane tab="管理货道" key="2">
+                <ManageAisleForm
+                  ref={this.saveManageAisleFormRef}
+                  ManageAislemodalVisible={this.state.ManageAislemodalVisible}
+                  ManageAisleEditModalConfirmLoading={this.state.ManageAisleEditModalConfirmLoading}
+                  ManageAisleHandleAddClick={this.ManageAisleHandleAddClick}
+                  ManageAisleHandleModalVisibleClick={this.ManageAisleHandleModalVisibleClick}
+                  handleClose={this.handleClose}
+                  AisleList={AisleList}
+                  handleStop={this.handleStop}
+                  handleStart={this.handleStart}
+                  message={message}
+                  updateGoodsCount={this.updateGoodsCount}
+                />
+              </TabPane>
+              <TabPane tab="机器温度" key="3">
+                <Form>
+                  <FormItem {...formItemLayout} label="当前温度">
+                    <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
+                  </FormItem>
+                  <FormItem {...formItemLayout} label="机器温度">
+                    <Select placeholder="请选择" value={ this.state.TemperatureSelected } onChange={this.onTemperatureSelected}>
+                      {TemperatureOptions.map((item) => {
+                        return (
+                          <Option value={item} key={item}>{item}</Option>
+                        );
+                      })}
+                    </Select>
+                  </FormItem>
+                  <FormItem {...formItemLayout}>
+                    <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
+                    <Button style={{ width: '120px' }} type="Default" onClick={() => this.temperatureSubmit()}>确定</Button>
+                  </FormItem>
+                </Form>
+              </TabPane>
+              <TabPane tab="修改编号" key="4">
+                <Form>
+                  <FormItem {...formItemLayout} label="当前编号">
+                    <span>{this.state.machineCodeOld}</span>
+                  </FormItem>
+                  <FormItem {...formItemLayout} label="机器编号">
+                    <Input placeholder="请填写机器编号" value={this.state.machineCodeNew} onChange={this.inputCodeChange}/>
+                  </FormItem>
+                  <FormItem {...formItemLayout}>
+                    <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
+                    <Button style={{ width: '120px' }} type="Default" onClick={() => this.machineCodeSubmit()}>确定</Button>
+                  </FormItem>
+                </Form>
+              </TabPane>
+              <TabPane tab="系统状态" key="5">
+                <WatchForm
+                  ref={this.ManageWatchFormRef}
+                  ManageWatchModalVisible={this.state.ManageWatchModalVisible}
+                  ManageWatchEditModalConfirmLoading={this.state.ManageWatchEditModalConfirmLoading}
+                  ManageWatchHandleModalVisibleClick={this.ManageWatchHandleModalVisibleClick}
+                  appUpdate={this.appUpdate}
+                  appRefresh={this.appMachineRefresh}
+                  machineDetail={this.state.machineDetail}
+                  // returnBtn={this.returnBtn}
+                />
+              </TabPane>
+            </Tabs>
+          </div>
+        </Modal>
       </PageHeaderLayout>
     );
   }

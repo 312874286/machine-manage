@@ -16,14 +16,20 @@ import {
   Popconfirm,
   Spin,
   Popover,
+  TimePicker,
+  Switch,
+  Tag
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './PointSetting.less';
 import LogModal from '../../components/LogModal';
 import { getAccountMenus } from '../../utils/authority';
+import {Radio} from "antd/lib/index";
+import EditableTagGroup from '../../components/Tag';
 
 const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
 const { TextArea } = Input
 const { Option } = Select;
 const getValue = obj =>
@@ -33,9 +39,16 @@ const getValue = obj =>
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 
+const pointTypeOptions = [{id: 1, name: '活动点位'}, {id: 0, name: '渠道点位'}]
+const type = ['渠道点位', '活动点位']
+
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions, loadData, onChange, editModalConfirmLoading, modalType, verifyPhone, verifyString, verifyTrim } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, insertOptions,
+      loadData, onChange, editModalConfirmLoading, modalType, verifyPhone,
+      verifyString, handleChange, getTagList, TagLists, handleTags, modalData, handleSupervisorySwitch, switchStatus, handTagLists,
+      modalDataTags
+    } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
     //     if (err) return;
@@ -54,6 +67,7 @@ const CreateForm = Form.create()(
         sm: { span: 16 },
       },
     };
+
     return (
       <Modal
         title={
@@ -66,12 +80,13 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
+        width={800}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="省市区商圈">
+            <FormItem {...formItemLayout} label="省市区" style={{ display: modalType ? '' : 'none' }}>
               {getFieldDecorator('provinceCityAreaTrade', {
-                rules: [{ required: true, message: '省市区商圈' }, {
+                rules: [{ required: true, message: '省市区' }, {
                   validator: verifyString,
                 }],
                 // initialValue: { defaultValue },
@@ -85,15 +100,111 @@ const CreateForm = Form.create()(
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="商场名称">
-              {getFieldDecorator('mall', {
-                rules: [{ required: false,whitespace: true, message: '请输入商场名称' }],
-              })(<Input placeholder="请输入商场" />)}
+            <FormItem {...formItemLayout} label="省市区" style={{ display: modalType ? 'none' : '' }}>
+              {getFieldDecorator('provinceCityAreaTrade', {
+                rules: [{ required: true, message: '省市区' }, {
+                  validator: verifyString,
+                }],
+                // initialValue: { defaultValue },
+              })(
+                <Cascader
+                  placeholder="请选择"
+                  options={insertOptions}
+                  loadData={loadData}
+                  onChange={onChange}
+                  changeOnSelect
+                  disabled
+                />
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label="点位名称">
-              {getFieldDecorator('name', {
+            <FormItem {...formItemLayout} label="点位名称" style={{ display: modalType ? '' : 'none' }}>
+              {getFieldDecorator('mall', {
                 rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
-              })(<Input placeholder="请输入点位名称" />)}
+              })(<Input placeholder="请输入点位" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="点位名称" style={{ display: modalType ? 'none' : '' }}>
+              {getFieldDecorator('mall', {
+                rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
+              })(<Input placeholder="请输入点位" disabled/>)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="具体位置">
+              {getFieldDecorator('name', {
+                rules: [{ required: true, whitespace: true, message: '请输入具体位置' }],
+              })(<Input placeholder="请输入具体位置" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="点位类型">
+              {getFieldDecorator('type', {
+                rules: [{ required: true, message: '请选择点位类型' }],
+                initialValue: '0',
+              })(
+                <RadioGroup>
+                  <Radio value="0">渠道点位</Radio>
+                  <Radio value="1">活动点位</Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+            <FormItem
+              label="监控设置"
+              {...formItemLayout}>
+              {getFieldDecorator('monitor', {
+                rules: [{ required: false, }],
+              })(
+                <Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="监控时间">
+              {getFieldDecorator('monitorStart', {
+                rules: [{ required: false, message: '' }],
+                initialValue: moment('00:00:00', 'HH:mm:ss')
+              })(
+                <TimePicker disabled={!switchStatus}/>
+              )}
+              <span>-</span>
+              {getFieldDecorator('monitorEnd', {
+                rules: [{ required: false, message: '' }],
+                initialValue: moment('23:59:59', 'HH:mm:ss')
+              })(
+                <TimePicker disabled={!switchStatus}/>
+              )}
+            </FormItem>
+            {/*<FormItem {...formItemLayout} label="标签">*/}
+            {/*{getFieldDecorator('tag', {*/}
+            {/*initialValue: []*/}
+            {/*})(*/}
+            {/*<Select*/}
+            {/*mode="multiple"*/}
+            {/*style={{ width: '100%' }}*/}
+            {/*placeholder="请选择标签"*/}
+            {/*// defaultValue={['a10', 'c12']}*/}
+            {/*onChange={handleChange}*/}
+            {/*// onSearch={getTagList}*/}
+            {/*>*/}
+            {/*{TagLists.map((item) => {*/}
+            {/*return (*/}
+            {/*<Option value={item.id} key={item.name}>{item.name}</Option>*/}
+            {/*);*/}
+            {/*})}*/}
+            {/*</Select>*/}
+            {/*)}*/}
+            {/*</FormItem>*/}
+            <FormItem {...formItemLayout} label="标签">
+              {getFieldDecorator('titles', {
+                rules: [{ required: false }],
+                initialValue: { tags: [] },
+              })(
+                <EditableTagGroup
+                  handleTags={handleTags}
+                  tags={modalDataTags.tags}
+                  search={true}
+                  handTagLists={handTagLists}
+                  data={TagLists}
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="备注描述">
+              {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
             </FormItem>
             <FormItem {...formItemLayout} label="运营人员">
               {getFieldDecorator('manager', {
@@ -107,9 +218,7 @@ const CreateForm = Form.create()(
                 }],
               })(<Input placeholder="请输入手机" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="备注描述">
-              {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
-            </FormItem>
+
           </Form>
         </div>
       </Modal>
@@ -142,7 +251,15 @@ export default class PointSettingList extends PureComponent {
     modalType: true,
     CreateFormLoading: false,
 
-    account: {}
+    account: {},
+    supervisoryStartTime: '00:00:00',
+    supervisoryEndTime: '23:59:59',
+    TagLists: [],
+
+    switchStatus: true,
+    type: '',
+    modalDataTags: { tags: [] }
+
   };
   componentWillMount() {
     // 查询省
@@ -191,6 +308,7 @@ export default class PointSettingList extends PureComponent {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
           code: this.state.code,
+          type: this.state.type
         },
       },
     });
@@ -205,8 +323,8 @@ export default class PointSettingList extends PureComponent {
     }
   }
   verifyString = (rule, value, callback) => {
-    if (value.length < 4) {
-      callback('请填写完整的省市区商圈');
+    if (value.length < 3) {
+      callback('请填写完整的省市区');
     } else {
       callback();
     }
@@ -317,6 +435,7 @@ export default class PointSettingList extends PureComponent {
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
         code: localCode,
+        type: fieldsValue.type >= 0 ? fieldsValue.type : ''
       }, () => {
         this.getLists();
       });
@@ -328,8 +447,10 @@ export default class PointSettingList extends PureComponent {
       modalVisible: !!flag,
       modalData: {},
       modalType: true,
+      TagLists: []
     });
     this.setModalData();
+    // this.getTagList('')
   };
   // 删除modal 删除事件
   handleDelClick = (item) => {
@@ -402,14 +523,14 @@ export default class PointSettingList extends PureComponent {
     const provinceIndex = forInCityRes.index
     const districtRes = await this.getArea(city)
     const arrCity = province[provinceIndex].children
-    const forInDistrictRes = this.forIn(arrCity, city, districtRes)
-    const cityIndex = forInDistrictRes.index
-    const circleRes = await this.getArea(district)
-    const arrDistrict = province[provinceIndex].children[cityIndex].children
-    this.forIn(arrDistrict, district, circleRes)
+    this.forIn(arrCity, city, districtRes)
+    // const cityIndex = forInDistrictRes.index
+    // const circleRes = await this.getArea(district)
+    // const arrDistrict = province[provinceIndex].children[cityIndex].children
+    // this.forIn(arrDistrict, district, circleRes)
     this.setState({
       options: province,
-      defaultValue: [res.province, city, district, circle],
+      defaultValue: [res.province, city, district],
     }, () => {
       this.setModalData(res);
       // this.setState({
@@ -510,23 +631,41 @@ export default class PointSettingList extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
-      this.form.setFieldsValue({
-        name: data.name || '',
-        mall: data.mall || '',
-        manager: data.manager || '',
-        mobile: data.mobile || '',
-        provinceCityAreaTrade: this.state.defaultValue,
-        remark: data.remark || '',
-      });
+      this.setState({
+        modalDataTags: {
+          tags: data.tags ? data.tags : []
+        },
+        switchStatus: parseInt(data.monitor) === 0 ? true : false
+      }, () => {
+        this.form.setFieldsValue({
+          name: data.name || '',
+          mall: data.mall || '',
+          manager: data.manager || '',
+          mobile: data.mobile || '',
+          provinceCityAreaTrade: this.state.defaultValue,
+          remark: data.remark || '',
+          monitorStart: data.monitorStart ? moment(data.monitorStart, 'HH:mm:ss') : undefined,
+          monitorEnd: data.monitorEnd ? moment(data.monitorEnd, 'HH:mm:ss') : undefined,
+          type: data.type ? data.type.toString() : ''
+        });
+      })
     } else {
-      this.form.setFieldsValue({
-        name: '',
-        mall: '',
-        manager: '',
-        mobile: '',
-        provinceCityAreaTrade: '',
-        remark: '',
-      });
+      this.setState({
+        modalDataTags:  { tags: [] },
+        switchStatus: true,
+      }, () => {
+        this.form.setFieldsValue({
+          name: '',
+          mall: '',
+          manager: '',
+          mobile: '',
+          provinceCityAreaTrade: '',
+          remark: '',
+          monitorStart: moment('00:00:00', 'HH:mm:ss'),
+          monitorEnd: moment('23:59:59', 'HH:mm:ss'),
+          type: '0',
+        });
+      })
     }
   }
   // 新增modal确认事件 开始
@@ -544,10 +683,13 @@ export default class PointSettingList extends PureComponent {
         ...fieldsValue,
         provinceCityAreaTrade: undefined,
         areaCode: provinceCityAreaTradeTmp[provinceCityAreaTradeTmp.length - 1],
+        monitorStart: this.state.switchStatus ? (fieldsValue.monitorStart ? fieldsValue.monitorStart.format('HH:mm:ss') : undefined) : '',
+        monitorEnd: this.state.switchStatus ? (fieldsValue.monitorEnd ? fieldsValue.monitorEnd.format('HH:mm:ss') : undefined) : '',
+        tag: this.state.modalDataTags.tags ? JSON.stringify(this.state.modalDataTags.tags) : '',
+        monitor: this.state.switchStatus ? 0 : 1
       };
       this.setState({
         editModalConfirmLoading: true,
-        modalData: {},
       });
       let url = 'pointSetting/savePointSetting';
       if (this.state.modalData.id) {
@@ -559,15 +701,18 @@ export default class PointSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.setState({
-          code: '',
-        }, () => {
-          this.getLists();
-        })
+      }).then((res) => {
+        if (res && res.code === 0) {
+          this.setState({
+            code: '',
+            modalVisible: false,
+            modalData: {},
+          }, () => {
+            this.getLists();
+          })
+        }
         this.setState({
           editModalConfirmLoading: false,
-          modalVisible: false,
         });
       });
     });
@@ -601,6 +746,46 @@ export default class PointSettingList extends PureComponent {
     });
   }
   // 四级联动结束
+  // handleChange
+  getTagList = (value) => {
+    this.props.dispatch({
+      type: 'pointSetting/getTagList',
+      payload: {
+        restParams: {
+          name: value,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          TagLists: res.data
+        })
+      }
+    });
+  }
+  handleTags = (val) => {
+    // tags: ["445", "6789"]
+    this.setState({
+      modalDataTags: { tags: val },
+    });
+  }
+  handTagLists = (val) => {
+    if (val) {
+      this.getTagList(val)
+    } else {
+      this.setState({
+        TagLists: []
+      })
+    }
+  }
+  handleChange = (value, option) => {
+    console.log(`selected ${value}`, option);
+    // this.setState({
+    //   TagLists: []
+    // }, () => {
+    //   console.log('222222', this.state.TagLists)
+    // })
+  }
   // 日志相关
   getLogList = () => {
     this.props.dispatch({
@@ -643,6 +828,23 @@ export default class PointSettingList extends PureComponent {
       this.getLogList();
     });
   }
+
+  handleSupervisorySwitch = (value) => {
+    if (value == true) {
+      this.setState({
+        switchStatus: value,
+        supervisoryStartTime: '00:00:00',
+        supervisoryEndTime: '23:59:59'
+      });
+    } else {
+      this.setState({
+        switchStatus: value,
+        supervisoryStartTime: '',
+        supervisoryEndTime: ''
+      });
+    }
+  }
+
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -665,9 +867,24 @@ export default class PointSettingList extends PureComponent {
           {/*label="关键字"*/}
           <Col md={7} sm={24} lg={8}>
             <FormItem >
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商场、运营人、手机号搜索" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入点位、具体位置、标签、运营人姓名搜索" />)}
             </FormItem>
           </Col>
+          <Col md={7} sm={24} lg={8}>
+            <FormItem label="选择点位类型">
+              {getFieldDecorator('type')(
+                <Select placeholder="选择点位类型">
+                  {pointTypeOptions.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24} lg={8}>
             <span>
                <FormItem>
@@ -698,34 +915,69 @@ export default class PointSettingList extends PureComponent {
     const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, options, account } = this.state;
     let columns = [
       {
-        title: '所属省市区商圈',
+        title: '省市区',
         width: '10%',
         dataIndex: 'areaName',
         key: 'areaName'
       },
       {
-        title: '商场',
+        title: '点位',
         width: '10%',
         dataIndex: 'mall',
         key: 'mall'
       },
       {
-        title: '点位名称',
+        title: '具体位置',
         width: '10%',
         dataIndex: 'name',
         key: 'name'
+      },
+      {
+        title: '点位类型',
+        width: '10%',
+        dataIndex: 'type',
+        key: 'type',
+        render(val) {
+          if (val !== null) {
+            return <span>{type[val]}</span>;
+          }
+        },
+      },
+      {
+        title: '监控时间',
+        width: '10%',
+        dataIndex: 'time',
+        key: 'time',
+        render: (text, item) => (
+          <div>{`${item.monitorStart ? item.monitorStart : ''}-${item.monitorEnd ? item.monitorEnd : ''}`}</div>
+        ),
+      },
+      {
+        title: '标签',
+        width: '10%',
+        dataIndex: 'tags',
+        key: 'tags',
+        render: (text, item) => (
+          (item.tags) ? (
+            item.tags.map((res) => {
+              return <Tag>{res}</Tag>
+            })
+          ) : (
+            null
+          )
+
+        ),
+      },
+      {
+        title: '备注描述',
+        dataIndex: 'remark',
+        key: 'remark'
       },
       {
         title: '运营人',
         width: '10%',
         dataIndex: 'manager',
         key: 'manager'
-      },
-      {
-        title: '手机号',
-        width: '10%',
-        dataIndex: 'mobile',
-        key: 'mobile'
       },
       {
         title: '机器个数',
@@ -752,9 +1004,9 @@ export default class PointSettingList extends PureComponent {
         key: 'machineCode'
       },
       {
-        title: '备注描述',
-        dataIndex: 'remark',
-        key: 'remark'
+        title: '手机号',
+        dataIndex: 'mobile',
+        key: 'mobile'
       },
       {
         fixed: 'right',
@@ -819,16 +1071,6 @@ export default class PointSettingList extends PureComponent {
               <Button icon="plus-circle-o" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
                 新建
               </Button>
-              {/*{selectedRows.length > 0 && (*/}
-              {/*<span>*/}
-              {/*<Button>批量操作</Button>*/}
-              {/*<Dropdown overlay={menu}>*/}
-              {/*<Button>*/}
-              {/*更多操作 <Icon type="down" />*/}
-              {/*</Button>*/}
-              {/*</Dropdown>*/}
-              {/*</span>*/}
-              {/*)}*/}
             </div>
             <div style={{ display: !account.list ? 'none' : ''}}>
               <StandardTable
@@ -839,7 +1081,7 @@ export default class PointSettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1300}
+                scrollX={1400}
                 scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
               />
             </div>
@@ -859,6 +1101,15 @@ export default class PointSettingList extends PureComponent {
           verifyPhone={this.verifyPhone}
           verifyString={this.verifyString}
           verifyTrim={this.verifyTrim}
+          // handleChange={this.handleChange}
+          // getTagList={this.getTagList}
+          TagLists={this.state.TagLists}
+          handleTags={this.handleTags}
+          // modalData={this.state.modalData}
+          handleSupervisorySwitch={this.handleSupervisorySwitch}
+          switchStatus={this.state.switchStatus}
+          handTagLists={this.handTagLists}
+          modalDataTags={this.state.modalDataTags}
         />
         {/*</Spin>*/}
         {/*<Spin tip="Loading..." spinning={this.state.CreateFormLoading}></Spin>*/}

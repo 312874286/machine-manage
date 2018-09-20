@@ -96,6 +96,28 @@ export async function machinePointLog({ restParams }) {
     restParams,
   });
 }
+
 export async function exportMachinePointLog({ restParams }) {
   window.location.href = `${api.exportMachinePointLog}?machineCode=${restParams.machineCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
+}
+
+export async function grabLog({ params }) {
+  return fetch.post(api.grabLog, {
+    body: stringify(params),
+  });
+}
+export async function getLogs({ restParams }) {
+  return fetch.get(api.getLogs, {
+    restParams,
+  });
+}
+export async function findTemperature({ restParams }) {
+  return fetch.get(api.findTemperature, {
+    restParams,
+  });
+}
+export async function updateTemperature({ params }) {
+  return fetch.post(api.updateTemperature, {
+    body: stringify(params),
+  });
 }

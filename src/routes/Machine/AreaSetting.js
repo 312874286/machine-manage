@@ -23,7 +23,7 @@ import {
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './ChannelSetting.less';
+import styles from './AreaSetting.less';
 import LogModal from '../../components/LogModal/index';
 import {getAccountMenus} from "../../utils/authority";
 
@@ -39,14 +39,11 @@ const status = ['运行中', '关闭', '已上线', '异常'];
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType } = props;
-    // const okHandle = () => {
-    //   form.validateFields((err, fieldsValue) => {
-    //     if (err) return;
-    //     form.resetFields();
-    //     handleAdd(fieldsValue);
-    //   });
-    // };
+    const {
+      modalVisible, form, handleAdd, handleModalVisible,
+      editModalConfirmLoading, modalType, verifyString,
+      areaList, getArea, modalData,
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -63,39 +60,59 @@ const CreateForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{modalType ? '编辑渠道' : '新建渠道'}</span>
+            <span class="modalTitle">{modalType ? '编辑省市' : '新建省市'}</span>
           </div>
         }
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
-        confirmLoading={editModalConfirmLoading}
-      >
+        confirmLoading={editModalConfirmLoading}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-          <FormItem {...formItemLayout} label="渠道编码">
-            {getFieldDecorator('channelCode', {
-              rules: [{ required: true, whitespace: true, message: '请输入渠道编码' }],
-            })(<Input placeholder="请输入渠道编码" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="渠道名称">
-            {getFieldDecorator('channelName', {
-              rules: [{ required: true, whitespace: true, message: '请输入渠道名称' }],
-            })(<Input placeholder="请输入渠道名称" />)}
-          </FormItem>
-        </Form>
+            <FormItem {...formItemLayout} label="选择省市" style={{ display: modalType ? 'none' : '' }}>
+              {getFieldDecorator('parentCode', {
+                rules: [{ required: true, message: '省市' }, {
+                  validator: verifyString,
+                }],
+                // initialValue: { defaultValue },
+              })(
+                <Cascader
+                  placeholder="请选择"
+                  options={areaList}
+                  loadData={getArea}
+                  changeOnSelect
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="省市" style={{ display: modalType ? '' : 'none' }}>
+              <span>{modalData.province}{modalData.city}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="区名称">
+              {getFieldDecorator('name', {
+                rules: [{ required: true, whitespace: true, message: '请输入区名称' }, {
+                  validator: (rule, value, callback) => {
+                    if (value.length > 16) {
+                      callback('区名称不能超过15个字符');
+                    } else {
+                      callback();
+                    }
+                  },
+                }],
+              })(<Input placeholder="请输入区名称" />)}
+            </FormItem>
+          </Form>
         </div>
       </Modal>
     );
-});
-@connect(({ common, loading, channelSetting, log }) => ({
+  });
+@connect(({ common, loading, areaSetting, log }) => ({
   common,
-  channelSetting,
-  loading: loading.models.channelSetting,
+  areaSetting,
+  loading: loading.models.areaSetting,
   log,
 }))
 @Form.create()
-export default class channelSettingList extends PureComponent {
+export default class areaSettingList extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
@@ -103,23 +120,27 @@ export default class channelSettingList extends PureComponent {
     id: '',
     editModalConfirmLoading: false,
     pageNo: 1,
-    keyword: '',
+    code: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
     modalType: true,
-    account: {}
+    account: {},
+    areaList: [],
+    parentCode: '',
+    options: []
   };
   componentDidMount() {
     this.getLists();
-    this.getAccountMenus(getAccountMenus())
+    this.getAreaSerach('')
+    // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
-      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
-        .children.filter((item) => item.path === 'channel')
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
+        .children.filter((item) => item.path === 'areaSetting')
       var obj = {}
       if (pointSettingMenu[0].children) {
         pointSettingMenu[0].children.forEach((item, e) => {
@@ -131,18 +152,79 @@ export default class channelSettingList extends PureComponent {
       }
     }
   }
-  // 获取点位管理列表
+  // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'channelSetting/getChannelSettingList',
+      type: 'areaSetting/areaList',
       payload: {
         restParams: {
+          code: this.state.code,
           pageNo: this.state.pageNo,
-          keyword: this.state.keyword,
         },
       },
     });
   }
+  // 四级联动开始
+  // 获取商圈信息
+  getArea = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      code = targetOption.value;
+      targetOption.loading = true;
+    }
+    this.props.dispatch({
+      type: 'common/getProvinceCity',
+      payload: {
+        restParams: {
+          code,
+        },
+      },
+    }).then((data) => {
+      if (selectedOptions) {
+        targetOption.loading = false;
+        targetOption.children = data;
+        this.setState({
+          areaList: [...this.state.areaList],
+        });
+      } else {
+        this.setState({
+          areaList: data,
+        });
+      }
+    });
+  }
+  getAreaSerach = (selectedOptions) => {
+    let code = '';
+    let targetOption = null;
+    if (selectedOptions) {
+      targetOption = selectedOptions[selectedOptions.length - 1];
+      code = targetOption.value;
+      targetOption.loading = true;
+    }
+    this.props.dispatch({
+      type: 'common/getProvinceCityAreaTradeArea',
+      payload: {
+        restParams: {
+          code,
+        },
+      },
+    }).then((data) => {
+      if (selectedOptions) {
+        targetOption.loading = false;
+        targetOption.children = data;
+        this.setState({
+          options: [...this.state.options]
+        });
+      } else {
+        this.setState({
+          options: data,
+        });
+      }
+    });
+  }
+  // 四级联动结束
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -181,32 +263,6 @@ export default class channelSettingList extends PureComponent {
       keyword: '',
     });
   };
-  // 批量
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-
-    if (!selectedRows) return;
-
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: '',
-          payload: {
-            no: selectedRows.map(row => row.no).join(','),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
@@ -218,8 +274,15 @@ export default class channelSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      let localCode = ''
+      if (fieldsValue.provinceCityAreaTrade) {
+        if (fieldsValue.provinceCityAreaTrade.length > 0) {
+          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+        }
+      }
       this.setState({
         pageNo: 1,
+        code: localCode,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
       }, () => {
         this.getLists();
@@ -234,58 +297,81 @@ export default class channelSettingList extends PureComponent {
       modalType: false,
     });
     this.setModalData();
+    this.getArea('')
   };
-  // 删除modal 删除事件
-  handleDelClick = (item) => {
-    this.setState({
-      editModalConfirmLoading: true,
-    });
-    if (item) {
-      const params = { id: item.id };
-      this.props.dispatch({
-        type: 'channelSetting/delChannelSetting',
-        payload: {
-          params,
-        },
-      }).then(() => {
-        // message.success('Click on Yes');
-        this.getLists();
-        this.setState({
-          editModalConfirmLoading: false,
-        });
-      });
-    } else return false;
-  }
   // 编辑modal 编辑事件
-  handleEditClick = (item) => {
+  handleEditClick = async (item) => {
     this.setState({
       modalVisible: true,
       modalData: item,
       modalType: true,
     });
-    this.props.dispatch({
-      type: 'channelSetting/getChannelSettingDetail',
+    const res = await this.getPointSettingDetail(item);
+    if (!res) {
+      return
+    }
+    const { parentCode, code } = res.data;
+    const provinceRes = await this.getAreas('')
+    let province = provinceRes;
+    const cityRes = await this.getAreas(parentCode)
+    await this.forIn(province, parentCode, cityRes)
+    this.setState({
+      areaList: province,
+      parentCode: [parentCode, code],
+    }, () => {
+      this.setModalData(res.data);
+    });
+  }
+  getPointSettingDetail = (item) => {
+    return this.props.dispatch({
+      type: 'areaSetting/areaDetail',
       payload: {
         restParams: {
-          id: item.id,
+          code: item.code,
         },
       },
-    }).then((res) => {
-      this.setModalData(res);
+    })
+  }
+  // 获取商圈信息
+  getAreas = (code) => {
+    return this.props.dispatch({
+      type: 'common/getProvinceCity',
+      payload: {
+        restParams: {
+          code,
+        },
+      },
     });
+  }
+  // forIn
+  forIn = (arr, value, res) => {
+    for (let [i, v] of new Map(arr.map((item, i) => [i, item]))) {
+      if (v.value === value) {
+        v.children = res;
+        return { index: i };
+      }
+    }
   }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        channelCode: data.channelCode || '',
-        channelName: data.channelName || '',
+        parentCode: this.state.parentCode,
+        name: data.district || undefined,
       });
     } else {
       this.form.setFieldsValue({
-        channelCode: '',
-        channelName: '',
+        parentCode: undefined,
+        name: undefined,
       });
+    }
+  }
+  // 验证
+  verifyString = (rule, value, callback) => {
+    if (value.length < 2) {
+      callback('请填写完整的省市');
+    } else {
+      callback();
     }
   }
   // 新增modal确认事件 开始
@@ -301,11 +387,15 @@ export default class channelSettingList extends PureComponent {
       this.setState({
         editModalConfirmLoading: true,
       });
-      let url = 'channelSetting/saveChannelSetting';
-      let params = { ...values };
-      if (this.state.modalData.id) {
-        url = 'channelSetting/editChannelSetting';
-        params = { ...values, id: this.state.modalData.id };
+      const parentCode = values.parentCode
+      let url = 'areaSetting/addArea';
+      let params = {
+        ...values,
+        parentCode: parentCode[parentCode.length - 1],
+      };
+      if (this.state.modalData.code) {
+        url = 'areaSetting/updateArea';
+        params = { ...params, code: this.state.modalData.code };
       }
       this.props.dispatch({
         type: url,
@@ -316,6 +406,7 @@ export default class channelSettingList extends PureComponent {
         if (res && res.code === 0) {
           this.getLists();
           this.setState({
+            editModalConfirmLoading: false,
             modalVisible: false,
             modalData: {},
           });
@@ -327,48 +418,6 @@ export default class channelSettingList extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
-  // 日志相关
-  getLogList = () => {
-    this.props.dispatch({
-      type: 'log/getLogList',
-      payload: {
-        restParams: {
-          code: this.state.logId,
-          pageNo: this.state.logModalPageNo,
-          type: 1020403,
-        },
-      },
-    }).then(() => {
-      this.setState({
-        logModalLoading: false,
-      });
-    });
-  }
-
-  handleLogClick = (data) => {
-    this.setState({
-      logModalVisible: !!data,
-      logModalLoading: true,
-      logId: data.id,
-    }, () => {
-      this.getLogList();
-    });
-  }
-
-  logModalHandleCancel = () => {
-    this.setState({
-      logModalVisible: false,
-    });
-  }
-
-  logModalhandleTableChange = (pagination) => {
-    const { current } = pagination;
-    this.setState({
-      logModalPageNo: current,
-    }, () => {
-      this.getLogList();
-    });
-  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -376,8 +425,15 @@ export default class channelSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入渠道编码、渠道名称" />)}
+            <FormItem label="省市区商圈">
+              {getFieldDecorator('provinceCityAreaTrade')(
+                <Cascader
+                  placeholder="请选择"
+                  options={this.state.options}
+                  loadData={this.getAreaSerach}
+                  changeOnSelect
+                />
+              )}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
@@ -398,55 +454,27 @@ export default class channelSettingList extends PureComponent {
   }
   render() {
     const {
-      channelSetting: { list, page, unColumn },
+      areaSetting: { list, page, unColumn },
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, account } = this.state;
+    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, account, areaList } = this.state;
     let columns = [
-      // {
-      //   title: '渠道ID',
-      //   width: 200,
-      //   dataIndex: 'id',
-      //   fixed: 'left',
-      // },
       {
-        title: '渠道编码',
-        width: '45%',
-        dataIndex: 'channelCode',
-        key: 'channelCode'
+        title: '省',
+        width: '30%',
+        dataIndex: 'province',
+        key: 'province'
       },
-      // {
-      //   title: '渠道状态',
-      //   width: 200,
-      //   dataIndex: 'isDelete',
-      //   filters: [
-      //     {
-      //       text: status[0],
-      //       value: 0,
-      //     },
-      //     {
-      //       text: status[1],
-      //       value: 1,
-      //     },
-      //     {
-      //       text: status[2],
-      //       value: 2,
-      //     },
-      //     {
-      //       text: status[3],
-      //       value: 3,
-      //     },
-      //   ],
-      //   onFilter: (value, record) => record.status.toString() === value,
-      //   render(val) {
-      //     return <Badge status={statusMap[val]} text={status[val]} />;
-      //   },
-      // },
       {
-        title: '渠道名称',
-        dataIndex: 'channelName',
-        key: 'channelName'
+        title: '市',
+        dataIndex: 'city',
+        key: 'city'
+      },
+      {
+        title: '区',
+        dataIndex: 'district',
+        key: 'district'
       },
       {
         fixed: 'right',
@@ -454,13 +482,7 @@ export default class channelSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
-            <Divider type="vertical" />
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete} style={{ display: !account.delete ? 'none' : '' }}>删除</a>
-            </Popconfirm>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
           </Fragment>
         ),
       },
@@ -507,23 +529,11 @@ export default class channelSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}
-                style={{ display: !account.add ? 'none' : '' }}
-              >
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
-              {/*{selectedRows.length > 0 && (*/}
-                {/*<span>*/}
-                  {/*<Button>批量操作</Button>*/}
-                  {/*<Dropdown overlay={menu}>*/}
-                    {/*<Button>*/}
-                      {/*更多操作 <Icon type="down" />*/}
-                    {/*</Button>*/}
-                  {/*</Dropdown>*/}
-                {/*</span>*/}
-              {/*)}*/}
             </div>
-            <div style={{ display: !account.list ? 'none' : '' }}>
+            <div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}
@@ -543,14 +553,11 @@ export default class channelSettingList extends PureComponent {
           modalVisible={modalVisible}
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
-        />
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
+          modalData={modalData}
+
+          areaList={areaList}
+          getArea={this.getArea}
+          verifyString={this.verifyString}
         />
       </PageHeaderLayout>
     );

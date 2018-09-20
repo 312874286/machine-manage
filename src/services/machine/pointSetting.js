@@ -31,3 +31,9 @@ export async function delPointSetting({ params }) {
     body: stringify(params),
   });
 }
+
+export async function getTagList({ restParams }) {
+  return fetch.get(api.getTagList, {
+    restParams,
+  });
+}
