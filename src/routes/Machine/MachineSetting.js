@@ -1133,7 +1133,7 @@ export default class machineSettingList extends PureComponent {
     console.log('old localeId',this.state.modalData.localeId)
     console.log('new localeId',this.state.dataId)
     let localeId = this.state.dataId;
-    if (localeId == '') {
+    if (localeId === '') {
       localeId = this.state.modalData.localeId
     }
     // 确认修改点位
@@ -1164,9 +1164,11 @@ export default class machineSettingList extends PureComponent {
       }).then((res) => {
         if (res && res.code === 0) {
           console.log('onselect', this.state.localeName)
-          this.setState({
-            pointName: this.state.localeName
-          })
+          if (localeId !== this.state.modalData.localeId) {
+            this.setState({
+              pointName: this.state.localeName
+            })
+          }
           message.success('修改成功')
         }
         this.pointForm.resetFields();
