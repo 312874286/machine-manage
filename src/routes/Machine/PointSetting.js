@@ -138,8 +138,8 @@ const CreateForm = Form.create()(
                 initialValue: '0',
               })(
                 <RadioGroup>
-                  <Radio value="0">活动点位</Radio>
-                  <Radio value="1">渠道点位</Radio>
+                  <Radio value="0">渠道点位</Radio>
+                  <Radio value="1">活动点位</Radio>
                 </RadioGroup>
               )}
             </FormItem>

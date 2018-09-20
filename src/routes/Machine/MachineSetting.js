@@ -205,35 +205,34 @@ const EditPointForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-
-          </Form>
-          <h3>监控设置</h3>
-          <Form>
-            <FormItem
-              label="开启监控"
-              {...formItemLayout}
-            >
-              {/*{getFieldDecorator('radio-group')(*/}
-              {/*<RadioGroup>*/}
-              {/*<Radio value="on">开启</Radio>*/}
-              {/*<Radio value="off">关闭</Radio>*/}
-              {/*</RadioGroup>*/}
-              {/*)}*/}
-              <Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="监控时间">
-              <TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
-              <span>-</span>
-              <TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
-
-            </FormItem>
             <FormItem>
               <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => editManageHandleModalVisibleClick()}>取消</Button>
               <Button style={{ width: '120px' }} type="Default" onClick={() => editPointHandleAddClick()}>确定</Button>
             </FormItem>
           </Form>
+          {/*<h3>监控设置</h3>*/}
+          {/*<Form>*/}
+            {/*<FormItem*/}
+              {/*label="开启监控"*/}
+              {/*{...formItemLayout}*/}
+            {/*>*/}
+              {/*/!*{getFieldDecorator('radio-group')(*!/*/}
+              {/*/!*<RadioGroup>*!/*/}
+              {/*/!*<Radio value="on">开启</Radio>*!/*/}
+              {/*/!*<Radio value="off">关闭</Radio>*!/*/}
+              {/*/!*</RadioGroup>*!/*/}
+              {/*/!*)}*!/*/}
+              {/*<Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>*/}
+            {/*</FormItem>*/}
+            {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label="监控时间">*/}
+              {/*<TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>*/}
+              {/*<span>-</span>*/}
+              {/*<TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>*/}
+
+            {/*</FormItem>*/}
+          {/*</Form>*/}
       </div>
     );
 });
@@ -1136,6 +1135,10 @@ export default class machineSettingList extends PureComponent {
     if (localeId === '') {
       localeId = this.state.modalData.localeId
     }
+    if (localeId === this.state.modalData.localeId) {
+      message.success('当前无修改')
+      return false
+    }
     // 确认修改点位
     this.pointForm.validateFields((err, values) => {
       if (err) {
@@ -1147,9 +1150,9 @@ export default class machineSettingList extends PureComponent {
       let params = {
         machineId: this.state.modalData.id,
         localeId: localeId,
-        openStatus: this.state.switchStatus ? 0 : 1,
-        monitorStart: this.state.supervisoryStartTime,
-        monitorEnd: this.state.supervisoryEndTime
+        // openStatus: this.state.switchStatus ? 0 : 1,
+        // monitorStart: this.state.supervisoryStartTime,
+        // monitorEnd: this.state.supervisoryEndTime
       };
       // if (this.state.modalData.id) {
       // url = 'machineSetting/updateLocaleMachineSetting';
