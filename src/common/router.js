@@ -200,6 +200,9 @@ export const getRouterData = (app) => {
     '/project/sampling-setting': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSetting')),
     },
+    '/project/addInteractSampling': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/AddInteractSampling')),
+    },
     '/project/game': {
       component: dynamicWrapper(app, ['project/gameSetting', 'log/log'], () => import('../routes/Project/GameSetting')),
     },

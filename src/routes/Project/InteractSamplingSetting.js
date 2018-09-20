@@ -1,138 +1,49 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Row,
   Col,
   Card,
   Form,
-  Input,
-  Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
-  InputNumber,
+  Select,
+  Input,
   DatePicker,
-  Modal,
-  message,
-  Badge,
-  Divider,
-  Cascader,
-  Popconfirm
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './InteractSamplingSetting.less';
-import LogModal from '../../components/LogModal/index';
 import {getAccountMenus} from "../../utils/authority";
 
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
-const statusMap = ['processing', 'default', 'success', 'error'];
-const status = ['运行中', '关闭', '已上线', '异常'];
+const status = ['未提交', '未开始', '进行中', '已结束', '已超时']
+const statusOption = [{id: 0, name: '未提交'}, {id: 1, name: '未开始'}, {id: 2, name: '进行中'}, {id: 3, name: '已结束'}, {id: 4, name: '已超时'}]
+const sortOption = [{id: 0, name: '默认排序'}, {id: 1, name: '按发放率倒序'}, {id: 2, name: '按发放率正序'}, {id: 3, name: '按持续时长倒序'}, {id: 4, name: '按持续时长正序'}]
 
-const CreateForm = Form.create()(
-  (props) => {
-    const {
-      modalVisible, form, handleAdd, handleModalVisible,
-      editModalConfirmLoading, modalType, verifyString,
-      areaList, getArea, modalData,
-    } = props;
-    const { getFieldDecorator } = form;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    return (
-      <Modal
-        title={
-          <div class="modalBox">
-            <span class="leftSpan"></span>
-            <span class="modalTitle">{modalType ? '编辑省市' : '新建省市'}</span>
-          </div>
-        }
-        visible={modalVisible}
-        onOk={handleAdd}
-        onCancel={() => handleModalVisible()}
-        confirmLoading={editModalConfirmLoading}>
-        <div className="manageAppBox">
-          <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="选择省市" style={{ display: modalType ? 'none' : '' }}>
-              {getFieldDecorator('parentCode', {
-                rules: [{ required: true, message: '省市' }, {
-                  validator: verifyString,
-                }],
-                // initialValue: { defaultValue },
-              })(
-                <Cascader
-                  placeholder="请选择"
-                  options={areaList}
-                  loadData={getArea}
-                  changeOnSelect
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="省市" style={{ display: modalType ? '' : 'none' }}>
-              <span>{modalData.province}{modalData.city}</span>
-            </FormItem>
-            <FormItem {...formItemLayout} label="区名称">
-              {getFieldDecorator('name', {
-                rules: [{ required: true, whitespace: true, message: '请输入区名称' }],
-              })(<Input placeholder="请输入区名称" />)}
-            </FormItem>
-          </Form>
-        </div>
-      </Modal>
-    );
-  });
-@connect(({ common, loading, interactSamplingSetting, log }) => ({
+@connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
   loading: loading.models.interactSamplingSetting,
-  log,
 }))
 @Form.create()
 export default class areaSettingList extends PureComponent {
   state = {
-    modalVisible: false,
     selectedRows: [],
     formValues: {},
-    id: '',
-    editModalConfirmLoading: false,
     pageNo: 1,
     status: '',
-    modalData: {},
-    logModalVisible: false,
-    logModalLoading: false,
-    logId: '',
-    logModalPageNo: 1,
-    modalType: true,
     account: {},
-    areaList: [],
-    parentCode: '',
-    options: []
   };
   componentDidMount() {
     this.getLists();
-    this.getAreaSerach('')
     // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
-      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'machine')[0]
-        .children.filter((item) => item.path === 'interactSamplingSetting')
+      const pointSettingMenu = setAccountMenusList.filter((item) => item.path === 'project')[0]
+        .children.filter((item) => item.path === 'sampling-setting')
       var obj = {}
       if (pointSettingMenu[0].children) {
         pointSettingMenu[0].children.forEach((item, e) => {
@@ -157,67 +68,6 @@ export default class areaSettingList extends PureComponent {
       },
     });
   }
-  // 四级联动开始
-  // 获取商圈信息
-  getArea = (selectedOptions) => {
-    let code = '';
-    let targetOption = null;
-    if (selectedOptions) {
-      targetOption = selectedOptions[selectedOptions.length - 1];
-      code = targetOption.value;
-      targetOption.loading = true;
-    }
-    this.props.dispatch({
-      type: 'common/getProvinceCity',
-      payload: {
-        restParams: {
-          code,
-        },
-      },
-    }).then((data) => {
-      if (selectedOptions) {
-        targetOption.loading = false;
-        targetOption.children = data;
-        this.setState({
-          areaList: [...this.state.areaList],
-        });
-      } else {
-        this.setState({
-          areaList: data,
-        });
-      }
-    });
-  }
-  getAreaSerach = (selectedOptions) => {
-    let code = '';
-    let targetOption = null;
-    if (selectedOptions) {
-      targetOption = selectedOptions[selectedOptions.length - 1];
-      code = targetOption.value;
-      targetOption.loading = true;
-    }
-    this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
-      payload: {
-        restParams: {
-          code,
-        },
-      },
-    }).then((data) => {
-      if (selectedOptions) {
-        targetOption.loading = false;
-        targetOption.children = data;
-        this.setState({
-          options: [...this.state.options]
-        });
-      } else {
-        this.setState({
-          options: data,
-        });
-      }
-    });
-  }
-  // 四级联动结束
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -267,150 +117,15 @@ export default class areaSettingList extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let localCode = ''
-      if (fieldsValue.provinceCityAreaTrade) {
-        if (fieldsValue.provinceCityAreaTrade.length > 0) {
-          localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
-        }
-      }
       this.setState({
         pageNo: 1,
-        code: localCode,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        status: this.state.status,
       }, () => {
         this.getLists();
       });
     });
   };
-  // 添加modal 添加事件
-  handleModalVisible = (flag) => {
-    this.setState({
-      modalVisible: !!flag,
-      modalData: {},
-      modalType: false,
-    });
-    this.setModalData();
-    this.getArea('')
-  };
-  // 编辑modal 编辑事件
-  handleEditClick = async (item) => {
-    this.setState({
-      modalVisible: true,
-      modalData: item,
-      modalType: true,
-    });
-    const res = await this.getPointSettingDetail(item);
-    if (!res) {
-      return
-    }
-    const { parentCode, code } = res.data;
-    const provinceRes = await this.getAreas('')
-    let province = provinceRes;
-    const cityRes = await this.getAreas(parentCode)
-    await this.forIn(province, parentCode, cityRes)
-    this.setState({
-      areaList: province,
-      parentCode: [parentCode, code],
-    }, () => {
-      this.setModalData(res.data);
-    });
-  }
-  getPointSettingDetail = (item) => {
-    return this.props.dispatch({
-      type: 'interactSamplingSetting/areaDetail',
-      payload: {
-        restParams: {
-          code: item.code,
-        },
-      },
-    })
-  }
-  // 获取商圈信息
-  getAreas = (code) => {
-    return this.props.dispatch({
-      type: 'common/getProvinceCity',
-      payload: {
-        restParams: {
-          code,
-        },
-      },
-    });
-  }
-  // forIn
-  forIn = (arr, value, res) => {
-    for (let [i, v] of new Map(arr.map((item, i) => [i, item]))) {
-      if (v.value === value) {
-        v.children = res;
-        return { index: i };
-      }
-    }
-  }
-  // 设置modal 数据
-  setModalData = (data) => {
-    if (data) {
-      this.form.setFieldsValue({
-        parentCode: this.state.parentCode,
-        name: data.district || undefined,
-      });
-    } else {
-      this.form.setFieldsValue({
-        parentCode: undefined,
-        name: undefined,
-      });
-    }
-  }
-  // 验证
-  verifyString = (rule, value, callback) => {
-    if (value.length < 2) {
-      callback('请填写完整的省市');
-    } else {
-      callback();
-    }
-  }
-  // 新增modal确认事件 开始
-  saveFormRef = (form) => {
-    this.form = form;
-  }
-  // 编辑modal 确认事件
-  handleAdd = () => {
-    this.form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-      this.setState({
-        editModalConfirmLoading: true,
-      });
-      const parentCode = values.parentCode
-      let url = 'interactSamplingSetting/addArea';
-      let params = {
-        ...values,
-        parentCode: parentCode[parentCode.length - 1],
-      };
-      if (this.state.modalData.id) {
-        url = 'interactSamplingSetting/updateArea';
-        params = { ...params, id: this.state.modalData.id };
-      }
-      this.props.dispatch({
-        type: url,
-        payload: {
-          params,
-        },
-      }).then((res) => {
-        if (res && res.code === 0) {
-          this.getLists();
-          this.setState({
-            editModalConfirmLoading: false,
-            modalVisible: false,
-            modalData: {},
-          });
-        }
-        this.setState({
-          editModalConfirmLoading: false,
-        });
-      });
-    });
-  }
-  // 新增modal确认事件 结束
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -418,18 +133,50 @@ export default class areaSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
-            <FormItem label="省市区商圈">
-              {getFieldDecorator('provinceCityAreaTrade')(
-                <Cascader
-                  placeholder="请选择"
-                  options={this.state.options}
-                  loadData={this.getAreaSerach}
-                  changeOnSelect
-                />
+            <FormItem label="互派状态">
+              {getFieldDecorator('status')(
+                <Select placeholder="请选择">
+                  {statusOption.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
+          <Col md={15} sm={24}>
+            <span>
+              <FormItem>
+                {getFieldDecorator('keyword')(
+                  <Input placeholder="请输入互派名称，互派游戏，负责人，机器编号，机器点位，商品编号，商品名称，商户信息等" />
+                )}
+              </FormItem>
+            </span>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="创建时间">
+              {getFieldDecorator('creatTime')(
+                <DatePicker placeholder="请选择创建时间" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="排序">
+              {getFieldDecorator('status')(
+                <Select placeholder="请选择排序方式">
+                  {sortOption.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <span>
                <FormItem>
                   <Button onClick={this.handleFormReset}>
@@ -450,29 +197,31 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, editModalConfirmLoading, modalData, modalType, account, areaList } = this.state;
+    const { selectedRows } = this.state;
     let columns = [
       {
         title: '互派名称',
-        width: '30%',
+        width: '10%',
         dataIndex: 'name',
-        key: 'name'
+        key: 'name',
       },
       {
         title: '互动游戏',
         dataIndex: 'gameName',
-        key: 'gameName'
+        key: 'gameName',
+        width: '10%',
       },
       {
         title: '互派机器数',
         dataIndex: 'merchantNum',
-        key: 'merchantNum'
+        key: 'merchantNum',
+        width: '10%',
       },
       {
         title: '互派商品数',
-        width: '30%',
+        width: '10%',
         dataIndex: 'goodsNum',
-        key: 'goodsNum'
+        key: 'goodsNum',
       },
       {
         title: '互派持续时长',
@@ -480,9 +229,10 @@ export default class areaSettingList extends PureComponent {
         key: 'realDay',
         render: (text, item) => (
           <Fragment>
-            <span>{item.realDay}{item.day}</span>
+            <span>{item.realDay}/{item.day}</span>
           </Fragment>
         ),
+        width: '10%',
       },
       {
         title: '发放率',
@@ -490,9 +240,10 @@ export default class areaSettingList extends PureComponent {
         key: 'realNum',
         render: (text, item) => (
           <Fragment>
-            <span>{item.realNum}{item.number}</span>
+            <span>{item.realNum}/{item.number}</span>
           </Fragment>
         ),
+        width: '10%',
       },
       {
         title: '负责人 创建时间',
@@ -503,11 +254,17 @@ export default class areaSettingList extends PureComponent {
             <span>{item.manager}{item.createTime}</span>
           </Fragment>
         ),
+        width: '20%',
       },
       {
         title: '状态',
-        dataIndex: 'district',
-        key: 'district'
+        dataIndex: 'status',
+        key: 'status',
+        render (val) {
+          if (val) {
+            return <span>{status[val]}</span>
+          }
+        }
       },
       {
         fixed: 'right',
@@ -542,18 +299,6 @@ export default class areaSettingList extends PureComponent {
         columns[i].width = ''
       }
     }
-    // this.state.options = this.props.common.list
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
-      </Menu>
-    );
-    const parentMethods = {
-      handleAdd: this.handleAdd,
-      handleModalVisible: this.handleModalVisible,
-    };
-
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -562,7 +307,8 @@ export default class areaSettingList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary"
+                      onClick={() => this.props.history.push({pathname: '/project/addInteractSampling', query: {statusValue: 3}})}>
                 新建
               </Button>
             </div>
@@ -575,23 +321,11 @@ export default class areaSettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={500}
+                scrollX={1200}
               />
             </div>
           </div>
         </Card>
-        <CreateForm
-          {...parentMethods}
-          ref={this.saveFormRef}
-          modalVisible={modalVisible}
-          editModalConfirmLoading={editModalConfirmLoading}
-          modalType={modalType}
-          modalData={modalData}
-
-          areaList={areaList}
-          getArea={this.getArea}
-          verifyString={this.verifyString}
-        />
       </PageHeaderLayout>
     );
   }
