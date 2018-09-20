@@ -1945,7 +1945,6 @@ export default class machineSettingList extends PureComponent {
       // this.handleMonitoringClick(this.state.modalData)
       this.setState({
         editMonitoringFormVisible: true,
-        flagTop: false,
         logTopLists: [],
         logLists: [],
         watchBtn: true,
@@ -2060,7 +2059,7 @@ export default class machineSettingList extends PureComponent {
 
     }
     if (key !== '1') {
-      clearInterval(mySetInterval)
+      // clearInterval(mySetInterval)
       clearInterval(myLogSetInterval)
     }
   }
