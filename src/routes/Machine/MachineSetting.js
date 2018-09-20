@@ -1942,7 +1942,8 @@ export default class machineSettingList extends PureComponent {
     this.setState({
       flagTop: false,
     }, () => {
-      this.handleMonitoringClick(this.state.modalData)
+      // this.handleMonitoringClick(this.state.modalData)
+      this.getMachineStatus(this.state.modalData);
     })
     // this.getLogLists()
     // this.props.dispatch({
