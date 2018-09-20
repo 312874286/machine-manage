@@ -2103,7 +2103,7 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res && res.code === 0) {
-        message.error(res.message ? res.message : '发送成功')
+        message.success(res.message ? res.message : '发送成功')
       } else {
         message.error(res.message)
       }
