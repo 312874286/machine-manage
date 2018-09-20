@@ -182,8 +182,7 @@ export default class labelSettingList extends PureComponent {
       type: 'labelSetting/getPointSettingList',
       payload: {
         restParams: {
-          keyword: item.name,
-          pageNo: ''
+          tag: item.name,
         },
       },
     }).then((res) => {

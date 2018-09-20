@@ -56,7 +56,9 @@ const api = map({
   grabLog: '/machine/machine/grabLog',
   getLogs: '/machine/machine/getLogs?machineId={machineId}',
   findTemperature: '/machine/machine/findTemperature?machineId={machineId}',
-  updateTemperature: '/machine/machine/updateTemperature'
+  updateTemperature: '/machine/machine/updateTemperature',
+
+  getPointFromTag: '/machine/locale/getList?tag={tag}'
 });
 
 export default api;
