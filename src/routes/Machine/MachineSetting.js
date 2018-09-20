@@ -1938,10 +1938,11 @@ export default class machineSettingList extends PureComponent {
     });
   }
   returnInterval = (machineCode) => {
+    console.log('returnInterval', machineCode, this.state.machineCode, this.state.modalData)
     this.setState({
       flagTop: false,
     }, () => {
-      this.handleMonitoringClick(this.state.machineCode)
+      this.handleMonitoringClick(this.state.modalData.machineCode)
     })
     // this.getLogLists()
     // this.props.dispatch({
