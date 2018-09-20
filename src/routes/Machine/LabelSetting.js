@@ -43,9 +43,9 @@ const WatchPoint = Form.create()(
     const { WatchPointModalVisible, WatchPointHandleModalVisibleClick, pointList } = props;
     const machineColumns = [{
       title: null,
-      dataIndex: 'name',
+      dataIndex: 'areaName',
       align: 'left',
-      width: '80%'
+      width: '80%',
     }];
     return (
       <Modal
