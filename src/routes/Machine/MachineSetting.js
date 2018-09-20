@@ -2303,7 +2303,7 @@ export default class machineSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          Temperature: res.data !== -1 ? res.data : '暂无温度'
+          Temperature: res.data
         })
       }
     })
@@ -2781,7 +2781,7 @@ export default class machineSettingList extends PureComponent {
               <TabPane tab="机器温度" key="3">
                 <Form>
                   <FormItem {...formItemLayout} label="当前温度">
-                    <span>{this.state.Temperature}</span>
+                    <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
                   </FormItem>
                   <FormItem {...formItemLayout} label="机器温度">
                     <Select placeholder="请选择" value={ this.state.TemperatureSelected } onChange={this.onTemperatureSelected}>
