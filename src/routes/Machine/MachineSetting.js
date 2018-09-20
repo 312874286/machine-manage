@@ -2032,6 +2032,11 @@ export default class machineSettingList extends PureComponent {
   }
   excell = (machineCode) => {
     if (this.state.excelTimeRange.length === 0) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.warn('请先选择时间')
       return false
     }
@@ -2088,6 +2093,11 @@ export default class machineSettingList extends PureComponent {
   logRefresh = (machineId) => {
     const { pointType, logStartTime, logEndTime } = this.state
     if (!pointType || !logStartTime || !logEndTime) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请填写时间或者选择日志类型')
       return false
     }
@@ -2103,8 +2113,18 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res && res.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
         message.success(res.message ? res.message : '发送成功')
       } else {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
         message.error(res.message)
       }
     })
@@ -2143,6 +2163,11 @@ export default class machineSettingList extends PureComponent {
   temperatureSubmit = () => {
     const { TemperatureSelected } = this.state
     if (!TemperatureSelected) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请先选择温度再提交')
       return false
     }
@@ -2156,6 +2181,11 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res && res.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
         message.error('修改成功')
       }
     })
@@ -2168,6 +2198,11 @@ export default class machineSettingList extends PureComponent {
   machineCodeSubmit = () => {
     const { machineCodeNew } = this.state
     if (!machineCodeNew) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请填写编码后再保存')
       return false
     }
