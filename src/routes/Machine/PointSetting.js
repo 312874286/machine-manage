@@ -256,7 +256,7 @@ export default class PointSettingList extends PureComponent {
     supervisoryEndTime: '23:59:59',
     TagLists: [],
 
-    switchStatus: true,
+    switchStatus: false,
     type: '',
     modalDataTags: { tags: [] }
 
@@ -652,7 +652,7 @@ export default class PointSettingList extends PureComponent {
     } else {
       this.setState({
         modalDataTags:  { tags: [] },
-        switchStatus: true,
+        switchStatus: false,
       }, () => {
         this.form.setFieldsValue({
           name: '',
