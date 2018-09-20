@@ -1794,6 +1794,8 @@ export default class machineSettingList extends PureComponent {
   handleMonitoringClick = (item) => {
     // machinePointLog
     this.setState({
+      customLogStartTime: '',
+      customLogEndTime: '',
       logStartTime: '',
       logEndTime: '',
       editMonitoringFormVisible: true,
