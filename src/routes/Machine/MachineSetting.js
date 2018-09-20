@@ -590,7 +590,7 @@ const EditMonitoringForm = Form.create()(
       logRefresh, logUpdate, pointType, grabLogOnChange, machineLogLists, pointChange, machineId,
       appUpdate, appRefresh, returnBtn, machineDetail, monitorKey,
       logStartTime, logEndTime,
-      customLogEndTime, customLogStartTime
+      customLogEndTime, customLogStartTime, getLogMessage
     } = props;
     const formItemLayout = {
       labelCol: {
@@ -695,9 +695,12 @@ const EditMonitoringForm = Form.create()(
                 <div className={styles.showList}
                      id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
+                  <span style={{ display: getLogMessage !== '正在获取' ? 'none' : '' }}>
+                    {getLogMessage}
+                  </span>
                   {(logLists.length === 0) ? '暂无数据' : (logLists.map((item) => {
                       return (
-                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999', display: getLogMessage === '正在获取' ? 'none' : '' }}>
                           <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
                         </p>
@@ -848,6 +851,7 @@ export default class machineSettingList extends PureComponent {
 
     customLogStartTime: '',
     customLogEndTime: '',
+    getLogMessage: '正在获取',
   };
   constructor(props) {
     super(props);
@@ -1855,6 +1859,9 @@ export default class machineSettingList extends PureComponent {
           this.getLogLists()
         });
       }
+      this.setState({
+        getLogMessage: '获取完成'
+      })
     });
   }
   getLogLists = () => {
@@ -2662,6 +2669,8 @@ export default class machineSettingList extends PureComponent {
 
           customLogStartTime={this.state.customLogStartTime}
           customLogEndTime={this.state.customLogEndTime}
+
+          getLogMessage={this.state.getLogMessage}
         />
         <Modal
           title={
