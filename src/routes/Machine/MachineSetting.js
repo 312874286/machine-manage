@@ -852,6 +852,7 @@ export default class machineSettingList extends PureComponent {
     customLogStartTime: '',
     customLogEndTime: '',
     getLogMessage: '正在获取',
+    machineCodeOld: '',
   };
   constructor(props) {
     super(props);
@@ -2178,6 +2179,9 @@ export default class machineSettingList extends PureComponent {
       modalData: item,
       editManageFormVisible: true,
       managekey: '0',
+      TemperatureSelected: undefined,
+      machineCodeOld: item.machineCode,
+      machineCodeNew: undefined,
     });
     this.handleEditClick(item)
   }
@@ -2212,7 +2216,10 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.error('修改成功')
+        this.setState({
+          Temperature: this.state.TemperatureSelected
+        })
+        message.success('修改成功')
       }
     })
   }
@@ -2250,6 +2257,9 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
+        this.setState({
+          machineCodeOld: this.state.machineCodeNew
+        })
         message.info(data.data ? data.data : '修改成功')
       }
     });
@@ -2791,7 +2801,7 @@ export default class machineSettingList extends PureComponent {
               <TabPane tab="修改编号" key="4">
                 <Form>
                   <FormItem {...formItemLayout} label="当前编号">
-                    <span>{modalData.machineCode}</span>
+                    <span>{this.state.machineCodeOld}</span>
                   </FormItem>
                   <FormItem {...formItemLayout} label="机器编号">
                     <Input placeholder="请填写机器编号" value={this.state.machineCodeNew} onChange={this.inputCodeChange}/>
