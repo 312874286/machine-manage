@@ -2441,12 +2441,12 @@ export default class machineSettingList extends PureComponent {
         },
         key: 'netStatus'
       },
-      {
-        title: '当前活动',
-        width: '10%',
-        dataIndex: 'activityName',
-        key: 'activityName'
-      },
+      // {
+      //   title: '当前活动',
+      //   width: '10%',
+      //   dataIndex: 'activityName',
+      //   key: 'activityName'
+      // },
       {
         title: '入场时间',
         width: '10%',
