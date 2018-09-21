@@ -200,8 +200,17 @@ export const getRouterData = (app) => {
     '/project/sampling-setting': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSetting')),
     },
-    '/project/addInteractSampling': {
-      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/AddInteractSampling')),
+    '/project/addBasicInteractSampling': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/BasicInteractSampling.js')),
+    },
+    '/project/addMerchantGoodsInteractSampling': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MerchantGoodsInteractSampling.js')),
+    },
+    '/project/addMachineInteractSampling': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MachineInteractSampling.js')),
+    },
+    '/project/addRuleInteractSampling': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/RuleInteractSampling.js')),
     },
     '/project/game': {
       component: dynamicWrapper(app, ['project/gameSetting', 'log/log'], () => import('../routes/Project/GameSetting')),

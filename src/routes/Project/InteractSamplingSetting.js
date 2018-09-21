@@ -308,7 +308,7 @@ export default class areaSettingList extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary"
-                      onClick={() => this.props.history.push({pathname: '/project/addInteractSampling', query: {statusValue: 3}})}>
+                      onClick={() => this.props.history.push({pathname: '/project/addBasicInteractSampling', query: {statusValue: 3}})}>
                 新建
               </Button>
             </div>
