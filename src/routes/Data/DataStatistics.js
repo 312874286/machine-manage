@@ -114,6 +114,7 @@ const ModalForm = Form.create()(
                 <EditableTagGroup
                   handleTags={handleTags}
                   tags={modalData.tags}
+                  search={false}
                 />
               )}
             </FormItem>

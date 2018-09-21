@@ -54,7 +54,6 @@ class EditableTagGroup extends PureComponent {
   };
   componentWillReceiveProps(nextProps) {
     const { value, tags, data, search } = nextProps;
-    console.log('tags', value, tags, data)
     if (tags) {
       this.setState({
         tags,
@@ -81,7 +80,6 @@ class EditableTagGroup extends PureComponent {
   }
   handleClose = (removedTag) => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
-    console.log(tags);
     this.setState({ tags });
     this.props.handleTags(tags)
   }
@@ -93,18 +91,17 @@ class EditableTagGroup extends PureComponent {
     this.setState({ inputVisible: true }, () => this.select.focus());
   }
   handleInputConfirm = () => {
-    console.log('123')
     this.setState({
       data: []
     }, () => {
       const state = this.state;
+      const { search } = state
       const inputValue = state.inputValue;
       let tags = state.tags;
       if (inputValue && tags.indexOf(inputValue) === -1) {
         tags = [...tags, inputValue];
       }
-      console.log('tag222', tags)
-      this.props.handTagLists('')
+      search && this.props.handTagLists('')
       this.props.handleTags(tags);
       this.setState({
         tags,
@@ -123,18 +120,17 @@ class EditableTagGroup extends PureComponent {
     });
   }
   handleSelectChange = (e) => {
+    const { search } = this.state
     this.setState({ inputValue: e.target.value }, () => {
       this.select.focus()
     });
-    this.props.handTagLists(e.target.value)
+    search && this.props.handTagLists(e.target.value)
   }
   saveInputRef = input => this.input = input
   saveSelectRef = select => this.select = select
   render() {
     const { tags, inputVisible, inputValue, search, data } = this.state;
-    // console.log('tags444444', tags, data)
     const options = this.state.data.map(d => <Option key={d.name}>{d.name}</Option>);
-    console.log('tags6666', data)
     return (
       <div>
         {tags.map((tag, index) => {
@@ -147,20 +143,6 @@ class EditableTagGroup extends PureComponent {
           return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
         })}
         {(inputVisible && search) &&  (
-          // (
-          //   data.length === 0
-          // ) ? (
-          //   <Input
-          //     ref={this.saveSelectRef}
-          //     type="text"
-          //     size="small"
-          //     style={{ width: 78 }}
-          //     value={inputValue}
-          //     onChange={this.handleSelectChange}
-          //     onBlur={this.handleInputConfirm}
-          //     onPressEnter={this.handleInputConfirm}
-          //   />
-          // ) : (
             <div className={styles.inputBox}>
               <Input
                 ref={this.saveSelectRef}
@@ -199,9 +181,17 @@ class EditableTagGroup extends PureComponent {
             onPressEnter={this.handleInputConfirm}
           />
         )}
-        {!inputVisible && (
+        {(!inputVisible && !search)&& (
           <Tag
-            onClick={(inputVisible && !search) ? this.showInput : this.showSelect}
+            onClick={this.showInput}
+            style={{ background: '#fff', borderStyle: 'dashed' }}
+          >
+            <Icon type="plus" /> New Tag
+          </Tag>
+        )}
+        {(!inputVisible && search)&& (
+          <Tag
+            onClick={this.showSelect}
             style={{ background: '#fff', borderStyle: 'dashed' }}
           >
             <Icon type="plus" /> New Tag
