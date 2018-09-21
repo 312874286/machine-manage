@@ -774,7 +774,7 @@ export default class machineSettingList extends PureComponent {
     formValues: {},
     editModalConfirmLoading: false,
     pageNo: 1,
-    // machineCode: '',
+    machineSearchCode: '',
     localCode: '',
     modalData: {},
     logModalVisible: false,
@@ -901,7 +901,7 @@ export default class machineSettingList extends PureComponent {
         restParams: {
           pageNo: this.state.pageNo,
           localCode: this.state.localCode,
-          machineCode: this.state.machineCode,
+          machineCode: this.state.machineSearchCode,
           startTime: this.state.startTime,
           endTime: this.state.endTime,
           machineType: this.state.machineType,
@@ -976,7 +976,7 @@ export default class machineSettingList extends PureComponent {
       }
       this.setState({
         pageNo: 1,
-        machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
+        machineSearchCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
         localCode: localCode,
         startTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[0].format('YYYY-MM-DD') : '',
         endTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[1].format('YYYY-MM-DD') : '',
@@ -2188,6 +2188,10 @@ export default class machineSettingList extends PureComponent {
   editManageHandleModalVisibleClick = () => {
     this.setState({
       editManageFormVisible: false,
+      modalData: {},
+      TemperatureSelected: undefined,
+      machineCodeOld: '',
+      machineCodeNew: undefined,
     });
   }
   temperatureSubmit = () => {
