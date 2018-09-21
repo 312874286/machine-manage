@@ -180,8 +180,8 @@ const GoOnForm = Form.create()(
                 rules: [{ required: false, message: '选择开始时间' }],
               })(
                 <DatePicker
-                  disabledDate={disabledStartDate}
-                  disabledTime={disabledTime}
+                  //disabledDate={disabledStartDate}
+                  //disabledTime={disabledTime}
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                   format="YYYY-MM-DD HH:mm"
                   // value={startValue}
