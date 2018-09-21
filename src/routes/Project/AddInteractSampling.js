@@ -37,10 +37,13 @@ export default class areaSettingList extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
-          <Steps current={1}>
-            <Step title="Finished" description="This is a description." />
-            <Step title="In Progress" description="This is a description." />
-            <Step title="Waiting" description="This is a description." />
+          <Steps current={0}>
+            <Step title="基本信息" description="" >
+
+            </Step>
+            <Step title="商户商品信息" description="" />
+            <Step title="选择机器" description="" />
+            <Step title="规则设置" description="" />
           </Steps>
         </Card>
       </PageHeaderLayout>
