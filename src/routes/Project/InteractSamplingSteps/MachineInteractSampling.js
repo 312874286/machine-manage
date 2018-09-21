@@ -68,33 +68,7 @@ export default class areaSettingList extends PureComponent {
               {steps.map(item => <Step key={item.title} title={item.title} />)}
             </Steps>
             <div className={styles.stepsContent}>
-              <Form onSubmit={this.handleSearch}>
-                <FormItem {...formItemLayout} label="互派活动">
-                  {getFieldDecorator('name', {
-                    rules: [{ required: true, whitespace: true, message: '请输入互派活动' }],
-                  })(<Input placeholder="请输入互派活动" />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="游戏编号">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入游戏编号' }],
-                  })(<Input placeholder="请输入游戏编号" />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="互派游戏">
-                  {getFieldDecorator('remark')(
-                    <Input placeholder="请输入备注描述"/>
-                  )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="预计时长">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入预计的天数' }],
-                  })(<Input placeholder="请输入预计时长" />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="负责人">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入项目负责人' }],
-                  })(<Input placeholder="请输入负责人" />)}
-                </FormItem>
-              </Form>
+
             </div>
             <div className={styles.stepsAction}>
               {

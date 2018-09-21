@@ -9,15 +9,27 @@ import {
   Select,
   Input,
   DatePicker,
-  Steps
+  Steps,
+  Table, Badge, Menu, Dropdown, Icon, Divider
 } from 'antd';
 import StandardTable from '../../../components/StandardTable/index';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
-import styles from './BasicInteractSampling.less';
+import styles from './MerchantGoodsInteractSampling.less';
 import {getAccountMenus} from "../../../utils/authority";
 
 const Step = Steps.Step;
 const FormItem = Form.Item;
+const menu = (
+  <Menu>
+    <Menu.Item>
+      Action 1
+    </Menu.Item>
+    <Menu.Item>
+      Action 2
+    </Menu.Item>
+  </Menu>
+);
+
 
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
@@ -30,6 +42,9 @@ export default class areaSettingList extends PureComponent {
     current: 1
   };
   componentDidMount() {
+  }
+  creat = () => {
+
   }
   render() {
     const {
@@ -61,6 +76,106 @@ export default class areaSettingList extends PureComponent {
       title: '规则设置',
       content: '',
     }];
+    const expandedGoodsRowRender = () => {
+      const columns = [
+        { title: 'Name', dataIndex: 'name', key: 'name' },
+        {
+          title: 'Action',
+          dataIndex: 'operation',
+          key: 'operation',
+          render: (text, item) => (
+            <Fragment>
+              <a onClick={() => this.handleWatchClick(item)}>修改</a>
+              <Divider type="vertical"/>
+              <a onClick={() => this.handleWatchClick(item)}>删除</a>
+            </Fragment>
+          )
+        },
+      ];
+
+      const data = [];
+      for (let i = 0; i < 3; ++i) {
+        data.push({
+          key: i,
+          name: `商品${i}`,
+        });
+      }
+      return (
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+        />
+      );
+    };
+    const expandedRowRender = () => {
+      const columns = [
+        { title: 'Name', dataIndex: 'name', key: 'name' },
+        {
+          title: 'Action',
+          dataIndex: 'operation',
+          key: 'operation',
+          render: (text, item) => (
+            <Fragment>
+              <a onClick={() => this.handleWatchClick(item)}>添加商品</a>
+              <Divider type="vertical"/>
+              <a onClick={() => this.handleWatchClick(item)}>修改</a>
+              <Divider type="vertical"/>
+              <a onClick={() => this.handleWatchClick(item)}>删除</a>
+            </Fragment>
+          )
+        },
+      ];
+
+      const data = [];
+      for (let i = 0; i < 3; ++i) {
+        data.push({
+          key: i,
+          name: `店铺${i}`,
+        });
+      }
+      return (
+        <Table
+          expandedRowRender={expandedGoodsRowRender}
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+        />
+      );
+    };
+
+    const columns = [
+      { title: 'Name', dataIndex: 'name', key: 'name' },
+      // { title: 'Platform', dataIndex: 'platform', key: 'platform' },
+      // { title: 'Version', dataIndex: 'version', key: 'version' },
+      // { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
+      // { title: 'Creator', dataIndex: 'creator', key: 'creator' },
+      // { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
+      { title: 'Action', key: 'operation',
+        render: (text, item) => (
+          <Fragment>
+            <a onClick={() => this.handleWatchClick(item)}>添加店铺</a>
+            <Divider type="vertical"/>
+            <a onClick={() => this.handleWatchClick(item)}>修改</a>
+            <Divider type="vertical"/>
+            <a onClick={() => this.handleWatchClick(item)}>删除</a>
+          </Fragment>
+        )
+      },
+    ];
+
+    const data = [];
+    for (let i = 0; i < 3; ++i) {
+      data.push({
+        key: i,
+        name: `商户${i}`,
+        // platform: 'iOS',
+        // version: '10.3.4.5654',
+        // upgradeNum: 500,
+        // creator: 'Jack',
+        // createdAt: '2014-12-24 23:12:00',
+      });
+    }
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -68,33 +183,18 @@ export default class areaSettingList extends PureComponent {
               {steps.map(item => <Step key={item.title} title={item.title} />)}
             </Steps>
             <div className={styles.stepsContent}>
-              <Form onSubmit={this.handleSearch}>
-                <FormItem {...formItemLayout} label="互派活动">
-                  {getFieldDecorator('name', {
-                    rules: [{ required: true, whitespace: true, message: '请输入互派活动' }],
-                  })(<Input placeholder="请输入互派活动" />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="游戏编号">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入游戏编号' }],
-                  })(<Input placeholder="请输入游戏编号" />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="互派游戏">
-                  {getFieldDecorator('remark')(
-                    <Input placeholder="请输入备注描述"/>
-                  )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="预计时长">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入预计的天数' }],
-                  })(<Input placeholder="请输入预计时长" />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="负责人">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入项目负责人' }],
-                  })(<Input placeholder="请输入负责人" />)}
-                </FormItem>
-              </Form>
+              {
+                <Button onClick={() => this.creat()}>创建商户店铺商品</Button>
+              }
+              <Table
+                className="components-table-demo-nested"
+                columns={columns}
+                expandedRowRender={expandedRowRender}
+                dataSource={data}
+                pagination={false}
+                scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 80)}}
+
+              />
             </div>
             <div className={styles.stepsAction}>
               {
