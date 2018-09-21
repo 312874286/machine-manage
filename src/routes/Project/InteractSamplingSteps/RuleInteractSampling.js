@@ -90,7 +90,7 @@ export default class areaSettingList extends PureComponent {
               <Form onSubmit={this.handleSearch}>
                 <FormItem {...formItemLayout} label="活动规则">
                 </FormItem>
-                <FormItem {...formItemLayout} label="同一用户参与活动次数">
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户参与活动次数</span>}>
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('name', {
@@ -111,21 +111,70 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label="同一用户每天参与活动次数">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入同一用户每天参与活动次数' }],
-                  })(<Input placeholder="请输入同一用户每天参与活动次数" />)}
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户参与活动次数</span>}>
+                  <Col span={14}>
+                    <FormItem>
+                      {getFieldDecorator('name', {
+                        rules: [{ required: !this.state.checkNick, whitespace: true, message: '请输入同一用户参与活动次数' }],
+                      })
+                      (<Input
+                        placeholder="请输入同一用户参与活动次数"
+                        disabled={this.state.checkNick}
+                      />)}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <Checkbox
+                        value={this.state.checkNick}
+                        onChange={this.handleChange}>
+                      </Checkbox>
+                    </FormItem>
+                  </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label="同一用户获得商品次数">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入同一用户获得商品次数' }],
-                  })(<Input placeholder="请输入同一用户获得商品次数" />)}
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>请输入同一用户获得商品次数</span>}>
+                  <Col span={14}>
+                    <FormItem>
+                      {getFieldDecorator('name', {
+                        rules: [{ required: !this.state.checkNick, whitespace: true, message: '请输入同一用户获得商品次数' }],
+                      })
+                      (<Input
+                        placeholder="请输入同一用户获得商品次数"
+                        disabled={this.state.checkNick}
+                      />)}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <Checkbox
+                        value={this.state.checkNick}
+                        onChange={this.handleChange}>
+                      </Checkbox>
+                    </FormItem>
+                  </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label="同一用户每天得商品次数">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入同一用户每天得商品次数' }],
-                  })(<Input placeholder="请输入同一用户每天得商品次数" />)}
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>
+                  <Col span={14}>
+                    <FormItem>
+                      {getFieldDecorator('name', {
+                        rules: [{ required: !this.state.checkNick, whitespace: true, message: '请输入同一用户每天参与活动次数' }],
+                      })
+                      (<Input
+                        placeholder="请输入同一用户每天参与活动次数"
+                        disabled={this.state.checkNick}
+                      />)}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <Checkbox
+                        value={this.state.checkNick}
+                        onChange={this.handleChange}>
+                      </Checkbox>
+                    </FormItem>
+                  </Col>
                 </FormItem>
+
                 <FormItem {...formItemLayout} label="商品信息">
                 </FormItem>
 
