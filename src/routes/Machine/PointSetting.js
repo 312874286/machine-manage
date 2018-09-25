@@ -644,8 +644,8 @@ export default class PointSettingList extends PureComponent {
           mobile: data.mobile || '',
           provinceCityAreaTrade: this.state.defaultValue,
           remark: data.remark || '',
-          monitorStart: data.monitorStart ? moment(data.monitorStart, 'HH:mm:ss') : undefined,
-          monitorEnd: data.monitorEnd ? moment(data.monitorEnd, 'HH:mm:ss') : undefined,
+          monitorStart: data.monitorStart ? moment(data.monitorStart, 'HH:mm:ss') : moment('00:00:00', 'HH:mm:ss'),
+          monitorEnd: data.monitorEnd ? moment(data.monitorEnd, 'HH:mm:ss') : moment('23:59:59', 'HH:mm:ss'),
           type: data.type >= 0 ? data.type.toString() : ''
         });
       })
