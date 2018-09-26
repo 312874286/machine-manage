@@ -203,10 +203,10 @@ export const getRouterData = (app) => {
     '/project/addBasicInteractSampling': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/BasicInteractSampling.js')),
     },
-    '/project/addMerchantGoodsInteractSampling': {
+    '/project/addMerchantGoodsInteractSampling/:id': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MerchantGoodsInteractSampling.js')),
     },
-    '/project/addMachineInteractSampling': {
+    '/project/addMachineInteractSampling/:id': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MachineInteractSampling.js')),
     },
     '/project/addRuleInteractSampling': {

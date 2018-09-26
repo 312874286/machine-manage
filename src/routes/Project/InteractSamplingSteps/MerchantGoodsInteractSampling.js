@@ -35,7 +35,9 @@ const menu = (
 // 新建商户
 const CreateMerchantForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, channelLists } = props;
+    const { modalVisible, form, handleAdd,
+      handleModalVisible, editModalConfirmLoading, modalType,
+      channelLists, saveAddShop } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -56,12 +58,25 @@ const CreateMerchantForm = Form.create()(
           </div>
         }
         visible={modalVisible}
-        onOk={handleAdd}
+        // onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-      >
+        footer={null}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="所属渠道">
+              {getFieldDecorator('channelId', {
+                rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
+              })(
+                <Select placeholder="请选择渠道">
+                  {channelLists.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.channelName}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
             <FormItem {...formItemLayout} label="sellerID">
               {getFieldDecorator('merchantCode', {
                 rules: [{ required: true, whitespace: true, message: '请输入sellerID' }],
@@ -74,26 +89,14 @@ const CreateMerchantForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="品牌名称">
               {getFieldDecorator('brandName', {
-                rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
+                rules: [{ required: false, whitespace: true, message: '请输入品牌名称' }],
               })(<Input placeholder="请输入品牌名称" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="原始标识">
-              {getFieldDecorator('originFlag', {
-                rules: [{ required: false, whitespace: true, message: '请输入原始标识' }],
-              })(<Input placeholder="请输入原始标识" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择渠道">
-              {getFieldDecorator('channelId', {
-                rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
-              })(
-                <Select placeholder="请选择">
-                  {channelLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.channelName}</Option>
-                    );
-                  })}
-                </Select>
-              )}
+            <FormItem {...formItemLayout}>
+              <Button style={{ width: '120px', marginRight: '10px' }}
+                      onClick={() => handleAdd()}>继续添加商家</Button>
+              <Button style={{ width: '120px' }} type="Default"  type="primary"
+                      onClick={() => saveAddShop()}>保存并添加店铺</Button>
             </FormItem>
           </Form>
         </div>
@@ -103,7 +106,7 @@ const CreateMerchantForm = Form.create()(
 // 新建店铺
 const CreateShopsForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, merchantLists, handleGoodsModalVisible } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -127,19 +130,9 @@ const CreateShopsForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-      >
+        footer={null}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="Shop ID">
-              {getFieldDecorator('shopCode', {
-                rules: [{ required: true,whitespace: true,  message: '请输入Shop ID' }],
-              })(<Input placeholder="请输入Shop ID" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="店铺名称">
-              {getFieldDecorator('shopName', {
-                rules: [{ required: true, whitespace: true, message: '请输入店铺名称' }],
-              })(<Input placeholder="请输入店铺名称" />)}
-            </FormItem>
             <FormItem {...formItemLayout} label="选择商户">
               {getFieldDecorator('sellerId', {
                 rules: [{ required: true, message: '请选择商户' }],
@@ -152,6 +145,22 @@ const CreateShopsForm = Form.create()(
                   })}
                 </Select>
               )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="Shop ID">
+              {getFieldDecorator('shopCode', {
+                rules: [{ required: true,whitespace: true,  message: '请输入Shop ID' }],
+              })(<Input placeholder="请输入Shop ID" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="店铺名称">
+              {getFieldDecorator('shopName', {
+                rules: [{ required: true, whitespace: true, message: '请输入店铺名称' }],
+              })(<Input placeholder="请输入店铺名称" />)}
+            </FormItem>
+            <FormItem {...formItemLayout}>
+              <Button style={{ width: '120px', marginRight: '10px' }}
+                      onClick={() => handleAdd()}>继续添加店铺</Button>
+              <Button style={{ width: '120px' }} type="Default"  type="primary"
+                      onClick={() => handleGoodsModalVisible(true)}>保存并添加商品</Button>
             </FormItem>
           </Form>
         </div>
@@ -205,9 +214,35 @@ const CreateGoodsForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-        width={800}
-      >
+        footer={null}
+        width={800}>
         <div className="manageAppBox">
+          <FormItem {...formItemLayout} label="所属商户">
+            {getFieldDecorator('sellerId', {
+              rules: [{ required: true, message: '请选择商户' }],
+            })(
+              <Select placeholder="请选择" onSelect={onSelect}>
+                {merchantLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="所属店铺">
+            {getFieldDecorator('shopId', {
+              rules: [{ required: true, message: '请选择店铺' }],
+            })(
+              <Select placeholder="请选择">
+                {shopsLists.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.shopName}</Option>
+                  );
+                })}
+              </Select>
+            )}
+          </FormItem>
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="商品ID">
               {getFieldDecorator('code', {
@@ -219,14 +254,9 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: '请输入商品名称' }],
               })(<Input placeholder="请输入商品名称" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="规格描述">
-              {getFieldDecorator('specRemark', {
-                rules: [{ required: false, whitespace: true, message: '请输入规格描述' }],
-              })(<Input placeholder="请输入规格描述" />)}
-            </FormItem>
             <FormItem {...formItemLayout} label="商品图片">
               {getFieldDecorator('img', {
-                rules: [{ required: false, message: '请传照片' }],
+                rules: [{ required: false, message: '请上传商品图片' }],
                 valuePropName: 'filelist',
               })(
                 <div className="clearfix">
@@ -245,9 +275,9 @@ const CreateGoodsForm = Form.create()(
                 </div>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="商品banner">
+            <FormItem {...formItemLayout} label="宣传介绍（支持图片和视频）">
               {getFieldDecorator('banner', {
-                rules: [{ required: false, message: '请传照片' }],
+                rules: [{ required: false, message: '' }],
                 valuePropName: 'filelist',
               })(
                 <div className="clearfix">
@@ -278,44 +308,24 @@ const CreateGoodsForm = Form.create()(
                 </div>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="商品价格">
-              {getFieldDecorator('price', {
-                rules: [{ required: false, message: '请输入商品价格' }],
-              })(<InputNumber placeholder="请输入商品价格" />)}
-            </FormItem>
             <FormItem {...formItemLayout} label="商品数量">
               {getFieldDecorator('number', {
                 rules: [{ required: true, message: '请输入商品数量' }],
               })(<InputNumber placeholder="请输入商品数量" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择商户">
-              {getFieldDecorator('sellerId', {
-                rules: [{ required: true, message: '请选择商户' }],
-              })(
-                <Select placeholder="请选择" onSelect={onSelect}>
-                  {merchantLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.merchantName}</Option>
-                    );
-                  })}
-                </Select>
-              )}
+            <FormItem {...formItemLayout} label="商品价格">
+              {getFieldDecorator('price', {
+                rules: [{ required: false, message: '请输入商品价格' }],
+              })(<InputNumber placeholder="请输入商品价格" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择店铺">
-              {getFieldDecorator('shopId', {
-                rules: [{ required: true, message: '请选择店铺' }],
-              })(
-                <Select placeholder="请选择">
-                  {shopsLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.shopName}</Option>
-                    );
-                  })}
-                </Select>
-              )}
+            <FormItem {...formItemLayout} label="备注信息">
+              {getFieldDecorator('remark')(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 6 }} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="备注描述">
-              {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            <FormItem {...formItemLayout}>
+              <Button style={{ width: '120px', marginRight: '10px' }}
+                      onClick={() => handleAdd()}>继续添加商品</Button>
+              <Button style={{ width: '120px' }} type="Default"  type="primary"
+                      onClick={() => handleAdd()}>完成</Button>
             </FormItem>
           </Form>
         </div>
@@ -346,13 +356,58 @@ export default class areaSettingList extends PureComponent {
     bannerfileList: [],
     videoUrl: {},
     // 商户
+    modalMerchantVisible: false,
+    editMerchantModalConfirmLoading: false,
+    modalMerchantType: true,
+    channelLists: [],
+    modalMerchantData: {},
     // 店铺
+    modalShopsVisible: false,
+    editShopsModalConfirmLoading: false,
+    modalShopsType: true,
+    modalShopsData: {},
 
+    interactSampling: null,
+    merchants: [],
+    shops: [],
+    goods: []
   };
   componentDidMount() {
+    console.log('this.props.params.id', this.props.match.params.id)
+    this.setState({
+      interactSampling: this.props.match.params.id
+    })
+    this.getInteractMerchantList(this.props.match.params.id)
   }
-  creat = () => {
-    this.handleModalVisible(true)
+  create = () => {
+    this.handleMerchantModalVisible(true)
+  }
+  getInteractMerchantList = (interactId) => {
+    // getInteractMerchantList
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getInteractMerchantList',
+      payload: {
+        params: {
+          interactId,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        merchants: res.data
+      })
+    });
+  }
+  getChannelList = () => {
+    this.props.dispatch({
+      type: 'merchantSetting/getChannelsList',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      this.setState({
+        channelLists: res,
+      });
+    });
   }
   // 新建商品开始
   // 新增modal确认事件 开始
@@ -368,6 +423,46 @@ export default class areaSettingList extends PureComponent {
     });
     this.setModalData();
   };
+  // 删除modal 删除事件
+  handleDelClick = (item) => {
+    this.setState({
+      editModalConfirmLoading: true,
+    });
+    if (item) {
+      const params = { id: item.id };
+      this.props.dispatch({
+        type: 'goodsSetting/delGoodsSetting',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        // message.success('Click on Yes');
+        this.getLists();
+        this.setState({
+          editModalConfirmLoading: false,
+        });
+      });
+    } else return false;
+  }
+  // 编辑modal 编辑事件
+  handleEditClick = (item) => {
+    this.setState({
+      modalVisible: true,
+      modalData: item,
+      modalType: true,
+    });
+    this.props.dispatch({
+      type: 'goodsSetting/getGoodsSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.getShopList(res.sellerId)
+      this.setModalData(res);
+    });
+  }
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
@@ -482,7 +577,7 @@ export default class areaSettingList extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          // message.success( messageTxt + '成功');
+          message.success( messageTxt + '成功');
           this.setState({
             code: '',
             getDataStartDay: this.state.startTime,
@@ -501,7 +596,6 @@ export default class areaSettingList extends PureComponent {
         // }
         this.setState({
           editModalConfirmLoading: false,
-          // modalVisible: false,
         });
       });
     });
@@ -603,6 +697,222 @@ export default class areaSettingList extends PureComponent {
     });
   }
   // 商品结束
+  // 店铺开始
+  // 新增modal确认事件 开始
+  saveShopsFormRef = (form) => {
+    this.shopsForm = form;
+  }
+  // 编辑modal 确认事件
+  handleShopsAdd = () => {
+    this.shopsForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        editShopsModalConfirmLoading: true,
+        modalShopsData: {},
+      });
+      let url = 'shopSetting/saveShopSetting';
+      let params = { ...values };
+      if (this.state.modalShopsData.id) {
+        url = 'shopSetting/editShopSetting';
+        params = { ...values, id: this.state.modalShopsData.id };
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then(() => {
+        this.getLists();
+        this.setState({
+          editShopsModalConfirmLoading: false,
+          modalShopsVisible: false,
+        });
+      });
+    });
+  }
+  // 添加modal 添加事件
+  handleShopsModalVisible = async (flag) => {
+    // this.handleMerchantModalVisible(false)
+    // await this.handleMerchantAdd()
+    await this.setState({
+      modalShopsVisible: !!flag,
+      modalShopsData: {},
+      modalShopsType: false,
+    }, () => {
+      this.setShopsModalData();
+    });
+  };
+  // 删除modal 删除事件
+  handleShopsDelClick = (item) => {
+    this.setState({
+      editShopsModalConfirmLoading: true,
+    });
+    if (item) {
+      const params = { id: item.id };
+      this.props.dispatch({
+        type: 'shopSetting/delShopSetting',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        // message.success('Click on Yes');
+        this.getLists();
+        this.setState({
+          editShopsModalConfirmLoading: false,
+        });
+      });
+    } else return false;
+  }
+  // 编辑modal 编辑事件
+  handleShopsEditClick = (item) => {
+    this.setState({
+      modalShopsVisible: true,
+      modalShopsData: item,
+      modalShopsType: true,
+    });
+    this.props.dispatch({
+      type: 'shopSetting/getShopSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setShopsModalData(res);
+    });
+  }
+  // 设置modal 数据
+  setShopsModalData = (data) => {
+    if (data) {
+      this.shopsForm.setFieldsValue({
+        shopCode: data.shopCode || '',
+        shopName: data.shopName || '',
+        sellerId: data.sellerId || '',
+      });
+    } else {
+      this.shopsForm.setFieldsValue({
+        shopCode: undefined,
+        shopName: undefined,
+        sellerId: undefined,
+      });
+    }
+  }
+  // 店铺结束
+  // 商户开始
+  // 添加modal 添加事件
+  handleMerchantModalVisible = (flag) => {
+    this.getChannelList()
+    this.setState({
+      modalMerchantVisible: !!flag,
+      modalMerchantData: {},
+      modalMerchantType: true,
+    });
+    this.setMerchantModalData();
+  };
+  // 删除modal 删除事件
+  handleMerchantDelClick = (item) => {
+    this.setState({
+      editMerchantModalConfirmLoading: true,
+    });
+    if (item) {
+      const params = { id: item.id };
+      this.props.dispatch({
+        type: 'merchantSetting/delMerchantSetting',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        // message.success('Click on Yes');
+        this.getLists();
+        this.setState({
+          editMerchantModalConfirmLoading: false,
+        });
+      });
+    } else return false;
+  }
+  // 编辑modal 编辑事件
+  handleMerchantEditClick = (item) => {
+    this.setState({
+      modalMerchantVisible: true,
+      modalMerchantData: item,
+      modalMerchantType: false,
+    });
+    this.props.dispatch({
+      type: 'merchantSetting/getMerchantSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setMerchantModalData(res);
+    });
+  }
+  // 设置modal 数据
+  setMerchantModalData = (data) => {
+    if (data) {
+      this.merchantForm.setFieldsValue({
+        merchantCode: data.merchantCode || undefined,
+        merchantName: data.merchantName || undefined,
+        brandName: data.brandName || undefined,
+        originFlag: data.originFlag || undefined,
+        channelId: data.channelId || undefined,
+      });
+    } else {
+      this.merchantForm.setFieldsValue({
+        merchantCode: undefined,
+        merchantName: undefined,
+        brandName: undefined,
+        originFlag: undefined,
+        channelId: undefined,
+      });
+    }
+  }
+  // 新增modal确认事件 开始
+  saveMerchantFormRef = (form) => {
+    this.merchantForm = form;
+  }
+  // 编辑modal 确认事件
+  handleMerchantAdd = () => {
+    this.merchantForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        editMerchantModalConfirmLoading: true,
+      });
+      let url = 'interactSamplingSetting/merchantAdd';
+      let params = { ...values, interactId: this.props.match.params.id };
+      if (this.state.modalMerchantData.id) {
+        url = 'interactSamplingSetting/updateMerchant';
+        params = { ...params, id: this.state.modalMerchantData.id };
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then((res) => {
+        if (res && res.code === 0) {
+          this.getInteractMerchantList(this.props.match.params.id)
+          this.setState({
+            modalMerchantVisible: false,
+            modalMerchantData: {},
+          });
+        }
+        this.setState({
+          editMerchantModalConfirmLoading: false,
+        });
+      });
+    });
+  }
+  saveAddShop = async () => {
+    await this.handleMerchantAdd()
+    await this.handleShopsModalVisible(true)
+  }
+  // 商户结束
   render() {
     const {
       interactSamplingSetting: { list, page, unColumn },
@@ -611,6 +921,9 @@ export default class areaSettingList extends PureComponent {
     const { current, expandedRowKeys, expandedShopsRowKeys } = this.state
     const { modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, previewVisible,
       previewImage, fileList,bannerfileList, videoUrl } = this.state;
+    const { modalShopsVisible, editShopsModalConfirmLoading, modalShopsType } = this.state;
+    const { modalMerchantVisible, editMerchantModalConfirmLoading, modalMerchantType, channelLists} = this.state;
+    const { merchants, shops, goods } = this.state
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -622,7 +935,8 @@ export default class areaSettingList extends PureComponent {
         sm: { span: 21 },
       },
     };
-    const steps = [{
+    const steps = [
+    {
       title: '基本信息',
       content: '',
     }, {
@@ -644,9 +958,9 @@ export default class areaSettingList extends PureComponent {
           key: 'operation',
           render: (text, item) => (
             <Fragment>
-              <a onClick={() => this.handleWatchClick(item)}>修改</a>
+              <a onClick={() => this.handleEditClick(item)}>修改</a>
               <Divider type="vertical"/>
-              <a onClick={() => this.handleWatchClick(item)}>删除</a>
+              <a onClick={() => this.handleDelClick(item)}>删除</a>
             </Fragment>
           )
         },
@@ -683,11 +997,11 @@ export default class areaSettingList extends PureComponent {
           key: 'operation',
           render: (text, item) => (
             <Fragment>
-              <a onClick={() => this.handleWatchClick(item)}>添加商品</a>
+              <a onClick={() => this.handleModalVisible(true, item)}>添加商品</a>
               <Divider type="vertical"/>
-              <a onClick={() => this.handleWatchClick(item)}>修改</a>
+              <a onClick={() => this.handleShopsEditClick(item)}>修改</a>
               <Divider type="vertical"/>
-              <a onClick={() => this.handleWatchClick(item)}>删除</a>
+              <a onClick={() => this.handleShopsDelClick(item)}>删除</a>
             </Fragment>
           )
         },
@@ -701,6 +1015,7 @@ export default class areaSettingList extends PureComponent {
       }
       return (
         <Table
+          rowKey={record => record.id || record.code}
           expandedRowRender={expandedGoodsRowRender}
           onExpandedRowsChange={onExpandedRowsShopsChange}
           columns={columns}
@@ -716,31 +1031,32 @@ export default class areaSettingList extends PureComponent {
         expandedRowKeys: expandedRows.splice(expandedRows.length - 1, 1),
         expandedShopsRowKeys: [],
       }, () => {
+        let params = { merchantId: this.state.expandedRowKeys[0] }
+        this.props.dispatch({
+          type: 'interactSamplingSetting/getInteractShopsList',
+          payload: {
+            params,
+          },
+        }).then(() => {
+
+        });
         console.log('expandedRowKeys', this.state.expandedRowKeys)
       })
     }
     const columns = [
-      { title: 'Name', dataIndex: 'name', key: 'name' },
-      { title: 'Action', key: 'operation',
+      { title: 'merchantName', dataIndex: 'merchantName', key: 'name' },
+      { title: '操作', key: 'operation',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleWatchClick(item)}>添加店铺</a>
+            <a onClick={() => this.handleShopsModalVisible(true, item)}>添加店铺</a>
             <Divider type="vertical"/>
-            <a onClick={() => this.handleWatchClick(item)}>修改</a>
+            <a onClick={() => this.handleMerchantEditClick(item)}>修改</a>
             <Divider type="vertical"/>
-            <a onClick={() => this.handleWatchClick(item)}>删除</a>
+            <a onClick={() => this.handleMerchantDelClick(item)}>删除</a>
           </Fragment>
         )
       },
     ];
-
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        name: `商户${i}`,
-      });
-    }
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -749,13 +1065,14 @@ export default class areaSettingList extends PureComponent {
             </Steps>
             <div className={styles.stepsContent}>
               {
-                <Button type="primary" style={{ marginBottom: 8 }}  onClick={() => this.creat()}>创建商户店铺商品</Button>
+                <Button type="primary" style={{ marginBottom: 8 }}  onClick={() => this.create()}>创建商户店铺商品</Button>
               }
               <Table
+                rowKey={record => record.id || record.code}
                 className="components-table-demo-nested"
                 columns={columns}
                 expandedRowRender={expandedRowRender}
-                dataSource={data}
+                dataSource={merchants}
                 pagination={false}
                 expandRowByClick={true}
                 onExpandedRowsChange={onExpandedRowsChange}
@@ -786,7 +1103,26 @@ export default class areaSettingList extends PureComponent {
               }
             </div>
         </Card>
-
+        <CreateMerchantForm
+          handleAdd={this.handleMerchantAdd}
+          handleModalVisible={this.handleMerchantModalVisible}
+          ref={this.saveMerchantFormRef}
+          modalVisible={modalMerchantVisible}
+          editModalConfirmLoading={editMerchantModalConfirmLoading}
+          modalType={modalMerchantType}
+          channelLists={channelLists}
+          saveAddShop={this.saveAddShop}
+        />
+        <CreateShopsForm
+          handleAdd={this.handleShopsAdd}
+          handleModalVisible={this.handleShopsModalVisible}
+          ref={this.saveShopsFormRef}
+          modalVisible={modalShopsVisible}
+          editModalConfirmLoading={editShopsModalConfirmLoading}
+          modalType={modalShopsType}
+          merchantLists={merchants}
+          handleGoodsModalVisible={this.handleModalVisible}
+        />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
           handleModalVisible={this.handleModalVisible}
@@ -794,7 +1130,7 @@ export default class areaSettingList extends PureComponent {
           modalVisible={modalVisible}
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
-          merchantLists={merchantLists}
+          merchantLists={merchants}
           shopsLists={shopsLists}
           previewVisible={previewVisible}
           previewImage={previewImage}

@@ -62,24 +62,24 @@ export async function deleteShops({ params }) {
     body: stringify(params),
   });
 }
-export async function getInteractGoodsList({ restParams }) {
+export async function getInteractGoodsList({ params }) {
   return fetch.get(api.getInteractGoodsList, {
-    restParams,
+    body: stringify(params),
   });
 }
-export async function getInteractMerchantList({ restParams }) {
+export async function getInteractMerchantList({ params }) {
   return fetch.post(api.getInteractMerchantList, {
-    restParams,
+    body: stringify(params),
   });
 }
-export async function getInteractShopsList({ restParams }) {
+export async function getInteractShopsList({ params }) {
   return fetch.post(api.getInteractShopsList, {
-    restParams,
+    body: stringify(params),
   });
 }
-export async function getInteractMachinePlanList({ restParams }) {
+export async function getInteractMachinePlanList({ params }) {
   return fetch.post(api.getInteractMachinePlanList, {
-    restParams,
+    body: stringify(params),
   });
 }
 
@@ -117,6 +117,17 @@ export async function ruleInteract({ params }) {
 export async function getChannelSettingList({ params, restParams }) {
   return fetch.get(api.getChannelSettingList, {
     body: stringify(params),
+    restParams,
+  });
+}
+
+export async function getGameList({ params }) {
+  return fetch.post(api.getGameList, {
+    body: stringify(params),
+  });
+}
+export async function getChannelsList({ restParams }) {
+  return fetch.get(api.getChannelsList, {
     restParams,
   });
 }

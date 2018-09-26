@@ -27,16 +27,64 @@ const FormItem = Form.Item;
 @Form.create()
 export default class areaSettingList extends PureComponent {
   state = {
-    current: 0
+    current: 0,
+    GameList: [],
+    type: true,
   };
   componentDidMount() {
+    this.getGameList()
+  }
+  getGameList = () => {
+    // getGameList
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getGameList',
+      payload: {
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          GameList: res.data
+        })
+      }
+    });
+  }
+  // interactAdd
+  next = (type) => {
+    this.setState({
+      type: (type === 0) ? false : true
+    }, () => {
+      this.props.form.validateFields((err, fieldsValue) => {
+        console.log('(err && type === 1)', (err && type === 1))
+        if (type === 1 && err) {
+          return false
+        }
+        let params = {
+          ...fieldsValue,
+          type,
+        };
+        this.props.dispatch({
+          type: 'interactSamplingSetting/interactAdd',
+          payload: {
+            params,
+          },
+        }).then((res) => {
+          if (res && res.code === 0) {
+            if (type === 1) {
+              this.props.history.push({pathname: `/project/addMerchantGoodsInteractSampling/${res.data}`})
+            } else {
+              this.props.history.push({pathname: '/project/sampling-setting', query: {statusValue: 3}})
+            }
+          }
+        });
+      })
+    })
   }
   render() {
     const {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current } = this.state
+    const { current, GameList, type } = this.state
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -71,37 +119,45 @@ export default class areaSettingList extends PureComponent {
               <Form onSubmit={this.handleSearch}>
                 <FormItem {...formItemLayout} label="互派活动">
                   {getFieldDecorator('name', {
-                    rules: [{ required: true, whitespace: true, message: '请输入互派活动' }],
+                    rules: [{ required: type, whitespace: true, message: '请输入互派活动' }],
                   })(<Input placeholder="请输入互派活动" />)}
                 </FormItem>
                 <FormItem {...formItemLayout} label="游戏编号">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入游戏编号' }],
+                  {getFieldDecorator('planCode', {
+                    rules: [{ required: type, whitespace: true, message: '请输入游戏编号' }],
                   })(<Input placeholder="请输入游戏编号" />)}
                 </FormItem>
                 <FormItem {...formItemLayout} label="互派游戏">
-                  {getFieldDecorator('remark')(
-                    <Input placeholder="请输入备注描述"/>
+                  {getFieldDecorator('gameId', {
+                    rules: [{ required: type, message: '请选择互派游戏' }],
+                  })(
+                    <Select placeholder="请选择">
+                      {GameList.map((item) => {
+                        return (
+                          <Option value={item.id} key={item.id}>{item.name}</Option>
+                        );
+                      })}
+                    </Select>
                   )}
                 </FormItem>
                 <FormItem {...formItemLayout} label="预计时长">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入预计的天数' }],
+                  {getFieldDecorator('day', {
+                    rules: [{ required: false, whitespace: true, message: '请输入预计的天数' }],
                   })(<Input placeholder="请输入预计时长" />)}
                 </FormItem>
                 <FormItem {...formItemLayout} label="负责人">
-                  {getFieldDecorator('code', {
-                    rules: [{ required: true, whitespace: true, message: '请输入项目负责人' }],
+                  {getFieldDecorator('manager', {
+                    rules: [{ required: type, whitespace: true, message: '请输入项目负责人' }],
                   })(<Input placeholder="请输入负责人" />)}
                 </FormItem>
               </Form>
             </div>
             <div className={styles.stepsAction}>
               {
-                <Button onClick={() => this.next()}>取消</Button>
+                <Button>取消</Button>
               }
               {
-                <Button onClick={() => this.next()}>暂存</Button>
+                <Button onClick={() => this.next(0)}>暂存</Button>
               }
               {
                 current > 0
@@ -115,7 +171,8 @@ export default class areaSettingList extends PureComponent {
               {
                 current < steps.length - 1
                 && <Button type="primary"
-                           onClick={() => this.props.history.push({pathname: '/project/addMerchantGoodsInteractSampling', query: {statusValue: 3}})}>下一步</Button>
+                           onClick={() => this.next(1)}>
+                  下一步</Button>
               }
             </div>
         </Card>

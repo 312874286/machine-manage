@@ -35,6 +35,7 @@ export default class areaSettingList extends PureComponent {
     pageNo: 1,
     status: '',
     account: {},
+    keyword: ''
   };
   componentDidMount() {
     this.getLists();
