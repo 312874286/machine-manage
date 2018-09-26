@@ -1465,7 +1465,7 @@ export default class machineSettingList extends PureComponent {
     if (updateStatus === 1) {
       updateStatusText = '更新'
     } else if (updateStatus === 2) {
-      updateStatusText = '刷新'
+      updateStatusText = '更新'
     } else {
       updateStatusText = '截屏'
     }
@@ -2737,7 +2737,7 @@ export default class machineSettingList extends PureComponent {
                       </div>
                       <div>
                         <Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>
-                        <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button>
+                        <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2, '更新')}>更新</Button>
                       </div>
                     </div>
                   </div>
