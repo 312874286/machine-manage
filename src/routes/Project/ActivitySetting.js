@@ -19,7 +19,8 @@ import {
   message,
   Alert,
   Table,
-  List
+  List,
+  Tabs
 } from "antd";
 import StandardTable from "../../components/StandardTable/index";
 import PageHeaderLayout from "../../layouts/PageHeaderLayout";
@@ -29,6 +30,10 @@ import GoodsModal from "../../components/Project/GoodsModal";
 import VipModal from "../../components/Project/VipModal";
 import moment from "moment/moment";
 import { getAccountMenus } from "../../utils/authority";
+import GoodsStatistics from '../../components/Project/Activity/GoodsStatistics';
+import OrderStatistics from '../../components/Project/Activity/OrderStatistics';
+
+const TabPane = Tabs.TabPane;
 
 // const status = ['全部','未开始', '进行中', '已结束'];
 const ActivityStatus = [
@@ -1921,15 +1926,16 @@ export default class activitySettingList extends PureComponent {
           goodsHandleCancel={this.goodsModalHandleCancel}
           goodsModalhandleTableChange={this.goodsModalhandleTableChange}
         />
-        <Tabs defaultActiveKey="1" onChange={callback}>
-          <TabPane tab="PV/UV/订单量" key="1">
-            Content of Tab Pane 1
-          </TabPane>
-          <TabPane tab="商品出货量" key="2">
-            Content of Tab Pane 2
-          </TabPane>
-        </Tabs>
-        ,<Modal title="统计" visible={true} />
+        <Modal title="统计" visible={true} >
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="PV/UV/订单量" key="1">
+              <GoodsStatistics />
+            </TabPane>
+            <TabPane tab="商品出货量" key="2">
+              <OrderStatistics />
+            </TabPane>
+          </Tabs>
+        </Modal>
       </PageHeaderLayout>
     );
   }
