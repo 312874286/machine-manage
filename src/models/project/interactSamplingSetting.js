@@ -22,7 +22,10 @@ import {
   getInteractMachineGoodsList,
   ruleInteract,
   getGameList,
-  getChannelsList
+  getChannelsList,
+  getMerchantDetail,
+  getGoodsDetail,
+  getShopsDetail,
 } from '../../services/project/interactSamplingSetting';
 
 
@@ -106,6 +109,18 @@ export default {
     *getInteractShopsList({ payload: { params } }, { call }) {
       const response = yield call(getInteractShopsList, { params });
       return response;
+    },
+    *getMerchantDetail({ payload: { params } }, { call }) {
+      const response = yield call(getMerchantDetail, { params });
+      return response.data;
+    },
+    *getShopsDetail({ payload: { params } }, { call }) {
+      const response = yield call(getShopsDetail, { params });
+      return response,data;
+    },
+    *getGoodsDetail({ payload: { params } }, { call }) {
+      const response = yield call(getGoodsDetail, { params });
+      return response.data;
     },
     *getInteractMachinePlanList({ payload: { params } }, { call }) {
       const response = yield call(getInteractMachinePlanList, { params });

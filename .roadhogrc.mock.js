@@ -5619,7 +5619,7 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'get /project/interact/goods/getList': (req, res) => {
+  'post /project/interact/goods/getList': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -5666,7 +5666,7 @@ const proxy = {
       }
     })
   },
-  'get /project/interact/merchant/getList': (req, res) => {
+  'post /project/interact/merchant/getList': (req, res) => {
     res.send({
       "code": 0,
       "data": [
@@ -5684,7 +5684,7 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'get /project/interact/shops/getList': (req, res) => {
+  'post /project/interact/shops/getList': (req, res) => {
     res.send({
       "code": 0,
       "data": [
@@ -5847,6 +5847,73 @@ const proxy = {
       "msg": "成功"
     })
   },
+  'post /project/interact/merchant/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "182daafc2c7e4be1beddba0a6979cbf4",
+        "merchantCode": "\bTM100001",
+        "brandName": "清风",
+        "originFlag": null,
+        "merchantName": "天猫清风",
+        "channelId": "7e2a6d2d8f3a4b8ebd3a1111898795ce",
+        "isDelete": null,
+        "createId": null,
+        "updateId": "936451df9a7443c3a59102b193e3b7ff",
+        "createTime": "2018-09-20 15:56:49",
+        "updateTime": "2018-09-20 15:56:50"
+      },
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "64747d97fe9a4095918619ce4a3d4b33",
+        "name": "清风2层100抽",
+        "code": "QF10000021",
+        "price": 9.9,
+        "number": 100000,
+        "sellerId": "182daafc2c7e4be1beddba0a6979cbf",
+        "shopId": "ABCEFGHIJKLMN",
+        "img": "",
+        "banner": null,
+        "isDelete": null,
+        "remark": null,
+        "specRemark": null,
+        "createId": null,
+        "createTime": "2018-09-20 19:39:01",
+        "updateId": "936451df9a7443c3a59102b193e3b7ff",
+        "updateTime": "2018-09-20 19:39:01",
+        "interactId": "92f34793989846a098e7135996242d8c",
+        "userDayNumber": 10,
+        "type": 0
+      },
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "92f34793989846a098e7135996242d8c",
+        "shopName": "天猫清风旗舰店",
+        "shopCode": "\bQJD100001",
+        "sellerId": "182daafc2c7e4be1beddba0a6979cbf4",
+        "sessionKey": "ABCEFGHIJKLMN",
+        "isDelete": null,
+        "remark": null,
+        "createId": "936451df9a7443c3a59102b193e3b7ff",
+        "createTime": "2018-09-20 17:39:34",
+        "updateId": "936451df9a7443c3a59102b193e3b7ff",
+        "updateTime": "2018-09-20 17:39:38",
+        "interactId": "87a2d062c6b643c594f5fda509387fa3",
+        "isVip": 10
+      },
+      "msg": "成功"
+    })
+  }
 };
 
 // export default noProxy ? {

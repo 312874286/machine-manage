@@ -63,7 +63,7 @@ export async function deleteShops({ params }) {
   });
 }
 export async function getInteractGoodsList({ params }) {
-  return fetch.get(api.getInteractGoodsList, {
+  return fetch.post(api.getInteractGoodsList, {
     body: stringify(params),
   });
 }
@@ -74,6 +74,21 @@ export async function getInteractMerchantList({ params }) {
 }
 export async function getInteractShopsList({ params }) {
   return fetch.post(api.getInteractShopsList, {
+    body: stringify(params),
+  });
+}
+export async function getMerchantDetail({ params }) {
+  return fetch.post(api.getMerchantDetail, {
+    body: stringify(params),
+  });
+}
+export async function getShopsDetail({ params }) {
+  return fetch.post(api.getShopsDetail, {
+    body: stringify(params),
+  });
+}
+export async function getGoodsDetail({ params }) {
+  return fetch.post(api.getGoodsDetail, {
     body: stringify(params),
   });
 }

@@ -80,7 +80,9 @@ const api = map({
   getInteractGoodsList: '/project/interact/goods/getList',
   getInteractMerchantList: '/project/interact/merchant/getList',
   getInteractShopsList: '/project/interact/shops/getList',
-
+  getMerchantDetail: '/project/interact/merchant/detail',
+  getGoodsDetail: '/project/interact/goods/detail',
+  getShopsDetail: '/project/interact/shops/detail',
   // 第三步 选择机器
   getInteractMachinePlanList: '/project/interact/machine/planList',
   addInteractMachine: '/project/interact/machine/add',
