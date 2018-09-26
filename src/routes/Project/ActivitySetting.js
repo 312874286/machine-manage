@@ -1926,13 +1926,13 @@ export default class activitySettingList extends PureComponent {
           goodsHandleCancel={this.goodsModalHandleCancel}
           goodsModalhandleTableChange={this.goodsModalhandleTableChange}
         />
-        <Modal title="统计" visible={true} >
+        <Modal title="统计" visible={true} width={1000} style={{top: 20}}>
           <Tabs defaultActiveKey="1">
             <TabPane tab="PV/UV/订单量" key="1">
-              <GoodsStatistics />
+              <OrderStatistics />
             </TabPane>
             <TabPane tab="商品出货量" key="2">
-              <OrderStatistics />
+              <GoodsStatistics />
             </TabPane>
           </Tabs>
         </Modal>
