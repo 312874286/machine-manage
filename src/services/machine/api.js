@@ -37,7 +37,7 @@ const api = map({
 
   updateLogStatus: '',
   returnDeskTop: '/machine/machine/cutDesktop',
-  updateLocaleMachineSetting: '/machine/machine/updateMachine',
+  updateLocaleMachineSetting: '/machine/machine/updateLocale',
   updateMachineCode: '/machine/machine/updateMachineCode',
   findMachineInfoById: '/machine/machine/findMachineInfoById',
 

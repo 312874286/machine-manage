@@ -2380,7 +2380,7 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'POST /machine/machine/updateMachine':  (req, res) => {
+  'POST /machine/machine/updateLocale':  (req, res) => {
     res.send({
       "code": 0,
       "data": null,
