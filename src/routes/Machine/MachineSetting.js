@@ -2286,6 +2286,7 @@ export default class machineSettingList extends PureComponent {
       this.handleEditClick(this.state.modalData)
     } else if (key === '1') {
       // 管理APP
+      this.appRefresh()
     } else if (key === '2') {
       // 管理货道
       this.handleManageAisleClick(this.state.modalData)
