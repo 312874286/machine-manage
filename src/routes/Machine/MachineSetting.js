@@ -1163,7 +1163,7 @@ export default class machineSettingList extends PureComponent {
       //   editPointEditModalConfirmLoading: true,
       // });
       let params = {
-        machineId: this.state.modalData.id,
+        id: this.state.modalData.id,
         localeId: localeId,
         // openStatus: this.state.switchStatus ? 0 : 1,
         // monitorStart: this.state.supervisoryStartTime,
