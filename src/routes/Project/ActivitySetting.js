@@ -30,8 +30,8 @@ import GoodsModal from "../../components/Project/GoodsModal";
 import VipModal from "../../components/Project/VipModal";
 import moment from "moment/moment";
 import { getAccountMenus } from "../../utils/authority";
-import GoodsStatistics from '../../components/Project/Activity/GoodsStatistics';
-import OrderStatistics from '../../components/Project/Activity/OrderStatistics';
+import GoodsStatistics from "../../components/Project/Activity/GoodsStatistics";
+import OrderStatistics from "../../components/Project/Activity/OrderStatistics";
 
 const TabPane = Tabs.TabPane;
 
@@ -623,9 +623,9 @@ export default class activitySettingList extends PureComponent {
     shopClist: [],
     vipTables: [],
 
+    StatisticsTabsVisible: false,
     OrderStatistics: [],
     GoodsStatistics: [],
-    CurrentActivity: null,
 
     account: {}
   };
@@ -1599,9 +1599,49 @@ export default class activitySettingList extends PureComponent {
     return vipTables;
   };
 
-  getOrderStatistics = () => {};
+  getOrderStatistics = data => {
+    console.log(1);
+    this.props
+      .dispatch({
+        type: "activitySetting/getOrderStatistics",
+        payload: {
+          params: {
+            activityCode: this.state.logId,
+            name: "pvuv"
+          }
+        }
+      })
+      .then(resp => {
+        if (resp && resp.code === 0) {
+          this.setState({
+            StatisticsTabsLoading: false,
+            OrderStatistics: resp.data
+          });
+        }
+      });
+  };
 
-  getGoodsStatistics = () => {};
+  getGoodsStatistics = () => {
+    console.log(2);
+    this.props
+      .dispatch({
+        type: "activitySetting/getGoodsStatistics",
+        payload: {
+          params: {
+            activityCode: this.state.logId,
+            name: "goodsInfo"
+          }
+        }
+      })
+      .then(resp => {
+        if (resp && resp.code === 0) {
+          this.setState({
+            StatisticsTabsLoading: false,
+            GoodsStatistics: resp.data
+          });
+        }
+      });
+  };
 
   goodsHandleChange = row => {
     const newData = [...this.state.goodsInitData];
@@ -1616,6 +1656,32 @@ export default class activitySettingList extends PureComponent {
     // console.log('goodsHandleChange::', row);
   };
 
+  handleStatisticsTabsVisible = () => {
+    this.setState({
+      StatisticsTabsVisible: false,
+      GoodsStatistics: [],
+      OrderStatistics: []
+    });
+  };
+  handleMachineStatisticsClick(data) {
+    this.setState(
+      {
+        StatisticsTabsLoading: true,
+        StatisticsTabsVisible: true,
+        logId: data.id
+      },
+      () => {
+        this.getOrderStatistics();
+      }
+    );
+  }
+  handleStatisticsTabsChange(key) {
+    if (key === "1") {
+      this.getOrderStatistics();
+    } else {
+      this.getGoodsStatistics();
+    }
+  }
   render() {
     const {
       activitySetting: { list, page, unColumn },
@@ -1687,7 +1753,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         fixed: "right",
-        width: 200,
+        width: 320,
         title: "操作",
         render: (text, item) => (
           <Fragment>
@@ -1757,6 +1823,15 @@ export default class activitySettingList extends PureComponent {
               }
             >
               统计
+            </a>
+            <Divider type="vertical" />
+            {/*机器统计*/}
+            <a
+              onClick={() => {
+                this.handleMachineStatisticsClick(item);
+              }}
+            >
+              机器统计
             </a>
           </Fragment>
         )
@@ -1926,13 +2001,43 @@ export default class activitySettingList extends PureComponent {
           goodsHandleCancel={this.goodsModalHandleCancel}
           goodsModalhandleTableChange={this.goodsModalhandleTableChange}
         />
-        <Modal title="统计" visible={true} width={1000} style={{top: 20}}>
-          <Tabs defaultActiveKey="1">
+        <Modal
+          className={styles.statisticsTabs}
+          title="机器统计"
+          visible={this.state.StatisticsTabsVisible}
+          width={1000}
+          style={{ top: 20 }}
+          footer={[
+            <Button
+              key="ok"
+              type="primary"
+              loading={this.state.StatisticsTabsLoading}
+              onClick={this.handleStatisticsTabsVisible}
+              style={{ margin: "0 auto", display: "block" }}
+            >
+              确定
+            </Button>
+          ]}
+        >
+          <Tabs
+            defaultActiveKey="1"
+            onChange={key => {
+              () => {
+                this.handleStatisticsTabsChange(key);
+              };
+            }}
+          >
             <TabPane tab="PV/UV/订单量" key="1">
-              <OrderStatistics />
+              <OrderStatistics
+                datas={this.state.OrderStatistics}
+                loading={this.state.StatisticsTabsLoading}
+              />
             </TabPane>
             <TabPane tab="商品出货量" key="2">
-              <GoodsStatistics />
+              <GoodsStatistics
+                datas={this.state.GoodsStatistics}
+                loading={this.state.StatisticsTabsLoading}
+              />
             </TabPane>
           </Tabs>
         </Modal>

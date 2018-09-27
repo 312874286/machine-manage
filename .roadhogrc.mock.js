@@ -5494,7 +5494,17 @@ const proxy = {
       ],
       "msg": "成功"
     })
-  }
+  },
+  'POST /statistics/TemplateExecute': (req, res) => {
+    const data = {"code":0,"msg":"成功"}
+    console.log(req.body.name==="goodsInfo",req.body.name)
+    if(req.body.name==="goodsInfo"){
+      data.data = [{"goods":3, "goodsName":"name1", "machineCode":"18605087", "pos":"1层东门", "activityId":"f6623e3246244f9e81e0335f04aea7bd", "time":"2018-09-26","goodsCode":"1"},{"goods":4,"goodsName":"name2","machineCode":"18605087", "pos":"1层东门","activityId":"f6623e3246244f9e81e0335f04aea7bd","time":"2018-09-26","goodsCode":"2"}]
+    }else{
+      data.data = [{"machineCode":"18342471","point":"点位","data":[{"date":"2018-09-25","pv":10,"uv":9,"order":9,"shipment":9,"fans":20},{"date":"2018-09-26","pv":100,"uv":99,"order":99,"shipment":99,"fans":200}]},{"machineCode":"18342472","point":"点位","data":[{"date":"2018-09-25","pv":10,"uv":9,"order":9,"shipment":9,"fans":20},{"date":"2018-09-26","pv":100,"uv":99,"order":99,"shipment":99,"fans":200}]}]
+    }
+    res.send(data)
+  },
 };
 
 // export default noProxy ? {
