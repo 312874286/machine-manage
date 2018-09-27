@@ -116,7 +116,7 @@ export default {
     },
     *getShopsDetail({ payload: { params } }, { call }) {
       const response = yield call(getShopsDetail, { params });
-      return response,data;
+      return response.data;
     },
     *getGoodsDetail({ payload: { params } }, { call }) {
       const response = yield call(getGoodsDetail, { params });

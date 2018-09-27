@@ -549,7 +549,7 @@ export default class areaSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'goodsSetting/delGoodsSetting',
+        type: 'interactSamplingSetting/deleteGoods',
         payload: {
           params,
         },
@@ -570,14 +570,14 @@ export default class areaSettingList extends PureComponent {
       modalType: true,
     });
     this.props.dispatch({
-      type: 'interactSamplingSetting/getGoodsSettingDetail',
+      type: 'interactSamplingSetting/getGoodsDetail',
       payload: {
-        restParams: {
+        params: {
           id: item.id,
         },
       },
     }).then((res) => {
-      this.getShopList(res.sellerId)
+      this.getInteractShopList(res.sellerId)
       this.setModalData(res);
     });
   }
@@ -913,9 +913,9 @@ export default class areaSettingList extends PureComponent {
     });
     this.getChannelList()
     this.props.dispatch({
-      type: 'interactSamplingSetting/getGoodsDetail',
+      type: 'interactSamplingSetting/getShopsDetail',
       payload: {
-        restParams: {
+        params: {
           id: item.id,
         },
       },
@@ -925,24 +925,26 @@ export default class areaSettingList extends PureComponent {
   }
   // 设置modal 数据
   setShopsModalData = (data) => {
-    const { expandedRowKeys } = this.state
     if (data) {
       this.shopsForm.setFieldsValue({
         shopCode: data.shopCode || '',
         shopName: data.shopName || '',
         sellerId: data.sellerId || '',
+        isVip: data.isVip || 0
       });
     } else {
       this.shopsForm.setFieldsValue({
         shopCode: undefined,
         shopName: undefined,
         sellerId: undefined,
+        isVip: 0
       });
     }
   }
   saveAddGoods = () => {
     // saveAndAddModal
     this.handleShopsAdd('saveAddGoods')
+    this.getShops()
   }
   RadioChange = (e) => {
     console.log('value', e)
@@ -1195,7 +1197,7 @@ export default class areaSettingList extends PureComponent {
       ];
       return (
         <Table
-          rowKey={record => record.id || record.code}
+          rowKey={record => record.id}
           expandedRowRender={expandedGoodsRowRender}
           onExpandedRowsChange={onExpandedRowsShopsChange}
           columns={columns}
