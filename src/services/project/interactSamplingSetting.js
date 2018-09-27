@@ -32,6 +32,11 @@ export async function interactNext({ restParams }) {
     restParams,
   });
 }
+export async function interactUpdate({ params }) {
+  return fetch.post(api.interactUpdate, {
+    body: stringify(params),
+  });
+}
 export async function updateGoods({ params }) {
   return fetch.post(api.updateGoods, {
     body: stringify(params),
@@ -74,6 +79,11 @@ export async function getInteractMerchantList({ params }) {
 }
 export async function getInteractShopsList({ params }) {
   return fetch.post(api.getInteractShopsList, {
+    body: stringify(params),
+  });
+}
+export async function interactDetail({ params }) {
+  return fetch.post(api.interactDetail, {
     body: stringify(params),
   });
 }
@@ -126,7 +136,7 @@ export async function getInteractMachineGoodsList({ restParams }) {
 }
 export async function ruleInteract({ params }) {
   return fetch.postJSON(api.ruleInteract, {
-    body: stringify(params),
+    body: JSON.stringify(params),
   });
 }
 export async function getChannelSettingList({ params, restParams }) {

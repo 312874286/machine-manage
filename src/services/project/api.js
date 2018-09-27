@@ -66,6 +66,8 @@ const api = map({
   // 互派活动
   interactLists: '/project/interact/list?status={status}&keyword={keyword}&pageNo={pageNo}',
   interactAdd: '/project/interact/add',
+  interactDetail: '/project/interact/detail',
+  interactUpdate: '/project/interact/update',
   // 第二步 商户商品信息
   merchantAdd: '/project/interact/merchant/add',
   shopsAdd: '/project/interact/shops/add',

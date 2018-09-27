@@ -273,7 +273,8 @@ export default class areaSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <a onClick={() => this.props.history.push({pathname: `/project/addBasicInteractSampling`, query: {id: item.id}})}
+            >编辑</a>
           </Fragment>
         ),
       },

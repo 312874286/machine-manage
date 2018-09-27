@@ -209,7 +209,7 @@ export const getRouterData = (app) => {
     '/project/addMachineInteractSampling/:id': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MachineInteractSampling.js')),
     },
-    '/project/addRuleInteractSampling': {
+    '/project/addRuleInteractSampling/:id': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/RuleInteractSampling.js')),
     },
     '/project/game': {

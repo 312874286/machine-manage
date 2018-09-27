@@ -30,9 +30,18 @@ export default class areaSettingList extends PureComponent {
     current: 0,
     GameList: [],
     type: true,
+    id: '',
   };
   componentDidMount() {
     this.getGameList()
+    if (this.props.location.query) {
+      const { id } = this.props.location.query;
+      this.setState({
+        id,
+      }, () => {
+        this.getInteractDetail()
+      })
+    }
   }
   getGameList = () => {
     // getGameList
@@ -48,8 +57,41 @@ export default class areaSettingList extends PureComponent {
       }
     });
   }
+  // interactDetail
+  getInteractDetail = () => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/interactDetail',
+      payload: {
+        params: {
+          id: this.state.id
+        },
+      },
+    }).then((res) => {
+      this.setModalData(res)
+    });
+  }
+  setModalData = (data) => {
+    if (data) {
+      this.props.form.setFieldsValue({
+        name: data.name || undefined,
+        planCode: data.planCode || undefined,
+        gameId: data.gameId || undefined,
+        day: data.day || undefined,
+        manager: data.manager || undefined
+      });
+    } else {
+      this.props.form.setFieldsValue({
+        name: undefined,
+        planCode: undefined,
+        gameId: undefined,
+        day: undefined,
+        manager: undefined
+      });
+    }
+  }
   // interactAdd
   next = (type) => {
+    let url = 'interactSamplingSetting/interactAdd'
     this.setState({
       type: (type === 0) ? false : true
     }, () => {
@@ -62,18 +104,33 @@ export default class areaSettingList extends PureComponent {
           ...fieldsValue,
           type,
         };
+        if (this.state.id) {
+          url = 'interactSamplingSetting/interactUpdate',
+          params = {
+            ...fieldsValue,
+            type,
+            id: this.state.id,
+          };
+        }
         this.props.dispatch({
-          type: 'interactSamplingSetting/interactAdd',
+          type: url,
           payload: {
             params,
           },
         }).then((res) => {
           if (res && res.code === 0) {
-            if (type === 1) {
-              this.props.history.push({pathname: `/project/addMerchantGoodsInteractSampling/${res.data}`})
+            if (this.state.id && type === 1) {
+              if (type === 1) {
+                this.props.history.push({pathname: `/project/addMerchantGoodsInteractSampling/${this.state.id}`})
+                return false
+              }
             } else {
-              this.props.history.push({pathname: '/project/sampling-setting', query: {statusValue: 3}})
+              if (type === 1) {
+                this.props.history.push({pathname: `/project/addMerchantGoodsInteractSampling/${res.data}`})
+                return false
+              }
             }
+            this.props.history.push({pathname: '/project/sampling-setting'})
           }
         });
       })
@@ -96,7 +153,8 @@ export default class areaSettingList extends PureComponent {
         sm: { span: 21 },
       },
     };
-    const steps = [{
+    const steps = [
+      {
       title: '基本信息',
       content: '',
     }, {

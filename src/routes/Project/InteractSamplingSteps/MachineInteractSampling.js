@@ -27,9 +27,13 @@ const FormItem = Form.Item;
 @Form.create()
 export default class areaSettingList extends PureComponent {
   state = {
-    current: 2
+    current: 2,
+    interactSampling: ''
   };
   componentDidMount() {
+    this.setState({
+      interactSampling: this.props.match.params.id
+    })
   }
   render() {
     const {
@@ -81,7 +85,7 @@ export default class areaSettingList extends PureComponent {
                 current > 0
                 && (
                   <Button type="primary" style={{ marginLeft: 8 }}
-                          onClick={() => this.props.history.push({pathname: '/project/addMerchantGoodsInteractSampling', query: {statusValue: 3}})}>
+                          onClick={() => this.props.history.push({pathname: `/project/addMerchantGoodsInteractSampling/${this.state.interactSampling}`})}>
                     上一步
                   </Button>
                 )
@@ -89,7 +93,7 @@ export default class areaSettingList extends PureComponent {
               {
                 current < steps.length - 1
                 && <Button type="primary"
-                           onClick={() => this.props.history.push({pathname: '/project/addRuleInteractSampling', query: {statusValue: 3}})}>下一步</Button>
+                           onClick={() => this.props.history.push({pathname: `/project/addRuleInteractSampling/${this.state.interactSampling}`})}>下一步</Button>
               }
             </div>
         </Card>

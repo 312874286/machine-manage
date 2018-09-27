@@ -314,7 +314,7 @@ const CreateGoodsForm = Form.create()(
               {getFieldDecorator('code', {
                 rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}` }],
               })(modalType ? (
-                <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`} disabled />
+                <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`} />
                 ) : (
                   <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`}/>
                 ))}
@@ -547,15 +547,14 @@ export default class areaSettingList extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id };
+      const params = { goodsId: item.id, interactId: this.props.match.params.id };
       this.props.dispatch({
         type: 'interactSamplingSetting/deleteGoods',
         payload: {
           params,
         },
       }).then(() => {
-        // message.success('Click on Yes');
-        this.getLists();
+        this.getGoods()
         this.setState({
           editModalConfirmLoading: false,
         });
@@ -889,15 +888,14 @@ export default class areaSettingList extends PureComponent {
       editShopsModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id };
+      const params = { shopsId: item.id, interactId: this.props.match.params.id };
       this.props.dispatch({
-        type: 'interactSamplingSetting/delShopSetting',
+        type: 'interactSamplingSetting/deleteShops',
         payload: {
           params,
         },
       }).then(() => {
-        // message.success('Click on Yes');
-        this.getLists();
+        this.getShops()
         this.setState({
           editShopsModalConfirmLoading: false,
         });
@@ -972,15 +970,14 @@ export default class areaSettingList extends PureComponent {
       editMerchantModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id };
+      const params = { merchantId: item.id, interactId: this.props.match.params.id };
       this.props.dispatch({
-        type: 'interactSamplingSetting/delMerchantSetting',
+        type: 'interactSamplingSetting/deleteMerchant',
         payload: {
           params,
         },
       }).then(() => {
-        // message.success('Click on Yes');
-        this.getLists();
+        this.getInteractMerchantList(this.state.interactSampling)
         this.setState({
           editMerchantModalConfirmLoading: false,
         });
@@ -1106,6 +1103,9 @@ export default class areaSettingList extends PureComponent {
         })
       }
     });
+  }
+  next = (type) => {
+
   }
   render() {
     const {
@@ -1261,13 +1261,13 @@ export default class areaSettingList extends PureComponent {
                 <Button onClick={() => this.next()}>取消</Button>
               }
               {
-                <Button onClick={() => this.next()}>暂存</Button>
+                <Button onClick={() => this.next(1)}>暂存</Button>
               }
               {
                 current > 0
                 && (
                   <Button type="primary" style={{ marginLeft: 8 }}
-                          onClick={() => this.props.history.push({pathname: '/project/addBasicInteractSampling', query: {statusValue: 3}})}>
+                          onClick={() => this.props.history.push({pathname: '/project/addBasicInteractSampling', query: {id: this.state.interactSampling}})}>
                     上一步
                   </Button>
                 )
@@ -1275,7 +1275,7 @@ export default class areaSettingList extends PureComponent {
               {
                 current < steps.length - 1
                 && <Button type="primary"
-                           onClick={() => this.props.history.push({pathname: '/project/addMachineInteractSampling', query: {statusValue: 3}})}>下一步</Button>
+                           onClick={() => this.props.history.push({pathname: `/project/addMachineInteractSampling/${this.state.interactSampling}`})}>下一步</Button>
               }
             </div>
         </Card>

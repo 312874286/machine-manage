@@ -26,6 +26,8 @@ import {
   getMerchantDetail,
   getGoodsDetail,
   getShopsDetail,
+  interactDetail,
+  interactUpdate,
 } from '../../services/project/interactSamplingSetting';
 
 
@@ -74,6 +76,10 @@ export default {
       const response = yield call(interactNext, { restParams });
       return response;
     },
+    *interactUpdate({ payload: { params } }, { call }) {
+      const response = yield call(interactUpdate, { params });
+      return response;
+    },
     *updateGoods({ payload: { params } }, { call }) {
       const response = yield call(updateGoods, { params });
       return response;
@@ -109,6 +115,10 @@ export default {
     *getInteractShopsList({ payload: { params } }, { call }) {
       const response = yield call(getInteractShopsList, { params });
       return response;
+    },
+    *interactDetail({ payload: { params } }, { call }) {
+      const response = yield call(interactDetail, { params });
+      return response.data;
     },
     *getMerchantDetail({ payload: { params } }, { call }) {
       const response = yield call(getMerchantDetail, { params });
