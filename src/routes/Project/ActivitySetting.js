@@ -1607,7 +1607,8 @@ export default class activitySettingList extends PureComponent {
         payload: {
           params: {
             activityCode: this.state.logId,
-            name: "pvuv"
+            name: "pvuv",
+            outputType: 1
           }
         }
       })
@@ -1629,7 +1630,8 @@ export default class activitySettingList extends PureComponent {
         payload: {
           params: {
             activityCode: this.state.logId,
-            name: "goodsInfo"
+            name: "goodsInfo",
+            outputType: 1
           }
         }
       })
