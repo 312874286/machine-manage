@@ -1677,13 +1677,13 @@ export default class activitySettingList extends PureComponent {
       }
     );
   }
-  handleStatisticsTabsChange(key) {
+  handleStatisticsTabsChange = key => {
     if (key === "1") {
       this.getOrderStatistics();
     } else {
       this.getGoodsStatistics();
     }
-  }
+  };
   render() {
     const {
       activitySetting: { list, page, unColumn },
@@ -2009,6 +2009,7 @@ export default class activitySettingList extends PureComponent {
           visible={this.state.StatisticsTabsVisible}
           width={1000}
           style={{ top: 20 }}
+          onCancel={this.handleStatisticsTabsVisible}
           footer={[
             <Button
               key="ok"
@@ -2021,14 +2022,7 @@ export default class activitySettingList extends PureComponent {
             </Button>
           ]}
         >
-          <Tabs
-            defaultActiveKey="1"
-            onChange={key => {
-              () => {
-                this.handleStatisticsTabsChange(key);
-              };
-            }}
-          >
+          <Tabs defaultActiveKey="1" onChange={this.handleStatisticsTabsChange}>
             <TabPane tab="PV/UV/订单量" key="1">
               <OrderStatistics
                 datas={this.state.OrderStatistics}
