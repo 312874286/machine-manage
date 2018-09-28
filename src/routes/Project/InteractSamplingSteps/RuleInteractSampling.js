@@ -10,14 +10,13 @@ import {
   Input,
   DatePicker,
   Steps,
-  Checkbox, Table
+  Checkbox, Table, message, InputNumber
 } from 'antd';
 import StandardTable from '../../../components/StandardTable/index';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import styles from './BasicInteractSampling.less';
 import {getAccountMenus} from "../../../utils/authority";
 import RuleInteractSampling from '../../../components/Project/RuleInteractSampling'
-
 const Step = Steps.Step;
 const FormItem = Form.Item;
 
@@ -60,31 +59,17 @@ export default class areaSettingList extends PureComponent {
   }
   setModalData = (data) => {
     if (data) {
-      if (data.times === -1) {
-        this.setState({
-          times: data.times
-        })
-      }
-      if (data.dayTimes === -1) {
-        this.setState({
-          dayTimes: data.dayTimes
-        })
-      }
-      if (data.number === -1) {
-        this.setState({
-          number: data.number
-        })
-      }
-      if (data.dayNumber === -1) {
-        this.setState({
-          dayNumber: data.dayNumber
-        })
-      }
+      this.setState({
+        times: data.times === -1 ? true : false,
+        dayTimes: data.dayTimes === -1 ? true : false,
+        number: data.number === -1 ? true : false,
+        dayNumber: data.dayNumber === -1 ? true : false
+      })
       this.props.form.setFieldsValue({
-        times: data.times || undefined,
-        dayTimes: data.dayTimes || undefined,
-        number: data.number || undefined,
-        dayNumber: data.dayNumber || undefined,
+        times: data.times === -1 ? ' ' :  data.times || undefined,
+        dayTimes: data.dayTimes === -1 ? ' ' :  data.dayTimes || undefined,
+        number: data.number === -1 ? ' ' :  data.number || undefined,
+        dayNumber: data.dayNumber === -1 ? ' ' :  data.dayNumber || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
@@ -135,7 +120,7 @@ export default class areaSettingList extends PureComponent {
       if (res && res.code === 0) {
         this.setState({
           allGoods: res.data.map((item, index) => {
-            return { key: index, id: item.id, userDayNumber: item.userDayNumber || 0, name: item.name }
+            return { key: index, goodsId: item.id, userDayNumber: item.userDayNumber || 0, name: item.name, check: false }
           })
         })
       }
@@ -146,9 +131,11 @@ export default class areaSettingList extends PureComponent {
     const { allGoods } = this.state
     if (val.checked) {
       console.log('allGoods', allGoods)
-      allGoods[val.key].userDayNumber = -1
+      allGoods[val.key].userDayNumber = ' '
+      allGoods[val.key].check = true
     } else {
-      allGoods[val.key].userDayNumber = 0
+      allGoods[val.key].userDayNumber = val.userDayNumber
+      allGoods[val.key].check = false
     }
     this.setState({
       allGoods: [],
@@ -159,8 +146,13 @@ export default class areaSettingList extends PureComponent {
     })
   }
   check = (type) => {
+    message.config({
+      top: 100,
+      duration: 2,
+      maxCount: 3,
+    });
     let url = 'interactSamplingSetting/interactAdd'
-    const { times, dayTimes, number, dayNumber } = this.state
+    const { times, dayTimes, number, dayNumber, allGoods } = this.state
     this.setState({
       type: (type === 0) ? false : true
     }, () => {
@@ -168,6 +160,30 @@ export default class areaSettingList extends PureComponent {
         console.log('(err && type === 1)', (err && type === 1))
         if (type === 1 && err) {
           return false
+        }
+        if (!times) {
+          if (!fieldsValue.times) {
+            message.info('如没有选择不限，请填写同一用户参与活动次数')
+            return false
+          }
+        }
+        if (!dayTimes) {
+          if (!fieldsValue.dayTimes) {
+            message.info('如没有选择不限，请填写同一用户参与活动次数')
+            return false
+          }
+        }
+        if (!number) {
+          if (!fieldsValue.number) {
+            message.info('如没有选择不限，请填写同一用户参与活动次数')
+            return false
+          }
+        }
+        if (!dayNumber) {
+          if (!fieldsValue.dayNumber) {
+            message.info('如没有选择不限，请填写同一用户参与活动次数')
+            return false
+          }
         }
         let params = {
           ...fieldsValue,
@@ -184,6 +200,24 @@ export default class areaSettingList extends PureComponent {
             id: this.state.interactSampling,
           };
         }
+        if (allGoods.length > 0) {
+          for (let i = 0; i < allGoods.length; i++) {
+            if (!allGoods[i].check) {
+              if (allGoods[i].userDayNumber === 0) {
+                message.info('如没有选择不限，请填写可派发数量')
+                return false
+              }
+            }
+            if (allGoods[i].check) {
+              allGoods[i].userDayNumber = -1
+            }
+          }
+        }
+        params = {
+          ...params,
+          id: this.state.interactSampling,
+          goodsRule: allGoods
+        };
         this.props.dispatch({
           type: url,
           payload: {
@@ -256,9 +290,9 @@ export default class areaSettingList extends PureComponent {
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('times', {
-                        rules: [{ required: !this.state.times, whitespace: true, message: '请输入同一用户参与活动次数' }],
+                        // rules: [{ required: !this.state.times, whitespace: false, message: '请输入同一用户参与活动次数' }],
                       })
-                      (<Input
+                      (<InputNumber
                         placeholder="请输入同一用户参与活动次数"
                         disabled={this.state.times}
                       />)}
@@ -267,8 +301,10 @@ export default class areaSettingList extends PureComponent {
                   <Col span={8}>
                     <FormItem>
                       <Checkbox
-                        value={this.state.times}
+                        checked={this.state.times}
+                        // value={this.state.times}
                         onChange={this.handleTimesChange}>
+                        不限
                       </Checkbox>
                     </FormItem>
                   </Col>
@@ -277,9 +313,9 @@ export default class areaSettingList extends PureComponent {
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('dayTimes', {
-                        rules: [{ required: !this.state.dayTimes, whitespace: true, message: '请输入同一用户每天参与活动次数' }],
+                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
                       })
-                      (<Input
+                      (<InputNumber
                         placeholder="请输入同一用户每天参与活动次数"
                         disabled={this.state.dayTimes}
                       />)}
@@ -288,8 +324,10 @@ export default class areaSettingList extends PureComponent {
                   <Col span={8}>
                     <FormItem>
                       <Checkbox
-                        value={this.state.dayTimes}
+                        checked={this.state.dayTimes}
+                        // value={this.state.dayTimes}
                         onChange={this.handleDayTimesChange}>
+                        不限
                       </Checkbox>
                     </FormItem>
                   </Col>
@@ -298,9 +336,9 @@ export default class areaSettingList extends PureComponent {
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('number', {
-                        rules: [{ required: !this.state.number, whitespace: true, message: '请输入同一用户获得商品次数' }],
+                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户获得商品次数' }],
                       })
-                      (<Input
+                      (<InputNumber
                         placeholder="请输入同一用户获得商品次数"
                         disabled={this.state.number}
                       />)}
@@ -309,8 +347,10 @@ export default class areaSettingList extends PureComponent {
                   <Col span={8}>
                     <FormItem>
                       <Checkbox
-                        value={this.state.number}
+                        checked={this.state.number}
+                        // value={this.state.number}
                         onChange={this.handleNumberChange}>
+                        不限
                       </Checkbox>
                     </FormItem>
                   </Col>
@@ -319,9 +359,9 @@ export default class areaSettingList extends PureComponent {
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('dayNumber', {
-                        rules: [{ required: !this.state.dayNumber, whitespace: true, message: '请输入同一用户每天参与活动次数' }],
+                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
                       })
-                      (<Input
+                      (<InputNumber
                         placeholder="请输入同一用户每天参与活动次数"
                         disabled={this.state.dayNumber}
                       />)}
@@ -330,8 +370,10 @@ export default class areaSettingList extends PureComponent {
                   <Col span={8}>
                     <FormItem>
                       <Checkbox
-                        value={this.state.dayNumber}
+                        checked={this.state.dayNumber}
+                        // value={this.state.dayNumber}
                         onChange={this.handleDayNumberChange}>
+                        不限
                       </Checkbox>
                     </FormItem>
                   </Col>

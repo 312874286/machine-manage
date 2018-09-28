@@ -1,4 +1,4 @@
-import { Table, Input, Button, Popconfirm, Form, Checkbox } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Checkbox, InputNumber } from 'antd';
 import React, { PureComponent } from 'react';
 import './RuleInteractSampling.less'
 
@@ -83,31 +83,22 @@ class EditableCell extends React.Component {
                         required: true,
                         message: `${title} is required.`,
                       }],
-                      initialValue: record[dataIndex],
+                      initialValue: record[dataIndex] === -1 ? ' ' : record[dataIndex],
                     })(
-                      <Input
+                      <InputNumber
                         ref={node => (this.input = node)}
-                        disabled={record['userDayNumber'] === -1 ? true : false}
-                        // onPressEnter={this.save}
+                        disabled={record['userDayNumber'] === ' ' ? true : false}
+                        // onBlur={this.save}
                       />
                     )}
                   </FormItem>
                 ) : (
-                  <FormItem style={{ margin: 0 }}>
-                    {form.getFieldDecorator(dataIndex, {
-                      rules: [{
-                        required: true,
-                        message: `${title} is required.`,
-                      }],
-                      initialValue: record[dataIndex],
-                    })(
-                      <Input
-                        ref={node => (this.input = node)}
-                        disabled={record['userDayNumber'] === -1 ? true : false}
-                        // onPressEnter={this.save}
-                      />
-                    )}
-                  </FormItem>
+                  <div
+                  className="editable-cell-value-wrap"
+                  style={{ paddingRight: 24 }}
+                  onClick={this.toggleEdit}>
+                  {restProps.children}
+                 </div>
                 )
               );
             }}
@@ -117,12 +108,21 @@ class EditableCell extends React.Component {
     );
   }
 }
-{/*<div*/}
-{/*className="editable-cell-value-wrap"*/}
-{/*style={{ paddingRight: 24 }}*/}
-{/*onClick={this.toggleEdit}>*/}
-{/*{restProps.children}*/}
-{/*</div>*/}
+{/*<FormItem style={{ margin: 0 }}>*/}
+  {/*{form.getFieldDecorator(dataIndex, {*/}
+    {/*rules: [{*/}
+      {/*required: true,*/}
+      {/*message: `${title} is required.`,*/}
+    {/*}],*/}
+    {/*initialValue: record[dataIndex],*/}
+  {/*})(*/}
+    {/*<Input*/}
+      {/*ref={node => (this.input = node)}*/}
+      {/*disabled={record['userDayNumber'] === ' ' ? true : false}*/}
+      {/*// onBlur={this.save}*/}
+    {/*/>*/}
+  {/*)}*/}
+{/*</FormItem>*/}
 export default class RuleInteractSampling extends PureComponent {
   constructor(props) {
     super(props);
@@ -135,15 +135,15 @@ export default class RuleInteractSampling extends PureComponent {
       dataIndex: 'userDayNumber',
       editable: true,
     }, {
-      title: 'operation',
+      title: '',
       dataIndex: 'key',
       render: (text, record) => {
         return (
           <Checkbox
             onChange={this.onChange}
             onClick={() => this.changeData(record)}
-            checked={record.userDayNumber === -1 ? true : false}
-            ></Checkbox>
+            checked={record.check}
+            >不限</Checkbox>
         );
       },
     }];
@@ -153,15 +153,21 @@ export default class RuleInteractSampling extends PureComponent {
       checked: false
     };
   }
-
+  componentWillReceiveProps(nextProps) {
+    const { data } = nextProps;
+    this.setState({
+      dataSource: data,
+    });
+  }
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
     this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
   }
   onChange = (e) => {
     console.log('row', e.target.checked, e)
+    // const { allGoods } = this.props
     setTimeout(() => {
-      this.props.handleChecked({ key: this.state.currentModalKey, checked: e.target.checked })
+      this.props.handleChecked({ key: this.state.currentModalKey, checked: e.target.checked, userDayNumber: 0 })
     }, 0)
   }
   changeData = (record) => {
@@ -171,20 +177,23 @@ export default class RuleInteractSampling extends PureComponent {
     })
   }
   handleSave = (row) => {
-    const newData = [...this.state.dataSource];
+    const newData = [...this.props.data];
     const index = newData.findIndex(item => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
       ...row,
     });
+    console.log('newData6666', newData, item, row)
+    this.props.handleChecked({ key: row.key, checked: row.check, userDayNumber: row.userDayNumber })
     this.setState({ dataSource: newData });
+    console.log('newData6666', this.state.dataSource)
   }
 
   render() {
     const { dataSource } = this.state;
     const { data } = this.props
-    console.log('data', data)
+    // console.log('data', data)
     const components = {
       body: {
         row: EditableFormRow,
@@ -222,6 +231,7 @@ export default class RuleInteractSampling extends PureComponent {
           {/*Add a row*/}
         {/*</Button>*/}
         <Table
+          pagination={false}
           rowKey={record => record.key}
           components={components}
           rowClassName={() => 'editable-row'}
