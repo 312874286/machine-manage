@@ -97,7 +97,7 @@ class EditableCell extends React.Component {
                   className="editable-cell-value-wrap"
                   style={{ paddingRight: 24 }}
                   onClick={this.toggleEdit}>
-                  {restProps.children}
+                  {restProps.children === -1 ? ' ' : restProps.children}
                  </div>
                 )
               );
