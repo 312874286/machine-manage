@@ -34,7 +34,8 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-const goodType = [{id: 0, name: '商品'}, {id: 1, name: '优惠券'}]
+// , {id: 1, name: '优惠券'}
+const goodType = [{id: 0, name: '商品'}]
 // 新建商户
 const CreateMerchantForm = Form.create()(
   (props) => {
