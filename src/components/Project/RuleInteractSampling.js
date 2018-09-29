@@ -1,6 +1,6 @@
 import { Table, Input, Button, Popconfirm, Form, Checkbox, InputNumber } from 'antd';
 import React, { PureComponent } from 'react';
-import './RuleInteractSampling.less'
+import styles from './RuleInteractSampling.less'
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -94,8 +94,9 @@ class EditableCell extends React.Component {
                   </FormItem>
                 ) : (
                   <div
-                  className="editable-cell-value-wrap"
-                  style={{ paddingRight: 24 }}
+                  // className="editable-cell-value-wrap"
+                  className={restProps.children ? styles.editorCell : '' }
+                  style={{ paddingRight: 24, border: restProps.children ? '1px solid #ccc' : 'none' }}
                   onClick={this.toggleEdit}>
                   {restProps.children === -1 ? ' ' : restProps.children}
                  </div>
