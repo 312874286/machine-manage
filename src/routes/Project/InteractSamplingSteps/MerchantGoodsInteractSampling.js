@@ -420,7 +420,7 @@ const CreateGoodsForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="商品价格">
               {getFieldDecorator('price', {
-                rules: [{ required: false, message: '请输入商品价格' }],
+                rules: [{ required: true, message: '请输入商品价格' }],
               })(<InputNumber placeholder="请输入商品价格" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="备注信息">
