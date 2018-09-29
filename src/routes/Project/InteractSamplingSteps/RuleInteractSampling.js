@@ -305,14 +305,14 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户参与活动次数</span>}>
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('dayTimes', {
                         // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
                       })
                       (<InputNumber
-                        placeholder="请输入同一用户参与活动次数"
+                        placeholder="请输入同一用户每天参与活动次数"
                         disabled={this.state.dayTimes}
                       />)}
                     </FormItem>
