@@ -48,7 +48,7 @@ const api = map({
   getTagList: '/machine/locale/getTagList?name={name}',
 
   addArea: '/admin/area/add',
-  updateArea: 'admin/area/update',
+  updateArea: '/admin/area/update',
   areaList: '/admin/area/pageList?pageNo={pageNo}&code={code}',
   areaDetail: '/admin/area/detail?code={code}',
 
@@ -56,7 +56,9 @@ const api = map({
   grabLog: '/machine/machine/grabLog',
   getLogs: '/machine/machine/getLogs?machineId={machineId}',
   findTemperature: '/machine/machine/findTemperature?machineId={machineId}',
-  updateTemperature: '/machine/machine/updateTemperature'
+  updateTemperature: '/machine/machine/updateTemperature',
+
+  getPointFromTag: '/machine/locale/getList?tag={tag}'
 });
 
 export default api;

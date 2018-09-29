@@ -39,14 +39,15 @@ const getValue = obj =>
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 
-const pointTypeOptions = [{id: 0, name: '活动点位'}, {id: 1, name: '渠道点位'}]
-const type = ['活动点位', '渠道点位']
+const pointTypeOptions = [{id: 1, name: '活动点位'}, {id: 0, name: '渠道点位'}]
+const type = ['渠道点位', '活动点位']
 
 const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, insertOptions,
       loadData, onChange, editModalConfirmLoading, modalType, verifyPhone,
-      verifyString, handleChange, getTagList, TagLists, handleTags, modalData, handleSupervisorySwitch, switchStatus, handTagLists
+      verifyString, handleChange, getTagList, TagLists, handleTags, modalData, handleSupervisorySwitch, switchStatus, handTagLists,
+      modalDataTags
     } = props;
     // const okHandle = () => {
     //   form.validateFields((err, fieldsValue) => {
@@ -83,7 +84,7 @@ const CreateForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="省市区">
+            <FormItem {...formItemLayout} label="省市区" style={{ display: modalType ? '' : 'none' }}>
               {getFieldDecorator('provinceCityAreaTrade', {
                 rules: [{ required: true, message: '省市区' }, {
                   validator: verifyString,
@@ -99,10 +100,32 @@ const CreateForm = Form.create()(
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="点位名称">
+            <FormItem {...formItemLayout} label="省市区" style={{ display: modalType ? 'none' : '' }}>
+              {getFieldDecorator('provinceCityAreaTrade', {
+                rules: [{ required: true, message: '省市区' }, {
+                  validator: verifyString,
+                }],
+                // initialValue: { defaultValue },
+              })(
+                <Cascader
+                  placeholder="请选择"
+                  options={insertOptions}
+                  loadData={loadData}
+                  onChange={onChange}
+                  changeOnSelect
+                  disabled
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="点位名称" style={{ display: modalType ? '' : 'none' }}>
               {getFieldDecorator('mall', {
                 rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
               })(<Input placeholder="请输入点位" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="点位名称" style={{ display: modalType ? 'none' : '' }}>
+              {getFieldDecorator('mall', {
+                rules: [{ required: true, whitespace: true, message: '请输入点位名称' }],
+              })(<Input placeholder="请输入点位" disabled/>)}
             </FormItem>
             <FormItem {...formItemLayout} label="具体位置">
               {getFieldDecorator('name', {
@@ -115,8 +138,8 @@ const CreateForm = Form.create()(
                 initialValue: '0',
               })(
                 <RadioGroup>
-                  <Radio value="0">活动点位</Radio>
-                  <Radio value="1">渠道点位</Radio>
+                  <Radio value="0">渠道点位</Radio>
+                  <Radio value="1">活动点位</Radio>
                 </RadioGroup>
               )}
             </FormItem>
@@ -147,24 +170,24 @@ const CreateForm = Form.create()(
               )}
             </FormItem>
             {/*<FormItem {...formItemLayout} label="标签">*/}
-              {/*{getFieldDecorator('tag', {*/}
-                {/*initialValue: []*/}
-              {/*})(*/}
-                {/*<Select*/}
-                  {/*mode="multiple"*/}
-                  {/*style={{ width: '100%' }}*/}
-                  {/*placeholder="请选择标签"*/}
-                  {/*// defaultValue={['a10', 'c12']}*/}
-                  {/*onChange={handleChange}*/}
-                  {/*// onSearch={getTagList}*/}
-                {/*>*/}
-                  {/*{TagLists.map((item) => {*/}
-                    {/*return (*/}
-                      {/*<Option value={item.id} key={item.name}>{item.name}</Option>*/}
-                    {/*);*/}
-                  {/*})}*/}
-                {/*</Select>*/}
-              {/*)}*/}
+            {/*{getFieldDecorator('tag', {*/}
+            {/*initialValue: []*/}
+            {/*})(*/}
+            {/*<Select*/}
+            {/*mode="multiple"*/}
+            {/*style={{ width: '100%' }}*/}
+            {/*placeholder="请选择标签"*/}
+            {/*// defaultValue={['a10', 'c12']}*/}
+            {/*onChange={handleChange}*/}
+            {/*// onSearch={getTagList}*/}
+            {/*>*/}
+            {/*{TagLists.map((item) => {*/}
+            {/*return (*/}
+            {/*<Option value={item.id} key={item.name}>{item.name}</Option>*/}
+            {/*);*/}
+            {/*})}*/}
+            {/*</Select>*/}
+            {/*)}*/}
             {/*</FormItem>*/}
             <FormItem {...formItemLayout} label="标签">
               {getFieldDecorator('titles', {
@@ -173,7 +196,7 @@ const CreateForm = Form.create()(
               })(
                 <EditableTagGroup
                   handleTags={handleTags}
-                  tags={modalData.tags}
+                  tags={modalDataTags.tags}
                   search={true}
                   handTagLists={handTagLists}
                   data={TagLists}
@@ -233,8 +256,9 @@ export default class PointSettingList extends PureComponent {
     supervisoryEndTime: '23:59:59',
     TagLists: [],
 
-    switchStatus: true,
-    type: ''
+    switchStatus: false,
+    type: '',
+    modalDataTags: { tags: [] }
 
   };
   componentWillMount() {
@@ -426,7 +450,7 @@ export default class PointSettingList extends PureComponent {
       TagLists: []
     });
     this.setModalData();
-    this.getTagList('')
+    // this.getTagList('')
   };
   // 删除modal 删除事件
   handleDelClick = (item) => {
@@ -499,14 +523,14 @@ export default class PointSettingList extends PureComponent {
     const provinceIndex = forInCityRes.index
     const districtRes = await this.getArea(city)
     const arrCity = province[provinceIndex].children
-    const forInDistrictRes = this.forIn(arrCity, city, districtRes)
-    const cityIndex = forInDistrictRes.index
-    const circleRes = await this.getArea(district)
-    const arrDistrict = province[provinceIndex].children[cityIndex].children
-    this.forIn(arrDistrict, district, circleRes)
+    this.forIn(arrCity, city, districtRes)
+    // const cityIndex = forInDistrictRes.index
+    // const circleRes = await this.getArea(district)
+    // const arrDistrict = province[provinceIndex].children[cityIndex].children
+    // this.forIn(arrDistrict, district, circleRes)
     this.setState({
       options: province,
-      defaultValue: [res.province, city, district, circle],
+      defaultValue: [res.province, city, district],
     }, () => {
       this.setModalData(res);
       // this.setState({
@@ -608,7 +632,7 @@ export default class PointSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.setState({
-        modalData: {
+        modalDataTags: {
           tags: data.tags ? data.tags : []
         },
         switchStatus: parseInt(data.monitor) === 0 ? true : false
@@ -620,15 +644,15 @@ export default class PointSettingList extends PureComponent {
           mobile: data.mobile || '',
           provinceCityAreaTrade: this.state.defaultValue,
           remark: data.remark || '',
-          monitorStart: data.monitorStart ? moment(data.monitorStart, 'HH:mm:ss') : undefined,
-          monitorEnd: data.monitorEnd ? moment(data.monitorEnd, 'HH:mm:ss') : undefined,
-          type: data.type
+          monitorStart: data.monitorStart ? moment(data.monitorStart, 'HH:mm:ss') : moment('00:00:00', 'HH:mm:ss'),
+          monitorEnd: data.monitorEnd ? moment(data.monitorEnd, 'HH:mm:ss') : moment('23:59:59', 'HH:mm:ss'),
+          type: data.type >= 0 ? data.type.toString() : ''
         });
       })
     } else {
       this.setState({
-        modalData:  { tags: [] },
-        switchStatus: true,
+        modalDataTags:  { tags: [] },
+        switchStatus: false,
       }, () => {
         this.form.setFieldsValue({
           name: '',
@@ -661,7 +685,7 @@ export default class PointSettingList extends PureComponent {
         areaCode: provinceCityAreaTradeTmp[provinceCityAreaTradeTmp.length - 1],
         monitorStart: this.state.switchStatus ? (fieldsValue.monitorStart ? fieldsValue.monitorStart.format('HH:mm:ss') : undefined) : '',
         monitorEnd: this.state.switchStatus ? (fieldsValue.monitorEnd ? fieldsValue.monitorEnd.format('HH:mm:ss') : undefined) : '',
-        tag: this.state.modalData.tags ? JSON.stringify(this.state.modalData.tags) : '',
+        tag: this.state.modalDataTags.tags ? JSON.stringify(this.state.modalDataTags.tags) : '',
         monitor: this.state.switchStatus ? 0 : 1
       };
       this.setState({
@@ -742,7 +766,7 @@ export default class PointSettingList extends PureComponent {
   handleTags = (val) => {
     // tags: ["445", "6789"]
     this.setState({
-      modalData: { tags: val },
+      modalDataTags: { tags: val },
     });
   }
   handTagLists = (val) => {
@@ -899,8 +923,8 @@ export default class PointSettingList extends PureComponent {
       {
         title: '点位',
         width: '10%',
-        dataIndex: 'mail',
-        key: 'mail'
+        dataIndex: 'mall',
+        key: 'mall'
       },
       {
         title: '具体位置',
@@ -1085,6 +1109,7 @@ export default class PointSettingList extends PureComponent {
           handleSupervisorySwitch={this.handleSupervisorySwitch}
           switchStatus={this.state.switchStatus}
           handTagLists={this.handTagLists}
+          modalDataTags={this.state.modalDataTags}
         />
         {/*</Spin>*/}
         {/*<Spin tip="Loading..." spinning={this.state.CreateFormLoading}></Spin>*/}
