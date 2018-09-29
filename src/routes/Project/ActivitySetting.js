@@ -2045,7 +2045,7 @@ export default class activitySettingList extends PureComponent {
             onChange={this.handleStatisticsTabsChange}
           >
             <TabPane tab="PV/UV/订单量" key="1">
-              {this.handleStatisticsTabsChange === "1" && (
+              {this.state.StatisticsActivityKey === "1" && (
                 <OrderStatistics
                   datas={this.state.OrderStatistics}
                   loading={this.state.StatisticsTabsLoading}
@@ -2053,7 +2053,7 @@ export default class activitySettingList extends PureComponent {
               )}
             </TabPane>
             <TabPane tab="商品出货量" key="2">
-              {this.handleStatisticsTabsChange === "2" && (
+              {this.state.StatisticsActivityKey === "2" && (
                 <GoodsStatistics
                   datas={this.state.GoodsStatistics}
                   loading={this.state.StatisticsTabsLoading}
