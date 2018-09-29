@@ -234,7 +234,7 @@ export default class areaSettingList extends PureComponent {
         key: 'realDay',
         render: (text, item) => (
           <Fragment>
-            <span>{item.realDay ? item.realDay : 0}/{item.day ? item.day : 0}</span>
+            <span>{item.realDay ? item.realDay : 0}/{item.day}</span>
           </Fragment>
         ),
         width: '10%',

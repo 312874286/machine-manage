@@ -78,7 +78,7 @@ export default class areaSettingList extends PureComponent {
         name: data.name || undefined,
         planCode: data.planCode || undefined,
         gameId: data.gameId || undefined,
-        day: data.day || 0,
+        day: data.day || 'max',
         manager: data.manager || undefined
       });
     } else {
@@ -86,7 +86,7 @@ export default class areaSettingList extends PureComponent {
         name: undefined,
         planCode: undefined,
         gameId: undefined,
-        day: 0,
+        day: 'max',
         manager: undefined
       });
     }
