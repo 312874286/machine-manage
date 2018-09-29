@@ -328,7 +328,7 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>请输入同一用户获得商品次数</span>}>
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户获得商品次数</span>}>
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('number', {
