@@ -23,11 +23,11 @@ export default class OrderStatistics extends PureComponent {
               return (
                 <div>
                   pv:
-                  {record[`pv${date.date}`]} | uv:
-                  {record[`uv${date.date}`]} | order:
-                  {record[`order${date.date}`]} | shipment:
-                  {record[`shipment${date.date}`]} | fans:
-                  {record[`fans${date.date}`]}
+                  {record[`pv${date.date}`] || 0} | uv:
+                  {record[`uv${date.date}`] || 0} | order:
+                  {record[`order${date.date}`] || 0} | shipment:
+                  {record[`shipment${date.date}`] || 0} | fans:
+                  {record[`fans${date.date}`] || 0}
                 </div>
               );
             }
@@ -62,11 +62,11 @@ export default class OrderStatistics extends PureComponent {
         obj[`order${date.date}`] = date.order;
         obj[`shipment${date.date}`] = date.shipment;
         obj[`fans${date.date}`] = date.fans;
-        obj.total.pv += date.pv;
-        obj.total.uv += date.uv;
-        obj.total.order += date.order;
-        obj.total.shipment += date.shipment;
-        obj.total.fans += date.fans;
+        obj.total.pv += date.pv || 0;
+        obj.total.uv += date.uv || 0;
+        obj.total.order += date.order || 0;
+        obj.total.shipment += date.shipment || 0;
+        obj.total.fans += date.fans || 0;
       });
       data.push(obj);
     });

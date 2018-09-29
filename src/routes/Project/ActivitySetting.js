@@ -1755,7 +1755,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         fixed: "right",
-        width: 320,
+        width: 240,
         title: "操作",
         render: (text, item) => (
           <Fragment>
@@ -1806,7 +1806,7 @@ export default class activitySettingList extends PureComponent {
             {/*活动统计*/}
             <a
               style={{
-                display: item.type === 0 && account.statistics ? "" : "none"
+                // display: item.type === 0 && account.statistics ? "" : "none"
               }}
               onClick={
                 item.type === 0 ? () => this.handleCountClick(item) : null
