@@ -142,7 +142,7 @@ const CreateShopsForm = Form.create()(
       },
     };
     const columns = [
-      { title: '已添加的商家名称', dataIndex: 'sellerId', key: 'sellerId', width: '50%' },
+      { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '50%' },
       { title: '店铺名称', dataIndex: 'shopName', key: 'shopName', width: '50%' },
     ];
     return (
@@ -273,9 +273,9 @@ const CreateGoodsForm = Form.create()(
       },
     };
     const columns = [
-      { title: '已添加的商家名称', dataIndex: 'sellerId', key: 'sellerId', width: '33%' },
-      { title: '店铺名称', dataIndex: 'shopId', key: 'shopId', width: '33%' },
-      { title: '店商品名称', dataIndex: 'name', key: 'name', width: '33%' }
+      { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '33%' },
+      { title: '店铺名称', dataIndex: 'shopName', key: 'shopName', width: '33%' },
+      { title: '商品名称', dataIndex: 'name', key: 'name', width: '33%' }
     ];
     const uploadButton = (
       <div>
@@ -619,6 +619,7 @@ export default class areaSettingList extends PureComponent {
       },
     }).then((res) => {
       this.getInteractShopList(res.sellerId)
+      this.getGoods()
       this.setModalData(res);
     });
   }
@@ -877,9 +878,26 @@ export default class areaSettingList extends PureComponent {
   // 编辑modal 确认事件
   handleShopsAdd = (flag) => {
     this.shopsForm.validateFields((err, values) => {
+      // this.setState({
+      //   mustIsVip: data.isVip === 2 ? true : false,
+      //   sessionKey: data.isVip === 0 ? false : true,
+      // }, () => {
+      //
+      // })
+      if (values.isVip === 1) {
+        this.merchantForm.validateFields(['sessionKey'], { force: true });
+      }
       if (err) {
         return;
       }
+      // console.log('fieldsValue.sessionKey3333', values.isVip === 1)
+      // if (values.isVip === 1) {
+      //   console.log('fieldsValue.sessionKey', typeof values.sessionKey)
+      //   if (!values.sessionKey) {
+      //     message.info('请填写入会码')
+      //     return
+      //   }
+      // }
       this.setState({
         editShopsModalConfirmLoading: true,
       });
@@ -986,14 +1004,16 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         mustIsVip: data.isVip === 2 ? true : false,
         sessionKey: data.isVip === 0 ? false : true,
+      }, () => {
+        this.merchantForm.validateFields(['sessionKey'], { force: true });
+        this.shopsForm.setFieldsValue({
+          shopCode: data.shopCode || '',
+          shopName: data.shopName || '',
+          sellerId: data.sellerId || '',
+          isVip: data.isVip === 0 ? 0 : 1,
+          sessionKey: data.sessionKey || ' '
+        });
       })
-      this.shopsForm.setFieldsValue({
-        shopCode: data.shopCode || '',
-        shopName: data.shopName || '',
-        sellerId: data.sellerId || '',
-        isVip: data.isVip === 0 ? 0 : 1,
-        sessionKey: data.sessionKey || ' '
-      });
     } else {
       this.setState({
         mustIsVip: false,

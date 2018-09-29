@@ -296,8 +296,8 @@ export default class areaSettingList extends PureComponent {
             >详情</a>
             <Divider type="vertical"/>
             <a>统计</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.giveUp(item)}>结束</a>
+            <Divider type="vertical" style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}/>
+            <a onClick={() => this.giveUp(item)} style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}>结束</a>
           </Fragment>
         ),
       },
