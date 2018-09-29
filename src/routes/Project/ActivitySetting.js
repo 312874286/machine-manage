@@ -2043,19 +2043,22 @@ export default class activitySettingList extends PureComponent {
           <Tabs
             activeKey={this.state.StatisticsActivityKey}
             onChange={this.handleStatisticsTabsChange}
-            style={{ width: 1000 }}
           >
             <TabPane tab="PV/UV/订单量" key="1">
-              <OrderStatistics
-                datas={this.state.OrderStatistics}
-                loading={this.state.StatisticsTabsLoading}
-              />
+              {this.handleStatisticsTabsChange === "1" && (
+                <OrderStatistics
+                  datas={this.state.OrderStatistics}
+                  loading={this.state.StatisticsTabsLoading}
+                />
+              )}
             </TabPane>
             <TabPane tab="商品出货量" key="2">
-              <GoodsStatistics
-                datas={this.state.GoodsStatistics}
-                loading={this.state.StatisticsTabsLoading}
-              />
+              {this.handleStatisticsTabsChange === "2" && (
+                <GoodsStatistics
+                  datas={this.state.GoodsStatistics}
+                  loading={this.state.StatisticsTabsLoading}
+                />
+              )}
             </TabPane>
           </Tabs>
         </Modal>
