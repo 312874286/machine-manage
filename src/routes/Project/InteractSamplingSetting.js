@@ -229,12 +229,12 @@ export default class areaSettingList extends PureComponent {
         key: 'goodsNum',
       },
       {
-        title: '互派持续时长',
+        title: '互派持续时长/天',
         dataIndex: 'realDay',
         key: 'realDay',
         render: (text, item) => (
           <Fragment>
-            <span>{item.realDay}/{item.day}</span>
+            <span>{item.realDay ? item.realDay : 0}/{item.day ? item.day : 0}</span>
           </Fragment>
         ),
         width: '10%',
@@ -245,7 +245,7 @@ export default class areaSettingList extends PureComponent {
         key: 'realNum',
         render: (text, item) => (
           <Fragment>
-            <span>{item.realNum}/{item.number}</span>
+            <span>{item.realNum ? item.realNum : 0}/{item.number ? item.number : 0}</span>
           </Fragment>
         ),
         width: '10%',

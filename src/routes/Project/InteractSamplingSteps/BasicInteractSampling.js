@@ -41,6 +41,8 @@ export default class areaSettingList extends PureComponent {
       }, () => {
         this.getInteractDetail()
       })
+    } else {
+      this.setModalData()
     }
   }
   getGameList = () => {
@@ -76,7 +78,7 @@ export default class areaSettingList extends PureComponent {
         name: data.name || undefined,
         planCode: data.planCode || undefined,
         gameId: data.gameId || undefined,
-        day: data.day || undefined,
+        day: data.day || 0,
         manager: data.manager || undefined
       });
     } else {
@@ -84,7 +86,7 @@ export default class areaSettingList extends PureComponent {
         name: undefined,
         planCode: undefined,
         gameId: undefined,
-        day: undefined,
+        day: 0,
         manager: undefined
       });
     }
@@ -201,7 +203,7 @@ export default class areaSettingList extends PureComponent {
                 <FormItem {...formItemLayout} label="预计时长">
                   {getFieldDecorator('day', {
                     rules: [{ required: false, whitespace: true, message: '请输入预计的天数' }],
-                  })(<Input placeholder="请输入预计时长" />)}
+                  })(<Input placeholder="请输入预计的天数" />)}
                 </FormItem>
                 <FormItem {...formItemLayout} label="负责人">
                   {getFieldDecorator('manager', {
