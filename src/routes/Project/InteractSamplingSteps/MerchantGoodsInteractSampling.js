@@ -1180,7 +1180,7 @@ export default class areaSettingList extends PureComponent {
     });
   }
   next = (type) => {
-
+    this.props.history.push({pathname: '/project/sampling-setting'})
   }
   render() {
     const {
