@@ -624,6 +624,8 @@ export default class activitySettingList extends PureComponent {
     vipTables: [],
 
     StatisticsTabsVisible: false,
+    StatisticsActivityKey: "1",
+    StatisticsTabsLoading: false,
     OrderStatistics: [],
     GoodsStatistics: [],
 
@@ -1600,49 +1602,61 @@ export default class activitySettingList extends PureComponent {
   };
 
   getOrderStatistics = data => {
-    console.log(1);
-    this.props
-      .dispatch({
-        type: "activitySetting/getOrderStatistics",
-        payload: {
-          params: {
-            activityCode: this.state.logId,
-            name: "pvuv",
-            outputType: 1
-          }
-        }
-      })
-      .then(resp => {
-        if (resp && resp.code === 0) {
-          this.setState({
-            StatisticsTabsLoading: false,
-            OrderStatistics: resp.data
+    this.setState(
+      {
+        StatisticsTabsLoading: true
+      },
+      () => {
+        this.props
+          .dispatch({
+            type: "activitySetting/getOrderStatistics",
+            payload: {
+              params: {
+                activityCode: this.state.logId,
+                name: "pvuv",
+                outputType: 1
+              }
+            }
+          })
+          .then(resp => {
+            if (resp && resp.code === 0) {
+              this.setState({
+                StatisticsTabsLoading: false,
+                OrderStatistics: resp.data
+              });
+            }
           });
-        }
-      });
+      }
+    );
   };
 
   getGoodsStatistics = () => {
-    console.log(2);
-    this.props
-      .dispatch({
-        type: "activitySetting/getGoodsStatistics",
-        payload: {
-          params: {
-            activityCode: this.state.logId,
-            name: "goodsInfo",
-            outputType: 1
-          }
-        }
-      })
-      .then(resp => {
-        if (resp && resp.code === 0) {
-          this.setState({
-            StatisticsTabsLoading: false,
-            GoodsStatistics: resp.data
+    this.setState(
+      {
+        StatisticsTabsLoading: true
+      },
+      () => {
+        this.props
+          .dispatch({
+            type: "activitySetting/getGoodsStatistics",
+            payload: {
+              params: {
+                activityCode: this.state.logId,
+                name: "goodsInfo",
+                outputType: 1
+              }
+            }
+          })
+          .then(resp => {
+            if (resp && resp.code === 0) {
+              this.setState({
+                StatisticsTabsLoading: false,
+                GoodsStatistics: resp.data
+              });
+            }
           });
-        }
-      });
+      }
+    );
   };
 
   goodsHandleChange = row => {
@@ -1661,6 +1675,8 @@ export default class activitySettingList extends PureComponent {
   handleStatisticsTabsVisible = () => {
     this.setState({
       StatisticsTabsVisible: false,
+      StatisticsActivityKey: "1",
+      StatisticsTabsLoading: false,
       GoodsStatistics: [],
       OrderStatistics: []
     });
@@ -1668,8 +1684,8 @@ export default class activitySettingList extends PureComponent {
   handleMachineStatisticsClick(data) {
     this.setState(
       {
-        StatisticsTabsLoading: true,
         StatisticsTabsVisible: true,
+        StatisticsActivityKey: "1",
         logId: data.id
       },
       () => {
@@ -1678,11 +1694,13 @@ export default class activitySettingList extends PureComponent {
     );
   }
   handleStatisticsTabsChange = key => {
-    if (key === "1") {
-      this.getOrderStatistics();
-    } else {
-      this.getGoodsStatistics();
-    }
+    this.setState({ StatisticsActivityKey: key }, () => {
+      if (key === "1") {
+        this.getOrderStatistics();
+      } else {
+        this.getGoodsStatistics();
+      }
+    });
   };
   render() {
     const {
@@ -2022,7 +2040,10 @@ export default class activitySettingList extends PureComponent {
             </Button>
           ]}
         >
-          <Tabs defaultActiveKey="1" onChange={this.handleStatisticsTabsChange}>
+          <Tabs
+            activeKey={this.state.StatisticsActivityKey}
+            onChange={this.handleStatisticsTabsChange}
+          >
             <TabPane tab="PV/UV/订单量" key="1">
               <OrderStatistics
                 datas={this.state.OrderStatistics}
