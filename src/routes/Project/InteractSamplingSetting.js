@@ -131,6 +131,21 @@ export default class areaSettingList extends PureComponent {
       });
     });
   };
+  giveUp = (item) => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/interactUpdate',
+      payload: {
+        params: {
+          id: item.id,
+          type: 2,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+       this.getLists()
+      }
+    });
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -237,7 +252,7 @@ export default class areaSettingList extends PureComponent {
             <span>{item.realDay ? item.realDay : 0}/{item.day}</span>
           </Fragment>
         ),
-        width: '10%',
+        width: '15%',
       },
       {
         title: '发放率',
@@ -259,7 +274,7 @@ export default class areaSettingList extends PureComponent {
             <span>{item.manager}{item.createTime}</span>
           </Fragment>
         ),
-        width: '20%',
+        width: '15%',
       },
       {
         title: '状态',
@@ -281,7 +296,7 @@ export default class areaSettingList extends PureComponent {
             >详情</a>
             <Divider type="vertical"/>
             <a>统计</a>
-            <Divider type="vertical"/>
+            <Divider type="vertical" onClick={() => this.giveUp(item)}/>
             <a>结束</a>
           </Fragment>
         ),
@@ -331,7 +346,7 @@ export default class areaSettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1200}
+                scrollX={1500}
               />
             </div>
           </div>

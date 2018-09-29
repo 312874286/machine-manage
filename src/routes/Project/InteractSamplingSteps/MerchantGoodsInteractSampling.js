@@ -919,7 +919,6 @@ export default class areaSettingList extends PureComponent {
   handleShopsModalVisible = async (flag, item) => {
     // this.handleMerchantModalVisible(false)
     // await this.handleMerchantAdd()
-    this.getShops()
     await this.setState({
       modalShopsVisible: !!flag,
       modalShopsData: {},
@@ -927,6 +926,7 @@ export default class areaSettingList extends PureComponent {
     }, () => {
       this.setShopsModalData();
       if (item) {
+        this.getShops(item.id)
         this.shopsForm.setFieldsValue({
           sellerId: item.id,
         });
@@ -1138,7 +1138,12 @@ export default class areaSettingList extends PureComponent {
   }
   saveAddShop = async () => {
     await this.handleMerchantAdd(1)
-    await this.handleShopsModalVisible(true)
+    await this.merchantForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.handleShopsModalVisible(true)
+    })
   }
   handleSessionKeyChange = (e) => {
     this.setState({
@@ -1147,8 +1152,9 @@ export default class areaSettingList extends PureComponent {
   }
   // 商户结束
   // 获取最新店铺开始
-  getShops = () => {
-    let params = { merchantId: this.state.expandedRowKeys[0] }
+  getShops = (merchantId) => {
+    console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
+    let params = { merchantId: this.state.expandedRowKeys[0] || merchantId }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
