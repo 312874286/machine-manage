@@ -9,6 +9,7 @@ import {
   Select,
   Input,
   DatePicker,
+  Divider,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -20,7 +21,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const status = ['未提交', '未开始', '进行中', '已结束', '已超时']
 const statusOption = [{id: 0, name: '未提交'}, {id: 1, name: '未开始'}, {id: 2, name: '进行中'}, {id: 3, name: '已结束'}, {id: 4, name: '已超时'}]
-const sortOption = [{id: 0, name: '默认排序'}, {id: 1, name: '按发放率倒序'}, {id: 2, name: '按发放率正序'}, {id: 3, name: '按持续时长倒序'}, {id: 4, name: '按持续时长正序'}]
+const sortOption = [{id: 'goodsSend DESC', name: '按发放率倒序'}, {id: 'goodsSend', name: '按发放率正序'}, {id: 'real_day DESC', name: '按持续时长倒序'}, {id: 'real_day', name: '按持续时长正序'}]
 
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
@@ -35,7 +36,8 @@ export default class areaSettingList extends PureComponent {
     pageNo: 1,
     status: '',
     account: {},
-    keyword: ''
+    keyword: '',
+    orderBy: '',
   };
   componentDidMount() {
     this.getLists();
@@ -64,7 +66,8 @@ export default class areaSettingList extends PureComponent {
         restParams: {
           status: this.state.status,
           pageNo: this.state.pageNo,
-          keyword: this.state.keyword
+          keyword: this.state.keyword,
+          orderBy: this.state.orderBy,
         },
       },
     });
@@ -121,7 +124,8 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        status: this.state.status,
+        status: fieldsValue.status >= 0 ? fieldsValue.status : '',
+        orderBy: fieldsValue.orderBy ? fieldsValue.orderBy : '',
       }, () => {
         this.getLists();
       });
@@ -157,16 +161,16 @@ export default class areaSettingList extends PureComponent {
           </Col>
         </Row>
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="创建时间">
-              {getFieldDecorator('creatTime')(
-                <DatePicker placeholder="请选择创建时间" />
-              )}
-            </FormItem>
-          </Col>
+          {/*<Col md={8} sm={24}>*/}
+            {/*<FormItem label="创建时间">*/}
+              {/*{getFieldDecorator('creatTime')(*/}
+                {/*<DatePicker placeholder="请选择创建时间" />*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
           <Col md={8} sm={24}>
             <FormItem label="排序">
-              {getFieldDecorator('status')(
+              {getFieldDecorator('orderBy')(
                 <Select placeholder="请选择排序方式">
                   {sortOption.map((item) => {
                     return (
@@ -274,7 +278,11 @@ export default class areaSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => this.props.history.push({pathname: `/project/addBasicInteractSampling`, query: {id: item.id}})}
-            >编辑</a>
+            >详情</a>
+            <Divider type="vertical"/>
+            <a>统计</a>
+            <Divider type="vertical"/>
+            <a>结束</a>
           </Fragment>
         ),
       },

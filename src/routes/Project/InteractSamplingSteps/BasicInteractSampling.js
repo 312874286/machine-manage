@@ -212,7 +212,7 @@ export default class areaSettingList extends PureComponent {
             </div>
             <div className={styles.stepsAction}>
               {
-                <Button>取消</Button>
+                <Button onClick={() => this.props.history.push({pathname: '/project/sampling-setting'})}>取消</Button>
               }
               {
                 <Button onClick={() => this.next(0)}>暂存</Button>

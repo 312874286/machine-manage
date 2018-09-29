@@ -83,7 +83,7 @@ class EditableCell extends React.Component {
                         required: true,
                         message: `${title} is required.`,
                       }],
-                      initialValue: record[dataIndex] === -1 ? ' ' : record[dataIndex],
+                      initialValue: record[dataIndex],
                     })(
                       <InputNumber
                         ref={node => (this.input = node)}
@@ -235,7 +235,7 @@ export default class RuleInteractSampling extends PureComponent {
           rowKey={record => record.key}
           components={components}
           rowClassName={() => 'editable-row'}
-          bordered
+          bordered={null}
           dataSource={data}
           columns={columns}
         />
