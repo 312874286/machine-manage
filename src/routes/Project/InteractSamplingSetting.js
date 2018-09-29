@@ -274,7 +274,7 @@ export default class areaSettingList extends PureComponent {
             <span>{item.manager}{item.createTime}</span>
           </Fragment>
         ),
-        width: '15%',
+        width: '30%',
       },
       {
         title: '状态',
