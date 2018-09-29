@@ -5,7 +5,7 @@ import api from './api';
 
 
 export async function getPointSettingList({ restParams }) {
-  return fetch.get(api.getPointSettingLists, {
+  return fetch.get(api.getPointFromTag, {
     restParams,
   });
 }

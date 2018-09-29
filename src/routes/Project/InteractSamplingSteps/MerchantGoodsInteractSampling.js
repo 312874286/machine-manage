@@ -34,13 +34,14 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-const goodType = [{id: 0, name: '商品'}, {id: 1, name: '优惠券'}]
+// , {id: 1, name: '优惠券'}
+const goodType = [{id: 0, name: '商品'}]
 // 新建商户
 const CreateMerchantForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd,
       handleModalVisible, editModalConfirmLoading, modalType,
-      channelLists, saveAddShop } = props;
+      channelLists, saveAddShop, merchants } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -52,6 +53,9 @@ const CreateMerchantForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const columns = [
+      { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '100%' },
+    ];
     return (
       <Modal
         title={
@@ -66,6 +70,13 @@ const CreateMerchantForm = Form.create()(
         confirmLoading={editModalConfirmLoading}
         footer={null}>
         <div className="manageAppBox">
+          <Table
+            rowKey={record => record.id}
+            columns={columns}
+            dataSource={merchants}
+            pagination={false}
+            scroll={{ y: 100}}
+          />
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="所属渠道">
               {getFieldDecorator('channelId', {
@@ -97,7 +108,7 @@ const CreateMerchantForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? '' : 'none'}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
-                      onClick={() => handleAdd()}>继续添加商家</Button>
+                      onClick={() => handleAdd(0)}>继续添加商家</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
                       onClick={() => saveAddShop()}>保存并添加店铺</Button>
             </FormItem>
@@ -105,7 +116,7 @@ const CreateMerchantForm = Form.create()(
               <Button style={{ width: '120px', marginRight: '10px' }}
                       onClick={() => handleModalVisible()}>取消</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
-                      onClick={() => handleAdd()}>保存</Button>
+                      onClick={() => handleAdd(1)}>保存</Button>
             </FormItem>
           </Form>
         </div>
@@ -118,7 +129,7 @@ const CreateShopsForm = Form.create()(
     const { modalVisible, form, handleAdd,
       handleModalVisible, editModalConfirmLoading,
       modalType, merchantLists, saveAddGoods,
-      handleChange, sessionKey, RadioChange, mustIsVip} = props;
+      handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData} = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -130,6 +141,10 @@ const CreateShopsForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const columns = [
+      { title: '已添加的商家名称', dataIndex: 'sellerId', key: 'sellerId', width: '50%' },
+      { title: '店铺名称', dataIndex: 'shopName', key: 'shopName', width: '50%' },
+    ];
     return (
       <Modal
         title={
@@ -144,6 +159,13 @@ const CreateShopsForm = Form.create()(
         confirmLoading={editModalConfirmLoading}
         footer={null}>
         <div className="manageAppBox">
+          <Table
+            rowKey={record => record.id}
+            columns={columns}
+            dataSource={currentShopsData}
+            pagination={false}
+            scroll={{ y: 100}}
+          />
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="选择商户">
               {getFieldDecorator('sellerId', {
@@ -204,7 +226,7 @@ const CreateShopsForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
-                      onClick={() => handleAdd()}>继续添加店铺</Button>
+                      onClick={() => handleAdd(0)}>继续添加店铺</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
                       onClick={() => saveAddGoods()}>保存并添加商品</Button>
             </FormItem>
@@ -212,7 +234,7 @@ const CreateShopsForm = Form.create()(
               <Button style={{ width: '120px', marginRight: '10px' }}
                       onClick={() => handleModalVisible()}>取消</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
-                      onClick={() => handleAdd()}>保存</Button>
+                      onClick={() => handleAdd(1)}>保存</Button>
             </FormItem>
           </Form>
         </div>
@@ -237,7 +259,8 @@ const CreateGoodsForm = Form.create()(
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
       handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList,
-      videoUrl, bannerHandleChange, handleUploadBanner, onGoodTypeSelect, GoodTypePlaceHolder } = props;
+      videoUrl, bannerHandleChange, handleUploadBanner, onGoodTypeSelect, GoodTypePlaceHolder,
+      currentGoodsData} = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -249,6 +272,11 @@ const CreateGoodsForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const columns = [
+      { title: '已添加的商家名称', dataIndex: 'sellerId', key: 'sellerId', width: '33%' },
+      { title: '店铺名称', dataIndex: 'shopId', key: 'shopId', width: '33%' },
+      { title: '店商品名称', dataIndex: 'name', key: 'name', width: '33%' }
+    ];
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -270,6 +298,13 @@ const CreateGoodsForm = Form.create()(
         footer={null}
         width={800}>
         <div className="manageAppBox">
+          <Table
+            rowKey={record => record.id}
+            columns={columns}
+            dataSource={currentGoodsData}
+            pagination={false}
+            scroll={{ y: 100}}
+          />
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="所属商户">
               {getFieldDecorator('sellerId', {
@@ -301,7 +336,7 @@ const CreateGoodsForm = Form.create()(
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请选择商品类型' }],
               })(
-                <Select placeholder="请选择" onSelect={onGoodTypeSelect}>
+                <Select placeholder="请选择" onSelect={onGoodTypeSelect} disabled={modalType ? true : false}>
                   {goodType.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.name}</Option>
@@ -385,7 +420,7 @@ const CreateGoodsForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="商品价格">
               {getFieldDecorator('price', {
-                rules: [{ required: false, message: '请输入商品价格' }],
+                rules: [{ required: true, message: '请输入商品价格' }],
               })(<InputNumber placeholder="请输入商品价格" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="备注信息">
@@ -393,15 +428,15 @@ const CreateGoodsForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
-                      onClick={() => handleAdd()}>继续添加商品</Button>
+                      onClick={() => handleAdd(0)}>继续添加商品</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
-                      onClick={() => handleAdd()}>完成</Button>
+                      onClick={() => handleAdd(1)}>完成</Button>
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? '' : 'none'}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
                       onClick={() => handleModalVisible()}>取消</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
-                      onClick={() => handleAdd()}>保存</Button>
+                      onClick={() => handleAdd(1)}>保存</Button>
             </FormItem>
           </Form>
         </div>
@@ -513,9 +548,16 @@ export default class areaSettingList extends PureComponent {
   saveFormRef = (form) => {
     this.form = form;
   }
+  onSelect = (value) => {
+    this.getInteractShopList(value)
+    this.form.setFieldsValue({
+      shopId: undefined,
+    });
+  }
   // 添加modal 添加事件
   handleModalVisible = async (flag, item) => {
     console.log('item', item)
+    this.getGoods()
     const { saveAndAddModal } = this.state
     this.setState({
       modalVisible: !!flag,
@@ -648,7 +690,7 @@ export default class areaSettingList extends PureComponent {
   }
   // 判断是否为图片
   imgFlag = (resp) => {
-    if (resp.indexOf('png') > 0 || resp.indexOf('jpg') > 0 || resp.indexOf('jpeg') > 0 || resp.indexOf('png') > 0) {
+    if (resp.indexOf('png') > 0 || resp.indexOf('jpg') > 0 || resp.indexOf('jpeg') > 0 || resp.indexOf('png') > 0 || resp.indexOf('gif') > 0) {
       return true
     } else {
       return false
@@ -663,7 +705,7 @@ export default class areaSettingList extends PureComponent {
     }
   }
   // 编辑modal 确认事件
-  handleAdd = () => {
+  handleAdd = (flag) => {
     this.form.validateFields((err, fieldsValue) => {
       if (this.state.fileList.length > 0) {
         this.form.setFieldsValue({
@@ -680,6 +722,7 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         editModalConfirmLoading: true,
       });
+      // console.log('this.state.bannerfileList', this.state.bannerfileList, this.state.videoUrl.data)
       let messageTxt = '添加'
       let url = 'interactSamplingSetting/goodsAdd';
       if (this.state.modalData.id) {
@@ -708,12 +751,15 @@ export default class areaSettingList extends PureComponent {
           this.setState({
             modalData: {},
             editModalConfirmLoading: false,
-            modalVisible: false,
           });
+          if (flag === 0) {
+            this.setModalData()
+          } else {
+            this.setState({
+              modalVisible: false,
+            });
+          }
         }
-        // else {
-        //   message.error(res ? res.msg : messageTxt + '失败');
-        // }
         this.setState({
           editModalConfirmLoading: false,
         });
@@ -787,7 +833,8 @@ export default class areaSettingList extends PureComponent {
     }).then((resp) => {
       if (resp && resp.code === 0) {
         // console.log('resp', resp)
-        if (resp.data.indexOf('png') > 0 || resp.data.indexOf('jpg') > 0 || resp.data.indexOf('jpeg') > 0 || resp.data.indexOf('png') > 0) {
+        console.log('this.imgFlag(resp.data)', this.imgFlag(resp.data))
+        if (this.imgFlag(resp.data)) {
           let fList = [{
             uid: -2,
             name: 'xxx.png',
@@ -838,9 +885,12 @@ export default class areaSettingList extends PureComponent {
       });
       let url = 'interactSamplingSetting/shopsAdd';
       let params = { ...values, interactId: this.state.interactSampling };
+      if (this.state.mustIsVip) {
+        params = { ...params, isVip: 2};
+      }
       if (this.state.modalShopsData.id) {
         url = 'interactSamplingSetting/updateShops';
-        params = { ...values, id: this.state.modalShopsData.id };
+        params = { ...params, id: this.state.modalShopsData.id };
       }
       this.props.dispatch({
         type: url,
@@ -852,14 +902,21 @@ export default class areaSettingList extends PureComponent {
           this.getShops()
           this.setState({
             editShopsModalConfirmLoading: false,
-            modalShopsVisible: false,
             modalShopsData: {},
             saveAndAddModal: {
               sellerId: params.sellerId
             }
           });
-          if (flag) {
+          if (flag === 'saveAddGoods') {
             this.handleModalVisible(true)
+          }
+          if (flag === 0) {
+            this.setShopsModalData()
+          }
+          if (flag === 1) {
+            this.setState({
+              modalShopsVisible: false,
+            });
           }
         }
       });
@@ -876,6 +933,8 @@ export default class areaSettingList extends PureComponent {
     }, () => {
       this.setShopsModalData();
       if (item) {
+        console.log('item', item)
+        this.getShops(item.id)
         this.shopsForm.setFieldsValue({
           sellerId: item.id,
         });
@@ -924,18 +983,28 @@ export default class areaSettingList extends PureComponent {
   // 设置modal 数据
   setShopsModalData = (data) => {
     if (data) {
+      this.setState({
+        mustIsVip: data.isVip === 2 ? true : false,
+        sessionKey: data.isVip === 0 ? false : true,
+      })
       this.shopsForm.setFieldsValue({
         shopCode: data.shopCode || '',
         shopName: data.shopName || '',
         sellerId: data.sellerId || '',
-        isVip: data.isVip || 0
+        isVip: data.isVip === 0 ? 0 : 1,
+        sessionKey: data.sessionKey || ' '
       });
     } else {
+      this.setState({
+        mustIsVip: false,
+        sessionKey: false,
+      })
       this.shopsForm.setFieldsValue({
         shopCode: undefined,
         shopName: undefined,
         sellerId: undefined,
-        isVip: 0
+        isVip: 0,
+        sessionKey: undefined
       });
     }
   }
@@ -951,6 +1020,14 @@ export default class areaSettingList extends PureComponent {
     }, () => {
       this.merchantForm.validateFields(['sessionKey'], { force: true });
     });
+    if (e.target.value === 0) {
+      this.shopsForm.setFieldsValue({
+        sessionKey: undefined
+      });
+      this.setState({
+        mustIsVip: false
+      });
+    }
   }
   // 店铺结束
   // 商户开始
@@ -1028,7 +1105,7 @@ export default class areaSettingList extends PureComponent {
     this.merchantForm = form;
   }
   // 编辑modal 确认事件
-  handleMerchantAdd = () => {
+  handleMerchantAdd = (flag) => {
     this.merchantForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -1050,8 +1127,14 @@ export default class areaSettingList extends PureComponent {
       }).then((res) => {
         if (res && res.code === 0) {
           this.getInteractMerchantList(this.props.match.params.id)
+          if (flag === 0) {
+            this.setMerchantModalData()
+          } else {
+            this.setState({
+              modalMerchantVisible: false,
+            });
+          }
           this.setState({
-            modalMerchantVisible: false,
             modalMerchantData: {},
           });
         }
@@ -1062,8 +1145,13 @@ export default class areaSettingList extends PureComponent {
     });
   }
   saveAddShop = async () => {
-    await this.handleMerchantAdd()
-    await this.handleShopsModalVisible(true)
+    await this.handleMerchantAdd(1)
+    await this.merchantForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.handleShopsModalVisible(true)
+    })
   }
   handleSessionKeyChange = (e) => {
     this.setState({
@@ -1072,8 +1160,9 @@ export default class areaSettingList extends PureComponent {
   }
   // 商户结束
   // 获取最新店铺开始
-  getShops = () => {
-    let params = { merchantId: this.state.expandedRowKeys[0] }
+  getShops = (merchantId) => {
+    console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
+    let params = { merchantId: this.state.expandedRowKeys[0] || merchantId }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -1105,7 +1194,7 @@ export default class areaSettingList extends PureComponent {
     });
   }
   next = (type) => {
-
+    this.props.history.push({pathname: '/project/sampling-setting'})
   }
   render() {
     const {
@@ -1161,6 +1250,7 @@ export default class areaSettingList extends PureComponent {
       ];
       return (
         <Table
+          rowKey={record => record.id}
           columns={columns}
           dataSource={currentGoodsData}
           pagination={false}
@@ -1258,7 +1348,7 @@ export default class areaSettingList extends PureComponent {
             </div>
             <div className={styles.stepsAction}>
               {
-                <Button onClick={() => this.next()}>取消</Button>
+                <Button onClick={() => this.props.history.push({pathname: '/project/sampling-setting'})}>关闭</Button>
               }
               {
                 <Button onClick={() => this.next(1)}>暂存</Button>
@@ -1288,6 +1378,7 @@ export default class areaSettingList extends PureComponent {
           modalType={modalMerchantType}
           channelLists={channelLists}
           saveAddShop={this.saveAddShop}
+          merchants={this.state.merchants}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
@@ -1302,6 +1393,7 @@ export default class areaSettingList extends PureComponent {
           sessionKey={this.state.sessionKey}
           RadioChange={this.RadioChange}
           mustIsVip={this.state.mustIsVip}
+          currentShopsData={this.state.currentShopsData}
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
@@ -1327,6 +1419,7 @@ export default class areaSettingList extends PureComponent {
           handleUploadBanner={this.handleUploadBanner}
           onGoodTypeSelect={this.onGoodTypeSelect}
           GoodTypePlaceHolder={this.state.GoodTypePlaceHolder}
+          currentGoodsData={this.state.currentGoodsData}
         />
       </PageHeaderLayout>
     );

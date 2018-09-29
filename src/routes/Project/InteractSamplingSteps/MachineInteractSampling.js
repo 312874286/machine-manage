@@ -164,10 +164,29 @@ export default class areaSettingList extends PureComponent {
               onUpdateMachine={this.handleUpdateMachine}
             />
           </div>
-
           <div className={styles.stepsAction}>
-            {<Button onClick={() => this.next()}>取消</Button>}
-            {<Button onClick={() => this.next()}>暂存</Button>}
+            {
+              <Button
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: "/project/sampling-setting"
+                  })
+                }
+              >
+                取消
+              </Button>
+            }
+            {
+              <Button
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: "/project/sampling-setting"
+                  })
+                }
+              >
+                暂存
+              </Button>
+            }
             {current > 0 && (
               <Button
                 type="primary"

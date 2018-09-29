@@ -2,8 +2,8 @@ import fetch from '../../utils/fetch/index';
 import api from './api';
 
 export async function templateDelete({ restParams }) {
-  return fetch.get(api.templateDelete, {
-    restParams,
+  return fetch.postJSON(api.templateDelete, {
+    body: JSON.stringify(restParams),
   });
 }
 
@@ -19,14 +19,14 @@ export async function templateUpdate({ params }) {
 }
 
 export async function templateQuery({ restParams }) {
-  return fetch.get(api.templateQuery, {
-    restParams,
+  return fetch.postJSON(api.templateQuery, {
+    body: JSON.stringify(restParams),
   });
 }
 
 export async function templateList({ restParams }) {
-  return fetch.get(api.templateList, {
-    restParams,
+  return fetch.postJSON(api.templateList, {
+    body: JSON.stringify(restParams),
   });
 }
 
@@ -37,5 +37,9 @@ export async function getActivityList({ restParams }) {
 }
 
 export async function templateExecute({ restParams }) {
-  window.location.href = `${api.templateExecute}?name=${restParams.name}&activityCode=${restParams.activityCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
+  window.location.href = `${api.templateExecute}?name=${restParams.name}&user=${restParams.user}&activityCode=${restParams.activityCode}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
+}
+
+export async function getUserInfo() {
+  return fetch.get(api.userInfo, {});
 }

@@ -1258,7 +1258,7 @@ export default class activitySettingList extends PureComponent {
     const dataSource = [...this.state.sourceData];
     this.setState({ sourceData: dataSource.filter(item => item.id !== key) });
     let targetData = [...this.state.targetData, ...dataSource.filter(item => item.id === key)]
-    console.log('targetData', targetData)
+    // console.log('targetData', targetData)
     targetData = this.unique(targetData)
     this.setState({ targetData });
   }
@@ -1356,55 +1356,24 @@ export default class activitySettingList extends PureComponent {
   // 店铺下的vip
   intVipList = () => {
     let  { targetData } = this.state
-    console.log('targetData', targetData)
+    // console.log('targetData2222', targetData)
     let key = 0
     targetData = targetData.map((item) => {
-      return { key: key += 1, id: item.id, shopName: item.shopName, isVip: 1, sessionKey: '请填写访问码'}
+      return {
+        key: key += 1,
+        id: item.id,
+        shopName: item.shopName,
+        isVip: 1,
+        sessionKey: item.sessionKey ? item.sessionKey : '请填写访问码' }
     })
+    // console.log('targetData3333', targetData)
     this.setState({
       goodsInitData: targetData,
       goodsCount: targetData.length,
     });
   }
-  // goodsHandle = (initData, value, record) => {
-  //   if (value === 1) {
-  //     record.sessionKey = '请填写访问码'
-  //   } else {
-  //     record.sessionKey = ''
-  //   }
-  //   this.setState({
-  //     vipTables: [...this.state.vipTables, record]
-  //   }, () => {
-  //     // console.log('2222record::', record, initData);
-  //     this.setState({
-  //       goodsInitData: this.state.vipTables,
-  //     });
-  //   })
-  // }
   goodsHandle = (initData, value, record) => {
     console.log('1111record::', initData, record);
-    // const { goodsLists } = this.state
-    // let goodsInitData = record
-    // for (var i = 0; i < goodsLists.length; i++ ) {
-    //   if (goodsLists[i].id === value) {
-    //     // record.name = this.state.clist[i].name;
-    //     goodsInitData[0].number = goodsLists[i].number
-    //   }
-    // }
-    // let vipTables = this.getGoodsNumber(value, record)
-    // console.log('goodsInitData', vipTables)
-    // this.setState({
-    //   vipTables: [...this.state.vipTables, record]
-    // }, () => {
-    //   console.log('2222record::', record, initData);
-    //   this.setState({
-    //     goodsInitData: this.state.vipTables,
-    //   });
-    // })
-    // vipTables = [{ key: 1, id: "1", shopName: '44444', isVip: 0, sessionKey: '55555'}]
-    // console.log('vipTables22222', vipTables)
-    //          a = { key: 1, id: "1", shopName: '22222', isVip: 0, sessionKey: "1111111"}
-    // initData[record.key - 1].isVip = value
     if (value === 1) {
       initData[record.key - 1].sessionKey = '请填写访问码'
     } else {

@@ -64,7 +64,7 @@ const api = map({
   paiActivity: '/pai/data/count/list',
 
   // 互派活动
-  interactLists: '/project/interact/list?status={status}&keyword={keyword}&pageNo={pageNo}',
+  interactLists: '/project/interact/list?status={status}&keyword={keyword}&pageNo={pageNo}&orderBy={orderBy}',
   interactAdd: '/project/interact/add',
   interactDetail: '/project/interact/detail',
   interactUpdate: '/project/interact/update',

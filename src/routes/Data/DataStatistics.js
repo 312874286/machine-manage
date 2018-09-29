@@ -21,7 +21,7 @@ import StandardTable from '../../components/StandardTable';
 import EditableTagGroup from '../../components/Tag';
 import {templateQuery} from "../../services/data/dataStatistics";
 import moment from "moment/moment";
-
+import { getUser } from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -29,7 +29,7 @@ const opType = [{id: 1, name: 'mysql'}, {id: 2, name: 'mongo'}, {id: 3, name: 'r
 const opTypeLists = ['', 'mysql', 'mongo', 'redis', 'hibrid']
 const ModalForm = Form.create()(
   (props) => {
-    const { form, modalVisible, editModalAddClick, editModalVisibleClick, editModalConfirmLoading, modalData, handleTags, modalFlag  } = props;
+    const { form, modalVisible, editModalAddClick, editModalVisibleClick, editModalConfirmLoading, modalData, handleTags, modalFlag, userInfo} = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -93,6 +93,19 @@ const ModalForm = Form.create()(
                 </Select>
               )}
             </FormItem>
+            <FormItem {...formItemLayout} label="请选择可执行人">
+              {getFieldDecorator('executor', {
+                rules: [{ required: false, message: '请选择可执行人' }],
+              })(
+                <Select mode="tags" placeholder="请选择可执行人">
+                  {userInfo.map((item) => {
+                    return (
+                      <Option key={item.uid} value={item.uid} >{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
             <FormItem {...formItemLayout} label="标签">
               {getFieldDecorator('titles', {
                 rules: [{ required: false }],
@@ -101,6 +114,7 @@ const ModalForm = Form.create()(
                 <EditableTagGroup
                   handleTags={handleTags}
                   tags={modalData.tags}
+                  search={false}
                 />
               )}
             </FormItem>
@@ -166,8 +180,8 @@ const GoOnForm = Form.create()(
                 rules: [{ required: false, message: '选择开始时间' }],
               })(
                 <DatePicker
-                  disabledDate={disabledStartDate}
-                  disabledTime={disabledTime}
+                  //disabledDate={disabledStartDate}
+                  //disabledTime={disabledTime}
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                   format="YYYY-MM-DD HH:mm"
                   // value={startValue}
@@ -219,6 +233,7 @@ export default class DataStatistics extends PureComponent {
     editModalConfirmLoading: false,
     currentData: {},
     activityLists: [],
+    userInfo:[],
 
     modalGoOnVisible: false,
     editGoOnModalConfirmLoading: false,
@@ -241,10 +256,29 @@ export default class DataStatistics extends PureComponent {
       payload: {
         restParams: {
           name: this.state.name,
+          user:getUser().userId,
         },
       },
     });
   }
+
+  getUserInfo = () => {
+    return this.props.dispatch({
+      type: 'dataStatistics/getUserInfo',
+      payload: {},
+    }).then(res => {
+      let data = [];
+      if(res)
+        for(let index in res){
+          data.push({
+            uid:res[index][0],
+            name:res[index][1],
+          })
+        }
+      return data;
+    })
+  };
+
   getActivityLists = () => {
     this.props.dispatch({
       type: 'scheduleSetting/activityList',
@@ -348,6 +382,7 @@ export default class DataStatistics extends PureComponent {
         payload: {
           restParams: {
             name: item.name,
+            user:getUser().userId,
           },
         },
       }).then((res) => {
@@ -367,6 +402,7 @@ export default class DataStatistics extends PureComponent {
       payload: {
         restParams: {
           name: item.name,
+          owner:getUser().userId,
         },
       },
     }).then((res) => {
@@ -382,27 +418,33 @@ export default class DataStatistics extends PureComponent {
     });
   }
   setModalData = (data) => {
-    if (data) {
-      this.setState({
-        modalData: { tags: data.titles },
-      }, () => {
-        this.ModalForm.setFieldsValue({
-          name: data.name || '',
-          template: data.template || undefined,
-          opType: data.opType || undefined,
-        });
-      })
-    } else {
-      this.setState({
-        modalData: { tags: [] },
-      }, () => {
-        this.ModalForm.setFieldsValue({
-          name: undefined,
-          template: undefined,
-          opType: undefined,
-        });
-      })
-    }
+    this.getUserInfo().then(userInfo => {
+      if (data) {
+        this.setState({
+          modalData: { tags: data.titles },
+          userInfo,
+        }, () => {
+          this.ModalForm.setFieldsValue({
+            name: data.name || '',
+            template: data.template || undefined,
+            opType: data.opType || undefined,
+            executor: data.executor || undefined,
+          });
+        })
+      } else {
+        this.setState({
+          modalData: { tags: [] },
+          userInfo,
+        }, () => {
+          this.ModalForm.setFieldsValue({
+            name: undefined,
+            template: undefined,
+            opType: undefined,
+            executor: undefined,
+          });
+        })
+      }
+    });
   }
   setGoOnModalData = () => {
     this.GoOnModalForm.setFieldsValue({
@@ -421,14 +463,17 @@ export default class DataStatistics extends PureComponent {
       if (err) {
         return;
       }
+
       let url = 'dataStatistics/templateInsert'
       let params = {
         ...values,
+        owner:getUser().userId,
         titles: this.state.modalData ? this.state.modalData.tags : ''
       }
+
       if (this.state.currentData.name) {
         url = 'dataStatistics/templateUpdate'
-        params = { ...params,  name: this.state.currentData.name}
+        params = { ...params, name: this.state.currentData.name}
       }
       this.props.dispatch({
         type: url,
@@ -515,7 +560,8 @@ export default class DataStatistics extends PureComponent {
         ...values,
         startTime: values.startTime ? values.startTime.format('YYYY-MM-DD HH:mm:ss') : '',
         endTime: values.endTime ? values.endTime.format('YYYY-MM-DD HH:mm:ss') : '',
-        name: this.state.currentData.name
+        name: this.state.currentData.name,
+        user: getUser().userId,
       }
       console.log('params', restParams)
       this.props.dispatch({
@@ -618,17 +664,22 @@ export default class DataStatistics extends PureComponent {
         fixed: 'right',
         width: 150,
         title: '操作',
-        render: (text, item) => (
+        render: (text, item) => {
+          let isCanEdit = true;
+          if(item.owner && getUser().userId !== item.owner){
+            isCanEdit = false
+          }
+          return (
           <Fragment>
             <a onClick={() => this.goOn(item)}>执行</a>
-            <Divider type="vertical" />
-            <a onClick={() => this.edit(item)}>编辑</a>
-            <Divider type="vertical" />
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.delete(item)} okText="Yes" cancelText="No">
-              <a>删除</a>
+            <Divider type="vertical"/>
+            <a onClick={() => this.edit(item)} style={{ display: isCanEdit ? '': 'none'}}>编辑</a>
+            <Divider type="vertical" style={{ display: isCanEdit ? '': 'none'}} />
+            <Popconfirm title="确定要删除吗" style={{ display: isCanEdit ? '': 'none'}} onConfirm={() => this.delete(item)} okText="Yes" cancelText="No">
+              <a style={{ display: isCanEdit ? '': 'none'}}>删除</a>
             </Popconfirm>
           </Fragment>
-        ),
+        )},
       },
     ];
     const formItemLayout = {
@@ -686,6 +737,7 @@ export default class DataStatistics extends PureComponent {
           modalData={modalData}
           handleTags={this.handleTags}
           modalFlag={this.state.modalFlag}
+          userInfo={this.state.userInfo}
         />
         <GoOnForm
           ref={this.saveGoOnModalFormRef}

@@ -89,7 +89,15 @@ const CreateForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="区名称">
               {getFieldDecorator('name', {
-                rules: [{ required: true, whitespace: true, message: '请输入区名称' }],
+                rules: [{ required: true, whitespace: true, message: '请输入区名称' }, {
+                  validator: (rule, value, callback) => {
+                    if (value.length > 16) {
+                      callback('区名称不能超过15个字符');
+                    } else {
+                      callback();
+                    }
+                  },
+                }],
               })(<Input placeholder="请输入区名称" />)}
             </FormItem>
           </Form>
@@ -385,9 +393,9 @@ export default class areaSettingList extends PureComponent {
         ...values,
         parentCode: parentCode[parentCode.length - 1],
       };
-      if (this.state.modalData.id) {
+      if (this.state.modalData.code) {
         url = 'areaSetting/updateArea';
-        params = { ...params, id: this.state.modalData.id };
+        params = { ...params, code: this.state.modalData.code };
       }
       this.props.dispatch({
         type: url,

@@ -40,7 +40,6 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       interactSampling: this.props.match.params.id
     }, () => {
-      this.getGoods()
       this.getInteractDetail()
     })
   }
@@ -54,6 +53,13 @@ export default class areaSettingList extends PureComponent {
         },
       },
     }).then((res) => {
+      if (!res.goodsRule) {
+        this.getGoods()
+      } else {
+        this.setState({
+          allGoods: res.goodsRule,
+        })
+      }
       this.setModalData(res)
     });
   }
@@ -72,6 +78,9 @@ export default class areaSettingList extends PureComponent {
         dayNumber: data.dayNumber === -1 ? ' ' :  data.dayNumber || undefined,
       });
     } else {
+      this.setState({
+        allGoods: [],
+      })
       this.props.form.setFieldsValue({
         times: undefined,
         dayTimes: undefined,
@@ -120,7 +129,7 @@ export default class areaSettingList extends PureComponent {
       if (res && res.code === 0) {
         this.setState({
           allGoods: res.data.map((item, index) => {
-            return { key: index, goodsId: item.id, userDayNumber: item.userDayNumber || 0, name: item.name, check: false }
+            return { key: index, goodsId: item.id, userDayNumber: item.userDayNumber === -1 ? ' ' : item.userDayNumber, name: item.name, check: item.userDayNumber === -1 ? true : false }
           })
         })
       }
@@ -161,30 +170,6 @@ export default class areaSettingList extends PureComponent {
         if (type === 1 && err) {
           return false
         }
-        if (!times) {
-          if (!fieldsValue.times) {
-            message.info('如没有选择不限，请填写同一用户参与活动次数')
-            return false
-          }
-        }
-        if (!dayTimes) {
-          if (!fieldsValue.dayTimes) {
-            message.info('如没有选择不限，请填写同一用户参与活动次数')
-            return false
-          }
-        }
-        if (!number) {
-          if (!fieldsValue.number) {
-            message.info('如没有选择不限，请填写同一用户参与活动次数')
-            return false
-          }
-        }
-        if (!dayNumber) {
-          if (!fieldsValue.dayNumber) {
-            message.info('如没有选择不限，请填写同一用户参与活动次数')
-            return false
-          }
-        }
         let params = {
           ...fieldsValue,
           type,
@@ -199,6 +184,32 @@ export default class areaSettingList extends PureComponent {
             ...params,
             id: this.state.interactSampling,
           };
+        }
+        if (type === 1) {
+          if (!times) {
+            if (!fieldsValue.times) {
+              message.info('如没有选择不限，请填写同一用户参与活动次数')
+              return false
+            }
+          }
+          if (!dayTimes) {
+            if (!fieldsValue.dayTimes) {
+              message.info('如没有选择不限，请填写同一用户每天参与活动次数')
+              return false
+            }
+          }
+          if (!number) {
+            if (!fieldsValue.number) {
+              message.info('如没有选择不限，请填写同一用户获得商品次数')
+              return false
+            }
+          }
+          // if (!dayNumber) {
+          //   if (!fieldsValue.dayNumber) {
+          //     message.info('如没有选择不限，请填写同一用户参与活动次数')
+          //     return false
+          //   }
+          // }
         }
         if (allGoods.length > 0) {
           for (let i = 0; i < allGoods.length; i++) {
@@ -225,11 +236,7 @@ export default class areaSettingList extends PureComponent {
           },
         }).then((res) => {
           if (res && res.code === 0) {
-            if (type === 0) {
-              this.props.history.push({pathname: `/project/addMachineInteractSampling/${this.state.interactSampling}`})
-            } else {
-              // this.props.history.push({pathname: '/project/sampling-setting'})
-            }
+            this.props.history.push({pathname: '/project/sampling-setting'})
           }
         });
       })
@@ -264,17 +271,6 @@ export default class areaSettingList extends PureComponent {
     }, {
       title: '规则设置',
       content: '',
-    }];
-    const columns = [{
-      title: 'Name',
-      dataIndex: 'name',
-      render: text => <a href="javascript:;">{text}</a>,
-    }, {
-      title: 'Age',
-      dataIndex: 'age',
-    }, {
-      title: 'Address',
-      dataIndex: 'address',
     }];
     return (
       <PageHeaderLayout>
@@ -316,7 +312,7 @@ export default class areaSettingList extends PureComponent {
                         // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
                       })
                       (<InputNumber
-                        placeholder="请输入同一用户每天参与活动次数"
+                        placeholder="请输入同一用户参与活动次数"
                         disabled={this.state.dayTimes}
                       />)}
                     </FormItem>
@@ -355,30 +351,29 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>
-                  <Col span={14}>
-                    <FormItem>
-                      {getFieldDecorator('dayNumber', {
-                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
-                      })
-                      (<InputNumber
-                        placeholder="请输入同一用户每天参与活动次数"
-                        disabled={this.state.dayNumber}
-                      />)}
-                    </FormItem>
-                  </Col>
-                  <Col span={8}>
-                    <FormItem>
-                      <Checkbox
-                        checked={this.state.dayNumber}
-                        // value={this.state.dayNumber}
-                        onChange={this.handleDayNumberChange}>
-                        不限
-                      </Checkbox>
-                    </FormItem>
-                  </Col>
-                </FormItem>
-
+                {/*<FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>*/}
+                  {/*<Col span={14}>*/}
+                    {/*<FormItem>*/}
+                      {/*{getFieldDecorator('dayNumber', {*/}
+                        {/*// rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],*/}
+                      {/*})*/}
+                      {/*(<InputNumber*/}
+                        {/*placeholder="请输入同一用户每天参与活动次数"*/}
+                        {/*disabled={this.state.dayNumber}*/}
+                      {/*/>)}*/}
+                    {/*</FormItem>*/}
+                  {/*</Col>*/}
+                  {/*<Col span={8}>*/}
+                    {/*<FormItem>*/}
+                      {/*<Checkbox*/}
+                        {/*checked={this.state.dayNumber}*/}
+                        {/*// value={this.state.dayNumber}*/}
+                        {/*onChange={this.handleDayNumberChange}>*/}
+                        {/*不限*/}
+                      {/*</Checkbox>*/}
+                    {/*</FormItem>*/}
+                  {/*</Col>*/}
+                {/*</FormItem>*/}
                 <FormItem {...formItemLayout} label="商品信息">
                 </FormItem>
                 <RuleInteractSampling
@@ -389,10 +384,10 @@ export default class areaSettingList extends PureComponent {
             </div>
             <div className={styles.stepsAction}>
               {
-                <Button onClick={() => this.next()}>取消</Button>
+                <Button onClick={() => this.props.history.push({pathname: '/project/sampling-setting'})}>取消</Button>
               }
               {
-                <Button onClick={() => this.next()}>暂存</Button>
+                <Button onClick={() => this.check(0)}>暂存</Button>
               }
               {
                 current > 0

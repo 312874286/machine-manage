@@ -58,9 +58,9 @@ const machineStatus = ['未知', '已开机', '已初始化', '已通过测试',
 const appStatus = ['未启动', '前台运行', '后台运行']
 const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-const pointTypeOptions = [{id: 0, name: '活动点位'}, {id: 1, name: '渠道点位'}]
+const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}]
 const pointStatusOptions = [{id: 1, name: '机器开机'}, {id: 2, name: '初始化机器 '}, {id: 3, name: '通过测试'}, {id: 4, name: '设置在点位'}]
-const machineType = ['渠道机器', '', '活动机器']
+const machineType = ['渠道机器', '活动机器']
 
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
@@ -205,35 +205,34 @@ const EditPointForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-
-          </Form>
-          <h3>监控设置</h3>
-          <Form>
-            <FormItem
-              label="开启监控"
-              {...formItemLayout}
-            >
-              {/*{getFieldDecorator('radio-group')(*/}
-              {/*<RadioGroup>*/}
-              {/*<Radio value="on">开启</Radio>*/}
-              {/*<Radio value="off">关闭</Radio>*/}
-              {/*</RadioGroup>*/}
-              {/*)}*/}
-              <Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="监控时间">
-              <TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
-              <span>-</span>
-              <TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
-
-            </FormItem>
             <FormItem>
               <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => editManageHandleModalVisibleClick()}>取消</Button>
               <Button style={{ width: '120px' }} type="Default" onClick={() => editPointHandleAddClick()}>确定</Button>
             </FormItem>
           </Form>
+          {/*<h3>监控设置</h3>*/}
+          {/*<Form>*/}
+            {/*<FormItem*/}
+              {/*label="开启监控"*/}
+              {/*{...formItemLayout}*/}
+            {/*>*/}
+              {/*/!*{getFieldDecorator('radio-group')(*!/*/}
+              {/*/!*<RadioGroup>*!/*/}
+              {/*/!*<Radio value="on">开启</Radio>*!/*/}
+              {/*/!*<Radio value="off">关闭</Radio>*!/*/}
+              {/*/!*</RadioGroup>*!/*/}
+              {/*/!*)}*!/*/}
+              {/*<Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>*/}
+            {/*</FormItem>*/}
+            {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label="监控时间">*/}
+              {/*<TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>*/}
+              {/*<span>-</span>*/}
+              {/*<TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>*/}
+
+            {/*</FormItem>*/}
+          {/*</Form>*/}
       </div>
     );
 });
@@ -589,7 +588,9 @@ const EditMonitoringForm = Form.create()(
       noticePosition, logLists, logTopLists, watchTop, machineCode, flagTop, returnInterval,
       handleMouseOver, handleMouseOut, mouseOver, onChange, excell, watchBtn,
       logRefresh, logUpdate, pointType, grabLogOnChange, machineLogLists, pointChange, machineId,
-      appUpdate, appRefresh, returnBtn, machineDetail, monitorKey
+      appUpdate, appRefresh, returnBtn, machineDetail, monitorKey,
+      logStartTime, logEndTime,
+      customLogEndTime, customLogStartTime, getLogMessage
     } = props;
     const formItemLayout = {
       labelCol: {
@@ -633,6 +634,7 @@ const EditMonitoringForm = Form.create()(
       align: 'left',
       width: '22%',
     }];
+    const dateFormat = 'YYYY-MM-DD';
     return (
       <Modal
         title={
@@ -693,9 +695,12 @@ const EditMonitoringForm = Form.create()(
                 <div className={styles.showList}
                      id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
+                  <span style={{ display: getLogMessage !== '正在获取' ? 'none' : '' }}>
+                    {getLogMessage}
+                  </span>
                   {(logLists.length === 0) ? '暂无数据' : (logLists.map((item) => {
                       return (
-                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999', display: getLogMessage === '正在获取' ? 'none' : '' }}>
                           <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
                         </p>
@@ -706,7 +711,9 @@ const EditMonitoringForm = Form.create()(
             </TabPane>
             <TabPane tab="定制日志" key="2">
               <div>
-                <RangePicker onChange={onChange} />
+                <RangePicker onChange={onChange}
+                             value={[customLogStartTime ? moment(customLogStartTime, dateFormat) : undefined, customLogEndTime ? moment(customLogEndTime, dateFormat) : undefined]}
+                />
                 <Button style={{ width: '120px', marginTop: '10px' }}
                         type="Default"
                         onClick={() => excell(machineCode)}>
@@ -719,7 +726,7 @@ const EditMonitoringForm = Form.create()(
               <Form onSubmit={this.handleSearch} style={{ marginTop: '10px' }}>
                 <FormItem {...formItemLayout} label="日志类型">
                   <div style={{ display: 'flex' }}>
-                    <Select placeholder="选择点位类型" value={ pointType } onChange={pointChange}>
+                    <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
                       {logOptions.map((item) => {
                         return (
                           <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -731,7 +738,9 @@ const EditMonitoringForm = Form.create()(
                 </FormItem>
                 <FormItem {...formItemLayout} label="时间范围">
                   <div style={{ display: 'flex' }}>
-                    <RangePicker onChange={grabLogOnChange} />
+                    <RangePicker onChange={grabLogOnChange}
+                                 value={[logStartTime ? moment(logStartTime, dateFormat) : undefined, logEndTime ? moment(logEndTime, dateFormat) : undefined]}
+                    />
                     <Button style={{ width: '120px', marginLeft: '10px' }} type="primary" onClick={() => logUpdate(machineId)}>刷新</Button>
                   </div>
                 </FormItem>
@@ -765,7 +774,7 @@ export default class machineSettingList extends PureComponent {
     formValues: {},
     editModalConfirmLoading: false,
     pageNo: 1,
-    // machineCode: '',
+    machineSearchCode: '',
     localCode: '',
     modalData: {},
     logModalVisible: false,
@@ -839,6 +848,11 @@ export default class machineSettingList extends PureComponent {
     endTime: '',
     machineType: '',
     machineStatus: '',
+
+    customLogStartTime: '',
+    customLogEndTime: '',
+    getLogMessage: '正在获取',
+    machineCodeOld: '',
   };
   constructor(props) {
     super(props);
@@ -887,7 +901,7 @@ export default class machineSettingList extends PureComponent {
         restParams: {
           pageNo: this.state.pageNo,
           localCode: this.state.localCode,
-          machineCode: this.state.machineCode,
+          machineCode: this.state.machineSearchCode,
           startTime: this.state.startTime,
           endTime: this.state.endTime,
           machineType: this.state.machineType,
@@ -962,7 +976,7 @@ export default class machineSettingList extends PureComponent {
       }
       this.setState({
         pageNo: 1,
-        machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
+        machineSearchCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
         localCode: localCode,
         startTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[0].format('YYYY-MM-DD') : '',
         endTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[1].format('YYYY-MM-DD') : '',
@@ -1133,8 +1147,12 @@ export default class machineSettingList extends PureComponent {
     console.log('old localeId',this.state.modalData.localeId)
     console.log('new localeId',this.state.dataId)
     let localeId = this.state.dataId;
-    if (localeId == '') {
+    if (localeId === '') {
       localeId = this.state.modalData.localeId
+    }
+    if (localeId === this.state.modalData.localeId) {
+      message.success('当前无修改')
+      return false
     }
     // 确认修改点位
     this.pointForm.validateFields((err, values) => {
@@ -1147,9 +1165,9 @@ export default class machineSettingList extends PureComponent {
       let params = {
         machineId: this.state.modalData.id,
         localeId: localeId,
-        openStatus: this.state.switchStatus ? 0 : 1,
-        monitorStart: this.state.supervisoryStartTime,
-        monitorEnd: this.state.supervisoryEndTime
+        // openStatus: this.state.switchStatus ? 0 : 1,
+        // monitorStart: this.state.supervisoryStartTime,
+        // monitorEnd: this.state.supervisoryEndTime
       };
       // if (this.state.modalData.id) {
       // url = 'machineSetting/updateLocaleMachineSetting';
@@ -1164,9 +1182,11 @@ export default class machineSettingList extends PureComponent {
       }).then((res) => {
         if (res && res.code === 0) {
           console.log('onselect', this.state.localeName)
-          this.setState({
-            pointName: this.state.localeName
-          })
+          if (localeId !== this.state.modalData.localeId) {
+            this.setState({
+              pointName: this.state.localeName
+            })
+          }
           message.success('修改成功')
         }
         this.pointForm.resetFields();
@@ -1779,6 +1799,10 @@ export default class machineSettingList extends PureComponent {
   handleMonitoringClick = (item) => {
     // machinePointLog
     this.setState({
+      customLogStartTime: '',
+      customLogEndTime: '',
+      logStartTime: '',
+      logEndTime: '',
       editMonitoringFormVisible: true,
       flagTop: false,
       logTopLists: [],
@@ -1836,6 +1860,9 @@ export default class machineSettingList extends PureComponent {
           this.getLogLists()
         });
       }
+      this.setState({
+        getLogMessage: '获取完成'
+      })
     });
   }
   getLogLists = () => {
@@ -1933,10 +1960,23 @@ export default class machineSettingList extends PureComponent {
     });
   }
   returnInterval = (machineCode) => {
+    console.log('returnInterval', machineCode, this.state.machineCode, this.state.modalData)
     this.setState({
       flagTop: false,
     }, () => {
-      this.handleMonitoringClick(machineCode)
+      // this.handleMonitoringClick(this.state.modalData)
+      this.setState({
+        editMonitoringFormVisible: true,
+        logTopLists: [],
+        logLists: [],
+        watchBtn: true,
+        machineCode: this.state.modalData.machineCode,
+        machineId: this.state.modalData.id,
+        modalData: this.state.modalData,
+        monitorKey: '1',
+      }, () => {
+        this.getMachineStatus(this.state.modalData);
+      })
     })
     // this.getLogLists()
     // this.props.dispatch({
@@ -2010,10 +2050,17 @@ export default class machineSettingList extends PureComponent {
     console.log(date, dateString);
     this.setState({
       excelTimeRange: dateString,
+      customLogStartTime: dateString[0],
+      customLogEndTime: dateString[1],
     })
   }
   excell = (machineCode) => {
     if (this.state.excelTimeRange.length === 0) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.warn('请先选择时间')
       return false
     }
@@ -2041,7 +2088,7 @@ export default class machineSettingList extends PureComponent {
 
     }
     if (key !== '1') {
-      clearInterval(mySetInterval)
+      // clearInterval(mySetInterval)
       clearInterval(myLogSetInterval)
     }
   }
@@ -2070,6 +2117,11 @@ export default class machineSettingList extends PureComponent {
   logRefresh = (machineId) => {
     const { pointType, logStartTime, logEndTime } = this.state
     if (!pointType || !logStartTime || !logEndTime) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请填写时间或者选择日志类型')
       return false
     }
@@ -2085,8 +2137,21 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res && res.code === 0) {
-        message.error(res.message ? res.message : '发送成功')
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        this.setState({
+          pointType: undefined,
+        })
+        message.success(res.message ? res.message : '发送成功')
       } else {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
         message.error(res.message)
       }
     })
@@ -2114,17 +2179,29 @@ export default class machineSettingList extends PureComponent {
       modalData: item,
       editManageFormVisible: true,
       managekey: '0',
+      TemperatureSelected: undefined,
+      machineCodeOld: item.machineCode,
+      machineCodeNew: undefined,
     });
     this.handleEditClick(item)
   }
   editManageHandleModalVisibleClick = () => {
     this.setState({
       editManageFormVisible: false,
+      modalData: {},
+      TemperatureSelected: undefined,
+      machineCodeOld: '',
+      machineCodeNew: undefined,
     });
   }
   temperatureSubmit = () => {
     const { TemperatureSelected } = this.state
     if (!TemperatureSelected) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请先选择温度再提交')
       return false
     }
@@ -2138,7 +2215,15 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res && res.code === 0) {
-        message.error('修改成功')
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        this.setState({
+          Temperature: this.state.TemperatureSelected
+        })
+        message.success('修改成功')
       }
     })
   }
@@ -2150,6 +2235,11 @@ export default class machineSettingList extends PureComponent {
   machineCodeSubmit = () => {
     const { machineCodeNew } = this.state
     if (!machineCodeNew) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
       message.error('请填写编码后再保存')
       return false
     }
@@ -2171,7 +2261,10 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        message.info(data.data)
+        this.setState({
+          machineCodeOld: this.state.machineCodeNew
+        })
+        message.info(data.data ? data.data : '修改成功')
       }
     });
   }
@@ -2214,7 +2307,7 @@ export default class machineSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          Temperature: res.data !== -1 ? res.data : '暂无温度'
+          Temperature: res.data
         })
       }
     })
@@ -2348,12 +2441,12 @@ export default class machineSettingList extends PureComponent {
         },
         key: 'netStatus'
       },
-      {
-        title: '当前活动',
-        width: '10%',
-        dataIndex: 'activityName',
-        key: 'activityName'
-      },
+      // {
+      //   title: '当前活动',
+      //   width: '10%',
+      //   dataIndex: 'activityName',
+      //   key: 'activityName'
+      // },
       {
         title: '入场时间',
         width: '10%',
@@ -2486,7 +2579,7 @@ export default class machineSettingList extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               scrollX={1000}
-              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 120)}
+              scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 180)}
             />
           </div>
         </Card>
@@ -2585,6 +2678,13 @@ export default class machineSettingList extends PureComponent {
           returnBtn={this.returnBtn}
 
           monitorKey={this.state.monitorKey}
+          logStartTime={this.state.logStartTime}
+          logEndTime={this.state.logEndTime}
+
+          customLogStartTime={this.state.customLogStartTime}
+          customLogEndTime={this.state.customLogEndTime}
+
+          getLogMessage={this.state.getLogMessage}
         />
         <Modal
           title={
@@ -2685,7 +2785,7 @@ export default class machineSettingList extends PureComponent {
               <TabPane tab="机器温度" key="3">
                 <Form>
                   <FormItem {...formItemLayout} label="当前温度">
-                    <span>{this.state.Temperature}</span>
+                    <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
                   </FormItem>
                   <FormItem {...formItemLayout} label="机器温度">
                     <Select placeholder="请选择" value={ this.state.TemperatureSelected } onChange={this.onTemperatureSelected}>
@@ -2705,7 +2805,7 @@ export default class machineSettingList extends PureComponent {
               <TabPane tab="修改编号" key="4">
                 <Form>
                   <FormItem {...formItemLayout} label="当前编号">
-                    <span>{modalData.machineCode}</span>
+                    <span>{this.state.machineCodeOld}</span>
                   </FormItem>
                   <FormItem {...formItemLayout} label="机器编号">
                     <Input placeholder="请填写机器编号" value={this.state.machineCodeNew} onChange={this.inputCodeChange}/>
