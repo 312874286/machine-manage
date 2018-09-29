@@ -878,12 +878,6 @@ export default class areaSettingList extends PureComponent {
   // 编辑modal 确认事件
   handleShopsAdd = (flag) => {
     this.shopsForm.validateFields((err, values) => {
-      // this.setState({
-      //   mustIsVip: data.isVip === 2 ? true : false,
-      //   sessionKey: data.isVip === 0 ? false : true,
-      // }, () => {
-      //
-      // })
       if (err) {
         return;
       }
