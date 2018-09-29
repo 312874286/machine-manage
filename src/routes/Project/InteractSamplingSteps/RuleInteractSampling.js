@@ -210,17 +210,17 @@ export default class areaSettingList extends PureComponent {
               return false
             }
           }
-          if (allGoods.length > 0) {
-            for (let i = 0; i < allGoods.length; i++) {
-              if (!allGoods[i].check) {
-                if (allGoods[i].userDayNumber === 0) {
-                  message.info('如没有选择不限，请填写可派发数量')
-                  return false
-                }
+        }
+        if (allGoods.length > 0) {
+          for (let i = 0; i < allGoods.length; i++) {
+            if (!allGoods[i].check) {
+              if (allGoods[i].userDayNumber === 0) {
+                message.info('如没有选择不限，请填写可派发数量')
+                return false
               }
-              if (allGoods[i].check) {
-                allGoods[i].userDayNumber = -1
-              }
+            }
+            if (allGoods[i].check) {
+              allGoods[i].userDayNumber = -1
             }
           }
         }
