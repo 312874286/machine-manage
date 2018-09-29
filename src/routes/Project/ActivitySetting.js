@@ -2043,6 +2043,7 @@ export default class activitySettingList extends PureComponent {
           <Tabs
             activeKey={this.state.StatisticsActivityKey}
             onChange={this.handleStatisticsTabsChange}
+            style={{ width: 1000 }}
           >
             <TabPane tab="PV/UV/订单量" key="1">
               <OrderStatistics
