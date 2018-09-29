@@ -81,7 +81,6 @@ export default class OrderStatistics extends PureComponent {
       {
         title: "点位",
         dataIndex: "machineCode",
-        width: 200,
         render: (text, record, index) => {
           return (
             <div>
