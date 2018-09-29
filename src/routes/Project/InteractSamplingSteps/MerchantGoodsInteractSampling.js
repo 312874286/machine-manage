@@ -205,7 +205,7 @@ const CreateShopsForm = Form.create()(
               <Col span={14}>
                 <FormItem>
                   {getFieldDecorator('sessionKey', {
-                    rules: [{ required: sessionKey, whitespace: true, message: '请输入入会码' }],
+                    // rules: [{ required: sessionKey, whitespace: true, message: '请输入入会码' }],
                   })
                   (<Input
                     placeholder="请输入入会码"
@@ -884,20 +884,15 @@ export default class areaSettingList extends PureComponent {
       // }, () => {
       //
       // })
-      if (values.isVip === 1) {
-        this.merchantForm.validateFields(['sessionKey'], { force: true });
-      }
       if (err) {
         return;
       }
-      // console.log('fieldsValue.sessionKey3333', values.isVip === 1)
-      // if (values.isVip === 1) {
-      //   console.log('fieldsValue.sessionKey', typeof values.sessionKey)
-      //   if (!values.sessionKey) {
-      //     message.info('请填写入会码')
-      //     return
-      //   }
-      // }
+      if (values.isVip === 1) {
+        if (!values.sessionKey.trim()) {
+          message.info('请填写入会码')
+          return
+        }
+      }
       this.setState({
         editShopsModalConfirmLoading: true,
       });
@@ -1011,7 +1006,7 @@ export default class areaSettingList extends PureComponent {
           shopName: data.shopName || '',
           sellerId: data.sellerId || '',
           isVip: data.isVip === 0 ? 0 : 1,
-          sessionKey: data.sessionKey || ' '
+          sessionKey: data.sessionKey || undefined
         });
       })
     } else {
