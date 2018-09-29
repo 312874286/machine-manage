@@ -4274,12 +4274,12 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-08-03 00:00:00",
-              "endTime": "2018-08-04 23:59:59"
+              "startTime": "2018-09-03 00:00:00",
+              "endTime": "2018-09-04 23:59:59"
             },
             {
-              "startTime": "2018-07-31 00:00:00",
-              "endTime": "2018-08-02 23:59:59"
+              "startTime": "2018-09-30 00:00:00",
+              "endTime": "2018-10-02 23:59:59"
             }
           ]
         },
@@ -4294,8 +4294,8 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-07-25 00:00:00",
-              "endTime": "2018-07-29 00:00:59"
+              "startTime": "2018-09-25 00:00:00",
+              "endTime": "2018-09-29 00:00:59"
             }
           ]
         },
@@ -4310,7 +4310,7 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-07-16 09:00:00",
+              "startTime": "2018-09-16 09:00:00",
               "endTime": "2018-10-06 23:00:00"
             }
           ]
@@ -4326,8 +4326,8 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-07-31 00:00:00",
-              "endTime": "2018-08-03 23:59:59"
+              "startTime": "2018-09-30 00:00:00",
+              "endTime": "2018-10-03 23:59:59"
             }
           ]
         },
