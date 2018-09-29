@@ -110,7 +110,7 @@ const CreateMerchantForm = Form.create()(
               <Button style={{ width: '120px', marginRight: '10px' }}
                       onClick={() => handleAdd(0)}>继续添加商家</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
-                      onClick={() => saveAddShop()}>保存并添加店铺</Button>
+                      onClick={() => saveAddShop(1)}>保存并添加店铺</Button>
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
@@ -557,7 +557,7 @@ export default class areaSettingList extends PureComponent {
   // 添加modal 添加事件
   handleModalVisible = async (flag, item) => {
     console.log('item', item)
-    this.getGoods()
+    this.getGoods(item.id)
     const { saveAndAddModal } = this.state
     this.setState({
       modalVisible: !!flag,
@@ -1187,8 +1187,11 @@ export default class areaSettingList extends PureComponent {
   }
   // 获取最新店铺结束
   // 获取最新商品开始
-  getGoods = () => {
-    let params = { shopsId: this.state.expandedShopsRowKeys[0], interactId: this.state.interactSampling }
+  getGoods = (shopsId) => {
+    let params = {
+      shopsId: this.state.expandedShopsRowKeys[0] || shopsId,
+      interactId: this.state.interactSampling
+    }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractGoodsList',
       payload: {

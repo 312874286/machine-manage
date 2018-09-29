@@ -26,7 +26,7 @@ import { getUser } from "../../utils/authority";
 const FormItem = Form.Item;
 const { Option } = Select;
 const opType = [{id: 1, name: 'mysql'}, {id: 2, name: 'mongo'}, {id: 3, name: 'redis'}, {id: 4, name: 'hibrid'}]
-const opTypeLists = ['', 'mysql', 'mongo', 'redis', 'hibrid']
+const opTypeLists = ['', 'mysql', 'mongo', 'redis', 'hybrid']
 const ModalForm = Form.create()(
   (props) => {
     const { form, modalVisible, editModalAddClick, editModalVisibleClick, editModalConfirmLoading, modalData, handleTags, modalFlag, userInfo} = props;
