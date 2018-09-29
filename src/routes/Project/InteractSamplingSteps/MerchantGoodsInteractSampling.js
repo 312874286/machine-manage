@@ -548,6 +548,12 @@ export default class areaSettingList extends PureComponent {
   saveFormRef = (form) => {
     this.form = form;
   }
+  onSelect = (value) => {
+    this.getInteractShopList(value)
+    this.form.setFieldsValue({
+      shopId: undefined,
+    });
+  }
   // 添加modal 添加事件
   handleModalVisible = async (flag, item) => {
     console.log('item', item)
@@ -927,6 +933,7 @@ export default class areaSettingList extends PureComponent {
     }, () => {
       this.setShopsModalData();
       if (item) {
+        console.log('item', item)
         this.getShops(item.id)
         this.shopsForm.setFieldsValue({
           sellerId: item.id,
