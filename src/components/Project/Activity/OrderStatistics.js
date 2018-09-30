@@ -23,10 +23,11 @@ export default class OrderStatistics extends PureComponent {
               return (
                 <div>
                   pv:
-                  {record[`pv${date.date}`] || 0} | uv:
-                  {record[`uv${date.date}`] || 0} | order:
-                  {record[`order${date.date}`] || 0} | shipment:
-                  {record[`shipment${date.date}`] || 0} | fans:
+                  {record[`pv${date.date}`] || 0}
+                  <br /> uv:
+                  {record[`uv${date.date}`] || 0} <br /> order:
+                  {record[`order${date.date}`] || 0} <br /> shipment:
+                  {record[`shipment${date.date}`] || 0} <br /> fans:
                   {record[`fans${date.date}`] || 0}
                 </div>
               );
@@ -62,6 +63,7 @@ export default class OrderStatistics extends PureComponent {
         obj[`order${date.date}`] = date.order;
         obj[`shipment${date.date}`] = date.shipment;
         obj[`fans${date.date}`] = date.fans;
+        debugger
         obj.total.pv += date.pv || 0;
         obj.total.uv += date.uv || 0;
         obj.total.order += date.order || 0;
@@ -81,6 +83,7 @@ export default class OrderStatistics extends PureComponent {
       {
         title: "点位",
         dataIndex: "machineCode",
+        width: 400,
         render: (text, record, index) => {
           return (
             <div>
@@ -94,15 +97,14 @@ export default class OrderStatistics extends PureComponent {
         title: "合计",
         dataIndex: "total",
         width: 400,
-        fixed: "right",
         render: (text, record) => {
           return (
             <div>
               pv:
-              {record.total.pv} | uv:
-              {record.total.uv} | order:
-              {record.total.order} | shipment:
-              {record.total.shipment} | fans:
+              {record.total.pv} <br/> uv:
+              {record.total.uv} <br/> order:
+              {record.total.order} <br/> shipment:
+              {record.total.shipment} <br/> fans:
               {record.total.fans}
             </div>
           );

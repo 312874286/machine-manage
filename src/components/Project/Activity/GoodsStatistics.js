@@ -38,9 +38,7 @@ export default class GoodsStatistics extends PureComponent {
   };
 
   parseData(datas) {
-    const data = [...datas];
-    const dataByTime = {};
-
+    let data = [...datas];
     let result = [];
     const times = {};
     columns[2].children = [];
@@ -77,12 +75,21 @@ export default class GoodsStatistics extends PureComponent {
       }
     });
 
+
+    // const sortResult = []
+    // Object.keys(times).sort((v, ov) => {
+    //   return new Date(v) > new Date(ov);
+    // }).forEach(time=>{
+    //   sortResult.concat(result.filter(i=>i.time === time))
+    // })
+
     result = result.map((item, index, array) => {
       return {
         ...item,
         count: array.filter(i => i.time === item.time).length + 1
       };
     });
+    let sortResult = []
     Object.keys(times).forEach(time => {
       const items = result.filter(i => i.time === time);
       const summary = { time, machineCode: "合计", count: items[0].count };
@@ -108,13 +115,14 @@ export default class GoodsStatistics extends PureComponent {
           isSummary: true
         };
       });
-      result.splice(
-        result.lastIndexOf(items[items.length - 1]) + 1,
+      sortResult = sortResult.concat(items)
+      sortResult.splice(
+        sortResult.lastIndexOf(items[items.length - 1]) + 1,
         0,
         summary
       );
     });
-    return result;
+    return sortResult;
   }
 
   render() {
