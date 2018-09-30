@@ -1,6 +1,7 @@
 import { stringify } from 'qs';
 import fetch from '../../utils/fetch/index';
 import api from './api';
+import apiData from './apiData';
 
 export async function saveActivitySetting({ params }) {
   return fetch.postJSON(api.saveActivitySetting, {
@@ -69,8 +70,20 @@ export async function getDefaultActivity({ restParams }) {
   });
 }
 
-export async function paiActivity({ restParams }) {
+export async function paiActivity({ params }) {
   return fetch.postJSON(api.paiActivity, {
-    body: JSON.stringify(restParams),
+    body: JSON.stringify(params),
+  });
+}
+
+export async function getOrderStatistics({ params }) {
+  return fetch.postJSON(apiData.machineStatistic, {
+    body: JSON.stringify(params),
+  });
+}
+
+export async function getGoodsStatistics({ params }) {
+  return fetch.postJSON(apiData.machineStatistic, {
+    body: JSON.stringify(params),
   });
 }
