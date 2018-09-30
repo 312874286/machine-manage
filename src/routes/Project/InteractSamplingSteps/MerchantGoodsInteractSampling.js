@@ -557,7 +557,6 @@ export default class areaSettingList extends PureComponent {
   // 添加modal 添加事件
   handleModalVisible = async (flag, item) => {
     console.log('item', item)
-    this.getGoods(item.id)
     const { saveAndAddModal } = this.state
     this.setState({
       modalVisible: !!flag,
@@ -566,6 +565,7 @@ export default class areaSettingList extends PureComponent {
     });
     this.setModalData();
     if (item) {
+      this.getGoods(item.id)
       if (item.sellerId) {
         await this.getInteractShopList(item.sellerId)
         await this.form.setFieldsValue({

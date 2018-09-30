@@ -10,6 +10,8 @@ import {
   Input,
   DatePicker,
   Divider,
+  Modal,
+  Table,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -22,7 +24,151 @@ const { Option } = Select;
 const status = ['未提交', '未开始', '进行中', '已结束', '已超时']
 const statusOption = [{id: 0, name: '未提交'}, {id: 1, name: '未开始'}, {id: 2, name: '进行中'}, {id: 3, name: '已结束'}, {id: 4, name: '已超时'}]
 const sortOption = [{id: 'goodsSend DESC', name: '按发放率倒序'}, {id: 'goodsSend', name: '按发放率正序'}, {id: 'real_day DESC', name: '按持续时长倒序'}, {id: 'real_day', name: '按持续时长正序'}]
-
+const WatchForm = Form.create()(
+  (props) => {
+    const { watchModalVisible, modalData, handleWatchModalVisible, allGoods, watchDetailClick } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    const columns = [{
+      title: '商品名称',
+      dataIndex: 'name',
+      width: '70%',
+    }, {
+      title: '每天可派发数',
+      dataIndex: 'userDayNumber',
+      render: (text, record) => {
+        return (
+          <span>{parseInt(record.userDayNumber) === -1 ? '不限' : record.userDayNumber}</span>
+        );
+      },
+    }];
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看活动</span>
+          </div>
+        }
+        visible={watchModalVisible}
+        onCancel={() => handleWatchModalVisible()}
+        footer={null}
+        width={800}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="1.基本信息">
+            </FormItem>
+            <FormItem {...formItemLayout} label="互派名称">
+              <span>{modalData.name}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="游戏编号">
+              <span>{modalData.planCode}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="互派游戏">
+              <span>{modalData.gameId}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="预计时长/天">
+              <span>{modalData.day}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="负责人">
+              <span>{modalData.manager}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="2.商户商品信息">
+              <a onClick={() => watchDetailClick(modalData.id)}>查看详情</a>
+            </FormItem>
+            <FormItem {...formItemLayout} label="3.选择机器">
+              <a onClick={() => watchDetailClick(modalData.id)}>查看详情</a>
+            </FormItem>
+            <FormItem {...formItemLayout} label="4.规则设置">
+            </FormItem>
+            <FormItem {...formItemLayout} label="4.1活动规则">
+            </FormItem>
+            <FormItem {...formItemLayout} label="同一用户参与活动次数">
+              <span>{modalData.times === -1 ? '不限' : modalData.times}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="同一用户每天参与活动次数">
+              <span>{modalData.dayTimes === -1 ? '不限' : modalData.dayTimes}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="同一用户获得商品次数">
+              <span>{modalData.dayNumber === -1 ? '不限' : modalData.dayNumber}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="4.2商品信息">
+              <Table
+                rowKey={record => record.id}
+                columns={columns}
+                dataSource={allGoods}
+                pagination={false}/>
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+const WatchMerchantGoodsForm = Form.create()(
+  (props) => {
+    const { watchModalVisible, modalData, handleWatchModalVisible, allGoods, watchDetailClick } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    const columns = [{
+      title: '商品名称',
+      dataIndex: 'name',
+      width: '70%',
+    }, {
+      title: '每天可派发数',
+      dataIndex: 'userDayNumber',
+      render: (text, record) => {
+        return (
+          <span>{parseInt(record.userDayNumber) === -1 ? '不限' : record.userDayNumber}</span>
+        );
+      },
+    }];
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看商户商品信息</span>
+          </div>
+        }
+        visible={watchModalVisible}
+        onCancel={() => handleWatchModalVisible()}
+        footer={null}
+        width={800}
+      >
+        <div className="manageAppBox">
+          {/*<Table*/}
+            {/*rowKey={record => record.id || record.code}*/}
+            {/*className="components-table-demo-nested"*/}
+            {/*columns={columns}*/}
+            {/*expandedRowRender={expandedRowRender}*/}
+            {/*dataSource={merchants}*/}
+            {/*pagination={false}*/}
+            {/*// expandRowByClick={true}*/}
+            {/*onExpandedRowsChange={onExpandedRowsChange}*/}
+            {/*expandedRowKeys={expandedRowKeys}*/}
+            {/*scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 80)}}*/}
+          {/*/>*/}
+        </div>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -38,6 +184,10 @@ export default class areaSettingList extends PureComponent {
     account: {},
     keyword: '',
     orderBy: '',
+
+    watchModalVisible: false,
+    modalData: {},
+    allGoods: [],
   };
   componentDidMount() {
     this.getLists();
@@ -145,6 +295,50 @@ export default class areaSettingList extends PureComponent {
        this.getLists()
       }
     });
+  }
+  handleWatchModalVisible = (flag) => {
+    this.setState({
+      watchModalVisible: !!flag,
+      modalData: {},
+    });
+  }
+  // interactDetail
+  getInteractDetail = (item) => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/interactDetail',
+      payload: {
+        params: {
+          id: item.id
+        },
+      },
+    }).then((res) => {
+      if (res) {
+        this.setState({
+          watchModalVisible: true,
+          modalData: res
+        })
+      }
+    });
+    this.getGoods(item)
+  }
+  // 获取所有商品开始
+  getGoods = (item) => {
+    let params = { interactId: item.id }
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getInteractGoodsList',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          allGoods: res.data
+        })
+      }
+    });
+  }
+  watchDetailClick = () => {
+
   }
   renderAdvancedForm() {
     const { form } = this.props;
@@ -298,6 +492,8 @@ export default class areaSettingList extends PureComponent {
             <a>统计</a>
             <Divider type="vertical" style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}/>
             <a onClick={() => this.giveUp(item)} style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}>结束</a>
+            <Divider type="vertical"/>
+            <a onClick={() => this.getInteractDetail(item)}>查看</a>
           </Fragment>
         ),
       },
@@ -351,6 +547,15 @@ export default class areaSettingList extends PureComponent {
             </div>
           </div>
         </Card>
+        <WatchForm
+          watchModalVisible={this.state.watchModalVisible}
+          modalData={this.state.modalData}
+          handleWatchModalVisible={this.handleWatchModalVisible}
+          allGoods={this.state.allGoods}
+          watchDetailClick={this.watchDetailClick}
+          />
+        <WatchMerchantGoodsForm
+          />
       </PageHeaderLayout>
     );
   }
