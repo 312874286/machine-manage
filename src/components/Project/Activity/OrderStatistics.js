@@ -94,7 +94,6 @@ export default class OrderStatistics extends PureComponent {
         title: "合计",
         dataIndex: "total",
         width: 400,
-        fixed: "right",
         render: (text, record) => {
           return (
             <div>
