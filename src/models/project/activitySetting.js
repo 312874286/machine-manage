@@ -65,8 +65,8 @@ export default {
       const response = yield call(getDefaultActivity, { restParams });
       return response.data;
     },
-    *paiActivity({ payload: { restParams } }, { call, put }) {
-      const response = yield call(paiActivity, { restParams });
+    *paiActivity({ payload: { params } }, { call, put }) {
+      const response = yield call(paiActivity, { params });
       yield put({
         type: 'savePaiCountList',
         payload: response,

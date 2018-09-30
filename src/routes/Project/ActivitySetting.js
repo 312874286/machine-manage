@@ -1229,7 +1229,7 @@ export default class activitySettingList extends PureComponent {
       .dispatch({
         type: "activitySetting/paiActivity",
         payload: {
-          restParams: {
+          params: {
             activityId: data.id
           }
         }
