@@ -93,76 +93,16 @@ export default class unusual extends PureComponent {
       {
         title: '机器编号',
         dataIndex: 'machineCode',
-        width: '20%',
+        width: '25%',
       },
       {
         title: '机器点位',
-        width: '20%',
+        width: '25%',
         dataIndex: 'local',
       },
-      // {
-      //   title: '机器门',
-      //   width: '10%',
-      //   dataIndex: 'machineDoorStatus',
-      //   render(val) {
-      //     if (val) {
-      //       return machineDoorStatus[val]
-      //     } else {
-      //       return '无'
-      //     }
-      //   }
-      // },
-      // {
-      //   title: '温度',
-      //   dataIndex: 'temperature',
-      //   width: '10%',
-      //   render: (text, item) => (
-      //     (item.temperature) ? (
-      //       <span>{item.temperature}</span>
-      //     ) :(
-      //       <span>无</span>
-      //     )
-      //   )
-      // },
-      {
-        title: '调货开关',
-        width: '20%',
-        dataIndex: 'dropGoodsSwitch',
-        render(val) {
-          if (val) {
-            return machineDoorStatus[val]
-          } else {
-            return '无'
-          }
-        }
-      },
-      // {
-      //   title: '屏幕亮度',
-      //   dataIndex: 'screenIntensity',
-      //   width: '10%',
-      //   render: (text, item) => (
-      //     (item.screenIntensity) ? (
-      //       <span>{item.screenIntensity}</span>
-      //     ) :(
-      //       <span>无</span>
-      //     )
-      //   )
-      // },
-      // {
-      //   title: '音量',
-      //   dataIndex: 'voice',
-      //   width: '10%',
-      //   render: (text, item) => (
-      //     (item.voice) ? (
-      //       <span>{item.voice}</span>
-      //     ) :(
-      //       <span>无</span>
-      //     )
-      //   )
-      // },
       {
         title: '货道故障',
-        width: '20%',
+        width: '25%',
         dataIndex: 'goodsChannelStatus',
         render: (text, item) => (
           (item.goodsChannelStatus) ? (
@@ -183,16 +123,6 @@ export default class unusual extends PureComponent {
           )
         )
       },
-      // {
-      //   fixed: 'right',
-      //   width: 150,
-      //   title: '历史解决方案',
-      //   render: (text, item) => (
-      //     <Fragment>
-      //       <a onClick={() => this.handleLogClick(item)}>查看</a>
-      //     </Fragment>
-      //   ),
-      // },
     ];
     return (
       <PageHeaderLayout>

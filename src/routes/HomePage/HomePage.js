@@ -64,15 +64,15 @@ export default class homePageSetting extends PureComponent {
               </div>
             }>
               <div className={styles.gridCardBox}>
-                <a style={{ cursor: 'not-allowed' }}>
-                  <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/onLine.png')}/>
-                  </div>
-                  <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.online === 0 ? "0" : MachinePortalDataList.online}</span>
-                    <span>机器在线</span>
-                  </div>
-                </a>
+                {/*<a style={{ cursor: 'not-allowed' }}>*/}
+                  {/*<div className={styles.machineLeftBox}>*/}
+                    {/*<img src={require('../../assets/images/indexPage/onLine.png')}/>*/}
+                  {/*</div>*/}
+                  {/*<div className={styles.machineRightBox}>*/}
+                    {/*<span>{MachinePortalDataList.online === 0 ? "0" : MachinePortalDataList.online}</span>*/}
+                    {/*<span>机器在线</span>*/}
+                  {/*</div>*/}
+                {/*</a>*/}
                 <a onClick={() => this.props.history.push('/offline')}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/offLine.png')}/>
@@ -82,15 +82,6 @@ export default class homePageSetting extends PureComponent {
                     <span>机器离线</span>
                   </div>
                 </a>
-                <a onClick={() => this.props.history.push('/Unusual')}>
-                  <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/unusual.png')}/>
-                  </div>
-                  <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.exception === 0 ? "0" : MachinePortalDataList.exception}</span>
-                    <span>机器异常</span>
-                  </div>
-                </a>
                 <a onClick={() => this.props.history.push('/StockOut')}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/stockOut.png')}/>
@@ -98,6 +89,24 @@ export default class homePageSetting extends PureComponent {
                   <div className={styles.machineRightBox}>
                     <span>{MachinePortalDataList.stockout === 0 ? "0" : MachinePortalDataList.stockout}</span>
                     <span>机器缺货</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push('/Unusual')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/unusual.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.exception === 0 ? "0" : MachinePortalDataList.exception}</span>
+                    <span>掉货开关异常</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push('/Trouble')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/unusual.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.exception === 0 ? "0" : MachinePortalDataList.exception}</span>
+                    <span>货道故障</span>
                   </div>
                 </a>
               </div>

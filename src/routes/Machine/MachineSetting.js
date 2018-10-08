@@ -1508,7 +1508,6 @@ export default class machineSettingList extends PureComponent {
       }
     });
   }
-
   appRefresh = () => {
     // console.log('刷新了app', this.state.modalData);
     this.handleManageAppClick(this.state.modalData);
@@ -2320,7 +2319,7 @@ export default class machineSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="省市区商圈">
+            <FormItem label="省市区">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
                   placeholder="请选择"
@@ -2332,9 +2331,11 @@ export default class machineSettingList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={9} sm={24}>
-            <FormItem>
+            <FormItem label="入场时间">
               {getFieldDecorator('rangeTime')(
-                <RangePicker />
+                <RangePicker
+                  placeholder={['开始时间', '结束时间']}
+                />
               )}
             </FormItem>
           </Col>
@@ -2356,7 +2357,7 @@ export default class machineSettingList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem>
               {getFieldDecorator('machineCode')(
-                <Input placeholder="请输入机器编号" />
+                <Input placeholder="请输入机器编号、点位、具体位置、活动名称" />
               )}
             </FormItem>
           </Col>
@@ -2429,7 +2430,7 @@ export default class machineSettingList extends PureComponent {
       //   key: 'detail'
       // },
       {
-        title: '网络',
+        title: '连接状态',
         width: '10%',
         dataIndex: 'netStatus',
         render(val) {
@@ -2441,12 +2442,12 @@ export default class machineSettingList extends PureComponent {
         },
         key: 'netStatus'
       },
-      // {
-      //   title: '当前活动',
-      //   width: '10%',
-      //   dataIndex: 'activityName',
-      //   key: 'activityName'
-      // },
+      {
+        title: '当前活动',
+        width: '10%',
+        dataIndex: 'activityName',
+        key: 'activityName'
+      },
       {
         title: '入场时间',
         width: '10%',
