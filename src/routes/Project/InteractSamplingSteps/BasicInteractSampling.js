@@ -99,7 +99,7 @@ export default class areaSettingList extends PureComponent {
     }, () => {
       this.props.form.validateFields((err, fieldsValue) => {
         console.log('(err && type === 1)', (err && type === 1))
-        if (type === 1 && err) {
+        if (err) {
           return false
         }
         let params = {
