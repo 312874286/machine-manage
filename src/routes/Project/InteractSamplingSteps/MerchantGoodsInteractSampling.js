@@ -565,7 +565,7 @@ export default class areaSettingList extends PureComponent {
     });
     this.setModalData();
     if (item) {
-      this.getGoods(item.id)
+      this.getGoods(1)
       if (item.sellerId) {
         await this.getInteractShopList(item.sellerId)
         await this.form.setFieldsValue({
@@ -596,7 +596,7 @@ export default class areaSettingList extends PureComponent {
           params,
         },
       }).then(() => {
-        this.getGoods()
+        this.getGoods(1)
         this.setState({
           editModalConfirmLoading: false,
         });
@@ -619,7 +619,7 @@ export default class areaSettingList extends PureComponent {
       },
     }).then((res) => {
       this.getInteractShopList(res.sellerId)
-      this.getGoods()
+      this.getGoods(1)
       this.setModalData(res);
     });
   }
@@ -748,7 +748,7 @@ export default class areaSettingList extends PureComponent {
       }).then((res) => {
         if (res && res.code === 0) {
           message.success( messageTxt + '成功');
-          this.getGoods()
+          this.getGoods(1)
           this.setState({
             modalData: {},
             editModalConfirmLoading: false,
@@ -906,7 +906,7 @@ export default class areaSettingList extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          this.getShops()
+          this.getShops(1)
           this.setState({
             editShopsModalConfirmLoading: false,
             modalShopsData: {},
@@ -941,7 +941,7 @@ export default class areaSettingList extends PureComponent {
       this.setShopsModalData();
       if (item) {
         console.log('item', item)
-        this.getShops(item.id)
+        this.getShops(1)
         this.shopsForm.setFieldsValue({
           sellerId: item.id,
         });
@@ -961,7 +961,7 @@ export default class areaSettingList extends PureComponent {
           params,
         },
       }).then(() => {
-        this.getShops()
+        this.getShops(1)
         this.setState({
           editShopsModalConfirmLoading: false,
         });
@@ -1020,7 +1020,7 @@ export default class areaSettingList extends PureComponent {
   saveAddGoods = () => {
     // saveAndAddModal
     this.handleShopsAdd('saveAddGoods')
-    this.getShops()
+    this.getShops(1)
   }
   RadioChange = (e) => {
     console.log('value', e)
@@ -1169,9 +1169,14 @@ export default class areaSettingList extends PureComponent {
   }
   // 商户结束
   // 获取最新店铺开始
-  getShops = (merchantId) => {
+  getShops = (flag) => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
-    let params = { merchantId: this.state.expandedRowKeys[0] || merchantId }
+    let params = {}
+    if (parseInt(flag) === 1) {
+      params = { interactId: this.state.interactSampling }
+    } else {
+      params = { merchantId: this.state.expandedRowKeys[0] }
+    }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -1187,10 +1192,17 @@ export default class areaSettingList extends PureComponent {
   }
   // 获取最新店铺结束
   // 获取最新商品开始
-  getGoods = (shopsId) => {
-    let params = {
-      shopsId: this.state.expandedShopsRowKeys[0] || shopsId,
-      interactId: this.state.interactSampling
+  getGoods = (flag) => {
+    let params = {}
+    if (parseInt(flag) === 1) {
+      params = {
+        interactId: this.state.interactSampling
+      }
+    } else {
+      params = {
+        shopsId: this.state.expandedShopsRowKeys[0],
+        interactId: this.state.interactSampling
+      }
     }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractGoodsList',
@@ -1275,7 +1287,7 @@ export default class areaSettingList extends PureComponent {
         expandedShopsRowKeys: expandedRows.splice(expandedRows.length - 1, 1)
       }, () => {
         if (this.state.expandedShopsRowKeys.length > 0) {
-          this.getGoods()
+          this.getGoods(2)
         }
       })
     }
@@ -1317,7 +1329,7 @@ export default class areaSettingList extends PureComponent {
         expandedShopsRowKeys: [],
       }, () => {
         if (this.state.expandedRowKeys.length > 0) {
-          this.getShops()
+          this.getShops(2)
         }
       })
     }

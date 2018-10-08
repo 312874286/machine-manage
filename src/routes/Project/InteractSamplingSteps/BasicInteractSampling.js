@@ -18,7 +18,7 @@ import {getAccountMenus} from "../../../utils/authority";
 
 const Step = Steps.Step;
 const FormItem = Form.Item;
-
+const { Option } = Select;
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -179,7 +179,7 @@ export default class areaSettingList extends PureComponent {
               <Form onSubmit={this.handleSearch}>
                 <FormItem {...formItemLayout} label="互派活动">
                   {getFieldDecorator('name', {
-                    rules: [{ required: type, whitespace: true, message: '请输入互派活动' }],
+                    rules: [{ required: true, whitespace: true, message: '请输入互派活动' }],
                   })(<Input placeholder="请输入互派活动" />)}
                 </FormItem>
                 <FormItem {...formItemLayout} label="游戏编号">
