@@ -915,7 +915,11 @@ export default class areaSettingList extends PureComponent {
             }
           });
           if (flag === 'saveAddGoods') {
-            this.handleModalVisible(true)
+            this.setState({
+              modalShopsVisible: false,
+            }, () => {
+              this.handleModalVisible(true)
+            });
           }
           if (flag === 0) {
             this.setShopsModalData()
