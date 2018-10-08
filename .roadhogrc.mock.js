@@ -5506,7 +5506,6 @@ const proxy = {
       "msg": "成功"
     })
   },
-<<<<<<< HEAD
   'GET /project/interact/list': (req, res) => {
     res.send({
       "msg": "成功",
@@ -5914,8 +5913,7 @@ const proxy = {
       },
       "msg": "成功"
     })
-  }
-=======
+  },
   'POST /statistics/TemplateExecute': (req, res) => {
     const data = {"code":0,"msg":"成功"}
     console.log(req.body.name==="goodsInfo",req.body.name)
@@ -5926,7 +5924,6 @@ const proxy = {
     }
     res.send(data)
   },
->>>>>>> 14b505842d0ab13f40d0e2c8abd2bb0300d7cca5
 };
 
 // export default noProxy ? {
