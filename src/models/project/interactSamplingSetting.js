@@ -28,6 +28,8 @@ import {
   getShopsDetail,
   interactDetail,
   interactUpdate,
+  getMerchantTree,
+  getMachineTree,
 } from '../../services/project/interactSamplingSetting';
 
 
@@ -154,6 +156,14 @@ export default {
     },
     *getInteractMachineGoodsList({ payload: { restParams } }, { call, put }) {
       const response = yield call(getInteractMachineGoodsList, { restParams });
+      return response;
+    },
+    *getMerchantTree({ payload: { restParams } }, { call }) {
+      const response = yield call(getMerchantTree, { restParams });
+      return response;
+    },
+    *getMachineTree({ payload: { restParams } }, { call }) {
+      const response = yield call(getMachineTree, { restParams });
       return response;
     },
     *ruleInteract({ payload: { params } }, { call }) {

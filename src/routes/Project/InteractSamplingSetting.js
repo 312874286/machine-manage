@@ -12,13 +12,14 @@ import {
   Divider,
   Modal,
   Table,
+  Tree
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './InteractSamplingSetting.less';
 import {getAccountMenus} from "../../utils/authority";
 
-
+const TreeNode = Tree.TreeNode;
 const FormItem = Form.Item;
 const { Option } = Select;
 const status = ['未提交', '未开始', '进行中', '已结束', '已超时']
@@ -26,7 +27,7 @@ const statusOption = [{id: 0, name: '未提交'}, {id: 1, name: '未开始'}, {i
 const sortOption = [{id: 'goodsSend DESC', name: '按发放率倒序'}, {id: 'goodsSend', name: '按发放率正序'}, {id: 'real_day DESC', name: '按持续时长倒序'}, {id: 'real_day', name: '按持续时长正序'}]
 const WatchForm = Form.create()(
   (props) => {
-    const { watchModalVisible, modalData, handleWatchModalVisible, allGoods, watchDetailClick } = props;
+    const { watchModalVisible, modalData, handleWatchModalVisible, allGoods, watchDetailClick, watchMachineDetailClick } = props;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -86,7 +87,7 @@ const WatchForm = Form.create()(
               <a onClick={() => watchDetailClick(modalData.id)}>查看详情</a>
             </FormItem>
             <FormItem {...formItemLayout} label="3.选择机器">
-              <a onClick={() => watchDetailClick(modalData.id)}>查看详情</a>
+              <a onClick={() => watchMachineDetailClick(modalData.id)}>查看详情</a>
             </FormItem>
             <FormItem {...formItemLayout} label="4.规则设置">
             </FormItem>
@@ -115,7 +116,11 @@ const WatchForm = Form.create()(
   });
 const WatchMerchantGoodsForm = Form.create()(
   (props) => {
-    const { watchModalVisible, modalData, handleWatchModalVisible, allGoods, watchDetailClick } = props;
+    const {
+      watchModalMerchantTreeVisible,
+      treeData,
+      handleMerchantTreeModalVisible,
+      renderTreeNodes } = props;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -126,19 +131,6 @@ const WatchMerchantGoodsForm = Form.create()(
         sm: { span: 18 },
       },
     };
-    const columns = [{
-      title: '商品名称',
-      dataIndex: 'name',
-      width: '70%',
-    }, {
-      title: '每天可派发数',
-      dataIndex: 'userDayNumber',
-      render: (text, record) => {
-        return (
-          <span>{parseInt(record.userDayNumber) === -1 ? '不限' : record.userDayNumber}</span>
-        );
-      },
-    }];
     return (
       <Modal
         title={
@@ -147,24 +139,53 @@ const WatchMerchantGoodsForm = Form.create()(
             <span class="modalTitle">查看商户商品信息</span>
           </div>
         }
-        visible={watchModalVisible}
-        onCancel={() => handleWatchModalVisible()}
+        visible={watchModalMerchantTreeVisible}
+        onCancel={() => handleMerchantTreeModalVisible()}
         footer={null}
         width={800}
       >
         <div className="manageAppBox">
-          {/*<Table*/}
-            {/*rowKey={record => record.id || record.code}*/}
-            {/*className="components-table-demo-nested"*/}
-            {/*columns={columns}*/}
-            {/*expandedRowRender={expandedRowRender}*/}
-            {/*dataSource={merchants}*/}
-            {/*pagination={false}*/}
-            {/*// expandRowByClick={true}*/}
-            {/*onExpandedRowsChange={onExpandedRowsChange}*/}
-            {/*expandedRowKeys={expandedRowKeys}*/}
-            {/*scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 80)}}*/}
-          {/*/>*/}
+          <Tree>
+            {renderTreeNodes(treeData)}
+          </Tree>
+        </div>
+      </Modal>
+    );
+  });
+const WatchMachineGoodsForm = Form.create()(
+  (props) => {
+    const {
+      watchModalMerchantTreeVisible,
+      treeData,
+      handleMerchantTreeModalVisible,
+      renderTreeNodes } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">查看机器商品信息</span>
+          </div>
+        }
+        visible={watchModalMerchantTreeVisible}
+        onCancel={() => handleMerchantTreeModalVisible()}
+        footer={null}
+        width={800}
+      >
+        <div className="manageAppBox">
+          <Tree>
+            {renderTreeNodes(treeData)}
+          </Tree>
         </div>
       </Modal>
     );
@@ -188,6 +209,11 @@ export default class areaSettingList extends PureComponent {
     watchModalVisible: false,
     modalData: {},
     allGoods: [],
+
+    watchModalMerchantTreeVisible: false,
+    treeData: [],
+    watchModalMachineTreeVisible: false,
+    machineTreeData: [],
   };
   componentDidMount() {
     this.getLists();
@@ -337,8 +363,61 @@ export default class areaSettingList extends PureComponent {
       }
     });
   }
-  watchDetailClick = () => {
-
+  watchDetailClick = (interactId) => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getMerchantTree',
+      payload: {
+        restParams: {
+          interactId,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          watchModalMerchantTreeVisible: true,
+          treeData: res.data
+        })
+      }
+    });
+  }
+  handleMerchantTreeModalVisible = (flag) => {
+    this.setState({
+      watchModalMerchantTreeVisible: !!flag,
+    });
+  }
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode {...item} />;
+    });
+  }
+  watchMachineDetailClick = (interactId) => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getMachineTree',
+      payload: {
+        restParams: {
+          interactId,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          watchModalMachineTreeVisible: true,
+          machineTreeData: res.data
+        })
+      }
+    });
+  }
+  handleMachineTreeModalVisible = (flag) => {
+    this.setState({
+      watchModalMachineTreeVisible: !!flag,
+    });
   }
   renderAdvancedForm() {
     const { form } = this.props;
@@ -553,9 +632,20 @@ export default class areaSettingList extends PureComponent {
           handleWatchModalVisible={this.handleWatchModalVisible}
           allGoods={this.state.allGoods}
           watchDetailClick={this.watchDetailClick}
+          watchMachineDetailClick={this.watchMachineDetailClick}
           />
         <WatchMerchantGoodsForm
+          watchModalMerchantTreeVisible={this.state.watchModalMerchantTreeVisible}
+          treeData={this.state.treeData}
+          handleMerchantTreeModalVisible={this.handleMerchantTreeModalVisible}
+          renderTreeNodes={this.renderTreeNodes}
           />
+        <WatchMachineGoodsForm
+          watchModalMerchantTreeVisible={this.state.watchModalMachineTreeVisible}
+          treeData={this.state.machineTreeData}
+          handleMerchantTreeModalVisible={this.handleMachineTreeModalVisible}
+          renderTreeNodes={this.renderTreeNodes}
+        />
       </PageHeaderLayout>
     );
   }

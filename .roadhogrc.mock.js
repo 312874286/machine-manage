@@ -5506,7 +5506,6 @@ const proxy = {
       "msg": "成功"
     })
   },
-<<<<<<< HEAD
   'GET /project/interact/list': (req, res) => {
     res.send({
       "msg": "成功",
@@ -5914,8 +5913,152 @@ const proxy = {
       },
       "msg": "成功"
     })
-  }
-=======
+  },
+  'GET /project/interact/merchantTree': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "854c44cfaea94c6191848fc193c53d92",
+          "name": "天猫小敏旗舰店",
+          "childList": []
+        },
+        {
+          "id": "182daafc2c7e4be1beddba0a6979cbf4",
+          "name": "天猫清风",
+          "childList": [
+            {
+              "id": "938cccdd9a03469f99e66f659ee3d14a",
+              "name": "天猫清风旗舰店",
+              "childList": [
+                {
+                  "id": "1",
+                  "name": "测试-云南白药",
+                  "childList": null
+                },
+                {
+                  "id": "1d4e2c5d6b854d43ac948e0c51f8ce83",
+                  "name": "666",
+                  "childList": null
+                },
+                {
+                  "id": "3416b4c619e0403c9bb46a13aaea1c14",
+                  "name": "9999999",
+                  "childList": null
+                },
+                {
+                  "id": "3d8ec6bd455941078e6596b6749dd3e6",
+                  "name": "6",
+                  "childList": null
+                },
+                {
+                  "id": "3f8afb4fea144b858164d9a9a4135d8a",
+                  "name": "1111",
+                  "childList": null
+                },
+                {
+                  "id": "49cf81bafa154764a6efb4a1522160ae",
+                  "name": "优资莱-珀莱雅",
+                  "childList": null
+                },
+                {
+                  "id": "50f84b28f4b5433f86d31dbbbef04ee7",
+                  "name": "商品名称222222",
+                  "childList": null
+                },
+                {
+                  "id": "6872e449b6704876b9a74a7cf1c82aca",
+                  "name": "清风3层100抽0000000000000000",
+                  "childList": null
+                },
+                {
+                  "id": "844952a8170f47fbaa44656a7351192a",
+                  "name": "我问问",
+                  "childList": null
+                },
+                {
+                  "id": "8ceb4e36aa0f443f84528698369d6940",
+                  "name": "伊利优酸乳",
+                  "childList": null
+                },
+                {
+                  "id": "8e7d25369a114ca5beb298a30b4aeb65",
+                  "name": "5555555",
+                  "childList": null
+                },
+                {
+                  "id": "a2c57114af6b49dd89be5c9697e7efa4",
+                  "name": "1111",
+                  "childList": null
+                },
+                {
+                  "id": "aeb0f93482fd4fc6b97129cef110a596",
+                  "name": "666",
+                  "childList": null
+                },
+                {
+                  "id": "b1f7c42ede9c4a7c837f7e6899d2369e",
+                  "name": "清风3层100抽",
+                  "childList": null
+                },
+                {
+                  "id": "b568dd69006d485d8044768dfdf2b7ef",
+                  "name": "商品2",
+                  "childList": null
+                },
+                {
+                  "id": "c38937196f14491abff5e520490acf02",
+                  "name": "商品名称test",
+                  "childList": null
+                },
+                {
+                  "id": "ca5ba475088946ed8857a8478fdf2ce5",
+                  "name": "0987",
+                  "childList": null
+                },
+                {
+                  "id": "d6888f533c9f4e2daa0a4b2b0c2fce7a",
+                  "name": "乔治卡罗尔",
+                  "childList": null
+                },
+                {
+                  "id": "d87c7f9e85e44a139e509ae0ba3a1a15",
+                  "name": "77777",
+                  "childList": null
+                },
+                {
+                  "id": "eb32bbe0176941fda59650d0f9e76d49",
+                  "name": "清风3层100抽",
+                  "childList": null
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'GET 	/project/interact/machineTree': (req, res) => {
+    res.send({
+
+      "code": 0,
+      "data": [
+        {
+          "id": "681fd2a6f6c84d40870436fea1854dbd",
+          "name": "北京市北京市东城区278797987989899景山公园歪脖树下(18884154)",
+          "childList": [
+            {
+              "id": "1",
+              "name": "测试-云南白药",
+              "childList": null
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
   'POST /statistics/TemplateExecute': (req, res) => {
     const data = {"code":0,"msg":"成功"}
     console.log(req.body.name==="goodsInfo",req.body.name)
@@ -5926,7 +6069,6 @@ const proxy = {
     }
     res.send(data)
   },
->>>>>>> 14b505842d0ab13f40d0e2c8abd2bb0300d7cca5
 };
 
 // export default noProxy ? {

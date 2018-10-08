@@ -85,6 +85,7 @@ const api = map({
   getMerchantDetail: '/project/interact/merchant/detail',
   getGoodsDetail: '/project/interact/goods/detail',
   getShopsDetail: '/project/interact/shops/detail',
+  merchantTree: '/project/interact/merchantTree?interactId={interactId}',
   // 第三步 选择机器
   getInteractMachinePlanList: '/project/interact/machine/planList',
   addInteractMachine: '/project/interact/machine/add',
@@ -92,6 +93,7 @@ const api = map({
   deleteInteractMachine: '/project/interact/machine/delete',
   getInteractAllGoodsList: '/project/interact/goods/getAllList',
   getInteractMachineGoodsList: '/project/interact/machine/goodsList',
+  getMachineTree: '/project/interact/machineTree?interactId={interactId}',
   // 第四步 规则设置
   ruleInteract: '/project/interact/rule',
 

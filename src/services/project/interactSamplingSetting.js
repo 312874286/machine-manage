@@ -146,6 +146,18 @@ export async function getChannelSettingList({ params, restParams }) {
   });
 }
 
+export async function getMerchantTree({ restParams }) {
+  return fetch.get(api.merchantTree, {
+    restParams,
+  });
+}
+
+export async function getMachineTree({ restParams }) {
+  return fetch.get(api.getMachineTree, {
+    restParams,
+  });
+}
+
 export async function getGameList({ params }) {
   return fetch.post(api.getGameList, {
     body: stringify(params),
