@@ -565,9 +565,11 @@ export default class areaSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.props.history.push({pathname: `/project/addBasicInteractSampling`, query: {id: item.id}})}
+            <a
+              style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}
+              onClick={() => this.props.history.push({pathname: `/project/addBasicInteractSampling`, query: {id: item.id}})}
             >详情</a>
-            <Divider type="vertical"/>
+            <Divider type="vertical" style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}/>
             <a>统计</a>
             <Divider type="vertical" style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}/>
             <a onClick={() => this.giveUp(item)} style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}>结束</a>
