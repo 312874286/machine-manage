@@ -1,21 +1,20 @@
 import React, { PureComponent, Fragment } from "react";
 import { connect } from "dva";
+import moment from "moment";
 import {
   Row,
   Col,
   Card,
   Form,
   Button,
-  Select,
+  Popconfirm,
   Input,
   DatePicker,
   Steps,
   Table,
   Modal
 } from "antd";
-import MachinePlanTable, {
-  MachinePlanedGoodsTable
-} from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachinePlanTable";
+import MachinePlanTable from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachinePlanTable";
 import MachineConfigCard from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachineConfigCard";
 import PageHeaderLayout from "../../../layouts/PageHeaderLayout";
 import styles from "./BasicInteractSampling.less";
@@ -36,12 +35,14 @@ export default class MachineInteractSampling extends PureComponent {
     interactInfo: null,
     goodsList: [],
     keyword: null,
-    machineModalVisible: false,
     machinesData: [],
-    machinesSearchData: [],
-    machinesAddedData: [],
+    machineModalVisible: false,
+    machineModalDatas: [],
+    machineModalData: null,
+    machineModalAddedData: [],
+    machineModalType: 0,
     goodsModalVisible: false,
-    goodsMachinesData: []
+    goodsModalMachineData: []
   };
   componentDidMount() {
     this.setState(
@@ -54,11 +55,46 @@ export default class MachineInteractSampling extends PureComponent {
       }
     );
   }
-  handleSearchClick() {
-    this.getMachineList();
-  }
   handleUpdateMachine = record => {
-    console.log(record);
+    this.setState({
+      machineModalVisible: true,
+      machineModalData: record
+    });
+  };
+  handleDeleteMachine = record => {
+    this.props
+      .dispatch({
+        type: "interactSamplingSetting/deleteInteractMachine",
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            machineId: record.machineId
+          }
+        }
+      })
+      .then(res => {
+        if (res && res.code === 0) {
+          this.getMachineList();
+        }
+      });
+  };
+  handleDeleteGoods = record => {
+    this.props
+      .dispatch({
+        type: "interactSamplingSetting/deleteInteractMachineGoods",
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            machineId: record.machineId,
+            goodsId: record.goodsId
+          }
+        }
+      })
+      .then(res => {
+        if (res && res.code === 0) {
+          this.getMachineList();
+        }
+      });
   };
   handleExpand = (indent, record) => {
     if (indent) {
@@ -78,7 +114,9 @@ export default class MachineInteractSampling extends PureComponent {
             machinesData
               .filter(m => m.machineId === record.machineId)
               .forEach(m => {
-                m.goodsList = res.data || [];
+                m.goodsList = (res.data || []).map(d => {
+                  return { machineId: record.machineId, ...d };
+                });
               });
             this.setState({ machinesData });
           }
@@ -87,7 +125,8 @@ export default class MachineInteractSampling extends PureComponent {
   };
   handelChoiceMachineClick() {
     this.setState({
-      machineModalVisible: true
+      machineModalVisible: true,
+      machineModalData: null
     });
   }
   handelMachineSearchClick() {
@@ -125,7 +164,7 @@ export default class MachineInteractSampling extends PureComponent {
       .then(res => {
         if (res && res.code === 0) {
           this.setState({
-            machinesSearchData: res.data
+            machineModalDatas: res.data
           });
         }
       });
@@ -159,7 +198,7 @@ export default class MachineInteractSampling extends PureComponent {
       .then(res => {
         if (res && res.code === 0) {
           this.setState({
-            machinesAddedData: machines
+            machineModalAddedData: machines
           });
         }
       });
@@ -168,14 +207,17 @@ export default class MachineInteractSampling extends PureComponent {
     this.setState(
       {
         machineModalVisible: false,
-        machinesSearchData: []
+        machineModalDatas: [],
+        machineModalAddedData: []
       },
-      () => {}
+      () => {
+        this.getMachineList();
+      }
     );
   }
   handleSelectedGoodsChange(e) {
     const goods = [...this.state.goodsList];
-    goods.filter(m => m.machineId === e.target.value).forEach(good => {
+    goods.filter(g => g.id === e.target.value).forEach(good => {
       good.checked = e.target.checked;
     });
     this.setState({ goodsList: goods });
@@ -184,6 +226,12 @@ export default class MachineInteractSampling extends PureComponent {
     const goods = [...this.state.goodsList];
     goods.filter(g => g.id === e.target.value).forEach(good => {
       good.secular = e.target.checked;
+      if (good.secular) {
+        good.startTime = moment();
+        good.startTimeStr = moment().format("YYYY-MM-DD 00:00:00");
+        good.endTime = null;
+        good.endTimeStr = null;
+      }
     });
     this.setState({ goodsList: goods });
   }
@@ -205,16 +253,16 @@ export default class MachineInteractSampling extends PureComponent {
     this.setState({ goodsList: goods });
   }
   handleGoodsModalVisible() {
-    this.setState({ goodsModalVisible: false });
+    this.setState({ goodsModalVisible: false, goodsModalMachineData: [] });
   }
   handleGoodAdd(machines) {
-    this.setState({ goodsMachinesData: machines }, () => {
+    this.setState({ goodsModalMachineData: machines }, () => {
       this.props
         .dispatch({
           type: "interactSamplingSetting/getInteractGoodsList",
           payload: {
             params: {
-              id: this.state.interactSampling
+              interactId: this.state.interactSampling
             }
           }
         })
@@ -236,15 +284,10 @@ export default class MachineInteractSampling extends PureComponent {
         seq: g.setOrder,
         state: g.secular ? 1 : 0,
         startTimeStr: g.startTimeStr,
-        endTimeStr: g.endTimeStr,
-        type: g.type
+        endTimeStr: g.endTimeStr
       };
     });
-    const machines = this.state.goodsMachinesData.map(m => {
-      return {
-        machineId: m.machineId
-      };
-    });
+    const machines = this.state.goodsModalMachineData.map(m => m.machineId);
     const params = {
       interactId: this.state.interactSampling,
       machines,
@@ -300,9 +343,39 @@ export default class MachineInteractSampling extends PureComponent {
         });
       });
   }
-  renderExpandedRow(record, isExpanded) {
-    if (isExpanded && record.goodsList && record.goodsList.length > 0) {
-      return <MachinePlanedGoodsTable dataSource={record.goodsList || []} />;
+  renderExpandedRow(machine, isExpanded) {
+    if (isExpanded) {
+      const columns = [
+        { title: "商品名称", dataIndex: "goodsName" },
+        { title: "商品数量", dataIndex: "number" },
+        {
+          title: "操作",
+          render: record => {
+            return (
+              <Fragment>
+                <Popconfirm
+                  title="确定要删除吗"
+                  onConfirm={() => {
+                    this.handleDeleteGoods(record);
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                >
+                  <a>删除</a>
+                </Popconfirm>
+              </Fragment>
+            );
+          }
+        }
+      ];
+      return (
+        <Table
+          rowKey="goodsId"
+          columns={columns}
+          dataSource={machine.goodsList}
+          pagination={false}
+        />
+      );
     } else {
       return null;
     }
@@ -371,6 +444,7 @@ export default class MachineInteractSampling extends PureComponent {
                       format="YYYY-MM-DD"
                       style={{ width: "100%" }}
                       value={g.startTime}
+                      disabled={g.secular}
                       onChange={(date, dateStr) => {
                         this.handleGoodsExpireDateChange(date, dateStr, g, 0);
                       }}
@@ -444,10 +518,7 @@ export default class MachineInteractSampling extends PureComponent {
                 />
               </Col>
               <Col span={6}>
-                <Button
-                  type="primary"
-                  onClick={this.handelChoiceMachineClick.bind(this)}
-                >
+                <Button type="primary" onClick={this.getMachineList.bind(this)}>
                   查询
                 </Button>
                 &nbsp;
@@ -460,9 +531,9 @@ export default class MachineInteractSampling extends PureComponent {
               loading={loading}
               dataSource={this.state.machinesData}
               onExpand={this.handleExpand.bind(this)}
-              renderExpandedRow={this.renderExpandedRow}
-              onDeleteMachine={this.handleDeleteMachine}
-              onUpdateMachine={this.handleUpdateMachine}
+              renderExpandedRow={this.renderExpandedRow.bind(this)}
+              onDeleteMachine={this.handleDeleteMachine.bind(this)}
+              onUpdateMachine={this.handleUpdateMachine.bind(this)}
             />
           </div>
           <div className={styles.stepsAction}>
@@ -529,8 +600,9 @@ export default class MachineInteractSampling extends PureComponent {
           footer={false}
         >
           <MachineConfigCard
-            datas={this.state.machinesSearchData}
-            postDatas={this.state.machinesAddedData}
+            data={this.state.machineModalData}
+            datas={this.state.machineModalDatas}
+            postDatas={this.state.machineModalAddedData}
             onAddMachine={this.handleMachineAdd.bind(this)}
             onAddGoods={this.handleGoodAdd.bind(this)}
             onSearch={this.handleMachineSearch.bind(this)}
@@ -550,7 +622,7 @@ export default class MachineInteractSampling extends PureComponent {
           <div style={{ margin: 10 }}>
             <div style={{ margin: "0 0 15px" }}>
               机器编号：
-              {this.state.goodsMachinesData.map(m => (
+              {this.state.goodsModalMachineData.map(m => (
                 <span style={{ margin: "0 5px" }}>{m.machineCode}</span>
               ))}
             </div>

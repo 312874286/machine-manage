@@ -32,7 +32,8 @@ import {
   getMachineTree,
   getInteractHavingMachineList,
   getInteractMachineGoods,
-  getInteractMachineList
+  getInteractMachineList,
+  deleteInteractMachineGoods
 } from "../../services/project/interactSamplingSetting";
 
 export default {
@@ -280,6 +281,15 @@ export default {
       { call }
     ) {
       const response = yield call(deleteInteractMachine, { params });
+      return response;
+    },
+    *deleteInteractMachineGoods(
+      {
+        payload: { params }
+      },
+      { call }
+    ) {
+      const response = yield call(deleteInteractMachineGoods, { params });
       return response;
     },
     *getInteractAllGoodsList(
