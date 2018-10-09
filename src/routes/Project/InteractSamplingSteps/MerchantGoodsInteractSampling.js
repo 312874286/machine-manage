@@ -228,7 +228,7 @@ const CreateShopsForm = Form.create()(
               <Button style={{ width: '120px', marginRight: '10px' }}
                       onClick={() => handleAdd(0)}>继续添加店铺</Button>
               <Button style={{ width: '120px' }} type="Default"  type="primary"
-                      onClick={() => saveAddGoods()}>保存并添加商品</Button>
+                      onClick={() => handleAdd('saveAddGoods')}>保存并添加商品</Button>
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? '' : 'none'}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
@@ -910,7 +910,7 @@ export default class areaSettingList extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          this.getShops()
+          this.getShops('saveAddGoods')
           // setTimeout(() => {
           //
           // }, 0)
@@ -921,13 +921,6 @@ export default class areaSettingList extends PureComponent {
               sellerId: params.sellerId
             }
           });
-          if (flag === 'saveAddGoods') {
-            this.setState({
-              modalShopsVisible: false,
-            }, () => {
-              this.handleModalVisible(true)
-            });
-          }
           if (flag === 0) {
             this.setShopsModalData()
           }
@@ -1031,7 +1024,7 @@ export default class areaSettingList extends PureComponent {
   saveAddGoods = () => {
     // saveAndAddModal
     this.handleShopsAdd('saveAddGoods')
-    this.getShops()
+    // this.getShops()
   }
   RadioChange = (e) => {
     console.log('value', e)
@@ -1180,7 +1173,7 @@ export default class areaSettingList extends PureComponent {
   }
   // 商户结束
   // 获取最新店铺开始
-  getShops = () => {
+  getShops = (flag) => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
     let params = { merchantId: this.state.expandedRowKeys[0] }
     this.props.dispatch({
@@ -1194,7 +1187,15 @@ export default class areaSettingList extends PureComponent {
         this.setState({
           currentShopsData: res.data,
         }, () => {
-          this.getAllShops()
+          if (flag === 'saveAddGoods') {
+            this.setState({
+              modalShopsVisible: false,
+            }, () => {
+              this.handleModalVisible(true)
+            });
+          } else {
+            this.getAllShops()
+          }
         })
       }
     });
