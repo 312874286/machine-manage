@@ -486,6 +486,8 @@ export default class areaSettingList extends PureComponent {
     currentShopsData: [],
     currentGoodsData: [],
 
+    allShopsLists: [],
+    allGoodsLists: [],
     saveAndAddModal: {},
     sessionKey: false,
     mustIsVip: false,
@@ -906,7 +908,10 @@ export default class areaSettingList extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          this.getShops(1)
+          this.getShops()
+          // setTimeout(() => {
+          //
+          // }, 0)
           this.setState({
             editShopsModalConfirmLoading: false,
             modalShopsData: {},
@@ -945,7 +950,7 @@ export default class areaSettingList extends PureComponent {
       this.setShopsModalData();
       if (item) {
         console.log('item', item)
-        this.getShops(1)
+        this.getAllShops()
         this.shopsForm.setFieldsValue({
           sellerId: item.id,
         });
@@ -965,7 +970,7 @@ export default class areaSettingList extends PureComponent {
           params,
         },
       }).then(() => {
-        this.getShops(1)
+        this.getShops()
         this.setState({
           editShopsModalConfirmLoading: false,
         });
@@ -1024,7 +1029,7 @@ export default class areaSettingList extends PureComponent {
   saveAddGoods = () => {
     // saveAndAddModal
     this.handleShopsAdd('saveAddGoods')
-    this.getShops(1)
+    this.getShops()
   }
   RadioChange = (e) => {
     console.log('value', e)
@@ -1173,23 +1178,38 @@ export default class areaSettingList extends PureComponent {
   }
   // 商户结束
   // 获取最新店铺开始
-  getShops = (flag) => {
+  getShops = () => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
-    let params = {}
-    if (parseInt(flag) === 1) {
-      params = { interactId: this.state.interactSampling }
-    } else {
-      params = { merchantId: this.state.expandedRowKeys[0] }
-    }
+    let params = { merchantId: this.state.expandedRowKeys[0] }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
         params,
       },
     }).then((res) => {
+      console.log('1111', res.data)
       if (res && res.code === 0) {
         this.setState({
-          currentShopsData: res.data
+          currentShopsData: res.data,
+        }, () => {
+          this.getAllShops()
+        })
+      }
+    });
+  }
+  getAllShops = () => {
+    console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
+    let params = { interactId: this.state.interactSampling }
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getInteractShopsList',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      console.log('2222', res.data)
+      if (res && res.code === 0) {
+        this.setState({
+          allShopsLists: res.data
         })
       }
     });
@@ -1216,7 +1236,34 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          currentGoodsData: res.data
+          currentGoodsData: res.data,
+          allGoodsLists: res.data
+        })
+      }
+    });
+  }
+  getAllGoods = (flag) => {
+    let params = {}
+    if (parseInt(flag) === 1) {
+      params = {
+        interactId: this.state.interactSampling
+      }
+    } else {
+      params = {
+        shopsId: this.state.expandedShopsRowKeys[0],
+        interactId: this.state.interactSampling
+      }
+    }
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getInteractGoodsList',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          currentGoodsData: res.data,
+          allGoodsLists: res.data
         })
       }
     });
@@ -1421,7 +1468,7 @@ export default class areaSettingList extends PureComponent {
           sessionKey={this.state.sessionKey}
           RadioChange={this.RadioChange}
           mustIsVip={this.state.mustIsVip}
-          currentShopsData={this.state.currentShopsData}
+          currentShopsData={this.state.allShopsLists}
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
@@ -1447,7 +1494,7 @@ export default class areaSettingList extends PureComponent {
           handleUploadBanner={this.handleUploadBanner}
           onGoodTypeSelect={this.onGoodTypeSelect}
           GoodTypePlaceHolder={this.state.GoodTypePlaceHolder}
-          currentGoodsData={this.state.currentGoodsData}
+          currentGoodsData={this.state.allGoodsLists}
         />
       </PageHeaderLayout>
     );
