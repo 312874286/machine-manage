@@ -184,6 +184,10 @@ export function parseUploadFileUrl(path) {
   }
 }
 
+export function cloneByJSON(data){
+  return JSON.parse(JSON.stringify(data))
+}
+
 const RegexTool = {
   mobile: /^[1][3,4,5,6,7,8,9][0-9]{9}$/,
   idCard: /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/,
