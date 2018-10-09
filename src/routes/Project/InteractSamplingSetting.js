@@ -75,7 +75,7 @@ const WatchForm = Form.create()(
               <span>{modalData.planCode}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="互派游戏">
-              <span>{modalData.gameId}</span>
+              <span>{modalData.gameName}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="预计时长/天">
               <span>{modalData.day}</span>
