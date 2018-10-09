@@ -29,7 +29,7 @@ const Step = Steps.Step;
   loading: loading.models.interactSamplingSetting
 }))
 @Form.create()
-export default class areaSettingList extends PureComponent {
+export default class MachineInteractSampling extends PureComponent {
   state = {
     current: 2,
     interactSampling: null,
@@ -75,9 +75,11 @@ export default class areaSettingList extends PureComponent {
         .then(res => {
           if (res && res.code === 0) {
             const machinesData = [...this.state.machinesData];
-            machinesData.filter(m => m.id === record.id).forEach(m => {
-              m.goodsList = res.data || [];
-            });
+            machinesData
+              .filter(m => m.machineId === record.machineId)
+              .forEach(m => {
+                m.goodsList = res.data || [];
+              });
             this.setState({ machinesData });
           }
         });
@@ -137,7 +139,7 @@ export default class areaSettingList extends PureComponent {
         };
       });
       return {
-        machineId: m.id,
+        machineId: m.machineId,
         machineCode: m.machineCode,
         state: m.secular ? 1 : 0,
         planTime
@@ -173,14 +175,14 @@ export default class areaSettingList extends PureComponent {
   }
   handleSelectedGoodsChange(e) {
     const goods = [...this.state.goodsList];
-    goods.filter(m => m.id === e.target.value).forEach(good => {
+    goods.filter(m => m.machineId === e.target.value).forEach(good => {
       good.checked = e.target.checked;
     });
     this.setState({ goodsList: goods });
   }
   handleGoodsExpireChange(e) {
     const goods = [...this.state.goodsList];
-    goods.filter(m => m.id === e.target.value).forEach(good => {
+    goods.filter(g => g.id === e.target.value).forEach(good => {
       good.secular = e.target.checked;
     });
     this.setState({ goodsList: goods });
@@ -189,7 +191,7 @@ export default class areaSettingList extends PureComponent {
     const goods = [...this.state.goodsList];
     const type = typeCode === 0 ? "startTime" : "endTime";
     const time = typeCode === 0 ? "00:00:00" : "23:59:59";
-    goods.filter(m => m.id === good.id).forEach(good => {
+    goods.filter(g => g.id === good.id).forEach(good => {
       good[type] = date;
       good[`${type}Str`] = `${dateStr} ${time}`;
     });
@@ -197,7 +199,7 @@ export default class areaSettingList extends PureComponent {
   }
   handleGoodsInputChange(value, type, good) {
     const goods = [...this.state.goodsList];
-    goods.filter(m => m.id === good.id).forEach(good => {
+    goods.filter(g => g.id === good.id).forEach(good => {
       good[type] = value;
     });
     this.setState({ goodsList: goods });
@@ -240,7 +242,7 @@ export default class areaSettingList extends PureComponent {
     });
     const machines = this.state.goodsMachinesData.map(m => {
       return {
-        machineId: m.id
+        machineId: m.machineId
       };
     });
     const params = {
@@ -311,8 +313,8 @@ export default class areaSettingList extends PureComponent {
         {this.state.goodsList.map(g => {
           return (
             <div>
-              <Row gutter={2} style={{ marginBottom: 10 }}>
-                <Col span="6">
+              <Row gutter={5} style={{ marginBottom: 10 }}>
+                <Col span={6}>
                   <label>
                     <input
                       type="checkbox"
@@ -323,7 +325,7 @@ export default class areaSettingList extends PureComponent {
                     {g.name}
                   </label>
                 </Col>
-                <Col span="9">
+                <Col span={9}>
                   <Input
                     value={g.setCount}
                     onChange={e => {
@@ -336,7 +338,7 @@ export default class areaSettingList extends PureComponent {
                     placeholder="每个机器的商品数量"
                   />
                 </Col>
-                <Col span="9">
+                <Col span={9}>
                   <Input
                     value={g.setOrder}
                     onChange={e => {
@@ -351,8 +353,8 @@ export default class areaSettingList extends PureComponent {
                 </Col>
               </Row>
               {g.checked && (
-                <Row gutter={2} style={{ marginBottom: 10 }}>
-                  <Col span="4" offset="2">
+                <Row gutter={5} style={{ marginBottom: 10 }}>
+                  <Col span={4} offset={2}>
                     <label>
                       <input
                         type="checkbox"
@@ -363,9 +365,10 @@ export default class areaSettingList extends PureComponent {
                       长期
                     </label>
                   </Col>
-                  <Col span="9">
+                  <Col span={9}>
                     <DatePicker
                       placeholder="开始时间"
+                      format="YYYY-MM-DD"
                       style={{ width: "100%" }}
                       value={g.startTime}
                       onChange={(date, dateStr) => {
@@ -373,9 +376,10 @@ export default class areaSettingList extends PureComponent {
                       }}
                     />
                   </Col>
-                  <Col span="9">
+                  <Col span={9}>
                     <DatePicker
                       placeholder="结束时间"
+                      format="YYYY-MM-DD"
                       style={{ width: "100%" }}
                       value={g.endTime}
                       disabled={g.secular}
@@ -429,8 +433,8 @@ export default class areaSettingList extends PureComponent {
           </Steps>
 
           <div className={styles.stepsContent}>
-            <Row gutter="5" style={{ marginBottom: 15 }}>
-              <Col span="6">
+            <Row gutter={5} style={{ marginBottom: 15 }}>
+              <Col span={6}>
                 <Input
                   value={this.state.keyword}
                   onChange={e => {
@@ -439,7 +443,7 @@ export default class areaSettingList extends PureComponent {
                   placeholder="搜索机器点位/编号"
                 />
               </Col>
-              <Col span="6">
+              <Col span={6}>
                 <Button
                   type="primary"
                   onClick={this.handelChoiceMachineClick.bind(this)}
@@ -521,6 +525,8 @@ export default class areaSettingList extends PureComponent {
           onCancel={this.handleMachineModalVisible.bind(this)}
           width={800}
           destroyOnClose={true}
+          maskClosable={false}
+          footer={false}
         >
           <MachineConfigCard
             datas={this.state.machinesSearchData}
@@ -537,7 +543,8 @@ export default class areaSettingList extends PureComponent {
           onCancel={this.handleGoodsModalVisible.bind(this)}
           onOk={this.handleGoodsModalSave.bind(this)}
           destroyOnClose={true}
-          width="500px"
+          maskClosable={false}
+          width={500}
           className="center-footer"
         >
           <div style={{ margin: 10 }}>

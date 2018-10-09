@@ -16,7 +16,8 @@ import { cloneByJSON } from "../../../../utils/utils";
 import "./MachineConfigCard.less";
 
 const { RangePicker } = DatePicker;
-
+const width = 150;
+const height = 60;
 export default class MachineConfigCard extends Component {
   state = {
     dates: [],
@@ -42,7 +43,7 @@ export default class MachineConfigCard extends Component {
     var unixDe = end.valueOf();
 
     for (var k = unixDb; k <= unixDe; ) {
-      dateAllArr.push(moment(parseInt(k)).format("l"));
+      dateAllArr.push(moment(parseInt(k)).format("YYYY-MM-DD"));
       k = k + 24 * 60 * 60 * 1000;
     }
     return dateAllArr;
@@ -59,7 +60,7 @@ export default class MachineConfigCard extends Component {
   }
   handleScheduleDayClick(date, machine) {
     const machines = [...this.state.machineList];
-    machines.filter(m => m.id === machine.id).forEach(machine => {
+    machines.filter(m => m.machineId === machine.machineId).forEach(machine => {
       if (!machine.machineActivity) {
         machine.machineActivity = [];
       }
@@ -75,7 +76,7 @@ export default class MachineConfigCard extends Component {
   }
   handleScheduleClick(machine, schedule) {
     const machines = [...this.state.machineList];
-    machines.filter(m => m.id === machine.id).forEach(machine => {
+    machines.filter(m => m.machineId === machine.machineId).forEach(machine => {
       machine.machineActivity.splice(
         machine.machineActivity.indexOf(schedule),
         1
@@ -85,22 +86,22 @@ export default class MachineConfigCard extends Component {
   }
   handleSelectedMachineChange(e) {
     const machines = [...this.state.machineList];
-    machines.filter(m => m.id === e.target.value).forEach(machine => {
+    machines.filter(m => m.machineId === e.target.value).forEach(machine => {
       machine.checked = e.target.checked;
     });
     this.setState({ machineList: machines });
   }
   handleMachineExpireChange(e) {
     const machines = [...this.state.machineList];
-    machines.filter(m => m.id === e.target.value).forEach(machine => {
+    machines.filter(m => m.machineId === e.target.value).forEach(machine => {
       machine.secular = e.target.checked;
     });
     this.setState({ machineList: machines });
   }
   handleAddMachine() {
     const params = {
-      queryStartTime: this.state.searchDateStr[0],
-      queryEndTime: this.state.searchDateStr[1]
+      queryStartTime: this.state.searchDateStr[0] + " 00:00:00",
+      queryEndTime: this.state.searchDateStr[1] + " 23:59:59"
     };
     const machines = [
       ...cloneByJSON(this.state.machineList.filter(m => m.checked)).map(m => {
@@ -112,7 +113,7 @@ export default class MachineConfigCard extends Component {
   }
   handleAddedMachineChange(e) {
     const machines = [...this.state.addedMachineList];
-    machines.filter(m => m.id === e.target.value).forEach(machine => {
+    machines.filter(m => m.machineId === e.target.value).forEach(machine => {
       machine.checked = e.target.checked;
     });
     this.setState({ addedMachineList: machines });
@@ -130,8 +131,6 @@ export default class MachineConfigCard extends Component {
     this.props.onSearch(this.state.searchDateStr, this.state.searchText);
   }
   renderSchedule(dates, machines, editabel) {
-    const height = 60;
-    const width = 100;
     const result = [];
     const maxWidth = dates.length * width;
     machines.forEach((machine, index) => {
@@ -140,8 +139,8 @@ export default class MachineConfigCard extends Component {
           const start = moment(activity.startTime);
           const end = moment(activity.endTime);
           const allDay = this.getDayAll(start, end);
-          const startStr = start.format("l");
-          const endStr = end.format("l");
+          const startStr = start.format("YYYY-MM-DD");
+          const endStr = end.format("YYYY-MM-DD");
           const startIndex = dates.indexOf(startStr);
           const endIndex = dates.indexOf(endStr);
           if (startIndex > -1 || endIndex > -1) {
@@ -180,23 +179,24 @@ export default class MachineConfigCard extends Component {
       <div style={{ padding: 10 }}>
         <div className="search-box">
           <div className="option-box">
-            <Row gutter="5">
-              <Col span="9">
+            <Row gutter={5}>
+              <Col span={9}>
                 <RangePicker
                   value={this.state.searchDate}
+                  format="YYYY-MM-DD"
                   onChange={(date, dateString) => {
                     this.handleSearchDateChange(date, dateString);
                   }}
                 />
               </Col>
-              <Col span="9">
+              <Col span={9}>
                 <Input
                   value={this.state.searchText}
                   onChange={this.handleSearchTextChange.bind(this)}
                   placeholder="省 市 区 点位筛选"
                 />
               </Col>
-              <Col span="6">
+              <Col span={6}>
                 <Button onClick={this.handleSearchClick.bind(this)}>
                   查询
                 </Button>
@@ -210,11 +210,14 @@ export default class MachineConfigCard extends Component {
                   <div>机器编号</div>
                   {this.state.machineList.map((machine, i) => {
                     return (
-                      <div key={machine.id} style={{ textAlign: "left" }}>
+                      <div
+                        key={machine.machineId}
+                        style={{ textAlign: "left" }}
+                      >
                         <label>
                           <input
                             type="checkbox"
-                            value={machine.id}
+                            value={machine.machineId}
                             checked={machine.checked}
                             onChange={this.handleSelectedMachineChange.bind(
                               this
@@ -230,7 +233,7 @@ export default class MachineConfigCard extends Component {
                   <div className="scroll-box">
                     <div
                       className="scroll-content"
-                      style={{ width: this.state.dates.length * 100 }}
+                      style={{ width: this.state.dates.length * width }}
                     >
                       <div className="scroll-content-title">
                         <div className="content">
@@ -252,16 +255,14 @@ export default class MachineConfigCard extends Component {
                                   (machine, index) => {
                                     return (
                                       <div
-                                        key={machine.id}
+                                        key={machine.machineId}
                                         onClick={() => {
                                           this.handleScheduleDayClick(
                                             date,
                                             machine
                                           );
                                         }}
-                                      >
-                                        {date}
-                                      </div>
+                                      />
                                     );
                                   }
                                 )}
@@ -284,11 +285,11 @@ export default class MachineConfigCard extends Component {
                   <div>期限</div>
                   {this.state.machineList.map((machine, i) => {
                     return (
-                      <div key={machine.id}>
+                      <div key={machine.machineId}>
                         <label>
                           <input
                             type="checkbox"
-                            value={machine.id}
+                            value={machine.machineId}
                             checked={machine.secular}
                             onChange={this.handleMachineExpireChange.bind(this)}
                           />
@@ -314,11 +315,11 @@ export default class MachineConfigCard extends Component {
                 <div>机器编号</div>
                 {this.state.addedMachineList.map((machine, i) => {
                   return (
-                    <div key={machine.id} style={{ textAlign: "left" }}>
+                    <div key={machine.machineId} style={{ textAlign: "left" }}>
                       <label>
                         <input
                           type="checkbox"
-                          value={machine.id}
+                          value={machine.machineId}
                           checked={machine.checked}
                           onChange={this.handleAddedMachineChange.bind(this)}
                         />
@@ -332,7 +333,7 @@ export default class MachineConfigCard extends Component {
                 <div className="scroll-box">
                   <div
                     className="scroll-content"
-                    style={{ width: this.state.dates.length * 100 }}
+                    style={{ width: this.state.dates.length * width }}
                   >
                     <div className="scroll-content-title">
                       <div className="content">
@@ -351,7 +352,9 @@ export default class MachineConfigCard extends Component {
                           return (
                             <div key={date} className="scroll-item">
                               {this.state.addedMachineList.map(machine => {
-                                return <div key={machine.id}>{date}</div>;
+                                return (
+                                  <div key={machine.machineId}>{date}</div>
+                                );
                               })}
                             </div>
                           );
@@ -372,7 +375,7 @@ export default class MachineConfigCard extends Component {
                 <div>操作</div>
                 {this.state.addedMachineList.map((machine, i) => {
                   return (
-                    <div key={machine.id}>
+                    <div key={machine.machineId}>
                       <a
                         onClick={() => {
                           this.handleAddedMachineGood(machine);

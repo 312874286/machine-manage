@@ -14,8 +14,8 @@
 
   .machine-table {
     position: relative;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 150px;
+    padding-right: 150px;
     border-bottom: 1px solid #e8e8e8;
     border-left: 1px solid #e8e8e8;
     max-height: 300px;
@@ -25,14 +25,14 @@
       top: 0;
       left: -1px;
       padding-left: 1px;
-      width: 100px;
+      width: 150px;
       border-left: 1px solid #e8e8e8;
     }
     .machine-table-right {
       position: absolute;
       top: 0;
       right: 0;
-      width: 101px;
+      width: 151px;
     }
 
     .machine-table-calendar {
@@ -107,9 +107,12 @@
       text-align: center;
       height: 60px;
       line-height: 60px;
-      width: 100px;
+      width: 150px;
       box-sizing: border-box;
       cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 
