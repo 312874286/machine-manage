@@ -512,9 +512,11 @@ export default class areaSettingList extends PureComponent {
         },
       },
     }).then((res) => {
-      this.setState({
-        merchants: res.data
-      })
+      if (res && res.code == 0) {
+        this.setState({
+          merchants: res.data
+        })
+      }
     });
   }
   getInteractShopList = (merchantId) => {
