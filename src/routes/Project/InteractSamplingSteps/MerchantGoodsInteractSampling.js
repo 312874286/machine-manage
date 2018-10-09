@@ -569,8 +569,8 @@ export default class areaSettingList extends PureComponent {
       modalType: false,
     });
     this.setModalData();
+    this.getAllGoods()
     if (item) {
-      this.getAllGoods()
       if (item.sellerId) {
         await this.getInteractShopList(item.sellerId)
         await this.form.setFieldsValue({
@@ -944,9 +944,9 @@ export default class areaSettingList extends PureComponent {
       modalShopsType: false,
     }, () => {
       this.setShopsModalData();
+      this.getAllShops()
       if (item) {
         console.log('item', item)
-        this.getAllShops()
         this.shopsForm.setFieldsValue({
           sellerId: item.id,
         });
@@ -1252,7 +1252,11 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          allGoodsLists: res.data
+          allGoodsLists: []
+        }, () => {
+          this.setState({
+            allGoodsLists: res.data
+          })
         })
       }
     });
