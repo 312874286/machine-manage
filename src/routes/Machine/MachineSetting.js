@@ -1830,7 +1830,7 @@ export default class machineSettingList extends PureComponent {
       // console.log('res', res)
       if (this.state.editMonitoringFormVisible && res.length > 0) {
         this.setState({
-          // editMonitoringFormVisible: true,
+          //   editMonitoringFormVisible: true,
           logLists: res,
         }, () => {
           // let destination = 30
