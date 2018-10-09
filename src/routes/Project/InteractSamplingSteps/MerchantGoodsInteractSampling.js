@@ -498,6 +498,7 @@ export default class areaSettingList extends PureComponent {
       interactSampling: this.props.match.params.id
     })
     this.getInteractMerchantList(this.props.match.params.id)
+    this.getAllGoods()
   }
   create = () => {
     this.handleMerchantModalVisible(true)
@@ -910,7 +911,7 @@ export default class areaSettingList extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-          this.getShops('saveAddGoods')
+          this.getShops(flag)
           // setTimeout(() => {
           //
           // }, 0)
@@ -1188,6 +1189,7 @@ export default class areaSettingList extends PureComponent {
           currentShopsData: res.data,
         }, () => {
           if (flag === 'saveAddGoods') {
+            console.log('1111', flag === 'saveAddGoods')
             this.setState({
               modalShopsVisible: false,
             }, () => {
@@ -1256,7 +1258,20 @@ export default class areaSettingList extends PureComponent {
     });
   }
   next = (type) => {
-    this.props.history.push({pathname: '/project/sampling-setting'})
+    const { merchants, allGoodsLists } = this.state
+    if (type === 1) {
+      if (allGoodsLists.length === 0) {
+        message.error('请至少添加一个商品')
+        return false
+      }
+      this.props.history.push({pathname: `/project/addMachineInteractSampling/${this.state.interactSampling}`})
+    } else {
+      if (merchants.length === 0) {
+        message.error('请至少添加一个商户')
+        return false
+      }
+      this.props.history.push({pathname: '/project/sampling-setting'})
+    }
   }
   render() {
     const {
@@ -1413,7 +1428,7 @@ export default class areaSettingList extends PureComponent {
                 <Button onClick={() => this.props.history.push({pathname: '/project/sampling-setting'})}>关闭</Button>
               }
               {
-                <Button onClick={() => this.next(1)}>暂存</Button>
+                <Button onClick={() => this.next(0)}>暂存</Button>
               }
               {
                 current > 0
@@ -1427,7 +1442,7 @@ export default class areaSettingList extends PureComponent {
               {
                 current < steps.length - 1
                 && <Button type="primary"
-                           onClick={() => this.props.history.push({pathname: `/project/addMachineInteractSampling/${this.state.interactSampling}`})}>下一步</Button>
+                           onClick={() => this.next(1)}>下一步</Button>
               }
             </div>
         </Card>
