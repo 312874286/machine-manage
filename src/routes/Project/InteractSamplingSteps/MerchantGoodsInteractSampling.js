@@ -567,7 +567,7 @@ export default class areaSettingList extends PureComponent {
     });
     this.setModalData();
     if (item) {
-      this.getGoods(1)
+      this.getAllGoods()
       if (item.sellerId) {
         await this.getInteractShopList(item.sellerId)
         await this.form.setFieldsValue({
@@ -598,7 +598,7 @@ export default class areaSettingList extends PureComponent {
           params,
         },
       }).then(() => {
-        this.getGoods(1)
+        this.getGoods()
         this.setState({
           editModalConfirmLoading: false,
         });
@@ -621,7 +621,7 @@ export default class areaSettingList extends PureComponent {
       },
     }).then((res) => {
       this.getInteractShopList(res.sellerId)
-      this.getGoods(1)
+      this.getGoods()
       this.setModalData(res);
     });
   }
@@ -750,7 +750,7 @@ export default class areaSettingList extends PureComponent {
       }).then((res) => {
         if (res && res.code === 0) {
           message.success( messageTxt + '成功');
-          this.getGoods(1)
+          this.getGoods()
           this.setState({
             modalData: {},
             editModalConfirmLoading: false,
@@ -1206,7 +1206,6 @@ export default class areaSettingList extends PureComponent {
         params,
       },
     }).then((res) => {
-      console.log('2222', res.data)
       if (res && res.code === 0) {
         this.setState({
           allShopsLists: res.data
@@ -1216,17 +1215,10 @@ export default class areaSettingList extends PureComponent {
   }
   // 获取最新店铺结束
   // 获取最新商品开始
-  getGoods = (flag) => {
-    let params = {}
-    if (parseInt(flag) === 1) {
-      params = {
-        interactId: this.state.interactSampling
-      }
-    } else {
-      params = {
-        shopsId: this.state.expandedShopsRowKeys[0],
-        interactId: this.state.interactSampling
-      }
+  getGoods = () => {
+    let params = {
+      shopsId: this.state.expandedShopsRowKeys[0],
+      interactId: this.state.interactSampling
     }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractGoodsList',
@@ -1237,22 +1229,15 @@ export default class areaSettingList extends PureComponent {
       if (res && res.code === 0) {
         this.setState({
           currentGoodsData: res.data,
-          allGoodsLists: res.data
+        }, () => {
+          this.getAllGoods()
         })
       }
     });
   }
-  getAllGoods = (flag) => {
-    let params = {}
-    if (parseInt(flag) === 1) {
-      params = {
-        interactId: this.state.interactSampling
-      }
-    } else {
-      params = {
-        shopsId: this.state.expandedShopsRowKeys[0],
-        interactId: this.state.interactSampling
-      }
+  getAllGoods = () => {
+    let params = {
+      interactId: this.state.interactSampling
     }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractGoodsList',
@@ -1262,7 +1247,6 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          currentGoodsData: res.data,
           allGoodsLists: res.data
         })
       }
@@ -1338,7 +1322,7 @@ export default class areaSettingList extends PureComponent {
         expandedShopsRowKeys: expandedRows.splice(expandedRows.length - 1, 1)
       }, () => {
         if (this.state.expandedShopsRowKeys.length > 0) {
-          this.getGoods(2)
+          this.getGoods()
         }
       })
     }
