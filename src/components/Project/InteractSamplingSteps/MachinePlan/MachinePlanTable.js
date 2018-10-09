@@ -1,12 +1,13 @@
 import React, { PureComponent, Fragment } from "react";
 import { Table, Divider, Popconfirm } from "antd";
+import { identity } from "gl-matrix/src/gl-matrix/mat2";
 
 export default class MachinePlanTable extends PureComponent {
   state = {
     expandedRows: []
   };
-  handleExpand = (...rests) => {
-    // return false;
+  handleExpand = (indent, record) => {
+    return this.props.onExpand(indent, record);
   };
   handleExpandedRowsChange = expandedRows => {
     this.setState({ expandedRows });

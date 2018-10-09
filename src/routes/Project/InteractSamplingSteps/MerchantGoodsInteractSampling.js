@@ -416,12 +416,12 @@ const CreateGoodsForm = Form.create()(
             <FormItem {...formItemLayout} label="商品数量">
               {getFieldDecorator('number', {
                 rules: [{ required: true, message: '请输入商品数量' }],
-              })(<InputNumber placeholder="请输入商品数量" />)}
+              })(<InputNumber placeholder="请输入商品数量" max={10000000} min={0}/>)}
             </FormItem>
             <FormItem {...formItemLayout} label="商品价格">
               {getFieldDecorator('price', {
                 rules: [{ required: true, message: '请输入商品价格' }],
-              })(<InputNumber placeholder="请输入商品价格" />)}
+              })(<InputNumber placeholder="请输入商品价格" min={0}/>)}
             </FormItem>
             <FormItem {...formItemLayout} label="备注信息">
               {getFieldDecorator('remark')(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 6 }} />)}

@@ -149,8 +149,8 @@ export default class machinePlanSettingList extends PureComponent {
         width: width,
         background: background,
         height: '20px',
-        startTime: itemStartTime,
-        endTime: itemEndTime,
+        startTime: item.startTime,
+        endTime: item.endTime,
         activityName: item.activityName,
         state: item.state
       }
