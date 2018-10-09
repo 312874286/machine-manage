@@ -22,14 +22,19 @@ export default class MachineConfigCard extends Component {
   state = {
     dates: [],
     addedMachineList: [],
+    machineEdit: null,
     machineList: [],
     goodsMachineList: [],
     searchDate: [],
     searchDateStr: [],
+    searchDateStart: null,
+    searchDateEnd: null,
     searchText: null,
     interactInfo: null
   };
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({ machineEdit: this.props.data });
+  }
   componentWillReceiveProps(nextProps) {
     this.setState({
       machineList: nextProps.datas,
@@ -179,29 +184,57 @@ export default class MachineConfigCard extends Component {
       <div style={{ padding: 10 }}>
         <div className="search-box">
           <div className="option-box">
-            <Row gutter={5}>
-              <Col span={9}>
-                <RangePicker
-                  value={this.state.searchDate}
-                  format="YYYY-MM-DD"
-                  onChange={(date, dateString) => {
-                    this.handleSearchDateChange(date, dateString);
-                  }}
-                />
-              </Col>
-              <Col span={9}>
-                <Input
-                  value={this.state.searchText}
-                  onChange={this.handleSearchTextChange.bind(this)}
-                  placeholder="省 市 区 点位筛选"
-                />
-              </Col>
-              <Col span={6}>
-                <Button onClick={this.handleSearchClick.bind(this)}>
-                  查询
-                </Button>
-              </Col>
-            </Row>
+            {(!this.state.machineEdit && (
+              <Row gutter={5}>
+                <Col span={9}>
+                  <RangePicker
+                    value={this.state.searchDate}
+                    format="YYYY-MM-DD"
+                    onChange={(date, dateString) => {
+                      this.handleSearchDateChange(date, dateString);
+                    }}
+                  />
+                </Col>
+                <Col span={9}>
+                  <Input
+                    value={this.state.searchText}
+                    onChange={this.handleSearchTextChange.bind(this)}
+                    placeholder="省 市 区 点位筛选"
+                  />
+                </Col>
+                <Col span={6}>
+                  <Button onClick={this.handleSearchClick.bind(this)}>
+                    查询
+                  </Button>
+                </Col>
+              </Row>
+            )) || (
+              <Row gutter={5}>
+                <Col span={9}>
+                  <DatePicker
+                    value={this.state.searchDateStart}
+                    format="YYYY-MM-DD"
+                    onChange={(date, dateString) => {
+                      this.handleSearchDateChange(date, dateString);
+                    }}
+                  />
+                </Col>
+                <Col span={9}>
+                  <DatePicker
+                    value={this.state.searchDateEnd}
+                    format="YYYY-MM-DD"
+                    onChange={(date, dateString) => {
+                      this.handleSearchDateChange(date, dateString);
+                    }}
+                  />
+                </Col>
+                <Col span={6}>
+                  <Button onClick={this.handleSearchClick.bind(this)}>
+                    查询
+                  </Button>
+                </Col>
+              </Row>
+            )}
           </div>
           {(this.state.machineList.length > 0 && (
             <div className="content-box">

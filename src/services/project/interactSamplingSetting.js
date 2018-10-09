@@ -186,3 +186,9 @@ export async function getInteractMachineList({ params }) {
     body: stringify(params)
   });
 }
+
+export async function deleteInteractMachineGoods({ params }) {
+  return fetch.post(api.deleteInteractMachineGoods, {
+    body: stringify(params)
+  });
+}

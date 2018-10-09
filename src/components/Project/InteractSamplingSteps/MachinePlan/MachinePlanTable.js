@@ -1,7 +1,7 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import { Table, Divider, Popconfirm } from "antd";
 
-export default class MachinePlanTable extends PureComponent {
+export default class MachinePlanTable extends Component {
   state = {
     expandedRows: []
   };
@@ -69,12 +69,5 @@ export default class MachinePlanTable extends PureComponent {
   };
   render() {
     return this.renderMachineTable();
-  }
-}
-
-export class MachinePlanedGoodsTable extends PureComponent {
-  
-  render() {
-    return this.renderTable();
   }
 }
