@@ -585,6 +585,7 @@ export default class areaSettingList extends PureComponent {
         await this.getInteractShopList(saveAndAddModal.sellerId)
         await this.form.setFieldsValue({
           sellerId: saveAndAddModal.sellerId,
+          shopId: undefined,
         });
       }
     }
