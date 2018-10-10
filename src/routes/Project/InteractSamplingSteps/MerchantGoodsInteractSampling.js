@@ -496,9 +496,10 @@ export default class areaSettingList extends PureComponent {
     console.log('this.props.params.id', this.props.match.params.id)
     this.setState({
       interactSampling: this.props.match.params.id
+    }, () => {
+      this.getAllGoods()
     })
     this.getInteractMerchantList(this.props.match.params.id)
-    this.getAllGoods()
   }
   create = () => {
     this.handleMerchantModalVisible(true)
@@ -569,8 +570,8 @@ export default class areaSettingList extends PureComponent {
       modalType: false,
     });
     this.setModalData();
+    this.getAllGoods()
     if (item) {
-      this.getAllGoods()
       if (item.sellerId) {
         await this.getInteractShopList(item.sellerId)
         await this.form.setFieldsValue({
@@ -584,6 +585,7 @@ export default class areaSettingList extends PureComponent {
         await this.getInteractShopList(saveAndAddModal.sellerId)
         await this.form.setFieldsValue({
           sellerId: saveAndAddModal.sellerId,
+          shopId: undefined,
         });
       }
     }
@@ -944,9 +946,9 @@ export default class areaSettingList extends PureComponent {
       modalShopsType: false,
     }, () => {
       this.setShopsModalData();
+      this.getAllShops()
       if (item) {
         console.log('item', item)
-        this.getAllShops()
         this.shopsForm.setFieldsValue({
           sellerId: item.id,
         });
@@ -1252,7 +1254,11 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          allGoodsLists: res.data
+          allGoodsLists: []
+        }, () => {
+          this.setState({
+            allGoodsLists: res.data
+          })
         })
       }
     });
