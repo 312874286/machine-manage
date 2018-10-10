@@ -27,19 +27,28 @@ export default class MachineConfigCard extends Component {
     goodsMachineList: [],
     searchDate: [],
     searchDateStr: [],
-    searchDateStart: null,
-    searchDateEnd: null,
+    editDateStart: null,
+    editDateEnd: null,
     searchText: null,
     interactInfo: null
   };
   componentDidMount() {
-    this.setState({ machineEdit: this.props.data });
+    let state = { interactInfo: this.props.interactInfo };
+    if (this.props.data) {
+      const data = this.props.data;
+      const start = moment(data.queryStartTime);
+      const end = moment(data.queryEndTime);
+      state.machineEdit = data;
+      state.editDateStart = start;
+      state.editDateEnd = end;
+      state.dates = this.getDayAll(start, end);
+    }
+    this.setState(state);
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
       machineList: nextProps.datas,
-      addedMachineList: nextProps.postDatas,
-      interactInfo: nextProps.interactInfo
+      addedMachineList: nextProps.postDatas
     });
   }
   getDayAll = (begin, end) => {
@@ -60,34 +69,67 @@ export default class MachineConfigCard extends Component {
       searchDateStr: dateString
     });
   }
+  handleEditDateChange(date, type) {
+    let startDate = this.state.editDateStart;
+    const endDate = this.state.editDateEnd;
+    if (type === 0) {
+      startDate = date;
+    } else {
+      endDate = date;
+    }
+    this.setState({
+      dates: this.getDayAll(startDate, endDate)
+    });
+  }
   handleSearchTextChange(e) {
     this.setState({ searchText: e.target.value });
   }
-  handleScheduleDayClick(date, machine) {
-    const machines = [...this.state.machineList];
-    machines.filter(m => m.machineId === machine.machineId).forEach(machine => {
-      if (!machine.machineActivity) {
-        machine.machineActivity = [];
+  handleScheduleDayClick(date, machine, type) {
+    const interactId = this.state.interactInfo.id;
+    const interactName = this.state.interactInfo.name;
+    const addMachineActivity = (m, d) => {
+      if (!m.machineActivity) {
+        m.machineActivity = [];
       }
-      machine.machineActivity.push({
-        activityId: this.state.interactInfo.id,
-        activityName: this.state.interactInfo.name,
-        startTime: `${date} 00:00:00`,
-        endTime: `${date} 23:59:59`,
+      m.machineActivity.push({
+        activityId: interactId,
+        activityName: interactName,
+        startTime: `${d} 00:00:00`,
+        endTime: `${d} 23:59:59`,
         isNew: true
       });
-    });
-    this.setState({ machineList: machines });
+      return m;
+    };
+    if (type === 0) {
+      const machines = [...this.state.machineList];
+      machines.filter(m => m.machineId === machine.machineId).forEach(m => {
+        addMachineActivity(m, date);
+      });
+      this.setState({
+        machineList: machines
+      });
+    } else {
+      this.setState({
+        machineEdit: addMachineActivity(this.state.machineEdit, date)
+      });
+    }
   }
-  handleScheduleClick(machine, schedule) {
-    const machines = [...this.state.machineList];
-    machines.filter(m => m.machineId === machine.machineId).forEach(machine => {
-      machine.machineActivity.splice(
-        machine.machineActivity.indexOf(schedule),
-        1
-      );
-    });
-    this.setState({ machineList: machines });
+  handleScheduleClick(machine, schedule, type) {
+    const removeMachineActivity = (m, s) => {
+      m.machineActivity.splice(m.machineActivity.indexOf(s), 1);
+      return m;
+    };
+    if (type === 0) {
+      const machines = [...this.state.machineList];
+      machines.filter(m => m.machineId === machine.machineId).forEach(m => {
+        removeMachineActivity(m, schedule);
+      });
+      this.setState({ machineList: machines });
+    } else {
+      this.setState({
+        machineEdit: removeMachineActivity(this.state.machineEdit, schedule)
+      });
+    }
   }
   handleSelectedMachineChange(e) {
     const machines = [...this.state.machineList];
@@ -116,6 +158,14 @@ export default class MachineConfigCard extends Component {
     ];
     this.props.onAddMachine(params, machines);
   }
+  handleUpdateMachine() {
+    const params = {
+      queryStartTime: this.state.editDateStart.format("YYYY-MM-DD 00:00:00"),
+      queryEndTime: this.state.editDateEnd.format("YYYY-MM-DD 23:59:59")
+    };
+    const machines = [this.state.machineEdit];
+    this.props.onUpdateMachine(params, machines);
+  }
   handleAddedMachineChange(e) {
     const machines = [...this.state.addedMachineList];
     machines.filter(m => m.machineId === e.target.value).forEach(machine => {
@@ -135,7 +185,7 @@ export default class MachineConfigCard extends Component {
   handleSearchClick() {
     this.props.onSearch(this.state.searchDateStr, this.state.searchText);
   }
-  renderSchedule(dates, machines, editabel) {
+  renderSchedule(dates, machines, editabel, type) {
     const result = [];
     const maxWidth = dates.length * width;
     machines.forEach((machine, index) => {
@@ -167,9 +217,9 @@ export default class MachineConfigCard extends Component {
               }`,
               style: { width: elWidth, maxWidth: maxWidth, left, top }
             };
-            if (editabel && activity.isNew) {
+            if (editabel && (activity.isNew || type === 1)) {
               props.onClick = () => {
-                this.handleScheduleClick(machine, activity);
+                this.handleScheduleClick(machine, activity, type);
               };
             }
             result.push(<div {...props}>{activity.activityName}</div>);
@@ -179,62 +229,34 @@ export default class MachineConfigCard extends Component {
     });
     return result;
   }
-  render() {
+  renderAdd() {
     return (
       <div style={{ padding: 10 }}>
         <div className="search-box">
           <div className="option-box">
-            {(!this.state.machineEdit && (
-              <Row gutter={5}>
-                <Col span={9}>
-                  <RangePicker
-                    value={this.state.searchDate}
-                    format="YYYY-MM-DD"
-                    onChange={(date, dateString) => {
-                      this.handleSearchDateChange(date, dateString);
-                    }}
-                  />
-                </Col>
-                <Col span={9}>
-                  <Input
-                    value={this.state.searchText}
-                    onChange={this.handleSearchTextChange.bind(this)}
-                    placeholder="省 市 区 点位筛选"
-                  />
-                </Col>
-                <Col span={6}>
-                  <Button onClick={this.handleSearchClick.bind(this)}>
-                    查询
-                  </Button>
-                </Col>
-              </Row>
-            )) || (
-              <Row gutter={5}>
-                <Col span={9}>
-                  <DatePicker
-                    value={this.state.searchDateStart}
-                    format="YYYY-MM-DD"
-                    onChange={(date, dateString) => {
-                      this.handleSearchDateChange(date, dateString);
-                    }}
-                  />
-                </Col>
-                <Col span={9}>
-                  <DatePicker
-                    value={this.state.searchDateEnd}
-                    format="YYYY-MM-DD"
-                    onChange={(date, dateString) => {
-                      this.handleSearchDateChange(date, dateString);
-                    }}
-                  />
-                </Col>
-                <Col span={6}>
-                  <Button onClick={this.handleSearchClick.bind(this)}>
-                    查询
-                  </Button>
-                </Col>
-              </Row>
-            )}
+            <Row gutter={5}>
+              <Col span={9}>
+                <RangePicker
+                  value={this.state.searchDate}
+                  format="YYYY-MM-DD"
+                  onChange={(date, dateString) => {
+                    this.handleSearchDateChange(date, dateString);
+                  }}
+                />
+              </Col>
+              <Col span={9}>
+                <Input
+                  value={this.state.searchText}
+                  onChange={this.handleSearchTextChange.bind(this)}
+                  placeholder="省 市 区 点位筛选"
+                />
+              </Col>
+              <Col span={6}>
+                <Button onClick={this.handleSearchClick.bind(this)}>
+                  查询
+                </Button>
+              </Col>
+            </Row>
           </div>
           {(this.state.machineList.length > 0 && (
             <div className="content-box">
@@ -284,21 +306,20 @@ export default class MachineConfigCard extends Component {
                           {this.state.dates.map(date => {
                             return (
                               <div key={date} className="scroll-item">
-                                {this.state.machineList.map(
-                                  (machine, index) => {
-                                    return (
-                                      <div
-                                        key={machine.machineId}
-                                        onClick={() => {
-                                          this.handleScheduleDayClick(
-                                            date,
-                                            machine
-                                          );
-                                        }}
-                                      />
-                                    );
-                                  }
-                                )}
+                                {this.state.machineList.map(machine => {
+                                  return (
+                                    <div
+                                      key={machine.machineId}
+                                      onClick={() => {
+                                        this.handleScheduleDayClick(
+                                          date,
+                                          machine,
+                                          0
+                                        );
+                                      }}
+                                    />
+                                  );
+                                })}
                               </div>
                             );
                           })}
@@ -307,7 +328,8 @@ export default class MachineConfigCard extends Component {
                           {this.renderSchedule(
                             this.state.dates,
                             this.state.machineList,
-                            true
+                            true,
+                            0
                           )}
                         </div>
                       </div>
@@ -340,27 +362,136 @@ export default class MachineConfigCard extends Component {
           )) || (
             <div style={{ padding: 20, textAlign: "center" }}>暂无数据</div>
           )}
+          {this.state.addedMachineList.length > 0 && (
+            <div>
+              <div className="machine-table">
+                <div className="machine-table-left">
+                  <div>机器编号</div>
+                  {this.state.addedMachineList.map((machine, i) => {
+                    return (
+                      <div
+                        key={machine.machineId}
+                        style={{ textAlign: "left" }}
+                      >
+                        <label>
+                          <input
+                            type="checkbox"
+                            value={machine.machineId}
+                            checked={machine.checked}
+                            onChange={this.handleAddedMachineChange.bind(this)}
+                          />
+                          {machine.machineCode}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="machine-table-calendar">
+                  <div className="scroll-box">
+                    <div
+                      className="scroll-content"
+                      style={{ width: this.state.dates.length * width }}
+                    >
+                      <div className="scroll-content-title">
+                        <div className="content">
+                          {this.state.dates.map((date, i) => {
+                            return (
+                              <div key={date} className="scroll-item">
+                                <div>{date}</div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div className="scroll-content-main">
+                        <div className="content">
+                          {this.state.dates.map(date => {
+                            return (
+                              <div key={date} className="scroll-item">
+                                {this.state.addedMachineList.map(machine => {
+                                  return (
+                                    <div key={machine.machineId}>{date}</div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="schedule">
+                          {this.renderSchedule(
+                            this.state.dates,
+                            this.state.addedMachineList,
+                            false,
+                            0
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="machine-table-right">
+                  <div>操作</div>
+                  {this.state.addedMachineList.map((machine, i) => {
+                    return (
+                      <div key={machine.machineId}>
+                        <a
+                          onClick={() => {
+                            this.handleAddedMachineGood(machine);
+                          }}
+                        >
+                          关联商品
+                        </a>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div style={{ textAlign: "center", margin: "5px 0" }}>
+                <Button onClick={this.handleAddedMachineGoods.bind(this)}>
+                  关联商品
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
-        {this.state.addedMachineList.length > 0 && (
-          <div>
+      </div>
+    );
+  }
+
+  renderEdit() {
+    const machine = this.state.machineEdit;
+    return (
+      <div style={{ padding: 10 }}>
+        <div className="search-box">
+          <div className="option-box">
+            <Row gutter={5}>
+              <Col span={9}>
+                <DatePicker
+                  value={this.state.editDateStart}
+                  format="YYYY-MM-DD"
+                  onChange={date => {
+                    this.handleEditDateChange(date, 0);
+                  }}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+              <Col span={9}>
+                <DatePicker
+                  value={this.state.editDateEnd}
+                  format="YYYY-MM-DD"
+                  onChange={date => {
+                    this.handleEditDateChange(date, 1);
+                  }}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+            </Row>
+          </div>
+          <div className="content-box">
             <div className="machine-table">
               <div className="machine-table-left">
                 <div>机器编号</div>
-                {this.state.addedMachineList.map((machine, i) => {
-                  return (
-                    <div key={machine.machineId} style={{ textAlign: "left" }}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          value={machine.machineId}
-                          checked={machine.checked}
-                          onChange={this.handleAddedMachineChange.bind(this)}
-                        />
-                        {machine.machineCode}
-                      </label>
-                    </div>
-                  );
-                })}
+                <div style={{ textAlign: "left" }}>{machine.machineCode}</div>
               </div>
               <div className="machine-table-calendar">
                 <div className="scroll-box">
@@ -384,11 +515,11 @@ export default class MachineConfigCard extends Component {
                         {this.state.dates.map(date => {
                           return (
                             <div key={date} className="scroll-item">
-                              {this.state.addedMachineList.map(machine => {
-                                return (
-                                  <div key={machine.machineId}>{date}</div>
-                                );
-                              })}
+                              <div
+                                onClick={() => {
+                                  this.handleScheduleDayClick(date, machine, 1);
+                                }}
+                              />
                             </div>
                           );
                         })}
@@ -396,8 +527,9 @@ export default class MachineConfigCard extends Component {
                       <div className="schedule">
                         {this.renderSchedule(
                           this.state.dates,
-                          this.state.addedMachineList,
-                          false
+                          [machine],
+                          true,
+                          1
                         )}
                       </div>
                     </div>
@@ -406,29 +538,28 @@ export default class MachineConfigCard extends Component {
               </div>
               <div className="machine-table-right">
                 <div>操作</div>
-                {this.state.addedMachineList.map((machine, i) => {
-                  return (
-                    <div key={machine.machineId}>
-                      <a
-                        onClick={() => {
-                          this.handleAddedMachineGood(machine);
-                        }}
-                      >
-                        关联商品
-                      </a>
-                    </div>
-                  );
-                })}
+                <div key={machine.machineId}>
+                  <a
+                    onClick={() => {
+                      this.handleAddedMachineGood(machine);
+                    }}
+                  >
+                    关联商品
+                  </a>
+                </div>
               </div>
             </div>
-            <div style={{ textAlign: "center", margin: "5px 0" }}>
-              <Button onClick={this.handleAddedMachineGoods.bind(this)}>
-                关联商品
-              </Button>
-            </div>
           </div>
-        )}
+          <div style={{ textAlign: "center", margin: "5px 0" }}>
+            <Button onClick={this.handleUpdateMachine.bind(this)}>保存</Button>
+          </div>
+        </div>
       </div>
     );
+  }
+  render() {
+    return this.state.machineEdit === null
+      ? this.renderAdd()
+      : this.renderEdit();
   }
 }

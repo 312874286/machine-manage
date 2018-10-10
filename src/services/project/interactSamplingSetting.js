@@ -192,3 +192,15 @@ export async function deleteInteractMachineGoods({ params }) {
     body: stringify(params)
   });
 }
+
+export async function getInteractMachineDetail({ params }) {
+  return fetch.post(api.getInteractMachineDetail, {
+    body: stringify(params)
+  });
+}
+
+export async function updateInteractMachineGoods({ params }) {
+  return fetch.postJSON(api.updateInteractMachineGoods, {
+    body: JSON.stringify(params)
+  });
+}
