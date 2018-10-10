@@ -1827,9 +1827,9 @@ export default class machineSettingList extends PureComponent {
       },
     }).then((res) => {
       // console.log('res', res)
-      if (res.length > 0) {
+      if (this.state.editMonitoringFormVisible && res.length > 0) {
         this.setState({
-          editMonitoringFormVisible: true,
+          //   editMonitoringFormVisible: true,
           logLists: res,
         }, () => {
           // let destination = 30
@@ -1839,7 +1839,7 @@ export default class machineSettingList extends PureComponent {
           })
           setTimeout(()=>{
             document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
-          },0)
+          }, 0)
           // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
           // console.log('scrollTo', document.getElementById('logTip').scrollTo)
 
