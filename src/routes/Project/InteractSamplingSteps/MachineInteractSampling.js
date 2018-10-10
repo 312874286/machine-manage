@@ -56,10 +56,25 @@ export default class MachineInteractSampling extends PureComponent {
     );
   }
   handleUpdateMachine = record => {
-    this.setState({
-      machineModalVisible: true,
-      machineModalData: record
-    });
+    this.props
+      .dispatch({
+        type: "interactSamplingSetting/getInteractMachineDetail",
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            machineId: record.machineId
+          }
+        }
+      })
+      .then(res => {
+        if (res && res.code === 0) {
+          this.setState({
+            machineModalVisible: true,
+            machineModalData: cloneByJSON(res.data),
+            machineModalAddedData: [res.data]
+          });
+        }
+      });
   };
   handleDeleteMachine = record => {
     this.props
@@ -171,12 +186,14 @@ export default class MachineInteractSampling extends PureComponent {
   }
   handleMachineAdd(times, machines) {
     const datas = [...machines].map(m => {
-      const planTime = m.machineActivity.filter(ma => ma.isNew).map(ma => {
-        return {
-          startTime: ma.startTime,
-          endTime: ma.endTime
-        };
-      });
+      const planTime = m.machineActivity
+        .filter(ma => ma.activityId === this.state.interactSampling)
+        .map(ma => {
+          return {
+            startTime: ma.startTime,
+            endTime: ma.endTime
+          };
+        });
       return {
         machineId: m.machineId,
         machineCode: m.machineCode,
@@ -200,6 +217,40 @@ export default class MachineInteractSampling extends PureComponent {
           this.setState({
             machineModalAddedData: machines
           });
+        }
+      });
+  }
+  handleMachineUpdateSave(times, machines) {
+    const datas = [...machines].map(m => {
+      const planTime = m.machineActivity
+        .filter(ma => ma.activityId === this.state.interactSampling)
+        .map(ma => {
+          return {
+            startTime: ma.startTime,
+            endTime: ma.endTime
+          };
+        });
+      return {
+        machineId: m.machineId,
+        machineCode: m.machineCode,
+        state: m.secular ? 1 : 0,
+        planTime
+      };
+    });
+    this.props
+      .dispatch({
+        type: "interactSamplingSetting/updateInteractMachineGoods",
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            machines: datas,
+            ...times
+          }
+        }
+      })
+      .then(res => {
+        if (res && res.code === 0) {
+          this.handleMachineModalVisible();
         }
       });
   }
@@ -277,14 +328,15 @@ export default class MachineInteractSampling extends PureComponent {
     });
   }
   handleGoodsModalSave() {
-    const goods = this.state.goodsList.map(g => {
+    const goods = this.state.goodsList.filter(g => g.checked).map(g => {
       return {
         goodsId: g.id,
         number: g.setCount,
         seq: g.setOrder,
         state: g.secular ? 1 : 0,
         startTimeStr: g.startTimeStr,
-        endTimeStr: g.endTimeStr
+        endTimeStr: g.endTimeStr,
+        type: g.type
       };
     });
     const machines = this.state.goodsModalMachineData.map(m => m.machineId);
@@ -302,9 +354,14 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
-          this.setState({
-            goodsModalVisible: false
-          });
+          this.setState(
+            {
+              goodsModalVisible: false
+            },
+            () => {
+              this.getMachineList();
+            }
+          );
         }
       });
   }
@@ -604,6 +661,7 @@ export default class MachineInteractSampling extends PureComponent {
             datas={this.state.machineModalDatas}
             postDatas={this.state.machineModalAddedData}
             onAddMachine={this.handleMachineAdd.bind(this)}
+            onUpdateMachine={this.handleMachineUpdateSave.bind(this)}
             onAddGoods={this.handleGoodAdd.bind(this)}
             onSearch={this.handleMachineSearch.bind(this)}
             interactInfo={this.state.interactInfo}
