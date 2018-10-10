@@ -96,7 +96,7 @@ export default class homePageSetting extends PureComponent {
                     <img src={require('../../assets/images/indexPage/unusual.png')}/>
                   </div>
                   <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.exception === 0 ? "0" : MachinePortalDataList.exception}</span>
+                    <span>{MachinePortalDataList.dropGoodsSwitchException === 0 ? "0" : MachinePortalDataList.dropGoodsSwitchException}</span>
                     <span>掉货开关异常</span>
                   </div>
                 </a>
@@ -105,7 +105,7 @@ export default class homePageSetting extends PureComponent {
                     <img src={require('../../assets/images/indexPage/unusual.png')}/>
                   </div>
                   <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.exception === 0 ? "0" : MachinePortalDataList.exception}</span>
+                    <span>{MachinePortalDataList.channelException === 0 ? "0" : MachinePortalDataList.channelException}</span>
                     <span>货道故障</span>
                   </div>
                 </a>

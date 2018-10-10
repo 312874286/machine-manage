@@ -59,7 +59,7 @@ const api = map({
   // getShopsList: '/project/shops/getList',
   // getMerchantsList: '/project/merchant/getList',
   // getActivityList: '/project/activity/getList',
-  getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}',
+  getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}&status={status}',
 
   paiActivity: '/pai/data/count/list',
 

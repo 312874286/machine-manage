@@ -93,11 +93,11 @@ export default class unusual extends PureComponent {
       {
         title: '机器编号',
         dataIndex: 'machineCode',
-        width: '20%',
+        width: '25%',
       },
       {
         title: '机器点位',
-        width: '20%',
+        width: '25%',
         dataIndex: 'local',
       },
       // {
@@ -126,7 +126,7 @@ export default class unusual extends PureComponent {
       // },
       {
         title: '调货开关',
-        width: '20%',
+        width: '25%',
         dataIndex: 'dropGoodsSwitch',
         render(val) {
           if (val) {
@@ -160,18 +160,18 @@ export default class unusual extends PureComponent {
       //     )
       //   )
       // },
-      {
-        title: '货道故障',
-        width: '20%',
-        dataIndex: 'goodsChannelStatus',
-        render: (text, item) => (
-          (item.goodsChannelStatus) ? (
-            <span>{item.goodsChannelStatus}</span>
-          ) :(
-            <span>无</span>
-          )
-        )
-      },
+      // {
+      //   title: '货道故障',
+      //   width: '20%',
+      //   dataIndex: 'goodsChannelStatus',
+      //   render: (text, item) => (
+      //     (item.goodsChannelStatus) ? (
+      //       <span>{item.goodsChannelStatus}</span>
+      //     ) :(
+      //       <span>无</span>
+      //     )
+      //   )
+      // },
       {
         title: '更新时间',
         dataIndex: 'updateTime',

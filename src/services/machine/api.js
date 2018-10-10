@@ -60,7 +60,7 @@ const api = map({
 
   getPointFromTag: '/machine/locale/getList?tag={tag}',
 
-  updateBatchMonitor: '/locale/updateBatch',
+  updateBatchMonitor: '/machine/locale/updateBatch',
 });
 
 export default api;

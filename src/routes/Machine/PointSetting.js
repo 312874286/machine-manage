@@ -1056,7 +1056,7 @@ export default class PointSettingList extends PureComponent {
         dataIndex: 'time',
         key: 'time',
         render: (text, item) => (
-          <div>{`${item.monitorStart ? item.monitorStart : ''}-${item.monitorEnd ? item.monitorEnd : ''}`}</div>
+          <div>{item.monitor === 0 ? `${item.monitorStart ? item.monitorStart : ''}-${item.monitorEnd ? item.monitorEnd : ''}` : '未开启'}</div>
         ),
       },
       {

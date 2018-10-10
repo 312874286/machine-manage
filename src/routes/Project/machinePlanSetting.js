@@ -19,6 +19,7 @@ import moment from "moment/moment";
 import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
+const { Option } = Select;
 const { RangePicker } = DatePicker;
 const activityStatus = [{id: 1, name: '进行中'}, {id: 2, name: '未开始'}]
 
@@ -40,6 +41,7 @@ export default class machinePlanSettingList extends PureComponent {
     handleDays: {},
     getDataStartDay: '',
     getDataEndDay: '',
+    status: '',
 
     account: {},
   };
@@ -71,6 +73,7 @@ export default class machinePlanSettingList extends PureComponent {
           startTime: this.state.startTime,
           localCode: this.state.localCode,
           endTime: this.state.endTime,
+          status: this.state.status,
         },
       },
     }).then((res) => {
@@ -212,6 +215,7 @@ export default class machinePlanSettingList extends PureComponent {
       this.setState({
         machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
         localCode,
+        status: fieldsValue.status ? fieldsValue.status : '',
       }, () => {
         this.getLists();
       });
@@ -265,7 +269,7 @@ export default class machinePlanSettingList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="选择活动状态">
-              {getFieldDecorator('type')(
+              {getFieldDecorator('status')(
                 <Select placeholder="请选择活动状态">
                   {activityStatus.map((item) => {
                     return (

@@ -55,7 +55,7 @@ export default {
           // if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
           //   isLeaf = true;
           // }
-          if (data[0].level === 4) {
+          if (data[0].level === 3) {
             isLeaf = true;
           }
           if (data[i].machines.length === 0) {

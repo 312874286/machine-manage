@@ -35,7 +35,7 @@ export default class unusual extends PureComponent {
       type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          type: 2
+          type: 4
         },
       },
     });

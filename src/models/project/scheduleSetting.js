@@ -107,7 +107,11 @@ export default {
       if (code !== 0) return;
       const arr = [];
       if (data) {
-        let isLeaf = false, disabled = false, machines = [], title, canUseNum;
+        let isLeaf = false,
+          disabled = false,
+          machines = [],
+          title,
+          canUseNum;
         for (let i = 0; i < data.length; i++) {
           machines = data[i].machines
           title = data[i].name
@@ -115,7 +119,7 @@ export default {
           // if ((data[0].level === 4 || data[0].level === 5) && data[i].machines.length === 0) {
           //   isLeaf = true;
           // }
-          if (data[0].level === 4) {
+          if (data[0].level === 3) {
             isLeaf = true;
           }
           if (data[i].machines.length === 0) {

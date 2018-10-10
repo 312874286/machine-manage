@@ -22,7 +22,15 @@ export default {
           isLeaf = true;
         }
         for (let i = 0; i < data.length; i++) {
-          const a = { value: data[i].code, label: data[i].name, isLeaf, title: data[i].name, key: data[i].code, level: data[i].level, province: data[i].province };
+          const a = {
+            value: data[i].code,
+            label: data[i].name,
+            isLeaf,
+            title: data[i].name,
+            key: data[i].code,
+            level: data[i].level,
+            province: data[i].province
+          };
           arr.push(a);
         }
       }
