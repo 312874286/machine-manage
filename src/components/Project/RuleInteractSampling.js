@@ -81,7 +81,7 @@ class EditableCell extends React.Component {
                     {form.getFieldDecorator(dataIndex, {
                       rules: [{
                         required: true,
-                        message: `${title} is required.`,
+                        message: `请填写${title}`,
                       }],
                       initialValue: record[dataIndex],
                     })(
