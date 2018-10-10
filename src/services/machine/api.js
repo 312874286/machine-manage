@@ -58,7 +58,9 @@ const api = map({
   findTemperature: '/machine/machine/findTemperature?machineId={machineId}',
   updateTemperature: '/machine/machine/updateTemperature',
 
-  getPointFromTag: '/machine/locale/getList?tag={tag}'
+  getPointFromTag: '/machine/locale/getList?tag={tag}',
+
+  updateBatchMonitor: '/locale/updateBatch',
 });
 
 export default api;

@@ -224,6 +224,46 @@ const CreateForm = Form.create()(
       </Modal>
     );
   });
+
+const MonitorSetForm = Form.create()(
+  (props) => {
+    const { modalVisible, handleAdd, handleModalVisible, editModalConfirmLoading,
+      handleSupervisorySwitch, switchStatus, handleSupervisoryStartTime,
+      handleSupervisoryEndTime, supervisoryStartTime, supervisoryEndTime,
+    } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+    return (
+      <Modal
+        title={'监控设置'}
+        visible={modalVisible}
+        onOk={handleAdd}
+        onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}>
+        <div className="manageAppBox">
+          <h3>监控设置</h3>
+          <Form>
+          <FormItem label="开启监控" {...formItemLayout}>
+            <Switch checked={switchStatus} checkedChildren="开" unCheckedChildren="关" onChange={handleSupervisorySwitch}/>
+          </FormItem>
+          <FormItem {...formItemLayout} label="监控时间">
+            <TimePicker value={moment(supervisoryStartTime ? supervisoryStartTime : '00:00:00', 'HH:mm:ss')} onChange={handleSupervisoryStartTime} disabled={!switchStatus}/>
+            <span>-</span>
+            <TimePicker value={moment(supervisoryEndTime ? supervisoryEndTime : '23:59:59', 'HH:mm:ss')} onChange={handleSupervisoryEndTime} disabled={!switchStatus}/>
+          </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, pointSetting, log }) => ({
   common,
   pointSetting,
@@ -258,8 +298,14 @@ export default class PointSettingList extends PureComponent {
 
     switchStatus: false,
     type: '',
-    modalDataTags: { tags: [] }
+    modalDataTags: { tags: [] },
 
+
+    multiSwitchStatus: false,
+    multiSupervisoryStartTime: '00:00:00',
+    multiSupervisoryEndTime: '23:59:59',
+    modalMonitorVisible: false,
+    editModalMonitorConfirmLoading: false,
   };
   componentWillMount() {
     // 查询省
@@ -844,7 +890,9 @@ export default class PointSettingList extends PureComponent {
       });
     }
   }
+  monitorSet = () => {
 
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -906,6 +954,65 @@ export default class PointSettingList extends PureComponent {
     const { expandForm } = this.state;
     return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
+
+  // 监控开关
+  handleMultiSupervisorySwitch = (value) => {
+    if (value == true) {
+      this.setState({
+        multiSwitchStatus: value,
+        multiSupervisoryStartTime: '00:00:00',
+        multiSupervisoryEndTime: '23:59:59'
+      });
+    } else {
+      this.setState({
+        multiSwitchStatus: value,
+        multiSupervisoryStartTime: '',
+        multiSupervisoryEndTime: ''
+      });
+    }
+  }
+  // 监控开始时间获取
+  handleMultiSupervisoryStartTime = (time,timeString) => {
+    this.setState({
+      multiSupervisoryStartTime: timeString
+    })
+  }
+  // 监控结束诗句获取
+  handleMultiSupervisoryEndTime = (time,timeString) => {
+    this.setState({
+      multiSupervisoryEndTime: timeString
+    })
+  }
+
+  handleMonitorAdd = () => {
+    const { multiSwitchStatus, multiSupervisoryStartTime, multiSupervisoryEndTime, selectedRows } = this.state
+    let params = {
+      ids: selectedRows.map((item) => {
+        return item.id
+      }),
+      monitor: multiSwitchStatus ? 0 : 1,
+      monitorStart: multiSupervisoryStartTime,
+      monitorEnd: multiSupervisoryEndTime,
+    }
+    this.props.dispatch({
+      type: 'pointSetting/updateBatchMonitor',
+      payload: {
+        params,
+      },
+    }).then(() => {
+      this.getLists();
+      this.setState({
+        editModalMonitorConfirmLoading: false,
+        modalMonitorVisible: false,
+      });
+    });
+  }
+  handleModalMonitorVisible = (flag) => {
+    this.setState({
+      modalMonitorVisible: !!flag,
+    });
+  };
+
   render() {
     const {
       pointSetting: { list, page, unColumn },
@@ -1073,16 +1180,19 @@ export default class PointSettingList extends PureComponent {
               </Button>
             </div>
             <div style={{ display: !account.list ? 'none' : ''}}>
+              <div className="table-operations">
+                <Button onClick={() => this.handleModalMonitorVisible(true)} style={{ marginTop: 20 }}>监控设置</Button>
+              </div>
               <StandardTable
-                selectedRows={selectedRows}
+                selectedPointRows={selectedRows}
                 loading={loading}
                 data={list}
                 page={page}
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1400}
-                scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 160)}
+                scrollX={1700}
+                scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 265)}
               />
             </div>
           </div>
@@ -1120,6 +1230,19 @@ export default class PointSettingList extends PureComponent {
           logVisible={this.state.logModalVisible}
           logHandleCancel={this.logModalHandleCancel}
           logModalhandleTableChange={this.logModalhandleTableChange}
+        />
+        <MonitorSetForm
+          ref={this.savePointFormRef}
+          editModalConfirmLoading={this.state.editModalMonitorConfirmLoading}
+          modalVisible={this.state.modalMonitorVisible}
+          handleAdd={this.handleMonitorAdd}
+          handleModalVisible={this.handleModalMonitorVisible}
+          handleSupervisorySwitch={this.handleMultiSupervisorySwitch}
+          handleSupervisoryStartTime={this.handleMultiSupervisoryStartTime}
+          handleSupervisoryEndTime={this.handleMultiSupervisoryEndTime}
+          switchStatus={this.state.multiSwitchStatus}
+          supervisoryStartTime={this.state.multiSupervisoryStartTime}
+          supervisoryEndTime={this.state.multiSupervisoryEndTime}
         />
       </PageHeaderLayout>
     );

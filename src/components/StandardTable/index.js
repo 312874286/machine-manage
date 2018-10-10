@@ -14,7 +14,7 @@ class StandardTable extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     // clean state
-    if (nextProps.selectedRows.length === 0) {
+    if (nextProps.selectedPointRows && nextProps.selectedPointRows.length === 0) {
       this.setState({
         selectedRowKeys: [],
         totalCallNo: 0,
@@ -68,7 +68,7 @@ class StandardTable extends PureComponent {
   }
   render() {
     const { selectedRowKeys, totalCallNo, No } = this.state;
-    const { data, page, loading, scrollX, columns, scrollY } = this.props;
+    const { data, page, loading, scrollX, columns, scrollY, selectedPointRows } = this.props;
     const status = ['关闭', '运行中', '已上线', '异常'];
     // const columns = [
     //   {
@@ -152,6 +152,7 @@ class StandardTable extends PureComponent {
     //   showQuickJumper: true,
     //   ...page,
     // };
+    console.log('selectedRows', selectedPointRows)
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
@@ -196,7 +197,7 @@ class StandardTable extends PureComponent {
         <Table
           loading={loading}
           rowKey={record => record.id || record.code}
-          // rowSelection={rowSelection}
+          rowSelection={selectedPointRows ? rowSelection : null}
           dataSource={data}
           columns={columns}
           pagination={paginationProps}

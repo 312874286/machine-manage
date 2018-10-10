@@ -5913,6 +5913,13 @@ const proxy = {
       },
       "msg": "成功"
     })
+  },
+  'post /locale/updateBatch': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
   }
 };
 
