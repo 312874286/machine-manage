@@ -496,9 +496,10 @@ export default class areaSettingList extends PureComponent {
     console.log('this.props.params.id', this.props.match.params.id)
     this.setState({
       interactSampling: this.props.match.params.id
+    }, () => {
+      this.getAllGoods()
     })
     this.getInteractMerchantList(this.props.match.params.id)
-    this.getAllGoods()
   }
   create = () => {
     this.handleMerchantModalVisible(true)
