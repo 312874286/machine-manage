@@ -100,7 +100,7 @@ const WatchForm = Form.create()(
               <span>{modalData.dayTimes === -1 ? '不限' : modalData.dayTimes}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="同一用户获得商品次数">
-              <span>{modalData.dayNumber === -1 ? '不限' : modalData.dayNumber}</span>
+              <span>{modalData.dayTimes === -1 ? '不限' : modalData.dayTimes}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="4.2商品信息">
               <Table
