@@ -19,7 +19,7 @@ import {getAccountMenus} from "../../../utils/authority";
 const Step = Steps.Step;
 const FormItem = Form.Item;
 const { Option } = Select;
-const activityTypeOptions = [{id: 1, name: '普通活动'}, {id: 2, name: '新零售'}]
+const activityTypeOptions = [{id: 0, name: '普通活动'}, {id: 1, name: '新零售'}]
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -80,7 +80,8 @@ export default class areaSettingList extends PureComponent {
         planCode: data.planCode || undefined,
         gameId: data.gameId || undefined,
         day: data.day || 'max',
-        manager: data.manager || undefined
+        manager: data.manager || undefined,
+        paiyangType: data.paiyangType || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
@@ -88,7 +89,8 @@ export default class areaSettingList extends PureComponent {
         planCode: undefined,
         gameId: undefined,
         day: 'max',
-        manager: undefined
+        manager: undefined,
+        paiyangType: undefined,
       });
     }
   }
@@ -99,7 +101,7 @@ export default class areaSettingList extends PureComponent {
       type: (type === 0) ? false : true
     }, () => {
       this.props.form.validateFields((err, fieldsValue) => {
-        console.log('(err && type === 1)', (err && type === 1))
+        console.log('(err && type === 1)', (err && type === 1), fieldsValue.paiyangType, fieldsValue.gameId)
         if (err) {
           return false
         }
@@ -202,7 +204,7 @@ export default class areaSettingList extends PureComponent {
                   )}
                 </FormItem>
                 <FormItem {...formItemLayout} label="活动类型">
-                  {getFieldDecorator('activityType', {
+                  {getFieldDecorator('paiyangType', {
                     rules: [{ required: type, message: '请选择活动类型' }],
                   })(
                     <Select placeholder="请选择">

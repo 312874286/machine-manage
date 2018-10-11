@@ -35,7 +35,7 @@ const menu = (
   </Menu>
 );
 // , {id: 1, name: '优惠券'}
-const goodType = [{id: 0, name: '商品'}]
+const goodType = [{id: 0, name: '商品'}, {id: 1, name: '优惠券'}]
 // 新建商户
 const CreateMerchantForm = Form.create()(
   (props) => {
@@ -129,7 +129,7 @@ const CreateShopsForm = Form.create()(
     const { modalVisible, form, handleAdd,
       handleModalVisible, editModalConfirmLoading,
       modalType, merchantLists, saveAddGoods,
-      handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData} = props;
+      handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData, paiyangType } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -202,27 +202,38 @@ const CreateShopsForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="入会码">
-              <Col span={14}>
-                <FormItem>
+              {/*<Col span={14}>*/}
+                {/*<FormItem>*/}
                   {getFieldDecorator('sessionKey', {
-                    // rules: [{ required: sessionKey, whitespace: true, message: '请输入入会码' }],
+                    // rules: [{ whitespace: true, message: '请输入入会码' }],
                   })
                   (<Input
                     placeholder="请输入入会码"
                     disabled={!sessionKey}
                   />)}
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <Checkbox
-                    disabled={!sessionKey}
-                    checked={mustIsVip}
-                    onChange={handleChange}>
-                    强制入会
-                  </Checkbox>
-                </FormItem>
-              </Col>
+                {/*</FormItem>*/}
+              {/*</Col>*/}
+              {/*<Col span={8}>*/}
+                {/*<FormItem>*/}
+                  {/*<Checkbox*/}
+                    {/*disabled={!sessionKey}*/}
+                    {/*checked={mustIsVip}*/}
+                    {/*onChange={handleChange}>*/}
+                    {/*强制入会*/}
+                  {/*</Checkbox>*/}
+                {/*</FormItem>*/}
+              {/*</Col>*/}
+            </FormItem>
+            <FormItem {...formItemLayout} label="新零售入会码" style={{ display: paiyangType ? '' : 'none'}}>
+              {/*<Col span={14}>*/}
+                {/*<FormItem>*/}
+                  {getFieldDecorator('sellSessionKey', {
+                  })
+                  (<Input
+                    placeholder="请输入新零售入会码"
+                  />)}
+                {/*</FormItem>*/}
+              {/*</Col>*/}
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
@@ -491,6 +502,8 @@ export default class areaSettingList extends PureComponent {
     saveAndAddModal: {},
     sessionKey: false,
     mustIsVip: false,
+
+    paiyangType: false,
   };
   componentDidMount() {
     console.log('this.props.params.id', this.props.match.params.id)
@@ -516,7 +529,11 @@ export default class areaSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res) {
-
+        if (parseInt(res.paiyangType) === 1) {
+          this.setState({
+            paiyangType: true
+          })
+        }
       }
     });
   }
@@ -638,6 +655,7 @@ export default class areaSettingList extends PureComponent {
       payload: {
         params: {
           id: item.id,
+          type: item.type,
         },
       },
     }).then((res) => {
@@ -900,6 +918,7 @@ export default class areaSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleShopsAdd = (flag) => {
+    const { paiyangType } = this.state
     this.shopsForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -910,14 +929,21 @@ export default class areaSettingList extends PureComponent {
           return
         }
       }
+      if (paiyangType) {
+        if (!values.sellSessionKey.trim()) {
+          message.info('请填写入零售入会码')
+          return
+        }
+      }
+      // sellSessionKey
       this.setState({
         editShopsModalConfirmLoading: true,
       });
       let url = 'interactSamplingSetting/shopsAdd';
       let params = { ...values, interactId: this.state.interactSampling };
-      if (this.state.mustIsVip) {
-        params = { ...params, isVip: 2};
-      }
+      // if (this.state.mustIsVip) {
+      //   params = { ...params, isVip: 2};
+      // }
       if (this.state.modalShopsData.id) {
         url = 'interactSamplingSetting/updateShops';
         params = { ...params, id: this.state.modalShopsData.id };
@@ -1023,7 +1049,8 @@ export default class areaSettingList extends PureComponent {
           shopName: data.shopName || '',
           sellerId: data.sellerId || '',
           isVip: data.isVip === 0 ? 0 : 1,
-          sessionKey: data.sessionKey || undefined
+          sessionKey: data.sessionKey || undefined,
+          sellSessionKey: data.sellSessionKey || undefined
         });
       })
     } else {
@@ -1036,7 +1063,8 @@ export default class areaSettingList extends PureComponent {
         shopName: undefined,
         sellerId: undefined,
         isVip: 0,
-        sessionKey: undefined
+        sessionKey: undefined,
+        sellSessionKey: undefined,
       });
     }
   }
@@ -1493,6 +1521,7 @@ export default class areaSettingList extends PureComponent {
           RadioChange={this.RadioChange}
           mustIsVip={this.state.mustIsVip}
           currentShopsData={this.state.allShopsLists}
+          paiyangType={this.state.paiyangType}
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
