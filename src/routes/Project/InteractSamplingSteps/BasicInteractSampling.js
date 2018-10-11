@@ -19,6 +19,7 @@ import {getAccountMenus} from "../../../utils/authority";
 const Step = Steps.Step;
 const FormItem = Form.Item;
 const { Option } = Select;
+const activityTypeOptions = [{id: 1, name: '普通活动'}, {id: 2, name: '新零售'}]
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -193,6 +194,19 @@ export default class areaSettingList extends PureComponent {
                   })(
                     <Select placeholder="请选择">
                       {GameList.map((item) => {
+                        return (
+                          <Option value={item.id} key={item.id}>{item.name}</Option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="活动类型">
+                  {getFieldDecorator('activityType', {
+                    rules: [{ required: type, message: '请选择活动类型' }],
+                  })(
+                    <Select placeholder="请选择">
+                      {activityTypeOptions.map((item) => {
                         return (
                           <Option value={item.id} key={item.id}>{item.name}</Option>
                         );
