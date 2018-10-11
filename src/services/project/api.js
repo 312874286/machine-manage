@@ -59,9 +59,43 @@ const api = map({
   // getShopsList: '/project/shops/getList',
   // getMerchantsList: '/project/merchant/getList',
   // getActivityList: '/project/activity/getList',
-  getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}',
+  getMachinePLanSetting: '/machine/machine/planList?machineCode={machineCode}&startTime={startTime}&localCode={localCode}&endTime={endTime}&status={status}',
 
   paiActivity: '/pai/data/count/list',
+
+  // 互派活动
+  interactLists: '/project/interact/list?status={status}&keyword={keyword}&pageNo={pageNo}&orderBy={orderBy}',
+  interactAdd: '/project/interact/add',
+  interactDetail: '/project/interact/detail',
+  interactUpdate: '/project/interact/update',
+  // 第二步 商户商品信息
+  merchantAdd: '/project/interact/merchant/add',
+  shopsAdd: '/project/interact/shops/add',
+  goodsAdd: '/project/interact/goods/add',
+  interactNext: '/project/interact/next',
+  updateGoods: '/project/interact/goods/update',
+  updateMerchant: '/project/interact/merchant/update',
+  updateShops: '/project/interact/shops/update',
+  deleteGoods: '/project/interact/goods/delete',
+  deleteMerchant: '/project/interact/merchant/delete',
+  deleteShops: '/project/interact/shops/delete',
+  getInteractGoodsList: '/project/interact/goods/getList',
+  getInteractMerchantList: '/project/interact/merchant/getList',
+  getInteractShopsList: '/project/interact/shops/getList',
+  getMerchantDetail: '/project/interact/merchant/detail',
+  getGoodsDetail: '/project/interact/goods/detail',
+  getShopsDetail: '/project/interact/shops/detail',
+  // 第三步 选择机器
+  getInteractMachinePlanList: '/project/interact/machine/planList',
+  addInteractMachine: '/project/interact/machine/add',
+  addInteractMachineGoods: '/project/interact/machine/goods/add',
+  deleteInteractMachine: '/project/interact/machine/delete',
+  getInteractAllGoodsList: '/project/interact/goods/getAllList',
+  getInteractMachineGoodsList: '/project/interact/machine/goodsList',
+  // 第四步 规则设置
+  ruleInteract: '/project/interact/rule',
+
+
 });
 
 export default api;

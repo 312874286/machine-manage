@@ -19,7 +19,9 @@ import moment from "moment/moment";
 import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
+const { Option } = Select;
 const { RangePicker } = DatePicker;
+const activityStatus = [{id: 1, name: '未开始'}, {id: 2, name: '进行中'}]
 
 @connect(({ common, loading, machinePlanSetting }) => ({
   common,
@@ -39,6 +41,7 @@ export default class machinePlanSettingList extends PureComponent {
     handleDays: {},
     getDataStartDay: '',
     getDataEndDay: '',
+    status: '',
 
     account: {},
   };
@@ -70,6 +73,7 @@ export default class machinePlanSettingList extends PureComponent {
           startTime: this.state.startTime,
           localCode: this.state.localCode,
           endTime: this.state.endTime,
+          status: this.state.status,
         },
       },
     }).then((res) => {
@@ -211,6 +215,7 @@ export default class machinePlanSettingList extends PureComponent {
       this.setState({
         machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
         localCode,
+        status: fieldsValue.status ? fieldsValue.status : '',
       }, () => {
         this.getLists();
       });
@@ -246,7 +251,7 @@ export default class machinePlanSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="省市区商圈">
+            <FormItem label="省市区">
               {getFieldDecorator('localCode')(
                 <Cascader
                   placeholder="请选择"
@@ -259,13 +264,33 @@ export default class machinePlanSettingList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem>
-              {getFieldDecorator('machineCode')(<Input placeholder="请输入机器编码搜索" />)}
+              {getFieldDecorator('machineCode')(<Input placeholder="请输入机器编码、活动名称搜索" />)}
             </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="选择活动状态">
+              {getFieldDecorator('status')(
+                <Select placeholder="请选择活动状态">
+                  {activityStatus.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem></FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem></FormItem>
           </Col>
           <Col md={8} sm={24}>
             <span>
                <FormItem>
-                  {/*{getFieldDecorator('time')(<RangePicker onChange={this.onChange}/>)}*/}
                  <Button onClick={this.handleFormReset}>
                     重置
                   </Button>
@@ -276,26 +301,6 @@ export default class machinePlanSettingList extends PureComponent {
             </span>
           </Col>
         </Row>
-        {/*<Row gutter={{ md: 24, lg: 24, xl: 48 }}>*/}
-          {/*<Col md={8} sm={24}>*/}
-            {/*<FormItem></FormItem>*/}
-          {/*</Col>*/}
-          {/*<Col md={8} sm={24}>*/}
-            {/*<FormItem></FormItem>*/}
-          {/*</Col>*/}
-          {/*<Col md={8} sm={24}>*/}
-            {/*<span>*/}
-               {/*<FormItem>*/}
-                 {/*<Button onClick={this.handleFormReset}>*/}
-                    {/*重置*/}
-                  {/*</Button>*/}
-                  {/*<Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" htmlType="submit">*/}
-                    {/*查询*/}
-                  {/*</Button>*/}
-               {/*</FormItem>*/}
-            {/*</span>*/}
-          {/*</Col>*/}
-        {/*</Row>*/}
       </Form>
     );
   }

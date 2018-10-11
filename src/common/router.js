@@ -104,6 +104,9 @@ export const getRouterData = (app) => {
     '/unusual': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/Unusual')),
     },
+    '/trouble': {
+      component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/Trouble')),
+    },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
@@ -196,6 +199,21 @@ export const getRouterData = (app) => {
     },
     '/project/schedule': {
       component: dynamicWrapper(app, ['project/scheduleSetting', 'log/log'], () => import('../routes/Project/ScheduleSetting')),
+    },
+    '/project/sampling-setting': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSetting')),
+    },
+    '/project/addBasicInteractSampling': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/BasicInteractSampling.js')),
+    },
+    '/project/addMerchantGoodsInteractSampling/:id': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MerchantGoodsInteractSampling.js')),
+    },
+    '/project/addMachineInteractSampling/:id': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MachineInteractSampling.js')),
+    },
+    '/project/addRuleInteractSampling/:id': {
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/RuleInteractSampling.js')),
     },
     '/project/game': {
       component: dynamicWrapper(app, ['project/gameSetting', 'log/log'], () => import('../routes/Project/GameSetting')),

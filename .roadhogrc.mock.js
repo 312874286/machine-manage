@@ -753,6 +753,17 @@ const proxy = {
             "parentName": null
           },
           {
+            "id": "38",
+            "functionDepict": "互派管理",
+            "functionPath": "sampling-setting",
+            "parentId": "4",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": null,
+            "seq": 7,
+            "parentName": null
+          },
+          {
             "id": "c0db2c98-b17e-11e8-9cb0-00163e08",
             "functionDepict": "删除",
             "functionPath": "delete",
@@ -5505,6 +5516,421 @@ const proxy = {
     }
     res.send(data)
   },
+  'GET /project/interact/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "id": "5555555555555555",
+          "name": "派样活动",
+          "gameName": "世界杯",
+          "merchantNum": 2,
+          "goodsNum": "10",
+          "realDay": "2",
+          "day": "2",
+          "realNum": 2,
+          "number": 2,
+          "manager": "如意",
+          "createTime": "2018-09-19 15:24:26.0",
+          "status": "0"
+        }
+      ],
+      "unColumn": ""
+    })
+  },
+  'post /project/interact/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": "10001",
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/merchant/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/next': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/merchant/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/merchant/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        "id": "1111111",
+        "name": "怡宝款泉水",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": null,
+        "createTime": "2018-07-03 14:51:05",
+        "updateId": null,
+        "updateTime": "2018-07-03 14:51:05"
+      }, {
+        "id": "88511198f5214404beb1cd8a3a29359e",
+        "name": "来一桶shui",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": "",
+        "createTime": "2018-07-03 10:55:28",
+        "updateId": "",
+        "updateTime": "2018-07-03 10:55:28"
+      }],
+      "inno72Goods": {
+        "id": null,
+        "name": null,
+        "code": null,
+        "price": null,
+        "sellerId": null,
+        "img": null,
+        "state": 0,
+        "remark": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null
+      }
+    })
+  },
+  'post /project/interact/merchant/getList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "3",
+          "merchantCode": "2",
+          "merchantName": "天猫",
+          "createId": "12",
+          "updateId": null,
+          "createTime": 1530499549000,
+          "updateTime": 1530499549000,
+          "isDelete": 0
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/getList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "3",
+          "merchantCode": "2",
+          "merchantName": "天猫",
+          "createId": "12",
+          "updateId": null,
+          "createTime": 1530499549000,
+          "updateTime": 1530499549000,
+          "isDelete": 0
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/machine/planList': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "data": [
+          {
+            "id": "6b4cd639883d42999254878b52b1cc20",
+            "machineCode": "18978050",
+            "localDesc": "北京市北京市西城区小西天灯市口",
+            "planTime": [{
+              "activityName": "测试别删",
+              "startTime": "2018-07-25 00:00:00",
+              "endTime": "2018-07-29 00:00:59"
+            }]
+          },
+          {
+            "id": "123",
+            "machineCode": "123",
+            "localDesc": "天津市天津市和平区鞍山道沿线大沽口",
+            "planTime": [{
+              "activityName": "测试别删",
+              "startTime": "2018-07-16 09:00:00",
+              "endTime": "2018-10-06 23:00:00"
+            }]
+          },
+          {
+            "id": "6893a2ada9dd4f7eb8dc33adfc6eda73",
+            "machineCode": "18022789",
+            "localDesc": "北京市北京市西城区小西天灯市口",
+            "planTime": [{
+              "activityName": "测试别删",
+              "startTime": "2018-07-31 00:00:00",
+              "endTime": "2018-08-03 23:59:59"
+            }]
+          }
+        ],
+        "code": 0
+      }
+    )
+  },
+  'post /project/interact/machine/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/machine/goods/add': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": null,
+        "msg": "成功"
+      }
+
+    )
+  },
+  'post /project/interact/machine/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'get /project/interact/goods/getAllList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+        "id": "1111111",
+        "name": "怡宝款泉水",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": null,
+        "createTime": "2018-07-03 14:51:05",
+        "updateId": null,
+        "updateTime": "2018-07-03 14:51:05"
+      }, {
+        "id": "88511198f5214404beb1cd8a3a29359e",
+        "name": "来一桶shui",
+        "code": "10000222XXX",
+        "price": 0.99,
+        "sellerId": "111111",
+        "img": "111111",
+        "state": 0,
+        "remark": "0.99",
+        "createId": "",
+        "createTime": "2018-07-03 10:55:28",
+        "updateId": "",
+        "updateTime": "2018-07-03 10:55:28"
+      }],
+      "inno72Goods": {
+        "id": null,
+        "name": null,
+        "code": null,
+        "price": null,
+        "sellerId": null,
+        "img": null,
+        "state": 0,
+        "remark": null,
+        "createId": null,
+        "createTime": null,
+        "updateId": null,
+        "updateTime": null
+      }
+    })
+  },
+  'post /project/interact/machine/goodsList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "data": [
+        {
+          "id": "6b4cd639883d4",
+          "goods_id": "2999254878b52b1cc20",
+          "number": 1000,
+          "seq": 1,
+          "type": 0
+        },
+        {
+          "id": "6b4cd639883d4",
+          "goods_id": "2999254878b52b1cc20",
+          "number": 1000,
+          "seq": 1,
+          "type": 0
+        },
+        {
+          "id": "6b4cd639883d4",
+          "goods_id": "2999254878b52b1cc20",
+          "number": 1000,
+          "seq": 1,
+          "type": 0
+        },
+      ],
+      "code": 0
+    })
+  },
+  'post /project/interact/rule': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/merchant/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "182daafc2c7e4be1beddba0a6979cbf4",
+        "merchantCode": "\bTM100001",
+        "brandName": "清风",
+        "originFlag": null,
+        "merchantName": "天猫清风",
+        "channelId": "7e2a6d2d8f3a4b8ebd3a1111898795ce",
+        "isDelete": null,
+        "createId": null,
+        "updateId": "936451df9a7443c3a59102b193e3b7ff",
+        "createTime": "2018-09-20 15:56:49",
+        "updateTime": "2018-09-20 15:56:50"
+      },
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/goods/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "64747d97fe9a4095918619ce4a3d4b33",
+        "name": "清风2层100抽",
+        "code": "QF10000021",
+        "price": 9.9,
+        "number": 100000,
+        "sellerId": "182daafc2c7e4be1beddba0a6979cbf",
+        "shopId": "ABCEFGHIJKLMN",
+        "img": "",
+        "banner": null,
+        "isDelete": null,
+        "remark": null,
+        "specRemark": null,
+        "createId": null,
+        "createTime": "2018-09-20 19:39:01",
+        "updateId": "936451df9a7443c3a59102b193e3b7ff",
+        "updateTime": "2018-09-20 19:39:01",
+        "interactId": "92f34793989846a098e7135996242d8c",
+        "userDayNumber": 10,
+        "type": 0
+      },
+      "msg": "成功"
+    })
+  },
+  'post /project/interact/shops/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "id": "92f34793989846a098e7135996242d8c",
+        "shopName": "天猫清风旗舰店",
+        "shopCode": "\bQJD100001",
+        "sellerId": "182daafc2c7e4be1beddba0a6979cbf4",
+        "sessionKey": "ABCEFGHIJKLMN",
+        "isDelete": null,
+        "remark": null,
+        "createId": "936451df9a7443c3a59102b193e3b7ff",
+        "createTime": "2018-09-20 17:39:34",
+        "updateId": "936451df9a7443c3a59102b193e3b7ff",
+        "updateTime": "2018-09-20 17:39:38",
+        "interactId": "87a2d062c6b643c594f5fda509387fa3",
+        "isVip": 10
+      },
+      "msg": "成功"
+    })
+  },
+  'post /machine/locale/updateBatch': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  }
 };
 
 // export default noProxy ? {

@@ -6,7 +6,7 @@ const api = map({
   findExceptionMachine: '/machine/machine/findExceptionMachine?type={type}',
   findMachineStockoutInfo: '/machine/machine/findMachineStockoutInfo?machineId={machineId}',
   paiTotalList: '/pai/data/count/totalList',
-  overPlanSetting: '/project/activityPlan/delete'
+  overPlanSetting: '/project/activityPlan/delete',
 });
 
 export default api;
