@@ -7,7 +7,8 @@ import {
   Input,
   Checkbox,
   Row,
-  Col
+  Col,
+  notification
 } from "antd";
 import moment from "moment";
 import $ from "jquery";
@@ -36,6 +37,7 @@ export default class MachineConfigCard extends Component {
     let state = { interactInfo: this.props.interactInfo };
     if (this.props.data) {
       const data = this.props.data;
+      data.secular = data.state === 1;
       const start = moment(data.queryStartTime);
       const end = moment(data.queryEndTime);
       state.machineEdit = data;
@@ -71,14 +73,16 @@ export default class MachineConfigCard extends Component {
   }
   handleEditDateChange(date, type) {
     let startDate = this.state.editDateStart;
-    const endDate = this.state.editDateEnd;
+    let endDate = this.state.editDateEnd;
     if (type === 0) {
       startDate = date;
     } else {
       endDate = date;
     }
     this.setState({
-      dates: this.getDayAll(startDate, endDate)
+      dates: this.getDayAll(startDate, endDate),
+      editDateStart: startDate,
+      editDateEnd: endDate
     });
   }
   handleSearchTextChange(e) {
@@ -145,6 +149,12 @@ export default class MachineConfigCard extends Component {
     });
     this.setState({ machineList: machines });
   }
+  handleEditMachineExpireChange(e) {
+    const machine = this.state.machineEdit;
+    machine.secular = e.target.checked;
+    this.setState({ machineList: machine });
+  }
+  handleEditMachineSelectedChange(e) {}
   handleAddMachine() {
     const params = {
       queryStartTime: this.state.searchDateStr[0] + " 00:00:00",
@@ -173,17 +183,26 @@ export default class MachineConfigCard extends Component {
     });
     this.setState({ addedMachineList: machines });
   }
-  handleAddedMachineGoods() {
+  handleAddedMachinesGoods() {
     this.props.onAddGoods(
       cloneByJSON([...this.state.addedMachineList.filter(m => m.checked)])
     );
   }
-  handleAddedMachineGood(good) {
-    this.props.onAddGoods(cloneByJSON([good]));
+  handleAddedMachineGoods(machine) {
+    this.props.onAddGoods(cloneByJSON([machine]));
   }
-
+  handleUpdateMachineGoods(machine) {
+    this.props.onUpdateGoods(cloneByJSON([machine]));
+  }
   handleSearchClick() {
-    this.props.onSearch(this.state.searchDateStr, this.state.searchText);
+    const dateStr = this.state.searchDateStr;
+    if (dateStr && dateStr.length > 1 && dateStr[0] && dateStr[1]) {
+      this.props.onSearch(this.state.searchDateStr, this.state.searchText);
+    } else {
+      notification.error({
+        message: "请选择筛选日期"
+      });
+    }
   }
   renderSchedule(dates, machines, editabel, type) {
     const result = [];
@@ -239,6 +258,7 @@ export default class MachineConfigCard extends Component {
                 <RangePicker
                   value={this.state.searchDate}
                   format="YYYY-MM-DD"
+                  placeholder="日期筛选"
                   onChange={(date, dateString) => {
                     this.handleSearchDateChange(date, dateString);
                   }}
@@ -436,7 +456,7 @@ export default class MachineConfigCard extends Component {
                       <div key={machine.machineId}>
                         <a
                           onClick={() => {
-                            this.handleAddedMachineGood(machine);
+                            this.handleAddedMachineGoods(machine);
                           }}
                         >
                           关联商品
@@ -447,7 +467,7 @@ export default class MachineConfigCard extends Component {
                 </div>
               </div>
               <div style={{ textAlign: "center", margin: "5px 0" }}>
-                <Button onClick={this.handleAddedMachineGoods.bind(this)}>
+                <Button onClick={this.handleAddedMachinesGoods.bind(this)}>
                   关联商品
                 </Button>
               </div>
@@ -457,7 +477,6 @@ export default class MachineConfigCard extends Component {
       </div>
     );
   }
-
   renderEdit() {
     const machine = this.state.machineEdit;
     return (
@@ -472,6 +491,13 @@ export default class MachineConfigCard extends Component {
                   onChange={date => {
                     this.handleEditDateChange(date, 0);
                   }}
+                  disabledDate={startValue => {
+                    const endValue = this.state.editDateEnd;
+                    if (!startValue || !endValue) {
+                      return false;
+                    }
+                    return startValue.valueOf() > endValue.valueOf();
+                  }}
                   style={{ width: "100%" }}
                 />
               </Col>
@@ -482,6 +508,13 @@ export default class MachineConfigCard extends Component {
                   onChange={date => {
                     this.handleEditDateChange(date, 1);
                   }}
+                  disabledDate={endValue => {
+                    const startValue = this.state.editDateStart;
+                    if (!startValue || !endValue) {
+                      return false;
+                    }
+                    return startValue.valueOf() >= endValue.valueOf();
+                  }}
                   style={{ width: "100%" }}
                 />
               </Col>
@@ -491,7 +524,17 @@ export default class MachineConfigCard extends Component {
             <div className="machine-table">
               <div className="machine-table-left">
                 <div>机器编号</div>
-                <div style={{ textAlign: "left" }}>{machine.machineCode}</div>
+                <div style={{ textAlign: "left" }}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      value={machine.machineId}
+                      checked={machine.checked}
+                      onChange={this.handleEditMachineSelectedChange.bind(this)}
+                    />
+                    {machine.machineCode}
+                  </label>
+                </div>
               </div>
               <div className="machine-table-calendar">
                 <div className="scroll-box">
@@ -539,19 +582,34 @@ export default class MachineConfigCard extends Component {
               <div className="machine-table-right">
                 <div>操作</div>
                 <div key={machine.machineId}>
-                  <a
-                    onClick={() => {
-                      this.handleAddedMachineGood(machine);
-                    }}
-                  >
-                    关联商品
-                  </a>
+                  <label>
+                    <input
+                      type="checkbox"
+                      value={machine.machineId}
+                      checked={machine.secular}
+                      onChange={this.handleEditMachineExpireChange.bind(this)}
+                    />
+                    长期
+                  </label>
                 </div>
               </div>
             </div>
           </div>
-          <div style={{ textAlign: "center", margin: "5px 0" }}>
-            <Button onClick={this.handleUpdateMachine.bind(this)}>保存</Button>
+          <div style={{ textAlign: "center", margin: "10px 0 0" }}>
+            <Button
+              type="primary"
+              onClick={this.handleUpdateMachine.bind(this)}
+            >
+              保存
+            </Button>
+            &nbsp;
+            <Button
+              onClick={() => {
+                this.handleUpdateMachineGoods(machine);
+              }}
+            >
+              关联商品
+            </Button>
           </div>
         </div>
       </div>
