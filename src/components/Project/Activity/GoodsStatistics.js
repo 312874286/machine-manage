@@ -39,10 +39,10 @@ export default class GoodsStatistics extends PureComponent {
 
   parseData(datas) {
     let data = [...datas];
+    debugger;
     let result = [];
     const times = {};
     columns[2].children = [];
-
     data.forEach(item => {
       let curData = result.find(
         i => i.time === item.time && i.machineCode === item.machineCode
@@ -74,22 +74,13 @@ export default class GoodsStatistics extends PureComponent {
         });
       }
     });
-
-
-    // const sortResult = []
-    // Object.keys(times).sort((v, ov) => {
-    //   return new Date(v) > new Date(ov);
-    // }).forEach(time=>{
-    //   sortResult.concat(result.filter(i=>i.time === time))
-    // })
-
     result = result.map((item, index, array) => {
       return {
         ...item,
         count: array.filter(i => i.time === item.time).length + 1
       };
     });
-    let sortResult = []
+    let sortResult = [];
     Object.keys(times).forEach(time => {
       const items = result.filter(i => i.time === time);
       const summary = { time, machineCode: "合计", count: items[0].count };
@@ -107,7 +98,8 @@ export default class GoodsStatistics extends PureComponent {
               return pGoods + cGoods;
             });
           } else {
-            goodsCount = items[0][goodsCode].goods || 0;
+            goodsCount =
+              (items[0][goodsCode] && items[0][goodsCode].goods) || 0;
           }
         }
         summary[goodsCode] = {
@@ -115,7 +107,7 @@ export default class GoodsStatistics extends PureComponent {
           isSummary: true
         };
       });
-      sortResult = sortResult.concat(items)
+      sortResult = sortResult.concat(items);
       sortResult.splice(
         sortResult.lastIndexOf(items[items.length - 1]) + 1,
         0,
