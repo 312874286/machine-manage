@@ -2357,7 +2357,7 @@ export default class machineSettingList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem>
               {getFieldDecorator('machineCode')(
-                <Input placeholder="请输入机器编号、点位、具体位置、活动名称" />
+                <Input placeholder="请输入机器编号、点位、具体位置" />
               )}
             </FormItem>
           </Col>
@@ -2442,12 +2442,12 @@ export default class machineSettingList extends PureComponent {
         },
         key: 'netStatus'
       },
-      {
-        title: '当前活动',
-        width: '10%',
-        dataIndex: 'activityName',
-        key: 'activityName'
-      },
+      // {
+      //   title: '当前活动',
+      //   width: '10%',
+      //   dataIndex: 'activityName',
+      //   key: 'activityName'
+      // },
       {
         title: '入场时间',
         width: '10%',
