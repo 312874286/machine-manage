@@ -152,7 +152,7 @@ class StandardTable extends PureComponent {
     //   showQuickJumper: true,
     //   ...page,
     // };
-    console.log('selectedRows', selectedPointRows)
+    // console.log('selectedRows', selectedPointRows)
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
