@@ -72,10 +72,10 @@ export default class areaSettingList extends PureComponent {
         dayNumber: data.dayNumber === -1 ? true : false
       })
       this.props.form.setFieldsValue({
-        times: data.times === -1 ? ' ' :  data.times || undefined,
-        dayTimes: data.dayTimes === -1 ? ' ' :  data.dayTimes || undefined,
-        number: data.number === -1 ? ' ' :  data.number || undefined,
-        dayNumber: data.dayNumber === -1 ? ' ' :  data.dayNumber || undefined,
+        times: data.times === -1 ? '' :  data.times || undefined,
+        dayTimes: data.dayTimes === -1 ? '' :  data.dayTimes || undefined,
+        number: data.number === -1 ? '' :  data.number || undefined,
+        dayNumber: data.dayNumber === -1 ? '' :  data.dayNumber || undefined,
       });
     } else {
       this.setState({
@@ -94,6 +94,11 @@ export default class areaSettingList extends PureComponent {
       times: e.target.checked,
     }, () => {
       this.props.form.validateFields(['times'], { force: true });
+      if (e.target.checked) {
+        this.props.form.setFieldsValue({
+          times: '',
+        });
+      }
     });
   }
   handleDayTimesChange = (e) => {
