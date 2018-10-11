@@ -2330,7 +2330,7 @@ export default class machineSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="入场时间">
               {getFieldDecorator('rangeTime')(
                 <RangePicker
@@ -2339,10 +2339,10 @@ export default class machineSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
-            <FormItem>
+          <Col md={8} sm={24}>
+            <FormItem label="机器类型">
               {getFieldDecorator('machineType')(
-                <Select placeholder="选择机器类型">
+                <Select placeholder="请选择">
                   {pointTypeOptions.map((item) => {
                     return (
                       <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -2355,16 +2355,9 @@ export default class machineSettingList extends PureComponent {
         </Row>
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem>
-              {getFieldDecorator('machineCode')(
-                <Input placeholder="请输入机器编号、点位、具体位置" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={9} sm={24}>
-            <FormItem>
+            <FormItem label="机器状态">
               {getFieldDecorator('machineStatus')(
-                <Select placeholder="选择机器状态">
+                <Select placeholder="请选择">
                   {pointStatusOptions.map((item) => {
                     return (
                       <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -2374,7 +2367,14 @@ export default class machineSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
+          <Col md={8} sm={24}>
+            <FormItem>
+              {getFieldDecorator('machineCode')(
+                <Input placeholder="请输入机器编号、点位、具体位置" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <span>
               <FormItem>
                 <Button onClick={this.handleFormReset}>

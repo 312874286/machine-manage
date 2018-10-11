@@ -139,8 +139,8 @@ export default class signInRecord extends PureComponent {
       }
       console.log('fieldsValue.time', fieldsValue.time)
       if (fieldsValue.time) {
-        startTime = fieldsValue.time[0].format('YYYY-MM-DD HH:mm')
-        endTime = fieldsValue.time[1].format('YYYY-MM-DD HH:mm')
+        startTime = fieldsValue.time[0].format('YYYY-MM-DD')
+        endTime = fieldsValue.time[1].format('YYYY-MM-DD')
       }
 
       this.setState({
@@ -221,7 +221,7 @@ export default class signInRecord extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="省市区商圈">
+            <FormItem label="省市区">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
                   placeholder="请选择"
