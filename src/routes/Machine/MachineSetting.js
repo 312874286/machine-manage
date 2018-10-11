@@ -695,12 +695,12 @@ const EditMonitoringForm = Form.create()(
                 <div className={styles.showList}
                      id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
-                  <span style={{ display: getLogMessage !== '正在获取' ? 'none' : '' }}>
-                    {getLogMessage}
-                  </span>
-                  {(logLists.length === 0) ? '暂无数据' : (logLists.map((item) => {
+                  {/*<span style={{ display: getLogMessage !== '正在获取' ? 'none' : '' }}>*/}
+                    {/*{getLogMessage}*/}
+                  {/*</span>display: getLogMessage === '正在获取' ? 'none' : ''*/}
+                  {(logLists.length === 0) ? '数据加载中，请稍等' : (logLists.map((item) => {
                       return (
-                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999', display: getLogMessage === '正在获取' ? 'none' : '' }}>
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999', }}>
                           <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
                         </p>
