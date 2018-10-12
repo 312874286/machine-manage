@@ -370,9 +370,9 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}` }],
               })(<Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}`} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="商品图片">
+            <FormItem {...formItemLayout} label="商品图片" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
               {getFieldDecorator('img', {
-                rules: [{ required: true, message: '请上传商品图片' }],
+                rules: [{ required: false, message: '请上传商品图片' }],
                 valuePropName: 'filelist',
               })(
                 <div className="clearfix">
@@ -391,7 +391,7 @@ const CreateGoodsForm = Form.create()(
                 </div>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="宣传介绍（支持图片和视频）">
+            <FormItem {...formItemLayout} label="宣传介绍（支持图片和视频" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
               {getFieldDecorator('banner', {
                 rules: [{ required: false, message: '' }],
                 valuePropName: 'filelist',
@@ -424,17 +424,17 @@ const CreateGoodsForm = Form.create()(
                 </div>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="商品数量">
+            <FormItem {...formItemLayout} label="商品数量" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
               {getFieldDecorator('number', {
-                rules: [{ required: true, message: '请输入商品数量' }],
+                rules: [{ required: false, message: '请输入商品数量' }],
               })(<InputNumber placeholder="请输入商品数量" max={10000000} min={0}/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="商品价格">
+            <FormItem {...formItemLayout} label="商品价格" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
               {getFieldDecorator('price', {
-                rules: [{ required: true, message: '请输入商品价格' }],
+                rules: [{ required: false, message: '请输入商品价格' }],
               })(<InputNumber placeholder="请输入商品价格" min={0}/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="备注信息">
+            <FormItem {...formItemLayout} label="备注信息" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
               {getFieldDecorator('remark')(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 6 }} />)}
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
@@ -668,47 +668,51 @@ export default class areaSettingList extends PureComponent {
   setModalData = (data) => {
     if (data) {
       let flist = [], videoUrl = {}
-      if (data.banner) {
-        if (this.imgFlag(data.banner)) {
-          flist = [{
-            uid: -2,
+      if (data.type === 0) {
+        if (data.banner) {
+          if (this.imgFlag(data.banner)) {
+            flist = [{
+              uid: -2,
+              name: 'xxx.png',
+              status: 'done',
+              url: data.banner,
+            }]
+            videoUrl = {}
+          } else if (this.videoFlag(data.banner)){
+            videoUrl = {
+              url: data.banner
+            }
+            flist = []
+          } else {
+            videoUrl = {}
+            flist = []
+          }
+        }
+        this.setState({
+          fileList: data.img ? [{
+            uid: -1,
             name: 'xxx.png',
             status: 'done',
-            url: data.banner,
-          }]
-          videoUrl = {}
-        } else if (this.videoFlag(data.banner)){
-          videoUrl = {
-            url: data.banner
-          }
-          flist = []
-        } else {
-          videoUrl = {}
-          flist = []
-        }
+            url: data.img,
+          }] : [],
+          bannerfileList: flist,
+          videoUrl,
+          GoodTypePlaceHolder: data.type,
+        });
+        this.form.setFieldsValue({
+          price: data.price || undefined,
+          remark: data.remark || undefined,
+          img: data.img || undefined,
+          specRemark: data.specRemark || undefined,
+          number: data.number || undefined,
+        });
       }
-      this.setState({
-        fileList: data.img ? [{
-          uid: -1,
-          name: 'xxx.png',
-          status: 'done',
-          url: data.img,
-        }] : [],
-        bannerfileList: flist,
-        videoUrl,
-        GoodTypePlaceHolder: data.type || 0,
-      });
       this.form.setFieldsValue({
         name: data.name || '',
         code: data.code || undefined,
         sellerId: data.sellerId || undefined,
-        price: data.price || undefined,
-        remark: data.remark || undefined,
-        img: data.img || undefined,
         shopId: data.shopId || undefined,
-        specRemark: data.specRemark || undefined,
-        number: data.number || undefined,
-        type: data.type || 0
+        type: data.type
       });
     } else {
       this.setState({
@@ -748,14 +752,34 @@ export default class areaSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = (flag) => {
+    message.config({
+      top: 100,
+      duration: 2,
+      maxCount: 1,
+    });
+    const { GoodTypePlaceHolder, fileList } = this.state
     this.form.validateFields((err, fieldsValue) => {
-      if (this.state.fileList.length > 0) {
+      if (fileList.length > 0) {
         this.form.setFieldsValue({
-          img: this.state.fileList,
+          img: fileList,
         });
       }
       if (err) {
         return;
+      }
+      if (GoodTypePlaceHolder === 0) {
+        if (fileList.length === 0) {
+          message.warn('请添加图片')
+          return;
+        }
+        if (fieldsValue.number.trim()) {
+          message.warn('请填写商品数量')
+          return;
+        }
+        if (fieldsValue.price.trim()) {
+          message.warn('请填写商品价格')
+          return;
+        }
       }
       let params = {
         ...fieldsValue,
