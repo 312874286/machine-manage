@@ -12,7 +12,8 @@ import {
   DatePicker,
   Steps,
   Table,
-  Modal
+  Modal,
+  notification
 } from "antd";
 import MachinePlanTable from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachinePlanTable";
 import MachineConfigCard from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachineConfigCard";
@@ -214,9 +215,14 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
-          this.setState({
-            machineModalAddedData: machines
-          });
+          this.setState(
+            {
+              machineModalAddedData: machines
+            },
+            () => {
+              this.getMachineList();
+            }
+          );
         }
       });
   }
@@ -297,16 +303,19 @@ export default class MachineInteractSampling extends PureComponent {
     this.setState({ goodsList: goods });
   }
   handleGoodsInputChange(value, type, good) {
-    const goods = [...this.state.goodsList];
-    goods.filter(g => g.id === good.id).forEach(good => {
-      good[type] = value;
-    });
-    this.setState({ goodsList: goods });
+    const reg = /^(0|[1-9][0-9]*)$/;
+    if ((!isNaN(value) && reg.test(value)) || value === "") {
+      const goods = [...this.state.goodsList];
+      goods.filter(g => g.id === good.id).forEach(good => {
+        good[type] = value;
+      });
+      this.setState({ goodsList: goods });
+    }
   }
   handleGoodsModalVisible() {
     this.setState({ goodsModalVisible: false, goodsModalMachineData: [] });
   }
-  handleGoodAdd(machines) {
+  handleGoodsAdd(machines) {
     this.setState({ goodsModalMachineData: machines }, () => {
       this.props
         .dispatch({
@@ -327,6 +336,65 @@ export default class MachineInteractSampling extends PureComponent {
         });
     });
   }
+  handleGoodsUpdate(machines) {
+    this.setState({ goodsModalMachineData: machines }, () => {
+      this.props
+        .dispatch({
+          type: "interactSamplingSetting/getInteractGoodsList",
+          payload: {
+            params: {
+              interactId: this.state.interactSampling
+            }
+          }
+        })
+        .then(goodsResp => {
+          if (goodsResp && goodsResp.code === 0) {
+            this.props
+              .dispatch({
+                type: "interactSamplingSetting/getInteractMachineGoods",
+                payload: {
+                  params: {
+                    interactId: this.state.interactSampling,
+                    machineId: machines[0].machineId
+                  }
+                }
+              })
+              .then(machineGoodsResp => {
+                if (machineGoodsResp && machineGoodsResp.code === 0) {
+                  const goodsList = [...goodsResp.data];
+                  if (
+                    machineGoodsResp.data &&
+                    machineGoodsResp.data.length > 0
+                  ) {
+                    machineGoodsResp.data.forEach(mg => {
+                      goodsList.filter(g => g.id === mg.goodsId).forEach(g => {
+                        g.checked = true;
+                        g.setCount = mg.number;
+                        g.setOrder = mg.seq;
+                        g.secular = mg.state === 1;
+                        g.startTime = mg.startTime && moment(mg.startTime);
+                        g.startTimeStr = mg.startTime;
+                        if (g.secular) {
+                          g.endTime = null;
+                          g.endTimeStr = "";
+                        } else {
+                          g.endTime = mg.endTime && moment(mg.endTime);
+                          g.endTimeStr = mg.endTime;
+                        }
+                      });
+                    });
+                  }
+                  console.log(goodsList);
+                  this.setState({
+                    goodsList: goodsList,
+                    goodsModalVisible: true
+                  });
+                }
+              });
+          }
+        });
+    });
+  }
   handleGoodsModalSave() {
     const goods = this.state.goodsList.filter(g => g.checked).map(g => {
       return {
@@ -339,6 +407,19 @@ export default class MachineInteractSampling extends PureComponent {
         type: g.type
       };
     });
+    if (
+      goods.some(
+        g =>
+          (!parseInt(g.number) && g.number != 0) ||
+          (!parseInt(g.seq) && g.seq != 0) ||
+          (g.state === 0 && !g.startTimeStr && !g.endTimeStr) ||
+          (g.state === 1 && !g.startTimeStr)
+      )
+    ) {
+      console.log(goods);
+      notification.error({ message: "已选择商品信息不能为空" });
+      return;
+    }
     const machines = this.state.goodsModalMachineData.map(m => m.machineId);
     const params = {
       interactId: this.state.interactSampling,
@@ -365,6 +446,7 @@ export default class MachineInteractSampling extends PureComponent {
         }
       });
   }
+  handleGoodsDisabledEndDate(data) {}
   getMachineList() {
     this.props
       .dispatch({
@@ -502,6 +584,13 @@ export default class MachineInteractSampling extends PureComponent {
                       style={{ width: "100%" }}
                       value={g.startTime}
                       disabled={g.secular}
+                      disabledDate={startValue => {
+                        const endValue = g.endTime;
+                        if (!startValue || !endValue) {
+                          return false;
+                        }
+                        return startValue.valueOf() > endValue.valueOf();
+                      }}
                       onChange={(date, dateStr) => {
                         this.handleGoodsExpireDateChange(date, dateStr, g, 0);
                       }}
@@ -514,6 +603,13 @@ export default class MachineInteractSampling extends PureComponent {
                       style={{ width: "100%" }}
                       value={g.endTime}
                       disabled={g.secular}
+                      disabledDate={endValue => {
+                        const startValue = g.startTime;
+                        if (!startValue || !endValue) {
+                          return false;
+                        }
+                        return startValue.valueOf() >= endValue.valueOf();
+                      }}
                       onChange={(date, dateStr) => {
                         this.handleGoodsExpireDateChange(date, dateStr, g, 1);
                       }}
@@ -662,7 +758,8 @@ export default class MachineInteractSampling extends PureComponent {
             postDatas={this.state.machineModalAddedData}
             onAddMachine={this.handleMachineAdd.bind(this)}
             onUpdateMachine={this.handleMachineUpdateSave.bind(this)}
-            onAddGoods={this.handleGoodAdd.bind(this)}
+            onAddGoods={this.handleGoodsAdd.bind(this)}
+            onUpdateGoods={this.handleGoodsUpdate.bind(this)}
             onSearch={this.handleMachineSearch.bind(this)}
             interactInfo={this.state.interactInfo}
           />
