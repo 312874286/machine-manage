@@ -13,7 +13,8 @@ import {
   Steps,
   Table,
   Modal,
-  notification
+  notification,
+  Checkbox
 } from "antd";
 import MachinePlanTable from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachinePlanTable";
 import MachineConfigCard from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachineConfigCard";
@@ -90,6 +91,7 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
+          notification.success({ message: "删除成功" });
           this.getMachineList();
         }
       });
@@ -108,6 +110,7 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
+          notification.success({ message: "删除成功" });
           this.getMachineList();
         }
       });
@@ -179,8 +182,22 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
+          let machines = res.data;
+          if (machines && machines.length > 0) {
+            machines = machines.map(m => {
+              const disabled = this.state.machinesData.some(
+                md => md.machineId === m.machineId
+              );
+              return {
+                ...m,
+                disabled
+              };
+            });
+          } else {
+            machines = [];
+          }
           this.setState({
-            machineModalDatas: res.data
+            machineModalDatas: machines
           });
         }
       });
@@ -220,6 +237,7 @@ export default class MachineInteractSampling extends PureComponent {
               machineModalAddedData: machines
             },
             () => {
+              notification.success({ message: "添加成功" });
               this.getMachineList();
             }
           );
@@ -256,6 +274,7 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
+          notification.success({ message: "保存成功" });
           this.handleMachineModalVisible();
         }
       });
@@ -384,7 +403,6 @@ export default class MachineInteractSampling extends PureComponent {
                       });
                     });
                   }
-                  console.log(goodsList);
                   this.setState({
                     goodsList: goodsList,
                     goodsModalVisible: true
@@ -416,7 +434,6 @@ export default class MachineInteractSampling extends PureComponent {
           (g.state === 1 && !g.startTimeStr)
       )
     ) {
-      console.log(goods);
       notification.error({ message: "已选择商品信息不能为空" });
       return;
     }
@@ -435,6 +452,7 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
+          notification.success({ message: "保存成功" });
           this.setState(
             {
               goodsModalVisible: false
@@ -446,7 +464,6 @@ export default class MachineInteractSampling extends PureComponent {
         }
       });
   }
-  handleGoodsDisabledEndDate(data) {}
   getMachineList() {
     this.props
       .dispatch({
@@ -460,7 +477,31 @@ export default class MachineInteractSampling extends PureComponent {
       })
       .then(res => {
         if (res && res.code === 0) {
+          let machines = this.state.machineModalDatas;
+          if (machines && machines.length > 0) {
+            machines = machines.map(m => {
+              const disabled = (res.data || []).some(
+                md => md.machineId === m.machineId
+              );
+              if (disabled) {
+                delete m.checked;
+              }
+              if (m.machineActivity) {
+                m.machineActivity = m.machineActivity.map(m => {
+                  delete m.isNew;
+                  return m;
+                });
+              }
+              return {
+                ...m,
+                disabled
+              };
+            });
+          } else {
+            machines = [];
+          }
           this.setState({
+            machineModalDatas: machines,
             machinesData: res.data
           });
         }
@@ -526,18 +567,17 @@ export default class MachineInteractSampling extends PureComponent {
           return (
             <div>
               <Row gutter={5} style={{ marginBottom: 10 }}>
-                <Col span={6}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={g.checked}
-                      value={g.id}
-                      onChange={this.handleSelectedGoodsChange.bind(this)}
-                    />
+                <Col span={8}>
+                  <Checkbox
+                    type="checkbox"
+                    checked={g.checked}
+                    value={g.id}
+                    onChange={this.handleSelectedGoodsChange.bind(this)}
+                  >
                     {g.name}
-                  </label>
+                  </Checkbox>
                 </Col>
-                <Col span={9}>
+                <Col span={8}>
                   <Input
                     value={g.setCount}
                     onChange={e => {
@@ -550,7 +590,7 @@ export default class MachineInteractSampling extends PureComponent {
                     placeholder="每个机器的商品数量"
                   />
                 </Col>
-                <Col span={9}>
+                <Col span={8}>
                   <Input
                     value={g.setOrder}
                     onChange={e => {
@@ -566,18 +606,17 @@ export default class MachineInteractSampling extends PureComponent {
               </Row>
               {g.checked && (
                 <Row gutter={5} style={{ marginBottom: 10 }}>
-                  <Col span={4} offset={2}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={g.secular}
-                        value={g.id}
-                        onChange={this.handleGoodsExpireChange.bind(this)}
-                      />
+                  <Col span={6} offset={2}>
+                    <Checkbox
+                      type="checkbox"
+                      checked={g.secular}
+                      value={g.id}
+                      onChange={this.handleGoodsExpireChange.bind(this)}
+                    >
                       长期
-                    </label>
+                    </Checkbox>
                   </Col>
-                  <Col span={9}>
+                  <Col span={8}>
                     <DatePicker
                       placeholder="开始时间"
                       format="YYYY-MM-DD"
@@ -596,7 +635,7 @@ export default class MachineInteractSampling extends PureComponent {
                       }}
                     />
                   </Col>
-                  <Col span={9}>
+                  <Col span={8}>
                     <DatePicker
                       placeholder="结束时间"
                       format="YYYY-MM-DD"
@@ -755,6 +794,7 @@ export default class MachineInteractSampling extends PureComponent {
           <MachineConfigCard
             data={this.state.machineModalData}
             datas={this.state.machineModalDatas}
+            diasbleData={this.state.machinesData}
             postDatas={this.state.machineModalAddedData}
             onAddMachine={this.handleMachineAdd.bind(this)}
             onUpdateMachine={this.handleMachineUpdateSave.bind(this)}
@@ -771,7 +811,7 @@ export default class MachineInteractSampling extends PureComponent {
           onOk={this.handleGoodsModalSave.bind(this)}
           destroyOnClose={true}
           maskClosable={false}
-          width={500}
+          width={650}
           className="center-footer"
         >
           <div style={{ margin: 10 }}>
