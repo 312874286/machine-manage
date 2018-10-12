@@ -12,13 +12,17 @@ import {
   Divider,
   Modal,
   Table,
-  Tree
+  Tree,
+  Tabs
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './InteractSamplingSetting.less';
 import {getAccountMenus} from "../../utils/authority";
+import GoodsStatistics from "../../components/Project/Activity/GoodsStatistics";
+import OrderStatistics from "../../components/Project/Activity/OrderStatistics";
 
+const TabPane = Tabs.TabPane;
 const TreeNode = Tree.TreeNode;
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -214,6 +218,12 @@ export default class areaSettingList extends PureComponent {
     treeData: [],
     watchModalMachineTreeVisible: false,
     machineTreeData: [],
+
+    StatisticsTabsVisible: false,
+    StatisticsActivityKey: "1",
+    StatisticsTabsLoading: false,
+    OrderStatistics: [],
+    GoodsStatistics: [],
   };
   componentDidMount() {
     this.getLists();
@@ -419,6 +429,108 @@ export default class areaSettingList extends PureComponent {
       watchModalMachineTreeVisible: !!flag,
     });
   }
+  // 统计
+  getOrderStatistics = data => {
+    this.setState(
+      {
+        StatisticsTabsLoading: true
+      },
+      () => {
+        this.props
+          .dispatch({
+            type: "interactSamplingSetting/getOrderStatistics",
+            payload: {
+              params: {
+                activityCode: this.state.logId,
+                name: "pvuv",
+                outputType: 1
+              }
+            }
+          })
+          .then(resp => {
+            if (resp && resp.code === 0) {
+              this.setState({
+                StatisticsTabsLoading: false,
+                OrderStatistics: resp.data
+              });
+            }
+          });
+      }
+    );
+  };
+
+  getGoodsStatistics = () => {
+    this.setState(
+      {
+        StatisticsTabsLoading: true
+      },
+      () => {
+        this.props
+          .dispatch({
+            type: "interactSamplingSetting/getGoodsStatistics",
+            payload: {
+              params: {
+                activityCode: this.state.logId,
+                name: "goodsInfo",
+                outputType: 1
+              }
+            }
+          })
+          .then(resp => {
+            if (resp && resp.code === 0) {
+              this.setState({
+                StatisticsTabsLoading: false,
+                GoodsStatistics: resp.data
+              });
+            }
+          });
+      }
+    );
+  };
+
+  goodsHandleChange = row => {
+    const newData = [...this.state.goodsInitData];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row
+    });
+    console.log("recordgoodsHandleChange", newData);
+    this.setState({ goodsInitData: newData });
+    // console.log('goodsHandleChange::', row);
+  };
+
+  handleStatisticsTabsVisible = () => {
+    this.setState({
+      StatisticsTabsVisible: false,
+      StatisticsActivityKey: "1",
+      StatisticsTabsLoading: false,
+      GoodsStatistics: [],
+      OrderStatistics: []
+    });
+  };
+  handleMachineStatisticsClick(data) {
+    this.setState(
+      {
+        StatisticsTabsVisible: true,
+        StatisticsActivityKey: "1",
+        logId: data.id
+      },
+      () => {
+        this.getOrderStatistics();
+      }
+    );
+  }
+  handleStatisticsTabsChange = key => {
+    this.setState({ StatisticsActivityKey: key }, () => {
+      if (key === "1") {
+        this.getOrderStatistics();
+      } else {
+        this.getGoodsStatistics();
+      }
+    });
+  };
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -570,7 +682,9 @@ export default class areaSettingList extends PureComponent {
               onClick={() => this.props.history.push({pathname: `/project/addBasicInteractSampling`, query: {id: item.id}})}
             >详情</a>
             <Divider type="vertical" style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}/>
-            <a>统计</a>
+            <a  onClick={() => {
+              this.handleMachineStatisticsClick(item);
+            }}>统计</a>
             <Divider type="vertical" style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}/>
             <a onClick={() => this.giveUp(item)} style={{ display: parseInt(item.status) === 3 ? 'none' : ''}}>结束</a>
             <Divider type="vertical"/>
@@ -648,6 +762,47 @@ export default class areaSettingList extends PureComponent {
           handleMerchantTreeModalVisible={this.handleMachineTreeModalVisible}
           renderTreeNodes={this.renderTreeNodes}
         />
+        <Modal
+          className={styles.statisticsTabs}
+          title="机器统计"
+          visible={this.state.StatisticsTabsVisible}
+          width={1000}
+          style={{ top: 20 }}
+          onCancel={this.handleStatisticsTabsVisible}
+          footer={[
+            <Button
+              key="ok"
+              type="primary"
+              loading={this.state.StatisticsTabsLoading}
+              onClick={this.handleStatisticsTabsVisible}
+              style={{ margin: "0 auto", display: "block" }}
+            >
+              确定
+            </Button>
+          ]}
+        >
+          <Tabs
+            activeKey={this.state.StatisticsActivityKey}
+            onChange={this.handleStatisticsTabsChange}
+          >
+            <TabPane tab="PV/UV/订单量" key="1">
+              {this.state.StatisticsActivityKey === "1" && (
+                <OrderStatistics
+                  datas={this.state.OrderStatistics}
+                  loading={this.state.StatisticsTabsLoading}
+                />
+              )}
+            </TabPane>
+            <TabPane tab="商品出货量" key="2">
+              {this.state.StatisticsActivityKey === "2" && (
+                <GoodsStatistics
+                  datas={this.state.GoodsStatistics}
+                  loading={this.state.StatisticsTabsLoading}
+                />
+              )}
+            </TabPane>
+          </Tabs>
+        </Modal>
       </PageHeaderLayout>
     );
   }

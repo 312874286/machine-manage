@@ -41,7 +41,7 @@ const CreateMerchantForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd,
       handleModalVisible, editModalConfirmLoading, modalType,
-      channelLists, saveAddShop, merchants } = props;
+      channelLists, saveAddShop, merchants, paiyangType } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -101,6 +101,12 @@ const CreateMerchantForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: '请输入商户名称' }],
               })(<Input placeholder="请输入商户名称" />)}
             </FormItem>
+            <FormItem {...formItemLayout} label="新零售入会码" style={{ display: paiyangType ? '' : 'none'}}>
+              {getFieldDecorator('sellSessionKey', {
+              })
+              (<Input placeholder="请输入新零售入会码"
+              />)}
+              </FormItem>
             <FormItem {...formItemLayout} label="品牌名称">
               {getFieldDecorator('brandName', {
                 rules: [{ required: false, whitespace: true, message: '请输入品牌名称' }],
@@ -129,7 +135,7 @@ const CreateShopsForm = Form.create()(
     const { modalVisible, form, handleAdd,
       handleModalVisible, editModalConfirmLoading,
       modalType, merchantLists, saveAddGoods,
-      handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData, paiyangType } = props;
+      handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -221,17 +227,6 @@ const CreateShopsForm = Form.create()(
                     {/*onChange={handleChange}>*/}
                     {/*强制入会*/}
                   {/*</Checkbox>*/}
-                {/*</FormItem>*/}
-              {/*</Col>*/}
-            </FormItem>
-            <FormItem {...formItemLayout} label="新零售入会码" style={{ display: paiyangType ? '' : 'none'}}>
-              {/*<Col span={14}>*/}
-                {/*<FormItem>*/}
-                  {getFieldDecorator('sellSessionKey', {
-                  })
-                  (<Input
-                    placeholder="请输入新零售入会码"
-                  />)}
                 {/*</FormItem>*/}
               {/*</Col>*/}
             </FormItem>
@@ -943,7 +938,6 @@ export default class areaSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleShopsAdd = (flag) => {
-    const { paiyangType } = this.state
     this.shopsForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -951,12 +945,6 @@ export default class areaSettingList extends PureComponent {
       if (values.isVip === 1) {
         if (!values.sessionKey.trim()) {
           message.info('请填写入会码')
-          return
-        }
-      }
-      if (paiyangType) {
-        if (!values.sellSessionKey.trim()) {
-          message.info('请填写入零售入会码')
           return
         }
       }
@@ -1075,7 +1063,6 @@ export default class areaSettingList extends PureComponent {
           sellerId: data.sellerId || '',
           isVip: data.isVip === 0 ? 0 : 1,
           sessionKey: data.sessionKey || undefined,
-          sellSessionKey: data.sellSessionKey || undefined
         });
       })
     } else {
@@ -1089,7 +1076,6 @@ export default class areaSettingList extends PureComponent {
         sellerId: undefined,
         isVip: 0,
         sessionKey: undefined,
-        sellSessionKey: undefined,
       });
     }
   }
@@ -1172,6 +1158,7 @@ export default class areaSettingList extends PureComponent {
         merchantCode: data.merchantCode || undefined,
         merchantName: data.merchantName || undefined,
         brandName: data.brandName || undefined,
+        sellSessionKey: data.sellSessionKey || undefined,
         originFlag: data.originFlag || undefined,
         channelId: data.channelId || undefined,
       });
@@ -1180,6 +1167,7 @@ export default class areaSettingList extends PureComponent {
         merchantCode: undefined,
         merchantName: undefined,
         brandName: undefined,
+        sellSessionKey: undefined,
         originFlag: undefined,
         channelId: undefined,
       });
@@ -1191,9 +1179,16 @@ export default class areaSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleMerchantAdd = (flag) => {
+    const { paiyangType } = this.state
     this.merchantForm.validateFields((err, values) => {
       if (err) {
         return;
+      }
+      if (paiyangType) {
+        if (!values.sellSessionKey.trim()) {
+          message.info('请填写入零售入会码')
+          return
+        }
       }
       this.setState({
         editMerchantModalConfirmLoading: true,
@@ -1531,6 +1526,7 @@ export default class areaSettingList extends PureComponent {
           channelLists={channelLists}
           saveAddShop={this.saveAddShop}
           merchants={this.state.merchants}
+          paiyangType={this.state.paiyangType}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
@@ -1546,7 +1542,6 @@ export default class areaSettingList extends PureComponent {
           RadioChange={this.RadioChange}
           mustIsVip={this.state.mustIsVip}
           currentShopsData={this.state.allShopsLists}
-          paiyangType={this.state.paiyangType}
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
