@@ -81,7 +81,7 @@ export default class areaSettingList extends PureComponent {
         gameId: data.gameId || undefined,
         day: data.day || 'max',
         manager: data.manager || undefined,
-        paiyangType: data.paiyangType || undefined,
+        paiyangType: data.paiyangType,
       });
     } else {
       this.props.form.setFieldsValue({

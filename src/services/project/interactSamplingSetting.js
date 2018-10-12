@@ -1,6 +1,7 @@
 import { stringify } from "qs";
 import fetch from "../../utils/fetch/index";
 import api from "./api";
+import apiData from "./apiData";
 
 export async function interactLists({ restParams }) {
   return fetch.get(api.interactLists, {
@@ -202,5 +203,19 @@ export async function getInteractMachineDetail({ params }) {
 export async function updateInteractMachineGoods({ params }) {
   return fetch.postJSON(api.updateInteractMachineGoods, {
     body: JSON.stringify(params)
+  });
+}
+
+// 统计
+
+export async function getOrderStatistics({ params }) {
+  return fetch.postJSON(apiData.machineStatistic, {
+    body: JSON.stringify(params),
+  });
+}
+
+export async function getGoodsStatistics({ params }) {
+  return fetch.postJSON(apiData.machineStatistic, {
+    body: JSON.stringify(params),
   });
 }

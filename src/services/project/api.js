@@ -115,4 +115,7 @@ const api = map({
   ruleInteract: "/project/interact/rule"
 });
 
+
+
+
 export default api;

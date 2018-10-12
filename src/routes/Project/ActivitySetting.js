@@ -1704,6 +1704,7 @@ export default class activitySettingList extends PureComponent {
       }
     });
   };
+
   render() {
     const {
       activitySetting: { list, page, unColumn },

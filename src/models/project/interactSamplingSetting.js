@@ -35,7 +35,9 @@ import {
   getInteractMachineList,
   deleteInteractMachineGoods,
   getInteractMachineDetail,
-  updateInteractMachineGoods
+  updateInteractMachineGoods,
+  getOrderStatistics,
+  getGoodsStatistics
 } from "../../services/project/interactSamplingSetting";
 
 export default {
@@ -383,7 +385,15 @@ export default {
     ) {
       const response = yield call(updateInteractMachineGoods, { params });
       return response;
-    }
+    },
+    *getOrderStatistics({ payload: { params }},{ call, put }) {
+      const response = yield call(getOrderStatistics, { params });
+      return response;
+    },
+    *getGoodsStatistics({ payload: { params }},{ call, put }) {
+      const response = yield call(getGoodsStatistics, { params });
+      return response;
+    },
   },
   reducers: {
     saveList(

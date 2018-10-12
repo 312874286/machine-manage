@@ -63,7 +63,7 @@ export default class OrderStatistics extends PureComponent {
         obj[`order${date.date}`] = date.order;
         obj[`shipment${date.date}`] = date.shipment;
         obj[`fans${date.date}`] = date.fans;
-        debugger
+        // debugger
         obj.total.pv += date.pv || 0;
         obj.total.uv += date.uv || 0;
         obj.total.order += date.order || 0;
