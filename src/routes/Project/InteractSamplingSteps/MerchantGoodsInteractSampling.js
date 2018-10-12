@@ -772,14 +772,15 @@ export default class areaSettingList extends PureComponent {
           message.warn('请添加图片')
           return;
         }
-        if (fieldsValue.number.trim()) {
-          message.warn('请填写商品数量')
-          return;
-        }
-        if (fieldsValue.price.trim()) {
-          message.warn('请填写商品价格')
-          return;
-        }
+        // console.log('fieldsValue.number', fieldsValue.number)
+        // if (fieldsValue.number.trim()) {
+        //   message.warn('请填写商品数量')
+        //   return;
+        // }
+        // if (fieldsValue.price.trim()) {
+        //   message.warn('请填写商品价格')
+        //   return;
+        // }
       }
       let params = {
         ...fieldsValue,
