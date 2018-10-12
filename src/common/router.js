@@ -185,6 +185,12 @@ export const getRouterData = (app) => {
     '/machine/task-setting': {
       component: dynamicWrapper(app, ['machine/taskSetting', 'log/log', 'common'], () => import('../routes/Machine/TaskSetting')),
     },
+    '/machine/version-setting': {
+      component: dynamicWrapper(app, ['machine/versionSetting', 'log/log', 'common'], () => import('../routes/Machine/VersionSetting')),
+    },
+    '/machine/batch-setting': {
+      component: dynamicWrapper(app, ['machine/batchSetting', 'log/log', 'common'], () => import('../routes/Machine/BatchSetting')),
+    },
     '/project/channel': {
       component: dynamicWrapper(app, ['project/channelSetting', 'log/log'], () => import('../routes/Project/ChannelSetting')),
     },

@@ -560,6 +560,21 @@ const proxy = {
           },
           {
             id: 'a37',
+            functionDepict: 'App版本管理',
+            functionPath: 'version-setting',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
+            id: 'a38',
+            functionDepict: '批次管理',
+            functionPath: 'batch-setting',
+            parentId: '1',
+            functionLevel: 2,
+            color: null
+          },
+          {
+            id: 'a39',
             functionDepict: '省市区管理',
             functionPath: 'area-setting',
             parentId: '1',
