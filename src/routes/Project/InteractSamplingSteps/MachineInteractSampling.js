@@ -63,7 +63,7 @@ export default class MachineInteractSampling extends PureComponent {
         type: "interactSamplingSetting/getInteractMachineDetail",
         payload: {
           params: {
-            interactId: this.state.interactSampling,
+            // interactId: this.state.interactSampling,
             machineId: record.key
           }
         }
