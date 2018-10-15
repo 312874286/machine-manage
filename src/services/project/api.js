@@ -109,7 +109,7 @@ const api = map({
   deleteInteractMachine: "/project/interact/machine/delete",
   getInteractAllGoodsList: "/project/interact/goods/getAllList",
   getInteractMachineGoodsList: "/project/interact/machine/goodsList",
-  getMachineTree: "/project/interact/machineTree?interactId={interactId}",
+  getMachineTree: "/project/interact/machineTree",
   // 第四步 规则设置
   ruleInteract: "/project/interact/rule"
 });

@@ -64,7 +64,7 @@ export default class MachineInteractSampling extends PureComponent {
         payload: {
           params: {
             interactId: this.state.interactSampling,
-            machineId: record.machineId
+            machineId: record.key
           }
         }
       })
@@ -85,7 +85,7 @@ export default class MachineInteractSampling extends PureComponent {
         payload: {
           params: {
             interactId: this.state.interactSampling,
-            machineId: record.machineId
+            machineId: record.key
           }
         }
       })
@@ -96,15 +96,15 @@ export default class MachineInteractSampling extends PureComponent {
         }
       });
   };
-  handleDeleteGoods = record => {
+  handleDeleteGoods = (goods, machine) => {
     this.props
       .dispatch({
         type: "interactSamplingSetting/deleteInteractMachineGoods",
         payload: {
           params: {
             interactId: this.state.interactSampling,
-            machineId: record.machineId,
-            goodsId: record.goodsId
+            machineId: machine.key,
+            goodsId: goods.key
           }
         }
       })
@@ -116,31 +116,31 @@ export default class MachineInteractSampling extends PureComponent {
       });
   };
   handleExpand = (indent, record) => {
-    if (indent) {
-      this.props
-        .dispatch({
-          type: "interactSamplingSetting/getInteractMachineGoods",
-          payload: {
-            params: {
-              interactId: this.state.interactSampling,
-              machineId: record.machineId
-            }
-          }
-        })
-        .then(res => {
-          if (res && res.code === 0) {
-            const machinesData = [...this.state.machinesData];
-            machinesData
-              .filter(m => m.machineId === record.machineId)
-              .forEach(m => {
-                m.goodsList = (res.data || []).map(d => {
-                  return { machineId: record.machineId, ...d };
-                });
-              });
-            this.setState({ machinesData });
-          }
-        });
-    }
+    // if (indent) {
+    //   this.props
+    //     .dispatch({
+    //       type: "interactSamplingSetting/getInteractMachineGoods",
+    //       payload: {
+    //         params: {
+    //           interactId: this.state.interactSampling,
+    //           machineId: record.machineId
+    //         }
+    //       }
+    //     })
+    //     .then(res => {
+    //       if (res && res.code === 0) {
+    //         const machinesData = [...this.state.machinesData];
+    //         machinesData
+    //           .filter(m => m.machineId === record.machineId)
+    //           .forEach(m => {
+    //             m.goodsList = (res.data || []).map(d => {
+    //               return { machineId: record.machineId, ...d };
+    //             });
+    //           });
+    //         this.setState({ machinesData });
+    //       }
+    //     });
+    // }
   };
   handelChoiceMachineClick() {
     this.setState({
@@ -467,7 +467,7 @@ export default class MachineInteractSampling extends PureComponent {
   getMachineList() {
     this.props
       .dispatch({
-        type: "interactSamplingSetting/getInteractHavingMachineList",
+        type: "interactSamplingSetting/getMachineTree",
         payload: {
           params: {
             interactId: this.state.interactSampling,
@@ -481,7 +481,7 @@ export default class MachineInteractSampling extends PureComponent {
           if (machines && machines.length > 0) {
             machines = machines.map(m => {
               const disabled = (res.data || []).some(
-                md => md.machineId === m.machineId
+                md => md.key === m.machineId
               );
               if (disabled) {
                 delete m.checked;
@@ -502,7 +502,11 @@ export default class MachineInteractSampling extends PureComponent {
           }
           this.setState({
             machineModalDatas: machines,
-            machinesData: res.data
+            machinesData: res.data.map(d => {
+              d.goodsList = d.children;
+              delete d.children;
+              return d;
+            })
           });
         }
       });
@@ -525,9 +529,10 @@ export default class MachineInteractSampling extends PureComponent {
   }
   renderExpandedRow(machine, isExpanded) {
     if (isExpanded) {
+      console.log(machine);
       const columns = [
-        { title: "商品名称", dataIndex: "goodsName" },
-        { title: "商品数量", dataIndex: "number" },
+        { title: "商品名称", dataIndex: "title" },
+        { title: "商品数量", dataIndex: "num" },
         {
           title: "操作",
           render: record => {
@@ -536,7 +541,7 @@ export default class MachineInteractSampling extends PureComponent {
                 <Popconfirm
                   title="确定要删除吗"
                   onConfirm={() => {
-                    this.handleDeleteGoods(record);
+                    this.handleDeleteGoods(record, machine);
                   }}
                   okText="确定"
                   cancelText="取消"
@@ -550,9 +555,9 @@ export default class MachineInteractSampling extends PureComponent {
       ];
       return (
         <Table
-          rowKey="goodsId"
+          rowKey="key"
           columns={columns}
-          dataSource={machine.goodsList}
+          dataSource={machine.goodsList || []}
           pagination={false}
         />
       );

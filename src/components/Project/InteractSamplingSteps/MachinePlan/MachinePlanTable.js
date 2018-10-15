@@ -14,7 +14,7 @@ export default class MachinePlanTable extends Component {
   renderExpandedRow = (record, index, indent) => {
     return this.props.renderExpandedRow(
       record,
-      this.state.expandedRows.some(id => id === record.id)
+      this.state.expandedRows.some(id => id === record.key)
     );
   };
   renderMachineTable = () => {
@@ -25,7 +25,7 @@ export default class MachinePlanTable extends Component {
       },
       {
         title: "机器点位",
-        dataIndex: "localDesc"
+        dataIndex: "title"
       },
       {
         title: "操作",
@@ -57,7 +57,7 @@ export default class MachinePlanTable extends Component {
     ];
     return (
       <Table
-        rowKey="id"
+        rowKey="key"
         columns={columns}
         dataSource={this.props.dataSource}
         expandedRowRender={this.renderExpandedRow}
