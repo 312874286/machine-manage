@@ -83,7 +83,7 @@ export default class OrderStatistics extends PureComponent {
       {
         title: "点位",
         dataIndex: "machineCode",
-        width: 400,
+        width: 300,
         render: (text, record, index) => {
           return (
             <div>
@@ -96,22 +96,21 @@ export default class OrderStatistics extends PureComponent {
       {
         title: "合计",
         dataIndex: "total",
-        width: 400,
+        width: 150,
         render: (text, record) => {
           return (
             <div>
               pv:
-              {record.total.pv} <br/> uv:
-              {record.total.uv} <br/> order:
-              {record.total.order} <br/> shipment:
-              {record.total.shipment} <br/> fans:
+              {record.total.pv} <br /> uv:
+              {record.total.uv} <br /> order:
+              {record.total.order} <br /> shipment:
+              {record.total.shipment} <br /> fans:
               {record.total.fans}
             </div>
           );
         }
       }
     ];
-
     return (
       <div>
         <Table
@@ -119,7 +118,7 @@ export default class OrderStatistics extends PureComponent {
           rowKey={record => record.id}
           dataSource={data}
           pagination={false}
-          scroll={{ x: data.length * 400 + 600 }}
+          scroll={{ x: columnsList.length * 150 + 300 + 150 }}
           loading={this.props.loading}
           bordered
         />

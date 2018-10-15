@@ -332,7 +332,7 @@ export default class gameSettingList extends PureComponent {
           params,
         },
       }).then((res) => {
-        if (res && res.code) {
+        if (res && res.code === 0) {
           this.getLists();
           this.setState({
             modalVisible: false,

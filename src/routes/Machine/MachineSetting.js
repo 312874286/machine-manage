@@ -670,8 +670,11 @@ const EditMonitoringForm = Form.create()(
                         onClick={() => watchTop(machineCode)}>
                   查看以前
                 </Button>
-                <div style={{ display: flagTop ? '' : 'none', height: '300px', overflowY: 'scroll' }} className={ styles.logTopLists }>
-                  {(logTopLists.length === 0) ? '暂无数据' : (
+                <span style={{ display: flagTop && getLogMessage === 2 ? '' : 'none', height: '300px' }}>
+                    {getLogMessage === 2 ? '数据加载中，请稍等' : ''}
+                </span>
+                <div style={{ display: flagTop && getLogMessage === 3 ? '' : 'none', height: '300px', overflowY: 'scroll' }} className={ styles.logTopLists }>
+                  {(logTopLists.length === 0) ? '' : (
                     logTopLists.map((item) => {
                       return (
                         <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>
@@ -695,17 +698,19 @@ const EditMonitoringForm = Form.create()(
                 <div className={styles.showList}
                      id="logTipDiv"
                      style={{transform: 'translateY(-'+noticePosition+'px) translateZ(0px)'}}>
-                  <span style={{ display: getLogMessage !== '正在获取' ? 'none' : '' }}>
-                    {getLogMessage}
+                  <span style={{ display: getLogMessage === 0 ? '' : 'none' }}>
+                    {getLogMessage === 0 ? '数据加载中，请稍等' : ''}
                   </span>
-                  {(logLists.length === 0) ? '暂无数据' : (logLists.map((item) => {
+                  <div style={{ display: getLogMessage === 0 ? 'none' : '' }}>
+                    {(logLists.length === 0) ? '' : (logLists.map((item) => {
                       return (
-                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999', display: getLogMessage === '正在获取' ? 'none' : '' }}>
+                        <p style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999', }}>
                           <span style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#000' }}>{item.pointTime}：</span>
                           <a  style={{ color: item.type.indexOf('6') > -1 ? 'red' : '#999' }}>{item.detail}</a>
                         </p>
                       );
                     }))}
+                  </div>
                 </div>
               </div>
             </TabPane>
@@ -851,8 +856,11 @@ export default class machineSettingList extends PureComponent {
 
     customLogStartTime: '',
     customLogEndTime: '',
-    getLogMessage: '正在获取',
+    getLogMessage: 0,
     machineCodeOld: '',
+
+    getLogMessage2: '数据加载中，请稍等',
+
   };
   constructor(props) {
     super(props);
@@ -1163,7 +1171,7 @@ export default class machineSettingList extends PureComponent {
       //   editPointEditModalConfirmLoading: true,
       // });
       let params = {
-        machineId: this.state.modalData.id,
+        id: this.state.modalData.id,
         localeId: localeId,
         // openStatus: this.state.switchStatus ? 0 : 1,
         // monitorStart: this.state.supervisoryStartTime,
@@ -1465,7 +1473,7 @@ export default class machineSettingList extends PureComponent {
     if (updateStatus === 1) {
       updateStatusText = '更新'
     } else if (updateStatus === 2) {
-      updateStatusText = '刷新'
+      updateStatusText = '更新'
     } else {
       updateStatusText = '截屏'
     }
@@ -1508,7 +1516,6 @@ export default class machineSettingList extends PureComponent {
       }
     });
   }
-
   appRefresh = () => {
     // console.log('刷新了app', this.state.modalData);
     this.handleManageAppClick(this.state.modalData);
@@ -1816,54 +1823,58 @@ export default class machineSettingList extends PureComponent {
       this.getMachineStatus(this.state.modalData);
     })
   }
-  getLogs = (item) => {
-    this.props.dispatch({
-      type: 'machineSetting/machinePointLog',
-      payload: {
-        restParams: {
-          machineCode: item.machineCode,
-          startTime: '',
-          endTime: '',
+  getLogs = (machineCode) => {
+    this.setState({
+      getLogMessage: 0,
+    }, () => {
+      this.props.dispatch({
+        type: 'machineSetting/machinePointLog',
+        payload: {
+          restParams: {
+            machineCode,
+            startTime: '',
+            endTime: '',
+          },
         },
-      },
-    }).then((res) => {
-      // console.log('res', res)
-      if (this.state.editMonitoringFormVisible && res.length > 0) {
-        this.setState({
-          //   editMonitoringFormVisible: true,
-          logLists: res,
-        }, () => {
-          // let destination = 30
-          // this.noticePosition = (res.length - 10) * 30
+      }).then((res) => {
+        // console.log('res', res)
+        if (this.state.editMonitoringFormVisible && res.length > 0) {
           this.setState({
-            noticePosition: this.noticePosition
-          })
-          setTimeout(()=>{
-            document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
-          }, 0)
-          // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
-          // console.log('scrollTo', document.getElementById('logTip').scrollTo)
+            //   editMonitoringFormVisible: true,
+            logLists: res,
+          }, () => {
+            // let destination = 30
+            // this.noticePosition = (res.length - 10) * 30
+            this.setState({
+              noticePosition: this.noticePosition
+            })
+            setTimeout(()=>{
+              document.getElementById('logTip').scrollTop = document.getElementById('logTipDiv').clientHeight
+            }, 0)
+            // document.getElementById('logTip').scrollTop = (this.state.logLists.length - 10) * 30
+            // console.log('scrollTo', document.getElementById('logTip').scrollTo)
 
-          // mySetInterval = setInterval(() => {
-          //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
-          //   if (destination / 30 < this.state.logLists.length ) {
-          //     this.move(destination, 500, res.length)
-          //     destination += 30
-          //   } else { // 列表到底
-          //     // clearInterval(mySetInterval)
-          //     // this.noticePosition = 0 // 设置列表为开始位置
-          //     // destination = 30
-          //     // this.move(destination, 500, res.length)
-          //     // destination += 30
-          //   }
-          // }, 1500)
-          this.getLogLists()
-        });
-      }
-      this.setState({
-        getLogMessage: '获取完成'
-      })
-    });
+            // mySetInterval = setInterval(() => {
+            //   console.log('destination / 30 < res.length', destination / 30 < this.state.logLists.length)
+            //   if (destination / 30 < this.state.logLists.length ) {
+            //     this.move(destination, 500, res.length)
+            //     destination += 30
+            //   } else { // 列表到底
+            //     // clearInterval(mySetInterval)
+            //     // this.noticePosition = 0 // 设置列表为开始位置
+            //     // destination = 30
+            //     // this.move(destination, 500, res.length)
+            //     // destination += 30
+            //   }
+            // }, 1500)
+            this.getLogLists()
+          });
+        }
+        this.setState({
+          getLogMessage: 1
+        })
+      });
+    })
   }
   getLogLists = () => {
     myLogSetInterval = setInterval(() => {
@@ -1929,40 +1940,49 @@ export default class machineSettingList extends PureComponent {
     console.log('machineCode', machineCode, this.state.machineCode)
     // clearInterval(mySetInterval)
     // clearInterval(myLogSetInterval)
-    let endTime = null
-    if (this.state.logTopLists.length === 0) {
-      endTime = this.state.logLists.length > 0 ? this.state.logLists[this.state.logLists.length - 1].pointTime : ''
-    } else {
-      endTime = this.state.logTopLists.length > 0 ? this.state.logTopLists[this.state.logTopLists.length - 1].pointTime : ''
-    }
-    this.props.dispatch({
-      type: 'machineSetting/machinePointLog',
-      payload: {
-        restParams: {
-          machineCode,
-          startTime: '',
-          endTime,
-        },
-      },
-    }).then((res) => {
-      if (res) {
-        if (res.length > 0) {
-          this.setState({
-            flagTop: true,
-            logTopLists: [...this.state.logTopLists, ...res],
-          });
-        } else {
-          this.setState({
-            watchBtn: false
-          })
-        }
+    clearInterval(myLogSetInterval)
+    this.setState({
+      getLogMessage: 2,
+    }, () => {
+      let endTime = null
+      if (this.state.logTopLists.length === 0) {
+        endTime = this.state.logLists.length > 0 ? this.state.logLists[this.state.logLists.length - 1].pointTime : ''
+      } else {
+        endTime = this.state.logTopLists.length > 0 ? this.state.logTopLists[this.state.logTopLists.length - 1].pointTime : ''
       }
-    });
+      this.props.dispatch({
+        type: 'machineSetting/machinePointLog',
+        payload: {
+          restParams: {
+            machineCode,
+            startTime: '',
+            endTime,
+          },
+        },
+      }).then((res) => {
+        if (res) {
+          if (res.length > 0) {
+            this.setState({
+              flagTop: true,
+              logTopLists: [...this.state.logTopLists, ...res],
+            });
+          } else {
+            this.setState({
+              watchBtn: false
+            })
+          }
+        }
+        this.setState({
+          getLogMessage: 3,
+        })
+      });
+    })
   }
   returnInterval = (machineCode) => {
     console.log('returnInterval', machineCode, this.state.machineCode, this.state.modalData)
     this.setState({
       flagTop: false,
+      getLogMessage: 0,
     }, () => {
       // this.handleMonitoringClick(this.state.modalData)
       this.setState({
@@ -1975,6 +1995,7 @@ export default class machineSettingList extends PureComponent {
         modalData: this.state.modalData,
         monitorKey: '1',
       }, () => {
+        this.getLogs(machineCode)
         this.getMachineStatus(this.state.modalData);
       })
     })
@@ -2081,7 +2102,7 @@ export default class machineSettingList extends PureComponent {
     })
     if (key === '2') {
     } else if (key === '1') {
-      this.getLogs(this.state.modalData)
+      this.getLogs(this.state.modalData.machineCode)
     } else if (key === '3') {
       this.logUpdate(this.state.modalData.id)
     } else if (key === '0') {
@@ -2286,6 +2307,7 @@ export default class machineSettingList extends PureComponent {
       this.handleEditClick(this.state.modalData)
     } else if (key === '1') {
       // 管理APP
+      this.appRefresh()
     } else if (key === '2') {
       // 管理货道
       this.handleManageAisleClick(this.state.modalData)
@@ -2320,7 +2342,7 @@ export default class machineSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="省市区商圈">
+            <FormItem label="省市区">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
                   placeholder="请选择"
@@ -2331,17 +2353,19 @@ export default class machineSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={9} sm={24}>
-            <FormItem>
+          <Col md={8} sm={24}>
+            <FormItem label="入场时间">
               {getFieldDecorator('rangeTime')(
-                <RangePicker />
+                <RangePicker
+                  placeholder={['开始时间', '结束时间']}
+                />
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
-            <FormItem>
+          <Col md={8} sm={24}>
+            <FormItem label="机器类型">
               {getFieldDecorator('machineType')(
-                <Select placeholder="选择机器类型">
+                <Select placeholder="请选择">
                   {pointTypeOptions.map((item) => {
                     return (
                       <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -2354,16 +2378,9 @@ export default class machineSettingList extends PureComponent {
         </Row>
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem>
-              {getFieldDecorator('machineCode')(
-                <Input placeholder="请输入机器编号" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={9} sm={24}>
-            <FormItem>
+            <FormItem label="机器状态">
               {getFieldDecorator('machineStatus')(
-                <Select placeholder="选择机器状态">
+                <Select placeholder="请选择">
                   {pointStatusOptions.map((item) => {
                     return (
                       <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -2373,7 +2390,14 @@ export default class machineSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
+          <Col md={8} sm={24}>
+            <FormItem>
+              {getFieldDecorator('machineCode')(
+                <Input placeholder="请输入机器编号、点位" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <span>
               <FormItem>
                 <Button onClick={this.handleFormReset}>
@@ -2429,7 +2453,7 @@ export default class machineSettingList extends PureComponent {
       //   key: 'detail'
       // },
       {
-        title: '网络',
+        title: '连接状态',
         width: '10%',
         dataIndex: 'netStatus',
         render(val) {
@@ -2736,7 +2760,7 @@ export default class machineSettingList extends PureComponent {
                       </div>
                       <div>
                         <Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>
-                        <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button>
+                        <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2, '更新')}>更新</Button>
                       </div>
                     </div>
                   </div>

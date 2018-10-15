@@ -37,7 +37,7 @@ const api = map({
 
   updateLogStatus: '',
   returnDeskTop: '/machine/machine/cutDesktop',
-  updateLocaleMachineSetting: '/machine/machine/updateMachine',
+  updateLocaleMachineSetting: '/machine/machine/updateLocale',
   updateMachineCode: '/machine/machine/updateMachineCode',
   findMachineInfoById: '/machine/machine/findMachineInfoById',
 
@@ -58,7 +58,9 @@ const api = map({
   findTemperature: '/machine/machine/findTemperature?machineId={machineId}',
   updateTemperature: '/machine/machine/updateTemperature',
 
-  getPointFromTag: '/machine/locale/getList?tag={tag}'
+  getPointFromTag: '/machine/locale/getList?tag={tag}',
+
+  updateBatchMonitor: '/machine/locale/updateBatch',
 });
 
 export default api;
