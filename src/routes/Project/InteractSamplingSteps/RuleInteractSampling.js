@@ -363,7 +363,7 @@ export default class areaSettingList extends PureComponent {
                         // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
                       })
                       (<InputNumber
-                        placeholder="请输入同一用户每天参与活动次数"
+                        placeholder="请输入同一用户每天获取商品次数"
                         disabled={this.state.dayNumber}
                       />)}
                     </FormItem>
