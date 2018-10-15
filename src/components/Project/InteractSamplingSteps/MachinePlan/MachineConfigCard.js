@@ -19,6 +19,7 @@ import "./MachineConfigCard.less";
 const { RangePicker } = DatePicker;
 const width = 150;
 const height = 60;
+const dateFormat = "YYYY-MM-DD";
 export default class MachineConfigCard extends Component {
   state = {
     dates: [],
@@ -31,10 +32,14 @@ export default class MachineConfigCard extends Component {
     editDateStart: null,
     editDateEnd: null,
     searchText: null,
-    interactInfo: null
+    interactInfo: null,
+    disabledMachines: []
   };
   componentDidMount() {
-    let state = { interactInfo: this.props.interactInfo };
+    let state = {
+      interactInfo: this.props.interactInfo,
+      disabledMachines: this.props.diasbleData
+    };
     if (this.props.data) {
       const data = this.props.data;
       data.secular = data.state === 1;
@@ -59,17 +64,22 @@ export default class MachineConfigCard extends Component {
     var unixDe = end.valueOf();
 
     for (var k = unixDb; k <= unixDe; ) {
-      dateAllArr.push(moment(parseInt(k)).format("YYYY-MM-DD"));
+      dateAllArr.push(moment(parseInt(k)).format(dateFormat));
       k = k + 24 * 60 * 60 * 1000;
     }
     return dateAllArr;
   };
   handleSearchDateChange(date, dateString) {
-    this.setState({
-      dates: this.getDayAll(date[0], date[1]),
-      searchDate: date,
-      searchDateStr: dateString
-    });
+    this.setState(
+      {
+        dates: this.getDayAll(date[0], date[1]),
+        searchDate: date,
+        searchDateStr: dateString
+      },
+      () => {
+        this.handleSearchClick();
+      }
+    );
   }
   handleEditDateChange(date, type) {
     let startDate = this.state.editDateStart;
@@ -137,7 +147,39 @@ export default class MachineConfigCard extends Component {
   }
   handleSelectedMachineChange(e) {
     const machines = [...this.state.machineList];
+    const interactId = this.state.interactInfo.id;
+    const interactName = this.state.interactInfo.name;
     machines.filter(m => m.machineId === e.target.value).forEach(machine => {
+      if (e.target.checked) {
+        this.state.dates.forEach(d => {
+          if (!machine.machineActivity) {
+            machine.machineActivity = [];
+          }
+          if (
+            !machine.machineActivity.some(
+              ma =>
+                moment(d).isBetween(moment(ma.startTime), moment(ma.endTime)) ||
+                moment(d).isSame(ma.startTime) ||
+                moment(d).isSame(ma.endTime)
+            )
+          ) {
+            machine.machineActivity.push({
+              activityId: interactId,
+              activityName: interactName,
+              startTime: `${d} 00:00:00`,
+              endTime: `${d} 23:59:59`,
+              isNew: true
+            });
+          }
+        });
+      } else {
+        if (!machine.machineActivity) {
+          machine.machineActivity = [];
+        }
+        machine.machineActivity = machine.machineActivity.filter(
+          ma => !ma.isNew
+        );
+      }
       machine.checked = e.target.checked;
     });
     this.setState({ machineList: machines });
@@ -154,7 +196,41 @@ export default class MachineConfigCard extends Component {
     machine.secular = e.target.checked;
     this.setState({ machineList: machine });
   }
-  handleEditMachineSelectedChange(e) {}
+  handleEditMachineSelectedChange(e) {
+    const machine = this.state.machineEdit;
+    machine.checked = e.target.checked;
+    if (e.target.checked) {
+      const interactId = this.state.interactInfo.id;
+      const interactName = this.state.interactInfo.name;
+      this.state.dates.forEach(d => {
+        if (!machine.machineActivity) {
+          machine.machineActivity = [];
+        }
+        if (
+          !machine.machineActivity.some(
+            ma =>
+              moment(d).isBetween(moment(ma.startTime), moment(ma.endTime)) ||
+              moment(d).isSame(ma.startTime) ||
+              moment(d).isSame(ma.endTime)
+          )
+        ) {
+          machine.machineActivity.push({
+            activityId: interactId,
+            activityName: interactName,
+            startTime: `${d} 00:00:00`,
+            endTime: `${d} 23:59:59`,
+            isNew: true
+          });
+        }
+      });
+    } else {
+      if (!machine.machineActivity) {
+        machine.machineActivity = [];
+      }
+      machine.machineActivity = machine.machineActivity.filter(ma => !ma.isNew);
+    }
+    this.setState({ machineEdit: machine });
+  }
   handleAddMachine() {
     const params = {
       queryStartTime: this.state.searchDateStr[0] + " 00:00:00",
@@ -206,46 +282,68 @@ export default class MachineConfigCard extends Component {
   }
   renderSchedule(dates, machines, editabel, type) {
     const result = [];
-    const maxWidth = dates.length * width;
-    machines.forEach((machine, index) => {
-      if (machine.machineActivity && machine.machineActivity.length > 0) {
-        machine.machineActivity.forEach(activity => {
-          const start = moment(activity.startTime);
-          const end = moment(activity.endTime);
-          const allDay = this.getDayAll(start, end);
-          const startStr = start.format("YYYY-MM-DD");
-          const endStr = end.format("YYYY-MM-DD");
-          const startIndex = dates.indexOf(startStr);
-          const endIndex = dates.indexOf(endStr);
-          if (startIndex > -1 || endIndex > -1) {
-            const top = index * height;
-            let left = 0;
-            if (startIndex > -1) {
-              left = startIndex * width;
-            } else if (endIndex > -1) {
-              left = 0;
-            }
-            //TODO need to fix out of range bug
-            let elWidth = allDay.length * width;
-            if (elWidth + left > maxWidth) {
-              elWidth = maxWidth - left;
-            }
-            const props = {
-              className: `schedule-item ${
-                activity.isNew ? "activity" : "activited"
-              }`,
-              style: { width: elWidth, maxWidth: maxWidth, left, top }
-            };
-            if (editabel && (activity.isNew || type === 1)) {
-              props.onClick = () => {
-                this.handleScheduleClick(machine, activity, type);
+    const searchDate =
+      type === 0
+        ? this.state.searchDate
+        : [this.state.editDateStart, this.state.editDateEnd];
+    if (searchDate.length > 0) {
+      const maxWidth = dates.length * width;
+      let searchStartDate = searchDate[0];
+      let searchEndDate = searchDate[1];
+      machines.forEach((machine, index) => {
+        if (machine.machineActivity && machine.machineActivity.length > 0) {
+          machine.machineActivity.forEach(activity => {
+            const start = moment(activity.startTime);
+            const end = moment(activity.endTime);
+            const allDay = this.getDayAll(start, end);
+            const startStr = start.format(dateFormat);
+            const endStr = end.format(dateFormat);
+            const startIndex = dates.indexOf(startStr);
+            const endIndex = dates.indexOf(endStr);
+            if (
+              searchStartDate.isBetween(start, end) ||
+              searchStartDate.isSame(start) ||
+              searchStartDate.isSame(end) ||
+              searchEndDate.isBetween(start, end) ||
+              searchEndDate.isSame(start) ||
+              searchEndDate.isSame(end) ||
+              start.isBetween(searchStartDate, searchEndDate) ||
+              end.isBetween(searchStartDate, searchEndDate)
+            ) {
+              const top = index * height;
+              let elWidth = allDay.length * width;
+              let left = 0;
+              if (
+                start.isBefore(searchStartDate) ||
+                start.isSame(searchStartDate)
+              ) {
+                left = 0;
+              } else {
+                left = startIndex * width;
+              }
+              if (end.isBefore(searchEndDate) || end.isSame(searchEndDate)) {
+                elWidth = (endIndex + 1) * width - left;
+              }
+              if (elWidth + left > maxWidth) {
+                elWidth = maxWidth - left;
+              }
+              const props = {
+                className: `schedule-item ${
+                  activity.isNew ? "activity" : "activited"
+                }`,
+                style: { width: elWidth, maxWidth: maxWidth, left, top }
               };
+              if (editabel && (activity.isNew || type === 1)) {
+                props.onClick = () => {
+                  this.handleScheduleClick(machine, activity, type);
+                };
+              }
+              result.push(<div {...props}>{activity.activityName}</div>);
             }
-            result.push(<div {...props}>{activity.activityName}</div>);
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    }
     return result;
   }
   renderAdd() {
@@ -257,7 +355,7 @@ export default class MachineConfigCard extends Component {
               <Col span={9}>
                 <RangePicker
                   value={this.state.searchDate}
-                  format="YYYY-MM-DD"
+                  format={dateFormat}
                   placeholder="日期筛选"
                   onChange={(date, dateString) => {
                     this.handleSearchDateChange(date, dateString);
@@ -289,17 +387,14 @@ export default class MachineConfigCard extends Component {
                         key={machine.machineId}
                         style={{ textAlign: "left" }}
                       >
-                        <label>
-                          <input
-                            type="checkbox"
-                            value={machine.machineId}
-                            checked={machine.checked}
-                            onChange={this.handleSelectedMachineChange.bind(
-                              this
-                            )}
-                          />
+                        <Checkbox
+                          value={machine.machineId}
+                          checked={machine.checked}
+                          onChange={this.handleSelectedMachineChange.bind(this)}
+                          disabled={machine.disabled}
+                        >
                           {machine.machineCode}
-                        </label>
+                        </Checkbox>
                       </div>
                     );
                   })}
@@ -327,18 +422,17 @@ export default class MachineConfigCard extends Component {
                             return (
                               <div key={date} className="scroll-item">
                                 {this.state.machineList.map(machine => {
-                                  return (
-                                    <div
-                                      key={machine.machineId}
-                                      onClick={() => {
-                                        this.handleScheduleDayClick(
-                                          date,
-                                          machine,
-                                          0
-                                        );
-                                      }}
-                                    />
-                                  );
+                                  const props = { key: machine.machineId };
+                                  if (!machine.disabled) {
+                                    props.onClick = () => {
+                                      this.handleScheduleDayClick(
+                                        date,
+                                        machine,
+                                        0
+                                      );
+                                    };
+                                  }
+                                  return <div {...props}>{date}</div>;
                                 })}
                               </div>
                             );
@@ -361,15 +455,14 @@ export default class MachineConfigCard extends Component {
                   {this.state.machineList.map((machine, i) => {
                     return (
                       <div key={machine.machineId}>
-                        <label>
-                          <input
-                            type="checkbox"
-                            value={machine.machineId}
-                            checked={machine.secular}
-                            onChange={this.handleMachineExpireChange.bind(this)}
-                          />
+                        <Checkbox
+                          value={machine.machineId}
+                          checked={machine.secular}
+                          onChange={this.handleMachineExpireChange.bind(this)}
+                          disabled={machine.disabled}
+                        >
                           长期
-                        </label>
+                        </Checkbox>
                       </div>
                     );
                   })}
@@ -393,15 +486,13 @@ export default class MachineConfigCard extends Component {
                         key={machine.machineId}
                         style={{ textAlign: "left" }}
                       >
-                        <label>
-                          <input
-                            type="checkbox"
-                            value={machine.machineId}
-                            checked={machine.checked}
-                            onChange={this.handleAddedMachineChange.bind(this)}
-                          />
+                        <Checkbox
+                          value={machine.machineId}
+                          checked={machine.checked}
+                          onChange={this.handleAddedMachineChange.bind(this)}
+                        >
                           {machine.machineCode}
-                        </label>
+                        </Checkbox>
                       </div>
                     );
                   })}
@@ -487,7 +578,7 @@ export default class MachineConfigCard extends Component {
               <Col span={9}>
                 <DatePicker
                   value={this.state.editDateStart}
-                  format="YYYY-MM-DD"
+                  format={dateFormat}
                   onChange={date => {
                     this.handleEditDateChange(date, 0);
                   }}
@@ -504,7 +595,7 @@ export default class MachineConfigCard extends Component {
               <Col span={9}>
                 <DatePicker
                   value={this.state.editDateEnd}
-                  format="YYYY-MM-DD"
+                  format={dateFormat}
                   onChange={date => {
                     this.handleEditDateChange(date, 1);
                   }}
@@ -525,15 +616,14 @@ export default class MachineConfigCard extends Component {
               <div className="machine-table-left">
                 <div>机器编号</div>
                 <div style={{ textAlign: "left" }}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value={machine.machineId}
-                      checked={machine.checked}
-                      onChange={this.handleEditMachineSelectedChange.bind(this)}
-                    />
+                  <Checkbox
+                    type="checkbox"
+                    value={machine.machineId}
+                    checked={machine.checked}
+                    onChange={this.handleEditMachineSelectedChange.bind(this)}
+                  >
                     {machine.machineCode}
-                  </label>
+                  </Checkbox>
                 </div>
               </div>
               <div className="machine-table-calendar">
@@ -562,7 +652,9 @@ export default class MachineConfigCard extends Component {
                                 onClick={() => {
                                   this.handleScheduleDayClick(date, machine, 1);
                                 }}
-                              />
+                              >
+                                {date}
+                              </div>
                             </div>
                           );
                         })}
@@ -582,20 +674,19 @@ export default class MachineConfigCard extends Component {
               <div className="machine-table-right">
                 <div>操作</div>
                 <div key={machine.machineId}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value={machine.machineId}
-                      checked={machine.secular}
-                      onChange={this.handleEditMachineExpireChange.bind(this)}
-                    />
+                  <Checkbox
+                    type="checkbox"
+                    value={machine.machineId}
+                    checked={machine.secular}
+                    onChange={this.handleEditMachineExpireChange.bind(this)}
+                  >
                     长期
-                  </label>
+                  </Checkbox>
                 </div>
               </div>
             </div>
           </div>
-          <div style={{ textAlign: "center", margin: "10px 0 0" }}>
+          <div style={{ textAlign: "center", margin: 20 }}>
             <Button
               type="primary"
               onClick={this.handleUpdateMachine.bind(this)}
