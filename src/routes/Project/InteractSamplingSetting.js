@@ -411,7 +411,7 @@ export default class areaSettingList extends PureComponent {
     this.props.dispatch({
       type: 'interactSamplingSetting/getMachineTree',
       payload: {
-        restParams: {
+        params: {
           interactId,
         },
       },

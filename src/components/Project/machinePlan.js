@@ -289,7 +289,7 @@ class MachinePlan extends PureComponent {
                  className={styles.cardDiv}>
               <div className={styles.machineCodeBox}>
                 <div>
-                  <span className={styles.title}>商圈</span>
+                  <span className={styles.title}>点位</span>
                 </div>
                 <div>
                   <span className={styles.title}>机器编号</span>

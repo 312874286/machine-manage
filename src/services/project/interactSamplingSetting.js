@@ -153,9 +153,9 @@ export async function getMerchantTree({ restParams }) {
   });
 }
 
-export async function getMachineTree({ restParams }) {
-  return fetch.get(api.getMachineTree, {
-    restParams
+export async function getMachineTree({ params }) {
+  return fetch.post(api.getMachineTree, {
+    body: stringify(params)
   });
 }
 

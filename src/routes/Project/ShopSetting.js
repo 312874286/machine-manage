@@ -330,7 +330,6 @@ export default class shopSettingList extends PureComponent {
       }
       this.setState({
         editModalConfirmLoading: true,
-        modalData: {},
       });
       let url = 'shopSetting/saveShopSetting';
       let params = { ...values };
@@ -343,11 +342,16 @@ export default class shopSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.getLists();
+      }).then((res) => {
+        if (res && res.code === 0) {
+          this.getLists();
+          this.setState({
+            modalData: {},
+            modalVisible: false,
+          });
+        }
         this.setState({
           editModalConfirmLoading: false,
-          modalVisible: false,
         });
       });
     });

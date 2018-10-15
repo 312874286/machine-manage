@@ -325,11 +325,11 @@ export default {
     },
     *getMachineTree(
       {
-        payload: { restParams }
+        payload: { params }
       },
       { call }
     ) {
-      const response = yield call(getMachineTree, { restParams });
+      const response = yield call(getMachineTree, { params });
       return response;
     },
     *ruleInteract(

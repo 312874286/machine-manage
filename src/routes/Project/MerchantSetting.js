@@ -339,7 +339,6 @@ export default class merchantSettingList extends PureComponent {
       }
       this.setState({
         editModalConfirmLoading: true,
-        modalData: {},
       });
       let url = 'merchantSetting/saveMerchantSetting';
       let params = { ...values };
@@ -352,11 +351,16 @@ export default class merchantSettingList extends PureComponent {
         payload: {
           params,
         },
-      }).then(() => {
-        this.getLists();
+      }).then((res) => {
+        if (res && res.code === 0) {
+          this.getLists();
+          this.setState({
+            modalData: {},
+            modalVisible: false,
+          });
+        }
         this.setState({
           editModalConfirmLoading: false,
-          modalVisible: false,
         });
       });
     });

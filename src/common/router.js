@@ -104,6 +104,9 @@ export const getRouterData = (app) => {
     '/unusual': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/Unusual')),
     },
+    '/trouble': {
+      component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/Trouble')),
+    },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },

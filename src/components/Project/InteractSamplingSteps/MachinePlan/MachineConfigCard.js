@@ -11,7 +11,6 @@ import {
   notification
 } from "antd";
 import moment from "moment";
-import $ from "jquery";
 import { cloneByJSON } from "../../../../utils/utils";
 
 import "./MachineConfigCard.less";
@@ -333,7 +332,11 @@ export default class MachineConfigCard extends Component {
                 }`,
                 style: { width: elWidth, maxWidth: maxWidth, left, top }
               };
-              if (editabel && (activity.isNew || type === 1)) {
+              if (
+                editabel &&
+                (activity.isNew ||
+                  (type === 1 && activity.activityId === this.state.interactInfo.id))
+              ) {
                 props.onClick = () => {
                   this.handleScheduleClick(machine, activity, type);
                 };
@@ -459,7 +462,7 @@ export default class MachineConfigCard extends Component {
                           value={machine.machineId}
                           checked={machine.secular}
                           onChange={this.handleMachineExpireChange.bind(this)}
-                          disabled={machine.disabled}
+                          disabled={machine.disabled || machine.state === 1}
                         >
                           长期
                         </Checkbox>

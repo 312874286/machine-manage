@@ -442,7 +442,7 @@ const SelectMachineForm = Form.create()(
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={10} sm={24}>
+              <Col md={8} sm={24}>
                 <FormItem>
                   {getFieldDecorator('provinceCityAreaTrade')(
                     <Cascader
@@ -452,6 +452,11 @@ const SelectMachineForm = Form.create()(
                       changeOnSelect
                     />
                   )}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem>
+                  {getFieldDecorator('machineCode')(<Input placeholder="请输入机器编码搜索" />)}
                 </FormItem>
               </Col>
               <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
@@ -2003,6 +2008,7 @@ export default class ScheduleSettingList extends PureComponent {
   // 选择机器开始
   // 回显省市区商圈数据源开始
   getAreaList = (selectedOptions) => {
+    console.log('res', selectedOptions)
     let code = '';
     let targetOption = null;
     let params = { code: code }
@@ -2010,7 +2016,12 @@ export default class ScheduleSettingList extends PureComponent {
       if (selectedOptions.level) {
         params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
       } else if (selectedOptions.code) {
-        params = { code: selectedOptions.code, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+        params = {
+          code: selectedOptions.code,
+          startTime: this.state.machineStartTime,
+          endTime: this.state.machineEndTime,
+          machineCode: selectedOptions.machineCode ? selectedOptions.machineCode : ''
+        }
       } else {
         targetOption = selectedOptions[selectedOptions.length - 1];
         code = targetOption.value;
@@ -2163,7 +2174,8 @@ export default class ScheduleSettingList extends PureComponent {
         message.error('请选择一个地区')
         return;
       }
-      this.getAreaList({code: localCode})
+      // , machineCode: fieldsValue.machineCode
+      this.getAreaList({code: localCode, machineCode: fieldsValue.machineCode})
     });
   }
   // openSelectMachineModal = () => {

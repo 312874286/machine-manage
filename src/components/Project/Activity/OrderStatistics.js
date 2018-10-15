@@ -13,28 +13,30 @@ export default class OrderStatistics extends PureComponent {
     const dateList = [];
     const columnsList = [];
     this.props.datas.forEach(item => {
-      item.data.forEach(date => {
-        if (dateList.indexOf(date.date) === -1) {
-          dateList.push(date.date);
-          columnsList.push({
-            title: date.date,
-            width: 400,
-            render: (text, record, index) => {
-              return (
-                <div>
-                  pv:
-                  {record[`pv${date.date}`] || 0}
-                  <br /> uv:
-                  {record[`uv${date.date}`] || 0} <br /> order:
-                  {record[`order${date.date}`] || 0} <br /> shipment:
-                  {record[`shipment${date.date}`] || 0} <br /> fans:
-                  {record[`fans${date.date}`] || 0}
-                </div>
-              );
-            }
-          });
-        }
-      });
+      item.data
+        .sort((a, b) => new Date(a.date) < new Date(b.date))
+        .forEach(date => {
+          if (dateList.indexOf(date.date) === -1) {
+            dateList.push(date.date);
+            columnsList.push({
+              title: date.date,
+              width: 400,
+              render: (text, record, index) => {
+                return (
+                  <div>
+                    pv:
+                    {record[`pv${date.date}`] || 0}
+                    <br /> uv:
+                    {record[`uv${date.date}`] || 0} <br /> order:
+                    {record[`order${date.date}`] || 0} <br /> shipment:
+                    {record[`shipment${date.date}`] || 0} <br /> fans:
+                    {record[`fans${date.date}`] || 0}
+                  </div>
+                );
+              }
+            });
+          }
+        });
     });
     return columnsList;
   };
@@ -56,20 +58,22 @@ export default class OrderStatistics extends PureComponent {
           fans: 0
         }
       };
-      item.data.forEach((date, k) => {
-        // obj['date'] = date.date,
-        obj[`pv${date.date}`] = date.pv;
-        obj[`uv${date.date}`] = date.uv;
-        obj[`order${date.date}`] = date.order;
-        obj[`shipment${date.date}`] = date.shipment;
-        obj[`fans${date.date}`] = date.fans;
-        // debugger
-        obj.total.pv += date.pv || 0;
-        obj.total.uv += date.uv || 0;
-        obj.total.order += date.order || 0;
-        obj.total.shipment += date.shipment || 0;
-        obj.total.fans += date.fans || 0;
-      });
+      item.data
+        .sort((a, b) => new Date(a.date) > new Date(b.date))
+        .forEach((date, k) => {
+          // obj['date'] = date.date,
+          obj[`pv${date.date}`] = date.pv;
+          obj[`uv${date.date}`] = date.uv;
+          obj[`order${date.date}`] = date.order;
+          obj[`shipment${date.date}`] = date.shipment;
+          obj[`fans${date.date}`] = date.fans;
+          // debugger
+          obj.total.pv += date.pv || 0;
+          obj.total.uv += date.uv || 0;
+          obj.total.order += date.order || 0;
+          obj.total.shipment += date.shipment || 0;
+          obj.total.fans += date.fans || 0;
+        });
       data.push(obj);
     });
     return data;
@@ -83,7 +87,7 @@ export default class OrderStatistics extends PureComponent {
       {
         title: "点位",
         dataIndex: "machineCode",
-        width: 400,
+        width: 300,
         render: (text, record, index) => {
           return (
             <div>
@@ -96,22 +100,21 @@ export default class OrderStatistics extends PureComponent {
       {
         title: "合计",
         dataIndex: "total",
-        width: 400,
+        width: 150,
         render: (text, record) => {
           return (
             <div>
               pv:
-              {record.total.pv} <br/> uv:
-              {record.total.uv} <br/> order:
-              {record.total.order} <br/> shipment:
-              {record.total.shipment} <br/> fans:
+              {record.total.pv} <br /> uv:
+              {record.total.uv} <br /> order:
+              {record.total.order} <br /> shipment:
+              {record.total.shipment} <br /> fans:
               {record.total.fans}
             </div>
           );
         }
       }
     ];
-
     return (
       <div>
         <Table
@@ -119,7 +122,7 @@ export default class OrderStatistics extends PureComponent {
           rowKey={record => record.id}
           dataSource={data}
           pagination={false}
-          scroll={{ x: data.length * 400 + 600 }}
+          scroll={{ x: columnsList.length * 150 + 300 + 150 }}
           loading={this.props.loading}
           bordered
         />

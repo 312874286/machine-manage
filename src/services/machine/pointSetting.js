@@ -37,3 +37,10 @@ export async function getTagList({ restParams }) {
     restParams,
   });
 }
+
+export async function updateBatchMonitor({ params }) {
+  return fetch.postJSON(api.updateBatchMonitor, {
+    body: JSON.stringify(params),
+  });
+}
+
