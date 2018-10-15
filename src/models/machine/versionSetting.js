@@ -1,4 +1,4 @@
-import { addArea, updateArea, areaList, areaDetail } from '../../services/machine/areaSetting';
+import { addArea, updateArea, areaList, areaDetail } from '../../services/machine/versionSetting';
 
 export default {
   namespace: 'versionSetting',

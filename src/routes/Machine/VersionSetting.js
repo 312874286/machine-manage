@@ -1,12 +1,15 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import {
-  Card,
   Form,
   Table,
   Button,
   Tabs,
-  message
+  message,
+  Row,
+  Col,
+  Card,
+  Input
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './VersionSetting.less'
@@ -14,6 +17,7 @@ import {getAccountMenus} from "../../utils/authority";
 import { InnoMsg } from  "../../utils/utils"
 import {Tab} from "../../components/Login";
 
+const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const tabNameLists = [
   {key: 1, name: '72App'},
@@ -42,7 +46,8 @@ export default class versionSetting extends PureComponent {
     editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
-    account: {}
+    account: {},
+    TabPaneKey: "3",
   };
   componentDidMount() {
     this.getLists();
@@ -74,18 +79,90 @@ export default class versionSetting extends PureComponent {
       },
     });
   }
+  // 分页
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    const { current } = pagination;
+    // console.log('params', params)
+    this.setState({
+      pageNo: current,
+    }, () => {
+      this.getLists();
+    });
+  };
+  // 重置
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+      pageNo: 1,
+      keyword: '',
+    });
+  };
+
   callback = (key) => {
     console.log(key);
   }
   add = () => {
-    InnoMsg.error('111111')
+    message.config({
+      top: 100,
+      duration: 2,
+      maxCount: 1,
+    })
+    message.error('111111')
+  }
+  // 新增modal确认事件 结束
+  renderAdvancedForm() {
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={9} sm={24}>
+            <FormItem>
+              {getFieldDecorator('keyword')(<Input placeholder="请输入版本号、版本、更新内容搜索" />)}
+            </FormItem>
+          </Col>
+          <Col md={7} sm={24}>
+            <span>
+               <FormItem>
+                  <Button onClick={this.handleFormReset}>
+                    重置
+                  </Button>
+                  <Button className={styles.serach} style={{ marginLeft: 8 }} type="primary" htmlType="submit">
+                    查询
+                  </Button>
+               </FormItem>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
   }
   render() {
     const {
       homePageSetting: { ExceptionMachineList },
       loading,
     } = this.props;
-    const { account } = this.state
+    const { account, TabPaneKey } = this.state
     const columns = [
       {
         title: 'App名称',
@@ -125,11 +202,14 @@ export default class versionSetting extends PureComponent {
     ];
     return (
       <PageHeaderLayout>
+        <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
+          <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
+        </Card>
         <Card bordered={false}>
           <Button icon="arrow-left" type="primary" onClick={() => this.add()}>
             新增
           </Button>
-          <Tabs onChange={this.callback} type="card">
+          <Tabs onChange={this.callback} type="card" defaultActiveKey={TabPaneKey}>
             {tabNameLists.map((item) => {
               return (
                 <TabPane key={item.key} tab={item.name}>{item.name}</TabPane>

@@ -61,6 +61,13 @@ const api = map({
   getPointFromTag: '/machine/locale/getList?tag={tag}',
 
   updateBatchMonitor: '/machine/locale/updateBatch',
+
+  //app版本
+  //批次
+  batchList: '/machine/batch/list',
+  batchDetail: '/machine/batch/detail?id={id}',
+  addBatch: '/machine/batch/save',
+  updateBatch: '/machine/batch/update',
 });
 
 export default api;

@@ -1,4 +1,4 @@
-import { addArea, updateArea, areaList, areaDetail } from '../../services/machine/areaSetting';
+import { batchList, batchDetail, addBatch, updateBatch } from '../../services/machine/batchSetting';
 
 export default {
   namespace: 'batchSetting',
@@ -10,23 +10,23 @@ export default {
   },
 
   effects: {
-    *areaList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(areaList, { restParams });
+    *batchList({ payload: { params } }, { call, put }) {
+      const response = yield call(batchList, { params });
       yield put({
         type: 'saveList',
         payload: response,
       });
     },
-    *addArea({ payload: { params } }, { call }) {
-      const response = yield call(addArea, { params });
+    *addBatch({ payload: { params } }, { call }) {
+      const response = yield call(addBatch, { params });
       return response;
     },
-    *updateArea({ payload: { params } }, { call }) {
-      const response = yield call(updateArea, { params });
+    *updateBatch({ payload: { params } }, { call }) {
+      const response = yield call(updateBatch, { params });
       return response;
     },
-    *areaDetail({ payload: { restParams } }, { call }) {
-      const response = yield call(areaDetail, { restParams });
+    *batchDetail({ payload: { restParams } }, { call }) {
+      const response = yield call(batchDetail, { restParams });
       return response;
     },
   },

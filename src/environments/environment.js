@@ -1,6 +1,6 @@
 const environment = {
   hostxxx: '',
-  host: '',
+  host: 'http://api.erp.72solo.com',
   appId: 'dingoa25um8bzdtan7hjgw',
   frontHost: 'http://erp.72solo.com',
 };

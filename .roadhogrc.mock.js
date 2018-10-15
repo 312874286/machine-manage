@@ -5946,6 +5946,92 @@ const proxy = {
       "data": null,
       "msg": "成功"
     })
+  },
+  'post /machine/batch/list': (req, res) => {
+    res.send({
+        "msg":"成功",
+        "code":0,
+        "page":{
+          "pageSize":20,
+          "currentResult":0,
+          "totalPage":1,
+          "pageNo":1,
+          "totalCount":2,
+          "list":null,
+          "firstPage":true,
+          "lastPage":true,
+          "nextPage":1,
+          "prePage":1,
+          "firstResult":0
+        },
+        "data":[
+          {
+            "id":"18",
+            "batchName":"原机器",
+            "createId":null,
+            "createUser":null,
+            "createTime":null,
+            "updateId":null,
+            "updateUser":null,
+            "updateTime":"2018-10-12 16:56:32",
+            "detailList":[
+
+            ]
+          },
+          {
+            "id":"19",
+            "batchName":"新批次",
+            "createId":null,
+            "createUser":null,
+            "createTime":null,
+            "updateId":null,
+            "updateUser":null,
+            "updateTime":null,
+            "detailList":[
+
+            ]
+          }
+        ],
+        "unColumn":""
+      })
+  },
+  'get /machine/batch/detail': (req, res) => {
+    res.send({
+      "code":0,
+      "msg":"",
+      "data":{
+        "id":"19",
+        "batchName":"新批次",
+        "detailList":[
+          {
+            "rowNo":1,
+            "count":8,
+            "type":2,
+            "volumeCount":12
+          },
+          {
+            "rowNo":2,
+            "count":10,
+            "type":2,
+            "volumeCount":12
+          }
+        ]
+      }
+    })
+  },
+  'post /machine/batch/save': (req, res) => {
+    res.send({
+      "msg":"成功",
+      "data":null,
+      "code":0
+    })
+  },
+  'POST /machine/batch/update': (req, res) => {
+    res.send({
+      "msg":"成功",
+      "data":null,
+      "code":0
+    })
   }
 };
 
