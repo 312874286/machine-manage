@@ -328,7 +328,9 @@ const ManageUpdateAppForm = Form.create()(
   });
 const ManageAisleForm = Form.create()(
   (props) => {
-    const { form, ManageAislemodalVisible, ManageAisleEditModalConfirmLoading, ManageAisleHandleAddClick, ManageAisleHandleModalVisibleClick, handleClose, AisleList, handleStop, handleStart, message, updateGoodsCount } = props;
+    const { form,
+      ManageAislemodalVisible, ManageAisleEditModalConfirmLoading, ManageAisleHandleAddClick, ManageAisleHandleModalVisibleClick,
+      handleClose, AisleList, handleStop, handleStart, message, updateGoodsCount } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {

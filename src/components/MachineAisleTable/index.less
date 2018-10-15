@@ -46,5 +46,160 @@
     .ant-table-tbody > tr:nth-child(odd) {
       background: transparent !important;
     }
+    .ant-table-thead > tr, #editTable .ant-table-tbody > tr {
+      -webkit-transition: all .3s;
+      transition: all .3s;
+      width: 138px !important;
+      height: 122px;
+      float: left;
+      display: flex;
+      flex-direction: column;
+      //border: 1px solid red;
+      margin: 5px 5px 16px 5px;
+      color: #333;
+      position: relative;
+    }
+    .ant-table-thead {
+      display: none;
+    }
+    .ant-table-tbody {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+    .ant-table-thead > tr > th, #editTable .ant-table-tbody > tr > td {
+      padding: 0px !important;
+      line-height: 24px;
+      height: 32px;
+    }
+    .ant-table-tbody > tr > td div{
+      padding: 4px 2px;
+    }
+    .textOverflow{
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .operation {
+      position: absolute;
+      right: 0;
+    }
+     #goodsCount input, #editTable #goodsCount {
+      width: 35px;
+      padding: 0;
+      text-align: center;
+      height: 20px;
+    }
+    .ant-form-item-label {
+      padding: 0 !important;
+    }
+    .ant-form-item {
+      display: flex;
+    }
+    .ant-form-item-required:before {
+      display: none !important;
+    }
+    .ant-form-item-control, #editTable .ant-form-item-label {
+      line-height: 24px !important;
+    }
+    .ant-form-item-label label {
+      color: #333 !important;
+    }
+    .ant-form-item-control-wrapper, #editTable .ant-form-item-control {
+      padding: 0 !important;
+    }
+     #volumeCount {
+      color: #333;
+    }
+    .ant-btn {
+      padding: 0 5px;
+      width: 100%;
+      border-radius: 6px !important;
+      line-height: 13px;
+      height: 20px !important;
+      margin: 5px 5px 0 10px;
+    }
+    .ant-table-tbody > tr:nth-child(even) {
+      background: #fff !important;
+    }
   }
 }
+// 管理货道
+//#editTable .ant-table-thead > tr, #editTable .ant-table-tbody > tr {
+//  -webkit-transition: all .3s;
+//  transition: all .3s;
+//  width: 138px !important;
+//  height: 122px;
+//  float: left;
+//  display: flex;
+//  flex-direction: column;
+//  //border: 1px solid red;
+//  margin: 5px 5px 16px 5px;
+//  color: #333;
+//  position: relative;
+//}
+//#editTable .ant-table-thead {
+//  display: none;
+//}
+//#editTable .ant-table-tbody {
+//  display: flex;
+//  align-items: center;
+//  justify-content: flex-start;
+//  flex-wrap: wrap;
+//}
+//#editTable .ant-table-thead > tr > th, #editTable .ant-table-tbody > tr > td {
+//  padding: 0px !important;
+//  line-height: 24px;
+//  height: 32px;
+//}
+//#editTable .ant-table-tbody > tr > td div{
+//  padding: 4px 2px;
+//}
+//#editTable .textOverflow{
+//  white-space: nowrap;
+//  text-overflow: ellipsis;
+//  overflow: hidden;
+//}
+//#editTable .operation {
+//  position: absolute;
+//  right: 0;
+//}
+//#editTable #goodsCount input, #editTable #goodsCount {
+//  width: 35px;
+//  padding: 0;
+//  text-align: center;
+//  height: 20px;
+//}
+//#editTable .ant-form-item-label {
+//  padding: 0 !important;
+//}
+//#editTable .ant-form-item {
+//  display: flex;
+//}
+//#editTable .ant-form-item-required:before {
+//  display: none !important;
+//}
+//#editTable .ant-form-item-control, #editTable .ant-form-item-label {
+//  line-height: 24px !important;
+//}
+//#editTable .ant-form-item-label label {
+//  color: #333 !important;
+//}
+//#editTable .ant-form-item-control-wrapper, #editTable .ant-form-item-control {
+//  padding: 0 !important;
+//}
+//#volumeCount {
+//  color: #333;
+//}
+//#editTable .ant-btn {
+//  padding: 0 5px;
+//  width: 100%;
+//  border-radius: 6px !important;
+//  line-height: 13px;
+//  height: 20px !important;
+//  margin: 5px 5px 0 10px;
+//}
+//#editTable .ant-table-tbody > tr:nth-child(even) {
+//  background: #fff !important;
+//}

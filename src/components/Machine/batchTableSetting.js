@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
 const { Option } = Select;
-
+const typeList = [{id: 1, name: '大弹簧货道'}, {id: 2, name: '小弹簧货道'}, {id: 3, name: '履带货道'}]
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
     <tr {...props} />
@@ -133,7 +133,7 @@ class BatchTableField extends Component {
     this.state = {
       count:0,
       clist: [],
-      rlist: [],
+      aisleCount: [],
       currentValue: '',
       initData: [],
       shopClist: [],
@@ -142,6 +142,7 @@ class BatchTableField extends Component {
     };
   }
   componentWillReceiveProps(nextProps) {
+    console.log('initData', this.props.initData)
     const {initData, clist, count, shopClist} = nextProps;
     console.log('initData, clist, count', initData, clist, count, shopClist)
     // if (clist.length > 0) {
@@ -150,55 +151,27 @@ class BatchTableField extends Component {
   }
   componentDidMount() {
     const { initData, clist } = this.props;
+    console.log('initData222', this.props.initData)
   }
-  handleChangeName = (record, value) => {
-    record.prizeId = value;
-    // let number = 0
-    // for (var i = 0; i < this.state.clist.length; i++ ) {
-    //   if (this.state.clist[i].id === value) {
-    //     // record.name = this.state.clist[i].name;
-    //     // number = this.state.clist[i].number
-    //   }
-    // }
-    // console.log('record', record, this.state.clist, this.props.initData, this.state.initData);
-    this.props.goodsHandle(this.state.initData, value, record, record.key);
+  // handleChangeName = (record, value) => {
+  //   record.prizeId = value;
+  //   this.props.goodsHandle(this.state.initData, value, record, record.key);
+  // }
+  // handleShopChangeName = (value) => {
+  //   this.props.shopHandle(value);
+  // }
+  handleChangeType = (record, value) => {
+    record.type = value;
   }
-  handleShopChangeName = (value) => {
-    this.props.shopHandle(value);
-  }
-  handleChangeRule = (record, value) => {
-    record.resultCode = value;
+  handleChangeCount = (record, value) => {
+    record.count = value;
   }
   handleDelete = (key) => {
     this.props.goodsHandleDelete(key);
   }
 
-  handleAdd = (maxNumber) => {
-    if (this.state.initData.length >= maxNumber) {
-      if (maxNumber !== 0) {
-        message.config({
-          top: 100,
-          duration: 2,
-          maxCount: 1,
-        });
-        message.warning(`最多只可添加${maxNumber}个商品`)
-        this.setState({
-          initData: this.state.initData.slice(0, maxNumber)
-        })
-      } else {
-        message.config({
-          top: 100,
-          duration: 2,
-          maxCount: 1,
-        });
-        message.warning(`请先添加游戏`)
-      }
-      return false
-    }
-    console.log('val', this.state.initData, this.state.currentValue, this.props.count)
-
+  handleAdd = () => {
     this.props.goodsHandleAdd(this.state.initData, this.state.currentValue, this.props.count);
-
   }
 
   handleSave = (row) => {
@@ -225,21 +198,18 @@ class BatchTableField extends Component {
       })
     });
     // console.log('shopClistCurrentValue', this.state.shopClistCurrentValue)
-    let rlist = [];
-    for (let i = 1; i <= 10; i++) {
+    let aisleCount = [];
+    for (let i = 1; i <= 9; i++) {
       let newobj = {
         id: i,
         name: i.toString(),
       }
-      rlist.push(newobj);
+      aisleCount.push(newobj);
     }
-    this.state.rlist = rlist;
+    this.setState({
+      aisleCount,
+    })
 
-    // if (this.props.initData.length !== 0) {
-    //   this.setState({
-    //     initData,
-    //   });
-    // }
     if (initData.length !== 0) {
       this.setState({
         initData,
@@ -255,113 +225,30 @@ class BatchTableField extends Component {
   }
   render() {
     const { count, couponsShow, maxNumber } = this.props;
-    const { clist, rlist, initData, shopClist, shopClistCurrentValue, currentValue } = this.state
+    const { aisleCount, initData } = this.state
     const components = {
       body: {
         row: EditableFormRow,
         cell: EditableCell,
       },
     };
-    // console.log('initData', initData)
-    if (couponsShow) {
-      this.columns = [{
-        title: '选择店铺',
-        dataIndex: 'shopName',
+    console.log('initData', this.props.initData)
+    this.columns = [
+      {
+        title: '行',
+        dataIndex: 'key',
         render: (text, record) => {
           return (
-            <Select  onSelect={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
-              {/*{children}*/}
-              {shopClist.map((item) => {
-                return (
-                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
-                );
-              })}
-            </Select>
-          );
-        },
-      },{
-        title: '商品名称',
-        dataIndex: 'name',
-        render: (text, record) => {
-          return (
-            <Select  onSelect={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
-              {/*{children}*/}
-              {clist.map((item) => {
-                return (
-                  <Option key={item.id} value={item.id}>{item.name}</Option>
-                );
-              })}
-            </Select>
+            <span>第{record.key + 1}行货道</span>
           );
         },
       }, {
-        title: '商品数量',
-        dataIndex: 'number',
-        editable: true,
-        // render: (text, record) => {
-        //   return (
-        //     <Input value={record.number}/>
-        //   );
-        // },
-      },{
-        title: '同一用户每天获得商品次数',
-        dataIndex: 'userDayNumber',
-        editable: true,
-        // render: (text, record) => {
-        //   return (
-        //     <Input value={record.number}/>
-        //   );
-        // },
-      },{
-        title: '操作',
-        dataIndex: 'operation',
+        title: '每行共几列',
+        dataIndex: 'count',
         render: (text, record) => {
           return (
-            <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key)}>
-              <a>删除</a>
-            </Popconfirm>
-          );
-        },
-      }];
-    } else {
-      this.columns = [{
-        title: '选择店铺',
-        dataIndex: 'shopName',
-        render: (text, record) => {
-          return (
-            <Select onSelect={this.handleShopChangeName} defaultValue={ record.shopName } placeholder="请选择店铺">
-              {/*{children}*/}
-              {shopClist.map((item) => {
-                return (
-                  <Option key={item.id} value={item.id}>{item.shopName}</Option>
-                );
-              })}
-            </Select>
-          );
-        },
-      },{
-        title: '商品名称',
-        dataIndex: 'name',
-        render: (text, record) => {
-          return (
-            <Select onSelect={this.handleChangeName.bind(this, record)} defaultValue={ record.name } placeholder="请选择商品">
-              {/*{children}*/}
-              {clist.map((item) => {
-                return (
-                  <Option key={item.id} value={item.id}>{item.name}</Option>
-                );
-              })}
-            </Select>
-          );
-        },
-      }, {
-        title: '规则',
-        dataIndex: 'resultCode',
-        render: (text, record) => {
-          return (
-            <Select defaultValue={record.resultCode} onChange={this.handleChangeRule.bind(this,record)}>
-              {/*{children2}*/}
-              {rlist.map((item) => {
+            <Select defaultValue={record.count} onChange={this.handleChangeCount.bind(this,record)} placeholder="请选择">
+              {aisleCount.map((item) => {
                 return (
                   <Option key={item.id} value={item.id}>{item.name}</Option>
                 );
@@ -371,8 +258,23 @@ class BatchTableField extends Component {
           );
         },
       }, {
-        title: '规则描述',
-        dataIndex: 'resultRemark',
+        title: '货道类型',
+        dataIndex: 'type',
+        render: (text, record) => {
+          return (
+            <Select defaultValue={record.type} onChange={this.handleChangeType.bind(this,record)} placeholder="请选择">
+              {typeList.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>{item.name}</Option>
+                );
+              })}
+            </Select>
+
+          );
+        },
+      }, {
+        title: '货道容量',
+        dataIndex: 'volumeCount',
         editable: true,
       }, {
         title: '操作',
@@ -385,7 +287,6 @@ class BatchTableField extends Component {
           );
         },
       }];
-    }
 
     const columns = this.columns.map((col) => {
       if (!col.editable) {
@@ -412,7 +313,7 @@ class BatchTableField extends Component {
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={initData}
+          dataSource={this.props.initData}
           columns={columns}
           pagination={false}
           rowKey={record => record.key}

@@ -15,19 +15,18 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './BatchSetting.less';
 import BatchTableField from '../../components/Machine/batchTableSetting';
+import BatchAisleSetting from '../../components/MachineAisleTable';
 import {getAccountMenus} from "../../utils/authority";
 import moment from "moment/moment";
 
 const FormItem = Form.Item;
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
-      verifyTimeRequire, gameLists, activityLists, openSelectMachineModal, selectCityName, machineNum,
-      goodsInitData, goodsCount, couponsInitData, couponsCount, goodsHandle, goodsHandleAdd, goodsHandleDelete,
-      goodsHandleChange, discountHandle, discountHandleAdd, discountHandleDelete, discountHandleChange, modalData,
-      onSelectShop, goodsLists, shopClist,
-      disabledStartDate, onStartChange, disabledEndDate, onEndChange, handleStartOpenChange, handleEndOpenChange, endOpen,
-      isDisabled, selectMachineFlag, disabledTime, disabledEndTime, couponsShow, shopHandle, onSelectGame, maxNumber, remark
+    const {
+      modalVisible, form, handleAdd, handleModalVisible,
+      editModalConfirmLoading, modalType, goodsInitData,
+      goodsHandle, goodsHandleAdd, goodsHandleDelete,
+      goodsHandleChange, shopHandle,
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -40,42 +39,12 @@ const CreateForm = Form.create()(
         sm: { span: 18 },
       },
     };
-    const goodsColumns = [{
-      title: '商品名称',
-      dataIndex: 'name',
-      align: 'center',
-    }, {
-      title: '规则',
-      dataIndex: 'resultCode',
-      align: 'center',
-    }, {
-      title: '规则描述',
-      dataIndex: 'resultRemark',
-      align: 'center',
-    }];
-    const couponsColumns = [{
-      title: 'InteractID',
-      dataIndex: 'code',
-      align: 'center',
-    }, {
-      title: '优惠券名称',
-      dataIndex: 'name',
-      align: 'center',
-    }, {
-      title: '规则',
-      dataIndex: 'resultCode',
-      align: 'center',
-    }, {
-      title: '规则描述',
-      dataIndex: 'resultRemark',
-      align: 'center',
-    }];
     return (
       <Modal
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{!modalType ? '编辑排期' : '新增排期'}</span>
+            <span class="modalTitle">{!modalType ? '编辑批次' : '新增批次'}</span>
           </div>
         }
         visible={modalVisible}
@@ -85,175 +54,89 @@ const CreateForm = Form.create()(
         width={800} >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="选择活动" style={{ display : modalData.id ? 'none' : 'block' }}>
-              {getFieldDecorator('activityId', {
-                rules: [{ required: false, message: '请选择活动' }],
-              })(<Select placeholder="请选择" onSelect={onSelectShop} >
-                {activityLists.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id} data-id={item.id} data-type={item.type}>{item.name}</Option>
-                  );
-                })}
-              </Select>)}
+            <FormItem {...formItemLayout} label="批次名称">
+              {getFieldDecorator('batchName', {
+                rules: [{ required: true, whitespace: true, message: '请填写批次名称' }],
+              })(<Input placeholder="请填写批次名称" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择活动" style={{ display : modalData.id ? 'block' : 'none' }}>
-              {getFieldDecorator('activityName', {
-                rules: [{ required: false, message: '请选择活动' }],
-              })(<Input disabled />)}
+            <FormItem {...formItemLayout} label="批次编号">
+              {getFieldDecorator('id', {
+                rules: [{ required: true, whitespace: true, message: '请填写批次编号' }],
+              })(<Input placeholder="请填写两位整数" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'none' : 'block' }}>
-              {getFieldDecorator('startTimeStr', {
-                rules: [{ required: true, message: '选择开始时间' }],
-              })(
-                <DatePicker
-                  disabledDate={disabledStartDate}
-                  disabledTime={disabledTime}
-                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                  format="YYYY-MM-DD HH:mm"
-                  // value={startValue}
-                  placeholder="选择开始时间"
-                  onChange={onStartChange}
-                  onOpenChange={handleStartOpenChange}
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择开始时间" style={{ display: isDisabled ? 'block' : 'none' }}>
-              {getFieldDecorator('startTimeStr', {
-                rules: [{ required: true, message: '选择开始时间' }],
-              })(
-                <DatePicker
-                  disabledDate={disabledStartDate}
-                  showTime
-                  format="YYYY-MM-DD HH:mm"
-                  // value={startValue}
-                  placeholder="选择开始时间"
-                  onChange={onStartChange}
-                  onOpenChange={handleStartOpenChange}
-                  disabled
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择结束时间">
-              {getFieldDecorator('endTimeStr', {
-                rules: [{ required: true, message: '选择结束时间' }],
-              })(
-                <DatePicker
-                  disabledTime={disabledEndTime}
-                  disabledDate={disabledEndDate}
-                  showTime={{ defaultValue: moment('23:59:59', 'HH:mm:ss') }}
-                  format="YYYY-MM-DD HH:mm"
-                  // value={endValue}
-                  placeholder="选择结束时间"
-                  onChange={onEndChange}
-                  open={endOpen}
-                  onOpenChange={handleEndOpenChange}
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择机器">
-              {getFieldDecorator('remark', {
-                rule: [{ validator: verifyTimeRequire }],
-              }) (
-                <div>
-                  {
-                    (remark ? remark : (
-                      selectCityName.length > 0
-                        ? '已选择' + machineNum + '台机器，分别位于' + selectCityName.join('、')
-                        : ''
-                    ))
-                  }
-                  <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
-                </div>
-              )
-              }
-            </FormItem>
-            {/*style={{ display: isDisabled ? 'block' : 'none' }}*/}
-            <FormItem {...formItemLayout} label="选择游戏">
-              {getFieldDecorator('gameId', {
-                rules: [{ required: false, message: '请选择游戏' }],
-              })(
-                <Select placeholder="请选择" onSelect={onSelectGame}>
-                  {gameLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id} data-maxNumber={item.maxGoodsNum}>{item.name}</Option>
-                    );
-                  })}
-                </Select>
-              )}
-            </FormItem>
-            {/*<FormItem {...formItemLayout} label="选择游戏" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
-            {/*{getFieldDecorator('gameId', {*/}
-            {/*rules: [{ required: false, message: '请选择游戏' }],*/}
-            {/*})(*/}
-            {/*<Select placeholder="请选择" disabled>*/}
-            {/*{gameLists.map((item) => {*/}
-            {/*return (*/}
-            {/*<Option value={item.id} key={item.id} >{item.name}</Option>*/}
-            {/*);*/}
-            {/*})}*/}
-            {/*</Select>*/}
-            {/*)}*/}
-            {/*</FormItem>*/}
-            <FormItem {...formItemLayout} label="同一用户获得商品次数">
-              {getFieldDecorator('userMaxTimes', {
-                rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],
-              })(<Input placeholder="请填写同一用户获得商品次数" />)}
-            </FormItem>
-            {/*<FormItem {...formItemLayout} label="同一用户获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
-            {/*{getFieldDecorator('userMaxTimes', {*/}
-            {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
-            {/*})(<Input placeholder="请填写同一用户获得商品次数" disabled />)}*/}
-            {/*</FormItem>*/}
-            <FormItem {...formItemLayout} label="同一用户每天获得商品总次数">
-              {getFieldDecorator('dayUserMaxTimes', {
-                rules: [{ required: false, whitespace: true, message: '请填写同一用户每天获得商品总次数' }],
-              })(<Input placeholder="请填写同一用户每天获得商品总次数" />)}
-            </FormItem>
-            {/*<FormItem {...formItemLayout} label="同一用户每天获得商品次数" style={{ display: isDisabled ? 'block' : 'none' }}>*/}
-            {/*{getFieldDecorator('dayUserMaxTimes', {*/}
-            {/*rules: [{ required: false, whitespace: true, message: '请填写同一用户获得商品次数' }],*/}
-            {/*})(<Input placeholder="请填写同一用户每天获得商品次数" disabled />)}*/}
-            {/*</FormItem>*/}
-            <FormItem label={`填写商品信息：最多可添加${maxNumber}个商品`}>
-              {/*<Table*/}
-              {/*columns={goodsColumns}*/}
-              {/*dataSource={goodsInitData}*/}
-              {/*rowKey={record => record.prizeId}*/}
-              {/*pagination={false}*/}
-              {/*style={{ display: isDisabled ? 'block' : 'none' }} />*/}
+            <FormItem label="货道信息">
               <div className={styles.goodsNoteBox}>
-                <FormItem label='若要重新选择商品时，需要重新选择一下店铺'>
-                  <GoodsTableField
+                <FormItem>
+                  <BatchTableField
                     initData={goodsInitData}
-                    count={goodsCount}
-                    clist={goodsLists}
-                    shopClist={shopClist}
                     shopHandle={shopHandle}
                     goodsHandle={goodsHandle}
                     goodsHandleAdd={goodsHandleAdd}
                     goodsHandleDelete={goodsHandleDelete}
                     goodsHandleChange={goodsHandleChange}
-                    couponsShow={!couponsShow}
-                    maxNumber={maxNumber}
+                    shopClist={[]}
                   />
                 </FormItem>
               </div>
             </FormItem>
-            {/*style={{ display: couponsShow ? 'block' : 'none' }}*/}
-            <FormItem label="填写优惠券信息">
-              {/*<Table columns={couponsColumns} dataSource={couponsInitData} rowKey={record => record.code} pagination={false} style={{ display: isDisabled ? 'block' : 'none' }} />*/}
-              <div>
-                <DiscountDynamicField
-                  shopClist={shopClist}
-                  couponsShow={!couponsShow}
-                  initData={couponsInitData}
-                  count={couponsCount}
-                  discountHandle={discountHandle}
-                  discountHandleAdd={discountHandleAdd}
-                  discountHandleDelete={discountHandleDelete}
-                  discountHandleChange={discountHandleChange}
-                />
-              </div>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+const ManageAisleForm = Form.create()(
+  (props) => {
+    const {
+      ManageAislemodalVisible, ManageAisleEditModalConfirmLoading, ManageAisleHandleAddClick, ManageAisleHandleModalVisibleClick,
+      modalType, form,
+      handleClose, AisleList, handleStop, handleStart, message, updateGoodsCount
+    } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">{!modalType ? '编辑批次' : '新增批次'}</span>
+          </div>
+        }
+        visible={ManageAislemodalVisible}
+        onOk={ManageAisleHandleAddClick}
+        onCancel={() => ManageAisleHandleModalVisibleClick(false)}
+        confirmLoading={ManageAisleEditModalConfirmLoading}
+        footer={null}
+        width={1250}>
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="批次名称">
+              {getFieldDecorator('batchName', {
+                rules: [{ required: true, whitespace: true, message: '请填写批次名称' }],
+              })(<Input placeholder="请填写批次名称" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="批次编号">
+              {getFieldDecorator('id', {
+                rules: [{ required: true, whitespace: true, message: '请填写批次编号' }],
+              })(<Input placeholder="请填写两位整数" />)}
+            </FormItem>
+            <FormItem label="货道信息">
+              <BatchAisleSetting
+                handleClose={handleClose}
+                AisleList={AisleList}
+                handleStop={handleStop}
+                handleStart={handleStart}
+                message={message}
+                updateGoodsCount={updateGoodsCount}
+              />
             </FormItem>
           </Form>
         </div>
@@ -268,14 +151,22 @@ const CreateForm = Form.create()(
 @Form.create()
 export default class versionSetting extends PureComponent {
   state = {
-    modalVisible: false,
     selectedRows: [],
     formValues: {},
     id: '',
-    editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
-    account: {}
+    account: {},
+
+    modalVisible: false,
+    editModalConfirmLoading: false,
+    modalType: true,
+    goodsInitData: [],
+    goodsCount: 0,
+
+    ManageAislemodalVisible: false,
+    ManageAisleEditModalConfirmLoading: false,
+    AisleList: []
   };
   componentDidMount() {
     this.getLists();
@@ -373,6 +264,338 @@ export default class versionSetting extends PureComponent {
       </Form>
     );
   }
+  saveFormRef = (form) => {
+    this.form = form;
+  }
+  add = () => {
+    this.setState({
+      modalVisible: true
+    })
+  }
+  // 添加modal 添加事件
+  handleModalVisible = (flag) => {
+    this.setState({
+      goodsInitData: [],
+      goodsCount: 0,
+    }, () => {
+      this.setState({
+        modalVisible: !!flag,
+        modalData: {},
+        modalType: true,
+      });
+      this.setModalData();
+    })
+  };
+  // 设置modal 数据
+  setModalData = (data) => {
+    if (data) {
+      this.form.setFieldsValue({
+        id: data.id,
+        batchName: data.batchName,
+      });
+    } else {
+      this.goodsHandleAdd()
+      this.form.setFieldsValue({
+        id: undefined,
+        batchName: undefined,
+      });
+    }
+  }
+  // 商品信息及优惠券的操作开始
+  goodsHandle = (initData, value, record, key) => {
+    console.log('initData', initData)
+    record = this.getGoodsNumber(value, record, initData, key)
+    console.log('record', record)
+    this.setState({
+      goodsTables: [...this.state.goodsTables, record]
+    }, () => {
+      this.setState({
+        goodsInitData: record,
+        goodsLists: []
+      });
+    })
+  }
+  getGoodsNumber = (value, record, initData, key) => {
+    const { goodsLists } = this.state
+    for (let j = 0; j < initData.length; j++) {
+      if (initData[j].key === key) {
+        for (var i = 0; i < goodsLists.length; i++ ) {
+          if (goodsLists[i].id === value) {
+            record.number = goodsLists[i].number
+          }
+        }
+      }
+    }
+    return initData;
+  }
+  shopHandle = (shopId) => {
+    this.getGoodsLists(shopId)
+  }
+  goodsHandleAdd = (val, currentValue) => {
+    const { goodsInitData, goodsCount } = this.state;
+    const newData = {
+      key: goodsCount,
+      rowNo: goodsCount + 1,
+      count: undefined,
+      type: undefined,
+      volumeCount: 0,
+    };
+    this.setState({
+      goodsInitData: [...goodsInitData, newData],
+      goodsCount: goodsCount+1,
+    });
+  }
+  goodsHandleDelete = (key) => {
+    const goodsInitData = [...this.state.goodsInitData];
+    this.setState({ goodsInitData: goodsInitData.filter(item => item.key !== key) });
+  }
+  goodsHandleChange = (row) => {
+    const newData = [...this.state.goodsInitData];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    this.setState({ goodsInitData: newData });
+  }
+  edit = (item) => {
+    this.props.dispatch({
+      type: 'batchSetting/batchDetail',
+      payload: {
+        restParams: {
+          id: item.id
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        console.log('res', res)
+        this.setModalData(res.data)
+        this.setState({
+          modalData: item,
+          goodsInitData: res.data.detailList.map((item, index) => {
+            return {
+              key: index,
+              rowNo: item.rowNo,
+              count: item.count,
+              type: item.type,
+              volumeCount: item.volumeCount,
+            }
+          }),
+          goodsCount: res.data.detailList.length
+        }, () => {
+          this.setState({
+            modalVisible: true,
+          })
+        })
+      }
+    });
+  }
+  handleAdd = () => {
+    this.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      let params = {
+        ...fieldsValue,
+        detailList: this.state.goodsInitData
+      };
+      this.setState({
+        editModalConfirmLoading: true,
+      });
+      let url = 'batchSetting/addBatch';
+      let messageTxt = '新增';
+      if (this.state.modalData.id) {
+        url = 'batchSetting/updateBatch';
+        params = { ...params, id: this.state.modalData.id };
+        messageTxt = '编辑';
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then((resp) => {
+        if (resp && resp.code === 0) {
+          this.setState({
+            goodsCount: 0,
+            goodsInitData: [],
+          }, () => {
+            this.getLists();
+          });
+        } else {
+          this.setState({
+            editModalConfirmLoading: false,
+          });
+          return;
+        }
+        this.setState({
+          editModalConfirmLoading: false,
+          modalVisible: false,
+        });
+      });
+    })
+  }
+
+  // 管理货道开始
+
+  handleStop = (val) => {
+    // deleteChannelMachineSetting
+    this.props.dispatch({
+      type: 'machineSetting/deleteChannelMachineSetting',
+      payload: {
+        params: val,
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        message.success('停用成功');
+        this.getAisleList();
+      } else {
+        message.error(resp ? resp.msg : '停用失败');
+      }
+    });
+  }
+  handleStart = (val) => {
+    this.props.dispatch({
+      type: 'machineSetting/deleteChannelMachineSetting',
+      payload: {
+        params: val,
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        message.success('启动成功');
+        this.getAisleList();
+        // this.setState({
+        //   message: resp.code
+        // })
+      } else {
+        message.error(resp ? resp.msg : '启动失败');
+      }
+    });
+  }
+  updateGoodsCount = (val) => {
+    this.props.dispatch({
+      type: 'machineSetting/updateGoodsCountMachineSetting',
+      payload: {
+        params: val,
+      },
+    }).then((resp) => {
+      if (resp && resp.code === 0) {
+        message.success('修改成功');
+        this.getAisleList();
+      } else {
+        message.error(resp ? resp.msg : '修改失败');
+      }
+    });
+  }
+  saveManageAisleFormRef = (form) => {
+    this.pointManageAisleForm = form;
+  }
+  handleManageAisleClick = (item) => {
+    this.setState({
+      modalVisible: false,
+      modalData: item,
+      editPointmodalVisible: false,
+      ManageAppmodalVisible: false,
+    }, () => {
+      this.getAisleList();
+    });
+  }
+  getAisleList = () => {
+    this.props.dispatch({
+      type: 'batchSetting/batchDetail',
+      payload: {
+        restParams: {
+          id: this.state.modalData.id,
+        },
+      },
+    }).then((result) => {
+      if (result && result.code === 0) {
+        if (result.data.detailList.length === 0) {
+          message.config({
+            top: 100,
+            duration: 2,
+            maxCount: 1,
+          });
+          message.error('该货道为空，暂时不能操作')
+          return;
+        }
+        this.setState({
+          ManageAislemodalVisible: true,
+        }, () => {
+          const res = result.data.detailList
+          console.log('res[res.length - 1]', res[res.length - 1].rowNo)
+          let AisleList = []
+          const r = res[res.length - 1].rowNo
+          console.log('r', r)
+          // for (let i = 0; i < 56; i++) {
+          //   let r = {}
+          //   // console.log('i', i)
+          //   for (let j = 0; j < res.length; j++) {
+          //     // console.log('parseInt(result[j].code) === i',parseInt(result[j].code), i, j)
+          //     if (parseInt(res[j].code) === (i+1)) {
+          //       let item = res[j]
+          //       r = {
+          //         value: parseInt(item.code),
+          //         key: item.id,
+          //         code: item.code,
+          //         goodsName: item.goodsName,
+          //         goodsPrice: item.goodsPrice,
+          //         volumeCount: item.volumeCount,
+          //         goodsCount: item.goodsCount,
+          //         workStatusreason: item.workStatusreason,
+          //         isDelete: item.isDelete
+          //       }
+          //       AisleList.push(r);
+          //       break;
+          //     }
+          //   }
+          //   if (!AisleList[i]) {
+          //     r = {
+          //       value: i + 1,
+          //       key: i + 1,
+          //     }
+          //     AisleList.push(r);
+          //   }
+          // }
+          let trLists = []
+          for (let i = 0; i < res.length; i++) {
+            trLists = [...trLists, ...this.getAisleLists(res[i])]
+          }
+          console.log('mmm', trLists)
+          for (let i = 0; i <= r; i++) {
+            let tr = AisleList.filter(item => item.value <= ( i * 10 + 8 ) && item.value >= ( i * 10 + 1 ))
+            trLists = [...trLists, ...tr]
+          }
+          this.setState({
+            AisleList: trLists,
+          });
+        });
+      }
+    });
+  }
+  getAisleLists = (detailList) => {
+    const { rowNo, count, volumeCount } = detailList
+    let arr = []
+    for (let i = 1; i <= count; i++) {
+      let tmp = {
+        code: parseInt((rowNo - 1).toString() + i.toString()),
+        volumeCount,
+      }
+      arr.push(tmp)
+    }
+    return arr
+  }
+  ManageAisleHandleAddClick = () => {
+    // 确认管理App
+    // console.log('确认管理Aisle货道');
+  }
+  ManageAisleHandleModalVisibleClick = (flag) => {
+    this.setState({
+      ManageAislemodalVisible: !!flag,
+    });
+  };
+  // 管理货道结束
   render() {
     const {
       batchSetting: { list },
@@ -403,15 +626,15 @@ export default class versionSetting extends PureComponent {
         fixed: 'right',
         width: 150,
         title: '操作',
-        render: () => (
+        render: (text, item) => (
           <Fragment>
             <a
-              onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}>
+              onClick={() => this.handleManageAisleClick(item)}>
               查看
             </a>
             <Divider type="vertical" />
             <a
-              onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}>
+              onClick={() => this.edit(item)}>
               编辑
             </a>
           </Fragment>
@@ -424,7 +647,7 @@ export default class versionSetting extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <Button icon="arrow-left" type="primary" onClick={() => history.go(-1)}>
+          <Button icon="arrow-left" type="primary" onClick={() => this.add()}>
             新增
           </Button>
           <div className={styles.tableList}>
@@ -439,7 +662,33 @@ export default class versionSetting extends PureComponent {
             />
           </div>
         </Card>
-        <CreateForm />
+        <CreateForm
+          ref={this.saveFormRef}
+          modalVisible={this.state.modalVisible}
+          handleAdd={this.handleAdd}
+          handleModalVisible={this.handleModalVisible}
+          editModalConfirmLoading={this.state.editModalConfirmLoading}
+          modalType={this.state.modalType}
+          goodsInitData={this.state.goodsInitData}
+          goodsHandle={this.goodsHandle}
+          goodsHandleAdd={this.goodsHandleAdd}
+          goodsHandleDelete={this.goodsHandleDelete}
+          goodsHandleChange={this.goodsHandleChange}
+          shopHandle={this.shopHandle}
+        />
+        <ManageAisleForm
+          ref={this.saveManageAisleFormRef}
+          ManageAislemodalVisible={this.state.ManageAislemodalVisible}
+          ManageAisleEditModalConfirmLoading={this.state.ManageAisleEditModalConfirmLoading}
+          ManageAisleHandleAddClick={this.ManageAisleHandleAddClick}
+          ManageAisleHandleModalVisibleClick={this.ManageAisleHandleModalVisibleClick}
+          handleClose={this.handleClose}
+          AisleList={this.state.AisleList}
+          handleStop={this.handleStop}
+          handleStart={this.handleStart}
+          message={message}
+          updateGoodsCount={this.updateGoodsCount}
+        />
       </PageHeaderLayout>
     );
   }
