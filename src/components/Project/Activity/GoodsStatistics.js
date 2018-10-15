@@ -39,7 +39,6 @@ export default class GoodsStatistics extends PureComponent {
 
   parseData(datas) {
     let data = [...datas];
-    debugger;
     let result = [];
     const times = {};
     columns[2].children = [];
@@ -113,6 +112,9 @@ export default class GoodsStatistics extends PureComponent {
         0,
         summary
       );
+    });
+    sortResult = sortResult.sort((a, b) => {
+      return new Date(a.time) < new Date(b.time);
     });
     return sortResult;
   }
