@@ -209,12 +209,12 @@ export default class areaSettingList extends PureComponent {
               return false
             }
           }
-          // if (!dayNumber) {
-          //   if (!fieldsValue.dayNumber) {
-          //     message.info('如没有选择不限，请填写同一用户参与活动次数')
-          //     return false
-          //   }
-          // }
+          if (!dayNumber) {
+            if (!fieldsValue.dayNumber) {
+              message.info('如没有选择不限，请填写同一用户参与活动次数')
+              return false
+            }
+          }
         }
         if (allGoods.length > 0) {
           for (let i = 0; i < allGoods.length; i++) {
@@ -356,29 +356,29 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                {/*<FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>*/}
-                  {/*<Col span={14}>*/}
-                    {/*<FormItem>*/}
-                      {/*{getFieldDecorator('dayNumber', {*/}
-                        {/*// rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],*/}
-                      {/*})*/}
-                      {/*(<InputNumber*/}
-                        {/*placeholder="请输入同一用户每天参与活动次数"*/}
-                        {/*disabled={this.state.dayNumber}*/}
-                      {/*/>)}*/}
-                    {/*</FormItem>*/}
-                  {/*</Col>*/}
-                  {/*<Col span={8}>*/}
-                    {/*<FormItem>*/}
-                      {/*<Checkbox*/}
-                        {/*checked={this.state.dayNumber}*/}
-                        {/*// value={this.state.dayNumber}*/}
-                        {/*onChange={this.handleDayNumberChange}>*/}
-                        {/*不限*/}
-                      {/*</Checkbox>*/}
-                    {/*</FormItem>*/}
-                  {/*</Col>*/}
-                {/*</FormItem>*/}
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>
+                  <Col span={14}>
+                    <FormItem>
+                      {getFieldDecorator('dayNumber', {
+                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
+                      })
+                      (<InputNumber
+                        placeholder="请输入同一用户每天参与活动次数"
+                        disabled={this.state.dayNumber}
+                      />)}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <Checkbox
+                        checked={this.state.dayNumber}
+                        // value={this.state.dayNumber}
+                        onChange={this.handleDayNumberChange}>
+                        不限
+                      </Checkbox>
+                    </FormItem>
+                  </Col>
+                </FormItem>
                 <FormItem {...formItemLayout} label="商品信息">
                 </FormItem>
                 <RuleInteractSampling
