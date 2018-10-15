@@ -335,7 +335,7 @@ export default class MachineConfigCard extends Component {
               if (
                 editabel &&
                 (activity.isNew ||
-                  (type === 1 && activity.activityId === interactInfo.id))
+                  (type === 1 && activity.activityId === this.state.interactInfo.id))
               ) {
                 props.onClick = () => {
                   this.handleScheduleClick(machine, activity, type);
