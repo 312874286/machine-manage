@@ -1,6 +1,7 @@
 import '@babel/polyfill';
 import 'url-polyfill';
 import dva from 'dva';
+import { message } from 'antd';
 
 import createHistory from 'history/createHashHistory';
 // user BrowserHistory
@@ -28,6 +29,11 @@ app.router(require('./router').default);
 // 5. Start
 app.start('#root');
 
+message.config({
+  top: 100,
+  duration: 2,
+  maxCount: 1,
+});
 
 FastClick.attach(document.body);
 

@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { isFunction, isObject, isString } from 'util';
+import { message } from 'antd';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -189,6 +190,14 @@ const RegexTool = {
   idCard: /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/,
 };
 
+
+const InnoMsg = message;
+InnoMsg.config({
+  top: 100,
+  duration: 2,
+  maxCount: 1,
+})
+
 // 二进制转换为数组
 export function bitParse(value) {
   const len = value.length;
@@ -218,4 +227,4 @@ export class MathTool {
   }
 }
 
-export { RegexTool };
+export { RegexTool , InnoMsg};

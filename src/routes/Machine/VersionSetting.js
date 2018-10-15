@@ -5,11 +5,28 @@ import {
   Form,
   Table,
   Button,
+  Tabs,
+  message
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './VersionSetting.less'
 import {getAccountMenus} from "../../utils/authority";
+import { InnoMsg } from  "../../utils/utils"
+import {Tab} from "../../components/Login";
 
+const TabPane = Tabs.TabPane;
+const tabNameLists = [
+  {key: 1, name: '72App'},
+  {key: 2, name: '72数据中心'},
+  {key: 3, name: '72监控App'},
+  {key: 4, name: '72安装器'},
+  {key: 5, name: '管理App'},
+  {key: 6, name: '蓝牙接收器'},
+  {key: 7, name: '72上传'},
+  {key: 8, name: '72守护'},
+  {key: 9, name: '壶中界'},
+  {key: 10, name:'新版壶中界'}
+  ]
 @connect(({ common, loading, homePageSetting }) => ({
   common,
   homePageSetting,
@@ -57,6 +74,12 @@ export default class versionSetting extends PureComponent {
       },
     });
   }
+  callback = (key) => {
+    console.log(key);
+  }
+  add = () => {
+    InnoMsg.error('111111')
+  }
   render() {
     const {
       homePageSetting: { ExceptionMachineList },
@@ -65,46 +88,54 @@ export default class versionSetting extends PureComponent {
     const { account } = this.state
     const columns = [
       {
-        title: '机器编号',
-        dataIndex: 'machineCode',
+        title: 'App名称',
+        dataIndex: 'machineCode1',
+        width: '10%',
+      },
+      {
+        title: '版本',
+        width: '10%',
+        dataIndex: 'local1',
+      },
+      {
+        title: '版本号',
+        dataIndex: 'offlineTime1',
+        width: '10%',
+      },
+      {
+        title: '升级路径',
+        dataIndex: 'machineCode2',
         width: '30%',
       },
       {
-        title: '机器点位',
-        width: '25%',
-        dataIndex: 'local',
-        render: (text, item) => (
-          (item.local) ? (
-            <span>{item.local}</span>
-          ) :(
-            <span>无</span>
-          )
-        )
+        title: '更新内容',
+        width: '20%',
+        dataIndex: 'local2',
       },
       {
-        title: '离线时间',
+        title: '创建人',
+        dataIndex: 'offlineTime2',
+        width: '10%',
+      },
+      {
+        title: '创建时间',
         dataIndex: 'offlineTime',
-      },
-      {
-        fixed: 'right',
-        width: 150,
-        title: '操作',
-        render: () => (
-          <Fragment>
-            <a
-              onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}
-              style={{ display: !account.add ? 'none' : '' }}
-            >创建工单</a>
-          </Fragment>
-        ),
+        width: '10%',
       },
     ];
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
-          <Button icon="arrow-left" type="primary" onClick={() => history.go(-1)}>
-            返回
+          <Button icon="arrow-left" type="primary" onClick={() => this.add()}>
+            新增
           </Button>
+          <Tabs onChange={this.callback} type="card">
+            {tabNameLists.map((item) => {
+              return (
+                <TabPane key={item.key} tab={item.name}>{item.name}</TabPane>
+              );
+            })}
+          </Tabs>
           <div className={styles.tableList}>
             <Table
               loading={loading}
