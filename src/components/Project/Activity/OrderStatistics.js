@@ -11,33 +11,44 @@ export default class OrderStatistics extends PureComponent {
 
   renderColums = () => {
     const dateList = [];
-    const columnsList = [];
+    let columnsList = [];
     this.props.datas.forEach(item => {
-      item.data
-        .sort((a, b) => new Date(a.date) < new Date(b.date))
-        .forEach(date => {
-          if (dateList.indexOf(date.date) === -1) {
-            dateList.push(date.date);
-            columnsList.push({
-              title: date.date,
-              width: 400,
-              render: (text, record, index) => {
-                return (
-                  <div>
-                    pv:
-                    {record[`pv${date.date}`] || 0}
-                    <br /> uv:
-                    {record[`uv${date.date}`] || 0} <br /> order:
-                    {record[`order${date.date}`] || 0} <br /> shipment:
-                    {record[`shipment${date.date}`] || 0} <br /> fans:
-                    {record[`fans${date.date}`] || 0}
-                  </div>
-                );
-              }
-            });
-          }
-        });
+      item.data.forEach(date => {
+        if (dateList.indexOf(date.date) === -1) {
+          dateList.push(date.date);
+          columnsList.push({
+            title: date.date,
+            width: 400,
+            render: (text, record, index) => {
+              return (
+                <div>
+                  pv:
+                  {record[`pv${date.date}`] || 0}
+                  <br /> uv:
+                  {record[`uv${date.date}`] || 0} <br /> order:
+                  {record[`order${date.date}`] || 0} <br /> shipment:
+                  {record[`shipment${date.date}`] || 0} <br /> fans:
+                  {record[`fans${date.date}`] || 0}
+                </div>
+              );
+            }
+          });
+        }
+      });
     });
+    console.log(columnsList);
+    columnsList = columnsList.sort((a, b) => {
+      const ad = new Date(a.title);
+      const bd = new Date(b.title);
+      if (ad < bd) {
+        return 1;
+      } else if (ad === bd) {
+        return 0;
+      } else {
+        return -1;
+      }
+    });
+    console.log(JSON.stringify(columnsList));
     return columnsList;
   };
 
@@ -58,22 +69,20 @@ export default class OrderStatistics extends PureComponent {
           fans: 0
         }
       };
-      item.data
-        .sort((a, b) => new Date(a.date) > new Date(b.date))
-        .forEach((date, k) => {
-          // obj['date'] = date.date,
-          obj[`pv${date.date}`] = date.pv;
-          obj[`uv${date.date}`] = date.uv;
-          obj[`order${date.date}`] = date.order;
-          obj[`shipment${date.date}`] = date.shipment;
-          obj[`fans${date.date}`] = date.fans;
-          // debugger
-          obj.total.pv += date.pv || 0;
-          obj.total.uv += date.uv || 0;
-          obj.total.order += date.order || 0;
-          obj.total.shipment += date.shipment || 0;
-          obj.total.fans += date.fans || 0;
-        });
+      item.data.forEach((date, k) => {
+        // obj['date'] = date.date,
+        obj[`pv${date.date}`] = date.pv;
+        obj[`uv${date.date}`] = date.uv;
+        obj[`order${date.date}`] = date.order;
+        obj[`shipment${date.date}`] = date.shipment;
+        obj[`fans${date.date}`] = date.fans;
+        // debugger
+        obj.total.pv += date.pv || 0;
+        obj.total.uv += date.uv || 0;
+        obj.total.order += date.order || 0;
+        obj.total.shipment += date.shipment || 0;
+        obj.total.fans += date.fans || 0;
+      });
       data.push(obj);
     });
     return data;

@@ -80,42 +80,51 @@ export default class GoodsStatistics extends PureComponent {
       };
     });
     let sortResult = [];
-    Object.keys(times).forEach(time => {
-      const items = result.filter(i => i.time === time);
-      const summary = { time, machineCode: "合计", count: items[0].count };
-      columns[2].children.forEach(i => {
-        const goodsCode = i.dataIndex;
-        let goodsCount = 0;
-        if (items.length > 0) {
-          if (items.length > 1) {
-            goodsCount = items.reduce((pv, cv) => {
-              const pGoods =
-                typeof pv === "object"
-                  ? (pv[goodsCode] && pv[goodsCode].goods) || 0
-                  : pv;
-              const cGoods = (cv[goodsCode] && cv[goodsCode].goods) || 0;
-              return pGoods + cGoods;
-            });
-          } else {
-            goodsCount =
-              (items[0][goodsCode] && items[0][goodsCode].goods) || 0;
-          }
+    Object.keys(times)
+      .sort((a, b) => {
+        const ad = new Date(a);
+        const bd = new Date(b);
+        if (ad < bd) {
+          return 1;
+        } else if (ad === bd) {
+          return 0;
+        } else {
+          return -1;
         }
-        summary[goodsCode] = {
-          goods: goodsCount,
-          isSummary: true
-        };
+      })
+      .forEach(time => {
+        const items = result.filter(i => i.time === time);
+        const summary = { time, machineCode: "合计", count: items[0].count };
+        columns[2].children.forEach(i => {
+          const goodsCode = i.dataIndex;
+          let goodsCount = 0;
+          if (items.length > 0) {
+            if (items.length > 1) {
+              goodsCount = items.reduce((pv, cv) => {
+                const pGoods =
+                  typeof pv === "object"
+                    ? (pv[goodsCode] && pv[goodsCode].goods) || 0
+                    : pv;
+                const cGoods = (cv[goodsCode] && cv[goodsCode].goods) || 0;
+                return pGoods + cGoods;
+              });
+            } else {
+              goodsCount =
+                (items[0][goodsCode] && items[0][goodsCode].goods) || 0;
+            }
+          }
+          summary[goodsCode] = {
+            goods: goodsCount,
+            isSummary: true
+          };
+        });
+        sortResult = sortResult.concat(items);
+        sortResult.splice(
+          sortResult.lastIndexOf(items[items.length - 1]) + 1,
+          0,
+          summary
+        );
       });
-      sortResult = sortResult.concat(items);
-      sortResult.splice(
-        sortResult.lastIndexOf(items[items.length - 1]) + 1,
-        0,
-        summary
-      );
-    });
-    sortResult = sortResult.sort((a, b) => {
-      return new Date(a.time) < new Date(b.time);
-    });
     return sortResult;
   }
 
