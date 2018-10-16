@@ -21,7 +21,8 @@ import {getAccountMenus} from "../../utils/authority";
 import moment from "moment/moment";
 import {RegexTool} from "../../utils/utils";
 
-const No = /^[+]{0,1}(\d){2}$/
+// const No = /^[+]{0,1}(\d){2}$/
+const No = /^\d{2}/
 const FormItem = Form.Item;
 const CreateForm = Form.create()(
   (props) => {
