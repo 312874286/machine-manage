@@ -35,7 +35,8 @@ const tabNameLists = [
   {key: 10, name:'新版壶中界'}
   ]
 // const tabNames = [ '72App', '72数据中心', '72监控App', '72安装器', '管理App', '蓝牙接收器', '72上传', '72守护', '壶中界', '新版壶中界']
-const testX = /^\d\.\d\.\d$/
+const testX = /^\d+\.\d+\.\d+$/
+// const testX = /(\d+\.){2}\d+/
 const CreateForm = Form.create()(
   (props) => {
     const {
