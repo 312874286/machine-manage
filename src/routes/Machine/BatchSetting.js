@@ -15,7 +15,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './BatchSetting.less';
 import BatchTableField from '../../components/Machine/batchTableSetting';
-import BatchAisleSetting from '../../components/MachineAisleTable';
+import BatchAisleSetting from '../../components/Machine/batchAisleSetting';
 import {getAccountMenus} from "../../utils/authority";
 import moment from "moment/moment";
 
@@ -525,66 +525,54 @@ export default class versionSetting extends PureComponent {
         }, () => {
           const res = result.data.detailList
           console.log('res[res.length - 1]', res[res.length - 1].rowNo)
-          let AisleList = []
-          const r = res[res.length - 1].rowNo
-          console.log('r', r)
-          // for (let i = 0; i < 56; i++) {
-          //   let r = {}
-          //   // console.log('i', i)
-          //   for (let j = 0; j < res.length; j++) {
-          //     // console.log('parseInt(result[j].code) === i',parseInt(result[j].code), i, j)
-          //     if (parseInt(res[j].code) === (i+1)) {
-          //       let item = res[j]
-          //       r = {
-          //         value: parseInt(item.code),
-          //         key: item.id,
-          //         code: item.code,
-          //         goodsName: item.goodsName,
-          //         goodsPrice: item.goodsPrice,
-          //         volumeCount: item.volumeCount,
-          //         goodsCount: item.goodsCount,
-          //         workStatusreason: item.workStatusreason,
-          //         isDelete: item.isDelete
-          //       }
-          //       AisleList.push(r);
-          //       break;
-          //     }
-          //   }
-          //   if (!AisleList[i]) {
-          //     r = {
-          //       value: i + 1,
-          //       key: i + 1,
-          //     }
-          //     AisleList.push(r);
-          //   }
+          // let AisleList = []
+          // const r = res[res.length - 1].rowNo - 1
+          // console.log('r', r)
+          // // for (let i = 0; i < 56; i++) {
+          // //   let r = {}
+          // //   // console.log('i', i)
+          // //   for (let j = 0; j < res.length; j++) {
+          // //     // console.log('parseInt(result[j].code) === i',parseInt(result[j].code), i, j)
+          // //     if (parseInt(res[j].code) === (i+1)) {
+          // //       let item = res[j]
+          // //       r = {
+          // //         value: parseInt(item.code),
+          // //         key: item.id,
+          // //         code: item.code,
+          // //         goodsName: item.goodsName,
+          // //         goodsPrice: item.goodsPrice,
+          // //         volumeCount: item.volumeCount,
+          // //         goodsCount: item.goodsCount,
+          // //         workStatusreason: item.workStatusreason,
+          // //         isDelete: item.isDelete
+          // //       }
+          // //       AisleList.push(r);
+          // //       break;
+          // //     }
+          // //   }
+          // //   if (!AisleList[i]) {
+          // //     r = {
+          // //       value: i + 1,
+          // //       key: i + 1,
+          // //     }
+          // //     AisleList.push(r);
+          // //   }
+          // // }
+          // let trLists = []
+          // for (let i = 0; i < res.length; i++) {
+          //   trLists = [...trLists, ...this.getAisleLists(res[i])]
           // }
-          let trLists = []
-          for (let i = 0; i < res.length; i++) {
-            trLists = [...trLists, ...this.getAisleLists(res[i])]
-          }
-          console.log('mmm', trLists)
-          for (let i = 0; i <= r; i++) {
-            let tr = AisleList.filter(item => item.value <= ( i * 10 + 8 ) && item.value >= ( i * 10 + 1 ))
-            trLists = [...trLists, ...tr]
-          }
+          // console.log('mmm', trLists)
+          // for (let i = 0; i <= r; i++) {
+          //   let tr = AisleList.filter(item => item.value <= ( i * 10 + 8 ) && item.value >= ( i * 10 + 1 ))
+          //   trLists = [...trLists, ...tr]
+          // }
           this.setState({
-            AisleList: trLists,
+            AisleList: res,
           });
         });
       }
     });
-  }
-  getAisleLists = (detailList) => {
-    const { rowNo, count, volumeCount } = detailList
-    let arr = []
-    for (let i = 1; i <= count; i++) {
-      let tmp = {
-        code: parseInt((rowNo - 1).toString() + i.toString()),
-        volumeCount,
-      }
-      arr.push(tmp)
-    }
-    return arr
   }
   ManageAisleHandleAddClick = () => {
     // 确认管理App
