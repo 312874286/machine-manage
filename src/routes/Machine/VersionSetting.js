@@ -9,15 +9,18 @@ import {
   Row,
   Col,
   Card,
-  Input
+  Input,
+  Modal,
+  InputNumber
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './VersionSetting.less'
 import {getAccountMenus} from "../../utils/authority";
-import { InnoMsg } from  "../../utils/utils"
+import {InnoMsg, RegexTool} from "../../utils/utils"
 import {Tab} from "../../components/Login";
 
 const FormItem = Form.Item;
+const { TextArea } = Input
 const TabPane = Tabs.TabPane;
 const tabNameLists = [
   {key: 1, name: '72App'},
@@ -31,27 +34,156 @@ const tabNameLists = [
   {key: 9, name: '壶中界'},
   {key: 10, name:'新版壶中界'}
   ]
-@connect(({ common, loading, homePageSetting }) => ({
+// const tabNames = [ '72App', '72数据中心', '72监控App', '72安装器', '管理App', '蓝牙接收器', '72上传', '72守护', '壶中界', '新版壶中界']
+const testX = /^\d\.\d\.\d$/
+const CreateForm = Form.create()(
+  (props) => {
+    const {
+      modalVisible, form, handleAdd, handleModalVisible,
+      editModalConfirmLoading, TabPaneKey, modalData, next, addOrConfirm
+    } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">新建版本</span>
+          </div>
+        }
+        visible={modalVisible}
+        // onOk={handleAdd}
+        onCancel={() => handleModalVisible(false)}
+        // confirmLoading={editModalConfirmLoading}
+        width={800}
+        footer={[
+          <Button
+            key="cancel"
+            onClick={() => handleModalVisible(false)}
+            style={{ margin: "0 10 0 0", }}
+          >
+            取消
+          </Button>,
+          <Button
+            key="prevent"
+            onClick={() => next(true)}
+            style={{ margin: "0 10 0 0", display: addOrConfirm ? 'none' : '' }}
+          >
+            上一步
+          </Button>,
+          <Button
+            key="next"
+            type="primary"
+            loading={editModalConfirmLoading}
+            onClick={() => next(false)}
+            style={{ margin: "0 10 0 0", display: addOrConfirm ? '' : 'none' }}
+          >
+            下一步
+          </Button>,
+          <Button
+            key="ok"
+            type="primary"
+            loading={editModalConfirmLoading}
+            onClick={() => handleAdd()}
+            style={{ margin: "0 10 0 0", display: addOrConfirm ? 'none' : '' }}
+          >
+            确定
+          </Button>
+        ]}
+      >
+        <div className="manageAppBox">
+          <Form>
+            <div style={{ display: addOrConfirm ? '' : 'none'}}>
+              <FormItem {...formItemLayout} label="App名称">
+                <span>{TabPaneKey.appName}</span>
+              </FormItem>
+              <FormItem {...formItemLayout} label="版本">
+                {getFieldDecorator('appVersion', {
+                  rules: [{ required: true, whitespace: true, message: '请填写版本' },
+                    {
+                      validator(rule, value, callback) {
+                        if (value) {
+                          if (!testX.test(value)) {
+                            callback('请填写正确的版本');
+                          }
+                        }
+                        callback();
+                      },
+                    }],
+                })(<Input placeholder="请填写版本，格式为x.x.x，例如1.0.0" />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="版本号">
+                {getFieldDecorator('appVersionCode', {
+                  rules: [{ required: true, message: '请填写版本号' },],
+                })(<InputNumber placeholder="请填写版本号" />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="升级路径">
+                {getFieldDecorator('downloadUrl', {
+                  rules: [{ required: true, whitespace: true, message: '请填写升级路径' }],
+                })(<Input placeholder="请填写升级路径" />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="更新内容">
+                {getFieldDecorator('updateInfo', {
+                  rules: [{ required: true, whitespace: true, message: '请填写更新内容' }],
+                })(<TextArea placeholder="请输入更新内容描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+              </FormItem>
+            </div>
+            <div style={{ display: addOrConfirm ? 'none' : ''}}>
+              <FormItem {...formItemLayout} label="App名称">
+                <span>{TabPaneKey.appName}</span>
+              </FormItem>
+              <FormItem {...formItemLayout} label="版本">
+                {modalData.appVersion}
+              </FormItem>
+              <FormItem {...formItemLayout} label="版本号">
+                {modalData.appVersionCode}
+              </FormItem>
+              <FormItem {...formItemLayout} label="升级路径">
+                {modalData.downloadUrl}
+              </FormItem>
+              <FormItem {...formItemLayout} label="更新内容">
+                {modalData.updateInfo}
+              </FormItem>
+            </div>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+@connect(({ common, loading, versionSetting }) => ({
   common,
-  homePageSetting,
-  loading: loading.models.homePageSetting,
+  versionSetting,
+  loading: loading.models.versionSetting,
 }))
 @Form.create()
 export default class versionSetting extends PureComponent {
   state = {
-    modalVisible: false,
     selectedRows: [],
     formValues: {},
-    id: '',
-    editModalConfirmLoading: false,
     pageNo: 1,
     keyword: '',
     account: {},
-    TabPaneKey: "3",
+    TabPaneKey: {},
+    modalVisible: false,
+    editModalConfirmLoading: false,
+    modalType: {},
+    modalData: {},
+    addOrConfirm: true,
+    tabNames: []
   };
   componentDidMount() {
-    this.getLists();
-    this.getAccountMenus(getAccountMenus())
+    // this.getAccountMenus(getAccountMenus())
+    this.getAppList()
   }
   getAccountMenus = (setAccountMenusList) => {
     let account = setAccountMenusList.filter((item) => item.path === 'check')
@@ -68,45 +200,36 @@ export default class versionSetting extends PureComponent {
       }
     }
   }
+  getAppList = () => {
+    this.props.dispatch({
+      type: 'versionSetting/appList',
+      payload: {
+        restParams: {
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          tabNames: res.data,
+          TabPaneKey: res.data[0]
+        }, () => {
+          this.getLists()
+        })
+      }
+    });
+  }
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'homePageSetting/findExceptionMachine',
+      type: 'versionSetting/getAppVersionList',
       payload: {
         restParams: {
-          type: 1
+          appPackageName: this.state.TabPaneKey.appPackageName,
+          keyword: this.state.keyword
         },
       },
     });
   }
-  // 分页
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-    const { current } = pagination;
-    // console.log('params', params)
-    this.setState({
-      pageNo: current,
-    }, () => {
-      this.getLists();
-    });
-  };
   // 重置
   handleFormReset = () => {
     const { form } = this.props;
@@ -119,16 +242,115 @@ export default class versionSetting extends PureComponent {
   };
 
   callback = (key) => {
-    console.log(key);
-  }
-  add = () => {
-    message.config({
-      top: 100,
-      duration: 2,
-      maxCount: 1,
+    const { tabNames } = this.state
+    this.setState({
+      TabPaneKey: tabNames.filter(i => i.appPackageName === key)[0]
+    }, () => {
+      this.getLists()
     })
-    message.error('111111')
   }
+  saveFormRef = (form) => {
+    this.form = form;
+  }
+  // 添加modal 添加事件
+  handleModalVisible = (flag) => {
+    this.setState({
+      modalVisible: !!flag,
+      modalData: {},
+      modalType: true,
+      addOrConfirm: true
+    }, () => {
+      this.setModalData();
+    });
+  };
+  // 设置modal 数据
+  setModalData = (data) => {
+    if (data) {
+      this.form.setFieldsValue({
+        appVersion: data.appVersion,
+        appVersionCode: data.appVersionCode,
+        downloadUrl: data.downloadUrl,
+        updateInfo: data.updateInfo,
+      });
+    } else {
+      // this.goodsHandleAdd()
+      this.form.setFieldsValue({
+        appVersion: undefined,
+        appVersionCode: undefined,
+        downloadUrl: undefined,
+        updateInfo: undefined,
+      });
+    }
+  }
+  handleAdd = (flag) => {
+    const { TabPaneKey } = this.state
+    this.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      let params = {
+        ...fieldsValue,
+        appPackageName: TabPaneKey.appPackageName,
+        appName: TabPaneKey.appName
+      };
+      console.log('fieldsValue', fieldsValue)
+      if (parseInt(flag) === 1) {
+        this.setState({
+          modalData: {
+            appVersion: fieldsValue.appVersion,
+            appVersionCode: fieldsValue.appVersionCode,
+            downloadUrl: fieldsValue.downloadUrl,
+            updateInfo: fieldsValue.updateInfo,
+          }
+        })
+      } else {
+        this.setState({
+          editModalConfirmLoading: true,
+        });
+        let url = 'versionSetting/saveVersion';
+        this.props.dispatch({
+          type: url,
+          payload: {
+            params,
+          },
+        }).then((resp) => {
+          if (resp && resp.code === 0) {
+            this.getLists();
+          } else {
+            this.setState({
+              editModalConfirmLoading: false,
+            });
+            return;
+          }
+          this.setState({
+            editModalConfirmLoading: false,
+            modalVisible: false,
+          });
+        });
+      }
+    })
+  }
+  next = (flag) => {
+    if (!flag) {
+      this.handleAdd(1)
+    }
+    this.setState({
+      addOrConfirm: flag
+    })
+  }
+  // 搜索
+  handleSearch = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      this.setState({
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+      }, () => {
+        this.getLists();
+      });
+    });
+  };
   // 新增modal确认事件 结束
   renderAdvancedForm() {
     const { form } = this.props;
@@ -159,44 +381,44 @@ export default class versionSetting extends PureComponent {
   }
   render() {
     const {
-      homePageSetting: { ExceptionMachineList },
+      versionSetting: { list },
       loading,
     } = this.props;
-    const { account, TabPaneKey } = this.state
+    const { account, TabPaneKey, tabNames } = this.state
     const columns = [
       {
         title: 'App名称',
-        dataIndex: 'machineCode1',
+        dataIndex: 'appName',
         width: '10%',
       },
       {
         title: '版本',
         width: '10%',
-        dataIndex: 'local1',
+        dataIndex: 'appVersion',
       },
       {
         title: '版本号',
-        dataIndex: 'offlineTime1',
+        dataIndex: 'appVersionCode',
         width: '10%',
       },
       {
         title: '升级路径',
-        dataIndex: 'machineCode2',
+        dataIndex: 'downloadUrl',
         width: '30%',
       },
       {
         title: '更新内容',
         width: '20%',
-        dataIndex: 'local2',
+        dataIndex: 'updateInfo',
       },
       {
         title: '创建人',
-        dataIndex: 'offlineTime2',
+        dataIndex: 'createUser',
         width: '10%',
       },
       {
         title: '创建时间',
-        dataIndex: 'offlineTime',
+        dataIndex: 'createTime',
         width: '10%',
       },
     ];
@@ -206,13 +428,13 @@ export default class versionSetting extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <Button icon="arrow-left" type="primary" onClick={() => this.add()}>
+          <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ 'marginBottom': '10px' }}>
             新增
           </Button>
-          <Tabs onChange={this.callback} type="card" defaultActiveKey={TabPaneKey}>
-            {tabNameLists.map((item) => {
+          <Tabs onChange={this.callback} type="card" defaultActiveKey={TabPaneKey.appPackageName}>
+            {tabNames.map((item) => {
               return (
-                <TabPane key={item.key} tab={item.name}>{item.name}</TabPane>
+                <TabPane key={item.appPackageName} tab={item.appName}></TabPane>
               );
             })}
           </Tabs>
@@ -220,7 +442,7 @@ export default class versionSetting extends PureComponent {
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={ExceptionMachineList}
+              dataSource={list}
               columns={columns}
               pagination={false}
               onChange={this.handleTableChange}
@@ -228,6 +450,18 @@ export default class versionSetting extends PureComponent {
             />
           </div>
         </Card>
+        <CreateForm
+          ref={this.saveFormRef}
+          modalVisible={this.state.modalVisible}
+          handleAdd={this.handleAdd}
+          handleModalVisible={this.handleModalVisible}
+          editModalConfirmLoading={this.state.editModalConfirmLoading}
+          modalType={this.state.modalType}
+          TabPaneKey={this.state.TabPaneKey}
+          modalData={this.state.modalData}
+          next={this.next}
+          addOrConfirm={this.state.addOrConfirm}
+        />
       </PageHeaderLayout>
     );
   }

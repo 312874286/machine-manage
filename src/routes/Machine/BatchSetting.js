@@ -10,7 +10,8 @@ import {
   Row,
   Col,
   Input,
-  Modal
+  Modal,
+  InputNumber
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './BatchSetting.less';
@@ -18,7 +19,9 @@ import BatchTableField from '../../components/Machine/batchTableSetting';
 import BatchAisleSetting from '../../components/Machine/batchAisleSetting';
 import {getAccountMenus} from "../../utils/authority";
 import moment from "moment/moment";
+import {RegexTool} from "../../utils/utils";
 
+const No = /^[+]{0,1}(\d){2}$/
 const FormItem = Form.Item;
 const CreateForm = Form.create()(
   (props) => {
@@ -53,7 +56,7 @@ const CreateForm = Form.create()(
         confirmLoading={editModalConfirmLoading}
         width={800} >
         <div className="manageAppBox">
-          <Form onSubmit={this.handleSearch}>
+          <Form>
             <FormItem {...formItemLayout} label="批次名称">
               {getFieldDecorator('batchName', {
                 rules: [{ required: true, whitespace: true, message: '请填写批次名称' }],
@@ -61,8 +64,16 @@ const CreateForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="批次编号">
               {getFieldDecorator('id', {
-                rules: [{ required: true, whitespace: true, message: '请填写批次编号' }],
-              })(<Input placeholder="请填写两位整数" />)}
+                rules: [{ required: true, message: '请填写批次编号' },
+                  {
+                    validator(rule, value, callback) {
+                      if (!No.test(value)) {
+                        callback('批次编号只能是两位整数');
+                      }
+                      callback();
+                    },
+                  }],
+              })(<InputNumber  placeholder="请填写两位整数"/>)}
             </FormItem>
             <FormItem label="货道信息">
               <div className={styles.goodsNoteBox}>
@@ -182,8 +193,9 @@ export default class versionSetting extends PureComponent {
     this.props.dispatch({
       type: 'batchSetting/batchList',
       payload: {
-        restParams: {
-          type: 1
+        params: {
+          pageNo: this.state.pageNo,
+          keyword: this.state.keyword
         },
       },
     });
@@ -224,6 +236,19 @@ export default class versionSetting extends PureComponent {
       formValues: {},
       pageNo: 1,
       keyword: '',
+    });
+  };
+  // 搜索
+  handleSearch = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      this.setState({
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+      }, () => {
+        this.getLists();
+      });
     });
   };
   // 新增modal确认事件 结束
@@ -434,59 +459,6 @@ export default class versionSetting extends PureComponent {
   }
 
   // 管理货道开始
-
-  handleStop = (val) => {
-    // deleteChannelMachineSetting
-    this.props.dispatch({
-      type: 'machineSetting/deleteChannelMachineSetting',
-      payload: {
-        params: val,
-      },
-    }).then((resp) => {
-      if (resp && resp.code === 0) {
-        message.success('停用成功');
-        this.getAisleList();
-      } else {
-        message.error(resp ? resp.msg : '停用失败');
-      }
-    });
-  }
-  handleStart = (val) => {
-    this.props.dispatch({
-      type: 'machineSetting/deleteChannelMachineSetting',
-      payload: {
-        params: val,
-      },
-    }).then((resp) => {
-      if (resp && resp.code === 0) {
-        message.success('启动成功');
-        this.getAisleList();
-        // this.setState({
-        //   message: resp.code
-        // })
-      } else {
-        message.error(resp ? resp.msg : '启动失败');
-      }
-    });
-  }
-  updateGoodsCount = (val) => {
-    this.props.dispatch({
-      type: 'machineSetting/updateGoodsCountMachineSetting',
-      payload: {
-        params: val,
-      },
-    }).then((resp) => {
-      if (resp && resp.code === 0) {
-        message.success('修改成功');
-        this.getAisleList();
-      } else {
-        message.error(resp ? resp.msg : '修改失败');
-      }
-    });
-  }
-  saveManageAisleFormRef = (form) => {
-    this.pointManageAisleForm = form;
-  }
   handleManageAisleClick = (item) => {
     this.setState({
       modalVisible: false,
@@ -507,15 +479,6 @@ export default class versionSetting extends PureComponent {
       },
     }).then((result) => {
       if (result && result.code === 0) {
-        if (result.data.detailList.length === 0) {
-          message.config({
-            top: 100,
-            duration: 2,
-            maxCount: 1,
-          });
-          message.error('该货道为空，暂时不能操作')
-          return;
-        }
         this.setState({
           ManageAislemodalVisible: true,
         }, () => {
@@ -527,10 +490,6 @@ export default class versionSetting extends PureComponent {
         });
       }
     });
-  }
-  ManageAisleHandleAddClick = () => {
-    // 确认管理App
-    // console.log('确认管理Aisle货道');
   }
   ManageAisleHandleModalVisibleClick = (flag) => {
     this.setState({
@@ -589,7 +548,7 @@ export default class versionSetting extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <Button icon="arrow-left" type="primary" onClick={() => this.add()}>
+          <Button icon="plus" type="primary" onClick={() => this.add()}>
             新增
           </Button>
           <div className={styles.tableList}>

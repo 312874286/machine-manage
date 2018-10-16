@@ -6032,6 +6032,64 @@ const proxy = {
       "data":null,
       "code":0
     })
+  },
+  'GET /machine/app/appVersionList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "appName": "ceshi",
+          "appPackageName": "111",
+          "appVersion": "1.0.1",
+          "appVersionCode": "10",
+          "downloadUrl": "1111",
+          "updateInfo": "测试",
+          "createId": "4a24ae3f83d14f8f8a056a80498785c0",
+          "createTime": "2018-10-15 15:43:59",
+          "createUser": "李宗豪"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /machine/app/saveHistory': (req, res) => {
+    res.send({
+      "msg":"成功",
+      "data":null,
+      "code":0
+    })
+  },
+  'GET /machine/app/appList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "1",
+          "appPackageName": "com.muwood.chainapp",
+          "appType": 1,
+          "appName": "海莲",
+          "appBelong": 2,
+          "url": "www.baidu.com"
+        },
+        {
+          "id": "2",
+          "appPackageName": "com.detection.inno72.installer",
+          "appType": 2,
+          "appName": "安装器",
+          "appBelong": 1,
+          "url": "www.baidu.com"
+        },
+        {
+          "id": "3",
+          "appPackageName": "com.detection.inno72.test",
+          "appType": 2,
+          "appName": "测试程序",
+          "appBelong": 1,
+          "url": "www.baidu.com"
+        }
+      ],
+      "msg": "成功"
+    })
   }
 };
 

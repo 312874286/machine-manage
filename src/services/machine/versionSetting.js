@@ -2,23 +2,19 @@ import { stringify } from 'qs';
 import fetch from '../../utils/fetch';
 import api from './api';
 
-export async function addArea({ params }) {
-  return fetch.postJSON(api.addArea, {
-    body: JSON.stringify(params),
+export async function saveVersion({ params }) {
+  return fetch.post(api.saveVersion, {
+    body: stringify(params),
   });
 }
-export async function updateArea({ params }) {
-  return fetch.postJSON(api.updateArea, {
-      body: JSON.stringify(params),
-  });
-}
-export async function areaList({ restParams, params }) {
-  return fetch.get(api.areaList, {
+
+export async function getAppVersionList({ restParams }) {
+  return fetch.get(api.getAppVersionList, {
     restParams,
   });
 }
-export async function areaDetail({ restParams }) {
-  return fetch.get(api.areaDetail, {
-    restParams,
-  });
+
+export async function appList({ }) {
+  return fetch.get(api.appList);
 }
+

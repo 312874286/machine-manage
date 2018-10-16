@@ -63,6 +63,9 @@ const api = map({
   updateBatchMonitor: '/machine/locale/updateBatch',
 
   //app版本
+  getAppVersionList: '/machine/app/appVersionList?appPackageName={appPackageName}&keyword={keyword}',
+  saveVersion: '/machine/app/saveHistory',
+  appList: '/machine/app/appList',
   //批次
   batchList: '/machine/batch/list',
   batchDetail: '/machine/batch/detail?id={id}',
