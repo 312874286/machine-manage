@@ -142,16 +142,14 @@ class BatchTableField extends Component {
     };
   }
   componentWillReceiveProps(nextProps) {
-    console.log('initData', this.props.initData)
-    const {initData, clist, count, shopClist} = nextProps;
-    console.log('initData, clist, count', initData, clist, count, shopClist)
+    const {initData, count } = nextProps;
     // if (clist.length > 0) {
-    this.updateRenderDatas(initData, clist, count, shopClist);
+    this.updateRenderDatas(initData, count);
     // }
   }
   componentDidMount() {
-    const { initData, clist } = this.props;
-    console.log('initData222', this.props.initData)
+    const { initData } = this.props;
+    this.updateRenderDatas(initData);
   }
   // handleChangeName = (record, value) => {
   //   record.prizeId = value;
@@ -178,26 +176,7 @@ class BatchTableField extends Component {
     // console.log('row', row)
     this.props.goodsHandleChange(row);
   }
-  updateRenderDatas(initData, clist, count, shopClist) {
-    let goodslist = clist
-    if (shopClist.length === 0 ) {
-      goodslist = []
-    }
-    this.setState({
-      clist: goodslist,
-    }, () => {
-      this.setState({
-        currentValue: this.state.clist.length === 0 ? '' : clist[0].name,
-      })
-    });
-    this.setState({
-      shopClist,
-    }, () => {
-      this.setState({
-        shopClistCurrentValue: this.state.shopClist.length === 0 ? '' : shopClist[0].id,
-      })
-    });
-    // console.log('shopClistCurrentValue', this.state.shopClistCurrentValue)
+  updateRenderDatas(initData, count) {
     let aisleCount = [];
     for (let i = 1; i <= 9; i++) {
       let newobj = {
@@ -208,23 +187,14 @@ class BatchTableField extends Component {
     }
     this.setState({
       aisleCount,
+      initData,
     })
 
-    if (initData.length !== 0) {
-      this.setState({
-        initData,
-      });
-    } else {
-      this.setState({
-        initData: [],
-      });
-    }
     this.setState({
       count: count,
     });
   }
   render() {
-    const { count, couponsShow, maxNumber } = this.props;
     const { aisleCount, initData } = this.state
     const components = {
       body: {
@@ -232,7 +202,7 @@ class BatchTableField extends Component {
         cell: EditableCell,
       },
     };
-    console.log('initData', this.props.initData)
+    // console.log('initData', this.props.initData)
     this.columns = [
       {
         title: '行',
@@ -247,7 +217,8 @@ class BatchTableField extends Component {
         dataIndex: 'count',
         render: (text, record) => {
           return (
-            <Select defaultValue={record.count} onChange={this.handleChangeCount.bind(this,record)} placeholder="请选择">
+            <Select defaultValue={record.count}  onChange={this.handleChangeCount.bind(this,record)}
+                    placeholder="请选择">
               {aisleCount.map((item) => {
                 return (
                   <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -307,13 +278,13 @@ class BatchTableField extends Component {
 
     return (
       <div className={styles.antButtons}>
-        <Button icon="plus" onClick={() => this.handleAdd(maxNumber)} type="primary" style={{ marginBottom: 16 }}>
+        <Button icon="plus" onClick={() => this.handleAdd()} type="primary" style={{ marginBottom: 16 }}>
           添加
         </Button>
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
-          dataSource={this.props.initData}
+          dataSource={initData}
           columns={columns}
           pagination={false}
           rowKey={record => record.key}

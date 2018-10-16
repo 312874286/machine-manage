@@ -8,11 +8,7 @@ const columns = [
     width: '12%',
     editable: false,
     render: (text, item) => (
-      (item.code) ? ((item.isDelete === 0) ? (
-        <div style={{background: '#e5f7d8'}}>货道: {item.code}</div>
-      ) : (
-        <div style={{background: '#ffe8e4'}}>货道: {item.code}</div>
-      )) : (<span />)
+      <div>货道: {item.code}</div>
     )
   },
   {
@@ -21,14 +17,11 @@ const columns = [
     width: '12%',
     editable: true,
     render: (text, item) => (
-      (item.code) ? ((item.isDelete === 0) ? (
-        <div style={{background: '#e5f7d8'}}>数量: {item.goodsCount}/{item.volumeCount}</div>
-      ) : (
-        <div style={{background: '#ffe8e4'}}>数量: {item.goodsCount}/{item.volumeCount}</div>
-      )) : (<span />)
+      <div>数量: {item.volumeCount}</div>
     )
   },
 ];
+const types = ['', '大弹簧货道', '小弹簧货道', '履带货道']
 class BatchAisleSetting extends React.Component {
   constructor(props) {
     super(props);
@@ -59,25 +52,23 @@ class BatchAisleSetting extends React.Component {
     return arr
   }
   render() {
-    const { editingKey, selectedRowKeys } = this.state;
     const { AisleList } = this.props
-    const r = AisleList[AisleList.length - 1].rowNo - 1
-    console.log('r', r)
-    let trLists = []
-    for (let i = 0; i < AisleList.length; i++) {
-      trLists = [...trLists, ...this.getAisleLists(AisleList[i])]
-    }
-    console.log('trLists', trLists)
     return (
       <div className={styles.editTable}>
-        <Table
-          // bordered
-          rowKey={i => i.code}
-          dataSource={trLists}
-          columns={columns}
-          rowClassName="editable-row"
-          pagination={false}
-        />
+        {AisleList.map((item) => {
+          return (
+            <div>
+              <span>{types[item.type]}</span>
+              <Table
+                rowKey={i => i.code}
+                dataSource={this.getAisleLists(item)}
+                columns={columns}
+                rowClassName="editable-row"
+                pagination={false}
+              />
+            </div>
+          );
+        })}
       </div>
     );
   }

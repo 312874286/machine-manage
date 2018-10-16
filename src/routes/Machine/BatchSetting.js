@@ -87,11 +87,9 @@ const CreateForm = Form.create()(
 const ManageAisleForm = Form.create()(
   (props) => {
     const {
-      ManageAislemodalVisible, ManageAisleEditModalConfirmLoading, ManageAisleHandleAddClick, ManageAisleHandleModalVisibleClick,
-      modalType, form,
-      handleClose, AisleList, handleStop, handleStart, message, updateGoodsCount
+      ManageAislemodalVisible, ManageAisleEditModalConfirmLoading, ManageAisleHandleAddClick,
+      ManageAisleHandleModalVisibleClick, modalData, AisleList,
     } = props;
-    const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -107,7 +105,7 @@ const ManageAisleForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{!modalType ? '编辑批次' : '新增批次'}</span>
+            <span class="modalTitle">查看批次</span>
           </div>
         }
         visible={ManageAislemodalVisible}
@@ -117,25 +115,16 @@ const ManageAisleForm = Form.create()(
         footer={null}
         width={1250}>
         <div className="manageAppBox">
-          <Form onSubmit={this.handleSearch}>
+          <Form>
             <FormItem {...formItemLayout} label="批次名称">
-              {getFieldDecorator('batchName', {
-                rules: [{ required: true, whitespace: true, message: '请填写批次名称' }],
-              })(<Input placeholder="请填写批次名称" />)}
+              <span>{modalData.batchName}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="批次编号">
-              {getFieldDecorator('id', {
-                rules: [{ required: true, whitespace: true, message: '请填写批次编号' }],
-              })(<Input placeholder="请填写两位整数" />)}
+              <span>{modalData.id}</span>
             </FormItem>
             <FormItem label="货道信息">
               <BatchAisleSetting
-                handleClose={handleClose}
                 AisleList={AisleList}
-                handleStop={handleStop}
-                handleStart={handleStart}
-                message={message}
-                updateGoodsCount={updateGoodsCount}
               />
             </FormItem>
           </Form>
@@ -166,7 +155,8 @@ export default class versionSetting extends PureComponent {
 
     ManageAislemodalVisible: false,
     ManageAisleEditModalConfirmLoading: false,
-    AisleList: []
+    AisleList: [],
+    modalData: {},
   };
   componentDidMount() {
     this.getLists();
@@ -294,7 +284,7 @@ export default class versionSetting extends PureComponent {
         batchName: data.batchName,
       });
     } else {
-      this.goodsHandleAdd()
+      // this.goodsHandleAdd()
       this.form.setFieldsValue({
         id: undefined,
         batchName: undefined,
@@ -372,20 +362,26 @@ export default class versionSetting extends PureComponent {
         console.log('res', res)
         this.setModalData(res.data)
         this.setState({
-          modalData: item,
-          goodsInitData: res.data.detailList.map((item, index) => {
-            return {
-              key: index,
-              rowNo: item.rowNo,
-              count: item.count,
-              type: item.type,
-              volumeCount: item.volumeCount,
-            }
-          }),
-          goodsCount: res.data.detailList.length
+          goodsInitData: [],
+          goodsCount: 0,
         }, () => {
           this.setState({
-            modalVisible: true,
+            modalData: item,
+            goodsInitData: res.data.detailList.map((item, index) => {
+              return {
+                key: index,
+                rowNo: item.rowNo,
+                count: item.count,
+                type: item.type,
+                volumeCount: item.volumeCount,
+              }
+            }),
+            goodsCount: res.data.detailList.length
+          }, () => {
+            this.setState({
+              modalVisible: true,
+              modalType: false,
+            })
           })
         })
       }
@@ -525,48 +521,6 @@ export default class versionSetting extends PureComponent {
         }, () => {
           const res = result.data.detailList
           console.log('res[res.length - 1]', res[res.length - 1].rowNo)
-          // let AisleList = []
-          // const r = res[res.length - 1].rowNo - 1
-          // console.log('r', r)
-          // // for (let i = 0; i < 56; i++) {
-          // //   let r = {}
-          // //   // console.log('i', i)
-          // //   for (let j = 0; j < res.length; j++) {
-          // //     // console.log('parseInt(result[j].code) === i',parseInt(result[j].code), i, j)
-          // //     if (parseInt(res[j].code) === (i+1)) {
-          // //       let item = res[j]
-          // //       r = {
-          // //         value: parseInt(item.code),
-          // //         key: item.id,
-          // //         code: item.code,
-          // //         goodsName: item.goodsName,
-          // //         goodsPrice: item.goodsPrice,
-          // //         volumeCount: item.volumeCount,
-          // //         goodsCount: item.goodsCount,
-          // //         workStatusreason: item.workStatusreason,
-          // //         isDelete: item.isDelete
-          // //       }
-          // //       AisleList.push(r);
-          // //       break;
-          // //     }
-          // //   }
-          // //   if (!AisleList[i]) {
-          // //     r = {
-          // //       value: i + 1,
-          // //       key: i + 1,
-          // //     }
-          // //     AisleList.push(r);
-          // //   }
-          // // }
-          // let trLists = []
-          // for (let i = 0; i < res.length; i++) {
-          //   trLists = [...trLists, ...this.getAisleLists(res[i])]
-          // }
-          // console.log('mmm', trLists)
-          // for (let i = 0; i <= r; i++) {
-          //   let tr = AisleList.filter(item => item.value <= ( i * 10 + 8 ) && item.value >= ( i * 10 + 1 ))
-          //   trLists = [...trLists, ...tr]
-          // }
           this.setState({
             AisleList: res,
           });
@@ -670,12 +624,8 @@ export default class versionSetting extends PureComponent {
           ManageAisleEditModalConfirmLoading={this.state.ManageAisleEditModalConfirmLoading}
           ManageAisleHandleAddClick={this.ManageAisleHandleAddClick}
           ManageAisleHandleModalVisibleClick={this.ManageAisleHandleModalVisibleClick}
-          handleClose={this.handleClose}
           AisleList={this.state.AisleList}
-          handleStop={this.handleStop}
-          handleStart={this.handleStart}
-          message={message}
-          updateGoodsCount={this.updateGoodsCount}
+          modalData={this.state.modalData}
         />
       </PageHeaderLayout>
     );

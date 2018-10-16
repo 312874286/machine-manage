@@ -6011,7 +6011,7 @@ const proxy = {
           },
           {
             "rowNo":2,
-            "count":10,
+            "count":9,
             "type":2,
             "volumeCount":12
           }
