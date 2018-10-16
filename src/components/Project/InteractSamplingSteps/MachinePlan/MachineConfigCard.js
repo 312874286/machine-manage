@@ -335,7 +335,8 @@ export default class MachineConfigCard extends Component {
               if (
                 editabel &&
                 (activity.isNew ||
-                  (type === 1 && activity.activityId === this.state.interactInfo.id))
+                  (type === 1 &&
+                    activity.activityId === this.state.interactInfo.id))
               ) {
                 props.onClick = () => {
                   this.handleScheduleClick(machine, activity, type);
@@ -682,6 +683,7 @@ export default class MachineConfigCard extends Component {
                     value={machine.machineId}
                     checked={machine.secular}
                     onChange={this.handleEditMachineExpireChange.bind(this)}
+                    disabled={machine.state === -1}
                   >
                     长期
                   </Checkbox>
