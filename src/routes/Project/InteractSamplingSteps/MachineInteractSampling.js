@@ -530,7 +530,6 @@ export default class MachineInteractSampling extends PureComponent {
   }
   renderExpandedRow(machine, isExpanded) {
     if (isExpanded) {
-      console.log(machine);
       const columns = [
         { title: "商品名称", dataIndex: "title" },
         { title: "商品数量", dataIndex: "num" },
