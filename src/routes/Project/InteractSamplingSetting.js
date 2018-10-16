@@ -604,7 +604,7 @@ export default class areaSettingList extends PureComponent {
             <span>
               <FormItem>
                 {getFieldDecorator("keyword")(
-                  <Input placeholder="请输入互派名称，互派游戏，负责人，机器编号，机器点位，商品编号，商品名称，商户信息等" />
+                  <Input placeholder="请输入互派名称，互派游戏，负责人，机器编号，机器点位，商品编号，商品名称" />
                 )}
               </FormItem>
             </span>
