@@ -211,7 +211,7 @@ export default class areaSettingList extends PureComponent {
           }
           if (!dayNumber) {
             if (!fieldsValue.dayNumber) {
-              message.info('如没有选择不限，请填写同一用户参与活动次数')
+              message.info('如没有选择不限，请填写同一用户获得商品次数')
               return false
             }
           }
