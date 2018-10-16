@@ -130,7 +130,12 @@ const WatchForm = Form.create()(props => {
           </FormItem>
           <FormItem {...formItemLayout} label="同一用户获得商品次数">
             <span>
-              {modalData.dayTimes === -1 ? "不限" : modalData.dayTimes}
+              {modalData.number === -1 ? "不限" : modalData.number}
+            </span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="同一用户每天获取商品次数">
+            <span>
+              {modalData.dayNumber === -1 ? "不限" : modalData.dayNumber}
             </span>
           </FormItem>
           <FormItem {...formItemLayout} label="4.2商品信息">
@@ -743,7 +748,7 @@ export default class areaSettingList extends PureComponent {
                 })
               }
             >
-              详情
+              编辑
             </a>
             <Divider
               type="vertical"
@@ -767,7 +772,7 @@ export default class areaSettingList extends PureComponent {
               结束
             </a>
             <Divider type="vertical" />
-            <a onClick={() => this.getInteractDetail(item)}>查看</a>
+            <a onClick={() => this.getInteractDetail(item)}>详情</a>
           </Fragment>
         )
       }
