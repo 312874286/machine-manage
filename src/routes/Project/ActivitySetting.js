@@ -969,30 +969,30 @@ export default class activitySettingList extends PureComponent {
       //   }
       // }
       // const rangeTimeValue = fieldsValue.rangeTime
-      const { goodsInitData, selectTypeValue } = this.state
-      console.log('goodsInitData', goodsInitData)
+      const { goodsInitData, selectTypeValue } = this.state;
+      console.log("goodsInitData", goodsInitData);
       if (selectTypeValue === 1) {
         for (let i = 0; i < goodsInitData.length; i++) {
           if (parseInt(goodsInitData[i].isVip) === 0) {
-            console.log('goodsInitData', goodsInitData[i].sessionKey)
+            console.log("goodsInitData", goodsInitData[i].sessionKey);
             if (goodsInitData[i].sessionKey) {
               message.config({
                 top: 100,
                 duration: 2,
-                maxCount: 1,
+                maxCount: 1
               });
-              message.warning(`非入会不要填写访问码`)
-              return false
+              message.warning(`非入会不要填写访问码`);
+              return false;
             }
           } else {
             if (!goodsInitData[i].sessionKey) {
               message.config({
                 top: 100,
                 duration: 2,
-                maxCount: 1,
+                maxCount: 1
               });
-              message.warning(`入会需要填写访问码`)
-              return false
+              message.warning(`入会需要填写访问码`);
+              return false;
             }
           }
         }
@@ -1616,7 +1616,8 @@ export default class activitySettingList extends PureComponent {
               params: {
                 activityCode: this.state.logId,
                 name: "pvuv",
-                outputType: 1
+                outputType: 1,
+                activityType: 1
               }
             }
           })
@@ -1645,7 +1646,8 @@ export default class activitySettingList extends PureComponent {
               params: {
                 activityCode: this.state.logId,
                 name: "goodsInfo",
-                outputType: 1
+                outputType: 1,
+                activityType: 1
               }
             }
           })
