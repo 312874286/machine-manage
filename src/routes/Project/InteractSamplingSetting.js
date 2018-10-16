@@ -748,7 +748,7 @@ export default class areaSettingList extends PureComponent {
                 })
               }
             >
-              详情
+              编辑
             </a>
             <Divider
               type="vertical"
@@ -772,7 +772,7 @@ export default class areaSettingList extends PureComponent {
               结束
             </a>
             <Divider type="vertical" />
-            <a onClick={() => this.getInteractDetail(item)}>查看</a>
+            <a onClick={() => this.getInteractDetail(item)}>详情</a>
           </Fragment>
         )
       }
