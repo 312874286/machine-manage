@@ -117,13 +117,25 @@ export default class MachineConfigCard extends Component {
       const machines = [...this.state.machineList];
       machines.filter(m => m.machineId === machine.machineId).forEach(m => {
         addMachineActivity(m, date);
+        if (m.machineActivity.some(mm => mm.isNew)) {
+          m.checked = true;
+        } else {
+          m.checked = false;
+        }
       });
       this.setState({
         machineList: machines
       });
     } else {
+      const machineEdit = this.state.machineEdit;
+      addMachineActivity(machineEdit, date);
+      if (machineEdit.machineActivity.some(mm => mm.isNew)) {
+        machineEdit.checked = true;
+      } else {
+        machineEdit.checked = false;
+      }
       this.setState({
-        machineEdit: addMachineActivity(this.state.machineEdit, date)
+        machineEdit
       });
     }
   }
@@ -136,11 +148,23 @@ export default class MachineConfigCard extends Component {
       const machines = [...this.state.machineList];
       machines.filter(m => m.machineId === machine.machineId).forEach(m => {
         removeMachineActivity(m, schedule);
+        if (m.machineActivity.some(mm => mm.isNew)) {
+          m.checked = true;
+        } else {
+          m.checked = false;
+        }
       });
       this.setState({ machineList: machines });
     } else {
+      const machineEdit = this.state.machineEdit;
+      removeMachineActivity(machineEdit, schedule);
+      if (machineEdit.machineActivity.some(mm => mm.isNew)) {
+        machineEdit.checked = true;
+      } else {
+        machineEdit.checked = false;
+      }
       this.setState({
-        machineEdit: removeMachineActivity(this.state.machineEdit, schedule)
+        machineEdit
       });
     }
   }
