@@ -154,21 +154,26 @@ export default class MachineConfigCard extends Component {
           if (!machine.machineActivity) {
             machine.machineActivity = [];
           }
-          if (
-            !machine.machineActivity.some(
-              ma =>
-                moment(d).isBetween(moment(ma.startTime), moment(ma.endTime)) ||
-                moment(d).isSame(ma.startTime) ||
-                moment(d).isSame(ma.endTime)
-            )
-          ) {
-            machine.machineActivity.push({
-              activityId: interactId,
-              activityName: interactName,
-              startTime: `${d} 00:00:00`,
-              endTime: `${d} 23:59:59`,
-              isNew: true
-            });
+          if (!moment(d).isBefore(moment())) {
+            if (
+              !machine.machineActivity.some(
+                ma =>
+                  moment(d).isBetween(
+                    moment(ma.startTime),
+                    moment(ma.endTime)
+                  ) ||
+                  moment(d).isSame(ma.startTime) ||
+                  moment(d).isSame(ma.endTime)
+              )
+            ) {
+              machine.machineActivity.push({
+                activityId: interactId,
+                activityName: interactName,
+                startTime: `${d} 00:00:00`,
+                endTime: `${d} 23:59:59`,
+                isNew: true
+              });
+            }
           }
         });
       } else {
@@ -205,21 +210,23 @@ export default class MachineConfigCard extends Component {
         if (!machine.machineActivity) {
           machine.machineActivity = [];
         }
-        if (
-          !machine.machineActivity.some(
-            ma =>
-              moment(d).isBetween(moment(ma.startTime), moment(ma.endTime)) ||
-              moment(d).isSame(ma.startTime) ||
-              moment(d).isSame(ma.endTime)
-          )
-        ) {
-          machine.machineActivity.push({
-            activityId: interactId,
-            activityName: interactName,
-            startTime: `${d} 00:00:00`,
-            endTime: `${d} 23:59:59`,
-            isNew: true
-          });
+        if (!moment(d).isBefore(moment())) {
+          if (
+            !machine.machineActivity.some(
+              ma =>
+                moment(d).isBetween(moment(ma.startTime), moment(ma.endTime)) ||
+                moment(d).isSame(ma.startTime) ||
+                moment(d).isSame(ma.endTime)
+            )
+          ) {
+            machine.machineActivity.push({
+              activityId: interactId,
+              activityName: interactName,
+              startTime: `${d} 00:00:00`,
+              endTime: `${d} 23:59:59`,
+              isNew: true
+            });
+          }
         }
       });
     } else {
@@ -427,7 +434,10 @@ export default class MachineConfigCard extends Component {
                               <div key={date} className="scroll-item">
                                 {this.state.machineList.map(machine => {
                                   const props = { key: machine.machineId };
-                                  if (!machine.disabled) {
+                                  if (
+                                    !machine.disabled &&
+                                    !moment(date).isBefore(moment())
+                                  ) {
                                     props.onClick = () => {
                                       this.handleScheduleDayClick(
                                         date,
@@ -650,15 +660,15 @@ export default class MachineConfigCard extends Component {
                     <div className="scroll-content-main">
                       <div className="content">
                         {this.state.dates.map(date => {
+                          const props = {};
+                          if (!moment(date).isBefore(moment())) {
+                            props.onClick = () => {
+                              this.handleScheduleDayClick(date, machine, 1);
+                            };
+                          }
                           return (
                             <div key={date} className="scroll-item">
-                              <div
-                                onClick={() => {
-                                  this.handleScheduleDayClick(date, machine, 1);
-                                }}
-                              >
-                                {date}
-                              </div>
+                              {<div {...props}>{date}</div>}
                             </div>
                           );
                         })}
