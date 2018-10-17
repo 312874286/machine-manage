@@ -219,7 +219,7 @@ export default class areaSettingList extends PureComponent {
         if (allGoods.length > 0) {
           for (let i = 0; i < allGoods.length; i++) {
             if (!allGoods[i].check) {
-              if (allGoods[i].userDayNumber === 0) {
+              if (allGoods[i].userDayNumber === 0 || !allGoods[i].userDayNumber) {
                 message.info('如没有选择不限，请填写可派发数量')
                 return false
               }
