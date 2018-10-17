@@ -331,14 +331,12 @@ export default class MachineConfigCard extends Component {
             const startIndex = dates.indexOf(startStr);
             const endIndex = dates.indexOf(endStr);
             if (
-              searchStartDate.isBetween(start, end) ||
-              searchStartDate.isSame(start) ||
-              searchStartDate.isSame(end) ||
-              searchEndDate.isBetween(start, end) ||
-              searchEndDate.isSame(start) ||
-              searchEndDate.isSame(end) ||
-              start.isBetween(searchStartDate, searchEndDate) ||
-              end.isBetween(searchStartDate, searchEndDate)
+              (!searchStartDate.isBefore(start) &&
+                !searchStartDate.isAfter(end)) ||
+              (!searchEndDate.isBefore(start) && !searchEndDate.isAfter(end)) ||
+              (!start.isBefore(searchStartDate) &&
+                !start.isAfter(searchEndDate)) ||
+              (!end.isBefore(searchStartDate) && !end.isAfter(searchEndDate))
             ) {
               const top = index * height;
               let elWidth = allDay.length * width;
