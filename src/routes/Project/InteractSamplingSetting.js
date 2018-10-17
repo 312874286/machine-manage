@@ -696,7 +696,7 @@ export default class areaSettingList extends PureComponent {
         key: "realDay",
         render: (text, item) => (
           <Fragment>
-            <span>
+            <span style={{ color: parseInt(item.status) === 4 ? 'rgba(226, 10, 30, 1)' : '' }}>
               {item.realDay ? item.realDay : 0}/{item.day}
             </span>
           </Fragment>
@@ -709,7 +709,7 @@ export default class areaSettingList extends PureComponent {
         key: "realNum",
         render: (text, item) => (
           <Fragment>
-            <span style={{ color: parseInt(item.status) === 4 ? 'rgba(226, 10, 30, 1)' : '' }}>
+            <span>
               {item.realNum ? item.realNum : 0}/{item.number ? item.number : 0}
             </span>
           </Fragment>
