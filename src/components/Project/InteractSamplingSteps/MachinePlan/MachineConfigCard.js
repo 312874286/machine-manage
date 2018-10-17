@@ -178,7 +178,7 @@ export default class MachineConfigCard extends Component {
           if (!machine.machineActivity) {
             machine.machineActivity = [];
           }
-          if (!moment(d).isBefore(moment())) {
+          if (!moment(d).isBefore(moment().format(dateFormat))) {
             if (
               !machine.machineActivity.some(
                 ma =>
@@ -234,7 +234,7 @@ export default class MachineConfigCard extends Component {
         if (!machine.machineActivity) {
           machine.machineActivity = [];
         }
-        if (!moment(d).isBefore(moment())) {
+        if (!moment(d).isBefore(moment().format(dateFormat))) {
           if (
             !machine.machineActivity.some(
               ma =>
@@ -460,7 +460,7 @@ export default class MachineConfigCard extends Component {
                                   const props = { key: machine.machineId };
                                   if (
                                     !machine.disabled &&
-                                    !moment(date).isBefore(moment())
+                                    !moment(date).isBefore(moment().format(dateFormat))
                                   ) {
                                     props.onClick = () => {
                                       this.handleScheduleDayClick(
@@ -685,7 +685,7 @@ export default class MachineConfigCard extends Component {
                       <div className="content">
                         {this.state.dates.map(date => {
                           const props = {};
-                          if (!moment(date).isBefore(moment())) {
+                          if (!moment(date).isBefore(moment().format(dateFormat))) {
                             props.onClick = () => {
                               this.handleScheduleDayClick(date, machine, 1);
                             };
