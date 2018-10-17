@@ -549,7 +549,7 @@ export default class areaSettingList extends PureComponent {
       }
     });
   }
-  getInteractShopList = (merchantId, shopId) => {
+  getInteractShopList = (merchantId) => {
     // getInteractMerchantList
     console.log('item.sellerId', merchantId)
     this.props.dispatch({
@@ -562,12 +562,6 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       this.setState({
         shops: res.data,
-      }, () => {
-        if (shopId) {
-          this.form.setFieldsValue({
-            shopId,
-          });
-        }
       })
     });
   }
