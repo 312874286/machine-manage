@@ -681,7 +681,14 @@ export default class areaSettingList extends PureComponent {
         title: "互派商品数",
         width: "10%",
         dataIndex: "goodsNum",
-        key: "goodsNum"
+        key: "goodsNum",
+        render: (text, item) => (
+          <Fragment>
+            <span>
+              {item.goodsNum ? item.goodsNum : 0}
+            </span>
+          </Fragment>
+        ),
       },
       {
         title: "互派持续时长/天",
