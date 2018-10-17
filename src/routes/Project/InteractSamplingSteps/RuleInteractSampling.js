@@ -224,6 +224,8 @@ export default class areaSettingList extends PureComponent {
                 return false
               }
             }
+          }
+          for (let i = 0; i < allGoods.length; i++) {
             if (allGoods[i].check) {
               allGoods[i].userDayNumber = -1
             }
