@@ -599,21 +599,22 @@ export default class areaSettingList extends PureComponent {
     });
     this.setModalData();
     this.getAllGoods()
-    if (item) {
-      if (item.sellerId) {
-        await this.getInteractShopList(item.sellerId)
-        await this.form.setFieldsValue({
-          sellerId: item.sellerId,
-          shopId: item.id,
-        });
-      }
-    }
     if (saveAndAddModal) {
       if (saveAndAddModal.sellerId) {
         await this.getInteractShopList(saveAndAddModal.sellerId)
         await this.form.setFieldsValue({
           sellerId: saveAndAddModal.sellerId,
-          shopId: undefined,
+          shopId: saveAndAddModal.shopId,
+        });
+      }
+    }
+    if (item) {
+      if (item.sellerId) {
+        await this.getInteractShopList(item.sellerId, item.id)
+        console.log('item', item.id, item.sellerId, this.state.shops)
+        await this.form.setFieldsValue({
+          sellerId: item.sellerId,
+          shopId: item.id,
         });
       }
     }
@@ -813,6 +814,7 @@ export default class areaSettingList extends PureComponent {
           this.setState({
             modalData: {},
             editModalConfirmLoading: false,
+            GoodTypePlaceHolder: 0,
           });
           if (flag === 0) {
             this.setModalData()
@@ -976,7 +978,8 @@ export default class areaSettingList extends PureComponent {
             editShopsModalConfirmLoading: false,
             modalShopsData: {},
             saveAndAddModal: {
-              sellerId: params.sellerId
+              sellerId: params.sellerId,
+              shopId: undefined
             }
           });
           if (flag === 0) {
