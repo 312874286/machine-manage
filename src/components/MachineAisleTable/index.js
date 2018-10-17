@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, Button, message, Popover } from 'antd';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -100,9 +100,21 @@ class MachineAisleTable extends React.Component {
         className: 'textOverflow',
         render: (text, item) => (
           (item.code) ? ((item.isDelete === 0) ? (
-            <div style={{background: '#e5f7d8'}}>商品: {item.goodsName}</div>
+            <div style={{background: '#e5f7d8'}}>商品:
+              <Popover
+                content={item.goodsName}
+                trigger="hover">
+                {item.goodsName}
+              </Popover>
+            </div>
           ) : (
-            <div style={{background: '#ffe8e4'}}>商品: {item.goodsName}</div>
+            <div style={{background: '#ffe8e4'}}>商品:
+              <Popover
+                content={item.goodsName}
+                trigger="hover">
+                {item.goodsName}
+              </Popover>
+            </div>
           )) : (<span />)
         )
       },

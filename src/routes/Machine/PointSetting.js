@@ -39,8 +39,8 @@ const getValue = obj =>
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 
-const pointTypeOptions = [{id: 1, name: '活动点位'}, {id: 0, name: '渠道点位'}]
-const type = ['渠道点位', '活动点位']
+const pointTypeOptions = [{id: 1, name: '活动点位'}, {id: 0, name: '渠道点位'}, {id: 2, name: '合作点位'}]
+const type = ['渠道点位', '活动点位', '合作点位']
 
 const CreateForm = Form.create()(
   (props) => {
@@ -135,12 +135,19 @@ const CreateForm = Form.create()(
             <FormItem {...formItemLayout} label="点位类型">
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请选择点位类型' }],
-                initialValue: '0',
+                // initialValue: '0',
+                // <RadioGroup>
+                // <Radio value="0">渠道点位</Radio>
+                // <Radio value="1">活动点位</Radio>
+                // </RadioGroup>
               })(
-                <RadioGroup>
-                  <Radio value="0">渠道点位</Radio>
-                  <Radio value="1">活动点位</Radio>
-                </RadioGroup>
+                <Select placeholder="选择点位类型">
+                  {pointTypeOptions.map((item) => {
+                    return (
+                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
               )}
             </FormItem>
             <FormItem
@@ -692,7 +699,7 @@ export default class PointSettingList extends PureComponent {
           remark: data.remark || '',
           monitorStart: data.monitorStart ? moment(data.monitorStart, 'HH:mm:ss') : moment('00:00:00', 'HH:mm:ss'),
           monitorEnd: data.monitorEnd ? moment(data.monitorEnd, 'HH:mm:ss') : moment('23:59:59', 'HH:mm:ss'),
-          type: data.type >= 0 ? data.type.toString() : ''
+          type: data.type
         });
       })
     } else {
@@ -709,7 +716,7 @@ export default class PointSettingList extends PureComponent {
           remark: '',
           monitorStart: moment('00:00:00', 'HH:mm:ss'),
           monitorEnd: moment('23:59:59', 'HH:mm:ss'),
-          type: '0',
+          type: undefined,
         });
       })
     }
