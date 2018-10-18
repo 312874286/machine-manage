@@ -35,7 +35,7 @@ const statusOption = [
   { id: 4, name: "已超时" }
 ];
 const sortOption = [
-  { id: "goodsSend DESC", name: "按发放率倒序" },
+  { id: "goodsSend desc,real_num desc", name: "按发放率倒序" },
   { id: "goodsSend,real_num", name: "按发放率正序" },
   { id: "real_day DESC", name: "按持续时长倒序" },
   { id: "real_day", name: "按持续时长正序" }
