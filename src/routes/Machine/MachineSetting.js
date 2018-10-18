@@ -603,7 +603,7 @@ const EditMonitoringForm = Form.create()(
       logRefresh, logUpdate, pointType, grabLogOnChange, machineLogLists, pointChange, machineId,
       appUpdate, appRefresh, returnBtn, machineDetail, monitorKey,
       logStartTime, logEndTime,
-      customLogEndTime, customLogStartTime, getLogMessage
+      customLogEndTime, customLogStartTime, getLogMessage, teamWorkMachineFlag
     } = props;
     const formItemLayout = {
       labelCol: {
@@ -670,7 +670,7 @@ const EditMonitoringForm = Form.create()(
                   <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh(machineId)}>刷新</Button>
                 </div>
                 <div>
-                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
+                  <Button style={{ width: '120px', marginRight: '10px', display: teamWorkMachineFlag === 2 ? 'none' : '' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
                   <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>
                 </div>
               </div>
@@ -1835,6 +1835,7 @@ export default class machineSettingList extends PureComponent {
       machineId: item.id,
       modalData: item,
       monitorKey: '0',
+      teamWorkMachineFlag: item.machineType,
     }, () => {
       this.getMachineStatus(this.state.modalData);
     })
@@ -2685,6 +2686,8 @@ export default class machineSettingList extends PureComponent {
           customLogEndTime={this.state.customLogEndTime}
 
           getLogMessage={this.state.getLogMessage}
+
+          teamWorkMachineFlag={teamWorkMachineFlag}
         />
         <Modal
           title={
