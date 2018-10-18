@@ -418,7 +418,7 @@ const WatchForm = Form.create()(
                     <div className={styles.statusBox}>
                       <span>掉货开关</span>
                       <span>
-                   {machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : '打开') : ''}
+                   {machineDetail.machineStatus ? (machineDetail.machineStatus.dropGoodsSwitch === 0 ? '关闭' : (machineDetail.machineStatus.dropGoodsSwitch === -1 ? '未知' : '打开')) : ''}
                   </span>
                     </div>
                     <div className={styles.statusBox}>
