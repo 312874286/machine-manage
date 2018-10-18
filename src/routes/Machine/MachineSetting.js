@@ -2212,13 +2212,13 @@ export default class machineSettingList extends PureComponent {
 
   // handleManageClick 管理
   handleManageClick = (item) => {
-    if (item.machineType === 2) {
+    if (item.machineType === 1 || item.machineType === 0) {
       this.setState({
-        teamWorkLists: teamWorkTabList
+        teamWorkLists: tabList
       })
     } else {
       this.setState({
-        teamWorkLists: tabList
+        teamWorkLists: teamWorkTabList
       })
     }
     this.setState({
