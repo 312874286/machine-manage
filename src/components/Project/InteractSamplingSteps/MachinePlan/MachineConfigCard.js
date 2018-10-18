@@ -318,8 +318,8 @@ export default class MachineConfigCard extends Component {
         : [this.state.editDateStart, this.state.editDateEnd];
     if (searchDate.length > 0) {
       const maxWidth = dates.length * width;
-      let searchStartDate = searchDate[0];
-      let searchEndDate = searchDate[1];
+      let searchStartDate = moment(searchDate[0].format(dateFormat));
+      let searchEndDate = moment(searchDate[1].format(dateFormat));
       machines.forEach((machine, index) => {
         if (machine.machineActivity && machine.machineActivity.length > 0) {
           machine.machineActivity.forEach(activity => {
@@ -331,14 +331,12 @@ export default class MachineConfigCard extends Component {
             const startIndex = dates.indexOf(startStr);
             const endIndex = dates.indexOf(endStr);
             if (
-              searchStartDate.isBetween(start, end) ||
-              searchStartDate.isSame(start) ||
-              searchStartDate.isSame(end) ||
-              searchEndDate.isBetween(start, end) ||
-              searchEndDate.isSame(start) ||
-              searchEndDate.isSame(end) ||
-              start.isBetween(searchStartDate, searchEndDate) ||
-              end.isBetween(searchStartDate, searchEndDate)
+              (!searchStartDate.isBefore(start) &&
+                !searchStartDate.isAfter(end)) ||
+              (!searchEndDate.isBefore(start) && !searchEndDate.isAfter(end)) ||
+              (!start.isBefore(searchStartDate) &&
+                !start.isAfter(searchEndDate)) ||
+              (!end.isBefore(searchStartDate) && !end.isAfter(searchEndDate))
             ) {
               const top = index * height;
               let elWidth = allDay.length * width;
@@ -458,6 +456,12 @@ export default class MachineConfigCard extends Component {
                               <div key={date} className="scroll-item">
                                 {this.state.machineList.map(machine => {
                                   const props = { key: machine.machineId };
+                                  console.log(
+                                    date,
+                                    moment(date).isBefore(
+                                      moment().format(dateFormat)
+                                    )
+                                  );
                                   if (
                                     !machine.disabled &&
                                     !moment(date).isBefore(
