@@ -2212,13 +2212,13 @@ export default class machineSettingList extends PureComponent {
 
   // handleManageClick 管理
   handleManageClick = (item) => {
-    if (item.machineType === 1 || item.machineType === 0) {
+    if (item.machineType === 2) {
       this.setState({
-        teamWorkLists: tabList
+        teamWorkLists: teamWorkTabList
       })
     } else {
       this.setState({
-        teamWorkLists: teamWorkTabList
+        teamWorkLists: tabList
       })
     }
     this.setState({
@@ -2794,7 +2794,7 @@ export default class machineSettingList extends PureComponent {
                 </div>
               </div>
             </div>
-            <div style={{ display: managekey === '2' && teamWorkMachineFlag === 2 ? '' : 'none' }}>
+            <div style={{ display: managekey === '2' && (teamWorkMachineFlag !== 0 || teamWorkMachineFlag !== 1) ? '' : 'none' }}>
               <ManageAisleForm
                 ref={this.saveManageAisleFormRef}
                 ManageAislemodalVisible={this.state.ManageAislemodalVisible}
@@ -2809,7 +2809,7 @@ export default class machineSettingList extends PureComponent {
                 updateGoodsCount={this.updateGoodsCount}
               />
             </div>
-            <div style={{ display: managekey === '3' && teamWorkMachineFlag === 2 ? '' : 'none' }}>
+            <div style={{ display: managekey === '3' && (teamWorkMachineFlag !== 0 || teamWorkMachineFlag !== 1) ? '' : 'none' }}>
               <Form>
                 <FormItem {...formItemLayout} label="当前温度">
                   <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
