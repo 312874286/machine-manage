@@ -369,11 +369,11 @@ const CreateForm = Form.create()(props => {
                 shopClist={shopClist}
                 shopHandle={shopHandle}
                 goodsHandle={goodsHandle}
-                goodsHandleAdd={goodsHandleAdd}
-                goodsHandleDelete={goodsHandleDelete}
+                // goodsHandleAdd={goodsHandleAdd}
+                // goodsHandleDelete={goodsHandleDelete}
                 goodsHandleChange={goodsHandleChange}
-                couponsShow={!couponsShow}
-                maxNumber={maxNumber}
+                // couponsShow={!couponsShow}
+                // maxNumber={maxNumber}
               />
               {/*</FormItem>*/}
             </div>
@@ -1028,7 +1028,8 @@ export default class activitySettingList extends PureComponent {
             this.setState({
               modalData: {},
               editModalConfirmLoading: false,
-              modalVisible: false
+              modalVisible: false,
+              sourceData: [],
             });
           }
           this.setState({
@@ -1506,8 +1507,8 @@ export default class activitySettingList extends PureComponent {
         if (fieldsValue.provinceCityAreaTrade.length > 0) {
           localCode =
             fieldsValue.provinceCityAreaTrade[
-              fieldsValue.provinceCityAreaTrade.length - 1
-            ];
+            fieldsValue.provinceCityAreaTrade.length - 1
+              ];
         }
       }
       // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
@@ -1561,8 +1562,8 @@ export default class activitySettingList extends PureComponent {
         key: (key += 1),
         id: item.id,
         shopName: item.shopName,
-        isVip: 1,
-        sessionKey: item.sessionKey ? item.sessionKey : "请填写访问码"
+        isVip: item.isVip ? item.isVip : 0,
+        sessionKey: item.sessionKey ? item.sessionKey : ''
       };
     });
     // console.log('targetData3333', targetData)
@@ -1573,11 +1574,11 @@ export default class activitySettingList extends PureComponent {
   };
   goodsHandle = (initData, value, record) => {
     console.log("1111record::", initData, record);
-    if (value === 1) {
-      initData[record.key - 1].sessionKey = "请填写访问码";
-    } else {
-      initData[record.key - 1].sessionKey = "";
-    }
+    // if (value === 1) {
+    //   initData[record.key - 1].sessionKey = "请填写访问码";
+    // } else {
+    //   initData[record.key - 1].sessionKey = "";
+    // }
     console.log("value", value);
     this.setState(
       {
@@ -1590,6 +1591,18 @@ export default class activitySettingList extends PureComponent {
       }
     );
   };
+  goodsHandleChange = (row) => {
+    const newData = [...this.state.goodsInitData];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+
+    this.setState({ goodsInitData: newData });
+    // console.log('goodsHandleChange::', row);
+  }
   getGoodsNumber = (value, record) => {
     let vipTables = this.state.targetData;
     const vip = [{ id: 0, name: "" }, { id: 1, name: "请填写访问码" }];
@@ -1979,8 +1992,8 @@ export default class activitySettingList extends PureComponent {
           shopClist={this.state.shopClist}
           goodsHandle={this.goodsHandle}
           shopHandle={this.shopHandle}
-          goodsHandleAdd={this.goodsHandleAdd}
-          goodsHandleDelete={this.goodsHandleDelete}
+          // goodsHandleAdd={this.goodsHandleAdd}
+          // goodsHandleDelete={this.goodsHandleDelete}
           goodsHandleChange={this.goodsHandleChange}
         />
         <WatchForm

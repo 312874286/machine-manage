@@ -54,13 +54,13 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
-const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位']
+const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位', '', '', '', '', '已在点位']
 const appStatus = ['未启动', '前台运行', '后台运行']
 const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}]
+const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}, {id: 2, name: '合作机器'}]
 const pointStatusOptions = [{id: 1, name: '机器开机'}, {id: 2, name: '初始化机器 '}, {id: 3, name: '通过测试'}, {id: 4, name: '设置在点位'}]
-const machineType = ['渠道机器', '活动机器']
+const machineType = ['渠道机器', '活动机器', '合作机器']
 
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
@@ -69,7 +69,20 @@ message.config({
   duration: 2,
   maxCount: 1,
 });
-
+const tabList = [
+  {id: '0', name: '重置点位'},
+  {id: '1', name: '管理APP'},
+  {id: '2', name: '管理货道'},
+  {id: '3', name: '机器温度'},
+  {id: '4', name: '修改编号'},
+  {id: '5', name: '系统状态'},
+]
+const teamWorkTabList = [
+  {id: '0', name: '重置点位'},
+  {id: '1', name: '管理APP'},
+  {id: '4', name: '修改编号'},
+  {id: '5', name: '系统状态'},
+]
 let mySetInterval = null
 let myLogSetInterval = null
 
@@ -860,6 +873,9 @@ export default class machineSettingList extends PureComponent {
     machineCodeOld: '',
 
     getLogMessage2: '数据加载中，请稍等',
+
+    teamWorkMachineFlag: '',
+    teamWorkLists: [],
 
   };
   constructor(props) {
@@ -2196,6 +2212,15 @@ export default class machineSettingList extends PureComponent {
 
   // handleManageClick 管理
   handleManageClick = (item) => {
+    if (item.machineType === 2) {
+      this.setState({
+        teamWorkLists: teamWorkTabList
+      })
+    } else {
+      this.setState({
+        teamWorkLists: tabList
+      })
+    }
     this.setState({
       modalData: item,
       editManageFormVisible: true,
@@ -2203,6 +2228,7 @@ export default class machineSettingList extends PureComponent {
       TemperatureSelected: undefined,
       machineCodeOld: item.machineCode,
       machineCodeNew: undefined,
+      teamWorkMachineFlag: item.machineType,
     });
     this.handleEditClick(item)
   }
@@ -2419,7 +2445,10 @@ export default class machineSettingList extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { account, selectedRows, modalVisible, editModalConfirmLoading, modalData, updateList, appLists, AisleList, message, appLists2, createTime } = this.state;
+    const { account, selectedRows,
+      modalVisible, editModalConfirmLoading, modalData,
+      updateList, appLists, AisleList, message, appLists2,
+      createTime, teamWorkMachineFlag, managekey, teamWorkLists } = this.state;
     const columns = [
       {
         title: '机器编号',
@@ -2615,59 +2644,6 @@ export default class machineSettingList extends PureComponent {
           editMachineCodeHandleModalVisibleClick={this.editMachineCodeHandleModalVisibleClick}
           editMachineCodeEditModalConfirmLoading={this.state.editMachineCodeEditModalConfirmLoading}
         />
-        {/*<Modal*/}
-          {/*title={*/}
-            {/*<div className="modalBox">*/}
-              {/*<span className="leftSpan"></span>*/}
-              {/*<span className="modalTitle">管理App</span>*/}
-            {/*</div>}*/}
-          {/*visible={this.state.ManageAppmodalVisible}*/}
-          {/*onCancel={() => this.ManageAppHandleModalVisibleClick()}*/}
-          {/*width={800}*/}
-          {/*footer={null}*/}
-          {/*confirmLoading={this.state.ManageAppEditModalConfirmLoading}*/}
-        {/*>*/}
-          {/*<div id="manageAppBox">*/}
-            {/*<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>*/}
-              {/*<div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>*/}
-                {/*<div>*/}
-                  {/*<div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>*/}
-                  {/*<div style={{ color: '#999'}}>上次更新时间：{createTime}</div>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                  {/*<Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>*/}
-                  {/*<Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2)}>更新</Button>*/}
-                {/*</div>*/}
-              {/*</div>*/}
-            {/*</div>*/}
-            {/*<Table*/}
-              {/*id="appTable"*/}
-              {/*className={styles.appTable}*/}
-              {/*columns={columns1}*/}
-              {/*dataSource={updateList}*/}
-              {/*rowKey={record => record.appPackageName}*/}
-              {/*pagination={false} />*/}
-            {/*<div style={{ padding: '10px' }}  className={styles.manageAppBox}>*/}
-              {/*<Row gutter={16}>*/}
-                {/*<Col span={12}>*/}
-                  {/*<div className={styles.leftBox}>*/}
-                    {/*/!*<Card title="切换App" bordered={false}>*!/*/}
-                    {/*<ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />*/}
-                    {/*/!*</Card>*!/*/}
-                  {/*</div>*/}
-                {/*</Col>*/}
-                {/*<Col span={12}>*/}
-                  {/*/!*<Card title="升级App" bordered={false}>*!/*/}
-                  {/*<div className={styles.rightBox}>*/}
-                    {/*<ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />*/}
-                  {/*</div>*/}
-                  {/*/!*</Card>*!/*/}
-                {/*</Col>*/}
-              {/*</Row>*/}
-            {/*</div>*/}
-          {/*</div>*/}
-        {/*</Modal>*/}
-
         <EditMonitoringForm
           editMonitoringFormVisible={this.state.editMonitoringFormVisible}
           editMonitoringHandleModalVisibleClick={this.editMonitoringHandleModalVisibleClick}
@@ -2723,136 +2699,162 @@ export default class machineSettingList extends PureComponent {
           width={1250}>
           <div class="manageAppBox">
             <Tabs type="card" onChange={this.manageCallBack} activeKey={ this.state.managekey }>
-              <TabPane tab="重置点位" key="0">
-                <EditPointForm
-                  ref={this.savePointFormRef}
-                  editPointmodalVisible={this.state.editPointmodalVisible}
-                  editPointHandleAddClick={this.editPointHandleAddClick}
-                  editPointHandleModalVisibleClick={this.editPointHandleModalVisibleClick}
-                  editPointEditModalConfirmLoading={this.state.editPointEditModalConfirmLoading}
-                  data={this.state.data}
-                  // modalData={this.state.modalData}
-                  handleChange={this.handleChange}
-                  onPopupScroll={this.onPopupScroll}
-                  onSelect={this.onSelect}
-                  onSearch={this.getPointSettingList}
-                  fetching={this.state.fetching}
-                  handleSupervisorySwitch={this.handleSupervisorySwitch}
-                  handleSupervisoryStartTime={this.handleSupervisoryStartTime}
-                  handleSupervisoryEndTime={this.handleSupervisoryEndTime}
-                  // value={this.state.value}
-                  modalData={this.state.modalData}
-                  pointName={this.state.pointName}
-                  switchStatus={this.state.switchStatus}
-                  supervisoryStartTime={this.state.supervisoryStartTime}
-                  supervisoryEndTime={this.state.supervisoryEndTime}
+              {teamWorkLists.map((item) => {
+                return (
+                  <TabPane tab={item.name} key={item.id}>
 
-                  editManageHandleModalVisibleClick={this.editManageHandleModalVisibleClick}
-                />
-              </TabPane>
-              <TabPane tab="管理APP" key="1">
-                <div id="manageAppBox">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>
-                    <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>
-                      <div>
-                        <div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>
-                        <div style={{ color: '#999'}}>上次更新时间：{createTime}</div>
-                      </div>
-                      <div>
-                        <Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>
-                        <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2, '更新')}>更新</Button>
-                      </div>
+                  </TabPane>
+                );
+              })}
+              {/*<TabPane tab="00" key="0">*/}
+              {/*</TabPane>*/}
+              {/*<TabPane tab="11" key="1">*/}
+              {/*</TabPane>*/}
+              {/*<div style={{ display: teamWorkMachineFlag === 2 ? 'none' : '' }}>*/}
+                {/*<TabPane  tab="22" key="2" disabled={ teamWorkMachineFlag === 2 ? true : false }>*/}
+                  {/**/}
+                {/*</TabPane>*/}
+              {/*</div>*/}
+
+              {/*<TabPane  key="3" disabled={ teamWorkMachineFlag === 2 ? true : false }>*/}
+               {/**/}
+              {/*</TabPane>*/}
+              {/*<TabPane  key="4">*/}
+                {/**/}
+              {/*</TabPane>*/}
+              {/*<TabPane  key="5">*/}
+                {/**/}
+              {/*</TabPane>*/}
+            </Tabs>
+            <div style={{ display: managekey === '0' ? '' : 'none' }}>
+              <EditPointForm
+                ref={this.savePointFormRef}
+                editPointmodalVisible={this.state.editPointmodalVisible}
+                editPointHandleAddClick={this.editPointHandleAddClick}
+                editPointHandleModalVisibleClick={this.editPointHandleModalVisibleClick}
+                editPointEditModalConfirmLoading={this.state.editPointEditModalConfirmLoading}
+                data={this.state.data}
+                // modalData={this.state.modalData}
+                handleChange={this.handleChange}
+                onPopupScroll={this.onPopupScroll}
+                onSelect={this.onSelect}
+                onSearch={this.getPointSettingList}
+                fetching={this.state.fetching}
+                handleSupervisorySwitch={this.handleSupervisorySwitch}
+                handleSupervisoryStartTime={this.handleSupervisoryStartTime}
+                handleSupervisoryEndTime={this.handleSupervisoryEndTime}
+                // value={this.state.value}
+                modalData={this.state.modalData}
+                pointName={this.state.pointName}
+                switchStatus={this.state.switchStatus}
+                supervisoryStartTime={this.state.supervisoryStartTime}
+                supervisoryEndTime={this.state.supervisoryEndTime}
+
+                editManageHandleModalVisibleClick={this.editManageHandleModalVisibleClick}
+              />
+            </div>
+            <div style={{ display: managekey === '1' ? '' : 'none' }}>
+              <div id="manageAppBox">
+                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'column', }}>
+                  <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', padding: '0 30px 20px 40px' }}>
+                    <div>
+                      <div style={{ color: '#999'}}>请您先点击更新，获取最新数据</div>
+                      <div style={{ color: '#999'}}>上次更新时间：{createTime}</div>
+                    </div>
+                    <div>
+                      <Button style={{ width: '120px', marginRight: '10px' }} type="Default" onClick={() => this.appRefresh()}>刷新</Button>
+                      <Button style={{ width: '120px' }} type="primary" onClick={() => this.appUpdate(2, '更新')}>更新</Button>
                     </div>
                   </div>
-                  <Table
-                    id="appTable"
-                    className={styles.appTable}
-                    columns={columns1}
-                    dataSource={updateList}
-                    rowKey={record => record.appPackageName}
-                    pagination={false} />
-                  <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
-                    <Row gutter={16}>
-                      <Col span={12}>
-                        <div className={styles.leftBox}>
-                          {/*<Card title="切换App" bordered={false}>*/}
-                          <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
-                          {/*</Card>*/}
-                        </div>
-                      </Col>
-                      <Col span={12}>
-                        {/*<Card title="升级App" bordered={false}>*/}
-                        <div className={styles.rightBox}>
-                          <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
-                        </div>
-                        {/*</Card>*/}
-                      </Col>
-                    </Row>
-                  </div>
                 </div>
-              </TabPane>
-              <TabPane tab="管理货道" key="2">
-                <ManageAisleForm
-                  ref={this.saveManageAisleFormRef}
-                  ManageAislemodalVisible={this.state.ManageAislemodalVisible}
-                  ManageAisleEditModalConfirmLoading={this.state.ManageAisleEditModalConfirmLoading}
-                  ManageAisleHandleAddClick={this.ManageAisleHandleAddClick}
-                  ManageAisleHandleModalVisibleClick={this.ManageAisleHandleModalVisibleClick}
-                  handleClose={this.handleClose}
-                  AisleList={AisleList}
-                  handleStop={this.handleStop}
-                  handleStart={this.handleStart}
-                  message={message}
-                  updateGoodsCount={this.updateGoodsCount}
-                />
-              </TabPane>
-              <TabPane tab="机器温度" key="3">
-                <Form>
-                  <FormItem {...formItemLayout} label="当前温度">
-                    <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
-                  </FormItem>
-                  <FormItem {...formItemLayout} label="机器温度">
-                    <Select placeholder="请选择" value={ this.state.TemperatureSelected } onChange={this.onTemperatureSelected}>
-                      {TemperatureOptions.map((item) => {
-                        return (
-                          <Option value={item} key={item}>{item}</Option>
-                        );
-                      })}
-                    </Select>
-                  </FormItem>
-                  <FormItem {...formItemLayout}>
-                    <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
-                    <Button style={{ width: '120px' }} type="Default" onClick={() => this.temperatureSubmit()}>确定</Button>
-                  </FormItem>
-                </Form>
-              </TabPane>
-              <TabPane tab="修改编号" key="4">
-                <Form>
-                  <FormItem {...formItemLayout} label="当前编号">
-                    <span>{this.state.machineCodeOld}</span>
-                  </FormItem>
-                  <FormItem {...formItemLayout} label="机器编号">
-                    <Input placeholder="请填写机器编号" value={this.state.machineCodeNew} onChange={this.inputCodeChange}/>
-                  </FormItem>
-                  <FormItem {...formItemLayout}>
-                    <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
-                    <Button style={{ width: '120px' }} type="Default" onClick={() => this.machineCodeSubmit()}>确定</Button>
-                  </FormItem>
-                </Form>
-              </TabPane>
-              <TabPane tab="系统状态" key="5">
-                <WatchForm
-                  ref={this.ManageWatchFormRef}
-                  ManageWatchModalVisible={this.state.ManageWatchModalVisible}
-                  ManageWatchEditModalConfirmLoading={this.state.ManageWatchEditModalConfirmLoading}
-                  ManageWatchHandleModalVisibleClick={this.ManageWatchHandleModalVisibleClick}
-                  appUpdate={this.appUpdate}
-                  appRefresh={this.appMachineRefresh}
-                  machineDetail={this.state.machineDetail}
-                  // returnBtn={this.returnBtn}
-                />
-              </TabPane>
-            </Tabs>
+                <Table
+                  id="appTable"
+                  className={styles.appTable}
+                  columns={columns1}
+                  dataSource={updateList}
+                  rowKey={record => record.appPackageName}
+                  pagination={false} />
+                <div style={{ padding: '10px', display: teamWorkMachineFlag === 2 ? 'none' : '' }}  className={styles.manageAppBox}>
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <div className={styles.leftBox}>
+                        {/*<Card title="切换App" bordered={false}>*/}
+                        <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
+                        {/*</Card>*/}
+                      </div>
+                    </Col>
+                    <Col span={12}>
+                      {/*<Card title="升级App" bordered={false}>*/}
+                      <div className={styles.rightBox}>
+                        <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
+                      </div>
+                      {/*</Card>*/}
+                    </Col>
+                  </Row>
+                </div>
+              </div>
+            </div>
+            <div style={{ display: managekey === '2' && (teamWorkMachineFlag !== 0 || teamWorkMachineFlag !== 1) ? '' : 'none' }}>
+              <ManageAisleForm
+                ref={this.saveManageAisleFormRef}
+                ManageAislemodalVisible={this.state.ManageAislemodalVisible}
+                ManageAisleEditModalConfirmLoading={this.state.ManageAisleEditModalConfirmLoading}
+                ManageAisleHandleAddClick={this.ManageAisleHandleAddClick}
+                ManageAisleHandleModalVisibleClick={this.ManageAisleHandleModalVisibleClick}
+                handleClose={this.handleClose}
+                AisleList={AisleList}
+                handleStop={this.handleStop}
+                handleStart={this.handleStart}
+                message={message}
+                updateGoodsCount={this.updateGoodsCount}
+              />
+            </div>
+            <div style={{ display: managekey === '3' && (teamWorkMachineFlag !== 0 || teamWorkMachineFlag !== 1) ? '' : 'none' }}>
+              <Form>
+                <FormItem {...formItemLayout} label="当前温度">
+                  <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
+                </FormItem>
+                <FormItem {...formItemLayout} label="机器温度">
+                  <Select placeholder="请选择" value={ this.state.TemperatureSelected } onChange={this.onTemperatureSelected}>
+                    {TemperatureOptions.map((item) => {
+                      return (
+                        <Option value={item} key={item}>{item}</Option>
+                      );
+                    })}
+                  </Select>
+                </FormItem>
+                <FormItem {...formItemLayout}>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
+                  <Button style={{ width: '120px' }} type="Default" onClick={() => this.temperatureSubmit()}>确定</Button>
+                </FormItem>
+              </Form>
+            </div>
+            <div style={{ display: managekey === '4' ? '' : 'none' }}>
+              <Form>
+                <FormItem {...formItemLayout} label="当前编号">
+                  <span>{this.state.machineCodeOld}</span>
+                </FormItem>
+                <FormItem {...formItemLayout} label="机器编号">
+                  <Input placeholder="请填写机器编号" value={this.state.machineCodeNew} onChange={this.inputCodeChange}/>
+                </FormItem>
+                <FormItem {...formItemLayout}>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
+                  <Button style={{ width: '120px' }} type="Default" onClick={() => this.machineCodeSubmit()}>确定</Button>
+                </FormItem>
+              </Form>
+            </div>
+            <div style={{ display: managekey === '5' ? '' : 'none' }}>
+              <WatchForm
+                ref={this.ManageWatchFormRef}
+                ManageWatchModalVisible={this.state.ManageWatchModalVisible}
+                ManageWatchEditModalConfirmLoading={this.state.ManageWatchEditModalConfirmLoading}
+                ManageWatchHandleModalVisibleClick={this.ManageWatchHandleModalVisibleClick}
+                appUpdate={this.appUpdate}
+                appRefresh={this.appMachineRefresh}
+                machineDetail={this.state.machineDetail}
+                // returnBtn={this.returnBtn}
+              />
+            </div>
           </div>
         </Modal>
       </PageHeaderLayout>
