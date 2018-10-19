@@ -2839,7 +2839,7 @@ export default class machineSettingList extends PureComponent {
                 </FormItem>
               </Form>
             </div>
-            <div style={{ display: managekey === '4' ? '' : 'none' }}>
+            <div style={{ display: managekey === '4' && teamWorkMachineFlag !== '9' ? '' : 'none' }}>
               <Form>
                 <FormItem {...formItemLayout} label="当前编号">
                   <span>{this.state.machineCodeOld}</span>
