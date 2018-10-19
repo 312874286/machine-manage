@@ -54,13 +54,20 @@ const getValue = obj =>
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['关闭', '运行中', '已上线', '异常'];
-const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位', '', '', '', '', '已在点位']
+const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位', '', '', '', '', '合作中']
 const appStatus = ['未启动', '前台运行', '后台运行']
 const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}, {id: 2, name: '合作机器'}]
-const pointStatusOptions = [{id: 1, name: '机器开机'}, {id: 2, name: '初始化机器 '}, {id: 3, name: '通过测试'}, {id: 4, name: '设置在点位'}]
-const machineType = ['渠道机器', '活动机器', '合作机器']
+const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}]
+const pointStatusOptions = [
+  {id: 1, name: '机器开机'},
+  {id: 2, name: '初始化机器 '},
+  {id: 3, name: '通过测试'},
+  {id: 4, name: '设置在点位'},
+  {id: 9, name: '合作中'}
+  ]
+const machineType = ['渠道机器', '活动机器']
+const machineArr = ['0', '1', '2', '3', '4']
 
 // <Icon type="wifi" />
 const netWorkMap = ['wifi'];
@@ -670,7 +677,7 @@ const EditMonitoringForm = Form.create()(
                   <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh(machineId)}>刷新</Button>
                 </div>
                 <div>
-                  <Button style={{ width: '120px', marginRight: '10px', display: teamWorkMachineFlag === 2 ? 'none' : '' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
+                  <Button style={{ width: '120px', marginRight: '10px', display: teamWorkMachineFlag === '9' ? 'none' : '' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
                   <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>
                 </div>
               </div>
@@ -1835,7 +1842,7 @@ export default class machineSettingList extends PureComponent {
       machineId: item.id,
       modalData: item,
       monitorKey: '0',
-      teamWorkMachineFlag: item.machineType,
+      teamWorkMachineFlag: item.machineStatus,
     }, () => {
       this.getMachineStatus(this.state.modalData);
     })
@@ -2213,7 +2220,7 @@ export default class machineSettingList extends PureComponent {
 
   // handleManageClick 管理
   handleManageClick = (item) => {
-    if (item.machineType === 2) {
+    if (item.machineStatus === '9') {
       this.setState({
         teamWorkLists: teamWorkTabList
       })
@@ -2229,7 +2236,7 @@ export default class machineSettingList extends PureComponent {
       TemperatureSelected: undefined,
       machineCodeOld: item.machineCode,
       machineCodeNew: undefined,
-      teamWorkMachineFlag: item.machineType,
+      teamWorkMachineFlag: item.machineStatus,
     });
     this.handleEditClick(item)
   }
@@ -2777,7 +2784,7 @@ export default class machineSettingList extends PureComponent {
                   dataSource={updateList}
                   rowKey={record => record.appPackageName}
                   pagination={false} />
-                <div style={{ padding: '10px', display: teamWorkMachineFlag === 2 ? 'none' : '' }}  className={styles.manageAppBox}>
+                <div style={{ padding: '10px', display: teamWorkMachineFlag === '9' ? 'none' : '' }}  className={styles.manageAppBox}>
                   <Row gutter={16}>
                     <Col span={12}>
                       <div className={styles.leftBox}>
@@ -2797,7 +2804,7 @@ export default class machineSettingList extends PureComponent {
                 </div>
               </div>
             </div>
-            <div style={{ display: managekey === '2' && (teamWorkMachineFlag !== 0 || teamWorkMachineFlag !== 1) ? '' : 'none' }}>
+            <div style={{ display: managekey === '2' && teamWorkMachineFlag !== '9' ? '' : 'none' }}>
               <ManageAisleForm
                 ref={this.saveManageAisleFormRef}
                 ManageAislemodalVisible={this.state.ManageAislemodalVisible}
@@ -2812,7 +2819,7 @@ export default class machineSettingList extends PureComponent {
                 updateGoodsCount={this.updateGoodsCount}
               />
             </div>
-            <div style={{ display: managekey === '3' && (teamWorkMachineFlag !== 0 || teamWorkMachineFlag !== 1) ? '' : 'none' }}>
+            <div style={{ display: managekey === '3' && teamWorkMachineFlag !== '9' ? '' : 'none' }}>
               <Form>
                 <FormItem {...formItemLayout} label="当前温度">
                   <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>

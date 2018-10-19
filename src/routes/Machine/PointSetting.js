@@ -39,8 +39,8 @@ const getValue = obj =>
 const statusMap = ['processing', 'default', 'success', 'error'];
 const status = ['运行中', '关闭', '已上线', '异常'];
 
-const pointTypeOptions = [{id: 1, name: '活动点位'}, {id: 0, name: '渠道点位'}, {id: 2, name: '合作点位'}]
-const type = ['渠道点位', '活动点位', '合作点位']
+const pointTypeOptions = [{id: 1, name: '活动点位'}, {id: 0, name: '渠道点位'}]
+const type = ['渠道点位', '活动点位']
 
 const CreateForm = Form.create()(
   (props) => {
