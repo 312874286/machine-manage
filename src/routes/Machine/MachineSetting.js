@@ -677,7 +677,7 @@ const EditMonitoringForm = Form.create()(
                   <Button style={{ width: '120px' }} type="Default" onClick={() => appRefresh(machineId)}>刷新</Button>
                 </div>
                 <div>
-                  <Button style={{ width: '120px', marginRight: '10px', display: teamWorkMachineFlag === '9' ? 'none' : '' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(2)}>返回App</Button>
                   <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => returnBtn(1)}>返回桌面</Button>
                 </div>
               </div>
