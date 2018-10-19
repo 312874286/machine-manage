@@ -87,7 +87,7 @@ const tabList = [
 const teamWorkTabList = [
   {id: '0', name: '重置点位'},
   {id: '1', name: '管理APP'},
-  {id: '4', name: '修改编号'},
+  // {id: '4', name: '修改编号'},
   {id: '5', name: '系统状态'},
 ]
 let mySetInterval = null
