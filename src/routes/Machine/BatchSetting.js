@@ -261,7 +261,7 @@ export default class versionSetting extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
             <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入版本号、版本、更新内容搜索" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="输入批次名称，批次编号搜索" />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
