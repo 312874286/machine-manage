@@ -41,7 +41,7 @@ const CreateForm = Form.create()(
       handleModalVisible, editModalConfirmLoading,
       modalType, modalData, selectCityName,
       openSelectMachineModal, machineNum, options,
-      loadData, verifyString, remark } = props;
+      loadData, verifyString, remark, onChangeArea } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -147,6 +147,7 @@ const CreateForm = Form.create()(
                   options={options}
                   loadData={loadData}
                   changeOnSelect
+                  onChange={onChangeArea}
                 />
               )}
             </FormItem>
@@ -402,7 +403,8 @@ export default class user extends PureComponent {
     defaultValue: [],
     remark: '',
 
-    account: {}
+    account: {},
+    lastAreaCode: '',
   };
   componentDidMount() {
     this.getLists();
@@ -457,13 +459,22 @@ export default class user extends PureComponent {
           options: res,
         });
       } else {
+        // lastAreaCode
         targetOption.loading = false;
-        targetOption.children = res
-        this.setState({
-          options: [...this.state.options],
-        });
+        console.log('res', res[0].parentCode, targetOption.value)
+        if (targetOption.value === res[0].parentCode) {
+          console.log('res2222', res[0].parentCode, targetOption.value)
+          targetOption.children = res
+          this.setState({
+            options: [...this.state.options],
+          });
+        }
       }
     });
+  }
+  onChangeArea = (value, selectedOptions) => {
+    console.log('res onChange', value, selectedOptions)
+    selectedOptions.loading = false;
   }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -1288,6 +1299,7 @@ export default class user extends PureComponent {
           loadData={this.areaList}
           verifyString={this.verifyString}
           remark={this.state.remark}
+          onChangeArea={this.onChangeArea}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}

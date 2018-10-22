@@ -693,7 +693,6 @@ export default class areaSettingList extends PureComponent {
           }] : [],
           bannerfileList: flist,
           videoUrl,
-          GoodTypePlaceHolder: data.type,
         });
         this.form.setFieldsValue({
           price: data.price || undefined,
@@ -703,6 +702,9 @@ export default class areaSettingList extends PureComponent {
           number: data.number || undefined,
         });
       }
+      this.setState({
+        GoodTypePlaceHolder: data.type,
+      })
       this.form.setFieldsValue({
         name: data.name || '',
         code: data.code || undefined,
@@ -714,7 +716,8 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         fileList: [],
         bannerfileList: [],
-        videoUrl: {}
+        videoUrl: {},
+        GoodTypePlaceHolder: 0
       });
       this.form.setFieldsValue({
         name: undefined,
