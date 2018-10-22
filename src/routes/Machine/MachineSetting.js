@@ -253,13 +253,13 @@ const ManageCutAppForm = Form.create()(
     return (
       <Form id="appCutTitle">
         <FormItem label="切换App" className={styles.appTitle} />
-        <FormItem {...formItemLayout} label="切换App" style={{ marginLeft: '11px' }}>
+        <FormItem {...formItemLayout} label="运行中的APP" style={{ marginLeft: '11px' }}>
           {getFieldDecorator('appStatus', {
           })(<Input disabled style={{ marginLeft: '-8px', width: '103%' }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="运行中的APP">
+        <FormItem {...formItemLayout} label="切换App">
           {getFieldDecorator('appPackageName', {
-            rules: [{ required: true, message: '运行中的APP' }],
+            rules: [{ required: true, message: '请选择要切换的App' }],
           })(
             <Select placeholder="请选择">
               {appLists.map((item) => {
@@ -2775,20 +2775,18 @@ export default class machineSettingList extends PureComponent {
                     pagination={false} />
                   <div style={{ padding: '10px' }}  className={styles.manageAppBox}>
                     <Row gutter={16}>
-                      <Col span={12}>
+                      <Col span={24}>
                         <div className={styles.leftBox}>
                           {/*<Card title="切换App" bordered={false}>*/}
                           <ManageCutAppForm ref={this.ManageCutAppFormRef} appLists={appLists} okCutApp={this.okCutApp} />
                           {/*</Card>*/}
                         </div>
                       </Col>
-                      <Col span={12}>
-                        {/*<Card title="升级App" bordered={false}>*/}
-                        <div className={styles.rightBox}>
-                          <ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />
-                        </div>
-                        {/*</Card>*/}
-                      </Col>
+                      {/*<Col span={12}>*/}
+                        {/*<div className={styles.rightBox}>*/}
+                          {/*<ManageUpdateAppForm ref={this.ManageUpdateAppFormRef} appLists={appLists2} okRefreshApp={this.okRefreshApp} />*/}
+                        {/*</div>*/}
+                      {/*</Col>*/}
                     </Row>
                   </div>
                 </div>

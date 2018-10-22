@@ -159,16 +159,16 @@ const UpgradeAppForm = Form.create(
                 })}
               </Select>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="升级版本">
-              {getFieldDecorator('appVersion', {
-                rules: [{ required: true, message: '请填写升级版本' }],
-              })(<Input />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="升级链接">
-              {getFieldDecorator('appUrl', {
-                rules: [{ required: true, message: '请填写升级链接' }],
-              })(<Input />)}
-            </FormItem>
+            {/*<FormItem {...formItemLayout} label="升级版本">*/}
+              {/*{getFieldDecorator('appVersion', {*/}
+                {/*rules: [{ required: true, message: '请填写升级版本' }],*/}
+              {/*})(<Input />)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem {...formItemLayout} label="升级链接">*/}
+              {/*{getFieldDecorator('appUrl', {*/}
+                {/*rules: [{ required: true, message: '请填写升级链接' }],*/}
+              {/*})(<Input />)}*/}
+            {/*</FormItem>*/}
             <FormItem {...formItemLayout} label="选择开始时间">
               {getFieldDecorator('doTimeStr', {
                 rules: [{ required: true, message: '选择开始时间' }],
@@ -585,12 +585,12 @@ const WatchUpgradeAppForm = Form.create()(
         <FormItem {...formItemLayout} label="APP名称">
           <span>{modalData.appName}</span>
         </FormItem>
-        <FormItem {...formItemLayout} label="升级版本">
-          <span>{modalData.appVersion}</span>
-        </FormItem>
-        <FormItem {...formItemLayout} label="升级链接">
-          <span>{modalData.appUrl}</span>
-        </FormItem>
+        {/*<FormItem {...formItemLayout} label="升级版本">*/}
+          {/*<span>{modalData.appVersion}</span>*/}
+        {/*</FormItem>*/}
+        {/*<FormItem {...formItemLayout} label="升级链接">*/}
+          {/*<span>{modalData.appUrl}</span>*/}
+        {/*</FormItem>*/}
         <FormItem {...formItemLayout} label="执行时间">
           <span>{modalData.doTime}</span>
         </FormItem>
@@ -955,16 +955,16 @@ export default class TaskSetting extends PureComponent {
       if (data) {
         this.UpgradeAppForm.setFieldsValue({
           appId: data.appId || '',
-          appUrl: data.appUrl || undefined,
-          appVersion: data.appVersion || undefined,
+          // appUrl: data.appUrl || undefined,
+          // appVersion: data.appVersion || undefined,
           doType: data.doType || undefined,
           doTimeStr: data.doTime ? moment(data.doTime) : undefined || undefined,
         });
       } else {
         this.UpgradeAppForm.setFieldsValue({
           app: undefined,
-          appUrl: undefined,
-          appVersion: undefined,
+          // appUrl: undefined,
+          // appVersion: undefined,
           doType: undefined,
           doTimeStr: undefined,
         });
@@ -976,16 +976,16 @@ export default class TaskSetting extends PureComponent {
       if (data) {
         this.UnloadAppForm.setFieldsValue({
           appId: data.appId || '',
-          appUrl: data.appUrl || undefined,
-          appVersion: data.appVersion || undefined,
+          // appUrl: data.appUrl || undefined,
+          // appVersion: data.appVersion || undefined,
           doType: data.doType || undefined,
           doTimeStr: moment(data.doTime) || undefined,
         });
       } else {
         this.UnloadAppForm.setFieldsValue({
           appId: undefined,
-          appUrl: undefined,
-          appVersion: undefined,
+          // appUrl: undefined,
+          // appVersion: undefined,
           doType: undefined,
           doTimeStr: undefined,
         });
