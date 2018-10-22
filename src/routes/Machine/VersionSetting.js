@@ -283,12 +283,15 @@ export default class versionSetting extends PureComponent {
       });
     }
   }
-  handleAdd = (flag) => {
+  handleAdd = (flag, flag2) => {
     const { TabPaneKey } = this.state
     this.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
+      this.setState({
+        addOrConfirm: flag2
+      })
       let params = {
         ...fieldsValue,
         appPackageName: TabPaneKey.appPackageName,
@@ -333,11 +336,12 @@ export default class versionSetting extends PureComponent {
   }
   next = (flag) => {
     if (!flag) {
-      this.handleAdd(1)
+      this.handleAdd(1, flag)
+    } else {
+      this.setState({
+        addOrConfirm: flag
+      })
     }
-    this.setState({
-      addOrConfirm: flag
-    })
   }
   // 搜索
   handleSearch = e => {
