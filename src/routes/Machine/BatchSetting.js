@@ -483,11 +483,13 @@ export default class versionSetting extends PureComponent {
         this.setState({
           ManageAislemodalVisible: true,
         }, () => {
-          const res = result.data.detailList
-          console.log('res[res.length - 1]', res[res.length - 1].rowNo)
-          this.setState({
-            AisleList: res,
-          });
+          if (result.data.detailList.length > 0) {
+            const res = result.data.detailList
+            console.log('res[res.length - 1]', res[res.length - 1].rowNo)
+            this.setState({
+              AisleList: res,
+            });
+          }
         });
       }
     });
