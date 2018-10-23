@@ -41,7 +41,7 @@ const CreateForm = Form.create()(
       handleModalVisible, editModalConfirmLoading,
       modalType, modalData, selectCityName,
       openSelectMachineModal, machineNum, options,
-      loadData, verifyString, remark } = props;
+      loadData, verifyString, remark, onChangeArea } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -147,6 +147,7 @@ const CreateForm = Form.create()(
                   options={options}
                   loadData={loadData}
                   changeOnSelect
+                  onChange={onChangeArea}
                 />
               )}
             </FormItem>
@@ -402,7 +403,8 @@ export default class user extends PureComponent {
     defaultValue: [],
     remark: '',
 
-    account: {}
+    account: {},
+    lastAreaCode: '',
   };
   componentDidMount() {
     this.getLists();
@@ -438,6 +440,7 @@ export default class user extends PureComponent {
   // 获取城市列表
   areaList = (selectedOptions) => {
     let targetOption = null;
+    const { lastAreaCode } = this.state
     let code = ''
     if (selectedOptions) {
       targetOption = selectedOptions[selectedOptions.length - 1];
@@ -457,13 +460,36 @@ export default class user extends PureComponent {
           options: res,
         });
       } else {
+        // lastAreaCode
         targetOption.loading = false;
-        targetOption.children = res
-        this.setState({
-          options: [...this.state.options],
-        });
+        console.log('res', res, targetOption.value)
+        if (targetOption.value === res[0].parentCode) {
+          console.log('res2222', res, targetOption.value)
+          targetOption.children = res
+          this.setState({
+            options: [...this.state.options],
+            lastAreaCode: targetOption.value
+          }, () => {
+          });
+        }
       }
     });
+  }
+  onChangeArea = (value, selectedOptions) => {
+    // console.log('res onChange', value, selectedOptions)
+    let options = this.state.options
+    options.forEach((res) => {
+      if (res.value !== value) {
+        if (res.loading) {
+          res.loading = false
+        }
+      }
+    })
+    this.setState({
+      options
+    });
+    console.log('options', options)
+    // selectedOptions.loading = false;
   }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -596,6 +622,7 @@ export default class user extends PureComponent {
       this.setState({
         options: province,
         defaultValue: [res.province, area],
+        lastAreaCode: res.province
       }, () => {
         this.setModalData(res);
       });
@@ -1288,6 +1315,7 @@ export default class user extends PureComponent {
           loadData={this.areaList}
           verifyString={this.verifyString}
           remark={this.state.remark}
+          onChangeArea={this.onChangeArea}
         />
         <WatchMachine
           WatchMachineModalVisible={this.state.WatchMachineModalVisible}
