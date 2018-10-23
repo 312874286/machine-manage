@@ -22,7 +22,7 @@ import moment from "moment/moment";
 import {RegexTool} from "../../utils/utils";
 
 // const No = /^[+]{0,1}(\d){2}$/
-const No = /^\d{2}/
+const No = /^\d{2}$/
 const FormItem = Form.Item;
 const CreateForm = Form.create()(
   (props) => {
@@ -66,7 +66,7 @@ const CreateForm = Form.create()(
                   }],
               })(<Input placeholder="请填写批次名称" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="批次编号" style={{ display: !modalType ? 'none' : ''}}>
+            <FormItem {...formItemLayout} label="批次编号">
               {getFieldDecorator('id', {
                 rules: [{ required: true, message: '请填写批次编号' },
                   {
@@ -77,21 +77,13 @@ const CreateForm = Form.create()(
                       callback();
                     },
                   }],
-              })(<InputNumber  placeholder="请填写两位整数"/>)}
+              })(<InputNumber  placeholder="请填写两位整数" disabled={!modalType}/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="批次编号" style={{ display: !modalType ? '' : 'none'}}>
-              {getFieldDecorator('id', {
-                rules: [{ required: true, message: '请填写批次编号' },
-                  {
-                    validator(rule, value, callback) {
-                      if (!No.test(value)) {
-                        callback('批次编号只能是两位整数');
-                      }
-                      callback();
-                    },
-                  }],
-              })(<InputNumber  placeholder="请填写两位整数" disabled/>)}
-            </FormItem>
+            {/*<FormItem {...formItemLayout} label="批次编号" style={{ display: !modalType ? '' : 'none'}}>*/}
+              {/*{getFieldDecorator('id', {*/}
+                {/*rules: [{ required: true, message: '请填写批次编号' }],*/}
+              {/*})(<InputNumber  placeholder="请填写两位整数" disabled/>)}*/}
+            {/*</FormItem>*/}
             <FormItem label="货道信息">
               <div className={styles.goodsNoteBox}>
                 <FormItem>

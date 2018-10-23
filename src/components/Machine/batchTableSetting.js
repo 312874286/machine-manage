@@ -199,7 +199,7 @@ class BatchTableField extends Component {
   }
   render() {
     const { aisleCount, initData } = this.state
-    const { modalType } = this.state
+    const { modalType } = this.props
     const components = {
       body: {
         row: EditableFormRow,
