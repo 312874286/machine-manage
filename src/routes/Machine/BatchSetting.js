@@ -310,22 +310,24 @@ export default class versionSetting extends PureComponent {
   saveFormRef = (form) => {
     this.form = form;
   }
-  add = () => {
-    this.setState({
-      modalVisible: true
-    })
-    this.setModalData()
-  }
+  // add = () => {
+  //   this.setState({
+  //     modalVisible: true,
+  //     modalType: true,
+  //
+  //   })
+  //   this.setModalData()
+  // }
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
     this.setState({
       goodsInitData: [],
       goodsCount: 0,
+      modalType: true,
     }, () => {
       this.setState({
         modalVisible: !!flag,
         modalData: {},
-        modalType: true,
       });
       this.setModalData();
     })
@@ -486,7 +488,7 @@ export default class versionSetting extends PureComponent {
         this.setState({
           editModalConfirmLoading: false,
           modalVisible: false,
-          modalType: true
+          // modalType: true
         });
       });
     })
@@ -584,7 +586,7 @@ export default class versionSetting extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <Button icon="plus" type="primary" onClick={() => this.add()}>
+          <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
             新增
           </Button>
           <div className={styles.tableList}>
