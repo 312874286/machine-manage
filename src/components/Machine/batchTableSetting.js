@@ -283,7 +283,8 @@ class BatchTableField extends Component {
 
     return (
       <div className={styles.antButtons}>
-        <Button icon="plus" onClick={() => this.handleAdd()} type="primary" style={{ marginBottom: 16 }}>
+        <Button icon="plus"
+                onClick={() => this.handleAdd()} type="primary" style={{ marginBottom: 16,  display: !modalType ? 'none' : '' }}>
           添加
         </Button>
         <Table
