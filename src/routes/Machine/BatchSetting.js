@@ -314,6 +314,7 @@ export default class versionSetting extends PureComponent {
     this.setState({
       modalVisible: true
     })
+    this.setModalData()
   }
   // 添加modal 添加事件
   handleModalVisible = (flag) => {
