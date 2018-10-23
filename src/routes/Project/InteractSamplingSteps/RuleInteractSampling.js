@@ -72,10 +72,10 @@ export default class areaSettingList extends PureComponent {
         dayNumber: data.dayNumber === -1 ? true : false
       })
       this.props.form.setFieldsValue({
-        times: data.times === -1 ? ' ' :  data.times || undefined,
-        dayTimes: data.dayTimes === -1 ? ' ' :  data.dayTimes || undefined,
-        number: data.number === -1 ? ' ' :  data.number || undefined,
-        dayNumber: data.dayNumber === -1 ? ' ' :  data.dayNumber || undefined,
+        times: data.times === -1 ? '' :  data.times || undefined,
+        dayTimes: data.dayTimes === -1 ? '' :  data.dayTimes || undefined,
+        number: data.number === -1 ? '' :  data.number || undefined,
+        dayNumber: data.dayNumber === -1 ? '' :  data.dayNumber || undefined,
       });
     } else {
       this.setState({
@@ -94,6 +94,11 @@ export default class areaSettingList extends PureComponent {
       times: e.target.checked,
     }, () => {
       this.props.form.validateFields(['times'], { force: true });
+      if (e.target.checked) {
+        this.props.form.setFieldsValue({
+          times: '',
+        });
+      }
     });
   }
   handleDayTimesChange = (e) => {
@@ -204,21 +209,23 @@ export default class areaSettingList extends PureComponent {
               return false
             }
           }
-          // if (!dayNumber) {
-          //   if (!fieldsValue.dayNumber) {
-          //     message.info('如没有选择不限，请填写同一用户参与活动次数')
-          //     return false
-          //   }
-          // }
+          if (!dayNumber) {
+            if (!fieldsValue.dayNumber) {
+              message.info('如没有选择不限，请填写同一用户获得商品次数')
+              return false
+            }
+          }
         }
         if (allGoods.length > 0) {
           for (let i = 0; i < allGoods.length; i++) {
             if (!allGoods[i].check) {
-              if (allGoods[i].userDayNumber === 0) {
+              if (allGoods[i].userDayNumber === 0 || !allGoods[i].userDayNumber) {
                 message.info('如没有选择不限，请填写可派发数量')
                 return false
               }
             }
+          }
+          for (let i = 0; i < allGoods.length; i++) {
             if (allGoods[i].check) {
               allGoods[i].userDayNumber = -1
             }
@@ -305,14 +312,14 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户参与活动次数</span>}>
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('dayTimes', {
                         // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
                       })
                       (<InputNumber
-                        placeholder="请输入同一用户参与活动次数"
+                        placeholder="请输入同一用户每天参与活动次数"
                         disabled={this.state.dayTimes}
                       />)}
                     </FormItem>
@@ -328,7 +335,7 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>请输入同一用户获得商品次数</span>}>
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户获得商品次数</span>}>
                   <Col span={14}>
                     <FormItem>
                       {getFieldDecorator('number', {
@@ -351,29 +358,29 @@ export default class areaSettingList extends PureComponent {
                     </FormItem>
                   </Col>
                 </FormItem>
-                {/*<FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>*/}
-                  {/*<Col span={14}>*/}
-                    {/*<FormItem>*/}
-                      {/*{getFieldDecorator('dayNumber', {*/}
-                        {/*// rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],*/}
-                      {/*})*/}
-                      {/*(<InputNumber*/}
-                        {/*placeholder="请输入同一用户每天参与活动次数"*/}
-                        {/*disabled={this.state.dayNumber}*/}
-                      {/*/>)}*/}
-                    {/*</FormItem>*/}
-                  {/*</Col>*/}
-                  {/*<Col span={8}>*/}
-                    {/*<FormItem>*/}
-                      {/*<Checkbox*/}
-                        {/*checked={this.state.dayNumber}*/}
-                        {/*// value={this.state.dayNumber}*/}
-                        {/*onChange={this.handleDayNumberChange}>*/}
-                        {/*不限*/}
-                      {/*</Checkbox>*/}
-                    {/*</FormItem>*/}
-                  {/*</Col>*/}
-                {/*</FormItem>*/}
+                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天获取商品次数</span>}>
+                  <Col span={14}>
+                    <FormItem>
+                      {getFieldDecorator('dayNumber', {
+                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
+                      })
+                      (<InputNumber
+                        placeholder="请输入同一用户每天获取商品次数"
+                        disabled={this.state.dayNumber}
+                      />)}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <Checkbox
+                        checked={this.state.dayNumber}
+                        // value={this.state.dayNumber}
+                        onChange={this.handleDayNumberChange}>
+                        不限
+                      </Checkbox>
+                    </FormItem>
+                  </Col>
+                </FormItem>
                 <FormItem {...formItemLayout} label="商品信息">
                 </FormItem>
                 <RuleInteractSampling

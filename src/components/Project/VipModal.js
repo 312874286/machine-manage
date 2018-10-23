@@ -147,7 +147,7 @@ class VipModal extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const {initData, clist, count, shopClist} = nextProps;
-    console.log('initData, clist, count', initData, clist, count, shopClist)
+    console.log('vip, clist, count', initData, clist, count, shopClist)
     // if (clist.length > 0) {
     this.updateRenderDatas(initData, clist, count, shopClist);
     // }
@@ -156,7 +156,7 @@ class VipModal extends Component {
     const { initData, clist } = this.props;
   }
   handleIsVip = (record, value) => {
-    console.log('您点击了是否入会', value)
+    console.log('您点击了是否入会', record, value)
     record.isVip = value
     if (value === 1) {
       record.sessionKey = '请填写访问码'
@@ -168,6 +168,7 @@ class VipModal extends Component {
     this.setState({
       initData,
     })
+    console.log('您点击了是否入会', this.state.initData, record, value)
     // record.prizeId = value;
     // console.log('record', record, this.state.clist, this.props.initData, this.state.initData);
     this.props.goodsHandle(this.props.initData, value, record);
@@ -220,7 +221,11 @@ class VipModal extends Component {
       dataIndex: 'isVip',
       render: (text, record) => {
         return (
-          <Select onChange={this.handleIsVip.bind(this, record)} onSelect={this.handleIsVip.bind(this, record)} defaultValue={ record.isVip } placeholder="请选择是否入会">
+          <Select
+            // onChange={this.handleIsVip.bind(this, record)}
+            onSelect={this.handleIsVip.bind(this, record)}
+            defaultValue={ record.isVip }
+            placeholder="请选择是否入会">
             {/*{children}*/}
             {isVip.map((item) => {
               return (

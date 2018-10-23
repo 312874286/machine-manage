@@ -11,7 +11,7 @@ export default class OrderStatistics extends PureComponent {
 
   renderColums = () => {
     const dateList = [];
-    const columnsList = [];
+    let columnsList = [];
     this.props.datas.forEach(item => {
       item.data.forEach(date => {
         if (dateList.indexOf(date.date) === -1) {
@@ -36,6 +36,19 @@ export default class OrderStatistics extends PureComponent {
         }
       });
     });
+    console.log(columnsList);
+    columnsList = columnsList.sort((a, b) => {
+      const ad = new Date(a.title);
+      const bd = new Date(b.title);
+      if (ad < bd) {
+        return 1;
+      } else if (ad === bd) {
+        return 0;
+      } else {
+        return -1;
+      }
+    });
+    console.log(JSON.stringify(columnsList));
     return columnsList;
   };
 

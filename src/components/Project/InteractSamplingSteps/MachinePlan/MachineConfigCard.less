@@ -1,0 +1,124 @@
+:global {
+  .center-footer .ant-modal-footer {
+    text-align: center;
+    padding: 10px 20px 20px 20px !important;
+  }
+}
+
+:global {
+  .search-box {
+    width: 100%;
+  }
+  .content-box {
+    margin-top: 10px;
+  }
+
+  .machine-table {
+    position: relative;
+    padding-left: 150px;
+    padding-right: 150px;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    border-left: 1px solid #e8e8e8;
+    max-height: 300px;
+    overflow: hidden;
+    overflow-y: auto;
+    .machine-table-left {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      padding-left: 1px;
+      width: 150px;
+      border-left: 1px solid #e8e8e8;
+    }
+    .machine-table-right {
+      position: absolute;
+      top: -1px;
+      right: 0;
+      width: 151px;
+    }
+
+    .machine-table-calendar {
+      position: relative;
+      top: -1px;
+
+      .scroll-box {
+        width: 100%;
+        overflow: hidden;
+        overflow-x: auto;
+      }
+
+      .scroll-content {
+        .scroll-content-main {
+          position: relative;
+
+          .schedule {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            .schedule-item {
+              text-align: center;
+              height: 61px;
+              line-height: 60px;
+              border: 1px solid;
+              box-sizing: border-box;
+              position: absolute;
+              cursor: pointer;
+              user-select: none;
+            }
+            .schedule-item.activited {
+              background-color: #f6ffed;
+              border-color: #b7eb8f;
+            }
+            .schedule-item.activity {
+              background-color: #e6f7ff;
+              border-color: #91d5ff;
+            }
+          }
+        }
+        .scroll-content-title::after,
+        .scroll-content-main .content::after,
+        .scroll-content-main .schedule::after {
+          display: block;
+          content: " ";
+          clear: both;
+        }
+      }
+
+      .scroll-content .scroll-item {
+        float: left;
+      }
+    }
+
+    .machine-table-calendar::after {
+      display: block;
+      content: " ";
+      clear: both;
+    }
+    .machine-table-left > div,
+    .machine-table-right > div,
+    .machine-table-calendar
+      .scroll-box
+      .scroll-content
+      .content
+      .scroll-item
+      > div {
+      border-right: 1px solid #e8e8e8;
+      border-top: 1px solid #e8e8e8;
+      text-align: center;
+      height: 60px;
+      line-height: 60px;
+      width: 150px;
+      box-sizing: border-box;
+      cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .machine-table-right > div {
+    border-left: 1px solid #e8e8e8;
+  }
+}

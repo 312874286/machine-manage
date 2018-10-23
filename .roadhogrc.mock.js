@@ -4289,12 +4289,12 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-08-03 00:00:00",
-              "endTime": "2018-08-04 23:59:59"
+              "startTime": "2018-09-03 00:00:00",
+              "endTime": "2018-09-04 23:59:59"
             },
             {
-              "startTime": "2018-07-31 00:00:00",
-              "endTime": "2018-08-02 23:59:59"
+              "startTime": "2018-09-30 00:00:00",
+              "endTime": "2018-10-02 23:59:59"
             }
           ]
         },
@@ -4309,8 +4309,8 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-07-25 00:00:00",
-              "endTime": "2018-07-29 00:00:59"
+              "startTime": "2018-09-25 00:00:00",
+              "endTime": "2018-09-29 00:00:59"
             }
           ]
         },
@@ -4325,7 +4325,7 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-07-16 09:00:00",
+              "startTime": "2018-09-16 09:00:00",
               "endTime": "2018-10-06 23:00:00"
             }
           ]
@@ -4341,8 +4341,8 @@ const proxy = {
           "machineStatus": null,
           "planTime": [
             {
-              "startTime": "2018-07-31 00:00:00",
-              "endTime": "2018-08-03 23:59:59"
+              "startTime": "2018-09-30 00:00:00",
+              "endTime": "2018-10-03 23:59:59"
             }
           ]
         },
@@ -5521,17 +5521,6 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'POST /statistics/TemplateExecute': (req, res) => {
-    const data = {"code":0,"msg":"成功"}
-    if(req.body.name==="goodsInfo"){
-      data.data = [{"goods":6,"machineCode":"18002841","pos":"江苏省徐州市云龙区徐州医科大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":5,"machineCode":"18015770","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":1,"machineCode":"18015770","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":13,"machineCode":"18033963","pos":"安徽省合肥市蜀山区合肥师范学院（锦绣校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"采之汲雪肌焕亮面膜2片组合装","goodsCode":"576236451496"},{"goods":10,"machineCode":"18073757","pos":"江苏省南京市浦口区南京信息工程大学（东苑）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":26,"machineCode":"18088295","pos":"湖南省长沙市岳麓区湖南商务职业技术学院点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":18,"machineCode":"18093877","pos":"安徽省合肥市蜀山区合肥师范学院（锦绣校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":59,"machineCode":"18180564","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18180564","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":3,"machineCode":"18231775","pos":"北京市北京市西城区北京建筑大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":4,"machineCode":"18294515","pos":"广东省广州市天河区华南农业大学绿榕园一楼点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士沐浴露","goodsCode":"576510091613"},{"goods":139,"machineCode":"18304210","pos":"江苏省徐州市泉山区江苏师范大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":5,"machineCode":"18304210","pos":"江苏省徐州市泉山区江苏师范大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":2,"machineCode":"18377770","pos":"四川省雅安市雨城区四川农业大学雅安校区1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18390965","pos":"江苏省南京市浦口区南京信息工程大学（中苑）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":4,"machineCode":"18457853","pos":"江苏省南京市浦口区南京信息工程大学（中苑）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":36,"machineCode":"18470589","pos":"江西省南昌市青山湖区江西农业大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":16,"machineCode":"18483379","pos":"四川省成都市温江区四川农业大学温江校区点位4","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":4,"machineCode":"18485774","pos":"陕西省宝鸡市渭滨区宝鸡文理学院点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士洗发水","goodsCode":"576283105389"},{"goods":1,"machineCode":"18525960","pos":"河北省石家庄市裕华区河北科技大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士洗发水","goodsCode":"576283105389"},{"goods":4,"machineCode":"18624181","pos":"四川省成都市温江区四川农业大学温江校区点位3","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士洗面奶","goodsCode":"576402814187"},{"goods":9,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":8,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":3,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":34,"machineCode":"18672886","pos":"江西省南昌市东湖区豫章师范学院点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":2,"machineCode":"18715089","pos":"四川省成都市其他西南交通大学犀浦校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18715089","pos":"四川省成都市其他西南交通大学犀浦校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":21,"machineCode":"18738688","pos":"江苏省徐州市泉山区江苏师范大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":9,"machineCode":"18745138","pos":"四川省雅安市雨城区四川农业大学雅安校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":15,"machineCode":"18745138","pos":"四川省雅安市雨城区四川农业大学雅安校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":10,"machineCode":"18745138","pos":"四川省雅安市雨城区四川农业大学雅安校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士沐浴露","goodsCode":"576510091613"},{"goods":32,"machineCode":"18805585","pos":"上海市上海市嘉定区同济大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":26,"machineCode":"18805585","pos":"上海市上海市嘉定区同济大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":1,"machineCode":"18805585","pos":"上海市上海市嘉定区同济大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":52,"machineCode":"18811576","pos":"安徽省合肥市蜀山区新华学院点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18815385","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"采之汲雪肌焕亮面膜2片组合装","goodsCode":"576236451496"},{"goods":2,"machineCode":"18815385","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"采之汲雪肌焕亮面膜2片组合装","goodsCode":"576236451496"},{"goods":1,"machineCode":"18847938","pos":"江苏省徐州市云龙区徐州医科大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":1,"machineCode":"18847938","pos":"江苏省徐州市云龙区徐州医科大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18871594","pos":"上海市上海市嘉定区同济大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":1,"machineCode":"18871594","pos":"上海市上海市嘉定区同济大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":2,"machineCode":"18886290","pos":"四川省成都市其他西南交通大学犀浦校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18886290","pos":"四川省成都市其他西南交通大学犀浦校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":18,"machineCode":"18895324","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18895324","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":21,"machineCode":"18924094","pos":"浙江省杭州市余杭区杭州师范大学仓前校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":3,"machineCode":"18924094","pos":"浙江省杭州市余杭区杭州师范大学仓前校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":10,"machineCode":"18927452","pos":"广东省广州市天河区华南农业大学绿榕园一楼点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":15,"machineCode":"18944889","pos":"四川省成都市温江区四川农业大学温江校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":2,"machineCode":"18944889","pos":"四川省成都市温江区四川农业大学温江校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":11,"machineCode":"18985756","pos":"浙江省杭州市余杭区杭州师范大学仓前校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"}]
-      data.data = [{"goods": 2, "machineCode": "18531434", "pos": "\u6cb3\u5317\u7701\u77f3\u5bb6\u5e84\u5e02\u88d5\u534e\u533a\u673a\u5668\u52ff\u5220", "activityId": "f95976169ca2429b8e1d9b344fe4961c", "time": "2018-09-29", "goodsName": "\u6f58\u5a773\u5206\u949f\u5947\u8ff9\u5962\u62a4\u7cbe\u534e\u971c", "goodsCode": "576665688344"}, {"goods": 1, "machineCode": "18578416", "pos": "\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u5176\u4ed6\u67ff\u5b50\u8def\u53e3", "activityId": "f95976169ca2429b8e1d9b344fe4961c", "time": "2018-09-29", "goodsName": "\u91c7\u4e4b\u6c72\u96ea\u808c\u7115\u4eae\u9762\u819c\u7ec4\u5408\u88c5", "goodsCode": "576236451496"}, {"goods": 1, "machineCode": "18578416", "pos": "\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u5176\u4ed6\u67ff\u5b50\u8def\u53e3", "activityId": "f95976169ca2429b8e1d9b344fe4961c", "time": "2018-09-30", "goodsName": "\u4f18\u8d44\u83b1\u7eff\u8336\u6d3b\u8403\u82af\u808c\u5957\u88c5", "goodsCode": "575906013266"}]
-    }else{
-      data.data = [{"point": "\u6fb3\u95e8\u7279\u522b\u884c\u653f\u533a\u6fb3\u95e8\u7279\u522b\u884c\u653f\u533a\u5176\u4ed6\u5730\u4e0b\u4e00\u5c42\u95e8\u53e3", "data": [{"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-24", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-24", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-24", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-25", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-25", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-25", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-26", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-26", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-26", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-27", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-27", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-27", "order": 1}, {"date": "2018-09-28", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"date": "2018-09-28", "visitor": 61, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-28", "order": 1}, {"date": "2018-09-29", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"pv": 2, "uv": 4, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 2, "machineCode": "18355236", "date": "2018-09-29", "order": 2}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-29", "order": 1}, {"pv": 4, "visitor": 0, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236", "date": "2018-09-30", "order": 2}, {"date": "2018-09-30", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"pv": 2, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236", "date": "2018-09-30", "order": 1}, {"date": "2018-09-30", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}], "machineCode": "18355236"}]
-      data.data = [{"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u4e91\u9f99\u533a\u5f90\u5dde\u533b\u79d1\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 10, "uv": 10, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18002841", "date": "2018-09-29", "order": 6}, {"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18002841", "date": "2018-09-30", "order": 4}], "machineCode": "18002841"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u95f5\u884c\u533a\u534e\u4e1c\u5e08\u8303\u5927\u5b66\uff08\u95f5\u884c\u6821\u533a\uff09\u70b9\u4f4d2", "data": [{"pv": 5, "uv": 5, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18015770", "date": "2018-09-29", "order": 5}, {"pv": 15, "uv": 13, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 11, "machineCode": "18015770", "date": "2018-09-30", "order": 12}], "machineCode": "18015770"}, {"point": "\u5b89\u5fbd\u7701\u5408\u80a5\u5e02\u8700\u5c71\u533a\u5408\u80a5\u5e08\u8303\u5b66\u9662\uff08\u9526\u7ee3\u6821\u533a\uff09\u70b9\u4f4d1", "data": [{"pv": 22, "uv": 18, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 13, "machineCode": "18033963", "date": "2018-09-29", "order": 13}, {"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18033963", "date": "2018-09-30", "order": 6}], "machineCode": "18033963"}, {"point": "\u5317\u4eac\u5e02\u5317\u4eac\u5e02\u671d\u9633\u533a\u70b972\u751f\u4ea7\u673a\u5668", "data": [{"pv": 2, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 1, "machineCode": "18047652", "date": "2018-09-30", "order": 2}], "machineCode": "18047652"}, {"point": "\u6c5f\u82cf\u7701\u5357\u4eac\u5e02\u6d66\u53e3\u533a\u5357\u4eac\u4fe1\u606f\u5de5\u7a0b\u5927\u5b66\uff08\u4e1c\u82d1\uff09\u70b9\u4f4d1", "data": [{"pv": 10, "uv": 7, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 10, "machineCode": "18073757", "date": "2018-09-29", "order": 10}, {"pv": 4, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18073757", "date": "2018-09-30", "order": 4}], "machineCode": "18073757"}, {"point": "\u6e56\u5357\u7701\u957f\u6c99\u5e02\u5cb3\u9e93\u533a\u6e56\u5357\u5546\u52a1\u804c\u4e1a\u6280\u672f\u5b66\u9662\u70b9\u4f4d2", "data": [{"pv": 32, "uv": 17, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 26, "machineCode": "18088295", "date": "2018-09-29", "order": 29}], "machineCode": "18088295"}, {"point": "\u5b89\u5fbd\u7701\u5408\u80a5\u5e02\u8700\u5c71\u533a\u5408\u80a5\u5e08\u8303\u5b66\u9662\uff08\u9526\u7ee3\u6821\u533a\uff09\u70b9\u4f4d2", "data": [{"pv": 41, "uv": 27, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 18, "machineCode": "18093877", "date": "2018-09-29", "order": 20}, {"pv": 5, "uv": 5, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18093877", "date": "2018-09-30", "order": 5}], "machineCode": "18093877"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u9f99\u6cc9\u9a7f\u533a\u56db\u5ddd\u5e08\u8303\u5927\u5b66\uff08\u6210\u9f99\u6821\u533a\uff09\u70b9\u4f4d2", "data": [{"pv": 78, "uv": 64, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 59, "machineCode": "18180564", "date": "2018-09-29", "order": 60}, {"pv": 71, "uv": 57, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 51, "machineCode": "18180564", "date": "2018-09-30", "order": 51}], "machineCode": "18180564"}, {"point": "\u5317\u4eac\u5e02\u5317\u4eac\u5e02\u897f\u57ce\u533a\u5317\u4eac\u5efa\u7b51\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 14, "uv": 12, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 10, "machineCode": "18231775", "date": "2018-09-30", "order": 11}], "machineCode": "18231775"}, {"point": "\u5e7f\u4e1c\u7701\u5e7f\u5dde\u5e02\u5929\u6cb3\u533a\u534e\u5357\u519c\u4e1a\u5927\u5b66\u7eff\u6995\u56ed\u4e00\u697c\u70b9\u4f4d1", "data": [{"pv": 25, "uv": 18, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18294515", "date": "2018-09-29", "order": 15}, {"pv": 40, "uv": 28, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 14, "machineCode": "18294515", "date": "2018-09-30", "order": 27}], "machineCode": "18294515"}, {"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u6cc9\u5c71\u533a\u6c5f\u82cf\u5e08\u8303\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 159, "uv": 147, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 139, "machineCode": "18304210", "date": "2018-09-29", "order": 141}, {"pv": 92, "uv": 83, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 78, "machineCode": "18304210", "date": "2018-09-30", "order": 78}], "machineCode": "18304210"}, {"point": "\u56db\u5ddd\u7701\u96c5\u5b89\u5e02\u96e8\u57ce\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u96c5\u5b89\u6821\u533a1", "data": [{"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 2, "machineCode": "18377770", "date": "2018-09-29", "order": 3}], "machineCode": "18377770"}, {"point": "\u6c5f\u82cf\u7701\u5357\u4eac\u5e02\u6d66\u53e3\u533a\u5357\u4eac\u4fe1\u606f\u5de5\u7a0b\u5927\u5b66\uff08\u4e2d\u82d1\uff09\u70b9\u4f4d2", "data": [{"pv": 11, "uv": 7, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18390965", "date": "2018-09-29", "order": 6}, {"pv": 12, "uv": 9, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18390965", "date": "2018-09-30", "order": 7}], "machineCode": "18390965"}, {"point": "\u6c5f\u82cf\u7701\u5357\u4eac\u5e02\u6d66\u53e3\u533a\u5357\u4eac\u4fe1\u606f\u5de5\u7a0b\u5927\u5b66\uff08\u4e2d\u82d1\uff09\u70b9\u4f4d1", "data": [{"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18457853", "date": "2018-09-29", "order": 5}], "machineCode": "18457853"}, {"point": "\u6c5f\u897f\u7701\u5357\u660c\u5e02\u9752\u5c71\u6e56\u533a\u6c5f\u897f\u519c\u4e1a\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 59, "uv": 38, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 36, "machineCode": "18470589", "date": "2018-09-29", "order": 39}, {"pv": 3, "uv": 2, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 2, "machineCode": "18470589", "date": "2018-09-30", "order": 2}], "machineCode": "18470589"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d4", "data": [{"pv": 21, "uv": 17, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 16, "machineCode": "18483379", "date": "2018-09-29", "order": 16}, {"pv": 14, "uv": 8, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18483379", "date": "2018-09-30", "order": 6}], "machineCode": "18483379"}, {"point": "\u9655\u897f\u7701\u5b9d\u9e21\u5e02\u6e2d\u6ee8\u533a\u5b9d\u9e21\u6587\u7406\u5b66\u9662\u70b9\u4f4d1", "data": [{"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18485774", "date": "2018-09-29", "order": 4}, {"pv": 1, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18485774", "date": "2018-09-30"}], "machineCode": "18485774"}, {"point": "\u6cb3\u5317\u7701\u77f3\u5bb6\u5e84\u5e02\u88d5\u534e\u533a\u6cb3\u5317\u79d1\u6280\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 4, "uv": 2, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 1, "machineCode": "18525960", "date": "2018-09-29", "order": 1}], "machineCode": "18525960"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d3", "data": [{"pv": 25, "uv": 12, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18624181", "date": "2018-09-29", "order": 4}, {"pv": 9, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18624181", "date": "2018-09-30"}], "machineCode": "18624181"}, {"point": "\u5317\u4eac\u5e02\u5317\u4eac\u5e02\u897f\u57ce\u533a\u5317\u4eac\u5efa\u7b51\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 2, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18638478", "date": "2018-09-29"}, {"pv": 29, "uv": 9, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18638478", "date": "2018-09-30"}], "machineCode": "18638478"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d1", "data": [{"pv": 29, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 17, "machineCode": "18638724", "date": "2018-09-29", "order": 17}, {"pv": 24, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 18, "machineCode": "18638724", "date": "2018-09-30", "order": 18}], "machineCode": "18638724"}, {"point": "\u6c5f\u897f\u7701\u5357\u660c\u5e02\u4e1c\u6e56\u533a\u8c6b\u7ae0\u5e08\u8303\u5b66\u9662\u70b9\u4f4d1", "data": [{"pv": 61, "uv": 41, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 34, "machineCode": "18672886", "date": "2018-09-29", "order": 34}], "machineCode": "18672886"}, {"point": "\u9655\u897f\u7701\u897f\u5b89\u5e02\u6237\u53bf\u897f\u5b89\u5efa\u7b51\u79d1\u6280\u5927\u5b66\uff08\u8349\u5802\u6821\u533a\uff09", "data": [{"pv": 6, "uv": 5, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18681298", "date": "2018-09-29", "order": 3}, {"pv": 2, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18681298", "date": "2018-09-30", "order": 2}], "machineCode": "18681298"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u5176\u4ed6\u897f\u5357\u4ea4\u901a\u5927\u5b66\u7280\u6d66\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 6, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18715089", "date": "2018-09-29", "order": 5}, {"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18715089", "date": "2018-09-30", "order": 4}], "machineCode": "18715089"}, {"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u6cc9\u5c71\u533a\u6c5f\u82cf\u5e08\u8303\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 26, "uv": 22, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 21, "machineCode": "18738688", "date": "2018-09-29", "order": 21}], "machineCode": "18738688"}, {"point": "\u56db\u5ddd\u7701\u96c5\u5b89\u5e02\u96e8\u57ce\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u96c5\u5b89\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 50, "uv": 19, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 34, "machineCode": "18745138", "date": "2018-09-29", "order": 34}], "machineCode": "18745138"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u5609\u5b9a\u533a\u540c\u6d4e\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 70, "uv": 36, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 58, "machineCode": "18805585", "date": "2018-09-29", "order": 58}, {"pv": 25, "uv": 14, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 24, "machineCode": "18805585", "date": "2018-09-30", "order": 24}], "machineCode": "18805585"}, {"point": "\u5b89\u5fbd\u7701\u5408\u80a5\u5e02\u8700\u5c71\u533a\u65b0\u534e\u5b66\u9662\u70b9\u4f4d1", "data": [{"pv": 67, "uv": 54, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 52, "machineCode": "18811576", "date": "2018-09-29", "order": 52}, {"pv": 4, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18811576", "date": "2018-09-30", "order": 4}], "machineCode": "18811576"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u95f5\u884c\u533a\u534e\u4e1c\u5e08\u8303\u5927\u5b66\uff08\u95f5\u884c\u6821\u533a\uff09\u70b9\u4f4d1", "data": [{"pv": 9, "uv": 7, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18815385", "date": "2018-09-29", "order": 6}, {"pv": 20, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 14, "machineCode": "18815385", "date": "2018-09-30", "order": 14}], "machineCode": "18815385"}, {"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u4e91\u9f99\u533a\u5f90\u5dde\u533b\u79d1\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 4, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 1, "machineCode": "18847938", "date": "2018-09-29", "order": 1}, {"pv": 12, "uv": 8, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 2, "machineCode": "18847938", "date": "2018-09-30", "order": 8}], "machineCode": "18847938"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u5609\u5b9a\u533a\u540c\u6d4e\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18871594", "date": "2018-09-29", "order": 6}, {"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18871594", "date": "2018-09-30", "order": 6}], "machineCode": "18871594"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u5176\u4ed6\u897f\u5357\u4ea4\u901a\u5927\u5b66\u7280\u6d66\u6821\u533a\u70b9\u4f4d1", "data": [{"pv": 5, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18886290", "date": "2018-09-29", "order": 5}, {"pv": 5, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 3, "machineCode": "18886290", "date": "2018-09-30", "order": 3}], "machineCode": "18886290"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u9f99\u6cc9\u9a7f\u533a\u56db\u5ddd\u5e08\u8303\u5927\u5b66\uff08\u6210\u9f99\u6821\u533a\uff09\u70b9\u4f4d1", "data": [{"pv": 33, "uv": 28, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 18, "machineCode": "18895324", "date": "2018-09-29", "order": 18}, {"pv": 40, "uv": 30, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 23, "machineCode": "18895324", "date": "2018-09-30", "order": 23}], "machineCode": "18895324"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u90eb\u53bf\u56db\u5ddd\u4f20\u5a92\u5b66\u9662\u70b9\u4f4d2", "data": [{"pv": 3, "uv": 2, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18905764", "date": "2018-09-29"}, {"pv": 6, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18905764", "date": "2018-09-30"}], "machineCode": "18905764"}, {"point": "\u6d59\u6c5f\u7701\u676d\u5dde\u5e02\u4f59\u676d\u533a\u676d\u5dde\u5e08\u8303\u5927\u5b66\u4ed3\u524d\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 30, "uv": 21, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 21, "machineCode": "18924094", "date": "2018-09-29", "order": 21}, {"pv": 9, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18924094", "date": "2018-09-30", "order": 4}], "machineCode": "18924094"}, {"point": "\u5e7f\u4e1c\u7701\u5e7f\u5dde\u5e02\u5929\u6cb3\u533a\u534e\u5357\u519c\u4e1a\u5927\u5b66\u7eff\u6995\u56ed\u4e00\u697c\u70b9\u4f4d2", "data": [{"pv": 34, "uv": 25, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 10, "machineCode": "18927452", "date": "2018-09-29", "order": 26}, {"pv": 65, "uv": 48, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 20, "machineCode": "18927452", "date": "2018-09-30", "order": 48}], "machineCode": "18927452"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 17, "uv": 16, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 15, "machineCode": "18944889", "date": "2018-09-29", "order": 15}, {"pv": 26, "uv": 23, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 19, "machineCode": "18944889", "date": "2018-09-30", "order": 19}], "machineCode": "18944889"}, {"point": "\u6d59\u6c5f\u7701\u676d\u5dde\u5e02\u4f59\u676d\u533a\u676d\u5dde\u5e08\u8303\u5927\u5b66\u4ed3\u524d\u6821\u533a\u70b9\u4f4d1", "data": [{"pv": 17, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 11, "machineCode": "18985756", "date": "2018-09-29", "order": 12}, {"pv": 11, "uv": 10, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 3, "machineCode": "18985756", "date": "2018-09-30", "order": 3}], "machineCode": "18985756"}]
-    }
-    res.send(data)
-  },
   'GET /project/interact/list': (req, res) => {
     res.send({
       "msg": "成功",
@@ -5939,6 +5928,401 @@ const proxy = {
       },
       "msg": "成功"
     })
+  },
+  'GET /project/interact/merchantTree': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "854c44cfaea94c6191848fc193c53d92",
+          "name": "天猫小敏旗舰店",
+          "childList": []
+        },
+        {
+          "id": "182daafc2c7e4be1beddba0a6979cbf4",
+          "name": "天猫清风",
+          "childList": [
+            {
+              "id": "938cccdd9a03469f99e66f659ee3d14a",
+              "name": "天猫清风旗舰店",
+              "childList": [
+                {
+                  "id": "1",
+                  "name": "测试-云南白药",
+                  "childList": null
+                },
+                {
+                  "id": "1d4e2c5d6b854d43ac948e0c51f8ce83",
+                  "name": "666",
+                  "childList": null
+                },
+                {
+                  "id": "3416b4c619e0403c9bb46a13aaea1c14",
+                  "name": "9999999",
+                  "childList": null
+                },
+                {
+                  "id": "3d8ec6bd455941078e6596b6749dd3e6",
+                  "name": "6",
+                  "childList": null
+                },
+                {
+                  "id": "3f8afb4fea144b858164d9a9a4135d8a",
+                  "name": "1111",
+                  "childList": null
+                },
+                {
+                  "id": "49cf81bafa154764a6efb4a1522160ae",
+                  "name": "优资莱-珀莱雅",
+                  "childList": null
+                },
+                {
+                  "id": "50f84b28f4b5433f86d31dbbbef04ee7",
+                  "name": "商品名称222222",
+                  "childList": null
+                },
+                {
+                  "id": "6872e449b6704876b9a74a7cf1c82aca",
+                  "name": "清风3层100抽0000000000000000",
+                  "childList": null
+                },
+                {
+                  "id": "844952a8170f47fbaa44656a7351192a",
+                  "name": "我问问",
+                  "childList": null
+                },
+                {
+                  "id": "8ceb4e36aa0f443f84528698369d6940",
+                  "name": "伊利优酸乳",
+                  "childList": null
+                },
+                {
+                  "id": "8e7d25369a114ca5beb298a30b4aeb65",
+                  "name": "5555555",
+                  "childList": null
+                },
+                {
+                  "id": "a2c57114af6b49dd89be5c9697e7efa4",
+                  "name": "1111",
+                  "childList": null
+                },
+                {
+                  "id": "aeb0f93482fd4fc6b97129cef110a596",
+                  "name": "666",
+                  "childList": null
+                },
+                {
+                  "id": "b1f7c42ede9c4a7c837f7e6899d2369e",
+                  "name": "清风3层100抽",
+                  "childList": null
+                },
+                {
+                  "id": "b568dd69006d485d8044768dfdf2b7ef",
+                  "name": "商品2",
+                  "childList": null
+                },
+                {
+                  "id": "c38937196f14491abff5e520490acf02",
+                  "name": "商品名称test",
+                  "childList": null
+                },
+                {
+                  "id": "ca5ba475088946ed8857a8478fdf2ce5",
+                  "name": "0987",
+                  "childList": null
+                },
+                {
+                  "id": "d6888f533c9f4e2daa0a4b2b0c2fce7a",
+                  "name": "乔治卡罗尔",
+                  "childList": null
+                },
+                {
+                  "id": "d87c7f9e85e44a139e509ae0ba3a1a15",
+                  "name": "77777",
+                  "childList": null
+                },
+                {
+                  "id": "eb32bbe0176941fda59650d0f9e76d49",
+                  "name": "清风3层100抽",
+                  "childList": null
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'GET 	/project/interact/machineTree': (req, res) => {
+    res.send({
+
+      "code": 0,
+      "data": [
+        {
+          "id": "681fd2a6f6c84d40870436fea1854dbd",
+          "name": "北京市北京市东城区278797987989899景山公园歪脖树下(18884154)",
+          "childList": [
+            {
+              "id": "1",
+              "name": "测试-云南白药",
+              "childList": null
+            }
+          ]
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/machine/getList': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "data": [
+            {
+                "id": "6b4cd639883d42999254878b52b1cc20",
+                "machineCode": "18978050",
+                "localDesc": "北京市北京市西城区小西天灯市口",
+                "machineActivity": [{
+                    "activityName": "测试别删",
+                    "startTime": "2018-10-10 00:00:00",
+                    "endTime": "2018-10-11 00:00:59"
+                }]
+            },
+            {
+                "id": "6b4cdasd183d42999254878b52b1cc20",
+                "machineCode": "18978049",
+                "localDesc": "天津市天津市和平区鞍山道沿线大沽口",
+                "machineActivity": [{
+                    "activityName": "测试别删",
+                    "startTime": "2018-09-30 09:00:00",
+                    "endTime": "2018-10-10 23:00:00"
+                }]
+            },
+            {
+                "id": "6893a2ada9dd4f7eb8dc33adfc6eda73",
+                "machineCode": "18022789",
+                "localDesc": "北京市北京市西城区小西天灯市口",
+                "machineActivity": [{
+                    "activityName": "测试别删",
+                    "startTime": "2018-10-10 00:00:00",
+                    "endTime": "2018-10-20 23:59:59"
+                }]
+            }
+        ],
+        "code": 0
+    })
+  },
+  'POST /project/interact/machine/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+      })
+  },
+  'POST /project/interact/machine/goods/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+      })
+  },
+  'POST /project/interact/machine/goods/add': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+      })
+  },
+  'POST /project/interact/machine/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+          "id": null,
+          "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+          "machineCode": "18884154",
+          "localDesc": "北京市北京市东城区278797987989899景山公园歪脖树下",
+          "state": 0,
+          "queryStartTime": "2018-09-01 13:00:00",
+          "queryEndTime": "2018-09-30 23:59:59",
+          "machineActivity": [
+              {
+                  "activityId": "87a2d062c6b643c594f5fda509387fa3",
+                  "activityName": "清华大学互派",
+                  "startTime": "2018-09-27 00:00:00",
+                  "endTime": "2018-09-28 23:59:59"
+              },
+              {
+                  "activityId": "87a2d062c6b643c594f5fda509387fa3",
+                  "activityName": "清华大学互派",
+                  "startTime": "2018-09-29 00:00:00",
+                  "endTime": "2018-09-30 00:00:00"
+              },
+              {
+                  "activityId": "796335802b4e4ac29c942c60280923de",
+                  "activityName": "mintest",
+                  "startTime": "2018-09-13 00:00:00",
+                  "endTime": "2018-09-28 23:59:59"
+              },
+              {
+                  "activityId": "6efa8f687f854569b28fe80dac653825",
+                  "activityName": "4444",
+                  "startTime": "2018-08-28 00:00:00",
+                  "endTime": "2018-08-31 23:59:59"
+              }
+          ]
+      },
+      "msg": "成功"
+  })
+  },
+  'POST /project/interact/machine/goods/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/machine/delete': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/goods/getList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "data": [{
+      "id": "1111111",
+      "name": "怡宝款泉水",
+      "code": "10000222XXX",
+      "price": 0.99,
+      "sellerId": "111111",
+      "img": "111111",
+      "state": 0,
+      "remark": "0.99",
+      "createId": null,
+      "createTime": "2018-07-03 14:51:05",
+      "updateId": null,
+      "updateTime": "2018-07-03 14:51:05"
+      }, {
+      "id": "88511198f5214404beb1cd8a3a29359e",
+      "name": "来一桶shui",
+      "code": "10000222XXX",
+      "price": 0.99,
+      "sellerId": "111111",
+      "img": "111111",
+      "state": 0,
+      "remark": "0.99",
+      "createId": "",
+      "createTime": "2018-07-03 10:55:28",
+      "updateId": "",
+      "updateTime": "2018-07-03 10:55:28"
+      }],
+      "inno72Goods": {
+      "id": null,
+      "name": null,
+      "code": null,
+      "price": null,
+      "sellerId": null,
+      "img": null,
+      "state": 0,
+      "remark": null,
+      "createId": null,
+      "createTime": null,
+      "updateId": null,
+      "updateTime": null
+      }
+      })
+  },
+  'POST /project/interact/machineTree': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+      {
+      "id": "681fd2a6f6c84d40870436fea1854dbd",
+      "name": "北京市北京市东城区278797987989899景山公园歪脖树下(18884154)",
+      "childList": [
+      {
+      "id": "1",
+      "name": "测试-云南白药",
+      "childList": null
+      }
+      ]
+      }
+      ],
+      "msg": "成功"
+      })
+  },
+  'POST /project/interact/machine/goods/list': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+            "id": "def57309fb624f90a89ab1ba6e1550ae",
+            "interactMachineId": "b0a4f9c3d3564dde952213606a2ce1de",
+            "goodsId": "64747d97fe9a4095918619ce4a3d4b33",
+            "number": 1000,
+            "seq": 1,
+            "startTime": "2018-09-26 23:59:59",
+            "endTime": "2018-09-26 23:59:59",
+            "state": 0,
+            "type": 0,
+            "goodsName": "清风2层100抽",
+            "startTimeStr": null,
+            "endTimeStr": null
+        }
+    ],
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/machine/getHavingMachines': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+            "id": "b0a4f9c3d3564dde952213606a2ce1de",
+            "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+            "machineCode": "18884154",
+            "localDesc": "北京市北京市东城区278797987989899景山公园歪脖树下",
+            "machineActivity": []
+        }
+    ],
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data":  {
+        "id": "1",
+        "name": "派样活动",
+        "gameId": "1",
+        "day": 5,
+        "manager": "如意",
+        "status": 0,
+        "times": 5,
+        "dayTimes": 1,
+        "number": 10,
+        "dayNumber": 2,
+        "createId": null,
+        "createTime": "2018-09-19 16:37:28",
+        "updateId": null,
+        "updateTime": "0001-01-01 00:00:00"
+        },
+      "msg": "成功"
+    })
+  },
+  'POST /statistics/TemplateExecute': (req, res) => {
+    const data = {"code":0,"msg":"成功"}
+    if(req.body.name==="goodsInfo"){
+      data.data = [{"goods":6,"machineCode":"18002841","pos":"江苏省徐州市云龙区徐州医科大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":5,"machineCode":"18015770","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":1,"machineCode":"18015770","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":13,"machineCode":"18033963","pos":"安徽省合肥市蜀山区合肥师范学院（锦绣校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"采之汲雪肌焕亮面膜2片组合装","goodsCode":"576236451496"},{"goods":10,"machineCode":"18073757","pos":"江苏省南京市浦口区南京信息工程大学（东苑）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":26,"machineCode":"18088295","pos":"湖南省长沙市岳麓区湖南商务职业技术学院点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":18,"machineCode":"18093877","pos":"安徽省合肥市蜀山区合肥师范学院（锦绣校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":59,"machineCode":"18180564","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18180564","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":3,"machineCode":"18231775","pos":"北京市北京市西城区北京建筑大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":4,"machineCode":"18294515","pos":"广东省广州市天河区华南农业大学绿榕园一楼点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士沐浴露","goodsCode":"576510091613"},{"goods":139,"machineCode":"18304210","pos":"江苏省徐州市泉山区江苏师范大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":5,"machineCode":"18304210","pos":"江苏省徐州市泉山区江苏师范大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":2,"machineCode":"18377770","pos":"四川省雅安市雨城区四川农业大学雅安校区1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18390965","pos":"江苏省南京市浦口区南京信息工程大学（中苑）点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":4,"machineCode":"18457853","pos":"江苏省南京市浦口区南京信息工程大学（中苑）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":36,"machineCode":"18470589","pos":"江西省南昌市青山湖区江西农业大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":16,"machineCode":"18483379","pos":"四川省成都市温江区四川农业大学温江校区点位4","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":4,"machineCode":"18485774","pos":"陕西省宝鸡市渭滨区宝鸡文理学院点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士洗发水","goodsCode":"576283105389"},{"goods":1,"machineCode":"18525960","pos":"河北省石家庄市裕华区河北科技大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士洗发水","goodsCode":"576283105389"},{"goods":4,"machineCode":"18624181","pos":"四川省成都市温江区四川农业大学温江校区点位3","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士洗面奶","goodsCode":"576402814187"},{"goods":9,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":8,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":3,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18638724","pos":"四川省成都市温江区四川农业大学温江校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":34,"machineCode":"18672886","pos":"江西省南昌市东湖区豫章师范学院点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":2,"machineCode":"18715089","pos":"四川省成都市其他西南交通大学犀浦校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18715089","pos":"四川省成都市其他西南交通大学犀浦校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":21,"machineCode":"18738688","pos":"江苏省徐州市泉山区江苏师范大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":9,"machineCode":"18745138","pos":"四川省雅安市雨城区四川农业大学雅安校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":15,"machineCode":"18745138","pos":"四川省雅安市雨城区四川农业大学雅安校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":10,"machineCode":"18745138","pos":"四川省雅安市雨城区四川农业大学雅安校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"乔治卡罗尔男士沐浴露","goodsCode":"576510091613"},{"goods":32,"machineCode":"18805585","pos":"上海市上海市嘉定区同济大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":26,"machineCode":"18805585","pos":"上海市上海市嘉定区同济大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":1,"machineCode":"18805585","pos":"上海市上海市嘉定区同济大学点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":52,"machineCode":"18811576","pos":"安徽省合肥市蜀山区新华学院点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18815385","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"采之汲雪肌焕亮面膜2片组合装","goodsCode":"576236451496"},{"goods":2,"machineCode":"18815385","pos":"上海市上海市闵行区华东师范大学（闵行校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"采之汲雪肌焕亮面膜2片组合装","goodsCode":"576236451496"},{"goods":1,"machineCode":"18847938","pos":"江苏省徐州市云龙区徐州医科大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":1,"machineCode":"18847938","pos":"江苏省徐州市云龙区徐州医科大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":6,"machineCode":"18871594","pos":"上海市上海市嘉定区同济大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":1,"machineCode":"18871594","pos":"上海市上海市嘉定区同济大学点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":2,"machineCode":"18886290","pos":"四川省成都市其他西南交通大学犀浦校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18886290","pos":"四川省成都市其他西南交通大学犀浦校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"},{"goods":18,"machineCode":"18895324","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":3,"machineCode":"18895324","pos":"四川省成都市龙泉驿区四川师范大学（成龙校区）点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"优资莱旅行套装","goodsCode":"575906013266"},{"goods":21,"machineCode":"18924094","pos":"浙江省杭州市余杭区杭州师范大学仓前校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":3,"machineCode":"18924094","pos":"浙江省杭州市余杭区杭州师范大学仓前校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":10,"machineCode":"18927452","pos":"广东省广州市天河区华南农业大学绿榕园一楼点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":15,"machineCode":"18944889","pos":"四川省成都市温江区四川农业大学温江校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":2,"machineCode":"18944889","pos":"四川省成都市温江区四川农业大学温江校区点位2","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-30","goodsName":"潘婷3分钟奇迹奢护精华霜","goodsCode":"576665688344"},{"goods":11,"machineCode":"18985756","pos":"浙江省杭州市余杭区杭州师范大学仓前校区点位1","activityId":"9c60b8c61b4d4f588f34caa7219f3e1a","time":"2018-09-29","goodsName":"悦诗风吟芦荟面膜","goodsCode":"576069787121"}]
+      data.data = [{"goods": 2, "machineCode": "18531434", "pos": "\u6cb3\u5317\u7701\u77f3\u5bb6\u5e84\u5e02\u88d5\u534e\u533a\u673a\u5668\u52ff\u5220", "activityId": "f95976169ca2429b8e1d9b344fe4961c", "time": "2018-09-29", "goodsName": "\u6f58\u5a773\u5206\u949f\u5947\u8ff9\u5962\u62a4\u7cbe\u534e\u971c", "goodsCode": "576665688344"}, {"goods": 1, "machineCode": "18578416", "pos": "\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u5176\u4ed6\u67ff\u5b50\u8def\u53e3", "activityId": "f95976169ca2429b8e1d9b344fe4961c", "time": "2018-09-29", "goodsName": "\u91c7\u4e4b\u6c72\u96ea\u808c\u7115\u4eae\u9762\u819c\u7ec4\u5408\u88c5", "goodsCode": "576236451496"}, {"goods": 1, "machineCode": "18578416", "pos": "\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u9999\u6e2f\u7279\u522b\u884c\u653f\u533a\u5176\u4ed6\u67ff\u5b50\u8def\u53e3", "activityId": "f95976169ca2429b8e1d9b344fe4961c", "time": "2018-09-30", "goodsName": "\u4f18\u8d44\u83b1\u7eff\u8336\u6d3b\u8403\u82af\u808c\u5957\u88c5", "goodsCode": "575906013266"}]
+    }else{
+      data.data = [{"point": "\u6fb3\u95e8\u7279\u522b\u884c\u653f\u533a\u6fb3\u95e8\u7279\u522b\u884c\u653f\u533a\u5176\u4ed6\u5730\u4e0b\u4e00\u5c42\u95e8\u53e3", "data": [{"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-24", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-24", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-24", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-25", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-25", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-25", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-26", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-26", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-26", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-27", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-27", "order": 1}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-27", "order": 1}, {"date": "2018-09-28", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"date": "2018-09-28", "visitor": 61, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-28", "order": 1}, {"date": "2018-09-29", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"pv": 2, "uv": 4, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 2, "machineCode": "18355236", "date": "2018-09-29", "order": 2}, {"pv": 1, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "shipment": 1, "machineCode": "18355236", "date": "2018-09-29", "order": 1}, {"pv": 4, "visitor": 0, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236", "date": "2018-09-30", "order": 2}, {"date": "2018-09-30", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}, {"pv": 2, "uv": 1, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236", "date": "2018-09-30", "order": 1}, {"date": "2018-09-30", "visitor": 0, "activityId": "4400721f84964087bdf59b1fea02daa6", "machineCode": "18355236"}], "machineCode": "18355236"}]
+      data.data = [{"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u4e91\u9f99\u533a\u5f90\u5dde\u533b\u79d1\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 10, "uv": 10, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18002841", "date": "2018-09-29", "order": 6}, {"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18002841", "date": "2018-09-30", "order": 4}], "machineCode": "18002841"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u95f5\u884c\u533a\u534e\u4e1c\u5e08\u8303\u5927\u5b66\uff08\u95f5\u884c\u6821\u533a\uff09\u70b9\u4f4d2", "data": [{"pv": 5, "uv": 5, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18015770", "date": "2018-09-29", "order": 5}, {"pv": 15, "uv": 13, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 11, "machineCode": "18015770", "date": "2018-09-30", "order": 12}], "machineCode": "18015770"}, {"point": "\u5b89\u5fbd\u7701\u5408\u80a5\u5e02\u8700\u5c71\u533a\u5408\u80a5\u5e08\u8303\u5b66\u9662\uff08\u9526\u7ee3\u6821\u533a\uff09\u70b9\u4f4d1", "data": [{"pv": 22, "uv": 18, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 13, "machineCode": "18033963", "date": "2018-09-29", "order": 13}, {"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18033963", "date": "2018-09-30", "order": 6}], "machineCode": "18033963"}, {"point": "\u5317\u4eac\u5e02\u5317\u4eac\u5e02\u671d\u9633\u533a\u70b972\u751f\u4ea7\u673a\u5668", "data": [{"pv": 2, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 1, "machineCode": "18047652", "date": "2018-09-30", "order": 2}], "machineCode": "18047652"}, {"point": "\u6c5f\u82cf\u7701\u5357\u4eac\u5e02\u6d66\u53e3\u533a\u5357\u4eac\u4fe1\u606f\u5de5\u7a0b\u5927\u5b66\uff08\u4e1c\u82d1\uff09\u70b9\u4f4d1", "data": [{"pv": 10, "uv": 7, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 10, "machineCode": "18073757", "date": "2018-09-29", "order": 10}, {"pv": 4, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18073757", "date": "2018-09-30", "order": 4}], "machineCode": "18073757"}, {"point": "\u6e56\u5357\u7701\u957f\u6c99\u5e02\u5cb3\u9e93\u533a\u6e56\u5357\u5546\u52a1\u804c\u4e1a\u6280\u672f\u5b66\u9662\u70b9\u4f4d2", "data": [{"pv": 32, "uv": 17, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 26, "machineCode": "18088295", "date": "2018-09-29", "order": 29}], "machineCode": "18088295"}, {"point": "\u5b89\u5fbd\u7701\u5408\u80a5\u5e02\u8700\u5c71\u533a\u5408\u80a5\u5e08\u8303\u5b66\u9662\uff08\u9526\u7ee3\u6821\u533a\uff09\u70b9\u4f4d2", "data": [{"pv": 41, "uv": 27, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 18, "machineCode": "18093877", "date": "2018-09-29", "order": 20}, {"pv": 5, "uv": 5, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18093877", "date": "2018-09-30", "order": 5}], "machineCode": "18093877"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u9f99\u6cc9\u9a7f\u533a\u56db\u5ddd\u5e08\u8303\u5927\u5b66\uff08\u6210\u9f99\u6821\u533a\uff09\u70b9\u4f4d2", "data": [{"pv": 78, "uv": 64, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 59, "machineCode": "18180564", "date": "2018-09-29", "order": 60}, {"pv": 71, "uv": 57, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 51, "machineCode": "18180564", "date": "2018-09-30", "order": 51}], "machineCode": "18180564"}, {"point": "\u5317\u4eac\u5e02\u5317\u4eac\u5e02\u897f\u57ce\u533a\u5317\u4eac\u5efa\u7b51\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 14, "uv": 12, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 10, "machineCode": "18231775", "date": "2018-09-30", "order": 11}], "machineCode": "18231775"}, {"point": "\u5e7f\u4e1c\u7701\u5e7f\u5dde\u5e02\u5929\u6cb3\u533a\u534e\u5357\u519c\u4e1a\u5927\u5b66\u7eff\u6995\u56ed\u4e00\u697c\u70b9\u4f4d1", "data": [{"pv": 25, "uv": 18, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18294515", "date": "2018-09-29", "order": 15}, {"pv": 40, "uv": 28, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 14, "machineCode": "18294515", "date": "2018-09-30", "order": 27}], "machineCode": "18294515"}, {"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u6cc9\u5c71\u533a\u6c5f\u82cf\u5e08\u8303\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 159, "uv": 147, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 139, "machineCode": "18304210", "date": "2018-09-29", "order": 141}, {"pv": 92, "uv": 83, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 78, "machineCode": "18304210", "date": "2018-09-30", "order": 78}], "machineCode": "18304210"}, {"point": "\u56db\u5ddd\u7701\u96c5\u5b89\u5e02\u96e8\u57ce\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u96c5\u5b89\u6821\u533a1", "data": [{"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 2, "machineCode": "18377770", "date": "2018-09-29", "order": 3}], "machineCode": "18377770"}, {"point": "\u6c5f\u82cf\u7701\u5357\u4eac\u5e02\u6d66\u53e3\u533a\u5357\u4eac\u4fe1\u606f\u5de5\u7a0b\u5927\u5b66\uff08\u4e2d\u82d1\uff09\u70b9\u4f4d2", "data": [{"pv": 11, "uv": 7, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18390965", "date": "2018-09-29", "order": 6}, {"pv": 12, "uv": 9, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18390965", "date": "2018-09-30", "order": 7}], "machineCode": "18390965"}, {"point": "\u6c5f\u82cf\u7701\u5357\u4eac\u5e02\u6d66\u53e3\u533a\u5357\u4eac\u4fe1\u606f\u5de5\u7a0b\u5927\u5b66\uff08\u4e2d\u82d1\uff09\u70b9\u4f4d1", "data": [{"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18457853", "date": "2018-09-29", "order": 5}], "machineCode": "18457853"}, {"point": "\u6c5f\u897f\u7701\u5357\u660c\u5e02\u9752\u5c71\u6e56\u533a\u6c5f\u897f\u519c\u4e1a\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 59, "uv": 38, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 36, "machineCode": "18470589", "date": "2018-09-29", "order": 39}, {"pv": 3, "uv": 2, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 2, "machineCode": "18470589", "date": "2018-09-30", "order": 2}], "machineCode": "18470589"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d4", "data": [{"pv": 21, "uv": 17, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 16, "machineCode": "18483379", "date": "2018-09-29", "order": 16}, {"pv": 14, "uv": 8, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18483379", "date": "2018-09-30", "order": 6}], "machineCode": "18483379"}, {"point": "\u9655\u897f\u7701\u5b9d\u9e21\u5e02\u6e2d\u6ee8\u533a\u5b9d\u9e21\u6587\u7406\u5b66\u9662\u70b9\u4f4d1", "data": [{"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18485774", "date": "2018-09-29", "order": 4}, {"pv": 1, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18485774", "date": "2018-09-30"}], "machineCode": "18485774"}, {"point": "\u6cb3\u5317\u7701\u77f3\u5bb6\u5e84\u5e02\u88d5\u534e\u533a\u6cb3\u5317\u79d1\u6280\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 4, "uv": 2, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 1, "machineCode": "18525960", "date": "2018-09-29", "order": 1}], "machineCode": "18525960"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d3", "data": [{"pv": 25, "uv": 12, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18624181", "date": "2018-09-29", "order": 4}, {"pv": 9, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18624181", "date": "2018-09-30"}], "machineCode": "18624181"}, {"point": "\u5317\u4eac\u5e02\u5317\u4eac\u5e02\u897f\u57ce\u533a\u5317\u4eac\u5efa\u7b51\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 2, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18638478", "date": "2018-09-29"}, {"pv": 29, "uv": 9, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18638478", "date": "2018-09-30"}], "machineCode": "18638478"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d1", "data": [{"pv": 29, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 17, "machineCode": "18638724", "date": "2018-09-29", "order": 17}, {"pv": 24, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 18, "machineCode": "18638724", "date": "2018-09-30", "order": 18}], "machineCode": "18638724"}, {"point": "\u6c5f\u897f\u7701\u5357\u660c\u5e02\u4e1c\u6e56\u533a\u8c6b\u7ae0\u5e08\u8303\u5b66\u9662\u70b9\u4f4d1", "data": [{"pv": 61, "uv": 41, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 34, "machineCode": "18672886", "date": "2018-09-29", "order": 34}], "machineCode": "18672886"}, {"point": "\u9655\u897f\u7701\u897f\u5b89\u5e02\u6237\u53bf\u897f\u5b89\u5efa\u7b51\u79d1\u6280\u5927\u5b66\uff08\u8349\u5802\u6821\u533a\uff09", "data": [{"pv": 6, "uv": 5, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18681298", "date": "2018-09-29", "order": 3}, {"pv": 2, "uv": 1, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18681298", "date": "2018-09-30", "order": 2}], "machineCode": "18681298"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u5176\u4ed6\u897f\u5357\u4ea4\u901a\u5927\u5b66\u7280\u6d66\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 6, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18715089", "date": "2018-09-29", "order": 5}, {"pv": 5, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18715089", "date": "2018-09-30", "order": 4}], "machineCode": "18715089"}, {"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u6cc9\u5c71\u533a\u6c5f\u82cf\u5e08\u8303\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 26, "uv": 22, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 21, "machineCode": "18738688", "date": "2018-09-29", "order": 21}], "machineCode": "18738688"}, {"point": "\u56db\u5ddd\u7701\u96c5\u5b89\u5e02\u96e8\u57ce\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u96c5\u5b89\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 50, "uv": 19, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 34, "machineCode": "18745138", "date": "2018-09-29", "order": 34}], "machineCode": "18745138"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u5609\u5b9a\u533a\u540c\u6d4e\u5927\u5b66\u70b9\u4f4d1", "data": [{"pv": 70, "uv": 36, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 58, "machineCode": "18805585", "date": "2018-09-29", "order": 58}, {"pv": 25, "uv": 14, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 24, "machineCode": "18805585", "date": "2018-09-30", "order": 24}], "machineCode": "18805585"}, {"point": "\u5b89\u5fbd\u7701\u5408\u80a5\u5e02\u8700\u5c71\u533a\u65b0\u534e\u5b66\u9662\u70b9\u4f4d1", "data": [{"pv": 67, "uv": 54, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 52, "machineCode": "18811576", "date": "2018-09-29", "order": 52}, {"pv": 4, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18811576", "date": "2018-09-30", "order": 4}], "machineCode": "18811576"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u95f5\u884c\u533a\u534e\u4e1c\u5e08\u8303\u5927\u5b66\uff08\u95f5\u884c\u6821\u533a\uff09\u70b9\u4f4d1", "data": [{"pv": 9, "uv": 7, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18815385", "date": "2018-09-29", "order": 6}, {"pv": 20, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 14, "machineCode": "18815385", "date": "2018-09-30", "order": 14}], "machineCode": "18815385"}, {"point": "\u6c5f\u82cf\u7701\u5f90\u5dde\u5e02\u4e91\u9f99\u533a\u5f90\u5dde\u533b\u79d1\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 4, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 1, "machineCode": "18847938", "date": "2018-09-29", "order": 1}, {"pv": 12, "uv": 8, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 2, "machineCode": "18847938", "date": "2018-09-30", "order": 8}], "machineCode": "18847938"}, {"point": "\u4e0a\u6d77\u5e02\u4e0a\u6d77\u5e02\u5609\u5b9a\u533a\u540c\u6d4e\u5927\u5b66\u70b9\u4f4d2", "data": [{"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18871594", "date": "2018-09-29", "order": 6}, {"pv": 6, "uv": 6, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 6, "machineCode": "18871594", "date": "2018-09-30", "order": 6}], "machineCode": "18871594"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u5176\u4ed6\u897f\u5357\u4ea4\u901a\u5927\u5b66\u7280\u6d66\u6821\u533a\u70b9\u4f4d1", "data": [{"pv": 5, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 5, "machineCode": "18886290", "date": "2018-09-29", "order": 5}, {"pv": 5, "uv": 3, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 3, "machineCode": "18886290", "date": "2018-09-30", "order": 3}], "machineCode": "18886290"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u9f99\u6cc9\u9a7f\u533a\u56db\u5ddd\u5e08\u8303\u5927\u5b66\uff08\u6210\u9f99\u6821\u533a\uff09\u70b9\u4f4d1", "data": [{"pv": 33, "uv": 28, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 18, "machineCode": "18895324", "date": "2018-09-29", "order": 18}, {"pv": 40, "uv": 30, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 23, "machineCode": "18895324", "date": "2018-09-30", "order": 23}], "machineCode": "18895324"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u90eb\u53bf\u56db\u5ddd\u4f20\u5a92\u5b66\u9662\u70b9\u4f4d2", "data": [{"pv": 3, "uv": 2, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18905764", "date": "2018-09-29"}, {"pv": 6, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "machineCode": "18905764", "date": "2018-09-30"}], "machineCode": "18905764"}, {"point": "\u6d59\u6c5f\u7701\u676d\u5dde\u5e02\u4f59\u676d\u533a\u676d\u5dde\u5e08\u8303\u5927\u5b66\u4ed3\u524d\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 30, "uv": 21, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 21, "machineCode": "18924094", "date": "2018-09-29", "order": 21}, {"pv": 9, "uv": 4, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 4, "machineCode": "18924094", "date": "2018-09-30", "order": 4}], "machineCode": "18924094"}, {"point": "\u5e7f\u4e1c\u7701\u5e7f\u5dde\u5e02\u5929\u6cb3\u533a\u534e\u5357\u519c\u4e1a\u5927\u5b66\u7eff\u6995\u56ed\u4e00\u697c\u70b9\u4f4d2", "data": [{"pv": 34, "uv": 25, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 10, "machineCode": "18927452", "date": "2018-09-29", "order": 26}, {"pv": 65, "uv": 48, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 20, "machineCode": "18927452", "date": "2018-09-30", "order": 48}], "machineCode": "18927452"}, {"point": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u6e29\u6c5f\u533a\u56db\u5ddd\u519c\u4e1a\u5927\u5b66\u6e29\u6c5f\u6821\u533a\u70b9\u4f4d2", "data": [{"pv": 17, "uv": 16, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 15, "machineCode": "18944889", "date": "2018-09-29", "order": 15}, {"pv": 26, "uv": 23, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 19, "machineCode": "18944889", "date": "2018-09-30", "order": 19}], "machineCode": "18944889"}, {"point": "\u6d59\u6c5f\u7701\u676d\u5dde\u5e02\u4f59\u676d\u533a\u676d\u5dde\u5e08\u8303\u5927\u5b66\u4ed3\u524d\u6821\u533a\u70b9\u4f4d1", "data": [{"pv": 17, "uv": 15, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 11, "machineCode": "18985756", "date": "2018-09-29", "order": 12}, {"pv": 11, "uv": 10, "activityId": "9c60b8c61b4d4f588f34caa7219f3e1a", "shipment": 3, "machineCode": "18985756", "date": "2018-09-30", "order": 3}], "machineCode": "18985756"}]
+    }
+    res.send(data)
   },
   'post /machine/locale/updateBatch': (req, res) => {
     res.send({

@@ -1440,12 +1440,15 @@ export default class TaskSetting extends PureComponent {
           sourceData: res,
         });
       } else {
+        console.log('targetOption', targetOption, params)
         if (targetOption) {
-          targetOption.loading = false;
-          targetOption.children = res
-          this.setState({
-            insertOptions: [...this.state.insertOptions],
-          });
+          if (targetOption.value === params.code) {
+            targetOption.loading = false;
+            targetOption.children = res
+            this.setState({
+              insertOptions: [...this.state.insertOptions],
+            });
+          }
         } else {
           this.setState({
             sourceData: res,

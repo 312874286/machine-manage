@@ -1,12 +1,12 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import { Table, Divider, Popconfirm } from "antd";
 
-export default class MachinePlanTable extends PureComponent {
+export default class MachinePlanTable extends Component {
   state = {
     expandedRows: []
   };
-  handleExpand = (...rests) => {
-    // return false;
+  handleExpand = (indent, record) => {
+    return this.props.onExpand(indent, record);
   };
   handleExpandedRowsChange = expandedRows => {
     this.setState({ expandedRows });
@@ -14,7 +14,7 @@ export default class MachinePlanTable extends PureComponent {
   renderExpandedRow = (record, index, indent) => {
     return this.props.renderExpandedRow(
       record,
-      this.state.expandedRows.some(id => id === record.id)
+      this.state.expandedRows.some(id => id === record.key)
     );
   };
   renderMachineTable = () => {
@@ -25,7 +25,7 @@ export default class MachinePlanTable extends PureComponent {
       },
       {
         title: "机器点位",
-        dataIndex: "localDesc"
+        dataIndex: "title"
       },
       {
         title: "操作",
@@ -57,7 +57,7 @@ export default class MachinePlanTable extends PureComponent {
     ];
     return (
       <Table
-        rowKey="id"
+        rowKey="key"
         columns={columns}
         dataSource={this.props.dataSource}
         expandedRowRender={this.renderExpandedRow}
@@ -69,43 +69,5 @@ export default class MachinePlanTable extends PureComponent {
   };
   render() {
     return this.renderMachineTable();
-  }
-}
-
-export class MachinePlanedGoodsTable extends PureComponent {
-  renderTable = () => {
-    const columns = [
-      { title: "商品名称", dataIndex: "goodsName" },
-      { title: "商品数量", dataIndex: "number" },
-      {
-        title: "操作",
-        dataIndex: "operation",
-        render: record => {
-          return (
-            <Fragment>
-              <Popconfirm
-                title="确定要删除吗"
-                onConfirm={this.props.onDeleteGoods}
-                okText="确定"
-                cancelText="取消"
-              >
-                <a>删除</a>
-              </Popconfirm>
-            </Fragment>
-          );
-        }
-      }
-    ];
-    return (
-      <Table
-        rowKey="goodsId"
-        columns={columns}
-        dataSource={this.props.dataSource}
-        pagination={false}
-      />
-    );
-  };
-  render() {
-    return this.renderTable();
   }
 }

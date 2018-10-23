@@ -113,28 +113,38 @@ export default class machinePlanSettingList extends PureComponent {
     let width;
     let background = 'Green'
     arr.forEach((item, index) => {
-      let time = '开始时间：' + item.startTime + '--' + '结束时间: ' + item.endTime
+      // console.log('item5555', item, new Date(item.endTime.replace(/-/g, "/")).getTime(), moment(this.state.endTime))
+      // let time = '开始时间：' + item.startTime + '--' + '结束时间: ' + item.endTime
       const DateNo = 24 * 60 * 60 * 1000
-      if (moment(item.startTime) >= moment(this.state.startTime)) {
+      const { startTime, endTime } = this.state
+      const { startDay, endDay } = this.state.handleDays
+      let stateStartTime = new Date(startTime.replace(/-/g, "/")).getTime(),
+        stateEndTime = new Date(endTime.replace(/-/g, "/")).getTime(),
+        stateHandleDaysStartDay = new Date(startDay.replace(/-/g, "/")).getTime(),
+        stateHandleDaysEndDay = new Date(endDay.replace(/-/g, "/")).getTime(),
+        itemStartTime = new Date(item.startTime.replace(/-/g, "/")).getTime(),
+        itemEndTime = new Date(item.endTime.replace(/-/g, "/")).getTime()
+
+      if (itemStartTime >= stateStartTime) {
         // 开始日期>范围的开始日期
-        if (moment(item.endTime) <= moment(this.state.endTime)) {
+        if (itemEndTime <= stateEndTime) {
           // 开始时间及结束日期在15天的范围
-          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
-          width = Math.floor((moment(item.endTime) - moment(item.startTime)) / DateNo)
+          left = Math.floor((itemStartTime - stateStartTime) / DateNo)
+          width = Math.floor((itemEndTime - itemStartTime) / DateNo)
         } else {
           // 结束日期>范围的结束日期
-          left = Math.floor((moment(item.startTime) - moment(this.state.startTime)) / DateNo)
-          width = Math.ceil((moment(this.state.endTime) - moment(item.startTime)) / DateNo)
+          left = Math.floor((itemStartTime - stateStartTime) / DateNo)
+          width = Math.ceil((stateEndTime - itemStartTime) / DateNo)
         }
         width += 1
       } else {
         // 开始日期<范围的开始日期
         left = 0, width = '';
-        if (moment(item.endTime) >= moment(this.state.handleDays.endDay)) {
+        if (itemEndTime >= stateHandleDaysEndDay) {
           // console.log('jieshu日期<范围的开始日期', left, width)
-          width = Math.floor((moment(this.state.endTime) - moment(this.state.startTime)) / DateNo)
+          width = Math.floor((stateEndTime - stateStartTime) / DateNo)
         } else {
-          width = Math.floor((moment(item.endTime) - moment(this.state.startTime)) / DateNo)
+          width = Math.floor((itemEndTime - stateStartTime) / DateNo)
         }
         width += 1
       }
@@ -150,6 +160,7 @@ export default class machinePlanSettingList extends PureComponent {
       }
       activityArr.push(tmp);
     })
+    console.log('activityArr', activityArr)
     return activityArr;
   }
   handleDays = (val) => {
