@@ -147,7 +147,7 @@ const CreateForm = Form.create()(
                   options={options}
                   loadData={loadData}
                   changeOnSelect
-                  onChange={onChangeArea}
+                  // onChange={onChangeArea}
                 />
               )}
             </FormItem>
@@ -463,14 +463,19 @@ export default class user extends PureComponent {
         // lastAreaCode
         targetOption.loading = false;
         console.log('res', res, targetOption.value)
-        if (targetOption.value === res[0].parentCode) {
-          console.log('res2222', res, targetOption.value)
-          targetOption.children = res
-          this.setState({
-            options: [...this.state.options],
-            lastAreaCode: targetOption.value
-          });
-        }
+        targetOption.children = res
+        this.setState({
+          options: [...this.state.options],
+          lastAreaCode: targetOption.value
+        });
+        // if (targetOption.value === res[0].parentCode) {
+        //   console.log('res2222', res, targetOption.value)
+        //   targetOption.children = res
+        //   this.setState({
+        //     options: [...this.state.options],
+        //     lastAreaCode: targetOption.value
+        //   });
+        // }
       }
     });
   }

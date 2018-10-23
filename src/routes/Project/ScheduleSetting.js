@@ -2164,13 +2164,14 @@ export default class ScheduleSettingList extends PureComponent {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
         }
       }
-      // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
+      // console.log('localCode', localCode, fieldsValue.machineCode, !localCode, !fieldsValue.machineCode)
       if (!localCode) {
         message.config({
           top: 100,
           duration: 2,
           maxCount: 1,
         });
+        // message.error('至少选择一个地区或者填写一个机器编号')
         message.error('请选择一个地区')
         return;
       }
