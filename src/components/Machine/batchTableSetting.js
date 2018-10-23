@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styles from './batchTableSetting.less'
 import { Table, Input, Button, Popconfirm, Form, Select, message } from 'antd';
 import {RegexTool} from "../../utils/utils";
-const No = /^\d+/
+const No = /^[1-9]+/
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
