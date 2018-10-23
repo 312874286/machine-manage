@@ -30,7 +30,7 @@ const CreateForm = Form.create()(
       modalVisible, form, handleAdd, handleModalVisible,
       editModalConfirmLoading, modalType, goodsInitData,
       goodsHandle, goodsHandleAdd, goodsHandleDelete,
-      goodsHandleChange, shopHandle,
+      goodsHandleChange, shopHandle, getByteLen
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -60,10 +60,13 @@ const CreateForm = Form.create()(
           <Form>
             <FormItem {...formItemLayout} label="批次名称">
               {getFieldDecorator('batchName', {
-                rules: [{ required: true, whitespace: true, message: '请填写批次名称' }],
+                rules: [{ required: true, whitespace: true, message: '请填写批次名称' },
+                  {
+                   validator: getByteLen
+                  }],
               })(<Input placeholder="请填写批次名称" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="批次编号">
+            <FormItem {...formItemLayout} label="批次编号" style={{ display: !modalType ? 'none' : ''}}>
               {getFieldDecorator('id', {
                 rules: [{ required: true, message: '请填写批次编号' },
                   {
@@ -76,6 +79,19 @@ const CreateForm = Form.create()(
                   }],
               })(<InputNumber  placeholder="请填写两位整数"/>)}
             </FormItem>
+            <FormItem {...formItemLayout} label="批次编号" style={{ display: !modalType ? '' : 'none'}}>
+              {getFieldDecorator('id', {
+                rules: [{ required: true, message: '请填写批次编号' },
+                  {
+                    validator(rule, value, callback) {
+                      if (!No.test(value)) {
+                        callback('批次编号只能是两位整数');
+                      }
+                      callback();
+                    },
+                  }],
+              })(<InputNumber  placeholder="请填写两位整数" disabled/>)}
+            </FormItem>
             <FormItem label="货道信息">
               <div className={styles.goodsNoteBox}>
                 <FormItem>
@@ -87,6 +103,7 @@ const CreateForm = Form.create()(
                     goodsHandleDelete={goodsHandleDelete}
                     goodsHandleChange={goodsHandleChange}
                     shopClist={[]}
+                    modalType={modalType}
                   />
                 </FormItem>
               </div>
@@ -200,6 +217,24 @@ export default class versionSetting extends PureComponent {
         },
       },
     });
+  }
+  getByteLen = (rule, value, callback) => {
+    let len = 0;
+    for (let i = 0; i < value.length; i++) {
+      let length = value.charCodeAt(i);
+      if(length >= 0 && length <= 128)
+      {
+        len += 1;
+      }
+      else
+      {
+        len += 2;
+      }
+    }
+    if(len > 40){
+      callback('批次名称长度为最大40位，其中中文算两个字符！')
+    }
+    callback()
   }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -579,6 +614,7 @@ export default class versionSetting extends PureComponent {
           goodsHandleDelete={this.goodsHandleDelete}
           goodsHandleChange={this.goodsHandleChange}
           shopHandle={this.shopHandle}
+          getByteLen={this.getByteLen}
         />
         <ManageAisleForm
           ref={this.saveManageAisleFormRef}

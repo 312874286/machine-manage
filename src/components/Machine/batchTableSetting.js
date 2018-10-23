@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styles from './batchTableSetting.less'
 import { Table, Input, Button, Popconfirm, Form, Select, message } from 'antd';
 import {RegexTool} from "../../utils/utils";
-
+const No = /^\d+/
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -96,6 +96,9 @@ class EditableCell extends Component {
                             if (value.length > 8) {
                               callback(`${title}输入过大`);
                             }
+                          }
+                          if (!No.test(value)) {
+                            callback('必须输入正整数')
                           }
                           callback();
                         },
@@ -196,6 +199,7 @@ class BatchTableField extends Component {
   }
   render() {
     const { aisleCount, initData } = this.state
+    const { modalType } = this.state
     const components = {
       body: {
         row: EditableFormRow,
@@ -218,7 +222,7 @@ class BatchTableField extends Component {
         render: (text, record) => {
           return (
             <Select defaultValue={record.count}  onChange={this.handleChangeCount.bind(this,record)}
-                    placeholder="请选择">
+                    placeholder="请选择" disabled={!modalType}>
               {aisleCount.map((item) => {
                 return (
                   <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -233,7 +237,8 @@ class BatchTableField extends Component {
         dataIndex: 'type',
         render: (text, record) => {
           return (
-            <Select defaultValue={record.type} onChange={this.handleChangeType.bind(this,record)} placeholder="请选择">
+            <Select defaultValue={record.type} onChange={this.handleChangeType.bind(this,record)}
+                    placeholder="请选择" disabled={!modalType}>
               {typeList.map((item) => {
                 return (
                   <Option key={item.id} value={item.id}>{item.name}</Option>
