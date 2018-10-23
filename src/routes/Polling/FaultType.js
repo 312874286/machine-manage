@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Form, Icon, Tree, message, Popconfirm, List } from 'antd';
+import { Card, Table, Button, Row, Col, Input, Modal, DatePicker, Form, Icon, Tree, message, Popconfirm, List, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './FaultType.less';
 import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
+const { Option } = Select;
+const submitType = [{id: 0, name: '不可直接上报'}, {id: 1, name: '可直接上报'}]
 @connect(({ faultType }) => ({ faultType }))
 export default class FaultType extends PureComponent {
     state = {
@@ -20,7 +22,8 @@ export default class FaultType extends PureComponent {
       currentRecord: {},
       pageNo: 1,
 
-      account: {}
+      account: {},
+      submitTypeName: ''
     };
     componentDidMount = () => {
       this.getLists();
@@ -79,6 +82,11 @@ export default class FaultType extends PureComponent {
         });
 
     }
+    onSubmitTypeChange = (value) => {
+      this.setState({
+        submitTypeName: value
+      })
+    }
     onFindData = (e) => {
     this.getLists();
     }
@@ -116,6 +124,7 @@ export default class FaultType extends PureComponent {
                     visible: true,
                     solutionsLists: arrlist,
                     typeName: data.name,
+                    submitTypeName: data.submitType
                 });
 
               });
@@ -159,6 +168,7 @@ export default class FaultType extends PureComponent {
         }],
         count: 1,
         typeName: '',
+        submitTypeName: undefined
       });
     }
     startDatePickerChange = (date, dateString) => {
@@ -179,7 +189,11 @@ export default class FaultType extends PureComponent {
             message.info('没有故障解决方案');
             return;
         }
-
+        // submitTypeName
+        if (!this.state.submitTypeName){
+          message.info('选择上报方式');
+          return;
+        }
         for (var i = 0; i < this.state.solutionsLists.length; i++) {
             if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
                 console.log(this.state.solutionsLists[i].name, i);
@@ -230,7 +244,10 @@ export default class FaultType extends PureComponent {
             message.info('没有故障解决方案');
             return;
         }
-
+        if (!this.state.submitTypeName){
+          message.info('选择上报方式');
+          return;
+        }
         for (var i = 0; i < this.state.solutionsLists.length; i++) {
             if ( this.state.solutionsLists[i].name.replace(/\s+/g, '') === '') {
                 console.log(this.state.solutionsLists[i].name, i);
@@ -253,6 +270,7 @@ export default class FaultType extends PureComponent {
                 code: this.state.currentRecord.code,
                 name: this.state.typeName,
                 solutions: newarr,
+                submitType: this.state.submitTypeName
               },
             },
           }).then((res) => {
@@ -437,6 +455,17 @@ export default class FaultType extends PureComponent {
             <Form onSubmit={this.handleSearch}>
               <FormItem {...formItemLayout} label="类型名称">
                 <Input placeholder="输入名称" value={this.state.typeName} onChange={this.onTypeNameChange} />
+              </FormItem>
+              <FormItem {...formItemLayout} label="上报方式">
+                  <Select placeholder="请选择"  value={this.state.submitTypeName} onChange={this.onSubmitTypeChange}>
+                    {submitType.map(item => {
+                      return (
+                        <Option value={item.id} key={item.id}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
               </FormItem>
               <FormItem {...formItemLayout} label="解决方案">
                 {
