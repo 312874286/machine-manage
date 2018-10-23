@@ -440,6 +440,7 @@ export default class user extends PureComponent {
   // 获取城市列表
   areaList = (selectedOptions) => {
     let targetOption = null;
+    const { lastAreaCode } = this.state
     let code = ''
     if (selectedOptions) {
       targetOption = selectedOptions[selectedOptions.length - 1];
@@ -461,20 +462,34 @@ export default class user extends PureComponent {
       } else {
         // lastAreaCode
         targetOption.loading = false;
-        console.log('res', res[0].parentCode, targetOption.value)
+        console.log('res', res, targetOption.value)
         if (targetOption.value === res[0].parentCode) {
-          console.log('res2222', res[0].parentCode, targetOption.value)
+          console.log('res2222', res, targetOption.value)
           targetOption.children = res
           this.setState({
             options: [...this.state.options],
+            lastAreaCode: targetOption.value
+          }, () => {
           });
         }
       }
     });
   }
   onChangeArea = (value, selectedOptions) => {
-    console.log('res onChange', value, selectedOptions)
-    selectedOptions.loading = false;
+    // console.log('res onChange', value, selectedOptions)
+    let options = this.state.options
+    options.forEach((res) => {
+      if (res.value !== value) {
+        if (res.loading) {
+          res.loading = false
+        }
+      }
+    })
+    this.setState({
+      options
+    });
+    console.log('options', options)
+    // selectedOptions.loading = false;
   }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -607,6 +622,7 @@ export default class user extends PureComponent {
       this.setState({
         options: province,
         defaultValue: [res.province, area],
+        lastAreaCode: res.province
       }, () => {
         this.setModalData(res);
       });
