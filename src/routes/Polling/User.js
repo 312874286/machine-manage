@@ -469,7 +469,6 @@ export default class user extends PureComponent {
           this.setState({
             options: [...this.state.options],
             lastAreaCode: targetOption.value
-          }, () => {
           });
         }
       }
@@ -486,9 +485,10 @@ export default class user extends PureComponent {
       }
     })
     this.setState({
-      options
+      options,
+      // lastAreaCode: value[0]
     });
-    console.log('options', options)
+    console.log('options', value)
     // selectedOptions.loading = false;
   }
   // 分页

@@ -446,6 +446,10 @@ export default class versionSetting extends PureComponent {
       if (err) {
         return;
       }
+      if (this.state.goodsInitData.length === 0) {
+        message.warn('请添加货道信息')
+        return;
+      }
       let params = {
         ...fieldsValue,
         detailList: this.state.goodsInitData
@@ -482,6 +486,7 @@ export default class versionSetting extends PureComponent {
         this.setState({
           editModalConfirmLoading: false,
           modalVisible: false,
+          modalType: true
         });
       });
     })
