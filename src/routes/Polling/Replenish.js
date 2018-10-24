@@ -252,16 +252,14 @@ export default class replenish extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem>
+            <FormItem label="关键字">
               {getFieldDecorator('keyword')(<Input placeholder="请输入机器编码、补货人、手机号搜索" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <span>
-               <FormItem>
-                  {getFieldDecorator('time')(<RangePicker onChange={this.onChange}/>)}
-               </FormItem>
-            </span>
+             <FormItem  label="补货时间">
+                {getFieldDecorator('time')(<RangePicker onChange={this.onChange}/>)}
+             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -312,25 +310,25 @@ export default class replenish extends PureComponent {
         width: '30%',
         key: 'localeStr'
       },
-      {
-        title: '补货人',
-        dataIndex: 'name',
-        width: '10%',
-        key: 'name',
-        align: 'center'
-      },
-      {
-        title: '手机号',
-        width: '10%',
-        dataIndex: 'phone',
-        key: 'phone'
-      },
-      {
-        title: '负责区域',
-        dataIndex: 'area',
-        width: '10%',
-        key: 'area'
-      },
+      // {
+      //   title: '补货人',
+      //   dataIndex: 'name',
+      //   width: '10%',
+      //   key: 'name',
+      //   align: 'center'
+      // },
+      // {
+      //   title: '手机号',
+      //   width: '10%',
+      //   dataIndex: 'phone',
+      //   key: 'phone'
+      // },
+      // {
+      //   title: '负责区域',
+      //   dataIndex: 'area',
+      //   width: '10%',
+      //   key: 'area'
+      // },
       {
         title: '补货明细',
         dataIndex: 'stockoutInfo',

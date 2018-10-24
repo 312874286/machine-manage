@@ -1,7 +1,7 @@
 import { getOrderList } from '../../services/order/order';
 
 export default {
-  namespace: 'order',
+  namespace: 'commodityStatistics',
   state: {
     list: [],
     page: {},

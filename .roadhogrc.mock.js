@@ -518,6 +518,13 @@ const proxy = {
             "parentName": null
           },
           {
+            id: 'a40',
+            functionDepict: '商品统计',
+            functionPath: 'commodityStatistics-setting',
+            parentId: '12',
+            functionLevel: 2,
+          },
+          {
             "id": "5",
             "functionDepict": "渠道管理",
             "functionPath": "channel",

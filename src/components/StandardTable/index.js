@@ -196,7 +196,7 @@ class StandardTable extends PureComponent {
         {/*</div>*/}
         <Table
           loading={loading}
-          rowKey={record => record.id || record.code}
+          rowKey={record => record.id || record.code || record.createTime}
           rowSelection={selectedPointRows ? rowSelection : null}
           dataSource={data}
           columns={columns}

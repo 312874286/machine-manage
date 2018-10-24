@@ -1926,8 +1926,7 @@ export default class activitySettingList extends PureComponent {
                 icon="plus"
                 type="primary"
                 onClick={() => this.handleModalVisible(true)}
-                style={{ display: !account.add ? "none" : "" }}
-              >
+                style={{ display: !account.add ? "none" : "" }}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
