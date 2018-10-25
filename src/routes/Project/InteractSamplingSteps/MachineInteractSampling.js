@@ -341,7 +341,8 @@ export default class MachineInteractSampling extends PureComponent {
           type: "interactSamplingSetting/getInteractGoodsList",
           payload: {
             params: {
-              interactId: this.state.interactSampling
+              interactId: this.state.interactSampling,
+              isAlone: 0
             }
           }
         })
@@ -428,11 +429,10 @@ export default class MachineInteractSampling extends PureComponent {
     if (
       goods.some(
         g =>
-          g.type === 0 &&
-          ((!parseInt(g.number) && g.number != 0) ||
-            (!parseInt(g.seq) && g.seq != 0) ||
-            (g.state === 0 && !g.startTimeStr && !g.endTimeStr) ||
-            (g.state === 1 && !g.startTimeStr))
+          (!parseInt(g.number) && g.number != 0) ||
+          (!parseInt(g.seq) && g.seq != 0) ||
+          (g.state === 0 && !g.startTimeStr && !g.endTimeStr) ||
+          (g.state === 1 && !g.startTimeStr)
       )
     ) {
       notification.error({ message: "已选择商品信息不能为空" });
@@ -582,21 +582,19 @@ export default class MachineInteractSampling extends PureComponent {
                     {g.name}
                   </Checkbox>
                 </Col>
-                {g.type === 0 && (
-                  <Col span={8}>
-                    <Input
-                      value={g.setCount}
-                      onChange={e => {
-                        this.handleGoodsInputChange(
-                          e.target.value,
-                          "setCount",
-                          g
-                        );
-                      }}
-                      placeholder="每个机器的商品数量"
-                    />
-                  </Col>
-                )}
+                <Col span={8}>
+                  <Input
+                    value={g.setCount}
+                    onChange={e => {
+                      this.handleGoodsInputChange(
+                        e.target.value,
+                        "setCount",
+                        g
+                      );
+                    }}
+                    placeholder="每个机器的商品数量"
+                  />
+                </Col>
                 {g.type === 0 && (
                   <Col span={8}>
                     <Input
@@ -613,59 +611,58 @@ export default class MachineInteractSampling extends PureComponent {
                   </Col>
                 )}
               </Row>
-              {g.checked &&
-                g.type === 0 && (
-                  <Row gutter={5} style={{ marginBottom: 10 }}>
-                    <Col span={6} offset={2}>
-                      <Checkbox
-                        type="checkbox"
-                        checked={g.secular}
-                        value={g.id}
-                        onChange={this.handleGoodsExpireChange.bind(this)}
-                      >
-                        长期
-                      </Checkbox>
-                    </Col>
-                    <Col span={8}>
-                      <DatePicker
-                        placeholder="开始时间"
-                        format="YYYY-MM-DD"
-                        style={{ width: "100%" }}
-                        value={g.startTime}
-                        disabled={g.secular}
-                        disabledDate={startValue => {
-                          const endValue = g.endTime;
-                          if (!startValue || !endValue) {
-                            return false;
-                          }
-                          return startValue.valueOf() > endValue.valueOf();
-                        }}
-                        onChange={(date, dateStr) => {
-                          this.handleGoodsExpireDateChange(date, dateStr, g, 0);
-                        }}
-                      />
-                    </Col>
-                    <Col span={8}>
-                      <DatePicker
-                        placeholder="结束时间"
-                        format="YYYY-MM-DD"
-                        style={{ width: "100%" }}
-                        value={g.endTime}
-                        disabled={g.secular}
-                        disabledDate={endValue => {
-                          const startValue = g.startTime;
-                          if (!startValue || !endValue) {
-                            return false;
-                          }
-                          return startValue.valueOf() >= endValue.valueOf();
-                        }}
-                        onChange={(date, dateStr) => {
-                          this.handleGoodsExpireDateChange(date, dateStr, g, 1);
-                        }}
-                      />
-                    </Col>
-                  </Row>
-                )}
+              {g.checked && (
+                <Row gutter={5} style={{ marginBottom: 10 }}>
+                  <Col span={6} offset={2}>
+                    <Checkbox
+                      type="checkbox"
+                      checked={g.secular}
+                      value={g.id}
+                      onChange={this.handleGoodsExpireChange.bind(this)}
+                    >
+                      长期
+                    </Checkbox>
+                  </Col>
+                  <Col span={8}>
+                    <DatePicker
+                      placeholder="开始时间"
+                      format="YYYY-MM-DD"
+                      style={{ width: "100%" }}
+                      value={g.startTime}
+                      disabled={g.secular}
+                      disabledDate={startValue => {
+                        const endValue = g.endTime;
+                        if (!startValue || !endValue) {
+                          return false;
+                        }
+                        return startValue.valueOf() > endValue.valueOf();
+                      }}
+                      onChange={(date, dateStr) => {
+                        this.handleGoodsExpireDateChange(date, dateStr, g, 0);
+                      }}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <DatePicker
+                      placeholder="结束时间"
+                      format="YYYY-MM-DD"
+                      style={{ width: "100%" }}
+                      value={g.endTime}
+                      disabled={g.secular}
+                      disabledDate={endValue => {
+                        const startValue = g.startTime;
+                        if (!startValue || !endValue) {
+                          return false;
+                        }
+                        return startValue.valueOf() >= endValue.valueOf();
+                      }}
+                      onChange={(date, dateStr) => {
+                        this.handleGoodsExpireDateChange(date, dateStr, g, 1);
+                      }}
+                    />
+                  </Col>
+                </Row>
+              )}
             </div>
           );
         })}
