@@ -266,7 +266,9 @@ const CreateGoodsForm = Form.create()(
       merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
       handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList,
       videoUrl, bannerHandleChange, handleUploadBanner, onGoodTypeSelect, GoodTypePlaceHolder,
-      currentGoodsData} = props;
+      currentGoodsData, onShopsTypeSelect, selectGoodsType, relevanceCommodityChange, relevanceCommodity,
+      sourceData, handleSave, selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -289,6 +291,45 @@ const CreateGoodsForm = Form.create()(
         <div className="ant-upload-text">Upload</div>
       </div>
     );
+    this.goodsColumns = [
+      {
+        title: "商品名称",
+        dataIndex: "name",
+        width: '30%',
+        render: text => <a href="javascript:;">{text}</a>
+      },  {
+        title: "关联优惠券状态",
+        dataIndex: "couponId",
+        width: '70%',
+        render: text => <a href="javascript:;">{text ? '已关联' : '未关联'}</a>
+      }
+    ];
+    const goodsColumns = this.goodsColumns.map(col => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: handleSave
+        })
+      };
+    });
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: onChangeRowSelection,
+      onSelect: onLeftSelect,
+      onSelectAll: onSelectAll,
+      getCheckboxProps: record => ({
+        disabled: record.couponId ? true : false,
+        name: record.name,
+      }),
+    };
     return (
       <Modal
         title={
@@ -309,7 +350,6 @@ const CreateGoodsForm = Form.create()(
             columns={columns}
             dataSource={currentGoodsData}
             pagination={false}
-            scroll={{ y: 100}}
           />
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="所属商户">
@@ -329,7 +369,7 @@ const CreateGoodsForm = Form.create()(
               {getFieldDecorator('shopId', {
                 rules: [{ required: true, message: '请选择店铺' }],
               })(
-                <Select placeholder="请选择">
+                <Select placeholder="请先选择店铺" onSelect={onShopsTypeSelect}>
                   {shopsLists.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.shopName}</Option>
@@ -342,7 +382,7 @@ const CreateGoodsForm = Form.create()(
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请选择商品类型' }],
               })(
-                <Select placeholder="请选择" onSelect={onGoodTypeSelect} disabled={modalType ? true : false}>
+                <Select placeholder="请选择" onSelect={onGoodTypeSelect} disabled={modalType || selectGoodsType ? true : false}>
                   {goodType.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.name}</Option>
@@ -365,9 +405,51 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}` }],
               })(<Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}`} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="商品图片" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
+            <FormItem {...formItemLayout} label="是否关联商品" style={{ display: GoodTypePlaceHolder === 0 ? 'none' : '' }}>
+              {getFieldDecorator('isVip', {
+                rules: [{ required: true, message: '' }],
+                initialValue: 1,
+              })(
+                <RadioGroup onChange={relevanceCommodityChange}>
+                  <Radio value={1}>是</Radio>
+                  <Radio value={0}>否</Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+            <div
+              style={{
+                padding: 0,
+                border: "1px solid #ececec",
+                paddingLeft: "10px",
+                marginBottom: "20px",
+                display: GoodTypePlaceHolder === 0 ? 'none' : ''
+              }}
+            >
+              <FormItem {...formItemLayout}>
+                {getFieldDecorator("machine")(
+                  <div style={{ display: "flex" }}>
+                    <div>
+                      <Table
+                        rowKey={record => record.id}
+                        rowSelection={rowSelection}
+                        columns={goodsColumns}
+                        dataSource={sourceData}
+                        id="leftTable"
+                        style={{
+                          marginBottom: "20px",
+                          marginTop: "10px"
+                        }}
+                        scroll={{ y: 200 }}
+                        pagination={false}
+                      />
+                    </div>
+                  </div>
+                )}
+              </FormItem>
+            </div>
+            <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品图片' : '优惠券图片'} style={{ display: relevanceCommodity ? '' : 'none' }}>
               {getFieldDecorator('img', {
-                rules: [{ required: false, message: '请上传商品图片' }],
+                rules: [{ required: false, message: `请输入${GoodTypePlaceHolder === 0 ? '请上传商品图片' : '请上传优惠券图片'}` }],
                 valuePropName: 'filelist',
               })(
                 <div className="clearfix">
@@ -386,7 +468,7 @@ const CreateGoodsForm = Form.create()(
                 </div>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="宣传介绍（支持图片和视频" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
+            <FormItem {...formItemLayout} label="宣传介绍（支持图片和视频)" style={{ display: relevanceCommodity ? '' : 'none' }}>
               {getFieldDecorator('banner', {
                 rules: [{ required: false, message: '' }],
                 valuePropName: 'filelist',
@@ -429,7 +511,7 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: false, message: '请输入商品价格' }],
               })(<InputNumber placeholder="请输入商品价格" min={0}/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="备注信息" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
+            <FormItem {...formItemLayout} label="备注信息">
               {getFieldDecorator('remark')(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 6 }} />)}
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
@@ -499,6 +581,18 @@ export default class areaSettingList extends PureComponent {
     mustIsVip: false,
 
     paiyangType: false,
+    selectGoodsType: true,
+    relevanceCommodity: true,
+
+    selectedRowKeys: [],
+    sourceData: [{
+      id: 1, name: '商品1', isCheck: 0, couponId: 222
+    }, {
+      id: 2, name: '商品2', isCheck: 1, couponId: null
+    }, {
+      id: 3, name: '商品3', isCheck: 1, couponId: null
+    }],
+    selectAll: true
   };
   componentDidMount() {
     console.log('this.props.params.id', this.props.match.params.id)
@@ -589,13 +683,14 @@ export default class areaSettingList extends PureComponent {
     });
   }
   // 添加modal 添加事件
-  handleModalVisible = async (flag, item) => {
-    console.log('item', item)
+  handleModalVisible = async (flag, item, flag1) => {
+    console.log('item', item, !flag1 ? flag1 : true)
     const { saveAndAddModal } = this.state
     this.setState({
       modalVisible: !!flag,
       modalData: {},
       modalType: false,
+      selectGoodsType: flag1
     });
     this.setModalData();
     this.getAllGoods()
@@ -645,6 +740,7 @@ export default class areaSettingList extends PureComponent {
       modalVisible: true,
       modalData: item,
       modalType: true,
+      selectGoodsType: true
     });
     this.props.dispatch({
       type: 'interactSamplingSetting/getGoodsDetail',
@@ -931,9 +1027,54 @@ export default class areaSettingList extends PureComponent {
     });
   }
   onGoodTypeSelect = (value) => {
+    if (value === 0) {
+      // 获取商品列表
+
+    }
     this.setState({
       GoodTypePlaceHolder: value
     })
+  }
+  relevanceCommodityChange = (e) => {
+    this.setState({
+      relevanceCommodity: e.target.value === 1 ? true : false,
+    }, () => {
+      // this.merchantForm.validateFields(['sessionKey'], { force: true });
+    });
+  }
+  handleSave = row => {
+    const newData = [...this.state.sourceData];
+    const index = newData.findIndex(item => row.id === item.id);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row
+    });
+    console.log("newDatahandleSave", newData);
+    this.setState({ sourceData: newData });
+  };
+  onChangeRowSelection = (selectedRowKeys, selectedRows) => {
+    // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    this.setState({
+      sourceKey: selectedRowKeys,
+      selectedRowKeys
+    });
+  };
+  onSelectAll = (selected, selectedRows, changeRows) => {
+    this.setState({
+      selectedRows,
+      selectAll: selected
+    });
+    console.log(selected, selectedRows, changeRows);
+  };
+  onShopsTypeSelect = (value) => {
+    // this.form.validateFields((err, fieldsValue) => {
+    //   console.log(fieldsValue.shopId)
+    // })
+    this.setState({
+      selectGoodsType: false
+    })
+    //
   }
   // 商品结束
   // 店铺开始
@@ -944,58 +1085,59 @@ export default class areaSettingList extends PureComponent {
   // 编辑modal 确认事件
   handleShopsAdd = (flag) => {
     this.shopsForm.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-      if (values.isVip === 1) {
-        if (!values.sessionKey.trim()) {
-          message.info('请填写入会码')
-          return
+        if (err) {
+          return;
         }
-      }
-      // sellSessionKey
-      this.setState({
-        editShopsModalConfirmLoading: true,
-      });
-      let url = 'interactSamplingSetting/shopsAdd';
-      let params = { ...values, interactId: this.state.interactSampling };
-      // if (this.state.mustIsVip) {
-      //   params = { ...params, isVip: 2};
-      // }
-      if (this.state.modalShopsData.id) {
-        url = 'interactSamplingSetting/updateShops';
-        params = { ...params, id: this.state.modalShopsData.id };
-      }
-      this.props.dispatch({
-        type: url,
-        payload: {
-          params,
-        },
-      }).then((res) => {
-        if (res && res.code === 0) {
-          this.getShops(flag)
-          // setTimeout(() => {
-          //
-          // }, 0)
-          this.setState({
-            editShopsModalConfirmLoading: false,
-            modalShopsData: {},
-            saveAndAddModal: {
-              sellerId: params.sellerId,
-              shopId: undefined
-            }
-          });
-          if (flag === 0) {
-            this.setShopsModalData()
+        if (values.isVip === 1) {
+          if (!values.sessionKey.trim()) {
+            message.info('请填写入会码')
+            return
           }
-          if (flag === 1) {
+        }
+        // sellSessionKey
+        this.setState({
+          editShopsModalConfirmLoading: true,
+        });
+        let url = 'interactSamplingSetting/shopsAdd';
+        let params = { ...values, interactId: this.state.interactSampling };
+        // if (this.state.mustIsVip) {
+        //   params = { ...params, isVip: 2};
+        // }
+        if (this.state.modalShopsData.id) {
+          url = 'interactSamplingSetting/updateShops';
+          params = { ...params, id: this.state.modalShopsData.id };
+        }
+        this.props.dispatch({
+          type: url,
+          payload: {
+            params,
+          },
+        }).then((res) => {
+          if (res && res.code === 0) {
+            this.getShops(flag)
+            // setTimeout(() => {
+            //
+            // }, 0)
             this.setState({
-              modalShopsVisible: false,
+              editShopsModalConfirmLoading: false,
+              modalShopsData: {},
+              saveAndAddModal: {
+                sellerId: params.sellerId,
+                shopId: undefined
+              }
             });
+            if (flag === 0) {
+              this.setShopsModalData()
+            }
+            if (flag === 1) {
+              this.setState({
+                modalShopsVisible: false,
+                selectGoodsType: true
+              });
+            }
           }
-        }
+        });
       });
-    });
   }
   // 添加modal 添加事件
   handleShopsModalVisible = async (flag, item) => {
@@ -1087,7 +1229,11 @@ export default class areaSettingList extends PureComponent {
   }
   saveAddGoods = () => {
     // saveAndAddModal
-    this.handleShopsAdd('saveAddGoods')
+    this.setState({
+      selectGoodsType: true
+    }, () => {
+      this.handleShopsAdd('saveAddGoods')
+    })
     // this.getShops()
   }
   RadioChange = (e) => {
@@ -1265,7 +1411,7 @@ export default class areaSettingList extends PureComponent {
             this.setState({
               modalShopsVisible: false,
             }, () => {
-              this.handleModalVisible(true)
+              this.handleModalVisible(true, '', true)
             });
           } else {
             this.getAllShops()
@@ -1429,7 +1575,7 @@ export default class areaSettingList extends PureComponent {
           key: 'operation',
           render: (text, item) => (
             <Fragment>
-              <a onClick={() => this.handleModalVisible(true, item)}>添加商品</a>
+              <a onClick={() => this.handleModalVisible(true, item, false)}>添加商品</a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleShopsEditClick(item)}>修改</a>
               <Divider type="vertical"/>
@@ -1574,6 +1720,17 @@ export default class areaSettingList extends PureComponent {
           onGoodTypeSelect={this.onGoodTypeSelect}
           GoodTypePlaceHolder={this.state.GoodTypePlaceHolder}
           currentGoodsData={this.state.allGoodsLists}
+          onShopsTypeSelect={this.onShopsTypeSelect}
+          selectGoodsType={this.state.selectGoodsType}
+          relevanceCommodityChange={this.relevanceCommodityChange}
+          relevanceCommodity={this.state.relevanceCommodity}
+
+          onChangeRowSelection={this.onChangeRowSelection}
+          onSelectAll={this.onSelectAll}
+          selectedRowKeys={this.state.selectedRowKeys}
+          sourceData={this.state.sourceData}
+          handleSave={this.handleSave}
+          selectAll={this.state.selectAll}
         />
       </PageHeaderLayout>
     );
