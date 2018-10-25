@@ -24,8 +24,8 @@ export async function shopsAdd({ params }) {
   });
 }
 export async function goodsAdd({ params }) {
-  return fetch.post(api.goodsAdd, {
-    body: stringify(params)
+  return fetch.postJSON(api.goodsAdd, {
+    body: JSON.stringify(params)
   });
 }
 export async function interactNext({ restParams }) {
@@ -39,8 +39,8 @@ export async function interactUpdate({ params }) {
   });
 }
 export async function updateGoods({ params }) {
-  return fetch.post(api.updateGoods, {
-    body: stringify(params)
+  return fetch.postJSON(api.updateGoods, {
+    body: JSON.stringify(params)
   });
 }
 export async function updateMerchant({ params }) {
@@ -205,7 +205,12 @@ export async function updateInteractMachineGoods({ params }) {
     body: JSON.stringify(params)
   });
 }
-
+// 添加优惠券时获取要关联的商品列表
+export async function couponGetList({ restParams }) {
+  return fetch.get(api.couponGetList, {
+    restParams
+  });
+}
 // 统计
 
 export async function getOrderStatistics({ params }) {
