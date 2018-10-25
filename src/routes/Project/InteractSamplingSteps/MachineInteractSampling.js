@@ -582,21 +582,19 @@ export default class MachineInteractSampling extends PureComponent {
                     {g.name}
                   </Checkbox>
                 </Col>
-                {g.type === 0 && (
-                  <Col span={8}>
-                    <Input
-                      value={g.setCount}
-                      onChange={e => {
-                        this.handleGoodsInputChange(
-                          e.target.value,
-                          "setCount",
-                          g
-                        );
-                      }}
-                      placeholder="每个机器的商品数量"
-                    />
-                  </Col>
-                )}
+                <Col span={8}>
+                  <Input
+                    value={g.setCount}
+                    onChange={e => {
+                      this.handleGoodsInputChange(
+                        e.target.value,
+                        "setCount",
+                        g
+                      );
+                    }}
+                    placeholder="每个机器的商品数量"
+                  />
+                </Col>
                 {g.type === 0 && (
                   <Col span={8}>
                     <Input
