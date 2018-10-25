@@ -428,11 +428,10 @@ export default class MachineInteractSampling extends PureComponent {
     if (
       goods.some(
         g =>
-          g.type === 0 &&
-          ((!parseInt(g.number) && g.number != 0) ||
-            (!parseInt(g.seq) && g.seq != 0) ||
-            (g.state === 0 && !g.startTimeStr && !g.endTimeStr) ||
-            (g.state === 1 && !g.startTimeStr))
+          (!parseInt(g.number) && g.number != 0) ||
+          (!parseInt(g.seq) && g.seq != 0) ||
+          (g.state === 0 && !g.startTimeStr && !g.endTimeStr) ||
+          (g.state === 1 && !g.startTimeStr)
       )
     ) {
       notification.error({ message: "已选择商品信息不能为空" });
