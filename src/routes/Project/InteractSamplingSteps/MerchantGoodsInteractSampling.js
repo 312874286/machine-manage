@@ -460,6 +460,7 @@ const CreateGoodsForm = Form.create()(
                 padding: 0,
                 paddingLeft: "10px",
                 marginBottom: "20px",
+                textAlign: 'center',
                 display: GoodTypePlaceHolder === 1 && relevanceCommodity && sourceData.length === 0  ? '' : 'none'
               }}
             >该店铺中暂时无商品，请先添加商品。</div>
@@ -971,7 +972,7 @@ export default class areaSettingList extends PureComponent {
         ...fieldsValue,
         interactId: this.state.interactSampling
       };
-      if (relevanceCommodity) {
+      if (relevanceCommodity && GoodTypePlaceHolder !== 0) {
         if (selectedRows.length === 0) {
           message.warn('请至少选择一件商品或添加新商品')
           return;
