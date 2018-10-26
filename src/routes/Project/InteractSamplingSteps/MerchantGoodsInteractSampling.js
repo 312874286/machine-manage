@@ -930,7 +930,7 @@ export default class areaSettingList extends PureComponent {
       duration: 2,
       maxCount: 1,
     });
-    const { GoodTypePlaceHolder, fileList, selectedRows, relevanceCommodity } = this.state
+    const { GoodTypePlaceHolder, fileList, bannerfileList, selectedRows, relevanceCommodity, modalData, videoUrl } = this.state
     this.form.validateFields((err, fieldsValue) => {
       if (fileList.length > 0) {
         this.form.setFieldsValue({
@@ -943,6 +943,10 @@ export default class areaSettingList extends PureComponent {
       if (GoodTypePlaceHolder === 0 || !relevanceCommodity) {
         if (fileList.length === 0) {
           message.warn('请添加图片')
+          return;
+        }
+        if (bannerfileList.length === 0 || !videoUrl.data) {
+          message.warn('请添加宣传介绍')
           return;
         }
         // console.log('fieldsValue.number', fieldsValue.number)
@@ -979,19 +983,19 @@ export default class areaSettingList extends PureComponent {
       // console.log('this.state.bannerfileList', this.state.bannerfileList, this.state.videoUrl.data)
       let messageTxt = '添加'
       let url = 'interactSamplingSetting/goodsAdd';
-      if (this.state.modalData.id) {
+      if (modalData.id) {
         url = 'interactSamplingSetting/updateGoods';
         messageTxt = '编辑'
-        params = { ...params, id: this.state.modalData.id };
+        params = { ...params, id: modalData.id };
       }
-      if (this.state.fileList.length > 0) {
-        params = { ...params, img: this.state.fileList[0].data };
+      if (fileList.length > 0) {
+        params = { ...params, img: fileList[0].data };
       }
-      if (this.state.bannerfileList.length > 0) {
-        params = { ...params, banner: this.state.bannerfileList[0].data };
+      if (bannerfileList.length > 0) {
+        params = { ...params, banner: bannerfileList[0].data };
       }
-      if (this.state.videoUrl.data) {
-        params = { ...params, banner: this.state.videoUrl.data };
+      if (videoUrl.data) {
+        params = { ...params, banner: videoUrl.data };
       }
       this.props.dispatch({
         type: url,
