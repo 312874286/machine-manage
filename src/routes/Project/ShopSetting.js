@@ -89,6 +89,11 @@ const CreateForm = Form.create()(
               </Select>
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label="关注店铺码">
+            {getFieldDecorator('focusSessionKey', {
+              rules: [{ required: false, whitespace: true, message: '请输入关注店铺码' }],
+            })(<Input placeholder="请输入关注店铺码" />)}
+          </FormItem>
         </Form>
         </div>
       </Modal>
@@ -309,12 +314,14 @@ export default class shopSettingList extends PureComponent {
         shopCode: data.shopCode || '',
         shopName: data.shopName || '',
         sellerId: data.sellerId || '',
+        focusSessionKey: data.focusSessionKey || '',
       });
     } else {
       this.form.setFieldsValue({
         shopCode: undefined,
         shopName: undefined,
         sellerId: undefined,
+        focusSessionKey: undefined
       });
     }
   }
