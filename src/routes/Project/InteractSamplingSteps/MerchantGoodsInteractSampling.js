@@ -319,7 +319,6 @@ const CreateGoodsForm = Form.create()(
         })
       };
     });
-    console.log('record.couponId && record.couponId !== shopId', couponId)
     const rowSelection = {
       selectAll,
       selectedRowKeys,
@@ -330,6 +329,7 @@ const CreateGoodsForm = Form.create()(
         disabled: record.couponId && record.couponId !== couponId ? true : false,
       }),
     };
+    console.log('modalType || selectGoodsType', modalType, selectGoodsType)
     return (
       <Modal
         title={
@@ -382,7 +382,7 @@ const CreateGoodsForm = Form.create()(
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请选择商品类型' }],
               })(
-                <Select placeholder="请选择" onSelect={onGoodTypeSelect} disabled={modalType || selectGoodsType ? true : false}>
+                <Select placeholder="请选择" onSelect={onGoodTypeSelect} disabled={selectGoodsType ? true : false}>
                   {goodType.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.name}</Option>
@@ -1154,7 +1154,7 @@ export default class areaSettingList extends PureComponent {
   };
   onShopsTypeSelect = (value) => {
     this.setState({
-      selectGoodsType: value,
+      selectGoodsType: value ? false : true,
       shopId: value
     })
     //
