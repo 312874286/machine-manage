@@ -267,7 +267,7 @@ const CreateGoodsForm = Form.create()(
       handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList,
       videoUrl, bannerHandleChange, handleUploadBanner, onGoodTypeSelect, GoodTypePlaceHolder,
       currentGoodsData, onShopsTypeSelect, selectGoodsType, relevanceCommodityChange, relevanceCommodity,
-      sourceData, handleSave, selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll, selectAll
+      sourceData, handleSave, selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll, selectAll, couponId
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -319,7 +319,7 @@ const CreateGoodsForm = Form.create()(
         })
       };
     });
-
+    console.log('record.couponId && record.couponId !== shopId', couponId)
     const rowSelection = {
       selectAll,
       selectedRowKeys,
@@ -327,7 +327,7 @@ const CreateGoodsForm = Form.create()(
       onSelect: onLeftSelect,
       onSelectAll: onSelectAll,
       getCheckboxProps: record => ({
-        disabled: record.couponId ? true : false,
+        disabled: record.couponId && record.couponId !== couponId ? true : false,
       }),
     };
     return (
@@ -588,7 +588,8 @@ export default class areaSettingList extends PureComponent {
     sourceData: [],
     selectAll: true,
     shopId: '',
-    selectedRows: []
+    selectedRows: [],
+    couponId: [],
   };
   componentDidMount() {
     console.log('this.props.params.id', this.props.match.params.id)
@@ -740,7 +741,7 @@ export default class areaSettingList extends PureComponent {
       modalData: item,
       modalType: true,
       selectGoodsType: true,
-      shopId: item.id
+      couponId: item.id
     });
     this.props.dispatch({
       type: 'interactSamplingSetting/getGoodsDetail',
@@ -753,6 +754,9 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       this.getInteractShopList(res.sellerId)
       this.getGoods()
+      this.setState({
+        shopId: res.shopId
+      });
       this.setModalData(res);
     });
   }
@@ -846,7 +850,7 @@ export default class areaSettingList extends PureComponent {
     })
   }
   getGoodsByShops = (value, flag) => {
-    const { interactSampling, shopId } = this.state
+    const { interactSampling, shopId, couponId } = this.state
     let selectedRowKey = [], selectedRow = []
     if (value !== 0) {
       // 获取商品列表 couponGetList
@@ -875,13 +879,14 @@ export default class areaSettingList extends PureComponent {
             })
           } else {
             res.data.forEach((item) => {
-              if (!item.couponId && item.isCheck === 1) {
+              if (item.isCheck === 1 && item.couponId === couponId) {
                 selectedRowKey.push(item.id)
                 selectedRow.push({
                   id: item.id
                 })
               }
             })
+            console.log('selectedRowKey', selectedRowKey, selectedRow)
           }
           this.setState({
             selectedRowKeys: selectedRowKey,
@@ -1810,6 +1815,7 @@ export default class areaSettingList extends PureComponent {
           handleSave={this.handleSave}
           selectAll={this.state.selectAll}
           onLeftSelect={this.onLeftSelect}
+          couponId={this.state.couponId}
         />
       </PageHeaderLayout>
     );
