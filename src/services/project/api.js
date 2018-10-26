@@ -96,6 +96,7 @@ const api = map({
   getGoodsDetail: "/project/interact/goods/detail",
   getShopsDetail: "/project/interact/shops/detail",
   merchantTree: "/project/interact/merchantTree?interactId={interactId}",
+  couponGetList: "/project/interact/goods/couponGetList?interactId={interactId}&shopsId={shopsId}",
   // 第三步 选择机器
   getInteractHavingMachineList: "/project/interact/machine/getHavingMachines",
   getInteractMachineGoods: "/project/interact/machine/goods/list",

@@ -6474,6 +6474,27 @@ const proxy = {
       ],
       "msg": "成功"
     })
+  },
+  'GET /project/interact/goods/couponGetList': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": [
+          {
+            "isCheck": 0,
+            "name": "乔治卡罗尔男士洗面奶",
+            "id": "db8e8bd2b78448c8a217d813463ab6ce",
+            "couponId": ""
+          },
+          {
+            "isCheck": 0,
+            "name": "乔治卡罗尔男士洗发水",
+            "id": "eb9f0d1d5a264110b404f21cf628c0d6",
+            "couponId": ""
+          }
+        ],
+        "msg": "成功"
+      }
+    )
   }
 };
 
