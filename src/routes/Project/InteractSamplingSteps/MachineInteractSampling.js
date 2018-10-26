@@ -363,7 +363,8 @@ export default class MachineInteractSampling extends PureComponent {
           type: "interactSamplingSetting/getInteractGoodsList",
           payload: {
             params: {
-              interactId: this.state.interactSampling
+              interactId: this.state.interactSampling,
+              isAlone: 0
             }
           }
         })
