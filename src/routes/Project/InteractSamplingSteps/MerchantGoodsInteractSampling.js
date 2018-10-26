@@ -405,7 +405,10 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}` }],
               })(<Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}`} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="是否关联商品" style={{ display: GoodTypePlaceHolder === 0 ? 'none' : '' }}>
+            <FormItem {...formItemLayout} label="是否关联商品"
+                      style={{ display: GoodTypePlaceHolder === 0 ? 'none' : '' }}
+                      extra="注：选否则优惠券做为独立派发商品"
+            >
               {getFieldDecorator('isAlone', {
                 rules: [{ required: false, message: '' }],
                 initialValue: 1,
@@ -422,7 +425,7 @@ const CreateGoodsForm = Form.create()(
                 border: "1px solid #ececec",
                 paddingLeft: "10px",
                 marginBottom: "20px",
-                display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? 'none' : ''
+                display: GoodTypePlaceHolder === 1 && relevanceCommodity && sourceData.length > 0  ? '' : 'none'
               }}
             >
               <FormItem {...formItemLayout}>
@@ -447,6 +450,14 @@ const CreateGoodsForm = Form.create()(
                 )}
               </FormItem>
             </div>
+            <div
+              style={{
+                padding: 0,
+                paddingLeft: "10px",
+                marginBottom: "20px",
+                display: GoodTypePlaceHolder === 1 && relevanceCommodity && sourceData.length === 0  ? '' : 'none'
+              }}
+            >该店铺中暂时无商品，请先添加商品。</div>
             <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品图片' : '优惠券图片'} style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>
               {getFieldDecorator('img', {
                 rules: [{ required: false, message: `请输入${GoodTypePlaceHolder === 0 ? '请上传商品图片' : '请上传优惠券图片'}` }],
