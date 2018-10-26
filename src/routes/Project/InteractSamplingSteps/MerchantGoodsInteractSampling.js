@@ -329,7 +329,7 @@ const CreateGoodsForm = Form.create()(
         disabled: record.couponId && record.couponId !== couponId ? true : false,
       }),
     };
-    console.log('modalType || selectGoodsType', modalType, selectGoodsType)
+    // console.log('modalType || selectGoodsType', modalType, selectGoodsType)
     return (
       <Modal
         title={
@@ -343,7 +343,9 @@ const CreateGoodsForm = Form.create()(
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
         footer={null}
-        width={800}>
+        className={styles.goodDetail}
+        width={800}
+      >
         <div className="manageAppBox">
           <Table
             rowKey={record => record.id}
@@ -405,20 +407,23 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}` }],
               })(<Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}`} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="是否关联商品"
-                      style={{ display: GoodTypePlaceHolder === 0 ? 'none' : '' }}
-                      extra="注：选否则优惠券做为独立派发商品"
-            >
-              {getFieldDecorator('isAlone', {
-                rules: [{ required: false, message: '' }],
-                initialValue: 1,
-              })(
-                <RadioGroup onChange={relevanceCommodityChange}>
-                  <Radio value={1}>是</Radio>
-                  <Radio value={0}>否</Radio>
-                </RadioGroup>
-              )}
-            </FormItem>
+            <div className={styles.require}>
+              <FormItem {...formItemLayout} label="是否关联商品"
+                        style={{ display: GoodTypePlaceHolder === 0 ? 'none' : '' }}
+                        extra="注：选否则优惠券做为独立派发商品"
+              >
+                {getFieldDecorator('isAlone', {
+                  rules: [{ required: false, message: '' }],
+                  initialValue: 1,
+                })(
+                  <RadioGroup onChange={relevanceCommodityChange}>
+                    <Radio value={1}>是</Radio>
+                    <Radio value={0}>否</Radio>
+                  </RadioGroup>
+                )}
+              </FormItem>
+            </div>
+
             <div
               style={{
                 padding: 0,
@@ -945,9 +950,11 @@ export default class areaSettingList extends PureComponent {
           message.warn('请添加图片')
           return;
         }
-        if (bannerfileList.length === 0 || !videoUrl.data) {
-          message.warn('请添加宣传介绍')
-          return;
+        if (!relevanceCommodity) {
+          if (bannerfileList.length === 0 && !videoUrl.url) {
+            message.warn('请添加宣传介绍')
+            return;
+          }
         }
         // console.log('fieldsValue.number', fieldsValue.number)
         // if (fieldsValue.number.trim()) {
@@ -966,7 +973,7 @@ export default class areaSettingList extends PureComponent {
       };
       if (relevanceCommodity) {
         if (selectedRows.length === 0) {
-          message.warn('请至少选择一件商品')
+          message.warn('请至少选择一件商品或添加新商品')
           return;
         }
         goodsList = selectedRows.map((item) => {
