@@ -961,6 +961,10 @@ export default class areaSettingList extends PureComponent {
         interactId: this.state.interactSampling
       };
       if (relevanceCommodity) {
+        if (selectedRows.length === 0) {
+          message.warn('请至少选择一件商品')
+          return;
+        }
         goodsList = selectedRows.map((item) => {
           return {
             goodsId: item.id

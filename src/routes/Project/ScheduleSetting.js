@@ -2015,14 +2015,14 @@ export default class ScheduleSettingList extends PureComponent {
     if (selectedOptions) {
       if (selectedOptions.level) {
         params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
-      } else if (selectedOptions.code) {
+      } else if (selectedOptions.code || selectedOptions.machineCode) {
         params = {
           code: selectedOptions.code,
           startTime: this.state.machineStartTime,
           endTime: this.state.machineEndTime,
           machineCode: selectedOptions.machineCode ? selectedOptions.machineCode : ''
         }
-      } else {
+      } else if (Array.isArray(selectedOptions)) {
         targetOption = selectedOptions[selectedOptions.length - 1];
         code = targetOption.value;
         targetOption.loading = true;
@@ -2039,7 +2039,7 @@ export default class ScheduleSettingList extends PureComponent {
         this.setState({
           insertOptions: res,
         });
-      } else if (selectedOptions.code) {
+      } else if (selectedOptions.code || selectedOptions.machineCode) {
         this.setState({
           sourceData: res,
         });
@@ -2165,18 +2165,18 @@ export default class ScheduleSettingList extends PureComponent {
         }
       }
       // console.log('localCode', localCode, fieldsValue.machineCode, !localCode, !fieldsValue.machineCode)
-      if (!localCode) {
+      if (!localCode && !fieldsValue.machineCode) {
         message.config({
           top: 100,
           duration: 2,
           maxCount: 1,
         });
-        // message.error('至少选择一个地区或者填写一个机器编号')
-        message.error('请选择一个地区')
+        message.error('至少选择一个地区或者填写一个机器编号')
+        // message.error('请选择一个地区')
         return;
       }
       // , machineCode: fieldsValue.machineCode
-      this.getAreaList({code: localCode, machineCode: fieldsValue.machineCode})
+      this.getAreaList({code: localCode ? localCode : '', machineCode: fieldsValue.machineCode})
     });
   }
   // openSelectMachineModal = () => {
