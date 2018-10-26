@@ -1122,6 +1122,8 @@ export default class areaSettingList extends PureComponent {
     })
     this.form.setFieldsValue({
       isAlone: 1,
+      name: undefined,
+      code: undefined,
     });
   }
   relevanceCommodityChange = (e) => {
