@@ -70,6 +70,7 @@ class EditableCell extends Component {
   render() {
     const { editing } = this.state;
     const {
+      sessionKeyIndexOf,
       editable,
       dataIndex,
       title,
@@ -78,7 +79,7 @@ class EditableCell extends Component {
       handleSave,
       ...restProps
     } = this.props;
-    // console.log('v', record)
+    console.log('v', record, sessionKeyIndexOf)
     return (
       <td ref={node => (this.cell = node)} {...restProps}>
         {editable ? (
@@ -90,7 +91,7 @@ class EditableCell extends Component {
                   <FormItem style={{ margin: 0 }}>
                     {form.getFieldDecorator(dataIndex, {
                       rules: [{
-                        required: false,
+                        required: true,
                         whitespace: true,
                         message: `请输入${title}`,
                       }, {
@@ -108,6 +109,7 @@ class EditableCell extends Component {
                       <Input
                         ref={node => (this.input = node)}
                         onPressEnter={this.save}
+                        style={{ border: record.key - 1 === sessionKeyIndexOf ? '1px solid red' : ''}}
                         // onBlur={this.save}
                       />
                     )}
@@ -115,8 +117,12 @@ class EditableCell extends Component {
                 ) : (
                   <div
                     className="editable-cell-value-wrap"
-                    style={{ paddingRight: 24 }}
                     onClick={this.toggleEdit}
+                    style={{
+                      border: record.key - 1 === sessionKeyIndexOf ? '1px solid red' : '',
+                      padding: '4px 11px',
+                      borderRadius: '4px'
+                    }}
                   >
                     {restProps.children}
                   </div>
@@ -142,14 +148,15 @@ class VipModal extends Component {
       initData: [],
       shopClist: [],
       shopClistCurrentValue: '',
-      couponsShow: ''
+      couponsShow: '',
+      sessionKeyIndexOf: -1,
     };
   }
   componentWillReceiveProps(nextProps) {
-    const {initData, clist, count, shopClist} = nextProps;
+    const {initData, clist, count, shopClist, sessionKeyIndexOf } = nextProps;
     console.log('vip, clist, count', initData, clist, count, shopClist)
     // if (clist.length > 0) {
-    this.updateRenderDatas(initData, clist, count, shopClist);
+    this.updateRenderDatas(initData, clist, count, shopClist, sessionKeyIndexOf);
     // }
   }
   componentDidMount() {
@@ -186,7 +193,7 @@ class VipModal extends Component {
     // console.log('row', row)
     this.props.goodsHandleChange(row);
   }
-  updateRenderDatas(initData, clist, count, shopClist) {
+  updateRenderDatas(initData, clist, count, shopClist, sessionKeyIndexOf) {
     console.log('initData', initData)
     if (initData.length !== 0) {
       this.setState({
@@ -199,11 +206,12 @@ class VipModal extends Component {
     }
     this.setState({
       count: count,
+      sessionKeyIndexOf,
     });
   }
   render() {
     const { count, couponsShow } = this.props;
-    const { clist, rlist, initData, shopClist, shopClistCurrentValue, currentValue } = this.state
+    const { clist, rlist, initData, shopClist, shopClistCurrentValue, currentValue, sessionKeyIndexOf } = this.state
     const components = {
       body: {
         row: EditableFormRow,
@@ -251,6 +259,7 @@ class VipModal extends Component {
         ...col,
         onCell: record => ({
           record,
+          sessionKeyIndexOf,
           editable: col.editable,
           dataIndex: col.dataIndex,
           title: col.title,
