@@ -1146,6 +1146,7 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       relevanceCommodity: e.target.value === 1 ? true : false,
     }, () => {
+      this.getGoodsByShops(e.target.value, 'add')
       // this.merchantForm.validateFields(['sessionKey'], { force: true });
     });
   }
