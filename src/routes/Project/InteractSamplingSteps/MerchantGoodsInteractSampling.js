@@ -1185,6 +1185,8 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       selectGoodsType: value ? false : true,
       shopId: value
+    }, () => {
+      this.getGoodsByShops(value, 'add')
     })
     //
   }
