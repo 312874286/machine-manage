@@ -1451,12 +1451,12 @@ export default class areaSettingList extends PureComponent {
       if (err) {
         return;
       }
-      if (paiyangType) {
-        if (!values.sellSessionKey.trim()) {
-          message.info('请填写入零售入会码')
-          return
-        }
-      }
+      // if (paiyangType) {
+      //   if (!values.sellSessionKey.trim()) {
+      //     message.info('请填写入零售入会码')
+      //     return
+      //   }
+      // }
       this.setState({
         editMerchantModalConfirmLoading: true,
       });
