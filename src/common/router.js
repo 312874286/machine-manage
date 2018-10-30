@@ -191,6 +191,9 @@ export const getRouterData = (app) => {
     '/machine/batch-setting': {
       component: dynamicWrapper(app, ['machine/batchSetting', 'log/log', 'common'], () => import('../routes/Machine/BatchSetting')),
     },
+    '/machine/machineDataStatistics': {
+      component: dynamicWrapper(app, ['machine/machineDataStatistics', 'log/log', 'common'], () => import('../routes/Machine/MachineDataStatistics')),
+    },
     '/project/channel': {
       component: dynamicWrapper(app, ['project/channelSetting', 'log/log'], () => import('../routes/Project/ChannelSetting')),
     },

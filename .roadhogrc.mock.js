@@ -581,6 +581,13 @@ const proxy = {
             functionLevel: 2,
           },
           {
+            id: 'a41',
+            functionDepict: '机器数据统计',
+            functionPath: 'machineDataStatistics',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
             "id": "22",
             "functionDepict": "用户管理",
             "functionPath": "user",
@@ -6495,6 +6502,58 @@ const proxy = {
         "msg": "成功"
       }
     )
+  },
+  'GET /machine/statistics': (req, res) => {
+    res.send({
+      "code":0,
+      "data":[
+        {
+          "machineCode":"123",
+          "point":"点位",
+          "date":"2018-10-24",
+          "pv":"总访客人数",
+          "uv":"独立访客数",
+          "order":"订单量",
+          "shipment":"出货量",
+          "fans":"入会数量",
+          "concern":"关注数量"
+        },
+        {
+          "machineCode":"123",
+          "point":"点位",
+          "date":"2018-10-25",
+          "pv":"总访客人数",
+          "uv":"独立访客数",
+          "order":"订单量",
+          "shipment":"出货量",
+          "fans":"入会数量",
+          "concern":"关注数量"
+        },
+        {
+          "machineCode":"123",
+          "point":"点位",
+          "date":"2018-10-26",
+          "pv":"总访客人数",
+          "uv":"独立访客数",
+          "order":"订单量",
+          "shipment":"出货量",
+          "fans":"入会数量",
+          "concern":"关注数量"
+        },
+        {
+          "machineCode":"123",
+          "point":"点位",
+          "date":"2018-10-27",
+          "pv":"总访客人数",
+          "uv":"独立访客数",
+          "order":"订单量",
+          "shipment":"出货量",
+          "fans":"入会数量",
+          "concern":"关注数量"
+        }
+      ],
+      "msg":null
+    })
   }
 };
 
