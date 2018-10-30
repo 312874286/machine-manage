@@ -9,8 +9,8 @@ export default {
   },
 
   effects: {
-    *replenishList({ payload: { restParams, params } }, { call, put }) {
-      const response = yield call(replenishList, { restParams, params });
+    *replenishList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(replenishList, { restParams });
       yield put({
         type: 'saveList',
         payload: response,

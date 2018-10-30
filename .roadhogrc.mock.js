@@ -520,7 +520,7 @@ const proxy = {
           {
             id: 'a40',
             functionDepict: '商品统计',
-            functionPath: 'commodityStatistics-setting',
+            functionPath: 'commodityStatistics',
             parentId: '12',
             functionLevel: 2,
           },
@@ -6480,6 +6480,231 @@ const proxy = {
         }
       ],
       "msg": "成功"
+    })
+  },
+  'GET /supply/channel/history/dayGoodsCount': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "code": 0,
+        "page": {
+          "pageSize": 20,
+          "currentResult": 0,
+          "totalPage": 1,
+          "pageNo": 1,
+          "totalCount": 5,
+          "list": null,
+          "firstResult": 0,
+          "firstPage": true,
+          "lastPage": true,
+          "nextPage": 1,
+          "prePage": 1
+        },
+        "data": [
+          {
+            "batchNo": "06e5ac53d3164119bdbafbd909f25bd6",
+            "machineCode": "18884154",
+            "localeStr": "北京市北京市东城区王府井大沽口",
+            "createTime": "2018-07-25 20:02:04",
+            "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "77f7fe7b9e7a4f008a321e23cdd4cfdf",
+            "machineCode": "18884154",
+            "localeStr": "北京市北京市东城区王府井大沽口",
+            "createTime": "2018-07-25 19:56:48",
+            "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "df8437abfb564153bfec25fd93dfd32b",
+            "machineCode": "18884154",
+            "localeStr": "北京市北京市东城区王府井大沽口",
+            "createTime": "2018-07-25 19:19:03",
+            "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "77",
+            "machineCode": null,
+            "localeStr": null,
+            "createTime": "2018-07-19 11:01:29",
+            "machineId": "be9a6ec2e331468b9d04a95a180dedb2",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          },
+          {
+            "batchNo": "666",
+            "machineCode": null,
+            "localeStr": null,
+            "createTime": "2018-07-19 11:00:21",
+            "machineId": "be9a6ec2e331468b9d04a95a180dedb2",
+            "status": 0,
+            "name": null,
+            "phone": null,
+            "area": null,
+            "areaCode": null,
+            "beginTime": null,
+            "endTime": null,
+            "keyword": null,
+            "historyList": null
+          }
+        ]
+      })
+  },
+  'GET /supply/channel/history/dayGoodsDetail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "87e0b8f7d53f48c09123d5142d253707",
+          "supplyChannelId": "017de335d3834ad6952750a754d822db",
+          "beforeCount": 5,
+          "afterCount": 10,
+          "batchNo": "06e5ac53d3164119bdbafbd909f25bd6",
+          "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+          "userId": "",
+          "type": 0,
+          "createTime": "2018-07-25 20:02:04",
+          "machineCode": null,
+          "localeStr": "北京市北京市东城区王府井大沽口",
+          "subCount": 5,
+          "goodsName": "测试商品 别删除"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'GET /supply/channel/history/dayGoodsList': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 5,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "batchNo": "06e5ac53d3164119bdbafbd909f25bd6",
+          "machineCode": "18884154",
+          "localeStr": "北京市北京市东城区王府井大沽口",
+          "createTime": "2018-07-25 20:02:04",
+          "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+          "status": 0,
+          "name": null,
+          "phone": null,
+          "area": null,
+          "areaCode": null,
+          "beginTime": null,
+          "endTime": null,
+          "keyword": null,
+          "historyList": null
+        },
+        {
+          "batchNo": "77f7fe7b9e7a4f008a321e23cdd4cfdf",
+          "machineCode": "18884154",
+          "localeStr": "北京市北京市东城区王府井大沽口",
+          "createTime": "2018-07-25 19:56:48",
+          "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+          "status": 0,
+          "name": null,
+          "phone": null,
+          "area": null,
+          "areaCode": null,
+          "beginTime": null,
+          "endTime": null,
+          "keyword": null,
+          "historyList": null
+        },
+        {
+          "batchNo": "df8437abfb564153bfec25fd93dfd32b",
+          "machineCode": "18884154",
+          "localeStr": "北京市北京市东城区王府井大沽口",
+          "createTime": "2018-07-25 19:19:03",
+          "machineId": "681fd2a6f6c84d40870436fea1854dbd",
+          "status": 0,
+          "name": null,
+          "phone": null,
+          "area": null,
+          "areaCode": null,
+          "beginTime": null,
+          "endTime": null,
+          "keyword": null,
+          "historyList": null
+        },
+        {
+          "batchNo": "77",
+          "machineCode": null,
+          "localeStr": null,
+          "createTime": "2018-07-19 11:01:29",
+          "machineId": "be9a6ec2e331468b9d04a95a180dedb2",
+          "status": 0,
+          "name": null,
+          "phone": null,
+          "area": null,
+          "areaCode": null,
+          "beginTime": null,
+          "endTime": null,
+          "keyword": null,
+          "historyList": null
+        },
+        {
+          "batchNo": "666",
+          "machineCode": null,
+          "localeStr": null,
+          "createTime": "2018-07-19 11:00:21",
+          "machineId": "be9a6ec2e331468b9d04a95a180dedb2",
+          "status": 0,
+          "name": null,
+          "phone": null,
+          "area": null,
+          "areaCode": null,
+          "beginTime": null,
+          "endTime": null,
+          "keyword": null,
+          "historyList": null
+        }
+      ]
     })
   }
 };

@@ -49,45 +49,45 @@ export default class CommodityStatisticsTable extends PureComponent {
     const columns = [
       {
         title: '商品名称',
-        dataIndex: 'orderNum',
+        dataIndex: 'goodsName',
         width: '15%',
-        key: 'orderNum'
+        key: 'goodsName'
       },
       {
         title: '机器编号',
-        dataIndex: 'userId',
-        width: '15%',
-        key: 'userId'
-      },
-      {
-        title: '机器点位',
-        dataIndex: 'nickName',
-        width: '20%',
-        key: 'nickName'
-      },
-      {
-        title: '补货前数量',
-        dataIndex: 'shopsName',
-        width: '10%',
-        key: 'shopsName'
-      },
-      {
-        title: '补货数量',
-        dataIndex: 'merPointAddress',
-        width: '10%',
-        key: 'merPointAddress'
-      },
-      {
-        title: '时间',
         dataIndex: 'machineCode',
-        width: '10%',
+        width: '15%',
         key: 'machineCode'
       },
       {
-        title: '剩余数量',
-        dataIndex: 'activityName',
+        title: '机器点位',
+        dataIndex: 'localDesc',
+        width: '20%',
+        key: 'localDesc'
+      },
+      {
+        title: '补货前数量',
+        dataIndex: 'beforeNum',
         width: '10%',
-        key: 'activityName'
+        key: 'beforeNum'
+      },
+      {
+        title: '补货数量',
+        dataIndex: 'afterNum',
+        width: '10%',
+        key: 'afterNum'
+      },
+      {
+        title: '时间',
+        dataIndex: 'date',
+        width: '10%',
+        key: 'date'
+      },
+      {
+        title: '剩余数量',
+        dataIndex: 'num',
+        width: '10%',
+        key: 'num'
       },
     ];
     if (unColumn) {

@@ -7,3 +7,8 @@ export async function getOrderList({ restParams }) {
     restParams,
   });
 }
+export async function historydayGoodsCount({ restParams }) {
+  return fetch.get(api.historydayGoodsCount, {
+    restParams,
+  });
+}

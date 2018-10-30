@@ -1,4 +1,4 @@
-import { getOrderList } from '../../services/order/order';
+import { historydayGoodsCount } from '../../services/order/order';
 
 export default {
   namespace: 'commodityStatistics',
@@ -10,8 +10,8 @@ export default {
   },
 
   effects: {
-    *getOrderList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(getOrderList, { restParams });
+    *historydayGoodsCount({ payload: { restParams } }, { call, put }) {
+      const response = yield call(historydayGoodsCount, { restParams });
       yield put({
         type: 'saveList',
         payload: response,

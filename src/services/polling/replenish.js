@@ -3,8 +3,7 @@ import fetch from '../../utils/fetch';
 import api from './api';
 
 export async function replenishList({ params, restParams }) {
-  return fetch.postJSON(api.replenishList, {
-    body: JSON.stringify(params),
+  return fetch.get(api.replenishList, {
     restParams
   });
 }

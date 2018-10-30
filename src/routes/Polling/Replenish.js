@@ -22,18 +22,90 @@ const { RangePicker } = DatePicker;
 
 const WatchMachine = Form.create()(
   (props) => {
-    const { WatchMachineModalVisible, WatchMachineHandleModalVisibleClick, machineList } = props;
-    const machineColumns = [{
-      title: '商品名称',
-      dataIndex: 'goodsName',
-      align: 'left',
-      width: '85%'
-    }, {
-      title: '补货数量',
-      dataIndex: 'subCount',
-      align: 'left',
-      width: '15%'
-    }];
+    const {
+      WatchMachineModalVisible,
+      WatchMachineHandleModalVisibleClick,
+      machineList
+    } = props;
+    const columns = [
+      {
+        title: "补货时间",
+        width: '30%',
+        key: "createTime + i.machineCode",
+        render: (data, datas, index) => {
+          const result = {
+            children: data.createTime,
+            props: {}
+          };
+          if (data.count > 1) {
+            if (data.start) {
+              result.props.rowSpan = data.count;
+            } else {
+              result.props.rowSpan = 0;
+            }
+          }
+          return result;
+        }
+      },
+      {
+        title: "补货人",
+        width: '20%',
+        dataIndex: "user"
+      },
+      {
+        title: "商品名称",
+        width: '30%',
+        dataIndex: "goodsName"
+      },
+      {
+        title: "补货数量",
+        width: '20%',
+        dataIndex: "num"
+      }
+    ];
+    // const machine = [{
+    //   machineCode: 1, time: '2018-10-22 12:23:30', people: '张三', goodName: '商品1', subCount: '10', flag: 1
+    // }, {
+    //   machineCode: 2, time: '2018-10-22 12:23:30', people: '张三', goodName: '商品2', subCount: '20', flag: 1
+    // }, {
+    //   machineCode: 3, time: '2018-10-22 12:23:30', people: '张三', goodName: '商品3', subCount: '30', flag: 1
+    // }, {
+    //   machineCode: 4, time: '2018-10-22 12:24:30', people: '李四', goodName: '商品1', subCount: '10', flag: 2
+    // }, {
+    //   machineCode: 5, time: '2018-10-22 12:24:30', people: '李四', goodName: '商品2', subCount: '10', flag: 2
+    // }, {
+    //   machineCode: 6, time: '2018-10-23 12:24:30', people: '王五', goodName: '商品1', subCount: '10', flag: 2
+    // }]
+    const times = {};
+    let result = [];
+    machineList.forEach((item, index) => {
+      let curData = result.find(
+        i => i.createTime === item.createTime && i.id === item.id
+      );
+      if (!times[item.createTime]) {
+        times[item.createTime] = {};
+      }
+      if (!curData) {
+        curData = {
+          createTime: item.createTime,
+          start: !result.some(i => i.createTime === item.createTime),
+          id: index,
+          user: item.user,
+          goodsName: item.goodsName,
+          countNum: item.countNum,
+          num: item.num
+        };
+        result.push(curData);
+      }
+      // curData[item.goodsCode] = item;
+    });
+    result = result.map((item, index, array) => {
+      return {
+        ...item,
+        count: array.filter(i => i.createTime === item.createTime).length
+      };
+    });
+    console.log('machine', result)
     return (
       <Modal
         title={
@@ -46,9 +118,13 @@ const WatchMachine = Form.create()(
         visible={WatchMachineModalVisible}
         onCancel={() => WatchMachineHandleModalVisibleClick()}
         footer={null}
+        className={styles.statisticsTabs}
       >
         <div style={{ paddingBottom: '30px' }} className={styles.watchMachineBox}>
-          <Table columns={machineColumns} dataSource={machineList} rowKey={record => record.machineCode} pagination={false} />
+          <Table columns={columns}
+                 dataSource={result}
+                 rowKey={record => record.id}
+                 pagination={false} />
         </div>
       </Modal>
     );
@@ -71,7 +147,7 @@ export default class replenish extends PureComponent {
     selectedRows: [],
     options: [],
 
-    account: {}
+    account: {},
   };
   componentDidMount() {
     this.getLists();
@@ -100,8 +176,6 @@ export default class replenish extends PureComponent {
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-        },
-        params: {
           keyword: this.state.keyword,
           areaCode: this.state.areaCode,
           beginTime: this.state.beginTime,
@@ -213,7 +287,8 @@ export default class replenish extends PureComponent {
       type: 'replenish/replenishDetail',
       payload: {
         restParams: {
-          batchNo: item.batchNo
+          machineId: item.machineId,
+          datetime: item.date
         },
       },
     }).then((res) => {
@@ -294,9 +369,9 @@ export default class replenish extends PureComponent {
     let columns = [
       {
         title: '补货时间',
-        dataIndex: 'createTime',
+        dataIndex: 'date',
         width: '15%',
-        key: 'createTime'
+        key: 'date'
       },
       {
         title: '机器编号',

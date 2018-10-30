@@ -18,14 +18,14 @@ import {getAccountMenus} from "../../utils/authority";
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-@connect(({ order, loading, log, common }) => ({
-  order,
+@connect(({ commodityStatistics, loading, log, common }) => ({
+  commodityStatistics,
   log,
-  loading: loading.models.order,
+  loading: loading.models.commodityStatistics,
   common,
 }))
 @Form.create()
-export default class Order extends PureComponent {
+export default class CommodityStatisticsSetting extends PureComponent {
   state = {
     pageNo: 1,
     keyword: '',
@@ -37,13 +37,12 @@ export default class Order extends PureComponent {
     areaList: [],
 
     account: {},
-    startTime: '',
+    beginTime: '',
     endTime: '',
   };
 
   componentDidMount = () => {
     this.getList();
-    this.getArea('');
     // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
@@ -61,87 +60,34 @@ export default class Order extends PureComponent {
       }
     }
   }
-
-
   // 获取列表
   getList = () => {
     this.props.dispatch({
-      type: 'order/getOrderList',
+      type: 'commodityStatistics/historydayGoodsCount',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          startTime: this.state.startTime,
+          beginTime: this.state.beginTime,
           endTime: this.state.endTime,
+          keyword: this.state.keyword,
         },
       },
     });
   }
-
-  // 获取商圈信息
-  getArea = (selectedOptions) => {
-    let code = '';
-    let targetOption = null;
-    if (selectedOptions) {
-      targetOption = selectedOptions[selectedOptions.length - 1];
-      code = targetOption.value;
-      targetOption.loading = true;
-    }
-
-    this.props.dispatch({
-      type: 'common/getProvinceCityAreaTradeArea',
-      payload: {
-        restParams: {
-          code,
-        },
-      },
-    }).then((data) => {
-      if (selectedOptions) {
-        targetOption.loading = false;
-        targetOption.children = data;
-
-        this.setState({
-          areaList: [...this.state.areaList],
-        });
-      } else {
-        this.setState({
-          areaList: data,
-        });
-      }
-    });
-  }
-
-  // 日志相关
-  getLogList = () => {
-    this.props.dispatch({
-      type: 'log/getLogList',
-      payload: {
-        restParams: {
-          code: this.state.logId,
-          pageNo: this.state.logModalPageNo,
-        },
-      },
-    }).then(() => {
-      this.setState({
-        logModalLoading: false,
-      });
-    });
-  }
-
-
   // 搜索
   handleSearch = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let startTime = ''
+      let beginTime = ''
       let endTime = ''
       if (fieldsValue.time) {
-        startTime = fieldsValue.time[0].format('YYYY-MM-DD')
+        beginTime = fieldsValue.time[0].format('YYYY-MM-DD')
         endTime = fieldsValue.time[1].format('YYYY-MM-DD')
       }
       this.setState({
         keyword: fieldsValue.keyword,
-        startTime,
+        beginTime,
         endTime,
       }, () => {
         this.getList();
@@ -207,7 +153,7 @@ export default class Order extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { order: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
+    const { commodityStatistics: { list, page, unColumn }, loading } = this.props;
     const { areaCode, keyword, areaList, account } = this.state;
 
     return (
@@ -255,14 +201,6 @@ export default class Order extends PureComponent {
             />
           </div>
         </Card>
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
-        />
       </PageHeaderLayout>
     );
   }
