@@ -9,6 +9,7 @@ import {
   Button,
   DatePicker,
 } from 'antd';
+import moment from 'moment';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Order.less';
 import CommodityStatisticsTable from '../../components/Order/commodityStatisticsTable.js';
@@ -39,6 +40,7 @@ export default class CommodityStatisticsSetting extends PureComponent {
     account: {},
     beginTime: '',
     endTime: '',
+
   };
 
   componentDidMount = () => {
@@ -189,7 +191,7 @@ export default class CommodityStatisticsSetting extends PureComponent {
           </div>
         </Card>
         <Card bordered={false}>
-          <div>数据更新时间：</div>
+          <div>数据更新时间：{moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}</div>
           <div>
             <CommodityStatisticsTable
               loading={loading}
