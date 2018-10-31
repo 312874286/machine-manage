@@ -16,9 +16,9 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './replenish.less'
 import StandardTable from '../../components/StandardTable/index';
 import {getAccountMenus} from "../../utils/authority";
+import moment from "moment/moment";
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
-
 
 const WatchMachine = Form.create()(
   (props) => {
@@ -333,7 +333,11 @@ export default class replenish extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
              <FormItem  label="补货时间">
-                {getFieldDecorator('time')(<RangePicker onChange={this.onChange}/>)}
+                {getFieldDecorator('time')(<RangePicker
+                  onChange={this.onChange}
+                  disabledDate={(current) => {
+                    return current > moment(new Date().setDate(new Date().getDate())).endOf('day');
+                    }} />)}
              </FormItem>
           </Col>
         </Row>
