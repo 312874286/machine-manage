@@ -102,6 +102,7 @@ class MachineAisleTable extends React.Component {
           (item.code) ? ((item.isDelete === 0) ? (
             <div style={{background: '#e5f7d8'}}>商品:
               <Popover
+                placement="topLeft"
                 content={item.goodsName}
                 trigger="hover">
                 {item.goodsName}
@@ -110,6 +111,7 @@ class MachineAisleTable extends React.Component {
           ) : (
             <div style={{background: '#ffe8e4'}}>商品:
               <Popover
+                placement="topLeft"
                 content={item.goodsName}
                 trigger="hover">
                 {item.goodsName}
