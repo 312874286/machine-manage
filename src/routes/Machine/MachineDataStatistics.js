@@ -38,8 +38,8 @@ export default class machineDataStatistics extends PureComponent {
 
     WatchPointModalVisible: false,
     pointList: [],
-    startDate: '',
-    endDate: '',
+    startDate: moment(new Date()).format('YYYY-MM-DD'),
+    endDate: moment(new Date()).format('YYYY-MM-DD'),
     machineCode: ''
   };
   componentDidMount() {
@@ -82,8 +82,8 @@ export default class machineDataStatistics extends PureComponent {
     this.setState({
       formValues: {},
       pageNo: 1,
-      startDate: '',
-      endDate: '',
+      startDate: moment(new Date()).format('YYYY-MM-DD'),
+      endDate: moment(new Date()).format('YYYY-MM-DD'),
       machineCode: ''
     });
   };
@@ -98,8 +98,8 @@ export default class machineDataStatistics extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let startDate = ''
-      let endDate = ''
+      let startDate = moment(new Date()).format('YYYY-MM-DD')
+      let endDate = moment(new Date()).format('YYYY-MM-DD')
       if (fieldsValue.time) {
         startDate = fieldsValue.time[0].format('YYYY-MM-DD')
         endDate = fieldsValue.time[1].format('YYYY-MM-DD')
