@@ -201,7 +201,6 @@ export default class Order extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     const { order: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
     const { areaCode, keyword, areaList, account } = this.state;
-
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
