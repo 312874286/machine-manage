@@ -127,7 +127,7 @@ export default class machineDataStatistics extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入机器code搜索" />)}
+              {getFieldDecorator('machineCode')(<Input placeholder="请输入机器code搜索" />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
@@ -245,7 +245,7 @@ export default class machineDataStatistics extends PureComponent {
                 columns={columns}
                 pagination={false}
                 // onChange={this.handleTableChange}
-                scroll={{ x: 500 ? scrollX : 1050, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100)}}
+                scroll={{ x: 500 ? scrollX : 1050, y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62)}}
               />
             </div>
           </div>
