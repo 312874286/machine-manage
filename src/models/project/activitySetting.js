@@ -1,4 +1,4 @@
-import { getActivitySettingList, getActivityCount, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting, getGameList, getDefaultActivity, getMerchantShops, paiActivity,getOrderStatistics,getGoodsStatistics } from '../../services/project/activitySetting';
+import { getActivitySettingList, getActivityCount, getActivitySettingDetail, getMerchantsList, getShopsList,  saveActivitySetting, editActivitySetting, delActivitySetting, getGameList, getDefaultActivity, getMerchantShops, paiActivity,getOrderStatistics,getGoodsStatistics, activityExcel } from '../../services/project/activitySetting';
 
 export default {
   namespace: 'activitySetting',
@@ -78,6 +78,10 @@ export default {
     },
     *getGoodsStatistics({ payload: { params }},{ call, put }) {
       const response = yield call(getGoodsStatistics, { params });
+      return response;
+    },
+    *activityExcel({ payload: { restParams } }, { call, put }) {
+      const response = yield call(activityExcel, { restParams });
       return response;
     },
   },

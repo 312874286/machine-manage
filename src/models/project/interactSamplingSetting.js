@@ -38,7 +38,8 @@ import {
   updateInteractMachineGoods,
   getOrderStatistics,
   getGoodsStatistics,
-  couponGetList
+  couponGetList,
+  activityExcel
 } from "../../services/project/interactSamplingSetting";
 
 export default {
@@ -397,6 +398,10 @@ export default {
     },
     *couponGetList({ payload: { restParams }},{ call }) {
       const response = yield call(couponGetList, { restParams });
+      return response;
+    },
+    *activityExcel({ payload: { restParams } }, { call, put }) {
+      const response = yield call(activityExcel, { restParams });
       return response;
     },
   },

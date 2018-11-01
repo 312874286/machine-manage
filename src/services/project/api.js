@@ -112,7 +112,10 @@ const api = map({
   getInteractMachineGoodsList: "/project/interact/machine/goodsList",
   getMachineTree: "/project/interact/machineTree",
   // 第四步 规则设置
-  ruleInteract: "/project/interact/rule"
+  ruleInteract: "/project/interact/rule",
+
+  // 活动到处店铺
+  activityExcel: '/project/interact/merchant/exportMachineSellerId',
 });
 
 
