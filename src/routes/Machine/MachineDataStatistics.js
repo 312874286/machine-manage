@@ -17,7 +17,7 @@ import styles from './LabelSetting.less';
 const { RangePicker } = DatePicker;
 
 const FormItem = Form.Item;
-
+const dateFormat = 'YYYY-MM-DD';
 @connect(({ common, loading, machineDataStatistics, log }) => ({
   common,
   machineDataStatistics,
@@ -38,9 +38,10 @@ export default class machineDataStatistics extends PureComponent {
 
     WatchPointModalVisible: false,
     pointList: [],
-    startDate: moment(new Date()).format('YYYY-MM-DD'),
-    endDate: moment(new Date()).format('YYYY-MM-DD'),
-    machineCode: ''
+    machineCode: '',
+
+    startDateString: moment().format('YYYY-MM-DD'),
+    endDateString: moment().format('YYYY-MM-DD'),
   };
   componentDidMount() {
     this.getLists();
@@ -68,8 +69,8 @@ export default class machineDataStatistics extends PureComponent {
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
-          startDate: this.state.startDate,
-          endDate: this.state.endDate,
+          startDate: this.state.startDateString,
+          endDate: this.state.endDateString,
           machineCode: this.state.machineCode
         },
       },
@@ -82,9 +83,9 @@ export default class machineDataStatistics extends PureComponent {
     this.setState({
       formValues: {},
       pageNo: 1,
-      startDate: moment(new Date()).format('YYYY-MM-DD'),
-      endDate: moment(new Date()).format('YYYY-MM-DD'),
-      machineCode: ''
+      machineCode: '',
+      startDateString: moment().format('YYYY-MM-DD'),
+      endDateString: moment().format('YYYY-MM-DD'),
     });
   };
   handleSelectRows = rows => {
@@ -98,31 +99,43 @@ export default class machineDataStatistics extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      let startDate = moment(new Date()).format('YYYY-MM-DD')
-      let endDate = moment(new Date()).format('YYYY-MM-DD')
+      let startDateString = moment().format('YYYY-MM-DD')
+      let endDateString = moment().format('YYYY-MM-DD')
       if (Array.isArray(fieldsValue.time)) {
-        startDate = fieldsValue.time[0].format('YYYY-MM-DD')
-        endDate = fieldsValue.time[1].format('YYYY-MM-DD')
+        startDateString = fieldsValue.time[0].format('YYYY-MM-DD')
+        endDateString = fieldsValue.time[1].format('YYYY-MM-DD')
       }
       this.setState({
         pageNo: 1,
-        startDate,
-        endDate,
+        startDateString,
+        endDateString,
         machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : ''
       }, () => {
         this.getLists();
       });
     });
   };
+  startDatePickerChange = (date, dateString) => {
+    this.setState({
+      startDateString: dateString[0],
+      endDateString: dateString[1],
+    });
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
+    const { startDateString, endDateString } = this.state
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem>
-              {getFieldDecorator('time')(<RangePicker />)}
+              {getFieldDecorator('time', {
+                initialValue: [moment(startDateString, 'YYYY-MM-DD'), moment(endDateString, 'YYYY-MM-DD')],
+              })(<RangePicker
+                onChange={this.startDatePickerChange}
+                format={dateFormat}
+              />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
