@@ -100,7 +100,8 @@ export default class machineDataStatistics extends PureComponent {
       if (err) return;
       let startDate = moment(new Date()).format('YYYY-MM-DD')
       let endDate = moment(new Date()).format('YYYY-MM-DD')
-      if (fieldsValue.time) {
+      console.log('fieldsValue.time', fieldsValue.time, Array.isArray(fieldsValue.time))
+      if (Array.isArray(fieldsValue.time)) {
         startDate = fieldsValue.time[0].format('YYYY-MM-DD')
         endDate = fieldsValue.time[1].format('YYYY-MM-DD')
       }
