@@ -24,7 +24,7 @@ export default {
       let list = []
       if (data.length > 0) {
         data.forEach((item, index) => {
-          console.log('item', item, index)
+          // console.log('item', item, index)
           list.push({
             id: item[0],
             activityName: item[1],
