@@ -433,13 +433,14 @@ export default class versionSetting extends PureComponent {
           <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
         </Card>
         <Card bordered={false}>
-          <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ 'marginBottom': '10px' }}>
-            新增
-          </Button>
           <Tabs onChange={this.callback} type="card" defaultActiveKey={TabPaneKey.appPackageName}>
             {tabNames.map((item) => {
               return (
-                <TabPane key={item.appPackageName} tab={item.appName}></TabPane>
+                <TabPane key={item.appPackageName} tab={item.appName}>
+                  <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ 'marginBottom': '10px' }}>
+                    新增
+                  </Button>
+                </TabPane>
               );
             })}
           </Tabs>

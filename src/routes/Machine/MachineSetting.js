@@ -60,11 +60,11 @@ const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}]
 const pointStatusOptions = [
-  {id: 1, name: '机器开机'},
-  {id: 2, name: '初始化机器 '},
-  {id: 3, name: '通过测试'},
+  {id: 1, name: '已开机'},
+  {id: 2, name: '已初始化 '},
+  {id: 3, name: '已通过测试'},
   {id: 4, name: '设置在点位'},
-  {id: 9, name: '合作中'}
+  {id: 9, name: '已在点位'}
   ]
 const machineType = ['渠道机器', '活动机器']
 const machineArr = ['0', '1', '2', '3', '4']
@@ -2427,7 +2427,7 @@ export default class machineSettingList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem>
               {getFieldDecorator('machineCode')(
-                <Input placeholder="请输入机器编号、点位" />
+                <Input placeholder="请输入机器编号、点位、标签搜索" />
               )}
             </FormItem>
           </Col>

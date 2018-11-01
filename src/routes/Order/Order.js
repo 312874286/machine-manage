@@ -210,7 +210,7 @@ export default class Order extends PureComponent {
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={8} sm={12}>
-                    <FormItem label="选择商圈">
+                    <FormItem label="选择省市区">
                       {getFieldDecorator('areaCode', {
                         initialValue: areaCode,
                       })(

@@ -14,7 +14,7 @@ import {
   Divider,
   Cascader,
   Popconfirm,
-  Spin,
+  message,
   Popover,
   TimePicker,
   Switch,
@@ -907,7 +907,7 @@ export default class PointSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={7} sm={24} lg={8}>
-            <FormItem label="省市区商圈">
+            <FormItem label="省市区">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
                   placeholder="请选择"
@@ -993,6 +993,10 @@ export default class PointSettingList extends PureComponent {
 
   handleMonitorAdd = () => {
     const { multiSwitchStatus, multiSupervisoryStartTime, multiSupervisoryEndTime, selectedRows } = this.state
+    if (selectedRows.length === 0) {
+      message.error('请先选择点位在进行批量监控设置')
+      return false
+    }
     let params = {
       ids: selectedRows.map((item) => {
         return item.id
@@ -1083,17 +1087,6 @@ export default class PointSettingList extends PureComponent {
         ),
       },
       {
-        title: '备注描述',
-        dataIndex: 'remark',
-        key: 'remark'
-      },
-      {
-        title: '运营人',
-        width: '10%',
-        dataIndex: 'manager',
-        key: 'manager'
-      },
-      {
         title: '机器个数',
         width: '10%',
         dataIndex: 'userNum',
@@ -1116,6 +1109,17 @@ export default class PointSettingList extends PureComponent {
 
         ),
         key: 'machineCode'
+      },
+      {
+        title: '备注描述',
+        dataIndex: 'remark',
+        key: 'remark'
+      },
+      {
+        title: '运营人',
+        width: '10%',
+        dataIndex: 'manager',
+        key: 'manager'
       },
       {
         title: '手机号',
@@ -1187,9 +1191,6 @@ export default class PointSettingList extends PureComponent {
               </Button>
             </div>
             <div style={{ display: !account.list ? 'none' : ''}}>
-              <div className="table-operations">
-                <Button onClick={() => this.handleModalMonitorVisible(true)} style={{ marginTop: 20 }}>监控设置</Button>
-              </div>
               <StandardTable
                 selectedPointRows={selectedRows}
                 loading={loading}
@@ -1201,6 +1202,9 @@ export default class PointSettingList extends PureComponent {
                 scrollX={1700}
                 scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 265)}
               />
+              <div className="table-operations">
+                <Button onClick={() => this.handleModalMonitorVisible(true)} style={{ marginTop: 20 }}>监控设置</Button>
+              </div>
             </div>
           </div>
         </Card>
