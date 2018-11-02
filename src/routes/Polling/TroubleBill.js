@@ -23,7 +23,7 @@ const statusOption = [{id: 1, name: '待接单'}, {id: 2, name: '处理中'}, {i
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, openSelectMachineModal, machineId } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, openSelectMachineModal, machineId, machine  } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -69,7 +69,7 @@ const CreateForm = Form.create()(
                 rules: [{ required: true, message: '请选择机器' }],
               })(
                 <div>
-                  { machineId ? machineId.split('、')[1] : '' }
+                  { machineId ? (machine ? machine : machineId.split('、')[1]) : '' }
                   <Button type="primary" onClick={openSelectMachineModal}>+ 选择</Button>
                 </div>
               )}
@@ -232,7 +232,9 @@ export default class troubleBill extends PureComponent {
     statusValue: undefined,
     sourceValue: undefined,
 
-    account: {}
+    account: {},
+    machine: '',
+    machineId: '',
   };
   constructor(props) {
     super(props);
@@ -242,13 +244,18 @@ export default class troubleBill extends PureComponent {
   }
   componentDidMount = () => {
     if (this.props.location.query) {
-      const { flag, statusValue } = this.props.location.query;
+      const { flag, statusValue, machine, machineId } = this.props.location.query;
       if (flag === 'openFault') {
         this.setState({
           modalVisible: true,
+          machine,
+          machineId
         }, () => {
           this.props.location.query = {}
           this.getLists();
+        });
+        this.form.setFieldsValue({
+          machineId: machineId.split('、')[0],
         });
       }
       // statusValue
@@ -1304,6 +1311,7 @@ export default class troubleBill extends PureComponent {
           editModalConfirmLoading={this.state.editModalConfirmLoading}
           openSelectMachineModal={this.openSelectMachineModal}
           machineId={this.state.machineId}
+          machine={this.state.machine}
         />
         <SelectMachineForm
           ref={this.selectMachineFormRef}

@@ -156,7 +156,7 @@ export default class stockOut extends PureComponent {
         render: () => (
           <Fragment>
             <a
-              onClick={() => this.props.history.push({pathname: '/check/fault', query: {flag: 'openFault'}})}
+              onClick={() => this.props.history.push({ pathname: '/check/fault', query: { flag: 'openFault', machine: `${item.local}—${item.machineCode}`, machineId: `${item.id}、${item.machineCode}`}})}
               style={{ display: !account.add ? 'none' : '' }}>创建工单</a>
           </Fragment>
         ),
