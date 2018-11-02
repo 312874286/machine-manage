@@ -985,22 +985,41 @@ export default class user extends PureComponent {
     });
   }
   addData = async () => {
-    const selectedRows = this.state.selectedRows
-    for (let a of selectedRows) {
-      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
-      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
-      await this.handleDelete(a.machineCode)
-    }
-    // console.log(this.state.repeat)
-    if (this.state.repeat.length > 0) {
-      Modal.warning({
-        title: '以下机器和已选机器重复',
-        content: this.state.repeat.join('\n') + '',
-      });
-    }
+    const { selectedRows, targetData } = this.state
+    const newArray = selectedRows.concat(targetData);
+    console.log('result', newArray)
+    this.uniqueNew(newArray)
+
+    // for (let a of selectedRows) {
+    //   let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
+    //   this.state.selectedRowKeys.splice(selectedRowKeys, 1)
+    //   await this.handleDelete(a.machineCode)
+    // }
+    // // console.log(this.state.repeat)
+    // if (this.state.repeat.length > 0) {
+    //   Modal.warning({
+    //     title: '以下机器和已选机器重复',
+    //     content: this.state.repeat.join('\n') + '',
+    //   });
+    // }
     this.setState({
       selectAll: false
     })
+  }
+  uniqueNew (arr) {
+    var ret = []
+    var hash = {}
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i]
+      var key = typeof(item) + item
+      console.log('result', key)
+      if (hash[key] !== 1) {
+        ret.push(item)
+        hash[key] = 1
+      }
+    }
+    console.log('result', ret)
+    return ret
   }
   unique = (arr) => {
     let targetData = []
@@ -1018,6 +1037,15 @@ export default class user extends PureComponent {
     })
     return Object.values(targetData)
   }
+  handleDelete = (key) => {
+    // console.log('key', key, this.state.targetData)
+    const dataSource = [...this.state.sourceData];
+    this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
+    let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
+    // console.log('targetData', targetData)
+    targetData = this.unique(targetData)
+    this.setState({ targetData });
+  }
   handleSave = (row) => {
     const newData = [...this.state.sourceData];
     const index = newData.findIndex(item => row.machineCode === item.machineCode);
@@ -1028,15 +1056,6 @@ export default class user extends PureComponent {
     });
     console.log('newDatahandleSave', newData)
     this.setState({ sourceData: newData });
-  }
-  handleDelete = (key) => {
-    // console.log('key', key, this.state.targetData)
-    const dataSource = [...this.state.sourceData];
-    this.setState({ sourceData: dataSource.filter(item => item.machineCode !== key) });
-    let targetData = [...this.state.targetData, ...dataSource.filter(item => item.machineCode === key)]
-    // console.log('targetData', targetData)
-    targetData = this.unique(targetData)
-    this.setState({ targetData });
   }
   targetHandleSave = (row) => {
     const newData = [...this.state.targetData];
