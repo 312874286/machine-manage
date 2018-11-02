@@ -1739,7 +1739,7 @@ export default class activitySettingList extends PureComponent {
         payload: {
           restParams: {
             activityId: item.id,
-            activityType: 0,
+            activityType: 1,
           }
         }
       })
