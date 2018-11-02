@@ -579,6 +579,19 @@ export default class areaSettingList extends PureComponent {
       }
     });
   };
+  handleExcelShop = (item) => {
+// activityExcel
+    this.props
+      .dispatch({
+        type: "interactSamplingSetting/activityExcel",
+        payload: {
+          restParams: {
+            activityId: item.id,
+            activityType: 1,
+          }
+        }
+      })
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -742,7 +755,7 @@ export default class areaSettingList extends PureComponent {
       },
       {
         fixed: "right",
-        width: 150,
+        width: 200,
         title: "操作",
         render: (text, item) => (
           <Fragment>
@@ -780,6 +793,14 @@ export default class areaSettingList extends PureComponent {
             </a>
             <Divider type="vertical" />
             <a onClick={() => this.getInteractDetail(item)}>详情</a>
+            <Divider type="vertical" />
+            <a
+              onClick={() => {
+                this.handleExcelShop(item);
+              }}
+            >
+              导出门店
+            </a>
           </Fragment>
         )
       }

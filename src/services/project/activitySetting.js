@@ -87,3 +87,7 @@ export async function getGoodsStatistics({ params }) {
     body: JSON.stringify(params),
   });
 }
+
+export async function activityExcel({ restParams }) {
+  window.location.href = `${api.activityExcel}?activityId=${restParams.activityId}&activityType=${restParams.activityType}`;
+}

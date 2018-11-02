@@ -1731,7 +1731,19 @@ export default class activitySettingList extends PureComponent {
       }
     });
   };
-
+  handleExcelShop = (item) => {
+// activityExcel
+    this.props
+      .dispatch({
+        type: "activitySetting/activityExcel",
+        payload: {
+          restParams: {
+            activityId: item.id,
+            activityType: 0,
+          }
+        }
+      })
+  }
   render() {
     const {
       activitySetting: { list, page, unColumn },
@@ -1759,7 +1771,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         title: "活动编码",
-        width: "15%",
+        width: "10%",
         dataIndex: "code",
         key: "code"
       },
@@ -1770,7 +1782,7 @@ export default class activitySettingList extends PureComponent {
       // },
       {
         title: "活动类型",
-        width: "15%",
+        width: "10%",
         dataIndex: "type",
         render(val) {
           return <span>{activityTypeLine[val]}</span>;
@@ -1803,7 +1815,7 @@ export default class activitySettingList extends PureComponent {
       },
       {
         fixed: "right",
-        width: 240,
+        width: 210,
         title: "操作",
         render: (text, item) => (
           <Fragment>
@@ -1882,6 +1894,14 @@ export default class activitySettingList extends PureComponent {
               }}
             >
               机器统计
+            </a>
+            <Divider type="vertical" />
+            <a
+              onClick={() => {
+                this.handleExcelShop(item);
+              }}
+            >
+              导出门店
             </a>
           </Fragment>
         )
@@ -1969,7 +1989,7 @@ export default class activitySettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1000}
+                scrollX={1200}
               />
             </div>
           </div>
