@@ -1901,7 +1901,7 @@ export default class activitySettingList extends PureComponent {
                 this.handleExcelShop(item);
               }}
             >
-              导出店铺
+              导出门店
             </a>
           </Fragment>
         )
