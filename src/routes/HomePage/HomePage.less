@@ -20,6 +20,13 @@
 .gridCardBox {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  a {
+    width: 25%;
+  }
+  a:nth-child(n + 5) {
+    margin-top: 20px;
+  }
 }
 .gridCardBox a {
   width: 240px;

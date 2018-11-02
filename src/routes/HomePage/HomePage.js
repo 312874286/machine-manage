@@ -109,6 +109,15 @@ export default class homePageSetting extends PureComponent {
                     <span>货道故障</span>
                   </div>
                 </a>
+                <a onClick={() => this.props.history.push('/Lock')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/unusual.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.channelException === 0 ? "0" : MachinePortalDataList.channelException}</span>
+                    <span>货道被锁定</span>
+                  </div>
+                </a>
               </div>
             </Card>
             <Card title={
