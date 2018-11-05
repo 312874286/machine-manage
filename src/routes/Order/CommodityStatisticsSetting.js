@@ -8,6 +8,7 @@ import {
   Input,
   Button,
   DatePicker,
+  message,
 } from 'antd';
 import moment from 'moment';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -154,15 +155,33 @@ export default class CommodityStatisticsSetting extends PureComponent {
   };
   handleExcel = () => {
     // dayGoodsCountExcel
-    this.props.dispatch({
-      type: 'commodityStatistics/dayGoodsCountExcel',
-      payload: {
-        restParams: {
-          beginTime: this.state.beginTime,
-          endTime: this.state.endTime,
-          keyword: this.state.keyword,
-        },
-      },
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      let beginTime = ''
+      let endTime = ''
+      if (!fieldsValue.time) {
+        message.warn('请选择一个时间')
+        return
+      } else {
+        beginTime = fieldsValue.time[0].format('YYYY-MM-DD')
+        endTime = fieldsValue.time[1].format('YYYY-MM-DD')
+      }
+      this.setState({
+        keyword: fieldsValue.keyword,
+        beginTime,
+        endTime,
+      }, () => {
+        this.props.dispatch({
+          type: 'commodityStatistics/dayGoodsCountExcel',
+          payload: {
+            restParams: {
+              beginTime: this.state.beginTime,
+              endTime: this.state.endTime,
+              keyword: this.state.keyword,
+            },
+          },
+        });
+      });
     });
   }
   render() {
