@@ -988,20 +988,20 @@ export default class user extends PureComponent {
     const { selectedRows, targetData } = this.state
     const newArray = selectedRows.concat(targetData);
     console.log('result', newArray)
-    this.uniqueNew(newArray)
+    // this.uniqueNew(newArray)
 
-    // for (let a of selectedRows) {
-    //   let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
-    //   this.state.selectedRowKeys.splice(selectedRowKeys, 1)
-    //   await this.handleDelete(a.machineCode)
-    // }
-    // // console.log(this.state.repeat)
-    // if (this.state.repeat.length > 0) {
-    //   Modal.warning({
-    //     title: '以下机器和已选机器重复',
-    //     content: this.state.repeat.join('\n') + '',
-    //   });
-    // }
+    for (let a of selectedRows) {
+      let selectedRowKeys = this.state.selectedRowKeys.indexOf(a.machineCode)
+      this.state.selectedRowKeys.splice(selectedRowKeys, 1)
+      await this.handleDelete(a.machineCode)
+    }
+    // console.log(this.state.repeat)
+    if (this.state.repeat.length > 0) {
+      Modal.warning({
+        title: '以下机器和已选机器重复',
+        content: this.state.repeat.join('\n') + '',
+      });
+    }
     this.setState({
       selectAll: false
     })
