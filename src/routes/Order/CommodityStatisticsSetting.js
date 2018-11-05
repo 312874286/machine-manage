@@ -152,7 +152,19 @@ export default class CommodityStatisticsSetting extends PureComponent {
       keyword: '',
     });
   };
-
+  handleExcel = () => {
+    // dayGoodsCountExcel
+    this.props.dispatch({
+      type: 'commodityStatistics/dayGoodsCountExcel',
+      payload: {
+        restParams: {
+          beginTime: this.state.beginTime,
+          endTime: this.state.endTime,
+          keyword: this.state.keyword,
+        },
+      },
+    });
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { commodityStatistics: { list, page, unColumn }, loading } = this.props;
@@ -191,7 +203,12 @@ export default class CommodityStatisticsSetting extends PureComponent {
           </div>
         </Card>
         <Card bordered={false}>
-          <div>数据更新时间：{moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}</div>
+          <div>
+            数据更新时间：{moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}
+            <Button icon="plus" type="primary" style={{ marginLeft: 20}} onClick={() => this.handleExcel(true)}>
+              导出
+            </Button>
+         </div>
           <div>
             <CommodityStatisticsTable
               loading={loading}

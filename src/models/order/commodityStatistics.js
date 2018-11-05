@@ -1,4 +1,4 @@
-import { historydayGoodsCount } from '../../services/order/order';
+import { historydayGoodsCount, dayGoodsCountExcel } from '../../services/order/order';
 
 export default {
   namespace: 'commodityStatistics',
@@ -16,6 +16,10 @@ export default {
         type: 'saveList',
         payload: response,
       });
+    },
+    *dayGoodsCountExcel({ payload: { restParams } }, { call, put }) {
+      const response = yield call(dayGoodsCountExcel, { restParams });
+      return response;
     },
   },
 

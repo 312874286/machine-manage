@@ -12,3 +12,7 @@ export async function historydayGoodsCount({ restParams }) {
     restParams,
   });
 }
+
+export async function dayGoodsCountExcel({ restParams }) {
+  window.location.href = `${api.dayGoodsCountExcel}?keyword=${restParams.keyword}&startTime=${restParams.startTime}&endTime=${restParams.endTime}`;
+}
