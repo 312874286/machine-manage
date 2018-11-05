@@ -328,7 +328,7 @@ export default class replenish extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="关键字">
-              {getFieldDecorator('keyword')(<Input placeholder="请输入机器编码、补货人、手机号搜索" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入机器编码搜索" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
