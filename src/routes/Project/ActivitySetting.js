@@ -1744,6 +1744,18 @@ export default class activitySettingList extends PureComponent {
         }
       })
   }
+  handleExportShopClick = () => {
+    this.props
+      .dispatch({
+        type: "activitySetting/activityExcel",
+        payload: {
+          restParams: {
+            activityId: '',
+            activityType: '',
+          }
+        }
+      })
+  }
   render() {
     const {
       activitySetting: { list, page, unColumn },
@@ -1978,6 +1990,12 @@ export default class activitySettingList extends PureComponent {
                 style={{ display: !account.setDefault ? "none" : "" }}
               >
                 设置默认活动
+              </Button>
+              <Button
+                type="primary"
+                onClick={() => this.handleExportShopClick(true)}
+              >
+                导出门店
               </Button>
             </div>
             <div style={{ display: !account.list ? "none" : "" }}>
