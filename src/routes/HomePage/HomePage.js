@@ -102,7 +102,7 @@ export default class homePageSetting extends PureComponent {
                 </a>
                 <a onClick={() => this.props.history.push('/Trouble')}>
                   <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/unusual.png')}/>
+                    <img src={require('../../assets/images/indexPage/trouble.png')}/>
                   </div>
                   <div className={styles.machineRightBox}>
                     <span>{MachinePortalDataList.channelException === 0 ? "0" : MachinePortalDataList.channelException}</span>
@@ -111,10 +111,10 @@ export default class homePageSetting extends PureComponent {
                 </a>
                 <a onClick={() => this.props.history.push('/Lock')}>
                   <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/unusual.png')}/>
+                    <img src={require('../../assets/images/indexPage/lock.png')}/>
                   </div>
                   <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.channelException === 0 ? "0" : MachinePortalDataList.channelException}</span>
+                    <span>{MachinePortalDataList.lockCount === 0 ? "0" : MachinePortalDataList.lockCount}</span>
                     <span>货道被锁定</span>
                   </div>
                 </a>
@@ -128,7 +128,7 @@ export default class homePageSetting extends PureComponent {
               <div className={styles.gridCardBox}>
                 <a onClick={() => this.props.history.push('/paiActivity')}>
                   <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/processed.png')}/>
+                    <img src={require('../../assets/images/indexPage/doing.png')}/>
                   </div>
                   <div className={styles.machineRightBox}>
                     <span>{MachinePortalDataList.paiActivityCount === 0 ? "0" : MachinePortalDataList.paiActivityCount}</span>

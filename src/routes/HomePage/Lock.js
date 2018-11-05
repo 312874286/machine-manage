@@ -52,7 +52,7 @@ export default class offLine extends PureComponent {
       type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          type: 1
+          type: 5
         },
       },
     });
