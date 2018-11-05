@@ -223,7 +223,7 @@ export default class CommodityStatisticsSetting extends PureComponent {
         </Card>
         <Card bordered={false}>
           <div>
-            数据更新时间：{moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}
+            {/*数据更新时间：{moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}*/}
             <Button icon="plus" type="primary" style={{ marginLeft: 20}} onClick={() => this.handleExcel(true)}>
               导出
             </Button>
