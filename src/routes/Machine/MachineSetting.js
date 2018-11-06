@@ -63,7 +63,7 @@ const pointStatusOptions = [
   {id: 1, name: '已开机'},
   {id: 2, name: '已初始化 '},
   {id: 3, name: '已通过测试'},
-  {id: 4, name: '设置在点位'},
+  {id: 4, name: '已在点位'},
   {id: 9, name: '已在点位'}
   ]
 const machineType = ['渠道机器', '活动机器']
