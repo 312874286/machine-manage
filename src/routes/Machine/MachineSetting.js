@@ -2427,7 +2427,7 @@ export default class machineSettingList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem>
               {getFieldDecorator('machineCode')(
-                <Input placeholder="请输入机器编号、点位、标签搜索" />
+                <Input placeholder="请输入机器编号、点位标签搜索" />
               )}
             </FormItem>
           </Col>
