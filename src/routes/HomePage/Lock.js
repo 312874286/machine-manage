@@ -82,8 +82,8 @@ export default class offLine extends PureComponent {
         )
       },
       {
-        title: '被锁定货道号',
-        dataIndex: 'offlineTime',
+        title: '被锁定货道个数',
+        dataIndex: 'lockCount',
       }
     ];
     return (
