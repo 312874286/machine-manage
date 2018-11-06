@@ -1,7 +1,7 @@
-import { getOrderList } from '../../services/order/order';
+import { historydayGoodsCount, dayGoodsCountExcel } from '../../services/order/order';
 
 export default {
-  namespace: 'order',
+  namespace: 'commodityStatistics',
   state: {
     list: [],
     page: {},
@@ -10,12 +10,16 @@ export default {
   },
 
   effects: {
-    *getOrderList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(getOrderList, { restParams });
+    *historydayGoodsCount({ payload: { restParams } }, { call, put }) {
+      const response = yield call(historydayGoodsCount, { restParams });
       yield put({
         type: 'saveList',
         payload: response,
       });
+    },
+    *dayGoodsCountExcel({ payload: { restParams } }, { call, put }) {
+      const response = yield call(dayGoodsCountExcel, { restParams });
+      return response;
     },
   },
 

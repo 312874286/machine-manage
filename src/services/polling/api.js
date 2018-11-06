@@ -25,8 +25,11 @@ const api = map({
   updateStatus: '/check/user/updateStatus',
   deleteUser: '/check/user/delete',
 
-  replenishList: '/supply/channel/history/list?pageNo={pageNo}',
-  replenishDetail: '/supply/channel/history/detail?batchNo={batchNo}',
+  // replenishList: '/supply/channel/history/list?pageNo={pageNo}',
+  // replenishDetail: '/supply/channel/history/detail?batchNo={batchNo}',
+
+  replenishList: '/supply/channel/history/dayGoodsList?pageNo={pageNo}&areaCode={areaCode}&beginTime={beginTime}&endTime={endTime}&keyword={keyword}',
+  replenishDetail: '/supply/channel/history/dayGoodsDetail?machineId={machineId}&datetime={datetime}',
 
 });
 

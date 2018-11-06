@@ -7,3 +7,12 @@ export async function getOrderList({ restParams }) {
     restParams,
   });
 }
+export async function historydayGoodsCount({ restParams }) {
+  return fetch.get(api.historydayGoodsCount, {
+    restParams,
+  });
+}
+
+export async function dayGoodsCountExcel({ restParams }) {
+  window.location.href = `${api.dayGoodsCountExcel}?keyword=${restParams.keyword}&beginTime=${restParams.beginTime}&endTime=${restParams.endTime}`;
+}

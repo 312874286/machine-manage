@@ -125,6 +125,7 @@ export default class GoodsStatistics extends PureComponent {
           summary
         );
       });
+    console.log('sortResult', sortResult)
     return sortResult;
   }
 

@@ -91,6 +91,7 @@ class EditableTagGroup extends PureComponent {
     this.setState({ inputVisible: true }, () => this.select.focus());
   }
   handleInputConfirm = () => {
+    console.log('33333')
     this.setState({
       data: []
     }, () => {

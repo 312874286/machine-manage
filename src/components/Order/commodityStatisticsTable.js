@@ -1,14 +1,17 @@
-import React, { PureComponent } from 'react';
-import { Table, Alert, Input, Button } from 'antd';
-import styles from './userTable.less';
+import React, { PureComponent, Fragment } from 'react';
+import { Table, Alert, Divider, Popconfirm, Input, Button } from 'antd';
+import styles from './orderTable.less';
+import { orderStatusData, orderTypeData } from '../../common/config/order';
 
-export default class userTable extends PureComponent {
+// const status = [{ id: 0, name: '停用' }, { id: 1, name: '正常' }];
+export default class CommodityStatisticsTable extends PureComponent {
   state = {
     No: '',
     totalNo: 0
   };
   componentWillReceiveProps(nextProps) {
     const { page, } = this.props;
+    // console.log('page', page)
     this.setState({
       totalNo: Math.ceil(page.total/page.pageSize)
     })
@@ -41,41 +44,51 @@ export default class userTable extends PureComponent {
       data,
       page,
       loading,
-      unColumn,
+      unColumn
     } = this.props;
-    let columns = [
+    const columns = [
       {
-        title: '用户Id',
-        dataIndex: 'id',
-        key: 'id'
+        title: '商品名称',
+        dataIndex: 'goodsName',
+        width: '15%',
+        key: 'goodsName'
       },
       {
-        title: '用户昵称',
-        dataIndex: 'userNick',
-        key: 'userNick'
-      },
-      // {
-      //   title: '手机号',
-      //   dataIndex: 'phone',
-      // },
-      {
-        title: '渠道名称',
-        dataIndex: 'channelName',
-        key: 'channelName'
+        title: '机器编号',
+        dataIndex: 'machineCode',
+        width: '15%',
+        key: 'machineCode'
       },
       {
-        title: '创建时间',
-        dataIndex: 'createTime',
-        key: 'createTime'
+        title: '机器点位',
+        dataIndex: 'localDesc',
+        width: '20%',
+        key: 'localDesc'
       },
-      // {
-      //   title: '操作',
-      //   render: (text, item) => (
-      //     <Fragment>
-      //       <a onClick={() => onLogClick(item)}>日志</a>
-      //     </Fragment>
-      //   ),
-      // },
+      {
+        title: '补货前数量',
+        dataIndex: 'beforeNum',
+        width: '10%',
+        key: 'beforeNum'
+      },
+      {
+        title: '补货数量',
+        dataIndex: 'afterNum',
+        width: '10%',
+        key: 'afterNum'
+      },
+      {
+        title: '时间',
+        dataIndex: 'date',
+        width: '10%',
+        key: 'date'
+      },
+      {
+        title: '剩余数量',
+        dataIndex: 'num',
+        width: '10%',
+        key: 'num'
+      },
     ];
     if (unColumn) {
       let leg = columns.length
@@ -90,10 +103,7 @@ export default class userTable extends PureComponent {
         }
       }
     }
-    const width = 100/(columns.length)
-    for (let i = 0; i < columns.length; i++) {
-      columns[i].width = width + '%'
-    }
+    // `第${page.current}页 / 共${Math.ceil(total/page.pageSize)}页`
     const paginationProps = {
       showTotal: (total) => {
         // console.log(total, page)
@@ -113,7 +123,6 @@ export default class userTable extends PureComponent {
       ...page,
       showQuickJumper: true,
     };
-
     return (
       <div className={styles.standardTable}>
         {/*<div className={styles.tableAlert}>*/}
@@ -135,7 +144,8 @@ export default class userTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 30)}}
+          scroll={{ x: 800, y: (document.documentElement.offsetHeight || document.body.offsetHeight) - (68 + 62 + 24 + 53 + 100 + 30) }}
+          // showHeader={false}
         />
       </div>
     );
