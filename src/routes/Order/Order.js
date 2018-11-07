@@ -201,7 +201,6 @@ export default class Order extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     const { order: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
     const { areaCode, keyword, areaList, account } = this.state;
-
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -210,7 +209,7 @@ export default class Order extends PureComponent {
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={8} sm={12}>
-                    <FormItem label="选择商圈">
+                    <FormItem label="选择省市区">
                       {getFieldDecorator('areaCode', {
                         initialValue: areaCode,
                       })(

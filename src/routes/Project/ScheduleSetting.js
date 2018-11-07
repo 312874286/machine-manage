@@ -999,7 +999,8 @@ export default class ScheduleSettingList extends PureComponent {
           startTime: this.state.startTime,
           code: this.state.code,
           status: this.state.status,
-          type: this.state.type
+          type: this.state.type,
+          keyword: this.state.keyword
         },
       },
     }).then((res) => {
@@ -2208,7 +2209,7 @@ export default class ScheduleSettingList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="省市区商圈">
+            <FormItem label="省市区">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
                   placeholder="请选择"
@@ -2248,6 +2249,11 @@ export default class ScheduleSettingList extends PureComponent {
           </Col>
         </Row>
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={7} sm={24}>
+            <FormItem>
+              {getFieldDecorator('keyword')(<Input placeholder="请输入机器点位、编号搜索" />)}
+            </FormItem>
+          </Col>
           <Col md={7} sm={24}>
             <span>
                <FormItem>

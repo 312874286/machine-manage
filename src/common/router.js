@@ -98,6 +98,9 @@ export const getRouterData = (app) => {
     '/stockOut': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/StockOut')),
     },
+    '/lock': {
+      component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/Lock')),
+    },
     '/paiActivity': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/PaiActivity')),
     },

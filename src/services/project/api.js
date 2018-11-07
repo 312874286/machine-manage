@@ -35,7 +35,7 @@ const api = map({
     "/project/shops/selectActivityShops?activityId={activityId}",
 
   getScheduleSettingList:
-    "/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}&status={status}&type={type}",
+    "/project/activityPlan/list?code={code}&startTime={startTime}&endTime={endTime}&status={status}&type={type}&keyword={keyword}",
   saveScheduleSetting: "/project/activityPlan/add",
   updateScheduleSetting: "/project/activityPlan/update",
   deleteScheduleSetting: "/project/activityPlan/delete?status=1",
