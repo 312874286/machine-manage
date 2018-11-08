@@ -65,11 +65,13 @@ export default class offLine extends PureComponent {
     const { account } = this.state
     const columns = [
       {
+        align: 'center',
         title: '机器编号',
         dataIndex: 'machineCode',
         width: '30%',
       },
       {
+        align: 'center',
         title: '机器点位',
         width: '25%',
         dataIndex: 'local',
@@ -84,6 +86,7 @@ export default class offLine extends PureComponent {
       {
         title: '被锁定货道个数',
         dataIndex: 'lockCount',
+        align: 'center'
       }
     ];
     return (
