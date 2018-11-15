@@ -595,6 +595,20 @@ const proxy = {
             functionLevel: 2,
           },
           {
+            id: 'a45',
+            functionDepict: '入场时间明细',
+            functionPath: 'enterTime-detail',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
+            id: 'a46',
+            functionDepict: '机器App版本 ',
+            functionPath: 'app-version',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
             "id": "22",
             "functionDepict": "用户管理",
             "functionPath": "user",
