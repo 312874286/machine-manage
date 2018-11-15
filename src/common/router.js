@@ -197,6 +197,9 @@ export const getRouterData = (app) => {
     '/machine/machineDataStatistics': {
       component: dynamicWrapper(app, ['machine/machineDataStatistics', 'log/log', 'common'], () => import('../routes/Machine/MachineDataStatistics')),
     },
+    '/machine/app-version': {
+      component: dynamicWrapper(app, ['machine/appVersion', 'log/log', 'common'], () => import('../routes/Machine/AppVersion')),
+    },
     '/project/channel': {
       component: dynamicWrapper(app, ['project/channelSetting', 'log/log'], () => import('../routes/Project/ChannelSetting')),
     },

@@ -1,0 +1,46 @@
+import { getPointSettingList, savePointSetting, getPointSettingDetail, editPointSetting, delPointSetting, getTagList, updateBatchMonitor } from '../../services/machine/pointSetting';
+
+import { getAppVersionList, saveVersion, appList } from '../../services/machine/versionSetting';
+import { searchAppVersion } from '../../services/machine/appVersion';
+
+
+export default {
+  namespace: 'appVersion',
+  state: {
+    list: [],
+    page: {},
+    datas: {},
+    unColumn: []
+  },
+
+  effects: {
+    *getPointSettingList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getPointSettingList, { restParams });
+      yield put({
+        type: 'saveList',
+        payload: response,
+      });
+    },
+    *getAppList({ payload: { restParams } }, { call }) {
+      return yield call(appList, { restParams });
+    },
+    *getAppVersion({ payload: { params } }, { call }) {
+      return yield call(searchAppVersion, { params})
+    }
+  },
+
+  reducers: {
+    saveList(state, { payload: { data, page, unColumn } }) {
+      return {
+        ...state,
+        list: data,
+        page: {
+          total: page.totalCount,
+          pageSize: page.pageSize,
+          current: page.pageNo,
+        },
+        unColumn,
+      };
+    },
+  },
+};

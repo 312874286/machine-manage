@@ -71,6 +71,8 @@ const api = map({
   batchDetail: '/machine/batch/detail?id={id}',
   addBatch: '/machine/batch/save',
   updateBatch: '/machine/batch/update',
+
+  searchAppVersion: '/machine/version/appVersion',
 });
 
 export default api;
