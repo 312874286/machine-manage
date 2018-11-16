@@ -68,7 +68,7 @@ class StandardTable extends PureComponent {
   }
   render() {
     const { selectedRowKeys, totalCallNo, No } = this.state;
-    const { data, page, loading, scrollX, columns, scrollY, selectedPointRows } = this.props;
+    const { data, page, loading, scrollX, columns, scrollY, selectedPointRows, showFooter } = this.props;
     const status = ['关闭', '运行中', '已上线', '异常'];
     // const columns = [
     //   {
@@ -197,12 +197,13 @@ class StandardTable extends PureComponent {
         <Table
           loading={loading}
           rowKey={record => record.id || record.code || record.createTime}
-          rowSelection={selectedPointRows ? rowSelection : null}
+          rowSelection={selectedPointRows ? selectedPointRows : null}
           dataSource={data}
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
           scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100)}}
+          footer={showFooter ? showFooter : null}
         />
       </div>
     );

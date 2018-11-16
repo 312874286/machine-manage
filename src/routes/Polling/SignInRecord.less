@@ -11,6 +11,20 @@
   }
 }
 
+.standardTable {
+  :global {
+    .ant-table-thead > tr > th.ant-table-selection-column {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+    }
+    .ant-table-footer  {
+      background: #FFF!important;
+    }
+  }
+}
+
 .tableListForm {
   :global {
     .ant-form-item {

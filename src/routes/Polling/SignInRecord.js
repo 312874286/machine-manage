@@ -11,6 +11,7 @@ import {
   Cascader,
   Table,
   DatePicker,
+  Checkbox
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import styles from './SignInRecord.less';
@@ -42,7 +43,7 @@ export default class signInRecord extends PureComponent {
     options: [],
     startTime: '',
     endTime: '',
-
+    selectedRowKeys: '',
     account: {}
   };
   componentDidMount() {
@@ -217,6 +218,7 @@ export default class signInRecord extends PureComponent {
     const { form } = this.props;
     const { channelLists } = this.state;
     const { getFieldDecorator } = form;
+    
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -273,49 +275,122 @@ export default class signInRecord extends PureComponent {
       </Form>
     );
   }
+
+  handleTableClick = (val, record) => {
+    console.log(val, record)
+    const { dispatch } = this.props
+    dispatch({
+      type: 'signInRecord/setUpdateStatus',
+      payload: {
+        params: {
+          id: val.id,
+          status: val.status == 1 ? 0 : 1
+        }
+      }
+    }).then(res => {
+      if (res.code == 0) {
+        this.getLists();
+      }
+    })
+  }
+
+  setStatus = (status) => {
+    console.log(this.state.selectedRowKeys.join(','))
+    const { dispatch } = this.props
+    if (this.state.selectedRowKeys == '') return;
+
+    dispatch({
+      type: 'signInRecord/setUpdateStatus',
+      payload: {
+        params: {
+          id: this.state.selectedRowKeys.join(','),
+          status
+        }
+      }
+    }).then(res => {
+      if (res.code == 0) {
+        this.getLists();
+      }
+    })
+  }
+  
   render() {
     const {
       signInRecord: { list, page, unColumn },
       loading,
     } = this.props;
-    const { selectedRows, account } = this.state;
+    const { selectedRows, account, selectedRowKeys } = this.state;
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(selectedRowKeys, selectedRows)
+        this.setState({
+          selectedRowKeys,
+        })
+      },
+      // getCheckboxProps: record => ({
+      //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      //   name: record.name,
+      // }),
+      onSelectAll: (selected, selectedRows, changeRows) => {
+        console.log(selected, selectedRows, changeRows)
+      },
+      // onSelect: (record, selected, selectedRows, nativeEvent) => {
+      //   console.log(record, selected, selectedRows, nativeEvent)
+      // }
+    };
     let columns = [
       {
-        title: '姓名',
+        title: <div style={{paddingLeft: 60}}>姓名</div>,
         dataIndex: 'name',
         width: 150,
         key: 'name'
       },
       {
-        title: '手机号',
+        title: <div style={{paddingLeft: 40}}>手机号</div>,
         dataIndex: 'phone',
         width: 200,
         key: 'phone'
       },
       {
-        title: '公司',
+        title: <div style={{paddingLeft: 40}}>公司</div>,
         dataIndex: 'enterprise',
         width: 150,
         key: 'enterprise'
       },
       {
-        title: '机器点位',
+        title: <div style={{paddingLeft: 40}}>机器点位</div>,
         dataIndex: 'localeName',
         width: 200,
         key: 'localeName'
       },
       {
-        title: '机器编号',
+        title: <div style={{paddingLeft: 30}}>机器编号</div>,
         dataIndex: 'machineCode',
         width: 200,
         key: 'machineCode'
       },
       {
-        title: '打卡时间',
+        title: <div style={{paddingLeft: 30}}>打卡时间</div>,
         dataIndex: 'createTime',
         width: 250,
         key: 'createTime'
       },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        width: 100,
+        key: 'status',
+        render: (val, record) => <span>{ val == 0 ? '有效' : '-' }</span>
+      },
+      {
+        title: '操作', 
+        key: 'action', 
+        render: (val, record) => <a onClick={() => {
+          this.handleTableClick(val, record)
+        }}>{
+          val.status == 1 ? '标为有效' : '标为无效'
+        }</a>
+      }
     ];
     if (unColumn) {
       let leg = columns.length
@@ -356,17 +431,30 @@ export default class signInRecord extends PureComponent {
               {/*/!*</a>*!/*/}
               {/*/!**!/*/}
             {/*</div>*/}
-            <div style={{ display: !account.list ? 'none' : ''}}>
+            <div className={styles.standardTable} style={{ display: !account.list ? 'none' : ''}}>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}
                 data={list}
                 page={page}
                 columns={columns}
+                selectedPointRows={rowSelection}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
                 scrollX={700}
                 scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 120)}
+                showFooter={() => {
+                  return (
+                    <div style={{paddingLeft: 50}}>
+                      {/* <Checkbox onChange={() => {
+                        
+                      }}>全选（已选0条）</Checkbox> */}
+                      <span>{`已选 ${selectedRowKeys.length} 条`}</span>
+                      <a onClick={() => { this.setStatus(0)}} style={{marginLeft: 20}}>设为有效</a>
+                      <a onClick={() => { this.setStatus(1)}} style={{marginLeft: 20}}>设为无效</a>
+                    </div>
+                  )
+                }}
               />
             </div>
 
