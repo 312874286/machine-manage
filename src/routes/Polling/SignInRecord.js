@@ -346,44 +346,44 @@ export default class signInRecord extends PureComponent {
         key: 'name'
       },
       {
-        title: <div style={{paddingLeft: 60}}>手机号</div>,
+        title: <div style={{paddingLeft: 40}}>手机号</div>,
         dataIndex: 'phone',
         width: 200,
         key: 'phone'
       },
       {
-        title: <div style={{paddingLeft: 60}}>公司</div>,
+        title: <div style={{paddingLeft: 40}}>公司</div>,
         dataIndex: 'enterprise',
         width: 150,
         key: 'enterprise'
       },
       {
-        title: <div style={{paddingLeft: 60}}>机器点位</div>,
+        title: <div style={{paddingLeft: 40}}>机器点位</div>,
         dataIndex: 'localeName',
         width: 200,
         key: 'localeName'
       },
       {
-        title: <div style={{paddingLeft: 60}}>机器编号</div>,
+        title: <div style={{paddingLeft: 30}}>机器编号</div>,
         dataIndex: 'machineCode',
         width: 200,
         key: 'machineCode'
       },
       {
-        title: <div style={{paddingLeft: 60}}>打卡时间</div>,
+        title: <div style={{paddingLeft: 30}}>打卡时间</div>,
         dataIndex: 'createTime',
         width: 250,
         key: 'createTime'
       },
       {
-        title: <div style={{paddingLeft: 60}}>状态</div>,
+        title: '状态',
         dataIndex: 'status',
         width: 100,
         key: 'status',
         render: (val, record) => <span>{ val == 0 ? '有效' : '-' }</span>
       },
       {
-        title: <div style={{paddingLeft: 60}}>操作</div>, 
+        title: '操作', 
         key: 'action', 
         render: (val, record) => <a onClick={() => {
           this.handleTableClick(val, record)
