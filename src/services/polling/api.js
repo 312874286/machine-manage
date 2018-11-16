@@ -30,6 +30,7 @@ const api = map({
 
   replenishList: '/supply/channel/history/dayGoodsList?pageNo={pageNo}&areaCode={areaCode}&beginTime={beginTime}&endTime={endTime}&keyword={keyword}',
   replenishDetail: '/supply/channel/history/dayGoodsDetail?machineId={machineId}&datetime={datetime}',
+  updateSignInStatus: '/check/signIn/updateStatus',
 
 });
 

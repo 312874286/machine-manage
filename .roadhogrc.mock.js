@@ -3969,7 +3969,7 @@ const proxy = {
       },
       "data": [
         {
-          "id": null,
+          "id": 53215321,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -3986,10 +3986,11 @@ const proxy = {
           "remark": null,
           "localeName": "北京市北京市东城区王府井—188982407114q",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 0,
         },
         {
-          "id": null,
+          "id": 53415432,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4006,10 +4007,11 @@ const proxy = {
           "remark": null,
           "localeName": "北京市北京市东城区王府井—188982407114q",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 1,
         },
         {
-          "id": null,
+          "id": 421432155321,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4026,9 +4028,17 @@ const proxy = {
           "remark": null,
           "localeName": "天津市天津市和平区鞍山道沿线—ZJ1807184936290",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 0
         }
       ]
+    })
+  },
+  'POST /check/signIn/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
     })
   },
   'GET /check/user/getUserMachinDetailList': (req, res) => {

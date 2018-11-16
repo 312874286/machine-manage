@@ -11,6 +11,7 @@ import {
   Cascader,
   Table,
   DatePicker,
+  Checkbox
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import styles from './SignInRecord.less';
@@ -42,7 +43,7 @@ export default class signInRecord extends PureComponent {
     options: [],
     startTime: '',
     endTime: '',
-
+    selectedRowKeys: '',
     account: {}
   };
   componentDidMount() {
@@ -217,6 +218,7 @@ export default class signInRecord extends PureComponent {
     const { form } = this.props;
     const { channelLists } = this.state;
     const { getFieldDecorator } = form;
+    
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -273,12 +275,69 @@ export default class signInRecord extends PureComponent {
       </Form>
     );
   }
+
+  handleTableClick = (val, record) => {
+    console.log(val, record)
+    const { dispatch } = this.props
+    dispatch({
+      type: 'signInRecord/setUpdateStatus',
+      payload: {
+        params: {
+          id: val.id,
+          status: val.status == 1 ? 0 : 1
+        }
+      }
+    }).then(res => {
+      if (res.code == 0) {
+        this.getLists();
+      }
+    })
+  }
+
+  setStatus = (status) => {
+    console.log(this.state.selectedRowKeys.join(','))
+    const { dispatch } = this.props
+    if (this.state.selectedRowKeys == '') return;
+
+    dispatch({
+      type: 'signInRecord/setUpdateStatus',
+      payload: {
+        params: {
+          id: this.state.selectedRowKeys.join(','),
+          status
+        }
+      }
+    }).then(res => {
+      if (res.code == 0) {
+        this.getLists();
+      }
+    })
+  }
+  
   render() {
     const {
       signInRecord: { list, page, unColumn },
       loading,
     } = this.props;
-    const { selectedRows, account } = this.state;
+    const { selectedRows, account, selectedRowKeys } = this.state;
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(selectedRowKeys, selectedRows)
+        this.setState({
+          selectedRowKeys,
+        })
+      },
+      // getCheckboxProps: record => ({
+      //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      //   name: record.name,
+      // }),
+      onSelectAll: (selected, selectedRows, changeRows) => {
+        console.log(selected, selectedRows, changeRows)
+      },
+      // onSelect: (record, selected, selectedRows, nativeEvent) => {
+      //   console.log(record, selected, selectedRows, nativeEvent)
+      // }
+    };
     let columns = [
       {
         title: '姓名',
@@ -316,6 +375,15 @@ export default class signInRecord extends PureComponent {
         width: 250,
         key: 'createTime'
       },
+      {
+        title: '操作', 
+        key: 'action', 
+        render: (val, record) => <a onClick={() => {
+          this.handleTableClick(val, record)
+        }}>{
+          val.status == 1 ? '标为有效' : '标为无效'
+        }</a>
+      }
     ];
     if (unColumn) {
       let leg = columns.length
@@ -363,10 +431,23 @@ export default class signInRecord extends PureComponent {
                 data={list}
                 page={page}
                 columns={columns}
+                selectedPointRows={rowSelection}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
                 scrollX={700}
                 scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 120)}
+                showFooter={() => {
+                  return (
+                    <div style={{paddingLeft: 5}}>
+                      {/* <Checkbox onChange={() => {
+                        
+                      }}>全选（已选0条）</Checkbox> */}
+                      <span>{`已选 ${selectedRowKeys.length} 条`}</span>
+                      <a onClick={() => { this.setStatus(0)}} style={{marginLeft: 20}}>设为有效</a>
+                      <a onClick={() => { this.setStatus(1)}} style={{marginLeft: 20}}>设为无效</a>
+                    </div>
+                  )
+                }}
               />
             </div>
 
