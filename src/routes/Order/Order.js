@@ -8,6 +8,7 @@ import {
   Input,
   Button,
   Cascader,
+  Select,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Order.less';
@@ -15,8 +16,10 @@ import OrderTable from '../../components/Order/orderTable';
 import LogModal from '../../components/LogModal';
 import {getAccountMenus} from "../../utils/authority";
 
+const { Option } = Select;
 const FormItem = Form.Item;
-
+const payStatusLists = [{id: 0, name: '未支付'}, {id: 1, name: '未支付'}]
+const goodsStatusLists = [{id: 0, name: '未出货'}, {id: 1, name: '已出货'}]
 
 @connect(({ order, loading, log, common }) => ({
   order,
@@ -35,6 +38,8 @@ export default class Order extends PureComponent {
     logId: '',
     logModalPageNo: 1,
     areaList: [],
+    payStatus: '',
+    goodsStatus: '',
 
     account: {},
   };
@@ -70,6 +75,8 @@ export default class Order extends PureComponent {
           pageNo: this.state.pageNo,
           areaCode: this.state.areaCode,
           keyword: this.state.keyword,
+          payStatus: this.state.payStatus,
+          goodsStatus: this.state.goodsStatus
         },
       },
     });
@@ -131,10 +138,11 @@ export default class Order extends PureComponent {
       e.preventDefault();
       this.props.form.validateFields((err, fieldsValue) => {
         if (err) return;
-
         this.setState({
           keyword: fieldsValue.keyword,
           areaCode: fieldsValue.areaCode,
+          payStatus: fieldsValue.payStatus >= 0 ? fieldsValue.payStatus : '',
+          goodsStatus: fieldsValue.goodsStatus >= 0 ? fieldsValue.goodsStatus : ''
         }, () => {
           this.getList();
         });
@@ -223,12 +231,40 @@ export default class Order extends PureComponent {
                       )}
                     </FormItem>
                   </Col>
-                  <Col md={9} sm={12}>
+                  <Col md={8} sm={12}>
                     <FormItem>
                       {getFieldDecorator('keyword', {
                         initialValue: keyword,
                       })(
                         <Input placeholder="请输入机器编号、活动名称、订单编号搜索" />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col md={8} sm={12}>
+                    <FormItem>
+                      {getFieldDecorator('payStatus')(
+                        <Select placeholder="选择支付状态">
+                          {payStatusLists.map((item) => {
+                            return (
+                              <Option key={item.id} value={item.id}>{item.name}</Option>
+                            );
+                          })}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                  <Col md={9} sm={12}>
+                    <FormItem>
+                      {getFieldDecorator('goodsStatus')(
+                        <Select placeholder="选择掉落状态">
+                          {goodsStatusLists.map((item) => {
+                            return (
+                              <Option key={item.id} value={item.id}>{item.name}</Option>
+                            );
+                          })}
+                        </Select>
                       )}
                     </FormItem>
                   </Col>
@@ -238,8 +274,8 @@ export default class Order extends PureComponent {
                       <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>
                     </FormItem>
                     {/*<span className={styles.submitButtons}>*/}
-                      {/*<Button onClick={this.handleFormReset}>重置</Button>*/}
-                      {/*<Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>*/}
+                    {/*<Button onClick={this.handleFormReset}>重置</Button>*/}
+                    {/*<Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>查询</Button>*/}
                     {/*</span>*/}
                   </Col>
                 </Row>

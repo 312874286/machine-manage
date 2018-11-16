@@ -251,7 +251,7 @@ class MachinePlan extends PureComponent {
               </div>
             } trigger="hover">
               <span style={{
-                background: item.state === '2' ? '#64C81A' : '#849FFF',
+                background: item.state === '2' ? '#64C81A' : (item.state === '3' ? '#666666' : '#849FFF'),
                 // background: moment(item.endTime) < new Date().getTime()  ? '#666666' : (moment(item.startTime) > new Date().getTime() ? '#64C81A' : '#849FFF'),
                 opacity: 0.5,
                 width: (item.width * 3.22) + '%', top: 3, left: (0.3 + (item.left * 3.22)) + '%', position: 'absolute', display: 'flex',
@@ -278,6 +278,7 @@ class MachinePlan extends PureComponent {
             <div className={styles.iBox}>
               <i className={styles.ingStatus}></i>活动进行中
               <i className={styles.preStatus}></i>活动未开始
+              <i className={styles.endStatus}></i>活动已结束
               <Button type="primary" style={{ marginLeft: '10px' }} onClick={() => this.backToday(true)}>
                 返回本月
               </Button>

@@ -6809,6 +6809,61 @@ const proxy = {
         }
       ]
     })
+  },
+  'GET /machine/locale/detail/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "firstTime": 1541666608000,
+          "lastTime": 1541061806000,
+          "machineCode": "18364770",
+          "id": "0fa03b763d814ee5860c364d615abb1a",
+          "locale": "天津市天津市南开区学府街学府商城徐水潘家园"
+        }
+      ],
+      "unColumn": ""
+    })
+  },
+  'GET /machine/locale/detail/machineLocaleDetail': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": [
+          {
+            "oldLocale": "北京市北京市海淀区1崇文门新世界百货1F扶梯边",
+            "createTime": "2018-11-08 16:43:28",
+            "id": "3",
+            "locale": "北京市北京市其他猫眼胡同猫眼胡同一区"
+          },
+          {
+            "oldLocale": "天津市天津市南开区学府街学府商城徐水潘家园",
+            "createTime": "2018-11-02 16:43:27",
+            "id": "2",
+            "locale": "北京市北京市海淀区1崇文门新世界百货1F扶梯边"
+          },
+          {
+            "createTime": "2018-11-01 16:43:26",
+            "id": "1",
+            "locale": "天津市天津市南开区学府街学府商城徐水潘家园"
+          }
+        ],
+        "msg": "成功"
+      }
+    )
   }
 };
 
