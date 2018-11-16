@@ -343,13 +343,13 @@ export default class areaSettingList extends PureComponent {
       {
         title: '机器编号',
         width: '30%',
-        dataIndex: 'id',
-        key: 'id'
+        dataIndex: 'machineCode',
+        key: 'machineCode'
       },
       {
         title: '机器点位',
-        dataIndex: 'machineCode',
-        key: 'machineCode'
+        dataIndex: 'locale',
+        key: 'locale'
       },
       {
         title: '首次入场',
