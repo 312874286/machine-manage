@@ -280,7 +280,7 @@ const SelectMachineForm = Form.create()(
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-              <Col md={10} sm={24}>
+              <Col md={8} sm={24}>
                 <FormItem>
                   {getFieldDecorator('provinceCityAreaTrade')(
                     <Cascader
@@ -292,7 +292,14 @@ const SelectMachineForm = Form.create()(
                   )}
                 </FormItem>
               </Col>
-              <Col md={2} sm={24} style={{ paddingLeft: '3px' }}>
+              <Col md={8} sm={24}>
+                <FormItem>
+                  {getFieldDecorator('machineCode')(
+                    <Input placeholder="请输入机器编号搜索" />
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24} style={{ paddingLeft: '3px' }}>
                 <FormItem>
                   <Button onClick={() => findSourceData()} style={{ width: '70px', borderRadius: '4px' }}>
                     搜索
@@ -945,20 +952,65 @@ export default class user extends PureComponent {
     });
   }
   // 回显省市区商圈数据源开始
+  // getAreaList = (selectedOptions) => {
+  //   let code = '';
+  //   let targetOption = null;
+  //   let params = { code: code }
+  //   if (selectedOptions) {
+  //     if (selectedOptions.level) {
+  //       params = { ...params, level: 1 }
+  //     } else if (selectedOptions.code) {
+  //       params = { code: selectedOptions.code }
+  //     } else {
+  //       targetOption = selectedOptions[selectedOptions.length - 1];
+  //       code = targetOption.value;
+  //       targetOption.loading = true;
+  //       params = { code: code, level: targetOption.level + 1}
+  //     }
+  //   }
+  //   this.props.dispatch({
+  //     type: 'user/selectMachine',
+  //     payload: {
+  //       params,
+  //     },
+  //   }).then((res) => {
+  //     if (selectedOptions.level) {
+  //       this.setState({
+  //         insertOptions: res,
+  //       });
+  //     } else if (selectedOptions.code) {
+  //       this.setState({
+  //         sourceData: res,
+  //       });
+  //     } else {
+  //       targetOption.loading = false;
+  //       targetOption.children = res
+  //       this.setState({
+  //         insertOptions: [...this.state.insertOptions],
+  //       });
+  //     }
+  //   });
+  // }
   getAreaList = (selectedOptions) => {
+    console.log('res', selectedOptions)
     let code = '';
     let targetOption = null;
     let params = { code: code }
     if (selectedOptions) {
       if (selectedOptions.level) {
-        params = { ...params, level: 1 }
-      } else if (selectedOptions.code) {
-        params = { code: selectedOptions.code }
-      } else {
+        params = { ...params, level: 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime }
+      } else if (selectedOptions.code || selectedOptions.machineCode) {
+        params = {
+          code: selectedOptions.code,
+          startTime: this.state.machineStartTime,
+          endTime: this.state.machineEndTime,
+          machineCode: selectedOptions.machineCode ? selectedOptions.machineCode : ''
+        }
+      } else if (Array.isArray(selectedOptions)) {
         targetOption = selectedOptions[selectedOptions.length - 1];
         code = targetOption.value;
         targetOption.loading = true;
-        params = { code: code, level: targetOption.level + 1}
+        params = { code: code, level: targetOption.level + 1, startTime: this.state.machineStartTime, endTime: this.state.machineEndTime}
       }
     }
     this.props.dispatch({
@@ -971,7 +1023,7 @@ export default class user extends PureComponent {
         this.setState({
           insertOptions: res,
         });
-      } else if (selectedOptions.code) {
+      } else if (selectedOptions.code || selectedOptions.machineCode) {
         this.setState({
           sourceData: res,
         });
@@ -1105,18 +1157,39 @@ export default class user extends PureComponent {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
         }
       }
-      // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
-      if (!localCode) {
+      // console.log('localCode', localCode, fieldsValue.machineCode, !localCode, !fieldsValue.machineCode)
+      if (!localCode && !fieldsValue.machineCode) {
         message.config({
           top: 100,
           duration: 2,
           maxCount: 1,
         });
-        message.error('请选择一个地区')
+        message.error('至少选择一个地区或者填写一个机器编号')
+        // message.error('请选择一个地区')
         return;
       }
-      this.getAreaList({code: localCode})
-    });
+      this.getAreaList({code: localCode ? localCode : '', machineCode: fieldsValue.machineCode})
+    })
+    // this.selectMachineform.validateFields((err, fieldsValue) => {
+    //   if (err) return;
+    //   let localCode = ''
+    //   if (fieldsValue.provinceCityAreaTrade) {
+    //     if (fieldsValue.provinceCityAreaTrade.length > 0) {
+    //       localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1]
+    //     }
+    //   }
+    //   // console.log('localCode', localCode, fieldsValue, fieldsValue.provinceCityAreaTrade)
+    //   if (!localCode) {
+    //     message.config({
+    //       top: 100,
+    //       duration: 2,
+    //       maxCount: 1,
+    //     });
+    //     message.error('请选择一个地区')
+    //     return;
+    //   }
+    //   this.getAreaList({code: localCode})
+    // });
   }
   openSelectMachineModal = () => {
     this.setState({
@@ -1178,7 +1251,7 @@ export default class user extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
             <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司、机器编号搜索" />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>

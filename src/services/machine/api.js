@@ -71,6 +71,9 @@ const api = map({
   batchDetail: '/machine/batch/detail?id={id}',
   addBatch: '/machine/batch/save',
   updateBatch: '/machine/batch/update',
+  //入场时间明细
+  machineLocaleDetailList: '/machine/locale/detail/list?pageNo={pageNo}&code={code}&keyword={keyword}',
+  machineLocaleDetail: '/machine/locale/detail/machineLocaleDetail?machineId={machineId}',
 });
 
 export default api;
