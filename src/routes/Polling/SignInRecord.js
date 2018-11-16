@@ -376,6 +376,13 @@ export default class signInRecord extends PureComponent {
         key: 'createTime'
       },
       {
+        title: '状态',
+        dataIndex: 'status',
+        width: 100,
+        key: 'status',
+        render: (val, record) => <span>{ val == 0 ? '有效' : '-' }</span>
+      },
+      {
         title: '操作', 
         key: 'action', 
         render: (val, record) => <a onClick={() => {
