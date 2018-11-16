@@ -340,50 +340,50 @@ export default class signInRecord extends PureComponent {
     };
     let columns = [
       {
-        title: '姓名',
+        title: <div style={{paddingLeft: 60}}>姓名</div>,
         dataIndex: 'name',
         width: 150,
         key: 'name'
       },
       {
-        title: '手机号',
+        title: <div style={{paddingLeft: 60}}>手机号</div>,
         dataIndex: 'phone',
         width: 200,
         key: 'phone'
       },
       {
-        title: '公司',
+        title: <div style={{paddingLeft: 60}}>公司</div>,
         dataIndex: 'enterprise',
         width: 150,
         key: 'enterprise'
       },
       {
-        title: '机器点位',
+        title: <div style={{paddingLeft: 60}}>机器点位</div>,
         dataIndex: 'localeName',
         width: 200,
         key: 'localeName'
       },
       {
-        title: '机器编号',
+        title: <div style={{paddingLeft: 60}}>机器编号</div>,
         dataIndex: 'machineCode',
         width: 200,
         key: 'machineCode'
       },
       {
-        title: '打卡时间',
+        title: <div style={{paddingLeft: 60}}>打卡时间</div>,
         dataIndex: 'createTime',
         width: 250,
         key: 'createTime'
       },
       {
-        title: '状态',
+        title: <div style={{paddingLeft: 60}}>状态</div>,
         dataIndex: 'status',
         width: 100,
         key: 'status',
         render: (val, record) => <span>{ val == 0 ? '有效' : '-' }</span>
       },
       {
-        title: '操作', 
+        title: <div style={{paddingLeft: 60}}>操作</div>, 
         key: 'action', 
         render: (val, record) => <a onClick={() => {
           this.handleTableClick(val, record)
@@ -431,7 +431,7 @@ export default class signInRecord extends PureComponent {
               {/*/!*</a>*!/*/}
               {/*/!**!/*/}
             {/*</div>*/}
-            <div style={{ display: !account.list ? 'none' : ''}}>
+            <div className={styles.standardTable} style={{ display: !account.list ? 'none' : ''}}>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}
@@ -445,7 +445,7 @@ export default class signInRecord extends PureComponent {
                 scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 120)}
                 showFooter={() => {
                   return (
-                    <div style={{paddingLeft: 5}}>
+                    <div style={{paddingLeft: 50}}>
                       {/* <Checkbox onChange={() => {
                         
                       }}>全选（已选0条）</Checkbox> */}
