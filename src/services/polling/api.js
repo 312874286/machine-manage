@@ -20,7 +20,7 @@ const api = map({
   saveCheckFault: '/check/fault/save',
   updateCheckStatus: '/check/fault/updateStatus',
 
-  getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}&startTime={startTime}&endTime={endTime}',
+  getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}&startTime={startTime}&endTime={endTime}&status={status}',
   userExcel: '/check/signIn/userExcel',
   updateStatus: '/check/user/updateStatus',
   deleteUser: '/check/user/delete',
