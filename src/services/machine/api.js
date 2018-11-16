@@ -71,14 +71,11 @@ const api = map({
   batchDetail: '/machine/batch/detail?id={id}',
   addBatch: '/machine/batch/save',
   updateBatch: '/machine/batch/update',
-<<<<<<< HEAD
   //入场时间明细
   machineLocaleDetailList: '/machine/locale/detail/list?pageNo={pageNo}&code={code}&keyword={keyword}',
   machineLocaleDetail: '/machine/locale/detail/machineLocaleDetail?machineId={machineId}',
-=======
 
   searchAppVersion: '/machine/version/appVersion',
->>>>>>> bce9b9b53516f0beaa4406dea7b008fdc980b102
 });
 
 export default api;

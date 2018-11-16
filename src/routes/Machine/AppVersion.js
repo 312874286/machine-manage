@@ -47,11 +47,13 @@ export default class PointSettingList extends PureComponent {
     options: '',
     pageNo: 1,
     keyword: '',
+    appVersion: '',
     code: '',
     type: '',
     appList: [],
     appVersionList: [],
-    tableLoading: true
+    tableLoading: true,
+    appVersionListPage: {}
   };
   componentWillMount() {
     // 查询省
@@ -97,10 +99,21 @@ export default class PointSettingList extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
     const { form } = this.props;
+    
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      let appVersion = ''
       console.log(fieldsValue)
-      this.searchAppVersion(fieldsValue)
+      if (fieldsValue.appVersion) {
+        appVersion = fieldsValue.appVersion
+      }
+      this.setState({
+        pageNo: 1,
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        appVersion
+      }, () => {
+        this.searchAppVersion()
+      });
       // let localCode = ''
       // if (fieldsValue.provinceCityAreaTrade) {
       //   if (fieldsValue.provinceCityAreaTrade.length > 0) {
@@ -126,7 +139,11 @@ export default class PointSettingList extends PureComponent {
     dispatch({
       type: 'appVersion/getAppVersion',
       payload: {
-        params: params
+        params: {
+          pageNo: this.state.pageNo,
+          keyword: this.state.keyword,
+          appVersion: this.state.appVersion
+        }
       }
     }).then(res => {
       this.setState({
@@ -134,7 +151,8 @@ export default class PointSettingList extends PureComponent {
       })
       if (res.code == 0) {
         this.setState({
-          appVersionList: res.data
+          appVersionList: res.data,
+          appVersionListPage: res.page
         })
       }
     })
@@ -192,6 +210,46 @@ export default class PointSettingList extends PureComponent {
     console.log(this.state.appList[options.props.index])
   }
 
+  // 分页
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    const { current } = pagination;
+    // console.log('params', params)
+    this.setState({
+      pageNo: current,
+    }, () => {
+      this.searchAppVersion();
+    });
+  };
+  // 重置
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+      pageNo: 1,
+      keyword: '',
+      appVersion: ''
+    });
+  };
+
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -212,7 +270,7 @@ export default class PointSettingList extends PureComponent {
               )}
             </FormItem>
           </Col> */}
-          <Col md={7} sm={24} lg={8}>
+          <Col md={8} sm={24} lg={6}>
             <FormItem label="App 版本">
               {getFieldDecorator('appVersion')(
                 <Select
@@ -225,15 +283,18 @@ export default class PointSettingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24} lg={8}>
+          <Col md={8} sm={24} lg={6}>
             <FormItem>
               {getFieldDecorator('keyword')(
                 <Input placeholder="请输入机器点位或机器编号搜索" />
               )}
             </FormItem>
           </Col>
-          <Col>
+          <Col md={8} sm={24} lg={4}>
             <FormItem>
+              <Button onClick={this.handleFormReset}>
+                重置
+              </Button>
               <Button className={styles.serach} style={{ marginLeft: 8}} type="primary" htmlType="submit">
                 搜索
               </Button>
@@ -246,16 +307,18 @@ export default class PointSettingList extends PureComponent {
   
 
   render() {
+    const { appVersionListPage, appVersionList } = this.state
+
     const columns = [
       {title: '机器', dataIndex: 'machineCode', key: 'machineCode', width: 200},
-      {title: <div style={{textAlign: 'center'}}>App版本</div>, dataIndex: 'appInfo', render(val) {
-        return (val.map((item) => <span style={{marginLeft: 20}}>{item};</span>))
+      {title: <div style={{textAlign: 'center'}}>App版本</div>, dataIndex: 'appInfo',render(val) {
+        return (val.map((item,index) => <span key={index} style={{marginLeft: 20}}>{item};</span>))
       }},
     ]
     const data = [
       {
         "machineCode": "19782745",
-        "createTime": "2018-11-05 14:04:08",
+        "createTime": "2018-11-05 14:04:01",
         "appInfo": [
             "72APP 1.1.1 (最新版本)",
             "72监控APP 1.1.9 (最新版本)",
@@ -268,7 +331,7 @@ export default class PointSettingList extends PureComponent {
         ]
       },{
         "machineCode": "19782742",
-        "createTime": "2018-11-05 14:04:08",
+        "createTime": "2018-11-05 14:04:03",
         "appInfo": [
             "72APP 1.1.1 (最新版本)",
             "72监控APP 1.1.9 (最新版本)",
@@ -297,7 +360,7 @@ export default class PointSettingList extends PureComponent {
         ]
       },{
         "machineCode": "19782744",
-        "createTime": "2018-11-05 14:04:08",
+        "createTime": "2018-11-05 14:04:05",
         "appInfo": [
             "72APP 1.1.1 (最新版本)",
             "72监控APP 1.1.9 (最新版本)",
@@ -310,7 +373,7 @@ export default class PointSettingList extends PureComponent {
         ]
       },{
         "machineCode": "19782741",
-        "createTime": "2018-11-05 14:04:08",
+        "createTime": "2018-11-05 14:04:38",
         "appInfo": [
             "72APP 1.1.1 (最新版本)",
             "72监控APP 1.1.9 (最新版本)",
@@ -323,6 +386,17 @@ export default class PointSettingList extends PureComponent {
         ]
       }
     ]
+    const paginationProps = {
+      showTotal: (total) => {
+        return (
+          <div className="paginationBox">
+            <span>当前显示{appVersionListPage.pageSize}条/页，共{appVersionListPage.totalCount}条，第{appVersionListPage.pageNo}/{appVersionListPage.totalPage}页</span>
+          </div>
+        )
+      },
+      ...appVersionListPage,
+      showQuickJumper: true,
+    };
     
     return (
       <PageHeaderLayout>
@@ -331,7 +405,15 @@ export default class PointSettingList extends PureComponent {
         </Card>
         <Card>
           <div>
-            <Table style={{padding: 10}} rowKey={i => i.machineCode} columns={columns} dataSource={this.state.appVersionList} loading={this.state.tableLoading} pagination={false}/>
+            <Table 
+              style={{padding: 10}} 
+              rowKey={i => i.machineCode || i.createTime} 
+              columns={columns} dataSource={appVersionList || []} 
+              loading={this.state.tableLoading} 
+              pagination={paginationProps}
+              onChange={this.handleStandardTableChange}
+              scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 100)}}
+            />
           </div>
         </Card>
       </PageHeaderLayout>

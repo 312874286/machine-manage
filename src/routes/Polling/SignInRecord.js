@@ -44,7 +44,8 @@ export default class signInRecord extends PureComponent {
     startTime: '',
     endTime: '',
     selectedRowKeys: '',
-    account: {}
+    account: {},
+    status: ''
   };
   componentDidMount() {
     this.getAreaList();
@@ -77,6 +78,7 @@ export default class signInRecord extends PureComponent {
           code: this.state.code,
           startTime: this.state.startTime,
           endTime: this.state.endTime,
+          status: this.state.status
         },
       },
     });
@@ -129,14 +131,19 @@ export default class signInRecord extends PureComponent {
     e.preventDefault();
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
+      console.log('status',fieldsValue.status)
       if (err) return;
       let localCode = ''
       let startTime = ''
       let endTime = ''
+      let status = ''
       if (fieldsValue.provinceCityAreaTrade) {
         if (fieldsValue.provinceCityAreaTrade.length > 0) {
           localCode = fieldsValue.provinceCityAreaTrade[fieldsValue.provinceCityAreaTrade.length - 1];
         }
+      }
+      if (fieldsValue.status) {
+        status = fieldsValue.status
       }
       console.log('fieldsValue.time', fieldsValue.time)
       if (fieldsValue.time) {
@@ -150,6 +157,7 @@ export default class signInRecord extends PureComponent {
         startTime,
         endTime,
         code: localCode,
+        status,
       }, () => {
         this.getLists();
       });
@@ -236,17 +244,25 @@ export default class signInRecord extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司搜索" />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
             <span>
                <FormItem>
                   {getFieldDecorator('time')(<RangePicker onChange={this.onChange}/>)}
                </FormItem>
             </span>
           </Col>
+          <Col md={8} sm={24}>
+            <span>
+               <FormItem >
+               {getFieldDecorator('status')(
+                  <Select placeholder="请选择状态">
+                    <Option value="0">有效</Option>
+                    <Option value="1">无效</Option>
+                  </Select>
+                  )}
+               </FormItem>
+            </span>
+          </Col>
+          
         </Row>
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           {/*<Col md={8} sm={24}>*/}
@@ -254,11 +270,11 @@ export default class signInRecord extends PureComponent {
           {/*<Col md={9} sm={24}>*/}
           {/*</Col>*/}
           <Col md={8} sm={24}>
-            <FormItem></FormItem>
+            <FormItem>
+              {getFieldDecorator('keyword')(<Input placeholder="请输入姓名、手机号、公司、机器点位、编号搜索" />)}
+            </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem></FormItem>
-          </Col>
+          
           <Col md={8} sm={24}>
             <span>
                <FormItem>
@@ -295,7 +311,6 @@ export default class signInRecord extends PureComponent {
   }
 
   setStatus = (status) => {
-    console.log(this.state.selectedRowKeys.join(','))
     const { dispatch } = this.props
     if (this.state.selectedRowKeys == '') return;
 
