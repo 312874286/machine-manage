@@ -342,17 +342,19 @@ export default class areaSettingList extends PureComponent {
     let columns = [
       {
         title: '机器编号',
-        width: '30%',
+        width: '15%',
         dataIndex: 'machineCode',
         key: 'machineCode'
       },
       {
         title: '机器点位',
+        width: '30%',
         dataIndex: 'locale',
         key: 'locale'
       },
       {
         title: '首次入场',
+        width: '20%',
         dataIndex: 'firstTime',
         key: 'firstTime'
       },
