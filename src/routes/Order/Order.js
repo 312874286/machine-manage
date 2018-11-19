@@ -18,7 +18,7 @@ import {getAccountMenus} from "../../utils/authority";
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const payStatusLists = [{id: 0, name: '未支付'}, {id: 1, name: '未支付'}]
+const payStatusLists = [{id: 0, name: '未支付'}, {id: 1, name: '支付成功'}]
 const goodsStatusLists = [{id: 0, name: '未出货'}, {id: 1, name: '已出货'}]
 
 @connect(({ order, loading, log, common }) => ({
