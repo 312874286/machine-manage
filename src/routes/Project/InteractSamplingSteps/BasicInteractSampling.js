@@ -19,7 +19,7 @@ import {getAccountMenus} from "../../../utils/authority";
 const Step = Steps.Step;
 const FormItem = Form.Item;
 const { Option } = Select;
-const activityTypeOptions = [{id: 0, name: '普通活动'}, {id: 1, name: '新零售'}]
+const activityTypeOptions = [{id: 0, name: '普通活动'}, {id: 1, name: '新零售'}, {id: 2, name: '微信互派活动'}]
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
