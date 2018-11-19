@@ -28,7 +28,7 @@ export default {
       response.data.forEach((item) => {
         arr.push({
           label: item.appVersion,
-          value: item.appVersion
+          value: item.appVersionCode
         })
       });
       return arr
@@ -47,7 +47,12 @@ export default {
       return arr
     },
     *getAppVersion({ payload: { params } }, { call }) {
-      return yield call(searchAppVersion, { params})
+      const response = yield call(searchAppVersion, { params})
+      yield put({
+        type: 'saveList',
+        payload: response,
+      });
+      return response
     }
   },
 

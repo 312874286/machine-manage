@@ -349,7 +349,9 @@ export default class PointSettingList extends PureComponent {
 
   render() {
     const { appVersionListPage, appVersionList } = this.state
-
+    const {appVersion: { page }} = this.props
+    const scrollX = 700
+    const scrollY = (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 120)
     const columns = [
       {title: '机器', dataIndex: 'machineCode', key: 'machineCode', width: 200},
       {title: <div style={{textAlign: 'center'}}>App版本</div>, dataIndex: 'appInfo',render(val) {
@@ -435,7 +437,7 @@ export default class PointSettingList extends PureComponent {
           </div>
         )
       },
-      ...appVersionListPage,
+      ...page,
       showQuickJumper: true,
     };
     
@@ -449,7 +451,8 @@ export default class PointSettingList extends PureComponent {
             <Table 
               style={{padding: 10}} 
               rowKey={i => i.machineCode || i.createTime} 
-              columns={columns} dataSource={appVersionList || []} 
+              columns={columns} 
+              dataSource={appVersionList || []} 
               loading={this.state.tableLoading} 
               pagination={paginationProps}
               onChange={this.handleStandardTableChange}
