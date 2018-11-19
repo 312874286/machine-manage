@@ -53,14 +53,15 @@ export default class PointSettingList extends PureComponent {
     appList: [],
     appVersionList: [],
     tableLoading: true,
-    appVersionListPage: {}
+    appVersionListPage: {},
+    AppOptions:[]
   };
   componentWillMount() {
     // 查询省
   }
   componentDidMount() {
-    // this.getAreaList();
-    // this.getLists();
+    this.getAreaList();
+    this.getLists();
     this.getAppList();
     this.searchAppVersion()
   }
@@ -106,11 +107,13 @@ export default class PointSettingList extends PureComponent {
       console.log(fieldsValue)
       if (fieldsValue.appVersion) {
         appVersion = fieldsValue.appVersion
+        console.log(appVersion)
       }
       this.setState({
         pageNo: 1,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
-        appVersion
+        appPackage: appVersion[0],
+        versionCode: appVersion[1]
       }, () => {
         this.searchAppVersion()
       });
@@ -142,7 +145,8 @@ export default class PointSettingList extends PureComponent {
         params: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
-          appVersion: this.state.appVersion
+          appPackage: this.state.appPackage,
+          versionCode: this.state.versionCode
         }
       }
     }).then(res => {
@@ -158,7 +162,32 @@ export default class PointSettingList extends PureComponent {
     })
   }
 
+  loadAppData = (selectedOptions) => {
+    const { dispatch } = this.props
 
+    const targetOption = selectedOptions[selectedOptions.length - 1];
+    targetOption.loading = true;
+
+    dispatch({
+      type: 'appVersion/getAppVersionList',
+      payload: {
+        restParams: {
+          appPackageName: targetOption.value,
+          keyword: ''
+        }
+      }
+    }).then(res => {
+      targetOption.loading = false;
+      targetOption.children = res
+      this.setState({
+        AppOptions: [...this.state.AppOptions],
+      });
+    })
+  }
+
+  onChangeApp = (value, selectedOptions) => {
+    console.log(value, selectedOptions)
+  }
   
   // 四级联动开始
   onChange = (value, selectedOptions) => {
@@ -169,6 +198,8 @@ export default class PointSettingList extends PureComponent {
   loadData = (selectedOptions) => {
     const targetOption = selectedOptions[selectedOptions.length - 1];
     targetOption.loading = true;
+    console.log('targetOption', targetOption)
+
     this.setState({
       code: targetOption.value,
     }, () => {
@@ -197,8 +228,10 @@ export default class PointSettingList extends PureComponent {
         },
       },
     }).then(res => {
+      console.log(res)
       this.setState({
-        appList: res.data,
+        // appList: res.data,
+        AppOptions: res
       })
     })
     
@@ -257,7 +290,7 @@ export default class PointSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          {/* <Col md={7} sm={24} lg={8}>
+          <Col md={7} sm={24} lg={8}>
             <FormItem label="省市区">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
@@ -269,24 +302,32 @@ export default class PointSettingList extends PureComponent {
                 />
               )}
             </FormItem>
-          </Col> */}
+          </Col>
           <Col md={8} sm={24} lg={6}>
             <FormItem label="App 版本">
               {getFieldDecorator('appVersion')(
-                <Select
-                placeholder="请选择"
-                allowClear={true}
-                onSelect={this.onSelectAppPackageName}
-                >
-                  {appList.map((item) => <Option key={item.id} value={item.appPackageName}>{item.appName}</Option>)}
-                </Select>
+                // <Select
+                // placeholder="请选择"
+                // allowClear={true}
+                // onSelect={this.onSelectAppPackageName}
+                // >
+                //   {appList.map((item) => <Option key={item.id} value={item.appPackageName}>{item.appName}</Option>)}
+                // </Select>
+                <Cascader
+                  placeholder="请选择"
+                  options={this.state.AppOptions}
+                  loadData={this.loadAppData}
+                  onChange={this.onChangeApp}
+                  changeOnSelect
+                />
+
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24} lg={6}>
             <FormItem>
               {getFieldDecorator('keyword')(
-                <Input placeholder="请输入机器点位或机器编号搜索" />
+                <Input placeholder="请输入机器编号搜索" />
               )}
             </FormItem>
           </Col>

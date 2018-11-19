@@ -21,8 +21,30 @@ export default {
         payload: response,
       });
     },
+    *getAppVersionList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getAppVersionList, { restParams });
+      let arr = []
+
+      response.data.forEach((item) => {
+        arr.push({
+          label: item.appVersion,
+          value: item.appVersion
+        })
+      });
+      return arr
+    },
     *getAppList({ payload: { restParams } }, { call }) {
-      return yield call(appList, { restParams });
+      const response = yield call(appList, { restParams });
+      let arr = []
+
+      response.data.forEach((item) => {
+        arr.push({
+          label: item.appName,
+          value: item.appPackageName,
+          isLeaf: false,
+        })
+      });
+      return arr
     },
     *getAppVersion({ payload: { params } }, { call }) {
       return yield call(searchAppVersion, { params})
