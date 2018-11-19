@@ -1677,6 +1677,42 @@ const proxy = {
             parentId: 'a34',
             functionLevel: 2,
           },
+          {
+            id: 'a42',
+            functionDepict: '商户管理',
+            functionPath: 'merchant',
+            parentId: null,
+            functionLevel: 1,
+            functionIcon: 'player',
+            color: null
+          },
+          {
+            id: 'a43',
+            functionDepict: '商户管理',
+            functionPath: 'merchant',
+            parentId: 'a42',
+            functionLevel: 2,
+            functionIcon: null,
+            color: null
+          },
+          {
+            id: 'a44',
+            functionDepict: '商户合作管理',
+            functionPath: 'merchantConsociation',
+            parentId: 'a42',
+            functionLevel: 2,
+            functionIcon: null,
+            color: null
+          },
+          {
+            id: 'a45',
+            functionDepict: '店铺管理',
+            functionPath: 'shop',
+            parentId: 'a42',
+            functionLevel: 2,
+            functionIcon: null,
+            color: null
+          },
         ],
         "functionArea": [
           {
