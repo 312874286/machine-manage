@@ -290,7 +290,7 @@ export default class PointSettingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={7} sm={24} lg={8}>
+          {/* <Col md={7} sm={24} lg={8}>
             <FormItem label="省市区">
               {getFieldDecorator('provinceCityAreaTrade')(
                 <Cascader
@@ -302,7 +302,7 @@ export default class PointSettingList extends PureComponent {
                 />
               )}
             </FormItem>
-          </Col>
+          </Col> */}
           <Col md={8} sm={24} lg={6}>
             <FormItem label="App 版本">
               {getFieldDecorator('appVersion')(
