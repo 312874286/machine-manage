@@ -74,7 +74,7 @@ const CreateForm = Form.create()(
               })(<Input placeholder="请输入商户名称" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="商户行业">
-              {getFieldDecorator('industry', {
+              {getFieldDecorator('industryCode', {
                 rules: [{ required: true, whitespace: true, message: '请选择商户行业' }],
               })(
                 <Select placeholder="请选择">
@@ -86,9 +86,9 @@ const CreateForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="机器状态">
+            <FormItem {...formItemLayout} label="允许登录商户平台">
               {getFieldDecorator('loginStatus', {
-                rules: [{ required: true, message: '请选择机器状态' }],
+                rules: [{ required: true, message: '请选择允许登录商户平台' }],
                 initialValue: '0',
               })(
                 <RadioGroup>
@@ -284,7 +284,7 @@ export default class merchant extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id, status: item.status >= 0 ? 1 : 0 };
+      const params = { id: item.id, status: item.status >= 0 ? 0 : 1 };
       this.props.dispatch({
         type: 'merchant/alterStatus',
         payload: {
@@ -321,7 +321,7 @@ export default class merchant extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        industry: data.industry || undefined,
+        industryCode: data.industryCode || undefined,
         merchantName: data.merchantName || undefined,
         loginStatus: data.loginStatus || undefined,
         loginName: data.loginName || undefined,
@@ -329,7 +329,7 @@ export default class merchant extends PureComponent {
       });
     } else {
       this.form.setFieldsValue({
-        industry: undefined,
+        industryCode: undefined,
         merchantName: undefined,
         loginStatus: undefined,
         loginName: undefined,
@@ -343,6 +343,7 @@ export default class merchant extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
+    const { BaseDictLists } = this.state
     this.form.validateFields((err, values) => {
       if (err) {
         return;
@@ -351,9 +352,14 @@ export default class merchant extends PureComponent {
         editModalConfirmLoading: true,
       });
       let url = 'merchant/saveMerchant';
-      let params = { ...values };
+      let params = {
+        ...values,
+        industry: BaseDictLists.filter(i => i.code === values.industryCode)[0].name
+      };
       if (this.state.modalData.id) {
-        params = { ...values, id: this.state.modalData.id };
+        params = {
+          ...params,
+          id: this.state.modalData.id };
       }
       this.props.dispatch({
         type: url,

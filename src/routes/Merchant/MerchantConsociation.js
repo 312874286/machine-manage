@@ -119,7 +119,7 @@ const CreateForm = Form.create()(
                       rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
                     })(<Input placeholder="请输入品牌名称" />)}
                   </FormItem>
-                </div> 
+                </div>
               ) : ''
             }
             {
@@ -139,7 +139,7 @@ const CreateForm = Form.create()(
                     {...formItemLayout}
                     label="上传二维码"
                   >
-                    {getFieldDecorator('upload', {
+                    {getFieldDecorator('wechatQrcodeUrl', {
                       valuePropName: 'filelist',
                       rules: [{ required: true, whitespace: true, message: '请上传二维码' }],
                     })(
@@ -159,10 +159,10 @@ const CreateForm = Form.create()(
                       </div>
                     )}
                   </FormItem>
-                </div> 
+                </div>
               ) : ''
             }
-            
+
         </Form>
         </div>
       </Modal>
@@ -330,7 +330,7 @@ export default class MerchantConsociation extends PureComponent {
         merchantAccountId: data.merchantAccountId || undefined,
         merchantAccountName: data.merchantAccountName || undefined,
         fileList: data.fileList || undefined,
-        upload: data.wechatQrcodeUrl || undefined
+        wechatQrcodeUrl: data.wechatQrcodeUrl || undefined
       });
     } else {
       this.form.setFieldsValue({
@@ -342,7 +342,7 @@ export default class MerchantConsociation extends PureComponent {
         merchantAccountId: undefined,
         merchantAccountName: undefined,
         fileList: undefined,
-        upload: data.wechatQrcodeUrl || undefined
+        wechatQrcodeUrl: data.wechatQrcodeUrl || undefined
       });
     }
   }
@@ -533,7 +533,7 @@ export default class MerchantConsociation extends PureComponent {
     } = this.props;
     const { channelType, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, account, fileList } = this.state;
     let columns = [
-      
+
       {
         title: '商户ID',
         width: '17%',
