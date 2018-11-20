@@ -38,7 +38,7 @@ const getValue = obj =>
 
 const CreateForm = Form.create()(
   (props) => {
-    const { sellerList, channelType, modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, channelLists, handleUploadChange, handleUpload, selectChanne } = props;
+    const { sellerList, channelType, modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, selectChanne } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -71,11 +71,11 @@ const CreateForm = Form.create()(
               })(
                 <Select
                   showSearch
-                  placeholder="Select a person"
+                  placeholder="请选择"
                   optionFilterProp="children"
                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
-                  {sellerList.map(item => <Option key={item.merchantCode} value={item.merchantName}>{item.merchantName}</Option>)}
+                  {sellerList.map(item => <Option key={item.id} value={item.merchantName}>{item.merchantName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -99,12 +99,12 @@ const CreateForm = Form.create()(
                   </FormItem>
                   <FormItem {...formItemLayout} label="商家名称">
                     {getFieldDecorator('merchantName', {
-                      rules: [{ required: false, whitespace: true, message: '请输入商家名称' }],
+                      rules: [{ required: true, whitespace: true, message: '请输入商家名称' }],
                     })(<Input placeholder="请输入商家名称" />)}
                   </FormItem>
                   <FormItem {...formItemLayout} label="品牌名称">
                     {getFieldDecorator('brandName', {
-                      rules: [{ required: false, whitespace: true, message: '请输入品牌名称' }],
+                      rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
                     })(<Input placeholder="请输入品牌名称" />)}
                   </FormItem>
                 </div> 
@@ -120,7 +120,7 @@ const CreateForm = Form.create()(
                   </FormItem>
                   <FormItem {...formItemLayout} label="商家名称">
                     {getFieldDecorator('merchantName', {
-                      rules: [{ required: false, whitespace: true, message: '请输入商家名称' }],
+                      rules: [{ required: true, whitespace: true, message: '请输入商家名称' }],
                     })(<Input placeholder="请输入商家名称" />)}
                   </FormItem>
                   <FormItem
@@ -129,11 +129,10 @@ const CreateForm = Form.create()(
                   >
                     {getFieldDecorator('upload', {
                       valuePropName: 'fileList',
-                      rules: [{ required: false, whitespace: true, message: '请上传二维码' }],
+                      rules: [{ required: true, whitespace: true, message: '请上传二维码' }],
                     })(
                       <Upload 
-                      customRequest={(params) => { handleUpload(params, 2, 'fileList'); }}
-                      action="/upload.do" 
+                      customRequest={(params) => { handleUpload(params); }}
                       listType="picture-card"
                       onChange={handleUploadChange}
                       accept="image/*"
@@ -176,7 +175,6 @@ export default class MerchantConsociation extends PureComponent {
     logId: '',
     logModalPageNo: 1,
     modalType: true,
-    channelLists: [],
     sellerList: [],
     account: {},
     channelType: '',
@@ -213,16 +211,6 @@ export default class MerchantConsociation extends PureComponent {
           code: this.state.channelId,
         },
       },
-    });
-    this.props.dispatch({
-      type: 'merchantConsociation/getChannelsList',
-      payload: {
-        restParams: {},
-      },
-    }).then((res) => {
-      this.setState({
-        channelLists: res,
-      });
     });
   }
   // 分页
@@ -432,13 +420,14 @@ export default class MerchantConsociation extends PureComponent {
     })
   }
 
-  handleUpload = ({ file, onError, onSuccess }, fileType, flag) => {
+  handleUpload = ({ file, onError, onSuccess }) => {
+    console.log(file)
+    return;
     const { dispatch } = this.props;
     dispatch({
       type: 'merchantConsociation/upload',
       payload: {
         params: { file },
-        restParams: { fileType, type: 'goods'  },
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
@@ -458,7 +447,7 @@ export default class MerchantConsociation extends PureComponent {
 
   renderAdvancedForm() {
     const { form } = this.props;
-    const { channelLists, sellerList } = this.state;
+    const { sellerList } = this.state;
     const { getFieldDecorator } = form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
@@ -490,7 +479,7 @@ export default class MerchantConsociation extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { channelType, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists, account, fileList } = this.state;
+    const { channelType, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, account, fileList } = this.state;
     let columns = [
       
       {
@@ -602,7 +591,6 @@ export default class MerchantConsociation extends PureComponent {
           modalVisible={modalVisible}
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
-          channelLists={channelLists}
           sellerList={sellerList}
           channelType={channelType}
           handleUploadChange={this.handleUploadChange}

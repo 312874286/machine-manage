@@ -1,5 +1,5 @@
-import { getMerchantSettingList, getMerchantSettingDetail, getChannelsList, saveMerchantSetting, editMerchantSetting, delMerchantSetting } from '../../services/project/merchantSetting';
-import { getMerchantsList } from '../../services/project/shopSetting'
+import { getMerchantSettingList, getMerchantSettingDetail, saveMerchantSetting, editMerchantSetting, getMerchantsList, uploadFile } from '../../services/merchant/merchantConsociation';
+
 
 export default {
   namespace: 'merchantConsociation',
@@ -22,10 +22,6 @@ export default {
       const response = yield call(getMerchantSettingDetail, { restParams });
       return response.data;
     },
-    *getChannelsList({ payload: { restParams } }, { call }) {
-      const response = yield call(getChannelsList, { restParams });
-      return response.data;
-    },
     *saveMerchantSetting({ payload: { params } }, { call }) {
       const response = yield call(saveMerchantSetting, { params });
       return response;
@@ -34,15 +30,14 @@ export default {
       const response = yield call(editMerchantSetting, { params });
       return response;
     },
-    *delMerchantSetting({ payload: { params } }, { call }) {
-      const response = yield call(delMerchantSetting, { params });
-      return response;
-    },
     *getMerchantsList({ payload: { restParams } }, { call }) {
       const response = yield call(getMerchantsList, { restParams });
       return response.data;
     },
-    *upload({})
+    *upload({ payload: { params, restParams } }, { call }) {
+      const response = yield call(uploadFile, { params, restParams });
+      return response;
+    }
   },
 
   reducers: {

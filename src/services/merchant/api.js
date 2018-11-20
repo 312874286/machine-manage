@@ -21,6 +21,8 @@ const api = map({
   alterStatus: '/inno72/merchant/user/alterStatus',
   resetPwd: '/inno72/merchant/user/resetPwd',
   getChannelList: '/project/channel/getList',
+  updateMerchantSetting: "/project/merchant/update",
+  uploadFile: '/project/merchant/uploadImage'
 });
 
 
