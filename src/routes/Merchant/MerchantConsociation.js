@@ -107,7 +107,7 @@ const CreateForm = Form.create()(
                       rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
                     })(<Input placeholder="请输入品牌名称" />)}
                   </FormItem>
-                </div> 
+                </div>
               ) : ''
             }
             {
@@ -131,7 +131,7 @@ const CreateForm = Form.create()(
                       valuePropName: 'fileList',
                       rules: [{ required: true, whitespace: true, message: '请上传二维码' }],
                     })(
-                      <Upload 
+                      <Upload
                       customRequest={(params) => { handleUpload(params); }}
                       listType="picture-card"
                       onChange={handleUploadChange}
@@ -143,10 +143,10 @@ const CreateForm = Form.create()(
                       </Upload>
                     )}
                   </FormItem>
-                </div> 
+                </div>
               ) : ''
             }
-            
+
         </Form>
         </div>
       </Modal>
@@ -422,24 +422,24 @@ export default class MerchantConsociation extends PureComponent {
 
   handleUpload = ({ file, onError, onSuccess }) => {
     console.log(file)
-    return;
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'merchantConsociation/upload',
-      payload: {
-        params: { file },
-      },
-    }).then((resp) => {
-      if (resp && resp.code === 0) {
-        console.log('resp', resp)
-        onSuccess(resp, file);
-        message.success('上传成功');
-      }
-    }).catch((e) => {
-      onError(e);
-    }).finally(() => {
-
-    });
+    // return;
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'merchantConsociation/upload',
+    //   payload: {
+    //     params: { file },
+    //   },
+    // }).then((resp) => {
+    //   if (resp && resp.code === 0) {
+    //     console.log('resp', resp)
+    //     onSuccess(resp, file);
+    //     message.success('上传成功');
+    //   }
+    // }).catch((e) => {
+    //   onError(e);
+    // }).finally(() => {
+    //
+    // });
   }
 
   handleUploadChange = ({ fileList }) => this.setState({ fileList })
@@ -481,7 +481,7 @@ export default class MerchantConsociation extends PureComponent {
     } = this.props;
     const { channelType, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, account, fileList } = this.state;
     let columns = [
-      
+
       {
         title: '商户ID',
         width: '17%',

@@ -67,13 +67,13 @@ const CreateForm = Form.create()(
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="合作渠道">
-              {getFieldDecorator('industry', {
+              {getFieldDecorator('channelId', {
                 rules: [{ required: true, whitespace: true, message: '请选择合作渠道' }],
               })(
                 <Select placeholder="请选择" onSelect={getMerchant}>
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id}>{item.channelName}</Option>
+                      <Option value={item.code} key={item.code}>{item.name}</Option>
                     );
                   })}
                 </Select>
@@ -136,7 +136,8 @@ export default class shop extends PureComponent {
   };
   componentDidMount() {
     this.getLists();
-    this.getChannelList();
+    // this.getChannelList();
+    this.getBaseDictLists()
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
@@ -178,6 +179,22 @@ export default class shop extends PureComponent {
       this.setState({
         channelLists: res,
       });
+    });
+  }
+  getBaseDictLists = () => {
+    this.props.dispatch({
+      type: 'shop/getBaseDict',
+      payload: {
+        params: {
+          type: '002',
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          channelLists: res.data.channel,
+        });
+      }
     });
   }
   getMerchant = (value) => {
@@ -306,7 +323,7 @@ export default class shop extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id };
+      const params = { id: item.id, status: item.status >= 0 ? 0 : 1 };
       this.props.dispatch({
         type: 'shop/alterStatus',
         payload: {
@@ -343,17 +360,19 @@ export default class shop extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.form.setFieldsValue({
-        shopCode: data.shopCode || '',
-        shopName: data.shopName || '',
-        sellerId: data.sellerId || '',
-        focusSessionKey: data.focusSessionKey || '',
+        channelId: data.channelId || undefined,
+        sellerId: data.sellerId || undefined,
+        shopCode: data.shopCode || undefined,
+        shopName: data.shopName || undefined,
+        focusSessionKey: data.focusSessionKey || undefined,
       });
     } else {
       this.form.setFieldsValue({
+        channelId: undefined,
+        sellerId: undefined,
         shopCode: undefined,
         shopName: undefined,
-        sellerId: undefined,
-        focusSessionKey: undefined
+        focusSessionKey: undefined,
       });
     }
   }
@@ -460,7 +479,7 @@ export default class shop extends PureComponent {
             <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
             <Divider type="vertical" />
             {/*<Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">*/}
-              <a className={styles.delete} onClick={() => this.handleDelClick(item)}>停用</a>
+              <a className={styles.delete} onClick={() => this.handleDelClick(item)}>{parseInt(item.status) === 0 ? '启用' : '停用'}</a>
             {/*</Popconfirm>*/}
           </Fragment>
         ),
