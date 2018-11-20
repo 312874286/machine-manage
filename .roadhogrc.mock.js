@@ -6821,6 +6821,78 @@ const proxy = {
         }
       ]
     })
+  },
+  'POST /project/dictionary/getBaseDict': (req, res) => {
+    res.send({
+        "code":0,
+        "data":{
+          "industry":[
+            {
+              "code":"001001",
+              "name":"汽车"
+            },
+            {
+              "code":"001002",
+              "name":"服饰"
+            },
+            {
+              "code":"001003",
+              "name":"箱包"
+            },
+            {
+              "code":"001004",
+              "name":"户外"
+            },
+            {
+              "code":"001005",
+              "name":"家电"
+            },
+            {
+              "code":"001006",
+              "name":"家纺"
+            },
+            {
+              "code":"001007",
+              "name":"数码"
+            },
+            {
+              "code":"001008",
+              "name":"母婴"
+            },
+            {
+              "code":"001009",
+              "name":"办公"
+            },
+            {
+              "code":"001010",
+              "name":"美妆"
+            }
+          ],
+          "channel":[
+            {
+              "code":"002001",
+              "name":"淘宝"
+            },
+            {
+              "code":"002002",
+              "name":"微信"
+            }
+          ]
+        },
+        "msg":"成功"
+      })
+  },
+  'POST /inno72/merchant/user/alterStatus': (req, res) => {
+    res.send({
+      "code":0,
+      "msg":"成功"
+    })
+  },
+  'POST /inno72/merchant/user/resetPwd': (req, res) => {
+    res.send({
+      "code":0,
+      "msg":"成功"
+    })
   }
 };
 
