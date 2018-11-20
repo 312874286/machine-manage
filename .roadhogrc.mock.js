@@ -2757,16 +2757,32 @@ const proxy = {
       },
       "data": [{
         brandName: "时代的",
-        channelId: "哇哈哈哇哈哈哈哈",
+        channelId: "天猫",
         createId: null,
-        createTime: "2018-07-05 17:54:12",
+        createTime: "2018-07-05 12:52:12",
         id: "1",
         isDelete: 0,
-        merchantCode: "1000010000000",
+        merchantCode: "1003242",
         merchantName: "伊利",
         originFlag: "钱钱钱",
         updateId: null,
-        updateTime: "2018-07-05 17:54:12",
+        updateTime: "2018-07-05 17:51:13",
+        merchantAccountName: 'XXX旗舰店',
+        merchantAccountId: '1003242'
+      },{
+        brandName: "时代的",
+        channelId: "天猫",
+        createId: null,
+        createTime: "2018-07-05 11:04:12",
+        id: "2",
+        isDelete: 0,
+        merchantCode: "1003241",
+        merchantName: "伊利",
+        originFlag: "钱钱钱",
+        updateId: null,
+        updateTime: "2018-07-05 15:54:14",
+        merchantAccountName: 'abadsX旗舰店',
+        merchantAccountId: '1003241'
       }]
     });
   },
