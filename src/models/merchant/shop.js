@@ -1,7 +1,7 @@
-import { getShopSettingList, getShopSettingDetail, getMerchantsList, saveShopSetting, editShopSetting, getBaseDict, getChannelList } from '../../services/merchant/shopSetting';
+import { getShopSettingList, getShopSettingDetail, getMerchantsList, saveShopSetting, editShopSetting, getBaseDict, getChannelList, alterStatus } from '../../services/merchant/shopSetting';
 
 export default {
-  namespace: 'shopSetting',
+  namespace: 'shop',
   state: {
     list: [],
     page: {},
@@ -39,6 +39,10 @@ export default {
     },
     *getBaseDict({ payload: { params } }, { call }) {
       const response = yield call(getBaseDict, { params });
+      return response;
+    },
+    *alterStatus({ payload: { params } }, { call }) {
+      const response = yield call(alterStatus, { params });
       return response;
     },
   },

@@ -6909,6 +6909,45 @@ const proxy = {
       "code":0,
       "msg":"成功"
     })
+  },
+  'GET /inno72/merchant/user/list': (req, res) => {
+    res.send({
+      "code":0,
+      "data":[
+        {
+          "id":"",
+          "loginName":"",
+          "merchantId":"",
+          "merchantName":"",
+          "phone":"手机号",
+          "industry":"行业",
+          "loginStatus":"是否允许登录0：不允许 - 默认,1：允许。"
+        }
+      ]
+    })
+  },
+  'GET /inno72/merchant/user/detail': (req, res) => {
+    res.send({
+        "code":0,
+        "data":
+          {
+            "id":"",
+            "loginName":"",
+            "merchantId":"",
+            "merchantName":"",
+            "phone":"手机号",
+            "industry":"行业",
+            "loginStatus":"是否允许登录0：不允许 - 默认,1：允许。"
+          }
+
+      }
+    )
+  },
+  'POST /inno72/merchant/user/save': (req, res) => {
+    res.send({
+      "code":0,
+      "msg":"成功"
+    })
   }
 };
 

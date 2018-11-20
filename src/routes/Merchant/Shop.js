@@ -112,10 +112,10 @@ const CreateForm = Form.create()(
       </Modal>
     );
   });
-@connect(({ common, loading, shopSetting }) => ({
+@connect(({ common, loading, shop }) => ({
   common,
-  shopSetting,
-  loading: loading.models.shopSetting,
+  shop,
+  loading: loading.models.shop,
 }))
 @Form.create()
 export default class shop extends PureComponent {
@@ -136,7 +136,7 @@ export default class shop extends PureComponent {
   };
   componentDidMount() {
     this.getLists();
-    // this.getChannelList();
+    this.getChannelList();
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
@@ -157,7 +157,7 @@ export default class shop extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'shopSetting/getShopSettingList',
+      type: 'shop/getShopSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
@@ -169,7 +169,7 @@ export default class shop extends PureComponent {
   }
   getChannelList = () => {
     this.props.dispatch({
-      type: 'shopSetting/getChannelList',
+      type: 'shop/getChannelList',
       payload: {
         restParams: {
         },
@@ -181,13 +181,14 @@ export default class shop extends PureComponent {
     });
   }
   getMerchant = (value) => {
+    console.log('value', value)
     this.getMerchantsList(value)
   }
   getMerchantsList = (channelId) => {
     this.props.dispatch({
-      type: 'shopSetting/getMerchantsList',
+      type: 'shop/getMerchantsList',
       payload: {
-        params: {
+        restParams: {
           channelId,
         },
       },
@@ -307,7 +308,7 @@ export default class shop extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'shopSetting/delShopSetting',
+        type: 'shop/alterStatus',
         payload: {
           params,
         },
@@ -328,7 +329,7 @@ export default class shop extends PureComponent {
       modalType: true,
     });
     this.props.dispatch({
-      type: 'shopSetting/getShopSettingDetail',
+      type: 'shop/getShopSettingDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -369,10 +370,10 @@ export default class shop extends PureComponent {
       this.setState({
         editModalConfirmLoading: true,
       });
-      let url = 'shopSetting/saveShopSetting';
+      let url = 'shop/saveShopSetting';
       let params = { ...values };
       if (this.state.modalData.id) {
-        url = 'shopSetting/editShopSetting';
+        url = 'shop/editShopSetting';
         params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -424,7 +425,7 @@ export default class shop extends PureComponent {
     );
   }
   render() {
-    const { shopSetting: { list, page, unColumn }, loading } = this.props;
+    const { shop: { list, page, unColumn }, loading } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, account, channelLists } = this.state;
     let columns = [
       {
@@ -458,9 +459,9 @@ export default class shop extends PureComponent {
           <Fragment>
             <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
             <Divider type="vertical" />
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete} style={{ display: !account.delete ? 'none' : ''}}>停用</a>
-            </Popconfirm>
+            {/*<Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">*/}
+              <a className={styles.delete} onClick={() => this.handleDelClick(item)}>停用</a>
+            {/*</Popconfirm>*/}
           </Fragment>
         ),
       },
