@@ -2,21 +2,21 @@ import { stringify } from 'qs';
 import fetch from '../../utils/fetch/index';
 import api from './api';
 
-export async function saveMerchantSetting({ params }) {
-  return fetch.post(api.saveMerchantSetting, {
+export async function saveMerchant({ params }) {
+  return fetch.post(api.saveMerchant, {
     body: stringify(params),
   });
 }
 
-export async function getMerchantSettingList({ params, restParams }) {
-  return fetch.get(api.getMerchantSettingList, {
+export async function getMerchantList({ params, restParams }) {
+  return fetch.get(api.getMerchantList, {
     body: JSON.stringify(params),
     restParams,
   });
 }
 
-export async function getMerchantSettingDetail({ restParams }) {
-  return fetch.get(api.getMerchantSettingDetail, {
+export async function getMerchantDetail({ restParams }) {
+  return fetch.get(api.getMerchantDetail, {
     restParams,
   });
 }

@@ -8,9 +8,9 @@ export async function saveShopSetting({ params }) {
   });
 }
 
-export async function getShopSettingList({ params }) {
+export async function getShopSettingList({ restParams }) {
   return fetch.get(api.getShopSettingList, {
-    body: JSON.stringify(params),
+    restParams
   });
 }
 
@@ -39,6 +39,11 @@ export async function editShopSetting({ params }) {
 }
 export async function getBaseDict({ params }) {
   return fetch.post(api.getBaseDict, {
+    body: stringify(params),
+  });
+}
+export async function alterStatus({ params }) {
+  return fetch.post(api.alterStatus, {
     body: stringify(params),
   });
 }

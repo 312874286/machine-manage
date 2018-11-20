@@ -1,9 +1,9 @@
-import { getMerchantSettingList, getMerchantSettingDetail,
-  getChannelsList, saveMerchantSetting, editMerchantSetting,
+import { getMerchantList, getMerchantDetail,
+  getChannelsList, saveMerchant, editMerchantSetting,
   getBaseDict, alterStatus, resetPwd } from '../../services/merchant/merchantSetting';
 
 export default {
-  namespace: 'merchantSetting',
+  namespace: 'merchant',
   state: {
     list: [],
     page: {},
@@ -12,23 +12,23 @@ export default {
   },
 
   effects: {
-    *getMerchantSettingList({ payload: { restParams } }, { call, put }) {
-      const response = yield call(getMerchantSettingList, { restParams });
+    *getMerchantList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getMerchantList, { restParams });
       yield put({
         type: 'saveList',
         payload: response,
       });
     },
-    *getMerchantSettingDetail({ payload: { restParams } }, { call }) {
-      const response = yield call(getMerchantSettingDetail, { restParams });
+    *getMerchantDetail({ payload: { restParams } }, { call }) {
+      const response = yield call(getMerchantDetail, { restParams });
       return response.data;
     },
     *getChannelsList({ payload: { restParams } }, { call }) {
       const response = yield call(getChannelsList, { restParams });
       return response.data;
     },
-    *saveMerchantSetting({ payload: { params } }, { call }) {
-      const response = yield call(saveMerchantSetting, { params });
+    *saveMerchant({ payload: { params } }, { call }) {
+      const response = yield call(saveMerchant, { params });
       return response;
     },
     *editMerchantSetting({ payload: { params } }, { call }) {

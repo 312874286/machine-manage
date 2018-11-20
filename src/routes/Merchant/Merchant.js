@@ -25,7 +25,6 @@ import {
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Merchant.less';
-import LogModal from '../../components/LogModal/index';
 import {getAccountMenus} from "../../utils/authority";
 import {RegexTool} from "../../utils/utils";
 
@@ -42,7 +41,7 @@ const merchantList = ['汽车行业', '快销品行业', '美妆行业', '母婴
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, getBaseDictLists } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, BaseDictLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -79,7 +78,7 @@ const CreateForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: '请选择商户行业' }],
               })(
                 <Select placeholder="请选择">
-                  {getBaseDictLists.map((item) => {
+                  {BaseDictLists.map((item) => {
                     return (
                       <Option value={item.code} key={item.code}>{item.name}</Option>
                     );
@@ -123,11 +122,10 @@ const CreateForm = Form.create()(
       </Modal>
     );
   });
-@connect(({ common, loading, merchantSetting, log }) => ({
+@connect(({ common, loading, merchant }) => ({
   common,
-  merchantSetting,
-  loading: loading.models.merchantSetting,
-  log,
+  merchant,
+  loading: loading.models.merchant,
 }))
 @Form.create()
 export default class merchant extends PureComponent {
@@ -148,11 +146,11 @@ export default class merchant extends PureComponent {
     channelLists: [],
 
     account: {},
-    getBaseDictLists: [],
+    BaseDictLists: [],
   };
   componentDidMount() {
     this.getLists();
-    // this.getBaseDictLists();
+    this.getBaseDictLists();
     this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
@@ -173,7 +171,7 @@ export default class merchant extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'merchantSetting/getMerchantSettingList',
+      type: 'merchant/getMerchantList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
@@ -182,37 +180,27 @@ export default class merchant extends PureComponent {
         },
       },
     });
-    // this.props.dispatch({
-    //   type: 'merchantSetting/getChannelsList',
-    //   payload: {
-    //     restParams: {},
-    //   },
-    // }).then((res) => {
-    //   // const arr = { id: -1, channelName: '请选择' }
-    //   // res.unshift(arr)
-    //   this.setState({
-    //     channelLists: res,
-    //   });
-    // });
   }
   getBaseDictLists = () => {
     this.props.dispatch({
-      type: 'merchantSetting/getBaseDict',
+      type: 'merchant/getBaseDict',
       payload: {
         params: {
           type: '001',
         },
       },
     }).then((res) => {
-      this.setState({
-        getBaseDictLists: res,
-      });
+      if (res && res.code === 0) {
+        this.setState({
+          BaseDictLists: res.data.industry,
+        });
+      }
     });
   }
   resetPwd = (item) => {
     console.log('resetPwd', item)
     this.props.dispatch({
-      type: 'merchantSetting/resetPwd',
+      type: 'merchant/resetPwd',
       payload: {
         params: {
           id: item.id,
@@ -296,9 +284,9 @@ export default class merchant extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id };
+      const params = { id: item.id, status: item.status >= 0 ? 1 : 0 };
       this.props.dispatch({
-        type: 'merchantSetting/delMerchantSetting',
+        type: 'merchant/alterStatus',
         payload: {
           params,
         },
@@ -319,7 +307,7 @@ export default class merchant extends PureComponent {
       modalType: false,
     });
     this.props.dispatch({
-      type: 'merchantSetting/getMerchantSettingDetail',
+      type: 'merchant/getMerchantDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -362,10 +350,9 @@ export default class merchant extends PureComponent {
       this.setState({
         editModalConfirmLoading: true,
       });
-      let url = 'merchantSetting/saveMerchantSetting';
+      let url = 'merchant/saveMerchant';
       let params = { ...values };
       if (this.state.modalData.id) {
-        url = 'merchantSetting/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
       this.props.dispatch({
@@ -388,48 +375,6 @@ export default class merchant extends PureComponent {
     });
   }
   // 新增modal确认事件 结束
-  // 日志相关
-  getLogList = () => {
-    this.props.dispatch({
-      type: 'log/getLogList',
-      payload: {
-        restParams: {
-          code: this.state.logId,
-          pageNo: this.state.logModalPageNo,
-          type: 1020403,
-        },
-      },
-    }).then(() => {
-      this.setState({
-        logModalLoading: false,
-      });
-    });
-  }
-
-  handleLogClick = (data) => {
-    this.setState({
-      logModalVisible: !!data,
-      logModalLoading: true,
-      logId: data.id,
-    }, () => {
-      this.getLogList();
-    });
-  }
-
-  logModalHandleCancel = () => {
-    this.setState({
-      logModalVisible: false,
-    });
-  }
-
-  logModalhandleTableChange = (pagination) => {
-    const { current } = pagination;
-    this.setState({
-      logModalPageNo: current,
-    }, () => {
-      this.getLogList();
-    });
-  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { channelLists } = this.state;
@@ -437,19 +382,6 @@ export default class merchant extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          {/*<Col md={8} sm={24}>*/}
-            {/*<FormItem label="选择渠道">*/}
-              {/*{getFieldDecorator('channelId')(*/}
-                {/*<Select placeholder="请选择">*/}
-                  {/*{channelLists.map((item) => {*/}
-                    {/*return (*/}
-                      {/*<Option value={item.id} key={item.id}>{item.channelName}</Option>*/}
-                    {/*);*/}
-                  {/*})}*/}
-                {/*</Select>*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
           <Col md={9} sm={24}>
             <FormItem>
               {getFieldDecorator('keyword')(<Input placeholder="请输入商户编码、商户名称、原始标识、品牌名称" />)}
@@ -473,17 +405,16 @@ export default class merchant extends PureComponent {
   }
   render() {
     const {
-      merchantSetting: { list, page, unColumn },
+      merchant: { list, page, unColumn },
       loading,
-      log: { logList, logPage },
     } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, channelLists, account } = this.state;
     let columns = [
       {
         title: '商户ID',
         width: '17%',
-        dataIndex: 'merchantCode',
-        key: 'merchantCode'
+        dataIndex: 'merchantId',
+        key: 'merchantId'
       },
       {
         title: '商户名称',
@@ -494,19 +425,19 @@ export default class merchant extends PureComponent {
       {
         title: '商户行业',
         width: '17%',
-        dataIndex: 'channelId',
-        key: 'channelId'
+        dataIndex: 'industry',
+        key: 'industry'
       },
       {
         title: '商户平台登录账号',
         width: '17%',
-        dataIndex: 'originFlag',
-        key: 'originFlag'
+        dataIndex: 'loginName',
+        key: 'loginName'
       },
       {
         title: '商户手机号码',
-        dataIndex: 'brandName',
-        key: 'brandName'
+        dataIndex: 'phone',
+        key: 'phone'
       },
       {
         fixed: 'right',
@@ -518,9 +449,9 @@ export default class merchant extends PureComponent {
             <Divider type="vertical" />
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>停用账号</a>
-            </Popconfirm>
+            {/*<Popconfirm title="确定要停用吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">*/}
+              <a className={styles.delete} onClick={() => this.handleDelClick(item)}>{parseInt(item.loginStatus) === 0 ? '启用账号' : '停用账号'}</a>
+            {/*</Popconfirm>*/}
             <Divider type="vertical" />
             <a onClick={() => this.resetPwd(item)}>重置密码</a>
           </Fragment>
@@ -594,15 +525,7 @@ export default class merchant extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
           channelLists={channelLists}
-          getBaseDictLists={this.state.getBaseDictLists}
-        />
-        <LogModal
-          data={logList}
-          page={logPage}
-          loding={this.state.logModalLoading}
-          logVisible={this.state.logModalVisible}
-          logHandleCancel={this.logModalHandleCancel}
-          logModalhandleTableChange={this.logModalhandleTableChange}
+          BaseDictLists={this.state.BaseDictLists}
         />
       </PageHeaderLayout>
     );
