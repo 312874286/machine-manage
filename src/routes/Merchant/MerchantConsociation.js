@@ -38,7 +38,7 @@ const getValue = obj =>
 
 const CreateForm = Form.create()(
   (props) => {
-    const { sellerList, channelType, modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, selectChanne } = props;
+    const { sellerList, channelType, modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, selectChannel, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -50,6 +50,12 @@ const CreateForm = Form.create()(
         sm: { span: 16 },
       },
     };
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
     return (
       <Modal
         title={
@@ -70,12 +76,14 @@ const CreateForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: '请选择商户' }],
               })(
                 <Select
+                  // labelInValue
                   showSearch
                   placeholder="请选择"
                   optionFilterProp="children"
+                  onSelect={handleSellerName}
                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
-                  {sellerList.map(item => <Option key={item.id} value={item.merchantName}>{item.merchantName}</Option>)}
+                  {sellerList.map(item => <Option key={item.id} value={item.merchantAccountId}>{item.merchantAccountName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -83,7 +91,11 @@ const CreateForm = Form.create()(
               {getFieldDecorator('channelName', {
                 rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
               })(
-                <Select onChange={selectChanne} placeholder="选择渠道">
+                <Select 
+                  // labelInValue 
+                  onChange={selectChannel} 
+                  placeholder="选择渠道"
+                >
                   <Option value="002001">淘宝</Option>
                   <Option value="002002">微信</Option>
                 </Select>
@@ -113,7 +125,7 @@ const CreateForm = Form.create()(
             {
               channelType == '002002' ? (
                 <div>
-                  <FormItem {...formItemLayout} label="sellerId">
+                  <FormItem {...formItemLayout} label="appId">
                     {getFieldDecorator('appId', {
                       rules: [{ required: true, whitespace: true, message: '请输入appId' }],
                     })(<Input placeholder="请输入appId" />)}
@@ -128,19 +140,23 @@ const CreateForm = Form.create()(
                     label="上传二维码"
                   >
                     {getFieldDecorator('upload', {
-                      valuePropName: 'fileList',
+                      valuePropName: 'filelist',
                       rules: [{ required: true, whitespace: true, message: '请上传二维码' }],
                     })(
-                      <Upload 
-                      customRequest={(params) => { handleUpload(params); }}
-                      listType="picture-card"
-                      onChange={handleUploadChange}
-                      accept="image/*"
-                      >
-                        <a>
-                          <Icon type="upload" />&nbsp;点击上传
-                        </a>
-                      </Upload>
+                      <div>
+                        <Upload
+                          customRequest={(params) => { handleUpload(params); }}
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                          onChange={handleUploadChange}
+                          accept="image/*">
+                          {fileList.length >= 1 ? null : uploadButton}
+                        </Upload>
+                        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                      </div>
                     )}
                   </FormItem>
                 </div> 
@@ -178,7 +194,10 @@ export default class MerchantConsociation extends PureComponent {
     sellerList: [],
     account: {},
     channelType: '',
-    fileList: []
+    fileList: [],
+    previewVisible: false,
+    previewImage: '',
+    addParams: {}
   };
   componentDidMount() {
     this.getLists();
@@ -310,7 +329,8 @@ export default class MerchantConsociation extends PureComponent {
         channelId: data.channelId || undefined,
         merchantAccountId: data.merchantAccountId || undefined,
         merchantAccountName: data.merchantAccountName || undefined,
-        fileList: data.fileList || undefined
+        fileList: data.fileList || undefined,
+        upload: data.wechatQrcodeUrl || undefined
       });
     } else {
       this.form.setFieldsValue({
@@ -321,7 +341,8 @@ export default class MerchantConsociation extends PureComponent {
         channelId: undefined,
         merchantAccountId: undefined,
         merchantAccountName: undefined,
-        fileList: undefined
+        fileList: undefined,
+        upload: data.wechatQrcodeUrl || undefined
       });
     }
   }
@@ -412,17 +433,36 @@ export default class MerchantConsociation extends PureComponent {
       })
     })
   }
+  handleSellerName = (val) => {
+    console.log(val)
+    // this.setState({
+    //   addParams: {
+    //     merchantAccountName: val.key,
+    //     merchantAccountId: val,label
+    //   }
+    // })
+  }
   // 选泽渠道
-  selectChanne = (val) => {
+  selectChannel = (val) => {
     console.log(val)
     this.setState({
       channelType: val
     })
   }
 
+
+  // 上传图片
+  handleCancel = () => this.setState({ previewVisible: false })
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
   handleUpload = ({ file, onError, onSuccess }) => {
     console.log(file)
-    return;
     const { dispatch } = this.props;
     dispatch({
       type: 'merchantConsociation/upload',
@@ -431,6 +471,18 @@ export default class MerchantConsociation extends PureComponent {
       },
     }).then((resp) => {
       if (resp && resp.code === 0) {
+        if (resp.data.indexOf('png') > 0 || resp.data.indexOf('jpg') > 0 || resp.data.indexOf('jpeg') > 0 || resp.data.indexOf('png') > 0) {
+          let fList = [{
+            uid: -2,
+            name: 'xxx.png',
+            status: 'done',
+            url: domain.url + resp.data,
+            data: resp.data,
+          }]
+          this.setState({
+            fileList: fList,
+          });
+        }
         console.log('resp', resp)
         onSuccess(resp, file);
         message.success('上传成功');
@@ -503,14 +555,14 @@ export default class MerchantConsociation extends PureComponent {
       {
         title: '合作渠道',
         width: '17%',
-        dataIndex: 'channelId',
-        key: 'channelId'
+        dataIndex: 'channelName',
+        key: 'channelName'
       },
       {
         title: '合作ID',
         width: '17%',
-        dataIndex: 'originFlag',
-        key: 'originFlag'
+        dataIndex: 'channelId',
+        key: 'channelId'
       },
       {
         title: '品牌名称',
@@ -593,9 +645,16 @@ export default class MerchantConsociation extends PureComponent {
           modalType={modalType}
           sellerList={sellerList}
           channelType={channelType}
+          handleSellerName={this.handleSellerName}
           handleUploadChange={this.handleUploadChange}
           handleUpload={this.handleUpload}
-          selectChanne={this.selectChanne}
+          selectChannel={this.selectChannel}
+          handleCancel={this.handleCancel}
+          fileList={fileList}
+          previewVisible={this.state.previewVisible}
+          previewImage={this.state.previewImage}
+          handlePreview={this.handlePreview}
+
         />
         <LogModal
           data={logList}
