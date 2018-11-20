@@ -260,6 +260,12 @@ export const getRouterData = (app) => {
     '/check/replenish': {
       component: dynamicWrapper(app, ['polling/replenish', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
     },
+    '/merchant/merchant': {
+      component: dynamicWrapper(app, ['merchant/merchantSetting', 'log/log'], () => import('../routes/Merchant/Merchant')),
+    },
+    '/merchant/shop': {
+      component: dynamicWrapper(app, ['merchant/shopSetting', 'log/log', 'common'], () => import('../routes/Merchant/Shop')),
+    },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },
