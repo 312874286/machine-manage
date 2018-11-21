@@ -38,7 +38,7 @@ const getValue = obj =>
 
 const CreateForm = Form.create()(
   (props) => {
-    const { sellerList, channelType, modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, selectChannel, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName } = props;
+    const { sellerList, channelType, modalVisible, form, handleAdd, handleCancelModalVisible, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, selectChannel, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName, channelLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -56,6 +56,7 @@ const CreateForm = Form.create()(
         <div className="ant-upload-text">Upload</div>
       </div>
     );
+    
     return (
       <Modal
         title={
@@ -66,7 +67,7 @@ const CreateForm = Form.create()(
         }
         visible={modalVisible}
         onOk={handleAdd}
-        onCancel={() => handleModalVisible()}
+        onCancel={() => handleCancelModalVisible()}
         confirmLoading={editModalConfirmLoading}
       >
         <div className="manageAppBox">
@@ -83,7 +84,7 @@ const CreateForm = Form.create()(
                   onSelect={handleSellerName}
                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
-                  {sellerList.map(item => <Option key={item.id} value={item.merchantAccountId}>{item.merchantAccountName}</Option>)}
+                  {sellerList.map((item, index) => <Option key={index} value={item.merchantCode}>{item.merchantAccountName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -96,8 +97,11 @@ const CreateForm = Form.create()(
                   onChange={selectChannel} 
                   placeholder="选择渠道"
                 >
-                  <Option value="002001">淘宝</Option>
-                  <Option value="002002">微信</Option>
+                  {channelLists.map((item) => {
+                    return (
+                      <Option value={item.code} key={item.code}>{item.name}</Option>
+                    );
+                  })}
                 </Select>
               )}
             </FormItem>
@@ -197,12 +201,13 @@ export default class MerchantConsociation extends PureComponent {
     fileList: [],
     previewVisible: false,
     previewImage: '',
-    addParams: {}
+    addParams: {},
+    channelLists: []
   };
   componentDidMount() {
     this.getLists();
+    this.getBaseDictLists()
     this.getAccountMenus(getAccountMenus())
-    this.getMerchantsList()
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -232,6 +237,38 @@ export default class MerchantConsociation extends PureComponent {
       },
     });
   }
+
+  getChannelList = () => {
+    this.props.dispatch({
+      type: 'shop/getChannelList',
+      payload: {
+        restParams: {
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        channelLists: res,
+      });
+    });
+  }
+
+  getBaseDictLists = () => {
+    this.props.dispatch({
+      type: 'shop/getBaseDict',
+      payload: {
+        params: {
+          type: '002',
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          channelLists: res.data.channel,
+        });
+      }
+    });
+  }
+
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -295,10 +332,36 @@ export default class MerchantConsociation extends PureComponent {
       modalType: true,
     });
     this.setModalData();
+    this.getMerchantsList()
   };
-  // 删除modal 删除事件
+  // 添加modal 添加事件
+  handleCancelModalVisible = (flag) => {
+    this.setState({
+      modalVisible: !!flag,
+      modalData: {},
+      modalType: true,
+    });
+    this.setModalData();
+  };
+  // 启用停用
   handleIsStopClick = (item) => {
-    console.log('handleIsStopClick',item)
+    this.setState({
+      editModalConfirmLoading: true,
+    });
+    if (item) {
+      const params = { id: item.id, status: item.status >= 0 ? 0 : 1 };
+      this.props.dispatch({
+        type: 'merchantConsociation/alterStatus',
+        payload: {
+          params,
+        },
+      }).then(() => {
+        this.getLists();
+        this.setState({
+          editModalConfirmLoading: false,
+        });
+      });
+    } else return false;
   }
   // 编辑modal 编辑事件
   handleEditClick = (item) => {
@@ -342,7 +405,7 @@ export default class MerchantConsociation extends PureComponent {
         merchantAccountId: undefined,
         merchantAccountName: undefined,
         fileList: undefined,
-        wechatQrcodeUrl: data.wechatQrcodeUrl || undefined
+        wechatQrcodeUrl: undefined
       });
     }
   }
@@ -421,13 +484,9 @@ export default class MerchantConsociation extends PureComponent {
   getMerchantsList = () => {
     const { dispatch } = this.props
     dispatch({
-      type: 'merchantConsociation/getMerchantsList',
-      payload: {
-        restParams: {
-          channelId: ''
-        }
-      }
+      type: 'merchantConsociation/getMerchantsListAll',
     }).then(res => {
+      console.log(res)
       this.setState({
         sellerList: res
       })
@@ -531,7 +590,7 @@ export default class MerchantConsociation extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { channelType, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, account, fileList } = this.state;
+    const { channelType, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, account, fileList, channelLists } = this.state;
     let columns = [
 
       {
@@ -577,9 +636,7 @@ export default class MerchantConsociation extends PureComponent {
           <Fragment>
             <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
             <Divider type="vertical" />
-            <Popconfirm title="确定要暂停合作吗" onConfirm={() => this.handleIsStopClick(item)} okText="Yes" cancelText="No">
-              <a >暂停合作</a>
-            </Popconfirm>
+            <a className={styles.delete} onClick={() => this.handleIsStopClick(item)}>{parseInt(item.loginStatus) === 0 ? '启用账号' : '停用账号'}</a>
           </Fragment>
         ),
       },
@@ -654,7 +711,8 @@ export default class MerchantConsociation extends PureComponent {
           previewVisible={this.state.previewVisible}
           previewImage={this.state.previewImage}
           handlePreview={this.handlePreview}
-
+          handleCancelModalVisible={this.handleCancelModalVisible}
+          channelLists={channelLists}
         />
         <LogModal
           data={logList}

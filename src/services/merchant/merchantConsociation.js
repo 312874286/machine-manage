@@ -22,10 +22,8 @@ export async function getMerchantSettingDetail({ restParams }) {
   });
 }
 
-export async function getMerchantsList({ restParams }) {
-  return fetch.get(api.getMerchantsList, {
-    restParams,
-  });
+export async function getMerchantsListAll() {
+  return fetch.get(api.getMerchantsListAll);
 }
 
 export async function editMerchantSetting({ params }) {
@@ -46,5 +44,22 @@ export async function uploadFile({ params }) {
   return fetch.postFile(api.uploadFile, { body: file });
 }
 
+export async function getBaseDict({ params }) {
+  return fetch.post(api.getBaseDict, {
+    body: stringify(params),
+  });
+}
+
+export async function getChannelList({ restParams }) {
+  return fetch.get(api.getChannelList, {
+    restParams,
+  });
+}
+
+export async function alterStatus({ params }) {
+  return fetch.post(api.alterStatus, {
+    body: stringify(params),
+  });
+}
 
 
