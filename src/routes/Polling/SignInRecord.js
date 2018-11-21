@@ -11,7 +11,8 @@ import {
   Cascader,
   Table,
   DatePicker,
-  Checkbox
+  Checkbox,
+  Popconfirm
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import styles from './SignInRecord.less';
@@ -395,16 +396,24 @@ export default class signInRecord extends PureComponent {
         dataIndex: 'status',
         width: 100,
         key: 'status',
-        render: (val, record) => <span>{ val == 0 ? '有效' : '-' }</span>
+        render: (val, record) => <span>{ val == 0 && val != null ? '有效' : '-' }</span>
       },
       {
         title: '操作', 
         key: 'action', 
-        render: (val, record) => <a onClick={() => {
-          this.handleTableClick(val, record)
-        }}>{
-          val.status == 1 ? '标为有效' : '标为无效'
-        }</a>
+        render: (val, record) => {
+        return (
+          // <a onClick={() => {
+          //   this.handleTableClick(val, record)
+          // }}>{
+          //   val.status == 0 ? '标为无效' : '标为有效'
+          // }</a>
+          <Popconfirm title={`确定要${val.status == 0 ? '标为无效' : '标为有效'}`} onConfirm={() => this.handleTableClick(val, record)} okText="Yes" cancelText="No">
+              <a>
+                {val.status == 0 ? '标为无效' : '标为有效'}
+              </a>
+            </Popconfirm>
+        )}
       }
     ];
     if (unColumn) {
