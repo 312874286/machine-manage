@@ -284,7 +284,7 @@ export default class merchant extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id, status: item.status >= 0 ? 0 : 1 };
+      const params = { id: item.id, status: item.loginStatus >= 0 ? 0 : 1 };
       this.props.dispatch({
         type: 'merchant/alterStatus',
         payload: {
