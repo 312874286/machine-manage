@@ -9,7 +9,7 @@ const api = map({
   deleteMerchantSetting: "/project/merchant/delete",
   getMerchantSettingDetail: "/project/merchant/detail?id={id}",
   getMerchantsList: "/project/merchant/getList?channelId={channelId}",
-  getMerchantsListAll: "/project/merchant/getList",
+  getMerchantsListAll: "/inno72/merchant/user/getList",
   getShopSettingList:
     "/project/shops/list?pageNo={pageNo}&keyword={keyword}&code={code}",
   saveShopSetting: "/project/shops/add",

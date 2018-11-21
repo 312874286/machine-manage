@@ -27,6 +27,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './MerchantConsociation.less';
 import LogModal from '../../components/LogModal/index';
 import {getAccountMenus} from "../../utils/authority";
+import domain from "../../common/config/domain"
 
 
 const FormItem = Form.Item;
@@ -38,7 +39,7 @@ const getValue = obj =>
 
 const CreateForm = Form.create()(
   (props) => {
-    const { sellerList, channelType, modalVisible, form, handleAdd, handleCancelModalVisible, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, selectChannel, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName, channelLists } = props;
+    const { sellerList, channelType, modalVisible, form, handleAdd, handleCancelModalVisible, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, selectChannel, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName,saveMerchantAccountId, saveChannelId,channelLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -77,14 +78,13 @@ const CreateForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: '请选择商户' }],
               })(
                 <Select
-                  // labelInValue
                   showSearch
                   placeholder="请选择"
                   optionFilterProp="children"
-                  onSelect={handleSellerName}
+                  onChange={(val) => { handleSellerName(val)}}
                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
-                  {sellerList.map((item, index) => <Option key={index} value={item.merchantCode}>{item.merchantAccountName}</Option>)}
+                  {sellerList.map((item) => item.id && item.merchantName && <Option key={item.id} onClick={saveMerchantAccountId(item.id)} value={item.merchantName}>{item.merchantName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -93,23 +93,22 @@ const CreateForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
               })(
                 <Select 
-                  // labelInValue 
                   onChange={selectChannel} 
                   placeholder="选择渠道"
                 >
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.code} key={item.code}>{item.name}</Option>
+                      <Option value={item.name} onClick={saveChannelId(item.code)} key={item.code}>{item.name}</Option>
                     );
                   })}
                 </Select>
               )}
             </FormItem>
             {
-              channelType == '002001' ? (
+              channelType == '淘宝' ? (
                 <div>
                   <FormItem {...formItemLayout} label="sellerId">
-                    {getFieldDecorator('sellerId', {
+                    {getFieldDecorator('merchantCode', {
                       rules: [{ required: true, whitespace: true, message: '请输入sellerId' }],
                     })(<Input placeholder="请输入sellerId" />)}
                   </FormItem>
@@ -127,10 +126,10 @@ const CreateForm = Form.create()(
               ) : ''
             }
             {
-              channelType == '002002' ? (
+              channelType == '微信' ? (
                 <div>
                   <FormItem {...formItemLayout} label="appId">
-                    {getFieldDecorator('appId', {
+                    {getFieldDecorator('merchantCode', {
                       rules: [{ required: true, whitespace: true, message: '请输入appId' }],
                     })(<Input placeholder="请输入appId" />)}
                   </FormItem>
@@ -147,6 +146,8 @@ const CreateForm = Form.create()(
                       valuePropName: 'filelist',
                       rules: [{ required: true, whitespace: true, message: '请上传二维码' }],
                     })(
+
+
                       <div>
                         <Upload
                           customRequest={(params) => { handleUpload(params); }}
@@ -155,7 +156,7 @@ const CreateForm = Form.create()(
                           onPreview={handlePreview}
                           onChange={handleUploadChange}
                           accept="image/*">
-                          {fileList.length >= 1 ? null : uploadButton}
+                          {fileList.length > 1 ? null : uploadButton}
                         </Upload>
                         <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
                           <img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -232,7 +233,7 @@ export default class MerchantConsociation extends PureComponent {
         restParams: {
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
-          code: this.state.channelId,
+          code:'',
         },
       },
     });
@@ -349,7 +350,7 @@ export default class MerchantConsociation extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id, status: item.status >= 0 ? 0 : 1 };
+      const params = { id: item.merchantAccountId, status: item.status == 0 ? 1 : 0 };
       this.props.dispatch({
         type: 'merchantConsociation/alterStatus',
         payload: {
@@ -384,23 +385,36 @@ export default class MerchantConsociation extends PureComponent {
   // 设置modal 数据
   setModalData = (data) => {
     if (data) {
+      this.setState({
+        channelType: data.channelName,
+        merchantAccountId: data.merchantAccountId,
+        channelId: data.channelId,
+        previewImage: data.wechatQrcodeUrl
+      })
       this.form.setFieldsValue({
         merchantCode: data.merchantCode || undefined,
         merchantName: data.merchantName || undefined,
         brandName: data.brandName || undefined,
-        originFlag: data.originFlag || undefined,
+        channelName: data.channelName || undefined,
         channelId: data.channelId || undefined,
         merchantAccountId: data.merchantAccountId || undefined,
         merchantAccountName: data.merchantAccountName || undefined,
-        fileList: data.fileList || undefined,
+        fileList: data.wechatQrcodeUrl || undefined,
         wechatQrcodeUrl: data.wechatQrcodeUrl || undefined
       });
+      
     } else {
+      this.setState({
+        channelType: undefined,
+        merchantAccountId: undefined,
+        channelId: undefined,
+        previewImage: undefined
+      })
       this.form.setFieldsValue({
         merchantCode: undefined,
         merchantName: undefined,
         brandName: undefined,
-        originFlag: undefined,
+        channelName: undefined,
         channelId: undefined,
         merchantAccountId: undefined,
         merchantAccountName: undefined,
@@ -416,9 +430,12 @@ export default class MerchantConsociation extends PureComponent {
   // 编辑modal 确认事件
   handleAdd = () => {
     this.form.validateFields((err, values) => {
+      const { merchantAccountId, channelId, previewImage} = this.state
+      
       if (err) {
         return;
       }
+      
       this.setState({
         editModalConfirmLoading: true,
       });
@@ -428,6 +445,9 @@ export default class MerchantConsociation extends PureComponent {
         url = 'merchantConsociation/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
+      params = Object.assign(params, {merchantAccountId,channelId, wechatQrcodeUrl: previewImage})
+      console.log('form--params==',params)
+
       this.props.dispatch({
         type: url,
         payload: {
@@ -439,11 +459,14 @@ export default class MerchantConsociation extends PureComponent {
           this.setState({
             modalData: {},
             modalVisible: false,
+            merchantAccountId: '',
+            channelId: ''
           });
         }
         this.setState({
           editModalConfirmLoading: false,
         });
+        this.setModalData()
       });
     });
   }
@@ -493,19 +516,23 @@ export default class MerchantConsociation extends PureComponent {
     })
   }
   handleSellerName = (val) => {
-    console.log(val)
-    // this.setState({
-    //   addParams: {
-    //     merchantAccountName: val.key,
-    //     merchantAccountId: val,label
-    //   }
-    // })
+    
+  }
+  saveMerchantAccountId = (val) => {
+    this.setState({
+      merchantAccountId: val
+    })
   }
   // 选泽渠道
   selectChannel = (val) => {
-    console.log(val)
     this.setState({
       channelType: val
+    })
+  }
+
+  saveChannelId = (val) => {
+    this.setState({
+      channelId: val
     })
   }
 
@@ -529,19 +556,23 @@ export default class MerchantConsociation extends PureComponent {
         params: { file },
       },
     }).then((resp) => {
-      if (resp && resp.code === 0) {
-        if (resp.data.indexOf('png') > 0 || resp.data.indexOf('jpg') > 0 || resp.data.indexOf('jpeg') > 0 || resp.data.indexOf('png') > 0) {
-          let fList = [{
-            uid: -2,
-            name: 'xxx.png',
-            status: 'done',
-            url: domain.url + resp.data,
-            data: resp.data,
-          }]
-          this.setState({
-            fileList: fList,
-          });
-        }
+      if (resp.code == 0) {
+        
+        console.log(this.state.previewImage)
+
+        let fList = [{
+          uid: -2,
+          name: 'xxx.png',
+          status: 'done',
+          url: domain.url + resp.data,
+          data: resp.data,
+        }]
+        console.log(resp)
+
+        this.setState({
+          fileList: fList,
+          previewImage: domain.url + resp.data
+        });
         console.log('resp', resp)
         onSuccess(resp, file);
         message.success('上传成功');
@@ -596,8 +627,8 @@ export default class MerchantConsociation extends PureComponent {
       {
         title: '商户ID',
         width: '17%',
-        dataIndex: 'merchantAccountId',
-        key: 'merchantAccountId'
+        dataIndex: 'merchantId',
+        key: 'merchantId'
       },
       {
         title: '商户名称',
@@ -636,7 +667,7 @@ export default class MerchantConsociation extends PureComponent {
           <Fragment>
             <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
             <Divider type="vertical" />
-            <a className={styles.delete} onClick={() => this.handleIsStopClick(item)}>{parseInt(item.loginStatus) === 0 ? '启用账号' : '停用账号'}</a>
+            <a className={styles.delete} onClick={() => this.handleIsStopClick(item)}>{parseInt(item.status) === 0 ? '启用账号' : '停用账号'}</a>
           </Fragment>
         ),
       },
@@ -713,6 +744,8 @@ export default class MerchantConsociation extends PureComponent {
           handlePreview={this.handlePreview}
           handleCancelModalVisible={this.handleCancelModalVisible}
           channelLists={channelLists}
+          saveMerchantAccountId={this.saveMerchantAccountId}
+          saveChannelId={this.saveChannelId}
         />
         <LogModal
           data={logList}
