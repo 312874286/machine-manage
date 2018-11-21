@@ -6785,6 +6785,115 @@ const proxy = {
         }
       ]
     })
+  },
+  'GET /project/interact/merchant/checkMerchantUser': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "3",
+          "merchantCode": "2",
+          "merchantName": "天猫"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/merchant/checkMerchant': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "3",
+          "merchantCode": "2",
+          "merchantName": "天猫",
+          "createId": "12",
+          "updateId": null,
+          "createTime": 1530499549000,
+          "updateTime": 1530499549000,
+          "isDelete": 0
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/shops/checkShops': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "3",
+          "merchantCode": "2",
+          "merchantName": "天猫",
+          "createId": "12",
+          "updateId": null,
+          "createTime": 1530499549000,
+          "updateTime": 1530499549000,
+          "isDelete": 0
+        }
+      ],
+      "msg": "成功"
+    })
+  },
+  'GET /project/dictionary/getBaseDict': (req, res) => {
+    res.send({
+      "code":0,
+      "data":{
+        "industry":[
+          {
+            "code":"001001",
+            "name":"汽车"
+          },
+          {
+            "code":"001002",
+            "name":"服饰"
+          },
+          {
+            "code":"001003",
+            "name":"箱包"
+          },
+          {
+            "code":"001004",
+            "name":"户外"
+          },
+          {
+            "code":"001005",
+            "name":"家电"
+          },
+          {
+            "code":"001006",
+            "name":"家纺"
+          },
+          {
+            "code":"001007",
+            "name":"数码"
+          },
+          {
+            "code":"001008",
+            "name":"母婴"
+          },
+          {
+            "code":"001009",
+            "name":"办公"
+          },
+          {
+            "code":"001010",
+            "name":"美妆"
+          }
+        ],
+        "channel":[
+          {
+            "code":"002001",
+            "name":"淘宝"
+          },
+          {
+            "code":"002002",
+            "name":"微信"
+          }
+        ]
+      },
+      "msg":"成功"
+    })
   }
 };
 

@@ -10,7 +10,13 @@ import {
   Input,
   DatePicker,
   Steps,
-  Table, Badge, Menu, Dropdown, Icon, Divider, Modal, Upload, InputNumber, Checkbox
+  Table, Badge,
+  Menu, Dropdown,
+  Icon, Divider,
+  Modal, Upload,
+  InputNumber,
+  Checkbox, Alert,
+  Popconfirm,
 } from 'antd';
 import StandardTable from '../../../components/StandardTable/index';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
@@ -18,6 +24,7 @@ import styles from './MerchantGoodsInteractSampling.less';
 import {getAccountMenus} from "../../../utils/authority";
 import {message, Radio} from "antd/lib/index";
 import domain from "../../../common/config/domain";
+import moment from "moment/moment";
 
 const { Option } = Select;
 const RadioGroup = Radio.Group;
@@ -41,7 +48,10 @@ const CreateMerchantForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd,
       handleModalVisible, editModalConfirmLoading, modalType,
-      channelLists, saveAddShop, merchants, paiyangType } = props;
+      channelLists, saveAddShop, merchants, paiyangType, checkMerchantUserLists, handleChange,
+      channelHandleChange,
+      checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, targetHandleDelete, toRightMerchantHandle
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -56,6 +66,45 @@ const CreateMerchantForm = Form.create()(
     const columns = [
       { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '100%' },
     ];
+    const rowSelection = {
+      onSelect: onLeftSelect,
+    };
+    const columnsLeft =  [{
+      title: '公众号AppID',
+      dataIndex: 'id',
+      width: '40%',
+      render: text => <a href="javascript:;">{text}</a>,
+    }, {
+      title: '公众号名称',
+      width: '40%',
+      dataIndex: 'merchantName',
+      render: text => <a href="javascript:;">{text}</a>,
+    }];
+    const columnsRight = [{
+      title: '公众号AppID',
+      dataIndex: 'id',
+      width: '30%',
+      render: text => <a href="javascript:;">{text}</a>,
+    }, {
+      title: '公众号名称',
+      width: '30%',
+      dataIndex: 'merchantName',
+      render: text => <a href="javascript:;">{text}</a>,
+    }, {
+      title: '操作',
+      width: 70,
+      dataIndex: 'operation',
+      render: (text, record) => {
+        return (
+          checkSelectedMerchantLists.length > 0
+            ? (
+              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
+            ) : null
+        );
+      }
+    }];
     return (
       <Modal
         title={
@@ -68,6 +117,7 @@ const CreateMerchantForm = Form.create()(
         // onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
+        width={1000}
         footer={null}>
         <div className="manageAppBox">
           <Table
@@ -78,39 +128,90 @@ const CreateMerchantForm = Form.create()(
             scroll={{ y: 100}}
           />
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="所属渠道">
-              {getFieldDecorator('channelId', {
-                rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
+            <FormItem {...formItemLayout} label="客户名称">
+              {getFieldDecorator('merchant', {
+                rules: [{ required: true, whitespace: true, message: '请选择客户名称' }],
               })(
-                <Select placeholder="请选择渠道">
+                <Select
+                  showSearch
+                  placeholder="请输入客户名称或者客户编码"
+                  optionFilterProp="children"
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  onChange={handleChange}
+                >
+                  {
+                    checkMerchantUserLists.map((item) => {
+                      return (
+                        <Option value={`${item.merchantCode}-${item.id}`}>{`${item.merchantCode}-${item.merchantName}`}</Option>
+                      )
+                    })
+                  }
+                </Select>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="客户编码">
+            {getFieldDecorator('merchantCode', {
+              rules: [{ required: true, whitespace: true, message: '请输入客户编码' }],
+            })(<Input placeholder="" disabled />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="所属渠道">
+              {getFieldDecorator('channelCode', {
+                rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
+                initialValue: paiyangType ? '002002' : undefined
+              })(
+                <Select placeholder="请选择渠道" disabled={paiyangType}  onChange={channelHandleChange}>
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id}>{item.channelName}</Option>
+                      <Option value={item.code} key={item.code} disabled={paiyangType ? true : (item.code === '002002' ? true : false)}>{item.name}</Option>
                     );
                   })}
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="sellerID">
-              {getFieldDecorator('merchantCode', {
-                rules: [{ required: true, whitespace: true, message: '请输入sellerID' }],
-              })(<Input placeholder="请输入商户编码" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="商户名称">
-              {getFieldDecorator('merchantName', {
-                rules: [{ required: true, whitespace: true, message: '请输入商户名称' }],
-              })(<Input placeholder="请输入商户名称" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="新零售入会码" style={{ display: paiyangType ? '' : 'none'}}>
-              {getFieldDecorator('sellSessionKey', {
-              })
-              (<Input placeholder="请输入新零售入会码"
-              />)}
-              </FormItem>
-            <FormItem {...formItemLayout} label="品牌名称">
-              {getFieldDecorator('brandName', {
-                rules: [{ required: false, whitespace: true, message: '请输入品牌名称' }],
-              })(<Input placeholder="请输入品牌名称" />)}
+            <FormItem>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ marginLeft: '20px' }}>
+                  <Alert
+                    message={(
+                      <div>
+                        已有 <a style={{ fontWeight: 600 }}>{checkMerchantLists.length}</a> 项
+                      </div>
+                    )}
+                    type="success"
+                    showIcon
+                  />
+                  <Table
+                    rowKey={record => record.machineCode}
+                    rowSelection={rowSelection}
+                    columns={columnsLeft}
+                    dataSource={checkMerchantLists}
+                    id="leftTable"
+                    style={{ width: '400px', marginBottom: '20px', marginTop: '10px' }}
+                    scroll={{ y: 200 }}
+                    pagination={false}
+                  />
+                </div>
+                <Button type="primary" onClick={() => toRightMerchantHandle()}> >> </Button>
+                <div>
+                  <Alert
+                    message={(
+                      <div>
+                        已有 <a style={{ fontWeight: 600 }}>{checkSelectedMerchantLists.length}</a> 项
+                      </div>
+                    )}
+                    type="success"
+                    showIcon
+                  />
+                  <Table
+                    rowKey={record => record.machineCode}
+                    columns={columnsRight}
+                    dataSource={checkSelectedMerchantLists}
+                    id="rightTable"
+                    style={{ width: '460px', marginTop: '10px' }}
+                    scroll={{ y: 200 }}
+                    pagination={false} />
+                </div>
+              </div>
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? '' : 'none'}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
@@ -578,6 +679,7 @@ export default class areaSettingList extends PureComponent {
     modalMerchantType: true,
     channelLists: [],
     modalMerchantData: {},
+    checkMerchantUserLists: [],
     // 店铺
     modalShopsVisible: false,
     editShopsModalConfirmLoading: false,
@@ -607,6 +709,12 @@ export default class areaSettingList extends PureComponent {
     shopId: '',
     selectedRows: [],
     couponId: [],
+
+    checkMerchantLists: [],
+    merchantAccountId: '',
+    checkSelectedMerchantLists: [],
+    selectedMerchantRows: [],
+    checkShopsLists: [],
   };
   componentDidMount() {
     console.log('this.props.params.id', this.props.match.params.id)
@@ -615,6 +723,7 @@ export default class areaSettingList extends PureComponent {
     }, () => {
       this.getAllGoods()
       this.getInteractDetail()
+      this.getcheckMerchantUserLists()
     })
     this.getInteractMerchantList(this.props.match.params.id)
   }
@@ -632,7 +741,7 @@ export default class areaSettingList extends PureComponent {
       },
     }).then((res) => {
       if (res) {
-        if (parseInt(res.paiyangType) === 1) {
+        if (parseInt(res.paiyangType) === 2) {
           this.setState({
             paiyangType: true
           })
@@ -675,15 +784,96 @@ export default class areaSettingList extends PureComponent {
   }
   getChannelList = () => {
     this.props.dispatch({
-      type: 'merchantSetting/getChannelsList',
+      type: 'interactSamplingSetting/getBaseDict',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          channelLists: res.data.channel,
+        });
+      } else {
+        this.setState({
+          channelLists: [
+            {
+              "code":"002001",
+              "name":"天猫互动吧"
+            },
+            {
+              "code":"002002",
+              "name":"微信渠道"
+            },
+            {
+              "code":"002003",
+              "name":"点72渠道"
+            }
+          ],
+        });
+      }
+    });
+  }
+  selectMerchantHandleChange = (value) => {
+    const { paiyangType } = this.state
+    this.merchantForm.setFieldsValue({
+      merchantCode: value && value.split('-')[0],
+    });
+    this.setState({
+      merchantCode: value && value.split('-')[1]
+    })
+    if (paiyangType) {
+      this.getCheckMerchantLists(value && value.split('-')[1], '002002')
+    }
+  }
+  channelHandleChange = (value) => {
+    const { merchantCode } = this.state
+    if (value) {
+      this.getCheckMerchantLists(merchantCode, value)
+    }
+  }
+  getcheckMerchantUserLists = () => {
+    //checkMerchantUserLists
+    this.props.dispatch({
+      type: 'interactSamplingSetting/checkMerchantUser',
       payload: {
         restParams: {},
       },
     }).then((res) => {
       this.setState({
-        channelLists: res,
+        checkMerchantUserLists: res,
       });
     });
+  }
+  getCheckMerchantLists = (merchantAccountId, channel) => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/checkMerchant',
+      payload: {
+        params: {
+          merchantAccountId,
+          channel,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          checkMerchantLists: res.data,
+        });
+      }
+    });
+  }
+  onLeftSelect = (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+    this.setState({
+      selectedMerchantRows: selectedRows,
+      selectAll: true
+    })
+  }
+  toRightMerchantHandle = () => {
+    console.log('111')
+   const { selectedMerchantRows } = this.state
+   this.setState({
+     checkSelectedMerchantLists: selectedMerchantRows
+   })
   }
   // 新建商品开始
   // 新增modal确认事件 开始
@@ -1794,6 +1984,14 @@ export default class areaSettingList extends PureComponent {
           saveAddShop={this.saveAddShop}
           merchants={this.state.merchants}
           paiyangType={this.state.paiyangType}
+
+          checkMerchantUserLists={this.state.checkMerchantUserLists}
+          handleChange={this.selectMerchantHandleChange}
+          channelHandleChange={this.channelHandleChange}
+          checkMerchantLists={this.state.checkMerchantLists}
+          checkSelectedMerchantLists={this.state.checkSelectedMerchantLists}
+          onLeftSelect={this.onLeftSelect}
+          toRightMerchantHandle={this.toRightMerchantHandle}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}

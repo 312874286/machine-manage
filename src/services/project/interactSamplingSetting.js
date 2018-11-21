@@ -212,7 +212,6 @@ export async function couponGetList({ restParams }) {
   });
 }
 // 统计
-
 export async function getOrderStatistics({ params }) {
   return fetch.postJSON(apiData.machineStatistic, {
     body: JSON.stringify(params),
@@ -227,4 +226,28 @@ export async function getGoodsStatistics({ params }) {
 
 export async function activityExcel({ restParams }) {
   window.location.href = `${api.activityExcel}?activityId=${restParams.activityId}&activityType=${restParams.activityType}`;
+}
+//  // 获取客户
+export async function checkMerchantUser({ restParams }) {
+  return fetch.get(api.checkMerchantUser, {
+    restParams
+  });
+}
+//   // 获取待添加商户
+export async function checkMerchant({ params }) {
+  return fetch.post(api.checkMerchant, {
+    body: JSON.stringify(params),
+  });
+}
+//   // 获取待添加的店铺
+export async function checkShops({ params }) {
+  return fetch.post(api.checkShops, {
+    body: JSON.stringify(params),
+  });
+}
+
+export async function getBaseDict({ params }) {
+  return fetch.get(api.getBaseDict, {
+    body: JSON.stringify(params),
+  });
 }

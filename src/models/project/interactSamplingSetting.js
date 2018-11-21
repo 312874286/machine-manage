@@ -39,7 +39,12 @@ import {
   getOrderStatistics,
   getGoodsStatistics,
   couponGetList,
-  activityExcel
+  activityExcel,
+
+  checkMerchantUser,
+  checkMerchant,
+  checkShops,
+  getBaseDict,
 } from "../../services/project/interactSamplingSetting";
 
 export default {
@@ -404,6 +409,42 @@ export default {
       const response = yield call(activityExcel, { restParams });
       return response;
     },
+    *checkMerchantUser(
+      {
+        payload: { restParams }
+      },
+      { call }
+    ) {
+      const response = yield call(checkMerchantUser, { restParams });
+      return response.data;
+    },
+    *checkMerchant(
+      {
+        payload: { params }
+      },
+      { call }
+    ) {
+      const response = yield call(checkMerchant, { params });
+      return response;
+    },
+    *checkShops(
+      {
+        payload: { params }
+      },
+      { call }
+    ) {
+      const response = yield call(checkShops, { params });
+      return response;
+    },
+    *getBaseDict(
+      {
+        payload: { params }
+      },
+      { call }
+    ) {
+      const response = yield call(getBaseDict, { params });
+      return response;
+    }
   },
   reducers: {
     saveList(
