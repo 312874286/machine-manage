@@ -301,7 +301,7 @@ export default class signInRecord extends PureComponent {
       payload: {
         params: {
           id: val.id,
-          status: val.status == 1 ? 0 : 1
+          status: val.status == 0 ? 1 : 0
         }
       }
     }).then(res => {
