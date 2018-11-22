@@ -84,7 +84,7 @@ export default class FaultType extends PureComponent {
     }
     onSubmitTypeChange = (value) => {
       this.setState({
-        submitTypeName: value
+        submitTypeName: value >= 0 ? value : 0
       })
     }
     onFindData = (e) => {
@@ -190,7 +190,7 @@ export default class FaultType extends PureComponent {
             return;
         }
         // submitTypeName
-        if (!this.state.submitTypeName){
+        if (![0, 1].some(i => i === this.state.submitTypeName)){
           message.info('选择上报方式');
           return;
         }
@@ -216,6 +216,7 @@ export default class FaultType extends PureComponent {
               params: {
                 name: this.state.typeName,
                 solutions: newarr,
+                submitType: this.state.submitTypeName,
               },
             },
           }).then((res) => {
@@ -244,7 +245,7 @@ export default class FaultType extends PureComponent {
             message.info('没有故障解决方案');
             return;
         }
-        if (!this.state.submitTypeName){
+        if (![0, 1].some(i => i === this.state.submitTypeName)){
           message.info('选择上报方式');
           return;
         }
