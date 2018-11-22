@@ -50,7 +50,7 @@ const CreateMerchantForm = Form.create()(
       handleModalVisible, editModalConfirmLoading, modalType,
       channelLists, saveAddShop, merchants, paiyangType, checkMerchantUserLists, handleChange,
       channelHandleChange,
-      checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, targetHandleDelete, toRightMerchantHandle
+      checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightMerchantHandle
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -68,10 +68,11 @@ const CreateMerchantForm = Form.create()(
     ];
     const rowSelection = {
       onSelect: onLeftSelect,
+      onSelectAll: onLeftSelectAll,
     };
     const columnsLeft =  [{
       title: '公众号AppID',
-      dataIndex: 'id',
+      dataIndex: 'merchantCode',
       width: '40%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
@@ -82,7 +83,7 @@ const CreateMerchantForm = Form.create()(
     }];
     const columnsRight = [{
       title: '公众号AppID',
-      dataIndex: 'id',
+      dataIndex: 'merchantCode',
       width: '30%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
@@ -181,7 +182,7 @@ const CreateMerchantForm = Form.create()(
                     showIcon
                   />
                   <Table
-                    rowKey={record => record.machineCode}
+                    rowKey={record => record.id}
                     rowSelection={rowSelection}
                     columns={columnsLeft}
                     dataSource={checkMerchantLists}
@@ -203,7 +204,7 @@ const CreateMerchantForm = Form.create()(
                     showIcon
                   />
                   <Table
-                    rowKey={record => record.machineCode}
+                    rowKey={record => record.id}
                     columns={columnsRight}
                     dataSource={checkSelectedMerchantLists}
                     id="rightTable"
@@ -368,7 +369,8 @@ const CreateGoodsForm = Form.create()(
       handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList,
       videoUrl, bannerHandleChange, handleUploadBanner, onGoodTypeSelect, GoodTypePlaceHolder,
       currentGoodsData, onShopsTypeSelect, selectGoodsType, relevanceCommodityChange, relevanceCommodity,
-      sourceData, handleSave, selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll, selectAll, couponId
+      sourceData, handleSave, selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll, selectAll, couponId,
+      paiyangType,
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -468,9 +470,9 @@ const CreateGoodsForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="所属店铺">
+            <FormItem {...formItemLayout} label="所属店铺" style={{ display: paiyangType ? 'none' : '' }}>
               {getFieldDecorator('shopId', {
-                rules: [{ required: true, message: '请选择店铺' }],
+                rules: [{ required: paiyangType, message: '请选择店铺' }],
               })(
                 <Select placeholder="请先选择店铺" onSelect={onShopsTypeSelect}>
                   {shopsLists.map((item) => {
@@ -845,6 +847,7 @@ export default class areaSettingList extends PureComponent {
     });
   }
   getCheckMerchantLists = (merchantAccountId, channel) => {
+    const { merchants } = this.state
     this.props.dispatch({
       type: 'interactSamplingSetting/checkMerchant',
       payload: {
@@ -856,24 +859,50 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          checkMerchantLists: res.data,
+          checkMerchantLists: res.data.filter(a => false === merchants.some(b => b.id === a.id)),
         });
       }
     });
   }
-  onLeftSelect = (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows);
+  onLeftSelectAll = (selected, selectedRows, changeRows) => {
+    console.log('111', selected, selectedRows, changeRows);
+    this.setState({
+      selectedMerchantRows: selectedRows,
+      selectAll: selected
+    })
+  }
+  onLeftMerchantSelect = (record, selected, selectedRows) => {
+    console.log('222', record, selected, selectedRows);
     this.setState({
       selectedMerchantRows: selectedRows,
       selectAll: true
     })
   }
   toRightMerchantHandle = () => {
-    console.log('111')
-   const { selectedMerchantRows } = this.state
-   this.setState({
-     checkSelectedMerchantLists: selectedMerchantRows
-   })
+    const { selectedMerchantRows, checkSelectedMerchantLists, checkMerchantLists } = this.state
+    let selectedMerchantRowsArr = checkMerchantLists, checkSelectedMerchantListsArr = checkSelectedMerchantLists
+    let newArr = []
+    // 遍历 左边选中的数组，检查 右边数组 filter，是否 和左边选中数组 有重复，放到新数组，提示重复信息，不重复的则 放到右边数组 移除左边数组，
+    selectedMerchantRows.forEach((item, index) => {
+     if (checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode).length > 0) {
+       // message.error('已重复')
+       newArr = [...newArr, ...checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode)]
+       // return false
+     } else {
+       console.log('bbb', item, index, checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode))
+       checkSelectedMerchantListsArr = [...checkSelectedMerchantListsArr, item]
+     }
+    })
+    const operation = (list1, list2, isUnion = false) =>
+      list1.filter( a => isUnion === list2.some(b => a.id === b.id));
+    // console.log('总数组', selectedMerchantRowsArr)
+    // console.log('左边剩余数组', operation(selectedMerchantRowsArr, checkSelectedMerchantListsArr))
+    // console.log('右边新数组', checkSelectedMerchantListsArr)
+    // console.log('重复数组', newArr)
+    this.setState({
+      checkMerchantLists: operation(selectedMerchantRowsArr, checkSelectedMerchantListsArr),
+      checkSelectedMerchantLists: checkSelectedMerchantListsArr
+    })
   }
   // 新建商品开始
   // 新增modal确认事件 开始
@@ -1610,23 +1639,18 @@ export default class areaSettingList extends PureComponent {
   }
   // 设置modal 数据
   setMerchantModalData = (data) => {
+    const { paiyangType } = this.state
     if (data) {
       this.merchantForm.setFieldsValue({
         merchantCode: data.merchantCode || undefined,
-        merchantName: data.merchantName || undefined,
-        brandName: data.brandName || undefined,
-        sellSessionKey: data.sellSessionKey || undefined,
-        originFlag: data.originFlag || undefined,
-        channelId: data.channelId || undefined,
+        merchant: data.merchant || undefined,
+        channelCode: data.channelCode || undefined,
       });
     } else {
       this.merchantForm.setFieldsValue({
         merchantCode: undefined,
-        merchantName: undefined,
-        brandName: undefined,
-        sellSessionKey: undefined,
-        originFlag: undefined,
-        channelId: undefined,
+        merchant: undefined,
+        channelCode: paiyangType ? '002002' : undefined,
       });
     }
   }
@@ -1636,7 +1660,7 @@ export default class areaSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleMerchantAdd = (flag) => {
-    const { paiyangType } = this.state
+    const { paiyangType, checkSelectedMerchantLists } = this.state
     this.merchantForm.validateFields((err, values) => {
       if (err) {
         return;
@@ -1651,7 +1675,11 @@ export default class areaSettingList extends PureComponent {
         editMerchantModalConfirmLoading: true,
       });
       let url = 'interactSamplingSetting/merchantAdd';
-      let params = { ...values, interactId: this.props.match.params.id };
+      let params = {
+        ...values,
+        interactId: this.props.match.params.id,
+        merchants: checkSelectedMerchantLists
+      };
       if (this.state.modalMerchantData.id) {
         url = 'interactSamplingSetting/updateMerchant';
         params = { ...params, id: this.state.modalMerchantData.id };
@@ -1673,10 +1701,13 @@ export default class areaSettingList extends PureComponent {
           }
           this.setState({
             modalMerchantData: {},
+            checkMerchantLists: [],
           });
         }
         this.setState({
           editMerchantModalConfirmLoading: false,
+          selectedMerchantRows: [],
+          checkSelectedMerchantLists: [],
         });
       });
     });
@@ -1805,7 +1836,7 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current, expandedRowKeys, expandedShopsRowKeys } = this.state
+    const { current, expandedRowKeys, expandedShopsRowKeys, paiyangType } = this.state
     const { modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, previewVisible,
       previewImage, fileList,bannerfileList, videoUrl } = this.state;
     const { modalShopsVisible, editShopsModalConfirmLoading, modalShopsType } = this.state;
@@ -1918,7 +1949,7 @@ export default class areaSettingList extends PureComponent {
       { title: '操作', key: 'operation',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleShopsModalVisible(true, item)}>添加店铺</a>
+            <a onClick={() => paiyangType ? this.handleModalVisible(true, item, false) : this.handleShopsModalVisible(true, item)}>{paiyangType ? '添加商品' : '添加店铺'}</a>
             <Divider type="vertical"/>
             <a onClick={() => this.handleMerchantEditClick(item)}>修改</a>
             <Divider type="vertical"/>
@@ -1941,12 +1972,12 @@ export default class areaSettingList extends PureComponent {
                 rowKey={record => record.id || record.code}
                 className="components-table-demo-nested"
                 columns={columns}
-                expandedRowRender={expandedRowRender}
+                expandedRowRender={paiyangType ? expandedGoodsRowRender : expandedRowRender}
                 dataSource={merchants}
                 pagination={false}
                 // expandRowByClick={true}
-                onExpandedRowsChange={onExpandedRowsChange}
-                expandedRowKeys={expandedRowKeys}
+                onExpandedRowsChange={paiyangType ? onExpandedRowsShopsChange : onExpandedRowsChange}
+                expandedRowKeys={paiyangType ? expandedShopsRowKeys : expandedRowKeys}
                 scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 80)}}
               />
             </div>
@@ -1990,8 +2021,9 @@ export default class areaSettingList extends PureComponent {
           channelHandleChange={this.channelHandleChange}
           checkMerchantLists={this.state.checkMerchantLists}
           checkSelectedMerchantLists={this.state.checkSelectedMerchantLists}
-          onLeftSelect={this.onLeftSelect}
+          onLeftSelect={this.onLeftMerchantSelect}
           toRightMerchantHandle={this.toRightMerchantHandle}
+          onLeftSelectAll={this.onLeftSelectAll}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
@@ -2046,6 +2078,8 @@ export default class areaSettingList extends PureComponent {
           selectAll={this.state.selectAll}
           onLeftSelect={this.onLeftSelect}
           couponId={this.state.couponId}
+
+          paiyangType={this.state.paiyangType}
         />
       </PageHeaderLayout>
     );

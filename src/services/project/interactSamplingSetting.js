@@ -14,13 +14,13 @@ export async function interactAdd({ params }) {
   });
 }
 export async function merchantAdd({ params }) {
-  return fetch.post(api.merchantAdd, {
-    body: stringify(params)
+  return fetch.postJSON(api.merchantAdd, {
+    body: JSON.stringify(params)
   });
 }
 export async function shopsAdd({ params }) {
-  return fetch.post(api.shopsAdd, {
-    body: stringify(params)
+  return fetch.postJSON(api.shopsAdd, {
+    body: JSON.stringify(params)
   });
 }
 export async function goodsAdd({ params }) {
