@@ -450,7 +450,7 @@ export default class PointSettingList extends PureComponent {
           <div>
             <Table 
               style={{padding: 10}} 
-              rowKey={i => i.machineCode || i.createTime} 
+              rowKey={(item, index) => item.machineCode || index} 
               columns={columns} 
               dataSource={appVersionList || []} 
               loading={this.state.tableLoading} 

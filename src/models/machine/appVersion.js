@@ -46,7 +46,7 @@ export default {
       });
       return arr
     },
-    *getAppVersion({ payload: { params } }, { call }) {
+    *getAppVersion({ payload: { params } }, { call, put }) {
       const response = yield call(searchAppVersion, { params})
       yield put({
         type: 'saveList',
