@@ -57,7 +57,7 @@ const CreateForm = Form.create()(
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    
+
     return (
       <Modal
         title={
@@ -92,8 +92,8 @@ const CreateForm = Form.create()(
               {getFieldDecorator('channelName', {
                 rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
               })(
-                <Select 
-                  onChange={selectChannel} 
+                <Select
+                  onChange={selectChannel}
                   placeholder="选择渠道"
                 >
                   {channelLists.map((item) => {
@@ -402,7 +402,7 @@ export default class MerchantConsociation extends PureComponent {
         fileList: data.wechatQrcodeUrl || undefined,
         wechatQrcodeUrl: data.wechatQrcodeUrl || undefined
       });
-      
+
     } else {
       this.setState({
         channelType: undefined,
@@ -431,11 +431,11 @@ export default class MerchantConsociation extends PureComponent {
   handleAdd = () => {
     this.form.validateFields((err, values) => {
       const { merchantAccountId, channelId, previewImage} = this.state
-      
+
       if (err) {
         return;
       }
-      
+
       this.setState({
         editModalConfirmLoading: true,
       });
@@ -516,7 +516,7 @@ export default class MerchantConsociation extends PureComponent {
     })
   }
   handleSellerName = (val) => {
-    
+
   }
   saveMerchantAccountId = (val) => {
     this.setState({
@@ -557,7 +557,7 @@ export default class MerchantConsociation extends PureComponent {
       },
     }).then((resp) => {
       if (resp.code == 0) {
-        
+
         console.log(this.state.previewImage)
 
         let fList = [{
@@ -651,8 +651,8 @@ export default class MerchantConsociation extends PureComponent {
       {
         title: '合作ID',
         width: '17%',
-        dataIndex: 'channelId',
-        key: 'channelId'
+        dataIndex: 'machineCode',
+        key: 'machineCode'
       },
       {
         title: '品牌名称',
