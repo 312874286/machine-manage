@@ -72,23 +72,23 @@ const CreateMerchantForm = Form.create()(
       onSelectAll: onLeftSelectAll,
     };
     const columnsLeft =  [{
-      title: '公众号AppID',
+      title: `${paiyangType ? '公众号AppID' : '商户ID'}`,
       dataIndex: 'merchantCode',
       width: '40%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
-      title: '公众号名称',
+      title: `${paiyangType ? '公众号名称' : '商户名称'}`,
       width: '40%',
       dataIndex: 'merchantName',
       render: text => <a href="javascript:;">{text}</a>,
     }];
     const columnsRight = [{
-      title: '公众号AppID',
+      title: `${paiyangType ? '公众号AppID' : '商户ID'}`,
       dataIndex: 'merchantCode',
       width: '30%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
-      title: '公众号名称',
+      title: `${paiyangType ? '公众号名称' : '商户名称'}`,
       width: '30%',
       dataIndex: 'merchantName',
       render: text => <a href="javascript:;">{text}</a>,
