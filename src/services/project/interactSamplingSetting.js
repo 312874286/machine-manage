@@ -236,18 +236,18 @@ export async function checkMerchantUser({ restParams }) {
 //   // 获取待添加商户
 export async function checkMerchant({ params }) {
   return fetch.post(api.checkMerchant, {
-    body: JSON.stringify(params),
+    body: stringify(params),
   });
 }
 //   // 获取待添加的店铺
 export async function checkShops({ params }) {
   return fetch.post(api.checkShops, {
-    body: JSON.stringify(params),
+    body: stringify(params),
   });
 }
 
 export async function getBaseDict({ params }) {
-  return fetch.get(api.getBaseDict, {
-    body: JSON.stringify(params),
+  return fetch.post(api.getBaseDict, {
+    body: stringify(params),
   });
 }

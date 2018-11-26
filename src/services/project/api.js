@@ -104,7 +104,7 @@ const api = map({
   // 获取待添加的店铺
   checkShops: '/project/interact/shops/checkShops',
   // 基础数据查询
-  getBaseDict: '/share/dictionary/getBaseDict',
+  getBaseDict: '/share/getBaseDict',
   // 第三步 选择机器
   getInteractHavingMachineList: "/project/interact/machine/getHavingMachines",
   getInteractMachineGoods: "/project/interact/machine/goods/list",

@@ -6895,7 +6895,7 @@ const proxy = {
       "msg":"成功"
     })
   },
-  'GET /share/dictionary/getBaseDict': (req, res) => {
+  'POST /share/getBaseDict': (req, res) => {
     res.send({
       "code":0,
       "data":{

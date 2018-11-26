@@ -70,7 +70,9 @@ export default class areaSettingList extends PureComponent {
     this.props.dispatch({
       type: 'interactSamplingSetting/getBaseDict',
       payload: {
-        restParams: {},
+        params: {
+          type: '002'
+        },
       },
     }).then((res) => {
       if (res && res.code === 0) {
@@ -119,6 +121,7 @@ export default class areaSettingList extends PureComponent {
         day: data.day || 'max',
         manager: data.manager || undefined,
         paiyangType: data.paiyangType,
+        channel: data.channel || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
@@ -128,6 +131,7 @@ export default class areaSettingList extends PureComponent {
         day: 'max',
         manager: undefined,
         paiyangType: undefined,
+        channel: undefined,
       });
     }
   }

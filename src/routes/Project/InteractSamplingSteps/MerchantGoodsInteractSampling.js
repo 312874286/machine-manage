@@ -901,11 +901,7 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       merchantCode: value && value.split('-')[1]
     })
-    if (paiyangType) {
-      this.getCheckMerchantLists(value && value.split('-')[1], '002002')
-    } else {
-      this.getCheckMerchantLists(value && value.split('-')[1], '001001')
-    }
+    this.getCheckMerchantLists(value && value.split('-')[1])
   }
   channelHandleChange = (value) => {
     const { merchantCode } = this.state
@@ -934,7 +930,7 @@ export default class areaSettingList extends PureComponent {
       payload: {
         params: {
           merchantAccountId,
-          channel,
+          interactId: this.state.interactSampling,
         },
       },
     }).then((res) => {
@@ -988,11 +984,7 @@ export default class areaSettingList extends PureComponent {
   //
   selectShopHandleChange = (value) => {
     const { paiyangType } = this.state
-    if (paiyangType) {
-      this.getCheckShopLists(value && value.split('-')[1], '002002')
-    } else {
-      this.getCheckShopLists(value && value.split('-')[1], '001001')
-    }
+    this.getCheckShopLists(value && value.split('-')[1])
   }
   getCheckShopLists = (sellerId, channel) => {
     this.props.dispatch({
@@ -1000,7 +992,7 @@ export default class areaSettingList extends PureComponent {
       payload: {
         params: {
           sellerId,
-          channel,
+          interactId: this.state.interactSampling,
         },
       },
     }).then((res) => {
@@ -1550,6 +1542,13 @@ export default class areaSettingList extends PureComponent {
   }
   // 商品结束
   // 店铺开始
+  targetShopHandleDelete = (id) => {
+    const dataSource = [...this.state.checkSelectedShopLists];
+    this.setState({
+      checkSelectedShopLists: dataSource.filter(item => item.id !== id),
+      selectedShopRows: [],
+    });
+  }
   // 新增modal确认事件 开始
   saveShopsFormRef = (form) => {
     this.shopsForm = form;
@@ -1666,7 +1665,7 @@ export default class areaSettingList extends PureComponent {
       modalShopsData: item,
       modalShopsType: true,
     });
-    this.getChannelList()
+    // this.getChannelList()
     this.props.dispatch({
       type: 'interactSamplingSetting/getShopsDetail',
       payload: {
@@ -1736,8 +1735,15 @@ export default class areaSettingList extends PureComponent {
   // 店铺结束
   // 商户开始
   // 添加modal 添加事件
+  targetMerchantHandleDelete = (id) => {
+    const dataSource = [...this.state.checkSelectedMerchantLists];
+    this.setState({
+      checkSelectedMerchantLists: dataSource.filter(item => item.id !== id),
+      selectedMerchantRows: [],
+    });
+  }
   handleMerchantModalVisible = (flag) => {
-    this.getChannelList()
+    // this.getChannelList()
     this.setState({
       modalMerchantVisible: !!flag,
       modalMerchantData: {},
@@ -1772,7 +1778,7 @@ export default class areaSettingList extends PureComponent {
       modalMerchantData: item,
       modalMerchantType: false,
     });
-    this.getChannelList()
+    // this.getChannelList()
     this.props.dispatch({
       type: 'interactSamplingSetting/getMerchantDetail',
       payload: {
@@ -2113,8 +2119,8 @@ export default class areaSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => paiyangType ? this.handleModalVisible(true, item, false) : this.handleShopsModalVisible(true, item)}>{paiyangType ? '添加商品' : '添加店铺'}</a>
-            <Divider type="vertical"/>
-            <a onClick={() => this.handleMerchantEditClick(item)}>{paiyangType ? '修改入会信息' : '修改商户'}</a>
+            {/*<Divider type="vertical"/>*/}
+            {/*<a onClick={() => this.handleMerchantEditClick(item)}>{paiyangType ? '修改入会信息' : '修改商户'}</a>*/}
             <Divider type="vertical"/>
             <a onClick={() => this.handleMerchantDelClick(item)}>删除</a>
           </Fragment>
@@ -2187,6 +2193,8 @@ export default class areaSettingList extends PureComponent {
           onLeftSelect={this.onLeftMerchantSelect}
           toRightMerchantHandle={this.toRightMerchantHandle}
           onLeftSelectAll={this.onLeftSelectAll}
+
+          targetHandleDelete={this.targetMerchantHandleDelete}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
@@ -2211,6 +2219,8 @@ export default class areaSettingList extends PureComponent {
           onLeftSelect={this.onLeftShopSelect}
           toRightShopHandle={this.toRightShopHandle}
           onLeftSelectAll={this.onLeftShopSelectAll}
+
+          targetHandleDelete={this.targetShopHandleDelete}
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
