@@ -90,7 +90,7 @@ const CreateForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="选择渠道">
-              {getFieldDecorator('channelName', {
+              {getFieldDecorator('channelId', {
                 rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
               })(
                 <Select
@@ -191,6 +191,7 @@ export default class MerchantConsociation extends PureComponent {
     pageNo: 1,
     keyword: '',
     channelId: '',
+    channelName: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
@@ -443,7 +444,8 @@ export default class MerchantConsociation extends PureComponent {
         url = 'merchantConsociation/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
-      params = Object.assign(params, {merchantAccountId,channelId})
+      let channelName = this.state.channelName
+      params = Object.assign(params, {merchantAccountId, channelId, channelName})
       console.log('form--params==',params)
 
       this.props.dispatch({
@@ -529,8 +531,22 @@ export default class MerchantConsociation extends PureComponent {
 
   saveChannelId = (val) => {
     console.log(val)
+    let channelName = ''
+    if (val == '002001') {
+      channelName = '淘宝'
+    } 
+    switch(val) {
+      case '002001':
+        channelName = '淘宝'
+        break
+      case '002002':
+        channelName = '微信'
+        break
+      default:
+    }
     this.setState({
-      channelId: val
+      channelId: val,
+      channelName
     })
   }
 
