@@ -19,7 +19,12 @@ import {getAccountMenus} from "../../../utils/authority";
 const Step = Steps.Step;
 const FormItem = Form.Item;
 const { Option } = Select;
-const activityTypeOptions = [{id: 0, name: '普通活动'}, {id: 1, name: '新零售'}, {id: 2, name: '微信互派活动'}]
+const activityTypeOptions = [
+  {id: 0, name: '派样'},
+  {id: 1, name: '互派'},
+  {id: 2, name: '互动'},
+  {id: 3, name: '新零售'}
+  ]
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -32,19 +37,20 @@ export default class areaSettingList extends PureComponent {
     GameList: [],
     type: true,
     id: '',
+    channelLists: [],
   };
   componentDidMount() {
     this.getGameList()
-    if (this.props.location.query) {
-      const { id } = this.props.location.query;
+    if (this.props.match.params.id) {
       this.setState({
-        id,
+        id: this.props.match.params.id,
       }, () => {
         this.getInteractDetail()
       })
     } else {
       this.setModalData()
     }
+    this.getChannelList()
   }
   getGameList = () => {
     // getGameList
@@ -57,6 +63,37 @@ export default class areaSettingList extends PureComponent {
         this.setState({
           GameList: res.data
         })
+      }
+    });
+  }
+  getChannelList = () => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getBaseDict',
+      payload: {
+        restParams: {},
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          channelLists: res.data.channel,
+        });
+      } else {
+        this.setState({
+          channelLists: [
+            {
+              "code":"002001",
+              "name":"天猫互动吧"
+            },
+            {
+              "code":"002002",
+              "name":"微信渠道"
+            },
+            {
+              "code":"002003",
+              "name":"点72渠道"
+            }
+          ],
+        });
       }
     });
   }
@@ -147,7 +184,7 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current, GameList, type } = this.state
+    const { current, GameList, type, channelLists } = this.state
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -212,6 +249,19 @@ export default class areaSettingList extends PureComponent {
                       {activityTypeOptions.map((item) => {
                         return (
                           <Option value={item.id} key={item.id}>{item.name}</Option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout} label="所属渠道">
+                  {getFieldDecorator('channel', {
+                    rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
+                  })(
+                    <Select placeholder="请选择渠道">
+                      {channelLists.map((item) => {
+                        return (
+                          <Option value={item.code} key={item.code}>{item.name}</Option>
                         );
                       })}
                     </Select>

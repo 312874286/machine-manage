@@ -215,7 +215,7 @@ export const getRouterData = (app) => {
     '/project/sampling-setting': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSetting')),
     },
-    '/project/addBasicInteractSampling': {
+    '/project/addBasicInteractSampling/:id?': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/BasicInteractSampling.js')),
     },
     '/project/addMerchantGoodsInteractSampling/:id': {

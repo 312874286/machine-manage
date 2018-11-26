@@ -427,7 +427,7 @@ export default {
       const response = yield call(checkMerchant, { params });
       return response;
     },
-    *checkShops(
+    *checkShop(
       {
         payload: { params }
       },

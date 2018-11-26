@@ -763,7 +763,7 @@ export default class areaSettingList extends PureComponent {
               style={{ display: parseInt(item.status) === 3 ? "none" : "" }}
               onClick={() =>
                 this.props.history.push({
-                  pathname: `/project/addBasicInteractSampling`,
+                  pathname: `/project/addBasicInteractSampling/${item.id}`,
                   query: { id: item.id }
                 })
               }
