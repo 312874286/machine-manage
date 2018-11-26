@@ -389,13 +389,13 @@ export default class MerchantConsociation extends PureComponent {
       this.setState({
         merchantAccountId: data.merchantAccountId,
         channelId: data.channelId,
-        previewImage: data.wechatQrcodeUrl
+        previewImage: data.wechatQrcodeUrl,
+        channelName: data.channelName
       })
       this.form.setFieldsValue({
         merchantCode: data.merchantCode || undefined,
         merchantName: data.merchantName || undefined,
         brandName: data.brandName || undefined,
-        channelName: data.channelName || undefined,
         channelId: data.channelId || undefined,
         merchantAccountId: data.merchantAccountId || undefined,
         merchantAccountName: data.merchantAccountName || undefined,
@@ -413,7 +413,6 @@ export default class MerchantConsociation extends PureComponent {
         merchantCode: undefined,
         merchantName: undefined,
         brandName: undefined,
-        channelName: undefined,
         channelId: undefined,
         merchantAccountId: undefined,
         merchantAccountName: undefined,
