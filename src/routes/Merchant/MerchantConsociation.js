@@ -40,7 +40,7 @@ const getValue = obj =>
 
 const CreateForm = Form.create()(
   (props) => {
-    const { sellerList, channelId, modalVisible, form, handleAdd, handleCancelModalVisible, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName,saveMerchantAccountId, saveChannelId,channelLists } = props;
+    const { sellerList, channelId, modalVisible, form, handleAdd, handleCancelModalVisible, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName, saveChannelId,channelLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -82,10 +82,10 @@ const CreateForm = Form.create()(
                   showSearch
                   placeholder="请选择"
                   optionFilterProp="children"
-                  onChange={(val) => { handleSellerName(val)}}
+                  onSelect={(val,option) => { handleSellerName(val, option)}}
                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
-                  {sellerList.map((item) => item.id && item.merchantName && <Option key={item.id} onClick={saveMerchantAccountId(item.id)} value={item.merchantName}>{item.merchantName}</Option>)}
+                  {sellerList.map((item, index) => item.id && item.merchantName && <Option key={item.id} value={item.merchantName}>{item.merchantName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -192,6 +192,7 @@ export default class MerchantConsociation extends PureComponent {
     keyword: '',
     channelId: '',
     channelName: '',
+    merchantAccountName: '',
     modalData: {},
     logModalVisible: false,
     logModalLoading: false,
@@ -390,7 +391,7 @@ export default class MerchantConsociation extends PureComponent {
         merchantAccountId: data.merchantAccountId,
         channelId: data.channelId,
         previewImage: data.wechatQrcodeUrl,
-        channelName: data.channelName
+        channelName: data.channelName,
       })
       this.form.setFieldsValue({
         merchantCode: data.merchantCode || undefined,
@@ -398,16 +399,17 @@ export default class MerchantConsociation extends PureComponent {
         brandName: data.brandName || undefined,
         channelId: data.channelId || undefined,
         merchantAccountId: data.merchantAccountId || undefined,
-        merchantAccountName: data.merchantAccountName || undefined,
         fileList: data.wechatQrcodeUrl || undefined,
-        wechatQrcodeUrl: data.wechatQrcodeUrl || undefined
+        wechatQrcodeUrl: data.wechatQrcodeUrl || undefined,
+        merchantAccountName: data.merchantAccountName || undefined
       });
 
     } else {
       this.setState({
         merchantAccountId: undefined,
         channelId: undefined,
-        previewImage: undefined
+        previewImage: undefined,
+        channelName: undefined,
       })
       this.form.setFieldsValue({
         merchantCode: undefined,
@@ -415,9 +417,9 @@ export default class MerchantConsociation extends PureComponent {
         brandName: undefined,
         channelId: undefined,
         merchantAccountId: undefined,
-        merchantAccountName: undefined,
         fileList: undefined,
-        wechatQrcodeUrl: undefined
+        wechatQrcodeUrl: undefined,
+        merchantAccountName: undefined
       });
     }
   }
@@ -518,14 +520,16 @@ export default class MerchantConsociation extends PureComponent {
       })
     })
   }
-  handleSellerName = (val) => {
-
-  }
-  saveMerchantAccountId = (val) => {
+  handleSellerName = (val, option) => {
+    const { sellerList } = this.state
+    console.log(val,option)
+    const index = option.props.index
     this.setState({
-      merchantAccountId: val
+      merchantAccountId: sellerList[index].id
     })
+    
   }
+  
   // 选泽渠道
 
   saveChannelId = (val) => {
@@ -757,7 +761,6 @@ export default class MerchantConsociation extends PureComponent {
           handlePreview={this.handlePreview}
           handleCancelModalVisible={this.handleCancelModalVisible}
           channelLists={channelLists}
-          saveMerchantAccountId={this.saveMerchantAccountId}
           saveChannelId={this.saveChannelId}
         />
         <LogModal
