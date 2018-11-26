@@ -463,7 +463,10 @@ export default class MerchantConsociation extends PureComponent {
           });
           this.setModalData()
         } else {
-          message.error(res.msg)
+          // message.error(res.msg)
+          this.setState({
+            editModalConfirmLoading: false
+          })
         }
         
       });
