@@ -323,14 +323,17 @@ export default class shop extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id, status: item.status >= 0 ? 0 : 1 };
+      const params = { id: item.id, status: item.status === '1' ? 0 : 1  };
       this.props.dispatch({
         type: 'shop/alterStatus',
         payload: {
           params,
         },
-      }).then(() => {
+      }).then((res) => {
         // message.success('Click on Yes');
+        if (res && res.code === 0) {
+          message.success(`${item.loginStatus === '0' ? '启用' : '停用'}成功`)
+        }
         this.getLists();
         this.setState({
           editModalConfirmLoading: false,

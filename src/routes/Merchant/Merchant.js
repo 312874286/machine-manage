@@ -287,14 +287,17 @@ export default class merchant extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id, status: item.loginStatus >= 0 ? 0 : 1 };
+      const params = { id: item.id, status: item.loginStatus === '1' ? 0 : 1 };
       this.props.dispatch({
         type: 'merchant/alterStatus',
         payload: {
           params,
         },
-      }).then(() => {
+      }).then((res) => {
         // message.success('Click on Yes');
+        if (res && res.code === 0) {
+          message.success(`${item.loginStatus === '0' ? '启用' : '停用'}成功`)
+        }
         this.getLists();
         this.setState({
           editModalConfirmLoading: false,

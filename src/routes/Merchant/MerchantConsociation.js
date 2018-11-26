@@ -651,8 +651,8 @@ export default class MerchantConsociation extends PureComponent {
       {
         title: '合作ID',
         width: '17%',
-        dataIndex: 'machineCode',
-        key: 'machineCode'
+        dataIndex: 'merchantCode',
+        key: 'merchantCode'
       },
       {
         title: '品牌名称',
