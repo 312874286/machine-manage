@@ -95,10 +95,11 @@ const CreateForm = Form.create()(
                 <Select
                   onChange={selectChannel}
                   placeholder="选择渠道"
+                  onSelect={saveChannelId}
                 >
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.name} onClick={saveChannelId(item.code)} key={item.code}>{item.name}</Option>
+                      <Option value={item.code}  key={item.code}>{item.name}</Option>
                     );
                   })}
                 </Select>
@@ -531,6 +532,7 @@ export default class MerchantConsociation extends PureComponent {
   }
 
   saveChannelId = (val) => {
+    console.log(val)
     this.setState({
       channelId: val
     })
