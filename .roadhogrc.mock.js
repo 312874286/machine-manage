@@ -1677,6 +1677,42 @@ const proxy = {
             parentId: 'a34',
             functionLevel: 2,
           },
+          {
+            id: 'a42',
+            functionDepict: '商户管理',
+            functionPath: 'merchant',
+            parentId: null,
+            functionLevel: 1,
+            functionIcon: 'player',
+            color: null
+          },
+          {
+            id: 'a43',
+            functionDepict: '商户管理',
+            functionPath: 'merchant',
+            parentId: 'a42',
+            functionLevel: 2,
+            functionIcon: null,
+            color: null
+          },
+          {
+            id: 'a44',
+            functionDepict: '商户合作管理',
+            functionPath: 'merchantConsociation',
+            parentId: 'a42',
+            functionLevel: 2,
+            functionIcon: null,
+            color: null
+          },
+          {
+            id: 'a45',
+            functionDepict: '店铺管理',
+            functionPath: 'shop',
+            parentId: 'a42',
+            functionLevel: 2,
+            functionIcon: null,
+            color: null
+          },
         ],
         "functionArea": [
           {
@@ -2721,16 +2757,32 @@ const proxy = {
       },
       "data": [{
         brandName: "时代的",
-        channelId: "哇哈哈哇哈哈哈哈",
+        channelId: "天猫",
         createId: null,
-        createTime: "2018-07-05 17:54:12",
+        createTime: "2018-07-05 12:52:12",
         id: "1",
         isDelete: 0,
-        merchantCode: "1000010000000",
+        merchantCode: "1003242",
         merchantName: "伊利",
         originFlag: "钱钱钱",
         updateId: null,
-        updateTime: "2018-07-05 17:54:12",
+        updateTime: "2018-07-05 17:51:13",
+        merchantAccountName: 'XXX旗舰店',
+        merchantAccountId: '1003242'
+      },{
+        brandName: "时代的",
+        channelId: "天猫",
+        createId: null,
+        createTime: "2018-07-05 11:04:12",
+        id: "2",
+        isDelete: 0,
+        merchantCode: "1003241",
+        merchantName: "伊利",
+        originFlag: "钱钱钱",
+        updateId: null,
+        updateTime: "2018-07-05 15:54:14",
+        merchantAccountName: 'abadsX旗舰店',
+        merchantAccountId: '1003241'
       }]
     });
   },
@@ -6952,6 +7004,117 @@ const proxy = {
           }
         ]
       },
+      "msg":"成功"
+    })
+  },
+  'POST /project/dictionary/getBaseDict': (req, res) => {
+    res.send({
+        "code":0,
+        "data":{
+          "industry":[
+            {
+              "code":"001001",
+              "name":"汽车"
+            },
+            {
+              "code":"001002",
+              "name":"服饰"
+            },
+            {
+              "code":"001003",
+              "name":"箱包"
+            },
+            {
+              "code":"001004",
+              "name":"户外"
+            },
+            {
+              "code":"001005",
+              "name":"家电"
+            },
+            {
+              "code":"001006",
+              "name":"家纺"
+            },
+            {
+              "code":"001007",
+              "name":"数码"
+            },
+            {
+              "code":"001008",
+              "name":"母婴"
+            },
+            {
+              "code":"001009",
+              "name":"办公"
+            },
+            {
+              "code":"001010",
+              "name":"美妆"
+            }
+          ],
+          "channel":[
+            {
+              "code":"002001",
+              "name":"淘宝"
+            },
+            {
+              "code":"002002",
+              "name":"微信"
+            }
+          ]
+        },
+        "msg":"成功"
+      })
+  },
+  'POST /inno72/merchant/user/alterStatus': (req, res) => {
+    res.send({
+      "code":0,
+      "msg":"成功"
+    })
+  },
+  'POST /inno72/merchant/user/resetPwd': (req, res) => {
+    res.send({
+      "code":0,
+      "msg":"成功"
+    })
+  },
+  'GET /inno72/merchant/user/list': (req, res) => {
+    res.send({
+      "code":0,
+      "data":[
+        {
+          "id":"",
+          "loginName":"",
+          "merchantId":"",
+          "merchantName":"",
+          "phone":"手机号",
+          "industry":"行业",
+          "loginStatus":"是否允许登录0：不允许 - 默认,1：允许。"
+        }
+      ]
+    })
+  },
+  'GET /inno72/merchant/user/detail': (req, res) => {
+    res.send({
+        "code":0,
+        "data":
+          {
+            "id":"",
+            "loginName":"",
+            "merchantId":"",
+            "merchantName":"",
+            "phone":"手机号",
+            "industry":"行业",
+            "loginStatus":"是否允许登录0：不允许 - 默认,1：允许。"
+          }
+
+      }
+    )
+  },
+  'POST /inno72/merchant/user/save': (req, res) => {
+    res.send({
+      "code":0,
       "msg":"成功"
     })
   }

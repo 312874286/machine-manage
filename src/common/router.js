@@ -260,6 +260,12 @@ export const getRouterData = (app) => {
     '/check/replenish': {
       component: dynamicWrapper(app, ['polling/replenish', 'log/log', 'common'], () => import('../routes/Polling/Replenish')),
     },
+    '/merchant/merchant': {
+      component: dynamicWrapper(app, ['merchant/merchant', 'log/log'], () => import('../routes/Merchant/Merchant')),
+    },
+    '/merchant/shop': {
+      component: dynamicWrapper(app, ['merchant/shop', 'log/log', 'common'], () => import('../routes/Merchant/Shop')),
+    },
     // '/channelManage/index': {
     //   component: dynamicWrapper(app, ['pointLocationManage', 'log/log', 'common'], () => import('../routes/pointLocationManage/Index')),
     // },
@@ -361,6 +367,9 @@ export const getRouterData = (app) => {
     },
     '/data/dataStatistics': {
       component: dynamicWrapper(app, ['data/dataStatistics'], () => import('../routes/Data/DataStatistics')),
+    },
+    '/merchant/merchantConsociation': {
+      component: dynamicWrapper(app, ['merchant/merchantConsociation'], () => import('../routes/Merchant/MerchantConsociation')),
     },
   };
   // Get name from ./menu.js or just set it in the router data.
