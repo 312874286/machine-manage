@@ -424,7 +424,7 @@ export default class shop extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
             <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商户ID、商户名称、合作渠道、品牌名称、合作ID" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入shopID、店铺名称" />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>

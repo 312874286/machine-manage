@@ -198,7 +198,6 @@ export default class merchant extends PureComponent {
     });
   }
   resetPwd = (item) => {
-    console.log('resetPwd', item)
     this.props.dispatch({
       type: 'merchant/resetPwd',
       payload: {
@@ -206,6 +205,10 @@ export default class merchant extends PureComponent {
           id: item.id,
         },
       },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        message.success('重置成功')
+      }
     })
   }
   // 分页
@@ -390,7 +393,7 @@ export default class merchant extends PureComponent {
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
           <Col md={9} sm={24}>
             <FormItem>
-              {getFieldDecorator('keyword')(<Input placeholder="请输入商户编码、商户名称、原始标识、品牌名称" />)}
+              {getFieldDecorator('keyword')(<Input placeholder="请输入商户ID、商户名称、商户账号、手机号码" />)}
             </FormItem>
           </Col>
           <Col md={7} sm={24}>
