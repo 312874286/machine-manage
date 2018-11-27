@@ -531,7 +531,7 @@ export default class shop extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -545,7 +545,7 @@ export default class shop extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            <div style={{ display: !account.list ? 'none' : ''}}>
+            <div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}
