@@ -151,7 +151,7 @@ export default class merchant extends PureComponent {
   componentDidMount() {
     this.getLists();
     this.getBaseDictLists();
-    this.getAccountMenus(getAccountMenus())
+    // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
