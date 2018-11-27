@@ -217,7 +217,7 @@ export default class shop extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          merchantLists: res,
+          merchantLists: res.data,
         });
       }
     });
