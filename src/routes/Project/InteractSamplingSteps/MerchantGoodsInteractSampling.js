@@ -51,7 +51,8 @@ const CreateMerchantForm = Form.create()(
       channelLists, saveAddShop,
       merchants, paiyangType, checkMerchantUserLists, handleChange,
       channelHandleChange,
-      checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightMerchantHandle, selectedRowKeys
+      checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightMerchantHandle,
+      selectedRowKeys, onSelectMerchantChange
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -68,9 +69,10 @@ const CreateMerchantForm = Form.create()(
       { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '100%' },
     ];
     const rowSelection = {
-      // selectedRowKeys,
+      selectedRowKeys,
       onSelect: onLeftSelect,
       onSelectAll: onLeftSelectAll,
+      onChange: onSelectMerchantChange
     };
     const columnsLeft =  [{
       title: `${paiyangType ? '公众号AppID' : '商户ID'}`,
@@ -259,12 +261,11 @@ const CreateShopsForm = Form.create()(
       { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '50%' },
       { title: '店铺名称', dataIndex: 'shopName', key: 'shopName', width: '50%' },
     ];
-    console.log('selectedRowKeys', selectedRowKeys)
     const rowSelection = {
-      // selectedRowKeys,
+      selectedRowKeys,
       onSelect: onLeftSelect,
       onSelectAll: onLeftSelectAll,
-      // onChange: onSelectShopChange
+      onChange: onSelectShopChange
     };
     const columnsLeft =  [{
       title: '店铺ID',
@@ -964,6 +965,9 @@ export default class areaSettingList extends PureComponent {
       selectAll: true
     })
   }
+  onSelectMerchantChange = (selectedRowKeys) => {
+    this.setState({ selectedMerchantRowsKeys: selectedRowKeys });
+  }
   toRightMerchantHandle = () => {
     const { selectedMerchantRows, checkSelectedMerchantLists, checkMerchantLists } = this.state
     let selectedMerchantRowsArr = checkMerchantLists, checkSelectedMerchantListsArr = checkSelectedMerchantLists
@@ -1020,8 +1024,7 @@ export default class areaSettingList extends PureComponent {
     })
   }
   onSelectShopChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedShopRows: selectedRowKeys });
+    this.setState({ selectedShopRowsKeys: selectedRowKeys });
   }
   toRightShopHandle = () => {
     const { selectedShopRows, checkSelectedShopLists, checkShopLists } = this.state
@@ -2271,6 +2274,7 @@ export default class areaSettingList extends PureComponent {
 
           targetHandleDelete={this.targetMerchantHandleDelete}
           selectedRowKeys={this.state.selectedMerchantRowsKeys}
+          onSelectMerchantChange={this.onSelectMerchantChange}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
@@ -2297,7 +2301,7 @@ export default class areaSettingList extends PureComponent {
           onLeftSelectAll={this.onLeftShopSelectAll}
 
           targetHandleDelete={this.targetShopHandleDelete}
-          selectedRowKeys={this.state.selectedShopRows}
+          selectedRowKeys={this.state.selectedShopRowsKeys}
 
           onSelectShopChange={this.onSelectShopChange}
 
