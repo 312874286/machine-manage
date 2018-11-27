@@ -112,7 +112,7 @@ const CreateMerchantForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{!modalType ? '编辑商户' : '新建商户'}</span>
+            <span class="modalTitle">{!modalType ? '编辑商户' : '添加商户'}</span>
           </div>
         }
         visible={modalVisible}
@@ -309,7 +309,7 @@ const CreateShopsForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{modalType ? '编辑店铺' : '新建店铺'}</span>
+            <span class="modalTitle">{modalType ? '编辑店铺' : '添加店铺'}</span>
           </div>
         }
         visible={modalVisible}
@@ -339,9 +339,9 @@ const CreateShopsForm = Form.create()(
                 onChange={handleChange}
                 >
               {
-                checkMerchantUserLists.map((item) => {
+                merchantLists.map((item) => {
                 return (
-                <Option value={`${item.merchantCode}-${item.id}`}>{`${item.merchantCode}-${item.merchantName}`}</Option>
+                <Option value={`${item.merchantCode}-${item.id}`}>{item.merchantName}</Option>
                 )
               })
               }
