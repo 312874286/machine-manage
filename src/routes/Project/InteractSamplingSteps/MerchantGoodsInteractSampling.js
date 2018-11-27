@@ -43,6 +43,14 @@ const menu = (
 );
 // , {id: 1, name: '优惠券'}
 const goodType = [{id: 0, name: '商品'}, {id: 1, name: '优惠券'}]
+const isFocusOptions = [
+  {id: '0', name: '不关注'},
+  {id: '1', name: '关注'},
+  {id: '2', name: '强制关注'}]
+const isVipOptions = [
+  {id: '0', name: '否'},
+  {id: '1', name: '是'},
+  {id: '2', name: '强制入会'}]
 // 新建商户
 const CreateMerchantForm = Form.create()(
   (props) => {
@@ -103,9 +111,19 @@ const CreateMerchantForm = Form.create()(
         return (
           checkSelectedMerchantLists.length > 0
             ? (
+            <div>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
                 <a href="javascript:;">删除</a>
               </Popconfirm>
+              <Select defaultValue='0'>
+                {/*{children2}*/}
+                {isFocusOptions.map((item) => {
+                  return (
+                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                  );
+                })}
+              </Select>
+            </div>
             ) : null
         );
       }
@@ -244,7 +262,7 @@ const CreateShopsForm = Form.create()(
       handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData,
       paiyangType, checkMerchantUserLists,
       checkShopLists, checkSelectedShopLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightShopHandle,
-      selectedRowKeys, onSelectShopChange
+      selectedRowKeys, onSelectShopChange, shopRadioGroupChange
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -281,24 +299,40 @@ const CreateShopsForm = Form.create()(
     const columnsRight = [{
       title: '店铺ID',
       dataIndex: 'shopCode',
-      width: '30%',
+      width: '20%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '店铺名称',
-      width: '30%',
+      width: '20%',
       dataIndex: 'shopName',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '操作',
-      width: 70,
+      width: 200,
       dataIndex: 'operation',
       render: (text, record) => {
         return (
           checkSelectedShopLists.length > 0
             ? (
+            <div>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
-                <a href="javascript:;">删除</a>
+                 <a href="javascript:;">删除</a>
               </Popconfirm>
+              {/*<Select defaultValue='0'>*/}
+                {/*{isVipOptions.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option key={item.id} value={item.id}>{item.name}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>*/}
+              <RadioGroup defaultValue={`${record.id}-0`} onChange={shopRadioGroupChange}>
+                {isVipOptions.map((item) => {
+                  return (
+                    <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
+                  );
+                })}
+              </RadioGroup>
+            </div>
             ) : null
         );
       }
@@ -1044,13 +1078,35 @@ export default class areaSettingList extends PureComponent {
       list1.filter( a => isUnion === list2.some(b => a.id === b.id));
     this.setState({
       checkShopLists: operation(selectedShopRowsArr, checkSelectedShopListsArr),
-      checkSelectedShopLists: checkSelectedShopListsArr
+      checkSelectedShopLists: checkSelectedShopListsArr.map(i => {
+        return {
+          id: i.id,
+          shopCode: i.shopCode,
+          isVip: '0',
+        }
+      })
     })
   }
   onLeftShopSelectAll = (selected, selectedRows, changeRows) => {
     this.setState({
       selectedShopRows: selectedRows,
     })
+  }
+  shopRadioGroupChange = (value) => {
+    // console.log('shopRadioGroupChange', value.target.value)
+    const shop = value.target.value.split('-')
+    const { checkSelectedShopLists } = this.state
+    const shopId = shop[0]
+    const isVip = shop[1]
+    checkSelectedShopLists.filter(i => {
+      if (i.id === shopId) {
+        i.isVip = isVip
+      }
+    })
+    this.setState({
+      checkSelectedShopLists,
+    })
+    // console.log('shopRadioGroupChange', checkSelectedShopLists)
   }
   // 新建商品开始
   // 新增modal确认事件 开始
@@ -2305,6 +2361,7 @@ export default class areaSettingList extends PureComponent {
 
           onSelectShopChange={this.onSelectShopChange}
 
+          shopRadioGroupChange={this.shopRadioGroupChange}
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
