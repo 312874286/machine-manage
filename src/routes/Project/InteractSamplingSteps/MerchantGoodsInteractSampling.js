@@ -68,7 +68,7 @@ const CreateMerchantForm = Form.create()(
       { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '100%' },
     ];
     const rowSelection = {
-      selectedRowKeys,
+      // selectedRowKeys,
       onSelect: onLeftSelect,
       onSelectAll: onLeftSelectAll,
     };
