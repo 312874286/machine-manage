@@ -1968,7 +1968,10 @@ export default class areaSettingList extends PureComponent {
   // 获取最新店铺开始
   getShops = (flag) => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
-    let params = { merchantId: this.state.expandedRowKeys[0] }
+    let params = {
+      merchantId: this.state.expandedRowKeys[0],
+      interactId: this.state.interactSampling,
+    }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -1996,7 +1999,10 @@ export default class areaSettingList extends PureComponent {
   }
   getAllShops = () => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
-    let params = { interactId: this.state.interactSampling }
+    let params = {
+      interactId: this.state.interactSampling,
+      // merchantId:
+    }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
