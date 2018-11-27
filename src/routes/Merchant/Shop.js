@@ -83,7 +83,11 @@ const CreateForm = Form.create()(
               {getFieldDecorator('sellerId', {
                 rules: [{ required: true, message: '请选择商户' }],
               })(
-                <Select placeholder="请选择">
+                <Select
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  placeholder="请选择">
                   {merchantLists.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.merchantName}</Option>
