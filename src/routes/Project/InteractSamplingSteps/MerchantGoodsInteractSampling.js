@@ -51,7 +51,8 @@ const CreateMerchantForm = Form.create()(
       channelLists, saveAddShop,
       merchants, paiyangType, checkMerchantUserLists, handleChange,
       channelHandleChange,
-      checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightMerchantHandle
+      checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightMerchantHandle,
+      selectedRowKeys, onSelectMerchantChange
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -68,8 +69,10 @@ const CreateMerchantForm = Form.create()(
       { title: '已添加的商家名称', dataIndex: 'merchantName', key: 'merchantName', width: '100%' },
     ];
     const rowSelection = {
+      selectedRowKeys,
       onSelect: onLeftSelect,
       onSelectAll: onLeftSelectAll,
+      onChange: onSelectMerchantChange
     };
     const columnsLeft =  [{
       title: `${paiyangType ? '公众号AppID' : '商户ID'}`,
@@ -240,7 +243,8 @@ const CreateShopsForm = Form.create()(
       modalType, merchantLists, saveAddGoods,
       handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData,
       paiyangType, checkMerchantUserLists,
-      checkShopLists, checkSelectedShopLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightShopHandle
+      checkShopLists, checkSelectedShopLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightShopHandle,
+      selectedRowKeys, onSelectShopChange
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -258,8 +262,10 @@ const CreateShopsForm = Form.create()(
       { title: '店铺名称', dataIndex: 'shopName', key: 'shopName', width: '50%' },
     ];
     const rowSelection = {
+      selectedRowKeys,
       onSelect: onLeftSelect,
       onSelectAll: onLeftSelectAll,
+      onChange: onSelectShopChange
     };
     const columnsLeft =  [{
       title: '店铺ID',
@@ -592,7 +598,7 @@ const CreateGoodsForm = Form.create()(
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请选择商品类型' }],
               })(
-                <Select placeholder="请选择" onSelect={onGoodTypeSelect} disabled={selectGoodsType ? true : false}>
+                <Select placeholder="请选择" onSelect={onGoodTypeSelect} disabled={selectGoodsType}>
                   {goodType.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.name}</Option>
@@ -821,6 +827,10 @@ export default class areaSettingList extends PureComponent {
     merchantAccountId: '',
     checkSelectedMerchantLists: [],
     selectedMerchantRows: [],
+    selectedMerchantRowsKeys: [],
+
+    selectedShopRows: [],
+    selectedShopRowsKeys: [],
     checkShopsLists: [],
 
     checkShopUserLists: [],
@@ -955,6 +965,9 @@ export default class areaSettingList extends PureComponent {
       selectAll: true
     })
   }
+  onSelectMerchantChange = (selectedRowKeys) => {
+    this.setState({ selectedMerchantRowsKeys: selectedRowKeys });
+  }
   toRightMerchantHandle = () => {
     const { selectedMerchantRows, checkSelectedMerchantLists, checkMerchantLists } = this.state
     let selectedMerchantRowsArr = checkMerchantLists, checkSelectedMerchantListsArr = checkSelectedMerchantLists
@@ -1000,13 +1013,18 @@ export default class areaSettingList extends PureComponent {
         this.setState({
           checkShopLists: res.data,
         });
+        console.log('selectedShopRows', this.state.selectedShopRows)
       }
     });
   }
   onLeftShopSelect = (record, selected, selectedRows) => {
+    console.log('record, selected, selectedRows', record, selected, selectedRows)
     this.setState({
       selectedShopRows: selectedRows,
     })
+  }
+  onSelectShopChange = (selectedRowKeys) => {
+    this.setState({ selectedShopRowsKeys: selectedRowKeys });
   }
   toRightShopHandle = () => {
     const { selectedShopRows, checkSelectedShopLists, checkShopLists } = this.state
@@ -1067,15 +1085,15 @@ export default class areaSettingList extends PureComponent {
     });
     this.setModalData();
     this.getAllGoods()
-    if (saveAndAddModal) {
-      if (saveAndAddModal.sellerId) {
-        await this.getInteractShopList(saveAndAddModal.sellerId)
-        await this.form.setFieldsValue({
-          sellerId: saveAndAddModal.sellerId,
-          shopId: saveAndAddModal.shopId,
-        });
-      }
-    }
+    // if (saveAndAddModal) {
+    //   if (saveAndAddModal.sellerId) {
+    //     await this.getInteractShopList(saveAndAddModal.sellerId)
+    //     await this.form.setFieldsValue({
+    //       sellerId: saveAndAddModal.sellerId,
+    //       shopId: saveAndAddModal.shopId,
+    //     });
+    //   }
+    // }
     if (item) {
       if (item.sellerId) {
         await this.getInteractShopList(item.sellerId, item.id)
@@ -1651,7 +1669,16 @@ export default class areaSettingList extends PureComponent {
       modalShopsData: {},
       modalShopsType: false,
 
-
+      selectedMerchantRows: [],
+      checkSelectedMerchantLists: [],
+      checkMerchantLists: [],
+      merchantAccountId: '',
+      checkShopsLists: [],
+      // 初始化店铺
+      checkShopUserLists: [],
+      checkShopLists: [],
+      checkSelectedShopLists: [],
+      selectedShopRows: [],
     }, () => {
       this.setShopsModalData();
       this.getAllShops()
@@ -1722,17 +1749,6 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         mustIsVip: false,
         sessionKey: false,
-
-        selectedMerchantRows: [],
-        checkSelectedMerchantLists: [],
-        checkMerchantLists: [],
-        merchantAccountId: '',
-        checkShopsLists: [],
-        // 初始化店铺
-        checkShopUserLists: [],
-        checkShopLists: [],
-        checkSelectedShopLists: [],
-        selectedShopRows: [],
       })
       this.shopsForm.setFieldsValue({
         shopCode: undefined,
@@ -1955,7 +1971,10 @@ export default class areaSettingList extends PureComponent {
   // 获取最新店铺开始
   getShops = (flag) => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
-    let params = { merchantId: this.state.expandedRowKeys[0] }
+    let params = {
+      merchantId: this.state.expandedRowKeys[0],
+      interactId: this.state.interactSampling,
+    }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -1972,7 +1991,7 @@ export default class areaSettingList extends PureComponent {
             this.setState({
               modalShopsVisible: false,
             }, () => {
-              this.handleModalVisible(true, '', true)
+              this.handleModalVisible(true, '', false)
             });
           } else {
             this.getAllShops()
@@ -1983,7 +2002,10 @@ export default class areaSettingList extends PureComponent {
   }
   getAllShops = () => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
-    let params = { interactId: this.state.interactSampling }
+    let params = {
+      interactId: this.state.interactSampling,
+      // merchantId:
+    }
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -2251,6 +2273,8 @@ export default class areaSettingList extends PureComponent {
           onLeftSelectAll={this.onLeftSelectAll}
 
           targetHandleDelete={this.targetMerchantHandleDelete}
+          selectedRowKeys={this.state.selectedMerchantRowsKeys}
+          onSelectMerchantChange={this.onSelectMerchantChange}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
@@ -2277,6 +2301,10 @@ export default class areaSettingList extends PureComponent {
           onLeftSelectAll={this.onLeftShopSelectAll}
 
           targetHandleDelete={this.targetShopHandleDelete}
+          selectedRowKeys={this.state.selectedShopRowsKeys}
+
+          onSelectShopChange={this.onSelectShopChange}
+
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
