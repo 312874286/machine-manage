@@ -140,6 +140,11 @@ const CreateForm = Form.create()(
                       rules: [{ required: true, whitespace: true, message: '请输入商家名称' }],
                     })(<Input placeholder="请输入商家名称" />)}
                   </FormItem>
+                  <FormItem {...formItemLayout} label="品牌名称">
+                    {getFieldDecorator('brandName', {
+                      rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
+                    })(<Input placeholder="请输入品牌名称" />)}
+                  </FormItem>
                   <FormItem
                     {...formItemLayout}
                     label="二维码地址"
@@ -529,7 +534,7 @@ export default class MerchantConsociation extends PureComponent {
     })
     
   }
-  
+
   // 选泽渠道
 
   saveChannelId = (val) => {
