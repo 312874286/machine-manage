@@ -73,7 +73,7 @@ const CreateForm = Form.create()(
                 <Select placeholder="请选择" onSelect={getMerchant}>
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.code} key={item.code}>{item.name}</Option>
+                      <Option value={item.id} key={item.id}>{item.name}</Option>
                     );
                   })}
                 </Select>
