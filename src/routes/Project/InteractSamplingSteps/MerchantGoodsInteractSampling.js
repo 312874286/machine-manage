@@ -1053,7 +1053,17 @@ export default class areaSettingList extends PureComponent {
       modalVisible: !!flag,
       modalData: {},
       modalType: false,
-      selectGoodsType: flag1
+      selectGoodsType: flag1,
+      // 初始化商户
+      checkMerchantLists: [],
+      merchantAccountId: '',
+      checkSelectedMerchantLists: [],
+      selectedMerchantRows: [],
+      checkShopsLists: [],
+      // 初始化店铺
+      checkShopUserLists: [],
+      checkShopLists: [],
+      checkSelectedShopLists: [],
     });
     this.setModalData();
     this.getAllGoods()
@@ -1615,6 +1625,19 @@ export default class areaSettingList extends PureComponent {
                 selectGoodsType: true
               });
             }
+            this.setState({
+              selectedMerchantRows: [],
+              checkSelectedMerchantLists: [],
+              checkMerchantLists: [],
+              merchantAccountId: '',
+              checkShopsLists: [],
+              // 初始化店铺
+              checkShopUserLists: [],
+              checkShopLists: [],
+              checkSelectedShopLists: [],
+
+              selectedShopRows: [],
+            })
           }
         });
       });
@@ -1627,6 +1650,8 @@ export default class areaSettingList extends PureComponent {
       modalShopsVisible: !!flag,
       modalShopsData: {},
       modalShopsType: false,
+
+
     }, () => {
       this.setShopsModalData();
       this.getAllShops()
@@ -1697,6 +1722,17 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         mustIsVip: false,
         sessionKey: false,
+
+        selectedMerchantRows: [],
+        checkSelectedMerchantLists: [],
+        checkMerchantLists: [],
+        merchantAccountId: '',
+        checkShopsLists: [],
+        // 初始化店铺
+        checkShopUserLists: [],
+        checkShopLists: [],
+        checkSelectedShopLists: [],
+        selectedShopRows: [],
       })
       this.shopsForm.setFieldsValue({
         shopCode: undefined,
@@ -1748,6 +1784,17 @@ export default class areaSettingList extends PureComponent {
       modalMerchantVisible: !!flag,
       modalMerchantData: {},
       modalMerchantType: true,
+
+      selectedMerchantRows: [],
+      checkSelectedMerchantLists: [],
+      checkMerchantLists: [],
+      merchantAccountId: '',
+      checkShopsLists: [],
+      // 初始化店铺
+      checkShopUserLists: [],
+      checkShopLists: [],
+      checkSelectedShopLists: [],
+      selectedShopRows: [],
     });
     this.setMerchantModalData();
   };
@@ -1863,8 +1910,17 @@ export default class areaSettingList extends PureComponent {
         }
         this.setState({
           editMerchantModalConfirmLoading: false,
+
           selectedMerchantRows: [],
           checkSelectedMerchantLists: [],
+
+          checkMerchantLists: [],
+          merchantAccountId: '',
+          checkShopsLists: [],
+          // 初始化店铺
+          checkShopUserLists: [],
+          checkShopLists: [],
+          checkSelectedShopLists: [],
         });
       });
     });

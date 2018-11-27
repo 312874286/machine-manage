@@ -516,7 +516,7 @@ export default class merchant extends PureComponent {
                 新建
               </Button>
             </div>
-            <div style={{ display: !account.list ? 'none' : '' }}>
+            <div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}
