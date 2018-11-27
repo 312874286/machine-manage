@@ -68,12 +68,12 @@ const CreateForm = Form.create()(
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="合作渠道">
               {getFieldDecorator('channelId', {
-                rules: [{ required: true, whitespace: true, message: '请选择合作渠道' }],
+                rules: [{ required: true, whitespace: true, message: '请选择合作渠道'}],
               })(
                 <Select placeholder="请选择" onSelect={getMerchant}>
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.id} key={item.id}>{item.name}</Option>
+                      <Option value={item.id.toString()} key={item.id.toString()}>{item.name}</Option>
                     );
                   })}
                 </Select>
@@ -203,7 +203,7 @@ export default class shop extends PureComponent {
     });
   }
   getMerchant = (value) => {
-    console.log('value', value)
+    // console.log('value', value)
     this.getMerchantsList(value)
   }
   getMerchantsList = (channelId) => {
@@ -215,9 +215,11 @@ export default class shop extends PureComponent {
         },
       },
     }).then((res) => {
-      this.setState({
-        merchantLists: res,
-      });
+      if (res && res.code === 0) {
+        this.setState({
+          merchantLists: res,
+        });
+      }
     });
   }
 
