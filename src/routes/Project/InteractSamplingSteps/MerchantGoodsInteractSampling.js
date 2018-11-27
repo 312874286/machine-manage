@@ -112,7 +112,7 @@ const CreateMerchantForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{!modalType ? '编辑商户' : '新建商户'}</span>
+            <span class="modalTitle">{!modalType ? '编辑商户' : '添加商户'}</span>
           </div>
         }
         visible={modalVisible}
@@ -309,7 +309,7 @@ const CreateShopsForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">{modalType ? '编辑店铺' : '新建店铺'}</span>
+            <span class="modalTitle">{modalType ? '编辑店铺' : '添加店铺'}</span>
           </div>
         }
         visible={modalVisible}
@@ -339,9 +339,9 @@ const CreateShopsForm = Form.create()(
                 onChange={handleChange}
                 >
               {
-                checkMerchantUserLists.map((item) => {
+                merchantLists.map((item) => {
                 return (
-                <Option value={`${item.merchantCode}-${item.id}`}>{`${item.merchantCode}-${item.merchantName}`}</Option>
+                <Option value={`${item.merchantCode}-${item.id}`}>{item.merchantName}</Option>
                 )
               })
               }
@@ -1053,7 +1053,17 @@ export default class areaSettingList extends PureComponent {
       modalVisible: !!flag,
       modalData: {},
       modalType: false,
-      selectGoodsType: flag1
+      selectGoodsType: flag1,
+      // 初始化商户
+      checkMerchantLists: [],
+      merchantAccountId: '',
+      checkSelectedMerchantLists: [],
+      selectedMerchantRows: [],
+      checkShopsLists: [],
+      // 初始化店铺
+      checkShopUserLists: [],
+      checkShopLists: [],
+      checkSelectedShopLists: [],
     });
     this.setModalData();
     this.getAllGoods()
@@ -1615,6 +1625,19 @@ export default class areaSettingList extends PureComponent {
                 selectGoodsType: true
               });
             }
+            this.setState({
+              selectedMerchantRows: [],
+              checkSelectedMerchantLists: [],
+              checkMerchantLists: [],
+              merchantAccountId: '',
+              checkShopsLists: [],
+              // 初始化店铺
+              checkShopUserLists: [],
+              checkShopLists: [],
+              checkSelectedShopLists: [],
+
+              selectedShopRows: [],
+            })
           }
         });
       });
@@ -1627,6 +1650,8 @@ export default class areaSettingList extends PureComponent {
       modalShopsVisible: !!flag,
       modalShopsData: {},
       modalShopsType: false,
+
+
     }, () => {
       this.setShopsModalData();
       this.getAllShops()
@@ -1697,6 +1722,17 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         mustIsVip: false,
         sessionKey: false,
+
+        selectedMerchantRows: [],
+        checkSelectedMerchantLists: [],
+        checkMerchantLists: [],
+        merchantAccountId: '',
+        checkShopsLists: [],
+        // 初始化店铺
+        checkShopUserLists: [],
+        checkShopLists: [],
+        checkSelectedShopLists: [],
+        selectedShopRows: [],
       })
       this.shopsForm.setFieldsValue({
         shopCode: undefined,
@@ -1748,6 +1784,17 @@ export default class areaSettingList extends PureComponent {
       modalMerchantVisible: !!flag,
       modalMerchantData: {},
       modalMerchantType: true,
+
+      selectedMerchantRows: [],
+      checkSelectedMerchantLists: [],
+      checkMerchantLists: [],
+      merchantAccountId: '',
+      checkShopsLists: [],
+      // 初始化店铺
+      checkShopUserLists: [],
+      checkShopLists: [],
+      checkSelectedShopLists: [],
+      selectedShopRows: [],
     });
     this.setMerchantModalData();
   };
@@ -1863,8 +1910,17 @@ export default class areaSettingList extends PureComponent {
         }
         this.setState({
           editMerchantModalConfirmLoading: false,
+
           selectedMerchantRows: [],
           checkSelectedMerchantLists: [],
+
+          checkMerchantLists: [],
+          merchantAccountId: '',
+          checkShopsLists: [],
+          // 初始化店铺
+          checkShopUserLists: [],
+          checkShopLists: [],
+          checkSelectedShopLists: [],
         });
       });
     });

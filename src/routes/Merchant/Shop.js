@@ -83,7 +83,11 @@ const CreateForm = Form.create()(
               {getFieldDecorator('sellerId', {
                 rules: [{ required: true, message: '请选择商户' }],
               })(
-                <Select placeholder="请选择">
+                <Select
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  placeholder="请选择">
                   {merchantLists.map((item) => {
                     return (
                       <Option value={item.id} key={item.id}>{item.merchantName}</Option>
@@ -138,7 +142,7 @@ export default class shop extends PureComponent {
     this.getLists();
     // this.getChannelList();
     this.getBaseDictLists()
-    this.getAccountMenus(getAccountMenus())
+    // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -480,7 +484,7 @@ export default class shop extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             {/*<Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">*/}
               <a className={styles.delete} onClick={() => this.handleDelClick(item)}>{parseInt(item.status) === 0 ? '启用' : '停用'}</a>
@@ -531,7 +535,7 @@ export default class shop extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : ''}}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
               {/*{selectedRows.length > 0 && (*/}
@@ -545,7 +549,7 @@ export default class shop extends PureComponent {
               {/*</span>*/}
               {/*)}*/}
             </div>
-            <div style={{ display: !account.list ? 'none' : ''}}>
+            <div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}

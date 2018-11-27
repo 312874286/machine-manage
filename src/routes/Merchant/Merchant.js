@@ -151,7 +151,7 @@ export default class merchant extends PureComponent {
   componentDidMount() {
     this.getLists();
     this.getBaseDictLists();
-    this.getAccountMenus(getAccountMenus())
+    // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -457,7 +457,7 @@ export default class merchant extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
@@ -512,11 +512,11 @@ export default class merchant extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : '' }}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
             </div>
-            <div style={{ display: !account.list ? 'none' : '' }}>
+            <div>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}
