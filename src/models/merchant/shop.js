@@ -23,7 +23,7 @@ export default {
     },
     *getMerchantsList({ payload: { restParams } }, { call }) {
       const response = yield call(getMerchantsList, { restParams });
-      return response.data;
+      return response;
     },
     *getChannelList({ payload: { restParams } }, { call }) {
       const response = yield call(getChannelList, { restParams });
