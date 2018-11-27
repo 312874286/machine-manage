@@ -457,7 +457,7 @@ export default class merchant extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
@@ -516,7 +516,7 @@ export default class merchant extends PureComponent {
                 新建
               </Button>
             </div>
-            <div>
+            <div style={{ display: !account.list ? 'none' : '' }}>
               <StandardTable
                 selectedRows={selectedRows}
                 loading={loading}

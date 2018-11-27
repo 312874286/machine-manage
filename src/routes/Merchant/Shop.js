@@ -484,7 +484,7 @@ export default class shop extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : ''}}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             {/*<Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">*/}
               <a className={styles.delete} onClick={() => this.handleDelClick(item)}>{parseInt(item.status) === 0 ? '启用' : '停用'}</a>
