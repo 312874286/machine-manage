@@ -40,7 +40,7 @@ const getValue = obj =>
 
 const CreateForm = Form.create()(
   (props) => {
-    const { sellerList, channelId, modalVisible, form, handleAdd, handleCancelModalVisible, handleModalVisible, editModalConfirmLoading, modalType, handleUploadChange, handleUpload, handlePreview, handleCancel, fileList, previewImage, previewVisible, handleSellerName, saveChannelId,channelLists } = props;
+    const { sellerList, channelCode, modalVisible, form, handleAdd, handleCancelModalVisible, handleModalVisible, editModalConfirmLoading, modalType, handleSellerName, saveChannelId,channelLists } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -90,24 +90,24 @@ const CreateForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="选择渠道">
-              {getFieldDecorator('channelId', {
+              {getFieldDecorator('channelName', {
                 rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
               })(
                 <Select
                   // onChange={selectChannel}
                   placeholder="选择渠道"
-                  onSelect={saveChannelId}
+                  onSelect={(val,option) => { saveChannelId(val,option) }}
                 >
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.code}  key={item.code}>{item.name}</Option>
+                      <Option value={item.name}  key={item.code}>{item.name}</Option>
                     );
                   })}
                 </Select>
               )}
             </FormItem>
             {
-              channelId == '002001' ? (
+              channelCode == '002001' ? (
                 <div>
                   <FormItem {...formItemLayout} label="sellerId">
                     {getFieldDecorator('merchantCode', {
@@ -128,7 +128,7 @@ const CreateForm = Form.create()(
               ) : ''
             }
             {
-              channelId == '002002' ? (
+              channelCode == '002002' ? (
                 <div>
                   <FormItem {...formItemLayout} label="appId">
                     {getFieldDecorator('merchantCode', {
@@ -196,7 +196,7 @@ export default class MerchantConsociation extends PureComponent {
     pageNo: 1,
     keyword: '',
     channelId: '',
-    channelName: '',
+    channelCode: '',
     merchantAccountName: '',
     modalData: {},
     logModalVisible: false,
@@ -395,14 +395,13 @@ export default class MerchantConsociation extends PureComponent {
       this.setState({
         merchantAccountId: data.merchantAccountId,
         channelId: data.channelId,
-        previewImage: data.wechatQrcodeUrl,
-        channelName: data.channelName,
+        channelCode: data.channelCode,
       })
       this.form.setFieldsValue({
         merchantCode: data.merchantCode || undefined,
         merchantName: data.merchantName || undefined,
         brandName: data.brandName || undefined,
-        channelId: data.channelId || undefined,
+        channelName: data.channelName || undefined,
         merchantAccountId: data.merchantAccountId || undefined,
         fileList: data.wechatQrcodeUrl || undefined,
         wechatQrcodeUrl: data.wechatQrcodeUrl || undefined,
@@ -413,14 +412,13 @@ export default class MerchantConsociation extends PureComponent {
       this.setState({
         merchantAccountId: undefined,
         channelId: undefined,
-        previewImage: undefined,
-        channelName: undefined,
+        channelCode: undefined,
       })
       this.form.setFieldsValue({
         merchantCode: undefined,
         merchantName: undefined,
         brandName: undefined,
-        channelId: undefined,
+        channelName: undefined,
         merchantAccountId: undefined,
         fileList: undefined,
         wechatQrcodeUrl: undefined,
@@ -435,7 +433,7 @@ export default class MerchantConsociation extends PureComponent {
   // 编辑modal 确认事件
   handleAdd = () => {
     this.form.validateFields((err, values) => {
-      const { merchantAccountId, channelId, previewImage} = this.state
+      const { merchantAccountId, channelId,  channelCode} = this.state
 
       if (err) {
         return;
@@ -450,8 +448,7 @@ export default class MerchantConsociation extends PureComponent {
         url = 'merchantConsociation/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
-      let channelName = this.state.channelName
-      params = Object.assign(params, {merchantAccountId, channelId, channelName})
+      params = Object.assign(params, {merchantAccountId, channelId, channelCode})
       console.log('form--params==',params)
 
       this.props.dispatch({
@@ -467,6 +464,7 @@ export default class MerchantConsociation extends PureComponent {
             modalVisible: false,
             merchantAccountId: '',
             channelId: '',
+            channelCode: '',
             editModalConfirmLoading: false,
           });
           this.setModalData()
@@ -537,24 +535,17 @@ export default class MerchantConsociation extends PureComponent {
 
   // 选泽渠道
 
-  saveChannelId = (val) => {
+  saveChannelId = (val, option) => {
     console.log(val)
-    let channelName = ''
-    if (val == '002001') {
-      channelName = '淘宝'
-    } 
-    switch(val) {
-      case '002001':
-        channelName = '淘宝'
-        break
-      case '002002':
-        channelName = '微信'
-        break
-      default:
-    }
+    const { channelLists } = this.state
+
+    const index = option.props.index
+
+    console.log(channelLists[index])
+    
     this.setState({
-      channelId: val,
-      channelName
+      channelId: channelLists[index].id,
+      channelCode: channelLists[index].code
     })
   }
 
@@ -643,7 +634,7 @@ export default class MerchantConsociation extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
-    const { channelId, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, account, fileList, channelLists } = this.state;
+    const { channelCode, sellerList, selectedRows, modalVisible, editModalConfirmLoading, modalType, account, fileList, channelLists } = this.state;
     let columns = [
 
       {
@@ -754,7 +745,7 @@ export default class MerchantConsociation extends PureComponent {
           editModalConfirmLoading={editModalConfirmLoading}
           modalType={modalType}
           sellerList={sellerList}
-          channelId={channelId}
+          channelCode={channelCode}
           handleSellerName={this.handleSellerName}
           handleUploadChange={this.handleUploadChange}
           handleUpload={this.handleUpload}
