@@ -473,8 +473,8 @@ export default class shop extends PureComponent {
       {
         title: '所属商家',
         width: '20%',
-        dataIndex: 'sellerId',
-        key: 'sellerId'
+        dataIndex: 'merchantName',
+        key: 'merchantName'
       },
       {
         title: '合作渠道',
