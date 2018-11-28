@@ -1573,9 +1573,12 @@ export default class areaSettingList extends PureComponent {
   // 店铺开始
   targetShopHandleDelete = (id) => {
     const dataSource = [...this.state.checkSelectedShopLists];
+    const checkShopList = [...dataSource.filter(item => item.id === id), ...this.state.checkShopLists]
+    console.log('11', checkShopList, ...dataSource.filter(item => item.id === id))
     this.setState({
       checkSelectedShopLists: dataSource.filter(item => item.id !== id),
       selectedShopRows: [],
+      checkShopLists: checkShopList
     });
   }
   // 新增modal确认事件 开始
@@ -1790,9 +1793,11 @@ export default class areaSettingList extends PureComponent {
   // 添加modal 添加事件
   targetMerchantHandleDelete = (id) => {
     const dataSource = [...this.state.checkSelectedMerchantLists];
+    const checkMerchantList = [...dataSource.filter(item => item.id === id), ...this.state.checkShopLists]
     this.setState({
       checkSelectedMerchantLists: dataSource.filter(item => item.id !== id),
       selectedMerchantRows: [],
+      checkMerchantLists: checkMerchantList
     });
   }
   handleMerchantModalVisible = (flag) => {

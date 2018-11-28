@@ -38,6 +38,7 @@ export default class areaSettingList extends PureComponent {
     type: true,
     id: '',
     channelLists: [],
+    merchants: []
   };
   componentDidMount() {
     this.getGameList()
@@ -46,6 +47,7 @@ export default class areaSettingList extends PureComponent {
         id: this.props.match.params.id,
       }, () => {
         this.getInteractDetail()
+        this.getInteractMerchantList(this.props.match.params.id)
       })
     } else {
       this.setModalData()
@@ -62,6 +64,23 @@ export default class areaSettingList extends PureComponent {
       if (res && res.code === 0) {
         this.setState({
           GameList: res.data
+        })
+      }
+    });
+  }
+  getInteractMerchantList = (interactId) => {
+    // getInteractMerchantList
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getInteractMerchantList',
+      payload: {
+        params: {
+          interactId,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code == 0) {
+        this.setState({
+          merchants: res.data
         })
       }
     });
@@ -188,7 +207,7 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current, GameList, type, channelLists } = this.state
+    const { current, GameList, type, channelLists, merchants } = this.state
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -249,7 +268,7 @@ export default class areaSettingList extends PureComponent {
                   {getFieldDecorator('paiyangType', {
                     rules: [{ required: type, message: '请选择活动类型' }],
                   })(
-                    <Select placeholder="请选择">
+                    <Select placeholder="请选择" disabled={merchants.length > 0 ? true : false}>
                       {activityTypeOptions.map((item) => {
                         return (
                           <Option value={item.id} key={item.id}>{item.name}</Option>
@@ -262,7 +281,7 @@ export default class areaSettingList extends PureComponent {
                   {getFieldDecorator('channel', {
                     rules: [{ required: true, whitespace: true, message: '请选择渠道' }],
                   })(
-                    <Select placeholder="请选择渠道">
+                    <Select placeholder="请选择渠道" disabled={merchants.length > 0 ? true : false}>
                       {channelLists.map((item) => {
                         return (
                           <Option value={item.code} key={item.code}>{item.name}</Option>

@@ -140,7 +140,7 @@ export default class shop extends PureComponent {
   };
   componentDidMount() {
     this.getLists();
-    // this.getChannelList();
+    this.getChannelList();
     this.getBaseDictLists()
     // this.getAccountMenus(getAccountMenus())
   }
