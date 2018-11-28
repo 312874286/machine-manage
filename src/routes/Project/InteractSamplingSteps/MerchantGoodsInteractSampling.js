@@ -895,6 +895,7 @@ export default class areaSettingList extends PureComponent {
       payload: {
         params: {
           merchantId,
+          interactId: this.state.interactSampling
         },
       },
     }).then((res) => {
