@@ -20,7 +20,7 @@ const api = map({
   saveCheckFault: '/check/fault/save',
   updateCheckStatus: '/check/fault/updateStatus',
 
-  getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}&startTime={startTime}&endTime={endTime}',
+  getRecordList: '/check/signIn/list?pageNo={pageNo}&keyword={keyword}&code={code}&startTime={startTime}&endTime={endTime}&status={status}',
   userExcel: '/check/signIn/userExcel',
   updateStatus: '/check/user/updateStatus',
   deleteUser: '/check/user/delete',
@@ -30,6 +30,7 @@ const api = map({
 
   replenishList: '/supply/channel/history/dayGoodsList?pageNo={pageNo}&areaCode={areaCode}&beginTime={beginTime}&endTime={endTime}&keyword={keyword}',
   replenishDetail: '/supply/channel/history/dayGoodsDetail?machineId={machineId}&datetime={datetime}',
+  updateSignInStatus: '/check/signIn/updateStatus',
 
 });
 

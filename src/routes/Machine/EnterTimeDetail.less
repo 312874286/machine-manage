@@ -11,20 +11,6 @@
   }
 }
 
-.standardTable {
-  :global {
-    .ant-table-thead > tr > th.ant-table-selection-column {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      z-index: 1000;
-    }
-    .ant-table-footer  {
-      background: #FFF!important;
-    }
-  }
-}
-
 .tableListForm {
   :global {
     .ant-form-item {
@@ -47,9 +33,6 @@
       display: flex;
       justify-content: flex-end;
     }
-    .ant-calendar-picker {
-      width: 100%;
-    }
   }
   .submitButtons {
     white-space: nowrap;
@@ -66,7 +49,10 @@
   }
 }
 .delete {
-  color: red;
+  color: #FC5A3F;
+}
+table tr:nth-child(odd) {
+  //background: #ffe8e4;
 }
 @media screen and (max-width: @screen-lg) {
   .tableListForm :global(.ant-form-item) {
@@ -77,5 +63,18 @@
 @media screen and (max-width: @screen-md) {
   .tableListForm :global(.ant-form-item) {
     margin-right: 8px;
+  }
+}
+.tableList {
+  .tableListOperator {
+    margin-bottom: 0px;
+    button {
+      //width: 100%;
+      //border-radius: 6px 6px 0px 0px !important;
+      margin-right: 8px;
+      //width: 100%;
+      //max-width: 100%;
+      background: #64C81A !important;
+    }
   }
 }

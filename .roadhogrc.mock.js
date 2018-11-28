@@ -595,6 +595,20 @@ const proxy = {
             functionLevel: 2,
           },
           {
+            id: 'a45',
+            functionDepict: '入场时间明细',
+            functionPath: 'enterTime-detail',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
+            id: 'a46',
+            functionDepict: '机器App版本 ',
+            functionPath: 'app-version',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
             "id": "22",
             "functionDepict": "用户管理",
             "functionPath": "user",
@@ -4007,7 +4021,7 @@ const proxy = {
       },
       "data": [
         {
-          "id": null,
+          "id": 53215321,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4024,10 +4038,11 @@ const proxy = {
           "remark": null,
           "localeName": "北京市北京市东城区王府井—188982407114q",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 0,
         },
         {
-          "id": null,
+          "id": 53415432,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4044,10 +4059,11 @@ const proxy = {
           "remark": null,
           "localeName": "北京市北京市东城区王府井—188982407114q",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 1,
         },
         {
-          "id": null,
+          "id": 421432155321,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4064,9 +4080,17 @@ const proxy = {
           "remark": null,
           "localeName": "天津市天津市和平区鞍山道沿线—ZJ1807184936290",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 0
         }
       ]
+    })
+  },
+  'POST /check/signIn/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
     })
   },
   'GET /check/user/getUserMachinDetailList': (req, res) => {
@@ -7117,6 +7141,60 @@ const proxy = {
       "code":0,
       "msg":"成功"
     })
+  'GET /machine/locale/detail/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "firstTime": 1541666608000,
+          "lastTime": 1541061806000,
+          "machineCode": "18364770",
+          "id": "0fa03b763d814ee5860c364d615abb1a",
+          "locale": "天津市天津市南开区学府街学府商城徐水潘家园"
+        }
+      ],
+      "unColumn": ""
+    })
+  },
+  'GET /machine/locale/detail/machineLocaleDetail': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": [
+          {
+            "oldLocale": "北京市北京市海淀区1崇文门新世界百货1F扶梯边",
+            "createTime": "2018-11-08 16:43:28",
+            "id": "3",
+            "locale": "北京市北京市其他猫眼胡同猫眼胡同一区"
+          },
+          {
+            "oldLocale": "天津市天津市南开区学府街学府商城徐水潘家园",
+            "createTime": "2018-11-02 16:43:27",
+            "id": "2",
+            "locale": "北京市北京市海淀区1崇文门新世界百货1F扶梯边"
+          },
+          {
+            "createTime": "2018-11-01 16:43:26",
+            "id": "1",
+            "locale": "天津市天津市南开区学府街学府商城徐水潘家园"
+          }
+        ],
+        "msg": "成功"
+      }
+    )
   }
 };
 

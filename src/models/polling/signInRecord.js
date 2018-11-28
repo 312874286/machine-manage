@@ -1,4 +1,4 @@
-import { getRecordList, userExcel } from '../../services/polling/SignInRecord';
+import { getRecordList, userExcel, updateStatus } from '../../services/polling/SignInRecord';
 
 export default {
   namespace: 'signInRecord',
@@ -19,6 +19,10 @@ export default {
     },
     *getUserExcel({ payload: { restParams } }, { call, put }) {
       const response = yield call(userExcel, { restParams });
+      return response;
+    },
+    *setUpdateStatus({ payload: { params } }, { call, put }) {
+      const response = yield call(updateStatus, { params });
       return response;
     },
   },

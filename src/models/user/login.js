@@ -14,7 +14,7 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(AccountLogin, payload);
+      const response = yield call(AccountLogDDAccountLoginin, payload);
       yield put({
         type: 'loginReducer',
         payload: response,
