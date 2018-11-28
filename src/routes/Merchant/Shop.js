@@ -140,7 +140,7 @@ export default class shop extends PureComponent {
   };
   componentDidMount() {
     this.getLists();
-    this.getChannelList();
+    // this.getChannelList();
     this.getBaseDictLists()
     // this.getAccountMenus(getAccountMenus())
   }
@@ -364,6 +364,7 @@ export default class shop extends PureComponent {
       },
     }).then((res) => {
       this.setModalData(res);
+      this.getMerchant(res.channelId)
     });
   }
   // 设置modal 数据
