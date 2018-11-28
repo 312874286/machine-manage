@@ -901,6 +901,7 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       this.setState({
         shops: res.data,
+        shopId: merchantId,
       })
     });
   }
