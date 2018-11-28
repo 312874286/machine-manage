@@ -25,6 +25,7 @@ import {getAccountMenus} from "../../../utils/authority";
 import {message, Radio} from "antd/lib/index";
 import domain from "../../../common/config/domain";
 import moment from "moment/moment";
+import {RegexTool} from "../../../utils/utils";
 
 const { Option } = Select;
 const RadioGroup = Radio.Group;
@@ -797,6 +798,60 @@ const CreateGoodsForm = Form.create()(
     );
   });
 
+
+const FocusForm = Form.create()(
+  (props) => {
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 13 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">修改关注</span>
+          </div>
+        }
+        visible={modalVisible}
+        onOk={handleAdd}
+        onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('isFocus', {
+                rules: [{ required: true, message: '请选择修改关注' }],
+              })(
+                <RadioGroup>
+                  <Radio value="0">无关注</Radio>
+                  <Radio value="1">关注</Radio>
+                  <Radio value="2">强制关注</Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} style={{ display: 'none' }}>
+              {getFieldDecorator('merchantId', {
+                rules: [{ }],
+              })(<Input  />)}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+
+
+
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -870,6 +925,10 @@ export default class areaSettingList extends PureComponent {
     checkShopUserLists: [],
     checkShopLists: [],
     checkSelectedShopLists: [],
+
+    //FocusForm
+    modalFocusFormVisible: false,
+    editFocusFormModalConfirmLoading: false
   };
   componentDidMount() {
     // console.log('this.props.params.id', this.props.match.params.id)
@@ -2119,6 +2178,48 @@ export default class areaSettingList extends PureComponent {
       }
     });
   }
+  // FocusForm
+  saveFocusFormRef = (form) => {
+    this.FocusForm = form;
+  }
+  handleFocusFormAdd = () => {
+    this.FocusForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.props.dispatch({
+        type: 'interactSamplingSetting/updateMerchant',
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            merchantId: values.merchantId,
+            isFocus: values.isFocus
+          },
+        },
+      }).then((res) => {
+        this.setState({
+          modalFocusFormVisible: false,
+        });
+        this.getInteractMerchantList(this.props.match.params.id)
+      });
+      // updateMerchant
+    })
+  }
+  handleFocusFormModalVisible = (data, flag) => {
+    this.setState({
+      modalFocusFormVisible: !!flag,
+    });
+    if (data) {
+      this.FocusForm.setFieldsValue({
+        isFocus: data.isFocus.toString() || undefined,
+        merchantId: data.id
+      });
+    } else {
+      this.FocusForm.setFieldsValue({
+        isFocus: undefined,
+      });
+    }
+  }
   next = (type) => {
     const { merchants, allGoodsLists } = this.state
     if (type === 1) {
@@ -2257,7 +2358,7 @@ export default class areaSettingList extends PureComponent {
           <Fragment>
             <a onClick={() => paiyangType ? this.handleModalVisible(true, item, false) : this.handleShopsModalVisible(true, item)}>{paiyangType ? '添加商品' : '添加店铺'}</a>
             <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }}/>
-            <a onClick={() => this.handleMerchantEditClick(item)}>
+            <a onClick={() => this.handleFocusFormModalVisible(item, true)}>
               {paiyangType ? '' : item.isFocus === 0 ? '不关注' : (item.isFocus === 1 ? '关注' : '强制关注')}
             </a>
             <Divider type="vertical"/>
@@ -2408,6 +2509,13 @@ export default class areaSettingList extends PureComponent {
           couponId={this.state.couponId}
 
           paiyangType={this.state.paiyangType}
+        />
+        <FocusForm
+          modalVisible={this.state.modalFocusFormVisible}
+          ref={this.saveFocusFormRef}
+          handleAdd={this.handleFocusFormAdd}
+          handleModalVisible={this.handleFocusFormModalVisible}
+          editModalConfirmLoading={this.state.editFocusFormModalConfirmLoading}
         />
       </PageHeaderLayout>
     );

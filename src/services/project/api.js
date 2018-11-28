@@ -124,6 +124,7 @@ const api = map({
 
   // 活动到处店铺
   activityExcel: '/project/interact/merchant/exportMachineSellerId',
+  // 商户修改是否关注
 });
 
 
