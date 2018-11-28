@@ -1081,6 +1081,7 @@ export default class areaSettingList extends PureComponent {
       checkSelectedShopLists: checkSelectedShopListsArr.map(i => {
         return {
           id: i.id,
+          shopName: i.shopName,
           shopCode: i.shopCode,
           isVip: '0',
         }
@@ -2215,8 +2216,10 @@ export default class areaSettingList extends PureComponent {
           render: (text, item) => (
             <Fragment>
               <a onClick={() => this.handleModalVisible(true, item, false)}>添加商品</a>
-              {/*<Divider type="vertical"/>*/}
-              {/*<a onClick={() => this.handleShopsEditClick(item)}>修改</a>*/}
+              <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }} />
+              <a onClick={() => this.handleShopsEditClick(item)}>
+                {paiyangType ? '' : item.isVip === 0 ? '否' : (item.isVip === 1 ? '是' : '强制入会')}
+              </a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleShopsDelClick(item)}>删除</a>
             </Fragment>
@@ -2253,8 +2256,10 @@ export default class areaSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => paiyangType ? this.handleModalVisible(true, item, false) : this.handleShopsModalVisible(true, item)}>{paiyangType ? '添加商品' : '添加店铺'}</a>
-            {/*<Divider type="vertical"/>*/}
-            {/*<a onClick={() => this.handleMerchantEditClick(item)}>{paiyangType ? '修改入会信息' : '修改商户'}</a>*/}
+            <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }}/>
+            <a onClick={() => this.handleMerchantEditClick(item)}>
+              {paiyangType ? '' : item.isFocus === 0 ? '不关注' : (item.isFocus === 1 ? '关注' : '强制关注')}
+            </a>
             <Divider type="vertical"/>
             <a onClick={() => this.handleMerchantDelClick(item)}>删除</a>
           </Fragment>
