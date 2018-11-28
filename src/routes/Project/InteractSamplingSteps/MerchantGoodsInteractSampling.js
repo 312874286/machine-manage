@@ -890,6 +890,7 @@ export default class areaSettingList extends PureComponent {
   getInteractShopList = (merchantId) => {
     // getInteractMerchantList
     console.log('item.sellerId', merchantId)
+    const { paiyangType, GoodTypePlaceHolder } = this.state
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -904,6 +905,9 @@ export default class areaSettingList extends PureComponent {
         shopId: merchantId,
       })
     });
+    if (paiyangType) {
+      this.getGoodsByShops(GoodTypePlaceHolder, 'add')
+    }
   }
   selectMerchantHandleChange = (value) => {
     const { paiyangType } = this.state
@@ -1962,7 +1966,7 @@ export default class areaSettingList extends PureComponent {
         this.setState({
           modalShopsVisible: false,
         }, () => {
-          this.handleModalVisible(true, '', true)
+          this.handleModalVisible(true, '', !paiyangType)
         });
       } else {
         this.handleShopsModalVisible(true)

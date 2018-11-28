@@ -793,14 +793,14 @@ export default class areaSettingList extends PureComponent {
             </a>
             <Divider type="vertical" />
             <a onClick={() => this.getInteractDetail(item)}>详情</a>
-            <Divider type="vertical" />
-            <a
-              onClick={() => {
-                this.handleExcelShop(item);
-              }}
-            >
-              导出门店
-            </a>
+            {/*<Divider type="vertical" />*/}
+            {/*<a*/}
+              {/*onClick={() => {*/}
+                {/*this.handleExcelShop(item);*/}
+              {/*}}*/}
+            {/*>*/}
+              {/*导出门店*/}
+            {/*</a>*/}
           </Fragment>
         )
       }

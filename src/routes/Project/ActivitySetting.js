@@ -1990,12 +1990,12 @@ export default class activitySettingList extends PureComponent {
               >
                 设置默认活动
               </Button>
-              <Button
-                type="primary"
-                onClick={() => this.handleExportShopClick(true)}
-              >
-                导出门店
-              </Button>
+              {/*<Button*/}
+                {/*type="primary"*/}
+                {/*onClick={() => this.handleExportShopClick(true)}*/}
+              {/*>*/}
+                {/*导出门店*/}
+              {/*</Button>*/}
             </div>
             <div style={{ display: !account.list ? "none" : "" }}>
               <StandardTable
