@@ -32,6 +32,7 @@ import moment from "moment/moment";
 import { getAccountMenus } from "../../utils/authority";
 import GoodsStatistics from "../../components/Project/Activity/GoodsStatistics";
 import OrderStatistics from "../../components/Project/Activity/OrderStatistics";
+import {getMerchantsLists} from "../../services/project/activitySetting";
 
 const TabPane = Tabs.TabPane;
 
@@ -650,6 +651,7 @@ export default class activitySettingList extends PureComponent {
   // {/*>{data.map(d => <Option key={d.key} value={d.value} data-id={d.id}>{d.text}</Option>)}*/}
   componentDidMount() {
     this.getLists();
+    this.getMerchantLists()
     this.getAccountMenus(getAccountMenus());
   }
   getAccountMenus = setAccountMenusList => {
@@ -680,6 +682,8 @@ export default class activitySettingList extends PureComponent {
         }
       }
     });
+  };
+  getMerchantLists = () => {
     this.props
       .dispatch({
         type: "activitySetting/getMerchantsList",
@@ -690,11 +694,13 @@ export default class activitySettingList extends PureComponent {
         }
       })
       .then(res => {
-        this.setState({
-          merchantLists: res
-        });
+        if (res && res.code === 0) {
+          this.setState({
+            merchantLists: res.data
+          });
+        }
       });
-  };
+  }
   // 分页
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -1909,14 +1915,14 @@ export default class activitySettingList extends PureComponent {
             >
               机器统计
             </a>
-            <Divider type="vertical" />
-            <a
-              onClick={() => {
-                this.handleExcelShop(item);
-              }}
-            >
-              导出门店
-            </a>
+            {/*<Divider type="vertical" />*/}
+            {/*<a*/}
+              {/*onClick={() => {*/}
+                {/*this.handleExcelShop(item);*/}
+              {/*}}*/}
+            {/*>*/}
+              {/*导出门店*/}
+            {/*</a>*/}
           </Fragment>
         )
       }
@@ -1992,12 +1998,12 @@ export default class activitySettingList extends PureComponent {
               >
                 设置默认活动
               </Button>
-              {/*<Button*/}
-                {/*type="primary"*/}
-                {/*onClick={() => this.handleExportShopClick(true)}*/}
-              {/*>*/}
-                {/*导出门店*/}
-              {/*</Button>*/}
+              <Button
+                type="primary"
+                onClick={() => this.handleExportShopClick(true)}
+              >
+                导出门店
+              </Button>
             </div>
             <div style={{ display: !account.list ? "none" : "" }}>
               <StandardTable

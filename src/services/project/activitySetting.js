@@ -29,7 +29,7 @@ export async function getActivitySettingDetail({ restParams }) {
 }
 
 export async function getMerchantsList({ params }) {
-  return fetch.get(api.getMerchantsList, {
+  return fetch.post(api.getMerchantsList, {
     body: stringify(params),
   });
 }
@@ -39,6 +39,12 @@ export async function getMerchantShops({ restParams }) {
     restParams,
   });
 }
+
+// export async function getMerchantShops2({ params }) {
+//   return fetch.get(api.getMerchantsList, {
+//     body: stringify(params),
+//   });
+// }
 
 export async function getShopsList({ restParams }) {
   return fetch.get(api.getShopsList, {

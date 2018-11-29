@@ -2558,7 +2558,7 @@ const proxy = {
       }]
     });
   },
-  'GET /project/merchant/getList': (req, res) => {
+  'POST /project/merchant/getList': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
