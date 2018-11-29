@@ -121,6 +121,8 @@ const api = map({
   getMachineTree: "/project/interact/machineTree",
   // 第四步 规则设置
   ruleInteract: "/project/interact/rule",
+  // 调货规则
+  getGameRuleList: '/interact/game/rule/getGameRuleList',
 
   // 活动到处店铺
   activityExcel: '/project/interact/merchant/exportMachineSellerId',

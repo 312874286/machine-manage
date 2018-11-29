@@ -45,6 +45,7 @@ import {
   checkMerchant,
   checkShops,
   getBaseDict,
+  getGameRuleList,
 } from "../../services/project/interactSamplingSetting";
 
 export default {
@@ -443,6 +444,15 @@ export default {
       { call }
     ) {
       const response = yield call(getBaseDict, { params });
+      return response;
+    },
+    *getGameRuleList(
+      {
+        payload: { params }
+      },
+      { call }
+    ) {
+      const response = yield call(getGameRuleList, { params });
       return response;
     }
   },

@@ -647,9 +647,9 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}` }],
               })(modalType ? (
                 <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`} />
-                ) : (
-                  <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`}/>
-                ))}
+              ) : (
+                <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`}/>
+              ))}
             </FormItem>
             <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}>
               {getFieldDecorator('name', {
@@ -798,7 +798,6 @@ const CreateGoodsForm = Form.create()(
     );
   });
 
-
 const FocusForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading } = props;
@@ -833,9 +832,11 @@ const FocusForm = Form.create()(
                 rules: [{ required: true, message: '请选择修改关注' }],
               })(
                 <RadioGroup>
-                  <Radio value="0">无关注</Radio>
-                  <Radio value="1">关注</Radio>
-                  <Radio value="2">强制关注</Radio>
+                  {isFocusOptions.map((item) => {
+                    return (
+                      <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                    );
+                  })}
                 </RadioGroup>
               )}
             </FormItem>
@@ -850,7 +851,58 @@ const FocusForm = Form.create()(
     );
   });
 
-
+const VipForm = Form.create()(
+  (props) => {
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 13 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">修改关注</span>
+          </div>
+        }
+        visible={modalVisible}
+        onOk={handleAdd}
+        onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('isVip', {
+                rules: [{ required: true, message: '请选择修改入会' }],
+              })(
+                <RadioGroup>
+                  {isVipOptions.map((item) => {
+                    return (
+                      <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                    );
+                  })}
+                </RadioGroup>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} style={{ display: 'none' }}>
+              {getFieldDecorator('shopId', {
+                rules: [{ }],
+              })(<Input  />)}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
 
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
@@ -928,7 +980,11 @@ export default class areaSettingList extends PureComponent {
 
     //FocusForm
     modalFocusFormVisible: false,
-    editFocusFormModalConfirmLoading: false
+    editFocusFormModalConfirmLoading: false,
+
+    //VipForm
+    modalVipFormVisible: false,
+    editVipFormModalConfirmLoading: false
   };
   componentDidMount() {
     // console.log('this.props.params.id', this.props.match.params.id)
@@ -2209,15 +2265,62 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       modalFocusFormVisible: !!flag,
     });
-    if (data) {
-      this.FocusForm.setFieldsValue({
-        isFocus: data.isFocus.toString() || undefined,
-        merchantId: data.id
+    if (flag) {
+      if (data) {
+        this.FocusForm.setFieldsValue({
+          isFocus: data.isFocus && data.isFocus.toString() || '0',
+          merchantId: data.id
+        });
+      } else {
+        this.FocusForm.setFieldsValue({
+          isFocus: undefined,
+        });
+      }
+    }
+  }
+
+  // VipForm
+  saveVipFormRef = (form) => {
+    this.VipForm = form;
+  }
+  handleVipFormAdd = () => {
+    this.VipForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.props.dispatch({
+        type: 'interactSamplingSetting/updateShop',
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            shopId: values.shopId,
+            isVip: values.isVip
+          },
+        },
+      }).then((res) => {
+        this.setState({
+          modalVipFormVisible: false,
+        });
+        this.getInteractMerchantList(this.props.match.params.id)
       });
-    } else {
-      this.FocusForm.setFieldsValue({
-        isFocus: undefined,
-      });
+      // updateMerchant
+    })
+  }
+  handleVipFormModalVisible = (data, flag) => {
+    this.setState({
+      modalFocusFormVisible: !!flag,
+    });
+    if (flag) {
+      if (data) {
+        this.VipForm.setFieldsValue({
+          isVip: data.isVip && data.isVip.toString() || '0',
+          VipId: data.id
+        });
+      } else {
+        this.FocusForm.setFieldsValue({
+          isVip: undefined,
+        });
+      }
     }
   }
   next = (type) => {
@@ -2318,8 +2421,8 @@ export default class areaSettingList extends PureComponent {
             <Fragment>
               <a onClick={() => this.handleModalVisible(true, item, false)}>添加商品</a>
               <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }} />
-              <a onClick={() => this.handleShopsEditClick(item)}>
-                {paiyangType ? '' : item.isVip === 0 ? '否' : (item.isVip === 1 ? '是' : '强制入会')}
+              <a onClick={() => this.handleVipFormModalVisible(item, true)}>
+                {paiyangType ? '' : item.isVip === 2 ? '强制入会' : (item.isVip === 1 ? '是' : '否')}
               </a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleShopsDelClick(item)}>删除</a>
@@ -2359,7 +2462,7 @@ export default class areaSettingList extends PureComponent {
             <a onClick={() => paiyangType ? this.handleModalVisible(true, item, false) : this.handleShopsModalVisible(true, item)}>{paiyangType ? '添加商品' : '添加店铺'}</a>
             <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }}/>
             <a onClick={() => this.handleFocusFormModalVisible(item, true)}>
-              {paiyangType ? '' : item.isFocus === 0 ? '不关注' : (item.isFocus === 1 ? '关注' : '强制关注')}
+              {paiyangType ? '' : item.isFocus === 2 ? '强制关注' : (item.isFocus === 1 ? '关注' : '不关注')}
             </a>
             <Divider type="vertical"/>
             <a onClick={() => this.handleMerchantDelClick(item)}>删除</a>
@@ -2516,6 +2619,14 @@ export default class areaSettingList extends PureComponent {
           handleAdd={this.handleFocusFormAdd}
           handleModalVisible={this.handleFocusFormModalVisible}
           editModalConfirmLoading={this.state.editFocusFormModalConfirmLoading}
+        />
+
+        <VipForm
+          modalVisible={this.state.modalVipFormVisible}
+          ref={this.saveVipFormRef}
+          handleAdd={this.handleVipFormAdd}
+          handleModalVisible={this.handleVipFormModalVisible}
+          editModalConfirmLoading={this.state.editVipFormModalConfirmLoading}
         />
       </PageHeaderLayout>
     );

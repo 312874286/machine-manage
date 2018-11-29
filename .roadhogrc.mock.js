@@ -7117,6 +7117,30 @@ const proxy = {
       "code":0,
       "msg":"成功"
     })
+  },
+  'POST /interact/game/rule/getGameRuleList': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "1",
+          "interactId": "1",
+          "goodsId": "11111",
+          "ruleCode": 22222,
+          "ruleRemark": "哈哈哈",
+          "type": 0
+        },
+        {
+          "id": "2",
+          "interactId": "1",
+          "goodsId": "2222",
+          "ruleCode": 22222,
+          "ruleRemark": "好好好",
+          "type": 1
+        }
+      ],
+      "msg": "成功"
+    })
   }
 };
 
