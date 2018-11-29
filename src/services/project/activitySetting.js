@@ -28,9 +28,9 @@ export async function getActivitySettingDetail({ restParams }) {
   });
 }
 
-export async function getMerchantsList({ restParams }) {
+export async function getMerchantsList({ params }) {
   return fetch.get(api.getMerchantsList, {
-    restParams,
+    body: stringify(params),
   });
 }
 

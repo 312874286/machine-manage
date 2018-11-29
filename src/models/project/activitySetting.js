@@ -32,8 +32,8 @@ export default {
       const response = yield call(getActivitySettingDetail, { restParams });
       return response.data;
     },
-    *getMerchantsList({ payload: { restParams } }, { call }) {
-      const response = yield call(getMerchantsList, { restParams });
+    *getMerchantsList({ payload: { params } }, { call }) {
+      const response = yield call(getMerchantsList, { params });
       return response.data;
     },
     *getMerchantShops({ payload: { restParams } }, { call }) {

@@ -684,7 +684,9 @@ export default class activitySettingList extends PureComponent {
       .dispatch({
         type: "activitySetting/getMerchantsList",
         payload: {
-          restParams: {}
+          params: {
+            channelCode: '002001',
+          }
         }
       })
       .then(res => {
