@@ -21,7 +21,7 @@ import {getAccountMenus} from "../../utils/authority";
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const activityStatus = [{id: 1, name: '未开始'}, {id: 2, name: '进行中'}]
+const activityStatus = [{id: 1, name: '未开始'}, {id: 2, name: '进行中'}, {id: 3, name: '已结束'}]
 
 @connect(({ common, loading, machinePlanSetting }) => ({
   common,

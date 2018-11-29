@@ -23,7 +23,7 @@ const statusOption = [{id: 1, name: '待接单'}, {id: 2, name: '处理中'}, {i
 
 const CreateForm = Form.create()(
   (props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, openSelectMachineModal, machineId, machine  } = props;
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, openSelectMachineModal, machineId, machine, workType  } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -54,6 +54,7 @@ const CreateForm = Form.create()(
             <FormItem {...formItemLayout} label="工单类型">
               {getFieldDecorator('workType', {
                 rules: [{ required: Array, message: '请选择工单类型' }],
+                initialValue: workType
               })(
                 <Select placeholder="请选择" style={{ width: '100%'}}>
                   {workTypeOption.map((item) => {
@@ -235,6 +236,7 @@ export default class troubleBill extends PureComponent {
     account: {},
     machine: '',
     machineId: '',
+    workType: '',
   };
   constructor(props) {
     super(props);
@@ -244,12 +246,13 @@ export default class troubleBill extends PureComponent {
   }
   componentDidMount = () => {
     if (this.props.location.query) {
-      const { flag, statusValue, machine, machineId } = this.props.location.query;
+      const { flag, statusValue, machine, machineId, type } = this.props.location.query;
       if (flag === 'openFault') {
         this.setState({
           modalVisible: true,
           machine,
-          machineId
+          machineId,
+          workType: type,
         }, () => {
           this.props.location.query = {}
           this.getLists();
@@ -1312,6 +1315,7 @@ export default class troubleBill extends PureComponent {
           openSelectMachineModal={this.openSelectMachineModal}
           machineId={this.state.machineId}
           machine={this.state.machine}
+          workType={this.state.workType}
         />
         <SelectMachineForm
           ref={this.selectMachineFormRef}
