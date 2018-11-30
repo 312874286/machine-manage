@@ -107,6 +107,7 @@ export default class unusual extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
+    const { account } = this.state
     const columns = [
       {
         title: '机器编号',
@@ -149,7 +150,7 @@ export default class unusual extends PureComponent {
           <Fragment>
             <a
               onClick={() => this.props.history.push({ pathname: '/check/fault', query: { flag: 'openFault', machine: `${item.local}—${item.machineCode}`, machineId: `${item.id}、${item.machineCode}`, type: 1,}})}
-              style={{ display: !account.add ? 'none' : '' }}>创建工单</a>
+              style={{ display: account && !account.add ? 'none' : '' }}>创建工单</a>
           </Fragment>
         ),
       },
