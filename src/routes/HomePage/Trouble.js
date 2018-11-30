@@ -9,6 +9,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import LogModal from '../../components/LogModal';
 import styles from './OffLine.less'
+import {getAccountMenus} from "../../utils/authority";
 
 const machineDoorStatus = ['关闭', '打开']
 
@@ -25,9 +26,26 @@ export default class unusual extends PureComponent {
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
+    account: {},
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    let account = setAccountMenusList.filter((item) => item.path === 'check')
+    var obj = {}
+    if (account[0]) {
+      account = account[0].children.filter((item) => item.path === 'fault')
+      if (account[0].children) {
+        account[0].children.forEach((item) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取列表
   getLists = () => {
