@@ -198,6 +198,7 @@ class StandardTable extends PureComponent {
           loading={loading}
           rowKey={record => record.id || record.code || record.createTime}
           rowSelection={selectedPointRows ? selectedPointRows : null}
+          // rowSelection={rowSelection ? rowSelection : null}
           dataSource={data}
           columns={columns}
           pagination={paginationProps}
