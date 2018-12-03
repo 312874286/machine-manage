@@ -902,10 +902,13 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       this.setState({
         shops: res.data,
-        shopId: merchantId,
       })
     });
+    console.log('item55', paiyangType, merchantId)
     if (paiyangType) {
+      this.setState({
+        shopId: merchantId,
+      })
       this.getGoodsByShops(GoodTypePlaceHolder, 'add')
     }
   }
@@ -1072,7 +1075,7 @@ export default class areaSettingList extends PureComponent {
   // 添加modal 添加事件
   handleModalVisible = async (flag, item, flag1) => {
     console.log('item', item, !flag1 ? flag1 : true)
-    const { saveAndAddModal } = this.state
+    const { saveAndAddModal, paiyangType } = this.state
     this.setState({
       modalVisible: !!flag,
       modalData: {},
@@ -1088,9 +1091,11 @@ export default class areaSettingList extends PureComponent {
       checkShopUserLists: [],
       checkShopLists: [],
       checkSelectedShopLists: [],
+      shopId: item ? item.id : '',
+    }, () => {
+      this.setModalData();
+      this.getAllGoods()
     });
-    this.setModalData();
-    this.getAllGoods()
     // if (saveAndAddModal) {
     //   if (saveAndAddModal.sellerId) {
     //     await this.getInteractShopList(saveAndAddModal.sellerId)
@@ -1108,9 +1113,10 @@ export default class areaSettingList extends PureComponent {
           sellerId: item.sellerId,
           shopId: item.id,
         });
-        this.setState({
-          shopId: item.id
-        })
+        console.log('item44', this.state.shopId)
+        // this.setState({
+        //   shopId: item.id
+        // })
       }
     }
   };
@@ -1251,6 +1257,7 @@ export default class areaSettingList extends PureComponent {
   }
   getGoodsByShops = (value, flag) => {
     const { interactSampling, shopId, couponId } = this.state
+    console.log('item22', interactSampling, shopId, couponId)
     let selectedRowKey = [], selectedRow = []
     if (value !== 0) {
       // 获取商品列表 couponGetList
@@ -1514,6 +1521,7 @@ export default class areaSettingList extends PureComponent {
     });
   }
   onGoodTypeSelect = (value) => {
+    console.log('item33', this.state.shopId)
     this.getGoodsByShops(value, 'add')
     this.setState({
       GoodTypePlaceHolder: value,

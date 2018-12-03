@@ -197,7 +197,7 @@ export default class shop extends PureComponent {
       // console.log('channel', res.data.channel.filter(i => i.name === '淘宝'))
       if (res && res.code === 0) {
         this.setState({
-          channelLists: res.data.channel.filter(i => i.name === '淘宝'),
+          channelLists: res.data.channel.filter(i => i.code === '002001'),
         });
       }
     });
