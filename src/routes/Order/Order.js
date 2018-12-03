@@ -138,9 +138,15 @@ export default class Order extends PureComponent {
       e.preventDefault();
       this.props.form.validateFields((err, fieldsValue) => {
         if (err) return;
+        let areaCode = ''
+        if (fieldsValue.areaCode) {
+          if (fieldsValue.areaCode.length > 0) {
+            areaCode = fieldsValue.areaCode[fieldsValue.areaCode.length - 1]
+          }
+        }
         this.setState({
           keyword: fieldsValue.keyword,
-          areaCode: fieldsValue.areaCode,
+          areaCode,
           payStatus: fieldsValue.payStatus >= 0 ? fieldsValue.payStatus : '',
           goodsStatus: fieldsValue.goodsStatus >= 0 ? fieldsValue.goodsStatus : ''
         }, () => {
