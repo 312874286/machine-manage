@@ -609,6 +609,13 @@ const proxy = {
             functionLevel: 2,
           },
           {
+            id: 'a46',
+            functionDepict: '机器流量监控 ',
+            functionPath: 'flow-monitoring',
+            parentId: '1',
+            functionLevel: 2,
+          },
+          {
             "id": "22",
             "functionDepict": "用户管理",
             "functionPath": "user",
@@ -7138,9 +7145,10 @@ const proxy = {
   },
   'POST /inno72/merchant/user/save': (req, res) => {
     res.send({
-      "code":0,
-      "msg":"成功"
+      "code": 0,
+      "msg": "成功"
     })
+  },
   'GET /machine/locale/detail/list': (req, res) => {
     res.send({
       "msg": "成功",
@@ -7195,6 +7203,13 @@ const proxy = {
         "msg": "成功"
       }
     )
+  },
+  'POST /machine/machine/updateMachineType': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
   }
 };
 

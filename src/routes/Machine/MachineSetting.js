@@ -52,13 +52,12 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+
 const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位', '', '', '', '', '合作中']
 const appStatus = ['未启动', '前台运行', '后台运行']
 const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}]
+const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}, {id: 2, name: '合作机器'}]
 const pointStatusOptions = [
   {id: 1, name: '已开机'},
   {id: 2, name: '已初始化 '},
@@ -66,11 +65,10 @@ const pointStatusOptions = [
   // {id: 4, name: '设置在点位'},
   {id: 4, name: '已在点位'}
   ]
-const machineType = ['渠道机器', '活动机器']
-const machineArr = ['0', '1', '2', '3', '4']
-
+const machineType = ['渠道机器', '活动机器', '合作机器']
+const localTypeOptions = [{id: '0', name: '渠道点位'}, {id: '1', name: '活动点位'}, {id: '2', name: '合作点位'}]
+const localType = {'0': '渠道点位', '1': '活动点位 ', '2': '合作点位'}
 // <Icon type="wifi" />
-const netWorkMap = ['wifi'];
 message.config({
   top: 100,
   duration: 2,
@@ -83,12 +81,14 @@ const tabList = [
   {id: '3', name: '机器温度'},
   {id: '4', name: '修改编号'},
   {id: '5', name: '系统状态'},
+  {id: '6', name: '机器类型'},
 ]
 const teamWorkTabList = [
   {id: '0', name: '重置点位'},
   {id: '1', name: '管理APP'},
   // {id: '4', name: '修改编号'},
   {id: '5', name: '系统状态'},
+  {id: '6', name: '机器类型'},
 ]
 let mySetInterval = null
 let myLogSetInterval = null
@@ -884,6 +884,9 @@ export default class machineSettingList extends PureComponent {
     teamWorkMachineFlag: '',
     teamWorkLists: [],
 
+    localType: '',
+    MachineTypeSelected: '',
+    MachineTypeDefault: ''
   };
   constructor(props) {
     super(props);
@@ -918,6 +921,9 @@ export default class machineSettingList extends PureComponent {
       }
     }
   }
+  IsNull = arg => {
+    return !arg && arg !== 0 && typeof arg !== 'boolean' ? true : false;
+  }
   getInput = () => {
     if (this.props.inputType === 'number') {
       return <InputNumber />;
@@ -937,6 +943,7 @@ export default class machineSettingList extends PureComponent {
           endTime: this.state.endTime,
           machineType: this.state.machineType,
           machineStatus: this.state.machineStatus,
+          localType: this.state.localType
         },
       },
     });
@@ -1013,6 +1020,7 @@ export default class machineSettingList extends PureComponent {
         endTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[1].format('YYYY-MM-DD') : '',
         machineType: fieldsValue.machineType >= 0 ? fieldsValue.machineType : '',
         machineStatus: fieldsValue.machineStatus >= 0 ? fieldsValue.machineStatus : '',
+        localType: fieldsValue.localType,
       }, () => {
         this.getLists();
       });
@@ -1694,17 +1702,6 @@ export default class machineSettingList extends PureComponent {
           let tr = AisleList.filter(item => item.value <= ( i * 10 + 8 ) && item.value >= ( i * 10 + 1 ))
           trLists = [...trLists, ...tr]
         }
-        // let tr1 = AisleList.filter(item => item.value <= 8)
-        // let tr2 = AisleList.filter(item => item.value <= 18 && item.value >= 11)
-        // let tr3 = AisleList.filter(item => item.value <= 28 && item.value >= 21)
-        // let tr4 = AisleList.filter(item => item.value <= 38 && item.value >= 31)
-        // let tr5 = AisleList.filter(item => item.value <= 48 && item.value >= 41)
-        // let tr6 = AisleList.filter(item => item.value <= 58 && item.value >= 51)
-        // console.log('AisleList.push(r);', AisleList)
-        // result.forEach((item) => {
-        //   let r = { key: item.id, code: item.code, goodsName: item.goodsName, goodsPrice: item.goodsPrice, volumeCount: item.volumeCount, goodsCount: item.goodsCount, workStatusreason: item.workStatusreason, isDelete: item.isDelete}
-        //   AisleList.push(r);
-        // })
         this.setState({
           AisleList: trLists,
         });
@@ -2023,40 +2020,6 @@ export default class machineSettingList extends PureComponent {
         this.getMachineStatus(this.state.modalData);
       })
     })
-    // this.getLogLists()
-    // this.props.dispatch({
-    //   type: 'machineSetting/machinePointLog',
-    //   payload: {
-    //     restParams: {
-    //       machineCode: machineCode,
-    //       startTime: '',
-    //       endTime: '',
-    //     },
-    //   },
-    // }).then((res) => {
-    //   console.log('res', res)
-    //   this.setState({
-    //     flagTop: false,
-    //     editMonitoringFormVisible: true,
-    //     logLists: res,
-    //     machineCode: machineCode
-    //   }, () => {
-    //     let destination = res.length * 30
-    //     this.noticePosition = (res.length - 10) * 30
-    //     this.setState({
-    //       noticePosition: this.noticePosition
-    //     })
-    //     mySetInterval = setInterval(() => {
-    //       if (destination / 30 < res.length ) {
-    //         this.move(destination, 500, res.length)
-    //         destination += 30
-    //       } else { // 列表到底
-    //         // clearInterval(mySetInterval)
-    //       }
-    //     }, 1500)
-    //     this.getLogLists()
-    //   });
-    // });
   }
   handleMouseOver = () => {
     this.setState({
@@ -2234,6 +2197,7 @@ export default class machineSettingList extends PureComponent {
       editManageFormVisible: true,
       managekey: '0',
       TemperatureSelected: undefined,
+      MachineTypeDefault: item.machineType ? item.machineType : undefined,
       machineCodeOld: item.machineCode,
       machineCodeNew: undefined,
       teamWorkMachineFlag: item.machineStatus,
@@ -2249,6 +2213,7 @@ export default class machineSettingList extends PureComponent {
       machineCodeNew: undefined,
     });
   }
+  // 温度提交
   temperatureSubmit = () => {
     const { TemperatureSelected } = this.state
     if (!TemperatureSelected) {
@@ -2277,6 +2242,40 @@ export default class machineSettingList extends PureComponent {
         });
         this.setState({
           Temperature: this.state.TemperatureSelected
+        })
+        message.success('修改成功')
+      }
+    })
+  }
+  // 机器类型
+  machineTypeSubmit = () => {
+    const { MachineTypeSelected } = this.state
+    if (this.IsNull(MachineTypeSelected)) {
+      message.config({
+        top: 100,
+        duration: 2,
+        maxCount: 1,
+      });
+      message.error('请先选择机器类型再提交')
+      return false
+    }
+    this.props.dispatch({
+      type: 'machineSetting/updateMachineType',
+      payload: {
+        params: {
+          machineId: this.state.modalData.id,
+          machineType: this.state.TemperatureSelected
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        message.config({
+          top: 100,
+          duration: 2,
+          maxCount: 1,
+        });
+        this.setState({
+          MachineTypeDefault: this.state.TemperatureSelected
         })
         message.success('修改成功')
       }
@@ -2326,6 +2325,11 @@ export default class machineSettingList extends PureComponent {
   onTemperatureSelected = (value) => {
     this.setState({
       TemperatureSelected: value
+    })
+  }
+  onMachineTypeSelected = (value) => {
+    this.setState({
+      MachineTypeSelected: value
     })
   }
   // manageCallBack
@@ -2432,6 +2436,21 @@ export default class machineSettingList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
+            <FormItem label="点位类型">
+              {getFieldDecorator('localType')(
+                <Select placeholder="请选择">
+                  {localTypeOptions.map((item) => {
+                    return (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
             <span>
               <FormItem>
                 <Button onClick={this.handleFormReset}>
@@ -2481,14 +2500,17 @@ export default class machineSettingList extends PureComponent {
           }
         },
       },
-      // {
-      //   title: '系统状态',
-      //   width: '10%',
-      //   render: (text, item) => (
-      //     <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }} onClick={() => this.getMachineStatus(item)} >查看</div>
-      //   ),
-      //   key: 'detail'
-      // },
+      { // machineType
+        title: '点位类型',
+        width: '18%',
+        dataIndex: 'localType',
+        key: 'localType',
+        render(val) {
+          if (val !== null) {
+            return <span>{localType[val]}</span>;
+          }
+        },
+      },
       {
         title: '连接状态',
         width: '10%',
@@ -2509,12 +2531,6 @@ export default class machineSettingList extends PureComponent {
       //   key: 'activityName'
       // },
       {
-        title: '入场时间',
-        width: '10%',
-        dataIndex: 'insideTime',
-        key: 'insideTime'
-      },
-      {
         title: '机器状态',
         dataIndex: 'machineStatus',
         render(val) {
@@ -2527,6 +2543,12 @@ export default class machineSettingList extends PureComponent {
         key: 'machineStatus'
       },
       {
+        title: '入场时间',
+        width: '10%',
+        dataIndex: 'insideTime',
+        key: 'insideTime'
+      },
+      {
         fixed: 'right',
         title: '操作',
         width: 180,
@@ -2535,15 +2557,6 @@ export default class machineSettingList extends PureComponent {
             <a onClick={() => this.handleMonitoringClick(item)}>监控</a>
             <Divider type="vertical" />
             <a onClick={() => this.handleManageClick(item)}>管理</a>
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => !account.setPoint ? null : this.handleEditClick(item) } style={{ display: !account.setPoint ? 'none' : ''}}>重置点位</a>*/}
-            {/*<a onClick={() => !account.machineSet ? null : this.handleEditClick(item)} style={{ display: !account.machineSet ? 'none' : ''}}>机器设置</a>*/}
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => !account.manageApp ? null : this.handleManageAppClick(item)} style={{ display: !account.manageApp ? 'none' : ''}}>管理App</a>*/}
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => !account.manageAisle ? null : this.handleManageAisleClick(item)} style={{ display: !account.manageAisle ? 'none' : ''}}>管理货道</a>*/}
-            {/*<Divider type="vertical" />*/}
-            {/*<a onClick={() => !account.editCode ? null : this.handleNoClick(item)} style={{ display: !account.editCode ? 'none' : ''}}>修改编号</a>*/}
           </Fragment>
         ),
       },
@@ -2714,25 +2727,6 @@ export default class machineSettingList extends PureComponent {
                   </TabPane>
                 );
               })}
-              {/*<TabPane tab="00" key="0">*/}
-              {/*</TabPane>*/}
-              {/*<TabPane tab="11" key="1">*/}
-              {/*</TabPane>*/}
-              {/*<div style={{ display: teamWorkMachineFlag === 2 ? 'none' : '' }}>*/}
-                {/*<TabPane  tab="22" key="2" disabled={ teamWorkMachineFlag === 2 ? true : false }>*/}
-                  {/**/}
-                {/*</TabPane>*/}
-              {/*</div>*/}
-
-              {/*<TabPane  key="3" disabled={ teamWorkMachineFlag === 2 ? true : false }>*/}
-               {/**/}
-              {/*</TabPane>*/}
-              {/*<TabPane  key="4">*/}
-                {/**/}
-              {/*</TabPane>*/}
-              {/*<TabPane  key="5">*/}
-                {/**/}
-              {/*</TabPane>*/}
             </Tabs>
             <div style={{ display: managekey === '0' ? '' : 'none' }}>
               <EditPointForm
@@ -2862,6 +2856,26 @@ export default class machineSettingList extends PureComponent {
                 machineDetail={this.state.machineDetail}
                 // returnBtn={this.returnBtn}
               />
+            </div>
+            <div style={{ display: managekey === '6' ? '' : 'none' }}>
+              <Form>
+                <FormItem {...formItemLayout} label="当前类型">
+                  <span>{this.state.MachineTypeDefault && machineType[this.state.MachineTypeDefault]}</span>
+                </FormItem>
+                <FormItem {...formItemLayout} label="选择类型">
+                  <Select placeholder="请选择" value={ this.state.MachineTypeSelected } onChange={this.onMachineTypeSelected}>
+                    {pointTypeOptions.filter(i => parseInt(i.id) !== this.state.MachineTypeDefault).map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id}>{item.name}</Option>
+                      );
+                    })}
+                  </Select>
+                </FormItem>
+                <FormItem {...formItemLayout}>
+                  <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
+                  <Button style={{ width: '120px' }} type="Default" onClick={() => this.machineTypeSubmit()}>确定</Button>
+                </FormItem>
+              </Form>
             </div>
           </div>
         </Modal>

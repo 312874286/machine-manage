@@ -11,7 +11,7 @@ const api = map({
   // endTime: '',
   // machineType: '',
   // machineStatus: '',
-  getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&machineCode={machineCode}&localCode={localCode}&startTime={startTime}&endTime={endTime}&machineType={machineType}&machineStatus={machineStatus}',
+  getMachineSettingList: '/machine/machine/list?pageNo={pageNo}&machineCode={machineCode}&localCode={localCode}&startTime={startTime}&endTime={endTime}&machineType={machineType}&machineStatus={machineStatus}&localType={localType}',
   updateGoodsCountMachineSetting: '/machine/machine/updateGoodsCount',
   deleteChannelMachineSetting: '/machine/machine/deleteChannel',
   getAisleList: '/machine/machine/channelInfo?machineId={machineId}',
@@ -20,6 +20,7 @@ const api = map({
   cutApp: '/machine/machine/cutApp?machineId={machineId}&appPackageName={appPackageName}',
   installApp: '/machine/machine/installApp?machineId={machineId}&appPackageName={appPackageName}&url={url}&versionCode={versionCode}',
   machineUpdateInfo: '/machine/machine/updateInfo',
+  updateMachineType: '/machine/machine/updateMachineType',
 
   getPointSettingLists: '/machine/locale/getList?pageNo={pageNo}&keyword={keyword}',
 
@@ -76,6 +77,8 @@ const api = map({
   machineLocaleDetail: '/machine/locale/detail/machineLocaleDetail?machineId={machineId}',
 
   searchAppVersion: '/machine/version/appVersion',
+  // 机器流量监控
+  flowMonitoring: '',
 });
 
 export default api;

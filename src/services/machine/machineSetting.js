@@ -121,3 +121,9 @@ export async function updateTemperature({ params }) {
     body: stringify(params),
   });
 }
+
+export async function updateMachineType({ params }) {
+  return fetch.post(api.updateMachineType, {
+    body: stringify(params),
+  });
+}

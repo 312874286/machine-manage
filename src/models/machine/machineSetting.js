@@ -2,7 +2,7 @@ import {
   getMachineSettingList, updateGoodsCountMachineSetting, updateLocaleMachineSetting,
   deleteChannelMachineSetting, getPointSettingList, getAisleList, getMachineStatus, getAppStatus,
   cutApp, installApp, machineUpdateInfo, updateLogStatus, returnDeskTop, findMachineInfoById, machinePointLog,
-  exportMachinePointLog, updateMachineCode, grabLog, getLogs, findTemperature, updateTemperature
+  exportMachinePointLog, updateMachineCode, grabLog, getLogs, findTemperature, updateTemperature, updateMachineType
 } from '../../services/machine/machineSetting';
 
 export default {
@@ -114,6 +114,10 @@ export default {
       const response = yield call(updateTemperature, { params });
       return response;
     },
+    *updateMachineType({ payload: { params } }, { call }) {
+      const response = yield call(updateMachineType, { params });
+      return response;
+    }
   },
   reducers: {
     saveList(state, { payload: { data, page, unColumn } }) {
