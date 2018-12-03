@@ -78,7 +78,7 @@ const api = map({
 
   searchAppVersion: '/machine/version/appVersion',
   // 机器流量监控
-  flowMonitoring: '',
+  flowMonitoring: '/machine/traffic/list?pageNo={pageNo}&machineCode={machineCode}&allTraffic={allTraffic}',
 });
 
 export default api;

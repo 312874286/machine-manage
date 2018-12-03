@@ -7210,6 +7210,45 @@ const proxy = {
       "data": null,
       "msg": "成功"
     })
+  },
+  'GET /machine/traffic/list': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "code": 0,
+        "page": {
+          "pageSize": 20,
+          "currentResult": 0,
+          "totalPage": 1,
+          "pageNo": 1,
+          "totalCount": 1,
+          "list": null,
+          "firstResult": 0,
+          "firstPage": true,
+          "lastPage": true,
+          "nextPage": 1,
+          "prePage": 1
+        },
+        "data": [
+          {
+            "machineId": "18941236",
+            "networkType": "4G",
+            "networkOperateName": "中国联通",
+            "accid": "89860617060059238915",
+            "memoryFree": 4628,
+            "memoryTotle": 5502,
+            "cpu": "0.0%",
+            "sdFree": 4628,
+            "sdTotle": 5502,
+            "ping": "87ms",
+            "allTraffic": 6.3,
+            "thatdayTraffic": 6.3,
+            "monthTraffic": 6.3,
+            "createTime": "2018-12-03 17:05:47"
+          }
+        ],
+        "unColumn": ""
+      }
+    )
   }
 };
 

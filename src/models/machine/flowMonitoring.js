@@ -10,7 +10,7 @@ export default {
   },
 
   effects: {
-    *flowMonitoring({ payload: { restParams } }, { call, put }) {
+    *flowMonitoringLists({ payload: { restParams } }, { call, put }) {
       const response = yield call(flowMonitoring, { restParams });
       // console.log('response', response)
       yield put({
