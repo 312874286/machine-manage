@@ -229,7 +229,7 @@ export default class Order extends PureComponent {
                       })(
                         <Cascader
                           options={areaList}
-                          onChange={(value) => { this.areaChange(value); }}
+                          // onChange={(value) => { this.areaChange(value); }}
                           loadData={this.getArea}
                           changeOnSelect
                           placeholder="请选择"
