@@ -52,6 +52,7 @@ export default class areaSettingList extends PureComponent {
   // interactDetail
   getInteractDetail = () => {
     const { goodsLists } = this.state
+    console.log('goodsLists', goodsLists)
     this.props.dispatch({
       type: 'interactSamplingSetting/interactDetail',
       payload: {
@@ -62,16 +63,16 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       console.log('!res.goodsRule', !res.goodsRule)
       if (!res.goodsRule) {
-        // this.getGoods()
-        allGoods: goodsLists.map((item, index) => {
-          return {
-            key: index,
-            goodsId: item.id,
-            userDayNumber: item.userDayNumber === -1 ? ' ' : item.userDayNumber,
-            name: item.name,
-            check: item.userDayNumber === -1 ? true : false
-          }
-        })
+        this.getGoods()
+        // allGoods: goodsLists.map((item, index) => {
+        //   return {
+        //     key: index,
+        //     goodsId: item.id,
+        //     userDayNumber: item.userDayNumber === -1 ? ' ' : item.userDayNumber,
+        //     name: item.name,
+        //     check: item.userDayNumber === -1 ? true : false
+        //   }
+        // })
       } else {
         this.setState({
           allGoods: res.goodsRule,
@@ -183,6 +184,15 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
+          allGoods: res.data.map((item, index) => {
+            return {
+              key: index,
+              goodsId: item.id,
+              userDayNumber: item.userDayNumber === -1 ? ' ' : item.userDayNumber,
+              name: item.name,
+              check: item.userDayNumber === -1 ? true : false
+            }
+          }),
           goodsLists: res.data,
         })
       }
