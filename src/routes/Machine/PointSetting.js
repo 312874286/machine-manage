@@ -18,7 +18,8 @@ import {
   Popover,
   TimePicker,
   Switch,
-  Tag
+  Tag,
+  Table
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -418,6 +419,12 @@ export default class PointSettingList extends PureComponent {
       this.getLists();
     });
   };
+  onChangeRowSelection = (selectedRowKeys) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`);
+    this.setState({
+      selectedRows: selectedRowKeys,
+    })
+  }
   // 重置
   handleFormReset = () => {
     const { form } = this.props;
@@ -460,11 +467,12 @@ export default class PointSettingList extends PureComponent {
     }
   };
 
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  };
+  // handleSelectRows = rows => {
+  //   console.log('selectedRows', rows)
+  //   this.setState({
+  //     selectedRows: rows,
+  //   });
+  // };
   // 搜索
   handleSearch = e => {
     e.preventDefault();
@@ -993,13 +1001,14 @@ export default class PointSettingList extends PureComponent {
 
   handleMonitorAdd = () => {
     const { multiSwitchStatus, multiSupervisoryStartTime, multiSupervisoryEndTime, selectedRows } = this.state
+    console.log('selectedRows', selectedRows)
     if (selectedRows.length === 0) {
       message.error('请先选择点位在进行批量监控设置')
       return false
     }
     let params = {
       ids: selectedRows.map((item) => {
-        return item.id
+        return item
       }),
       monitor: multiSwitchStatus ? 0 : 1,
       monitorStart: multiSupervisoryStartTime,
@@ -1010,8 +1019,13 @@ export default class PointSettingList extends PureComponent {
       payload: {
         params,
       },
-    }).then(() => {
-      this.getLists();
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.getLists();
+        this.setState({
+          selectedRows: []
+        });
+      }
       this.setState({
         editModalMonitorConfirmLoading: false,
         modalMonitorVisible: false,
@@ -1177,7 +1191,11 @@ export default class PointSettingList extends PureComponent {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
-
+    // onChangeRowSelection
+    const rowSelection = {
+      selectedRowKeys: selectedRows,
+      onChange: this.onChangeRowSelection,
+    };
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -1192,12 +1210,13 @@ export default class PointSettingList extends PureComponent {
             </div>
             <div style={{ display: !account.list ? 'none' : ''}}>
               <StandardTable
-                selectedPointRows={selectedRows}
+                // rowSelection={rowSelection}
+                selectedPointRows={rowSelection}
                 loading={loading}
                 data={list}
                 page={page}
                 columns={columns}
-                onSelectRow={this.handleSelectRows}
+                // onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
                 scrollX={1700}
                 scrollY={(document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 265)}

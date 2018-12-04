@@ -9,6 +9,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import LogModal from '../../components/LogModal';
 import styles from './OffLine.less'
+import {getAccountMenus} from "../../utils/authority";
 
 const machineDoorStatus = ['关闭', '打开']
 
@@ -25,9 +26,26 @@ export default class unusual extends PureComponent {
     logModalLoading: false,
     logId: '',
     logModalPageNo: 1,
+    account: {},
   };
   componentDidMount() {
     this.getLists();
+    this.getAccountMenus(getAccountMenus())
+  }
+  getAccountMenus = (setAccountMenusList) => {
+    let account = setAccountMenusList.filter((item) => item.path === 'check')
+    var obj = {}
+    if (account[0]) {
+      account = account[0].children.filter((item) => item.path === 'fault')
+      if (account[0].children) {
+        account[0].children.forEach((item) => {
+          obj[item.path] = true;
+        })
+        this.setState({
+          account: obj
+        })
+      }
+    }
   }
   // 获取列表
   getLists = () => {
@@ -89,6 +107,7 @@ export default class unusual extends PureComponent {
       loading,
       log: { logList, logPage },
     } = this.props;
+    const { account } = this.state
     const columns = [
       {
         title: '机器编号',
@@ -122,6 +141,18 @@ export default class unusual extends PureComponent {
             <span>无</span>
           )
         )
+      },
+      {
+        fixed: 'right',
+        width: 150,
+        title: '操作',
+        render: (text, item) => (
+          <Fragment>
+            <a
+              onClick={() => this.props.history.push({ pathname: '/check/fault', query: { flag: 'openFault', machine: `${item.local}—${item.machineCode}`, machineId: `${item.id}、${item.machineCode}`, type: 1,}})}
+              style={{ display: account && !account.add ? 'none' : '' }}>创建工单</a>
+          </Fragment>
+        ),
       },
     ];
     return (

@@ -68,12 +68,12 @@ const CreateForm = Form.create()(
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="合作渠道">
               {getFieldDecorator('channelId', {
-                rules: [{ required: true, whitespace: true, message: '请选择合作渠道' }],
+                rules: [{ required: true, whitespace: true, message: '请选择合作渠道'}],
               })(
                 <Select placeholder="请选择" onSelect={getMerchant}>
                   {channelLists.map((item) => {
                     return (
-                      <Option value={item.code} key={item.code}>{item.name}</Option>
+                      <Option value={item.id.toString()} key={item.id.toString()}>{item.name}</Option>
                     );
                   })}
                 </Select>
@@ -197,13 +197,13 @@ export default class shop extends PureComponent {
       // console.log('channel', res.data.channel.filter(i => i.name === '淘宝'))
       if (res && res.code === 0) {
         this.setState({
-          channelLists: res.data.channel.filter(i => i.name === '淘宝'),
+          channelLists: res.data.channel.filter(i => i.code === '002001'),
         });
       }
     });
   }
   getMerchant = (value) => {
-    console.log('value', value)
+    // console.log('value', value)
     this.getMerchantsList(value)
   }
   getMerchantsList = (channelId) => {
@@ -215,9 +215,11 @@ export default class shop extends PureComponent {
         },
       },
     }).then((res) => {
-      this.setState({
-        merchantLists: res,
-      });
+      if (res && res.code === 0) {
+        this.setState({
+          merchantLists: res.data,
+        });
+      }
     });
   }
 
@@ -328,7 +330,10 @@ export default class shop extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id, status: item.status === '1' ? 0 : 1  };
+      const params = {
+        id: item.merchantAccountId,
+        status: item.status === '1' ? 0 : 1
+      };
       this.props.dispatch({
         type: 'shop/alterStatus',
         payload: {
@@ -337,7 +342,7 @@ export default class shop extends PureComponent {
       }).then((res) => {
         // message.success('Click on Yes');
         if (res && res.code === 0) {
-          message.success(`${item.loginStatus === '0' ? '启用' : '停用'}成功`)
+          message.success(`${item.status === '0' ? '启用' : '停用'}成功`)
         }
         this.getLists();
         this.setState({
@@ -362,6 +367,7 @@ export default class shop extends PureComponent {
       },
     }).then((res) => {
       this.setModalData(res);
+      this.getMerchant(res.channelId)
     });
   }
   // 设置modal 数据
@@ -470,8 +476,8 @@ export default class shop extends PureComponent {
       {
         title: '所属商家',
         width: '20%',
-        dataIndex: 'sellerId',
-        key: 'sellerId'
+        dataIndex: 'merchantName',
+        key: 'merchantName'
       },
       {
         title: '合作渠道',

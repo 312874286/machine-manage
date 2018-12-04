@@ -1039,11 +1039,13 @@ export default class areaSettingList extends PureComponent {
   getInteractShopList = (merchantId) => {
     // getInteractMerchantList
     console.log('item.sellerId', merchantId)
+    const { paiyangType, GoodTypePlaceHolder } = this.state
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
         params: {
           merchantId,
+          interactId: this.state.interactSampling
         },
       },
     }).then((res) => {
@@ -1051,6 +1053,13 @@ export default class areaSettingList extends PureComponent {
         shops: res.data,
       })
     });
+    console.log('item55', paiyangType, merchantId)
+    if (paiyangType) {
+      this.setState({
+        shopId: merchantId,
+      })
+      this.getGoodsByShops(GoodTypePlaceHolder, 'add')
+    }
   }
   selectMerchantHandleChange = (value) => {
     const { paiyangType } = this.state
@@ -1238,7 +1247,7 @@ export default class areaSettingList extends PureComponent {
   // 添加modal 添加事件
   handleModalVisible = async (flag, item, flag1) => {
     console.log('item', item, !flag1 ? flag1 : true)
-    const { saveAndAddModal } = this.state
+    const { saveAndAddModal, paiyangType } = this.state
     this.setState({
       modalVisible: !!flag,
       modalData: {},
@@ -1254,9 +1263,11 @@ export default class areaSettingList extends PureComponent {
       checkShopUserLists: [],
       checkShopLists: [],
       checkSelectedShopLists: [],
+      shopId: item ? item.id : '',
+    }, () => {
+      this.setModalData();
+      this.getAllGoods()
     });
-    this.setModalData();
-    this.getAllGoods()
     // if (saveAndAddModal) {
     //   if (saveAndAddModal.sellerId) {
     //     await this.getInteractShopList(saveAndAddModal.sellerId)
@@ -1274,9 +1285,10 @@ export default class areaSettingList extends PureComponent {
           sellerId: item.sellerId,
           shopId: item.id,
         });
-        this.setState({
-          shopId: item.id
-        })
+        console.log('item44', this.state.shopId)
+        // this.setState({
+        //   shopId: item.id
+        // })
       }
     }
   };
@@ -1417,6 +1429,7 @@ export default class areaSettingList extends PureComponent {
   }
   getGoodsByShops = (value, flag) => {
     const { interactSampling, shopId, couponId } = this.state
+    console.log('item22', interactSampling, shopId, couponId)
     let selectedRowKey = [], selectedRow = []
     if (value !== 0) {
       // 获取商品列表 couponGetList
@@ -1680,6 +1693,7 @@ export default class areaSettingList extends PureComponent {
     });
   }
   onGoodTypeSelect = (value) => {
+    console.log('item33', this.state.shopId)
     this.getGoodsByShops(value, 'add')
     this.setState({
       GoodTypePlaceHolder: value,
@@ -1744,9 +1758,12 @@ export default class areaSettingList extends PureComponent {
   // 店铺开始
   targetShopHandleDelete = (id) => {
     const dataSource = [...this.state.checkSelectedShopLists];
+    const checkShopList = [...dataSource.filter(item => item.id === id), ...this.state.checkShopLists]
+    console.log('11', checkShopList, ...dataSource.filter(item => item.id === id))
     this.setState({
       checkSelectedShopLists: dataSource.filter(item => item.id !== id),
       selectedShopRows: [],
+      checkShopLists: checkShopList
     });
   }
   // 新增modal确认事件 开始
@@ -1961,9 +1978,11 @@ export default class areaSettingList extends PureComponent {
   // 添加modal 添加事件
   targetMerchantHandleDelete = (id) => {
     const dataSource = [...this.state.checkSelectedMerchantLists];
+    const checkMerchantList = [...dataSource.filter(item => item.id === id), ...this.state.checkShopLists]
     this.setState({
       checkSelectedMerchantLists: dataSource.filter(item => item.id !== id),
       selectedMerchantRows: [],
+      checkMerchantLists: checkMerchantList
     });
   }
   handleMerchantModalVisible = (flag) => {
@@ -2127,7 +2146,7 @@ export default class areaSettingList extends PureComponent {
         this.setState({
           modalShopsVisible: false,
         }, () => {
-          this.handleModalVisible(true, '', true)
+          this.handleModalVisible(true, '', !paiyangType)
         });
       } else {
         this.handleShopsModalVisible(true)
