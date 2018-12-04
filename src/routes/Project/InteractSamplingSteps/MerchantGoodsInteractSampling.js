@@ -49,7 +49,7 @@ const isFocusOptions = [
   {id: '1', name: '关注'},
   {id: '2', name: '强制关注'}]
 const isVipOptions = [
-  {id: '0', name: '不入会'},
+  {id: '0', name: '无入会'},
   {id: '1', name: '入会'},
   {id: '2', name: '强制入会'}]
 // 新建商户
@@ -2441,7 +2441,7 @@ export default class areaSettingList extends PureComponent {
               <a onClick={() => this.handleModalVisible(true, item, false)}>添加商品</a>
               <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }} />
               <a onClick={() => this.handleVipFormModalVisible(item, true)}>
-                {paiyangType ? '' : item.isVip === 2 ? '强制入会' : (item.isVip === 1 ? '入会' : '不入会')}
+                {paiyangType ? '' : item.isVip === 2 ? '强制入会' : (item.isVip === 1 ? '入会' : '无入会')}
               </a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleShopsDelClick(item)}>删除</a>
