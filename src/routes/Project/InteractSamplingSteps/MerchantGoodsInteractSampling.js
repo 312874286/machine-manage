@@ -2327,7 +2327,7 @@ export default class areaSettingList extends PureComponent {
   }
   handleVipFormModalVisible = (data, flag) => {
     this.setState({
-      modalFocusFormVisible: !!flag,
+      modalVipFormVisible: !!flag,
     });
     if (flag) {
       if (data) {
@@ -2441,7 +2441,7 @@ export default class areaSettingList extends PureComponent {
               <a onClick={() => this.handleModalVisible(true, item, false)}>添加商品</a>
               <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }} />
               <a onClick={() => this.handleVipFormModalVisible(item, true)}>
-                {paiyangType ? '' : item.isVip === 2 ? '强制入会' : (item.isVip === 1 ? '是' : '否')}
+                {paiyangType ? '' : item.isVip === 2 ? '强制入会' : (item.isVip === 1 ? '入会' : '不入会')}
               </a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleShopsDelClick(item)}>删除</a>
