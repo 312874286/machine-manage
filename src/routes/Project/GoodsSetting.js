@@ -162,7 +162,7 @@ const CreateForm = Form.create()(
           </FormItem>
             <FormItem {...formItemLayout} label="商品数量">
               {getFieldDecorator('number', {
-                rules: [{ required: true, message: '请输入商品数量' }],
+                rules: [{ required: false, message: '请输入商品数量' }],
               })(<InputNumber placeholder="请输入商品数量" />)}
             </FormItem>
           <FormItem {...formItemLayout} label="选择商户">
@@ -373,6 +373,9 @@ export default class goodsSettingList extends PureComponent {
   }
   onSelect = (value, option) => {
     this.getShopList(value)
+    this.form.setFieldsValue({
+      shopId: undefined,
+    });
   }
   getShopList = (value) => {
     this.props.dispatch({

@@ -7155,6 +7155,7 @@ const proxy = {
       ],
       "msg": "成功"
     })
+  },
   'GET /machine/locale/detail/list': (req, res) => {
     res.send({
       "msg": "成功",
