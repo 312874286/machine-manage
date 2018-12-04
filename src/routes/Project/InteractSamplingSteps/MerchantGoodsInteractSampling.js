@@ -49,8 +49,8 @@ const isFocusOptions = [
   {id: '1', name: '关注'},
   {id: '2', name: '强制关注'}]
 const isVipOptions = [
-  {id: '0', name: '否'},
-  {id: '1', name: '是'},
+  {id: '0', name: '不入会'},
+  {id: '1', name: '入会'},
   {id: '2', name: '强制入会'}]
 // 新建商户
 const CreateMerchantForm = Form.create()(
