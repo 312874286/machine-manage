@@ -789,7 +789,11 @@ export default class goodsSettingList extends PureComponent {
       this.props.dispatch({
         type: url,
         payload: {
-          params,
+          params: {
+            ...params,
+            price: fieldsValue.price && fieldsValue.price >= 0 ? fieldsValue.price : 0,
+            number: fieldsValue.number && fieldsValue.number >= 0 ? fieldsValue.number : 0,
+          }
         },
       }).then((res) => {
         if (res && res.code === 0) {

@@ -89,7 +89,7 @@ export const getRouterData = (app) => {
     // '/exception/trigger': {
     //   component: dynamicWrapper(app, [], () => import('../routes/Exception/triggerException')),
     // },
-    '/homePage': {
+    '/homePage/index': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/HomePage')),
     },
     '/offline': {

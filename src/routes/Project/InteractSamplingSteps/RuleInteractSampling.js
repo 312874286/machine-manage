@@ -38,7 +38,8 @@ export default class areaSettingList extends PureComponent {
     interactSampling: '',
     allGoods: [],
     goodsInitData: [],
-    goodsLists: []
+    goodsLists: [],
+    paiyangType: 0,
   };
   componentDidMount() {
     this.setState({
@@ -62,6 +63,11 @@ export default class areaSettingList extends PureComponent {
       },
     }).then((res) => {
       console.log('!res.goodsRule', !res.goodsRule)
+      // paiyangType 2
+      this.setState({
+        paiyangType: res.paiyangType
+      })
+
       if (!res.goodsRule) {
         this.getGoods()
         // allGoods: goodsLists.map((item, index) => {
@@ -87,14 +93,22 @@ export default class areaSettingList extends PureComponent {
       type: 'interactSamplingSetting/getGameRuleList',
       payload: {
         params: {
-          id: this.state.interactSampling
+          interactId: this.state.interactSampling
         },
       },
     }).then((res) => {
       if (res && res.code === 0) {
         if (res.data.length > 0) {
           this.setState({
-            goodsInitData: res.data,
+            goodsInitData: res.data.map((item, index) => {
+              return {
+                key: index,
+                goodsId: item.id,
+                goodName: item.name,
+                ruleCode: '',
+                ruleRemark: item.ruleRemark ? item.ruleRemark : '描述',
+              }
+            }),
           })
         } else {
           this.setState({
@@ -333,7 +347,7 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current, allGoods, goodsInitData, goodsLists } = this.state
+    const { current, allGoods, goodsInitData, goodsLists, paiyangType } = this.state
     console.log('allGoods', allGoods, goodsLists)
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -470,7 +484,7 @@ export default class areaSettingList extends PureComponent {
                   handleChecked={this.handleChecked}
                 />
               </TabPane>
-              <TabPane tab="掉货规则" key="3">
+              <TabPane tab="掉货规则" key="3" disabled={paiyangType === 2}>
                 <RuleInteract
                   initData={goodsInitData}
                   goodsHandle={this.goodsHandle}

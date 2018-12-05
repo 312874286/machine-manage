@@ -116,7 +116,7 @@ const CreateMerchantForm = Form.create()(
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
                 <a href="javascript:;">删除</a>
               </Popconfirm>
-              <Select defaultValue='0'>
+              <Select defaultValue='0' style={{ display: paiyangType ? 'none' : ''}}>
                 {/*{children2}*/}
                 {isFocusOptions.map((item) => {
                   return (
@@ -319,14 +319,7 @@ const CreateShopsForm = Form.create()(
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
                  <a href="javascript:;">删除</a>
               </Popconfirm>
-              {/*<Select defaultValue='0'>*/}
-                {/*{isVipOptions.map((item) => {*/}
-                  {/*return (*/}
-                    {/*<Option key={item.id} value={item.id}>{item.name}</Option>*/}
-                  {/*);*/}
-                {/*})}*/}
-              {/*</Select>*/}
-              <RadioGroup defaultValue={`${record.id}-0`} onChange={shopRadioGroupChange}>
+              <RadioGroup defaultValue={`${record.id}-0`} onChange={shopRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
                 {isVipOptions.map((item) => {
                   return (
                     <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
@@ -338,13 +331,6 @@ const CreateShopsForm = Form.create()(
         );
       }
     }];
-    {/*<Select placeholder="请选择">*/}
-    {/*{merchantLists.map((item) => {*/}
-    {/*return (*/}
-    {/*<Option value={item.id} key={item.id}>{item.merchantName}</Option>*/}
-    {/*);*/}
-    {/*})}*/}
-    {/*</Select>*/}
     return (
       <Modal
         title={
@@ -374,7 +360,7 @@ const CreateShopsForm = Form.create()(
               })(
                 <Select
                 showSearch
-                placeholder="请输入客户名称或者客户编码"
+                placeholder="请输入商户名称"
                 optionFilterProp="children"
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 onChange={handleChange}
@@ -382,7 +368,7 @@ const CreateShopsForm = Form.create()(
               {
                 merchantLists.map((item) => {
                 return (
-                <Option value={`${item.merchantCode}-${item.id}`}>{item.merchantName}</Option>
+                <Option value={item.id} key={item.id}>{item.merchantName}</Option>
                 )
               })
               }
@@ -1154,10 +1140,9 @@ export default class areaSettingList extends PureComponent {
   }
   //
   selectShopHandleChange = (value) => {
-    const { paiyangType } = this.state
-    this.getCheckShopLists(value && value.split('-')[1])
+    this.getCheckShopLists(value)
   }
-  getCheckShopLists = (sellerId, channel) => {
+  getCheckShopLists = (sellerId) => {
     this.props.dispatch({
       type: 'interactSamplingSetting/checkShop',
       payload: {
@@ -1763,6 +1748,7 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       checkSelectedShopLists: dataSource.filter(item => item.id !== id),
       selectedShopRows: [],
+      selectedShopRowsKeys: [],
       checkShopLists: checkShopList
     });
   }
@@ -1982,6 +1968,7 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       checkSelectedMerchantLists: dataSource.filter(item => item.id !== id),
       selectedMerchantRows: [],
+      selectedMerchantRowsKeys: [],
       checkMerchantLists: checkMerchantList
     });
   }

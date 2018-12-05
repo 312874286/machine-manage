@@ -420,7 +420,7 @@ const proxy = {
         functions: [
           {
             "id": "29",
-            "functionDepict": "首页",
+            "functionDepict": "工作台",
             "functionPath": "homePage",
             "parentId": null,
             "functionLevel": 1,
@@ -428,6 +428,13 @@ const proxy = {
             "color": null,
             "seq": 0,
             "parentName": null
+          },
+          {
+            id: 'a48',
+            functionDepict: '首页',
+            functionPath: 'index',
+            parentId: '29',
+            functionLevel: 2,
           },
           {
             "id": "1",

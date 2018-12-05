@@ -761,11 +761,6 @@ export default class areaSettingList extends PureComponent {
         title: "负责人",
         dataIndex: "manager",
         key: "manager",
-        render(val) {
-          if (val) {
-            return <span>{status[val]}</span>;
-          }
-        }
       },
       // {
       //   title: "发放率",
