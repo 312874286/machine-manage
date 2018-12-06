@@ -106,7 +106,7 @@ export default class areaSettingList extends PureComponent {
                 key: index,
                 goodsId: item.goodsId,
                 goodName: item.name,
-                ruleCode: '',
+                ruleCode: item.ruleCode,
                 ruleRemark: item.ruleRemark ? item.ruleRemark : '描述',
               }
             }),

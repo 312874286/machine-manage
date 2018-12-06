@@ -106,13 +106,13 @@ const CreateMerchantForm = Form.create()(
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '操作',
-      width: 70,
+      width: 200,
       dataIndex: 'operation',
       render: (text, record) => {
         return (
           checkSelectedMerchantLists.length > 0
             ? (
-            <div>
+            <div style={{ display: 'flex' }}>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
                 <a href="javascript:;">删除</a>
               </Popconfirm>
@@ -322,7 +322,7 @@ const CreateShopsForm = Form.create()(
         return (
           checkSelectedShopLists.length > 0
             ? (
-            <div>
+            <div style={{ display: 'flex' }}>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
                  <a href="javascript:;">删除</a>
               </Popconfirm>
