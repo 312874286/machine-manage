@@ -46,7 +46,6 @@ export default class areaSettingList extends PureComponent {
       interactSampling: this.props.match.params.id
     }, () => {
       this.getGoods()
-      this.getInteractDropDetail()
       this.getInteractDetail()
     })
   }
@@ -67,7 +66,9 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         paiyangType: res.paiyangType
       })
-
+      if (res.paiyangType !== 2) {
+        this.getInteractDropDetail()
+      }
       if (!res.goodsRule) {
         this.getGoods()
         // allGoods: goodsLists.map((item, index) => {
@@ -484,7 +485,7 @@ export default class areaSettingList extends PureComponent {
                   handleChecked={this.handleChecked}
                 />
               </TabPane>
-              <TabPane tab="掉货规则" key="3" disabled={paiyangType === 2}>
+              <TabPane tab="掉货规则" key="3" disabled={paiyangType !== 2}>
                 <RuleInteract
                   initData={goodsInitData}
                   goodsHandle={this.goodsHandle}
