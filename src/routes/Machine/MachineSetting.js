@@ -943,7 +943,7 @@ export default class machineSettingList extends PureComponent {
           endTime: this.state.endTime,
           machineType: this.state.machineType,
           machineStatus: this.state.machineStatus,
-          localType: this.state.localType
+          localType: this.state.localType ? this.state.localType : ''
         },
       },
     });
@@ -2264,7 +2264,7 @@ export default class machineSettingList extends PureComponent {
       payload: {
         params: {
           machineId: this.state.modalData.id,
-          machineType: this.state.TemperatureSelected
+          machineType: this.state.MachineTypeSelected
         },
       },
     }).then((res) => {
