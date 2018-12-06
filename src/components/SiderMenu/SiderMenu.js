@@ -44,18 +44,18 @@ export default class SiderMenu extends PureComponent {
   }
   getDefaultCollapsedSubMenus(props) {
     const { location: { pathname } } = props || this.props;
-    console.log('pathname', pathname)
+    // console.log('pathname', pathname)
     const snippets = pathname.split('/').slice(1, -1);
     const currentPathSnippets = snippets.map((item, index) => {
       const arr = snippets.filter((_, i) => i <= index);
       return arr.join('/');
     });
-    console.log('pathname', snippets)
+    // console.log('pathname', snippets)
     let currentMenuSelectedKeys = [];
     currentPathSnippets.forEach((item) => {
       currentMenuSelectedKeys = currentMenuSelectedKeys.concat(this.getSelectedMenuKeys(item));
     });
-    console.log('pathname', currentPathSnippets)
+    // console.log('pathname', currentPathSnippets)
     if (currentMenuSelectedKeys.length === 0) {
       return ['dashboard/index'];
     }
@@ -75,11 +75,11 @@ export default class SiderMenu extends PureComponent {
   }
   getSelectedMenuKeys = (path) => {
     const flatMenuKeys = this.getFlatMenuKeys(this.menus);
-    console.log(
-      path,
-      flatMenuKeys.indexOf(path.replace(/^\//, '')),
-      flatMenuKeys.indexOf(path.replace(/^\//, '').replace(/\/$/, '')),
-    )
+    // console.log(
+    //   path,
+    //   flatMenuKeys.indexOf(path.replace(/^\//, '')),
+    //   flatMenuKeys.indexOf(path.replace(/^\//, '').replace(/\/$/, '')),
+    // )
     // if (flatMenuKeys.indexOf(path.replace(/^\//, '')) > -1) {
     //   return [path.replace(/^\//, '')];
     // }
@@ -89,7 +89,7 @@ export default class SiderMenu extends PureComponent {
     return flatMenuKeys.filter((item) => {
       const itemRegExpStr = `^${item.replace(/:[\w-]+/g, '[\\w-]+')}$`;
       const itemRegExp = new RegExp(itemRegExpStr);
-      console.log('yy', itemRegExp.test(path.replace(/^\//, '')))
+      // console.log('yy', itemRegExp.test(path.replace(/^\//, '')))
       // if (path === '/homePage/index') {
       //   return true
       // }
@@ -225,15 +225,15 @@ export default class SiderMenu extends PureComponent {
     const menuProps = collapsed ? {} : {
       openKeys,
     };
-    console.log('selectedKeys0', openKeys)
+    // console.log('selectedKeys0', openKeys)
     // if pathname can't match, use the nearest parent's key
     let selectedKeys = this.getSelectedMenuKeys(pathname);
-    console.log('selectedKeys', selectedKeys, openKeys)
+    // console.log('selectedKeys', selectedKeys, openKeys)
     if (!selectedKeys.length) {
-      console.log('selectedKeys1', selectedKeys)
+      // console.log('selectedKeys1', selectedKeys)
       selectedKeys = [openKeys[openKeys.length - 1]];
     }
-    console.log('selectedKeys2', selectedKeys)
+    // console.log('selectedKeys2', selectedKeys)
     // console.log('collapsed', collapsed, collapsed, onCollapse )
     return (
       <div className={styles.siderBox}>

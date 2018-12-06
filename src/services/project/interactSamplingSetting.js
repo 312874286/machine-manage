@@ -253,7 +253,7 @@ export async function getBaseDict({ params }) {
 }
 
 export async function getGameRuleList({ params }) {
-  return fetch.postJSON(api.getGameRuleList, {
-    body: JSON.stringify(params),
+  return fetch.post(api.getGameRuleList, {
+    body: stringify(params),
   });
 }

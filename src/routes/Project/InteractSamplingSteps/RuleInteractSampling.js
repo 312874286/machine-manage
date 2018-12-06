@@ -66,7 +66,7 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         paiyangType: res.paiyangType
       })
-      if (res.paiyangType !== 2) {
+      if (res.paiyangType === 2) {
         this.getInteractDropDetail()
       }
       if (!res.goodsRule) {
