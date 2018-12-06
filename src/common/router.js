@@ -101,6 +101,12 @@ export const getRouterData = (app) => {
     '/lock': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/Lock')),
     },
+    '/flowWarn': {
+      component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/FlowWarn')),
+    },
+    '/RAMWarn': {
+      component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/RAMWarn')),
+    },
     '/paiActivity': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/PaiActivity')),
     },

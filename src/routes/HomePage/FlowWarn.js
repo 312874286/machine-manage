@@ -16,7 +16,7 @@ import {getAccountMenus} from "../../utils/authority";
   loading: loading.models.homePageSetting,
 }))
 @Form.create()
-export default class offLine extends PureComponent {
+export default class flowWarn extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
@@ -35,7 +35,7 @@ export default class offLine extends PureComponent {
       type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          type: 5
+          type: 6
         },
       },
     });
@@ -50,25 +50,25 @@ export default class offLine extends PureComponent {
         align: 'center',
         title: '机器编号',
         dataIndex: 'machineCode',
-        width: '30%',
+        width: '25%',
       },
       {
         align: 'center',
-        title: '机器点位',
+        title: '总使用流量',
         width: '25%',
-        dataIndex: 'local',
-        render: (text, item) => (
-          (item.local) ? (
-            <span>{item.local}</span>
-          ) :(
-            <span>无</span>
-          )
-        )
+        dataIndex: 'allTraffic',
       },
       {
-        title: '被锁定货道个数',
-        dataIndex: 'lockCount',
-        align: 'center'
+        title: '本月使用流量',
+        dataIndex: 'monthTraffic',
+        align: 'center',
+        width: '25%',
+      },
+      {
+        title: '今日使用流量',
+        dataIndex: 'thatdayTraffic',
+        align: 'center',
+        width: '25%',
       }
     ];
     return (

@@ -16,7 +16,7 @@ import {getAccountMenus} from "../../utils/authority";
   loading: loading.models.homePageSetting,
 }))
 @Form.create()
-export default class offLine extends PureComponent {
+export default class RAMWarn extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
@@ -35,7 +35,7 @@ export default class offLine extends PureComponent {
       type: 'homePageSetting/findExceptionMachine',
       payload: {
         restParams: {
-          type: 5
+          type: 7
         },
       },
     });
@@ -50,26 +50,20 @@ export default class offLine extends PureComponent {
         align: 'center',
         title: '机器编号',
         dataIndex: 'machineCode',
-        width: '30%',
+        width: '33%',
       },
       {
         align: 'center',
-        title: '机器点位',
-        width: '25%',
-        dataIndex: 'local',
-        render: (text, item) => (
-          (item.local) ? (
-            <span>{item.local}</span>
-          ) :(
-            <span>无</span>
-          )
-        )
+        title: 'SD卡总内存',
+        width: '33%',
+        dataIndex: 'sdTotle',
       },
       {
-        title: '被锁定货道个数',
-        dataIndex: 'lockCount',
-        align: 'center'
-      }
+        title: '剩余内存',
+        dataIndex: 'sdFree',
+        align: 'center',
+        width: '33%',
+      },
     ];
     return (
       <PageHeaderLayout>

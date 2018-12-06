@@ -118,6 +118,24 @@ export default class homePageSetting extends PureComponent {
                     <span>货道被锁定</span>
                   </div>
                 </a>
+                <a onClick={() => this.props.history.push('/flowWarn')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/lock.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.trafficCount === 0 ? "0" : MachinePortalDataList.trafficCount}</span>
+                    <span>今日流量预警</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push('/RAMWarn')}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/lock.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.sdCount === 0 ? "0" : MachinePortalDataList.sdCount}</span>
+                    <span>机器内存预警</span>
+                  </div>
+                </a>
               </div>
             </Card>
             <Card title={
