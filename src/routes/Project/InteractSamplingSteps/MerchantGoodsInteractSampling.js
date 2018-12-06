@@ -106,7 +106,7 @@ const CreateMerchantForm = Form.create()(
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '操作',
-      width: 200,
+      width: 300,
       dataIndex: 'operation',
       render: (text, record) => {
         return (
@@ -114,7 +114,7 @@ const CreateMerchantForm = Form.create()(
             ? (
             <div style={{ display: 'flex' }}>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
-                <a href="javascript:;">删除</a>
+                <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
               </Popconfirm>
               {/*<Select defaultValue='0' style={{ display: paiyangType ? 'none' : ''}}>*/}
                 {/*/!*{children2}*!/*/}
@@ -148,7 +148,7 @@ const CreateMerchantForm = Form.create()(
         // onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-        width={1000}
+        width={1100}
         footer={null}>
         <div className="manageAppBox">
           <Table
@@ -238,7 +238,7 @@ const CreateMerchantForm = Form.create()(
                     columns={columnsRight}
                     dataSource={checkSelectedMerchantLists}
                     id="rightTable"
-                    style={{ width: '460px', marginTop: '10px' }}
+                    style={{ width: '560px', marginTop: '10px' }}
                     scroll={{ y: 200 }}
                     pagination={false} />
                 </div>
@@ -316,7 +316,7 @@ const CreateShopsForm = Form.create()(
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '操作',
-      width: 200,
+      width: 300,
       dataIndex: 'operation',
       render: (text, record) => {
         return (
@@ -324,7 +324,7 @@ const CreateShopsForm = Form.create()(
             ? (
             <div style={{ display: 'flex' }}>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
-                 <a href="javascript:;">删除</a>
+                 <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
               </Popconfirm>
               <RadioGroup defaultValue={`${record.id}-0`} onChange={shopRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
                 {isVipOptions.map((item) => {
@@ -350,7 +350,7 @@ const CreateShopsForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-        width={1000}
+        width={1100}
         footer={null}>
         <div className="manageAppBox">
           <Table
@@ -421,7 +421,7 @@ const CreateShopsForm = Form.create()(
                     columns={columnsRight}
                     dataSource={checkSelectedShopLists}
                     id="rightTable"
-                    style={{ width: '460px', marginTop: '10px' }}
+                    style={{ width: '560px', marginTop: '10px' }}
                     scroll={{ y: 200 }}
                     pagination={false} />
                 </div>
