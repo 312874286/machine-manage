@@ -1406,7 +1406,7 @@ export default class TaskSetting extends PureComponent {
           code: selectedOptions.code,
           startTime: this.state.machineStartTime,
           endTime: this.state.machineEndTime,
-          machineCode: selectedOptions.machineCode || ''
+          machineCode: selectedOptions.machineCode || '',
         }
       } else {
         let level = ''
@@ -1428,7 +1428,10 @@ export default class TaskSetting extends PureComponent {
     this.props.dispatch({
       type: 'taskSetting/taskSelectAreaMachines',
       payload: {
-        params,
+        params: {
+          ...params,
+          type: this.state.taskType,
+        },
       },
     }).then((res) => {
       if (selectedOptions.level) {
