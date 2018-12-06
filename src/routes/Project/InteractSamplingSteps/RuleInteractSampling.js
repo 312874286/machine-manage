@@ -203,7 +203,7 @@ export default class areaSettingList extends PureComponent {
             return {
               key: index,
               goodsId: item.id,
-              userDayNumber: item.userDayNumber === -1 ? ' ' : item.userDayNumber,
+              userDayNumberNew: item.userDayNumber === -1 ? ' ' : item.userDayNumber,
               name: item.name,
               check: item.userDayNumber === -1 ? true : false
             }
@@ -230,10 +230,10 @@ export default class areaSettingList extends PureComponent {
     const { allGoods } = this.state
     if (val.checked) {
       console.log('allGoods', allGoods)
-      allGoods[val.key].userDayNumber = ' '
+      allGoods[val.key].userDayNumberNew = ' '
       allGoods[val.key].check = true
     } else {
-      allGoods[val.key].userDayNumber = val.userDayNumber
+      allGoods[val.key].userDayNumberNew = val.userDayNumberNew
       allGoods[val.key].check = false
     }
     this.setState({
@@ -304,7 +304,7 @@ export default class areaSettingList extends PureComponent {
         if (allGoods.length > 0) {
           for (let i = 0; i < allGoods.length; i++) {
             if (!allGoods[i].check) {
-              if (allGoods[i].userDayNumber === 0 || !allGoods[i].userDayNumber) {
+              if (allGoods[i].userDayNumberNew === 0 || !allGoods[i].userDayNumberNew) {
                 message.info('如没有选择不限，请填写可派发数量')
                 return false
               }
@@ -312,7 +312,7 @@ export default class areaSettingList extends PureComponent {
           }
           for (let i = 0; i < allGoods.length; i++) {
             if (allGoods[i].check) {
-              allGoods[i].userDayNumber = -1
+              allGoods[i]['userDayNumber'] = -1
             }
           }
         }

@@ -87,7 +87,7 @@ class EditableCell extends React.Component {
                     })(
                       <InputNumber
                         ref={node => (this.input = node)}
-                        disabled={record['userDayNumber'] === ' ' ? true : false}
+                        disabled={record['userDayNumberNew'] === ' ' ? true : false}
                         // onBlur={this.save}
                       />
                     )}
@@ -119,7 +119,7 @@ class EditableCell extends React.Component {
   {/*})(*/}
     {/*<Input*/}
       {/*ref={node => (this.input = node)}*/}
-      {/*disabled={record['userDayNumber'] === ' ' ? true : false}*/}
+      {/*disabled={record['userDayNumberNew'] === ' ' ? true : false}*/}
       {/*// onBlur={this.save}*/}
     {/*/>*/}
   {/*)}*/}
@@ -133,7 +133,7 @@ export default class RuleInteractSampling extends PureComponent {
       width: '30%',
     }, {
       title: '每天可派发数',
-      dataIndex: 'userDayNumber',
+      dataIndex: 'userDayNumberNew',
       editable: true,
     }, {
       title: '',
@@ -168,7 +168,7 @@ export default class RuleInteractSampling extends PureComponent {
     console.log('row', e.target.checked, e)
     // const { allGoods } = this.props
     setTimeout(() => {
-      this.props.handleChecked({ key: this.state.currentModalKey, checked: e.target.checked, userDayNumber: 0 })
+      this.props.handleChecked({ key: this.state.currentModalKey, checked: e.target.checked, userDayNumberNew: 0 })
     }, 0)
   }
   changeData = (record) => {
@@ -186,7 +186,7 @@ export default class RuleInteractSampling extends PureComponent {
       ...row,
     });
     console.log('newData6666', newData, item, row)
-    this.props.handleChecked({ key: row.key, checked: row.check, userDayNumber: row.userDayNumber })
+    this.props.handleChecked({ key: row.key, checked: row.check, userDayNumberNew: row.userDayNumberNew })
     this.setState({ dataSource: newData });
     console.log('newData6666', this.state.dataSource)
   }

@@ -1873,6 +1873,8 @@ export default class areaSettingList extends PureComponent {
       checkShopLists: [],
       checkSelectedShopLists: [],
       selectedShopRows: [],
+      selectedMerchantRowsKeys: [],
+      selectedShopRowsKeys: [],
     }, () => {
       this.setShopsModalData();
       this.getAllShops()
@@ -2008,6 +2010,8 @@ export default class areaSettingList extends PureComponent {
       checkShopLists: [],
       checkSelectedShopLists: [],
       selectedShopRows: [],
+      selectedMerchantRowsKeys: [],
+      selectedShopRowsKeys: [],
     });
     this.setMerchantModalData();
   };
