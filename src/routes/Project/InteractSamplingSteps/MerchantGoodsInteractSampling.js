@@ -2291,7 +2291,7 @@ export default class areaSettingList extends PureComponent {
         return;
       }
       this.props.dispatch({
-        type: 'interactSamplingSetting/updateShop',
+        type: 'interactSamplingSetting/updateShops',
         payload: {
           params: {
             interactId: this.state.interactSampling,
@@ -2316,7 +2316,7 @@ export default class areaSettingList extends PureComponent {
       if (data) {
         this.VipForm.setFieldsValue({
           isVip: data.isVip && data.isVip.toString() || '0',
-          VipId: data.id
+          shopId: data.id
         });
       } else {
         this.FocusForm.setFieldsValue({
