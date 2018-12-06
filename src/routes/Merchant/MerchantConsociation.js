@@ -677,7 +677,7 @@ export default class MerchantConsociation extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             <a className={styles.delete} onClick={() => this.handleIsStopClick(item)}>{parseInt(item.status) === 0 ? '启用账号' : '停用账号'}</a>
           </Fragment>
@@ -724,7 +724,7 @@ export default class MerchantConsociation extends PureComponent {
                 新建
               </Button>
             </div>
-            <div style={{ display: !account.list ? 'none' : '' }}>
+            <div>
               <StandardTable
               selectedRows={selectedRows}
               loading={loading}
