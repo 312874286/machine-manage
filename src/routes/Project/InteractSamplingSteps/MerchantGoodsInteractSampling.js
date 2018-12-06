@@ -1025,7 +1025,6 @@ export default class areaSettingList extends PureComponent {
   getInteractShopList = (merchantId) => {
     // getInteractMerchantList
     console.log('item.sellerId', merchantId)
-    const { paiyangType, GoodTypePlaceHolder } = this.state
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -1039,13 +1038,6 @@ export default class areaSettingList extends PureComponent {
         shops: res.data,
       })
     });
-    console.log('item55', paiyangType, merchantId)
-    if (paiyangType) {
-      this.setState({
-        shopId: merchantId,
-      })
-      this.getGoodsByShops(GoodTypePlaceHolder, 'add')
-    }
   }
   selectMerchantHandleChange = (value) => {
     const { paiyangType } = this.state
@@ -1224,10 +1216,18 @@ export default class areaSettingList extends PureComponent {
     this.form = form;
   }
   onSelect = (value) => {
-    this.getInteractShopList(value)
-    this.form.setFieldsValue({
-      shopId: undefined,
-    });
+    const { paiyangType, GoodTypePlaceHolder } = this.state
+    if (paiyangType) {
+      this.setState({
+        shopId: value,
+      })
+      this.getGoodsByShops(GoodTypePlaceHolder, 'add', value)
+    } else {
+      this.getInteractShopList(value)
+      this.form.setFieldsValue({
+        shopId: undefined,
+      });
+    }
   }
   // 添加modal 添加事件
   handleModalVisible = async (flag, item, flag1) => {
@@ -1253,27 +1253,23 @@ export default class areaSettingList extends PureComponent {
       this.setModalData();
       this.getAllGoods()
     });
-    // if (saveAndAddModal) {
-    //   if (saveAndAddModal.sellerId) {
-    //     await this.getInteractShopList(saveAndAddModal.sellerId)
-    //     await this.form.setFieldsValue({
-    //       sellerId: saveAndAddModal.sellerId,
-    //       shopId: saveAndAddModal.shopId,
-    //     });
-    //   }
-    // }
     if (item) {
-      if (item.sellerId) {
-        await this.getInteractShopList(item.sellerId, item.id)
-        console.log('item', item.id, item.sellerId, this.state.shops)
-        await this.form.setFieldsValue({
-          sellerId: item.sellerId,
-          shopId: item.id,
-        });
-        console.log('item44', this.state.shopId)
-        // this.setState({
-        //   shopId: item.id
-        // })
+      if (!paiyangType) {
+        if (item.sellerId) {
+          await this.getInteractShopList(item.sellerId, item.id)
+          console.log('item', item.id, item.sellerId, this.state.shops)
+          await this.form.setFieldsValue({
+            sellerId: item.sellerId,
+            shopId: item.id,
+          });
+        }
+      } else {
+        if (item.id) {
+          await this.form.setFieldsValue({
+            sellerId: item.id,
+            shopId: item.id,
+          });
+        }
       }
     }
   };
@@ -1412,7 +1408,7 @@ export default class areaSettingList extends PureComponent {
       selectedRows: selectedRow
     })
   }
-  getGoodsByShops = (value, flag) => {
+  getGoodsByShops = (value, flag, shopsId) => {
     const { interactSampling, shopId, couponId } = this.state
     console.log('item22', interactSampling, shopId, couponId)
     let selectedRowKey = [], selectedRow = []
@@ -1420,7 +1416,7 @@ export default class areaSettingList extends PureComponent {
       // 获取商品列表 couponGetList
       let restParams = {
         interactId: interactSampling,
-        shopsId: shopId,
+        shopsId: shopsId ? shopsId : shopId,
       }
       this.props.dispatch({
         type: 'interactSamplingSetting/couponGetList',
