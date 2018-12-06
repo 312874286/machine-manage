@@ -2316,7 +2316,7 @@ export default class areaSettingList extends PureComponent {
       if (data) {
         this.VipForm.setFieldsValue({
           isVip: data.isVip && data.isVip.toString() || '0',
-          shopId: data.id
+          shopsId: data.id
         });
       } else {
         this.FocusForm.setFieldsValue({
