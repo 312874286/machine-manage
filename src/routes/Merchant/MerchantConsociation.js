@@ -215,7 +215,6 @@ export default class MerchantConsociation extends PureComponent {
   componentDidMount() {
     this.getLists();
     this.getBaseDictLists()
-    this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -474,7 +473,7 @@ export default class MerchantConsociation extends PureComponent {
             editModalConfirmLoading: false
           })
         }
-        
+
       });
     });
   }
@@ -530,7 +529,7 @@ export default class MerchantConsociation extends PureComponent {
     this.setState({
       merchantAccountId: sellerList[index].id
     })
-    
+
   }
 
   // 选泽渠道
@@ -542,7 +541,7 @@ export default class MerchantConsociation extends PureComponent {
     const index = option.props.index
 
     console.log(channelLists[index])
-    
+
     this.setState({
       channelId: channelLists[index].id,
       channelCode: channelLists[index].code
