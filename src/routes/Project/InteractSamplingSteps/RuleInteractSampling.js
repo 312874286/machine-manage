@@ -104,7 +104,7 @@ export default class areaSettingList extends PureComponent {
             goodsInitData: res.data.map((item, index) => {
               return {
                 key: index,
-                goodsId: item.id,
+                goodsId: item.goodsId,
                 goodName: item.name,
                 ruleCode: '',
                 ruleRemark: item.ruleRemark ? item.ruleRemark : '描述',
