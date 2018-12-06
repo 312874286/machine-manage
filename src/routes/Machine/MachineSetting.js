@@ -65,7 +65,7 @@ const pointStatusOptions = [
   // {id: 4, name: '设置在点位'},
   {id: 4, name: '已在点位'}
   ]
-const machineType = ['渠道机器', '活动机器', '合作机器']
+const machineType = ['渠道机器', '活动机器', '合作机器', '']
 const localTypeOptions = [{id: '0', name: '渠道点位'}, {id: '1', name: '活动点位'}, {id: '2', name: '合作点位'}]
 const localType = {'0': '渠道点位', '1': '活动点位 ', '2': '合作点位'}
 // <Icon type="wifi" />
@@ -886,7 +886,7 @@ export default class machineSettingList extends PureComponent {
 
     localType: '',
     MachineTypeSelected: '',
-    MachineTypeDefault: ''
+    MachineTypeDefault: 3
   };
   constructor(props) {
     super(props);
@@ -2275,7 +2275,8 @@ export default class machineSettingList extends PureComponent {
           maxCount: 1,
         });
         this.setState({
-          MachineTypeDefault: this.state.MachineTypeSelected
+          MachineTypeDefault: this.state.MachineTypeSelected,
+          MachineTypeSelected: undefined,
         })
         message.success('修改成功')
       }
@@ -2860,7 +2861,7 @@ export default class machineSettingList extends PureComponent {
             <div style={{ display: managekey === '6' ? '' : 'none' }}>
               <Form>
                 <FormItem {...formItemLayout} label="当前类型">
-                  <span>{this.state.MachineTypeDefault && machineType[this.state.MachineTypeDefault]}</span>
+                  <span>{machineType[this.state.MachineTypeDefault]}</span>
                 </FormItem>
                 <FormItem {...formItemLayout} label="选择类型">
                   <Select placeholder="请选择" value={ this.state.MachineTypeSelected } onChange={this.onMachineTypeSelected}>
