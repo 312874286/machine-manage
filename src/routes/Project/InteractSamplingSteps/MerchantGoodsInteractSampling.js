@@ -61,7 +61,7 @@ const CreateMerchantForm = Form.create()(
       merchants, paiyangType, checkMerchantUserLists, handleChange,
       channelHandleChange,
       checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightMerchantHandle,
-      selectedRowKeys, onSelectMerchantChange
+      selectedRowKeys, onSelectMerchantChange, merchantsRadioGroupChange
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -116,14 +116,21 @@ const CreateMerchantForm = Form.create()(
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
                 <a href="javascript:;">删除</a>
               </Popconfirm>
-              <Select defaultValue='0' style={{ display: paiyangType ? 'none' : ''}}>
-                {/*{children2}*/}
+              {/*<Select defaultValue='0' style={{ display: paiyangType ? 'none' : ''}}>*/}
+                {/*/!*{children2}*!/*/}
+                {/*{isFocusOptions.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option key={item.id} value={item.id}>{item.name}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>*/}
+              <RadioGroup defaultValue={`${record.id}-0`} onChange={merchantsRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
                 {isFocusOptions.map((item) => {
                   return (
-                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                    <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
                   );
                 })}
-              </Select>
+              </RadioGroup>
             </div>
             ) : null
         );
@@ -1207,6 +1214,22 @@ export default class areaSettingList extends PureComponent {
     })
     this.setState({
       checkSelectedShopLists,
+    })
+    // console.log('shopRadioGroupChange', checkSelectedShopLists)
+  }
+  merchantsRadioGroupChange = (value) => {
+    // console.log('shopRadioGroupChange', value.target.value)
+    const merchant = value.target.value.split('-')
+    const { checkSelectedMerchantLists } = this.state
+    const merchantId = merchant[0]
+    const isFoucs = merchant[1]
+    checkSelectedMerchantLists.filter(i => {
+      if (i.id === merchantId) {
+        i.isFocus = isFoucs
+      }
+    })
+    this.setState({
+      checkSelectedMerchantLists,
     })
     // console.log('shopRadioGroupChange', checkSelectedShopLists)
   }
@@ -2542,6 +2565,8 @@ export default class areaSettingList extends PureComponent {
           targetHandleDelete={this.targetMerchantHandleDelete}
           selectedRowKeys={this.state.selectedMerchantRowsKeys}
           onSelectMerchantChange={this.onSelectMerchantChange}
+
+          merchantsRadioGroupChange={this.merchantsRadioGroupChange}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
