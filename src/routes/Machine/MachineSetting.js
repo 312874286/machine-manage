@@ -886,7 +886,8 @@ export default class machineSettingList extends PureComponent {
 
     localType: '',
     MachineTypeSelected: '',
-    MachineTypeDefault: 3
+    MachineTypeDefault: 3,
+    machineTypes: ''
   };
   constructor(props) {
     super(props);
@@ -2183,7 +2184,7 @@ export default class machineSettingList extends PureComponent {
 
   // handleManageClick 管理
   handleManageClick = (item) => {
-    if (item.machineStatus === '9') {
+    if (item.machineType === 2) {
       this.setState({
         teamWorkLists: teamWorkTabList
       })
@@ -2198,9 +2199,10 @@ export default class machineSettingList extends PureComponent {
       managekey: '0',
       TemperatureSelected: undefined,
       MachineTypeDefault: item.machineType ? item.machineType : undefined,
+      // machineTypes: item.machineType,
       machineCodeOld: item.machineCode,
       machineCodeNew: undefined,
-      teamWorkMachineFlag: item.machineStatus,
+      teamWorkMachineFlag: item.machineType,
     });
     this.handleEditClick(item)
   }
@@ -2275,8 +2277,9 @@ export default class machineSettingList extends PureComponent {
           maxCount: 1,
         });
         this.setState({
-          MachineTypeDefault: this.state.MachineTypeSelected,
+          MachineTypeDefault: MachineTypeSelected,
           MachineTypeSelected: undefined,
+          teamWorkLists: MachineTypeSelected === '2' ? teamWorkTabList : tabList
         })
         message.success('修改成功')
       }
@@ -2476,7 +2479,7 @@ export default class machineSettingList extends PureComponent {
     const { account, selectedRows,
       modalVisible, editModalConfirmLoading, modalData,
       updateList, appLists, AisleList, message, appLists2,
-      createTime, teamWorkMachineFlag, managekey, teamWorkLists } = this.state;
+      createTime, teamWorkMachineFlag, managekey, teamWorkLists, machineTypes } = this.state;
     const columns = [
       {
         title: '机器编号',
@@ -2797,7 +2800,7 @@ export default class machineSettingList extends PureComponent {
                 </div>
               </div>
             </div>
-            <div style={{ display: managekey === '2' && teamWorkMachineFlag !== '9' ? '' : 'none' }}>
+            <div style={{ display: managekey === '2' && teamWorkMachineFlag !== 2 ? '' : 'none' }}>
               <ManageAisleForm
                 ref={this.saveManageAisleFormRef}
                 ManageAislemodalVisible={this.state.ManageAislemodalVisible}
@@ -2812,7 +2815,7 @@ export default class machineSettingList extends PureComponent {
                 updateGoodsCount={this.updateGoodsCount}
               />
             </div>
-            <div style={{ display: managekey === '3' && teamWorkMachineFlag !== '9' ? '' : 'none' }}>
+            <div style={{ display: managekey === '3' && teamWorkMachineFlag !== 2  ? '' : 'none' }}>
               <Form>
                 <FormItem {...formItemLayout} label="当前温度">
                   <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
@@ -2832,7 +2835,7 @@ export default class machineSettingList extends PureComponent {
                 </FormItem>
               </Form>
             </div>
-            <div style={{ display: managekey === '4' && teamWorkMachineFlag !== '9' ? '' : 'none' }}>
+            <div style={{ display: managekey === '4' && teamWorkMachineFlag !== 2 ? '' : 'none' }}>
               <Form>
                 <FormItem {...formItemLayout} label="当前编号">
                   <span>{this.state.machineCodeOld}</span>
