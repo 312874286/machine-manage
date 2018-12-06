@@ -97,11 +97,11 @@ const CreateMerchantForm = Form.create()(
     const columnsRight = [{
       title: `${paiyangType ? '公众号AppID' : '商户ID'}`,
       dataIndex: 'merchantCode',
-      width: '30%',
+      width: '20%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: `${paiyangType ? '公众号名称' : '商户名称'}`,
-      width: '30%',
+      width: '20%',
       dataIndex: 'merchantName',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
