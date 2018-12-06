@@ -2275,7 +2275,7 @@ export default class machineSettingList extends PureComponent {
           maxCount: 1,
         });
         this.setState({
-          MachineTypeDefault: this.state.TemperatureSelected
+          MachineTypeDefault: this.state.MachineTypeSelected
         })
         message.success('修改成功')
       }
