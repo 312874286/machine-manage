@@ -7,20 +7,8 @@ import {
   Card,
   Form,
   Input,
-  Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
   InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Badge,
-  Divider,
-  Cascader,
-  Popconfirm,
-  Table,
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -179,26 +167,32 @@ export default class FlowMonitoring extends PureComponent {
     } = this.props;
     let columns = [
       {
+        title: '时间',
+        width: '20%',
+        dataIndex: 'createTime',
+        key: 'createTime'
+      },
+      {
         title: '机器Code',
-        width: '25%',
+        width: '20%',
         dataIndex: 'machineId',
         key: 'machineId'
       },
       {
         title: '当日总流量',
-        width: '25%',
+        width: '20%',
         dataIndex: 'thatdayTraffic',
         key: 'thatdayTraffic'
       },
       {
         title: '当月流量',
-        width: '25%',
+        width: '20%',
         dataIndex: 'monthTraffic',
         key: 'monthTraffic'
       },
       {
         title: '总流量',
-        width: '25%',
+        width: '20%',
         dataIndex: 'allTraffic',
         key: 'allTraffic'
       },
