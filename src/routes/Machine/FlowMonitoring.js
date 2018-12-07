@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Row,
   Col,
@@ -13,9 +12,6 @@ import {
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './LabelSetting.less';
-import LogModal from '../../components/LogModal/index';
-import {getAccountMenus} from "../../utils/authority";
-
 
 const FormItem = Form.Item;
 @connect(({ common, loading, flowMonitoring, log }) => ({
