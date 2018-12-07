@@ -120,7 +120,7 @@ export default class homePageSetting extends PureComponent {
                 </a>
                 <a onClick={() => this.props.history.push('/flowWarn')}>
                   <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/lock.jpg')}/>
+                    <img src={require('../../assets/images/indexPage/flowWarn.jpg')}/>
                   </div>
                   <div className={styles.machineRightBox}>
                     <span>{MachinePortalDataList.trafficCount === 0 ? "0" : MachinePortalDataList.trafficCount}</span>
@@ -129,7 +129,7 @@ export default class homePageSetting extends PureComponent {
                 </a>
                 <a onClick={() => this.props.history.push('/RAMWarn')}>
                   <div className={styles.machineLeftBox}>
-                    <img src={require('../../assets/images/indexPage/lock.jpg')}/>
+                    <img src={require('../../assets/images/indexPage/RAMWarn.jpg')}/>
                   </div>
                   <div className={styles.machineRightBox}>
                     <span>{MachinePortalDataList.sdCount === 0 ? "0" : MachinePortalDataList.sdCount}</span>
