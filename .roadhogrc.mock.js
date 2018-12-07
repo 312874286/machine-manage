@@ -420,7 +420,7 @@ const proxy = {
         functions: [
           {
             "id": "29",
-            "functionDepict": "工作台",
+            "functionDepict": "首页",
             "functionPath": "homePage",
             "parentId": null,
             "functionLevel": 1,
@@ -446,6 +446,13 @@ const proxy = {
             "color": "",
             "seq": 1,
             "parentName": null
+          },
+          {
+            id: 'a48',
+            functionDepict: '机器流量监控',
+            functionPath: 'flow-monitor',
+            parentId: '1',
+            functionLevel: 2,
           },
           {
             "id": "4",
@@ -2565,7 +2572,7 @@ const proxy = {
       }]
     });
   },
-  'GET /project/merchant/getList': (req, res) => {
+  'POST /project/merchant/getList': (req, res) => {
     res.send({
       "msg": "成功",
       "code": 0,
@@ -4028,7 +4035,7 @@ const proxy = {
       },
       "data": [
         {
-          "id": null,
+          "id": 53215321,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4045,10 +4052,11 @@ const proxy = {
           "remark": null,
           "localeName": "北京市北京市东城区王府井—188982407114q",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 0,
         },
         {
-          "id": null,
+          "id": 53415432,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4065,10 +4073,11 @@ const proxy = {
           "remark": null,
           "localeName": "北京市北京市东城区王府井—188982407114q",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 1,
         },
         {
-          "id": null,
+          "id": 421432155321,
           "name": "赵飞龙",
           "phone": "13683023304",
           "password": null,
@@ -4085,9 +4094,17 @@ const proxy = {
           "remark": null,
           "localeName": "天津市天津市和平区鞍山道沿线—ZJ1807184936290",
           "machineCode": null,
-          "machines": null
+          "machines": null,
+          "status": 0
         }
       ]
+    })
+  },
+  'POST /check/signIn/updateStatus': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
     })
   },
   'GET /check/user/getUserMachinDetailList': (req, res) => {
@@ -7135,8 +7152,8 @@ const proxy = {
   },
   'POST /inno72/merchant/user/save': (req, res) => {
     res.send({
-      "code":0,
-      "msg":"成功"
+      "code": 0,
+      "msg": "成功"
     })
   },
   'POST /interact/game/rule/getGameRuleList': (req, res) => {
@@ -7217,6 +7234,44 @@ const proxy = {
         "msg": "成功"
       }
     )
+  },
+  'GET /machine/traffic/list': (req, res) => {
+    res.send({
+      "msg": "成功",
+      "code": 0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 1,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
+      "data": [
+        {
+          "machineId": "18941236",
+          "networkType": "4G",
+          "networkOperateName": "中国联通",
+          "accid": "89860617060059238915",
+          "memoryFree": 4628,
+          "memoryTotle": 5502,
+          "cpu": "0.0%",
+          "sdFree": 4628,
+          "sdTotle": 5502,
+          "ping": "87ms",
+          "allTraffic": 6.3,
+          "thatdayTraffic": 6.3,
+          "monthTraffic": 6.3,
+          "createTime": "2018-12-03 17:05:47"
+        }
+      ],
+      "unColumn": ""
+    })
   }
 };
 

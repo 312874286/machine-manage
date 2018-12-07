@@ -76,6 +76,7 @@ const api = map({
   machineLocaleDetail: '/machine/locale/detail/machineLocaleDetail?machineId={machineId}',
 
   searchAppVersion: '/machine/version/appVersion',
+  flowMonitoring: '/machine/traffic/list?pageNo={pageNo}&machineCode={machineCode}&allTraffic={allTraffic}',
 });
 
 export default api;
