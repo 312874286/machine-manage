@@ -47,11 +47,12 @@ const goodType = [{id: 0, name: '商品'}, {id: 1, name: '优惠券'}]
 const isFocusOptions = [
   {id: '0', name: '不关注'},
   {id: '1', name: '关注'},
-  {id: '2', name: '强制关注'}]
+  {id: '2', name: '强制关注'}
+  ]
 const isVipOptions = [
   {id: '0', name: '无入会'},
   {id: '1', name: '入会'},
-  {id: '2', name: '强制入会'}]
+]
 // 新建商户
 const CreateMerchantForm = Form.create()(
   (props) => {
@@ -863,7 +864,7 @@ const VipForm = Form.create()(
         title={
           <div class="modalBox">
             <span class="leftSpan"></span>
-            <span class="modalTitle">修改关注</span>
+            <span class="modalTitle">修改入会</span>
           </div>
         }
         visible={modalVisible}
@@ -888,6 +889,11 @@ const VipForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} style={{ display: 'none' }}>
               {getFieldDecorator('shopId', {
+                rules: [{ }],
+              })(<Input  />)}
+            </FormItem>
+            <FormItem {...formItemLayout} style={{ display: 'none' }}>
+              {getFieldDecorator('merchantId', {
                 rules: [{ }],
               })(<Input  />)}
             </FormItem>
@@ -2170,10 +2176,10 @@ export default class areaSettingList extends PureComponent {
   }
   // 商户结束
   // 获取最新店铺开始
-  getShops = (flag) => {
+  getShops = (flag, merchantId) => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
     let params = {
-      merchantId: this.state.expandedRowKeys[0],
+      merchantId: merchantId ? merchantId : this.state.expandedRowKeys[0],
       interactId: this.state.interactSampling,
     }
     this.props.dispatch({
@@ -2182,7 +2188,6 @@ export default class areaSettingList extends PureComponent {
         params,
       },
     }).then((res) => {
-      console.log('1111', res.data)
       if (res && res.code === 0) {
         this.setState({
           currentShopsData: res.data,
@@ -2330,7 +2335,8 @@ export default class areaSettingList extends PureComponent {
         this.setState({
           modalVipFormVisible: false,
         });
-        this.getInteractMerchantList(this.props.match.params.id)
+        this.getShops(2, values.merchantId)
+        // merchantId
       });
       // updateMerchant
     })
@@ -2343,7 +2349,8 @@ export default class areaSettingList extends PureComponent {
       if (data) {
         this.VipForm.setFieldsValue({
           isVip: data.isVip && data.isVip.toString() || '0',
-          shopId: data.id
+          shopId: data.id,
+          merchantId: data.sellerId,
         });
       } else {
         this.FocusForm.setFieldsValue({

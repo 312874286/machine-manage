@@ -1,8 +1,8 @@
 const environment = {
-  hostxxx: 'http://api.bi.inno72.com',
-  host: 'http://api.erp.inno72.com',
-  appId: 'dingoakb41ozzxedr3gnpv',
-  frontHost: 'http://erp.inno72.com',
+  hostxxx: 'http://api.bi.36solo.com',
+  host: 'http://api.erp.36solo.com',
+  appId: 'dingoapfhppaxuf4llewdw',
+  frontHost: 'http://erp.36solo.com',
 };
 
 export default environment;
