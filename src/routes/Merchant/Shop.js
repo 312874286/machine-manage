@@ -107,7 +107,7 @@ const CreateForm = Form.create()(
               })(<Input placeholder="请输入店铺名称" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="入会码">
-              {getFieldDecorator('focusSessionKey', {
+              {getFieldDecorator('sessionKey', {
                 rules: [{ required: false, whitespace: true, message: '请输入入会码' }],
               })(<Input placeholder="请输入入会码" />)}
             </FormItem>
