@@ -2198,7 +2198,7 @@ export default class machineSettingList extends PureComponent {
       editManageFormVisible: true,
       managekey: '0',
       TemperatureSelected: undefined,
-      MachineTypeDefault: item.machineType ? item.machineType : undefined,
+      MachineTypeDefault: machineType[item.machineType] ? machineType[item.machineType] : undefined,
       // machineTypes: item.machineType,
       machineCodeOld: item.machineCode,
       machineCodeNew: undefined,
@@ -2277,7 +2277,7 @@ export default class machineSettingList extends PureComponent {
           maxCount: 1,
         });
         this.setState({
-          MachineTypeDefault: MachineTypeSelected,
+          MachineTypeDefault: machineType[MachineTypeSelected],
           MachineTypeSelected: undefined,
           teamWorkLists: MachineTypeSelected === '2' ? teamWorkTabList : tabList
         })
@@ -2864,7 +2864,7 @@ export default class machineSettingList extends PureComponent {
             <div style={{ display: managekey === '6' ? '' : 'none' }}>
               <Form>
                 <FormItem {...formItemLayout} label="当前类型">
-                  <span>{machineType[this.state.MachineTypeDefault]}</span>
+                  <span>{this.state.MachineTypeDefault}</span>
                 </FormItem>
                 <FormItem {...formItemLayout} label="选择类型">
                   <Select placeholder="请选择" value={ this.state.MachineTypeSelected } onChange={this.onMachineTypeSelected}>
