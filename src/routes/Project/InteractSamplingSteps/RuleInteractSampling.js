@@ -327,11 +327,11 @@ export default class areaSettingList extends PureComponent {
         params = {
           ...params,
           id: this.state.interactSampling,
-          goodsRule: allGoods.map((i) => {
+          goodsRule: allGoods.map((item) => {
             return {
-              key: index,
-              goodsId: item.id,
-              userDayNumber: item.userDayNumberNew === -1 ? ' ' : item.userDayNumberNew,
+              key: item.key,
+              goodsId: item.goodsId,
+              userDayNumber: item.userDayNumberNew === ' ' ? -1 : item.userDayNumberNew,
               name: item.name,
               check: item.userDayNumber === -1 ? true : false
             }
