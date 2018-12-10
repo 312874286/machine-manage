@@ -55,9 +55,9 @@ class EditableCell extends Component {
   save = (toggleEdit) => {
     const { record, handleSave } = this.props;
     this.form.validateFields((error, values) => {
-      if (error) {
-        return;
-      }
+      // if (error) {
+      //   return;
+      // }
       // toggleEdit();
       handleSave({ ...record, ...values });
     });
@@ -91,7 +91,7 @@ class EditableCell extends Component {
                         message: `请输入${title}`,
                       }, {
                         validator(rule, value, callback) {
-                          if (title === '商品数量') {
+                          if (title === '规则描述') {
                             if (value.length > 8) {
                               callback(`${title}输入过大`);
                             }

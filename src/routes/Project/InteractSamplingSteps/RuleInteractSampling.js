@@ -214,6 +214,7 @@ export default class areaSettingList extends PureComponent {
     });
   }
   goodsHandleChange = (row) => {
+    console.log('row', row)
     const newData = [...this.state.goodsInitData];
     const index = newData.findIndex(item => row.key === item.key);
     const item = newData[index];
