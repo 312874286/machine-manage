@@ -169,25 +169,25 @@ export default class FlowMonitoring extends PureComponent {
         key: 'createTime'
       },
       {
-        title: '机器Code',
+        title: '机器编码',
         width: '20%',
         dataIndex: 'machineId',
         key: 'machineId'
       },
       {
-        title: '当日总流量',
+        title: '当日总流量（MB）',
         width: '20%',
         dataIndex: 'thatdayTraffic',
         key: 'thatdayTraffic'
       },
       {
-        title: '当月流量',
+        title: '当月流量（MB）',
         width: '20%',
         dataIndex: 'monthTraffic',
         key: 'monthTraffic'
       },
       {
-        title: '总流量',
+        title: '总流量（MB）',
         width: '20%',
         dataIndex: 'allTraffic',
         key: 'allTraffic'
