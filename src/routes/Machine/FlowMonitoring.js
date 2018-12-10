@@ -117,7 +117,7 @@ export default class FlowMonitoring extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
         allTraffic: fieldsValue.allTraffic >= 0 ? fieldsValue.allTraffic : '',
       }, () => {
         this.getLists();
