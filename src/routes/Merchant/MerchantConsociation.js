@@ -215,7 +215,6 @@ export default class MerchantConsociation extends PureComponent {
   componentDidMount() {
     this.getLists();
     this.getBaseDictLists()
-    this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -474,7 +473,7 @@ export default class MerchantConsociation extends PureComponent {
             editModalConfirmLoading: false
           })
         }
-        
+
       });
     });
   }
@@ -530,7 +529,7 @@ export default class MerchantConsociation extends PureComponent {
     this.setState({
       merchantAccountId: sellerList[index].id
     })
-    
+
   }
 
   // 选泽渠道
@@ -542,7 +541,7 @@ export default class MerchantConsociation extends PureComponent {
     const index = option.props.index
 
     console.log(channelLists[index])
-    
+
     this.setState({
       channelId: channelLists[index].id,
       channelCode: channelLists[index].code
@@ -678,7 +677,7 @@ export default class MerchantConsociation extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleEditClick(item)} style={{ display: !account.update ? 'none' : '' }}>编辑</a>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
             <Divider type="vertical" />
             <a className={styles.delete} onClick={() => this.handleIsStopClick(item)}>{parseInt(item.status) === 0 ? '启用账号' : '停用账号'}</a>
           </Fragment>
@@ -721,11 +720,11 @@ export default class MerchantConsociation extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)} style={{ display: !account.add ? 'none' : '' }}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
             </div>
-            <div style={{ display: !account.list ? 'none' : '' }}>
+            <div>
               <StandardTable
               selectedRows={selectedRows}
               loading={loading}

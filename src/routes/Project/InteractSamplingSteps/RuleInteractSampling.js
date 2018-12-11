@@ -10,15 +10,17 @@ import {
   Input,
   DatePicker,
   Steps,
-  Checkbox, Table, message, InputNumber
+  Checkbox, Table, message, InputNumber, Tabs
 } from 'antd';
 import StandardTable from '../../../components/StandardTable/index';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import styles from './BasicInteractSampling.less';
 import {getAccountMenus} from "../../../utils/authority";
 import RuleInteractSampling from '../../../components/Project/RuleInteractSampling'
+import RuleInteract from '../../../components/Project/InteractSamplingSteps/Ruleinteract/index'
 const Step = Steps.Step;
 const FormItem = Form.Item;
+const TabPane = Tabs.TabPane;
 
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
@@ -34,17 +36,23 @@ export default class areaSettingList extends PureComponent {
     number: false,
     dayNumber: false,
     interactSampling: '',
-    allGoods: []
+    allGoods: [],
+    goodsInitData: [],
+    goodsLists: [],
+    paiyangType: 0,
   };
   componentDidMount() {
     this.setState({
       interactSampling: this.props.match.params.id
     }, () => {
+      this.getGoods()
       this.getInteractDetail()
     })
   }
   // interactDetail
   getInteractDetail = () => {
+    const { goodsLists } = this.state
+    console.log('goodsLists', goodsLists)
     this.props.dispatch({
       type: 'interactSamplingSetting/interactDetail',
       payload: {
@@ -53,8 +61,25 @@ export default class areaSettingList extends PureComponent {
         },
       },
     }).then((res) => {
+      console.log('!res.goodsRule', !res.goodsRule)
+      // paiyangType 2
+      this.setState({
+        paiyangType: res.paiyangType
+      })
+      if (res.paiyangType === 2) {
+        this.getInteractDropDetail()
+      }
       if (!res.goodsRule) {
         this.getGoods()
+        // allGoods: goodsLists.map((item, index) => {
+        //   return {
+        //     key: index,
+        //     goodsId: item.id,
+        //     userDayNumber: item.userDayNumber === -1 ? ' ' : item.userDayNumber,
+        //     name: item.name,
+        //     check: item.userDayNumber === -1 ? true : false
+        //   }
+        // })
       } else {
         this.setState({
           allGoods: res.goodsRule,
@@ -63,7 +88,48 @@ export default class areaSettingList extends PureComponent {
       this.setModalData(res)
     });
   }
+  getInteractDropDetail = () => {
+    const { goodsLists } = this.state
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getGameRuleList',
+      payload: {
+        params: {
+          interactId: this.state.interactSampling
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        if (res.data.length > 0) {
+          this.setState({
+            goodsInitData: res.data.map((item, index) => {
+              return {
+                key: index,
+                goodsId: item.goodsId,
+                goodName: item.name,
+                ruleCode: item.ruleCode,
+                ruleRemark: item.ruleRemark ? item.ruleRemark : '描述',
+              }
+            }),
+          })
+        } else {
+          this.setState({
+            goodsInitData: goodsLists.map((item, index) => {
+              return {
+                key: index,
+                goodsId: item.id,
+                goodName: item.name,
+                ruleCode: '',
+                ruleRemark: '描述',
+              }
+            }),
+          })
+        }
+      }
+      // this.setModalData(res)
+    });
+  }
   setModalData = (data) => {
+    console.log('allGoods222', data, this.state.allGoods)
     if (data) {
       this.setState({
         times: data.times === -1 ? true : false,
@@ -134,21 +200,41 @@ export default class areaSettingList extends PureComponent {
       if (res && res.code === 0) {
         this.setState({
           allGoods: res.data.map((item, index) => {
-            return { key: index, goodsId: item.id, userDayNumber: item.userDayNumber === -1 ? ' ' : item.userDayNumber, name: item.name, check: item.userDayNumber === -1 ? true : false }
-          })
+            return {
+              key: index,
+              goodsId: item.id,
+              userDayNumberNew: item.userDayNumber === -1 ? ' ' : item.userDayNumber,
+              name: item.name,
+              check: item.userDayNumber === -1 ? true : false
+            }
+          }),
+          goodsLists: res.data,
         })
       }
     });
+  }
+  goodsHandleChange = (row) => {
+    // console.log('row', row)
+    const newData = [...this.state.goodsInitData];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+
+    this.setState({ goodsInitData: newData });
+    // console.log('goodsHandleChange::', row);
   }
   handleChecked = (val) => {
     console.log('val', val)
     const { allGoods } = this.state
     if (val.checked) {
       console.log('allGoods', allGoods)
-      allGoods[val.key].userDayNumber = ' '
+      allGoods[val.key].userDayNumberNew = ' '
       allGoods[val.key].check = true
     } else {
-      allGoods[val.key].userDayNumber = val.userDayNumber
+      allGoods[val.key].userDayNumberNew = val.userDayNumberNew
       allGoods[val.key].check = false
     }
     this.setState({
@@ -166,7 +252,7 @@ export default class areaSettingList extends PureComponent {
       maxCount: 3,
     });
     let url = 'interactSamplingSetting/interactAdd'
-    const { times, dayTimes, number, dayNumber, allGoods } = this.state
+    const { times, dayTimes, number, dayNumber, allGoods, goodsInitData } = this.state
     this.setState({
       type: (type === 0) ? false : true
     }, () => {
@@ -219,7 +305,7 @@ export default class areaSettingList extends PureComponent {
         if (allGoods.length > 0) {
           for (let i = 0; i < allGoods.length; i++) {
             if (!allGoods[i].check) {
-              if (allGoods[i].userDayNumber === 0 || !allGoods[i].userDayNumber) {
+              if (allGoods[i].userDayNumberNew === 0 || !allGoods[i].userDayNumberNew) {
                 message.info('如没有选择不限，请填写可派发数量')
                 return false
               }
@@ -227,14 +313,31 @@ export default class areaSettingList extends PureComponent {
           }
           for (let i = 0; i < allGoods.length; i++) {
             if (allGoods[i].check) {
-              allGoods[i].userDayNumber = -1
+              allGoods[i]['userDayNumber'] = -1
+            }
+          }
+        }
+        if (goodsInitData.length >0) {
+          for (let i = 0; i < goodsInitData.length; i++) {
+            if (!goodsInitData[i].ruleCode || goodsInitData[i].ruleRemark === '描述' || !goodsInitData[i].ruleRemark) {
+              message.info('请填写完整规则编号或者规则描述')
+              return false
             }
           }
         }
         params = {
           ...params,
           id: this.state.interactSampling,
-          goodsRule: allGoods
+          goodsRule: allGoods.map((item) => {
+            return {
+              key: item.key,
+              goodsId: item.goodsId,
+              userDayNumber: item.userDayNumberNew === ' ' ? -1 : item.userDayNumberNew,
+              name: item.name,
+              check: item.userDayNumber === -1 ? true : false
+            }
+          }),
+          gameRule: goodsInitData,
         };
         this.props.dispatch({
           type: url,
@@ -254,7 +357,8 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current, allGoods } = this.state
+    const { current, allGoods, goodsInitData, goodsLists, paiyangType } = this.state
+    console.log('allGoods', allGoods, goodsLists)
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -285,110 +389,119 @@ export default class areaSettingList extends PureComponent {
             <Steps current={current}>
               {steps.map(item => <Step key={item.title} title={item.title} />)}
             </Steps>
-            <div className={styles.stepsContent}>
-              <Form onSubmit={this.handleSearch}>
-                <FormItem {...formItemLayout} label="活动规则">
-                </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户参与活动次数</span>}>
-                  <Col span={14}>
-                    <FormItem>
-                      {getFieldDecorator('times', {
-                        // rules: [{ required: !this.state.times, whitespace: false, message: '请输入同一用户参与活动次数' }],
-                      })
-                      (<InputNumber
-                        placeholder="请输入同一用户参与活动次数"
-                        disabled={this.state.times}
-                      />)}
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="用户参与规则" key="1">
+                <div className={styles.stepsContent}>
+                  <Form onSubmit={this.handleSearch}>
+                    <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户参与活动次数</span>}>
+                      <Col span={14}>
+                        <FormItem>
+                          {getFieldDecorator('times', {
+                            // rules: [{ required: !this.state.times, whitespace: false, message: '请输入同一用户参与活动次数' }],
+                          })
+                          (<InputNumber
+                            placeholder="请输入同一用户参与活动次数"
+                            disabled={this.state.times}
+                          />)}
+                        </FormItem>
+                      </Col>
+                      <Col span={8}>
+                        <FormItem>
+                          <Checkbox
+                            checked={this.state.times}
+                            // value={this.state.times}
+                            onChange={this.handleTimesChange}>
+                            不限
+                          </Checkbox>
+                        </FormItem>
+                      </Col>
                     </FormItem>
-                  </Col>
-                  <Col span={8}>
-                    <FormItem>
-                      <Checkbox
-                        checked={this.state.times}
-                        // value={this.state.times}
-                        onChange={this.handleTimesChange}>
-                        不限
-                      </Checkbox>
+                    <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>
+                      <Col span={14}>
+                        <FormItem>
+                          {getFieldDecorator('dayTimes', {
+                            // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
+                          })
+                          (<InputNumber
+                            placeholder="请输入同一用户每天参与活动次数"
+                            disabled={this.state.dayTimes}
+                          />)}
+                        </FormItem>
+                      </Col>
+                      <Col span={8}>
+                        <FormItem>
+                          <Checkbox
+                            checked={this.state.dayTimes}
+                            // value={this.state.dayTimes}
+                            onChange={this.handleDayTimesChange}>
+                            不限
+                          </Checkbox>
+                        </FormItem>
+                      </Col>
                     </FormItem>
-                  </Col>
-                </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天参与活动次数</span>}>
-                  <Col span={14}>
-                    <FormItem>
-                      {getFieldDecorator('dayTimes', {
-                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
-                      })
-                      (<InputNumber
-                        placeholder="请输入同一用户每天参与活动次数"
-                        disabled={this.state.dayTimes}
-                      />)}
+                    <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户获得商品次数</span>}>
+                      <Col span={14}>
+                        <FormItem>
+                          {getFieldDecorator('number', {
+                            // rules: [{ required: false, whitespace: false, message: '请输入同一用户获得商品次数' }],
+                          })
+                          (<InputNumber
+                            placeholder="请输入同一用户获得商品次数"
+                            disabled={this.state.number}
+                          />)}
+                        </FormItem>
+                      </Col>
+                      <Col span={8}>
+                        <FormItem>
+                          <Checkbox
+                            checked={this.state.number}
+                            // value={this.state.number}
+                            onChange={this.handleNumberChange}>
+                            不限
+                          </Checkbox>
+                        </FormItem>
+                      </Col>
                     </FormItem>
-                  </Col>
-                  <Col span={8}>
-                    <FormItem>
-                      <Checkbox
-                        checked={this.state.dayTimes}
-                        // value={this.state.dayTimes}
-                        onChange={this.handleDayTimesChange}>
-                        不限
-                      </Checkbox>
+                    <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天获取商品次数</span>}>
+                      <Col span={14}>
+                        <FormItem>
+                          {getFieldDecorator('dayNumber', {
+                            // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
+                          })
+                          (<InputNumber
+                            placeholder="请输入同一用户每天获取商品次数"
+                            disabled={this.state.dayNumber}
+                          />)}
+                        </FormItem>
+                      </Col>
+                      <Col span={8}>
+                        <FormItem>
+                          <Checkbox
+                            checked={this.state.dayNumber}
+                            // value={this.state.dayNumber}
+                            onChange={this.handleDayNumberChange}>
+                            不限
+                          </Checkbox>
+                        </FormItem>
+                      </Col>
                     </FormItem>
-                  </Col>
-                </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户获得商品次数</span>}>
-                  <Col span={14}>
-                    <FormItem>
-                      {getFieldDecorator('number', {
-                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户获得商品次数' }],
-                      })
-                      (<InputNumber
-                        placeholder="请输入同一用户获得商品次数"
-                        disabled={this.state.number}
-                      />)}
-                    </FormItem>
-                  </Col>
-                  <Col span={8}>
-                    <FormItem>
-                      <Checkbox
-                        checked={this.state.number}
-                        // value={this.state.number}
-                        onChange={this.handleNumberChange}>
-                        不限
-                      </Checkbox>
-                    </FormItem>
-                  </Col>
-                </FormItem>
-                <FormItem {...formItemLayout} label={<span><span style={{ color: 'red' }}>*</span>同一用户每天获取商品次数</span>}>
-                  <Col span={14}>
-                    <FormItem>
-                      {getFieldDecorator('dayNumber', {
-                        // rules: [{ required: false, whitespace: false, message: '请输入同一用户每天参与活动次数' }],
-                      })
-                      (<InputNumber
-                        placeholder="请输入同一用户每天获取商品次数"
-                        disabled={this.state.dayNumber}
-                      />)}
-                    </FormItem>
-                  </Col>
-                  <Col span={8}>
-                    <FormItem>
-                      <Checkbox
-                        checked={this.state.dayNumber}
-                        // value={this.state.dayNumber}
-                        onChange={this.handleDayNumberChange}>
-                        不限
-                      </Checkbox>
-                    </FormItem>
-                  </Col>
-                </FormItem>
-                <FormItem {...formItemLayout} label="商品信息">
-                </FormItem>
+                  </Form>
+                </div>
+              </TabPane>
+              <TabPane tab="商品派发规则" key="2">
                 <RuleInteractSampling
                   data={allGoods}
                   handleChecked={this.handleChecked}
                 />
-              </Form>
-            </div>
+              </TabPane>
+              <TabPane tab="掉货规则" key="3" disabled={paiyangType !== 2}>
+                <RuleInteract
+                  initData={goodsInitData}
+                  goodsHandle={this.goodsHandle}
+                  goodsHandleChange={this.goodsHandleChange}
+                />
+              </TabPane>
+            </Tabs>
             <div className={styles.stepsAction}>
               {
                 <Button onClick={() => this.props.history.push({pathname: '/project/sampling-setting'})}>取消</Button>

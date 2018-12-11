@@ -107,7 +107,7 @@ const CreateForm = Form.create()(
               })(<Input placeholder="请输入店铺名称" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="入会码">
-              {getFieldDecorator('focusSessionKey', {
+              {getFieldDecorator('sessionKey', {
                 rules: [{ required: false, whitespace: true, message: '请输入入会码' }],
               })(<Input placeholder="请输入入会码" />)}
             </FormItem>
@@ -197,7 +197,7 @@ export default class shop extends PureComponent {
       // console.log('channel', res.data.channel.filter(i => i.name === '淘宝'))
       if (res && res.code === 0) {
         this.setState({
-          channelLists: res.data.channel.filter(i => i.name === '淘宝'),
+          channelLists: res.data.channel.filter(i => i.code === '002001'),
         });
       }
     });
@@ -330,7 +330,10 @@ export default class shop extends PureComponent {
       editModalConfirmLoading: true,
     });
     if (item) {
-      const params = { id: item.id, status: item.status === '1' ? 0 : 1  };
+      const params = {
+        id: item.merchantAccountId,
+        status: item.status === '1' ? 0 : 1
+      };
       this.props.dispatch({
         type: 'shop/alterStatus',
         payload: {
@@ -339,7 +342,7 @@ export default class shop extends PureComponent {
       }).then((res) => {
         // message.success('Click on Yes');
         if (res && res.code === 0) {
-          message.success(`${item.loginStatus === '0' ? '启用' : '停用'}成功`)
+          message.success(`${item.status === '0' ? '启用' : '停用'}成功`)
         }
         this.getLists();
         this.setState({

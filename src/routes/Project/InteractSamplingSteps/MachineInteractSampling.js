@@ -186,7 +186,7 @@ export default class MachineInteractSampling extends PureComponent {
           if (machines && machines.length > 0) {
             machines = machines.map(m => {
               const disabled = this.state.machinesData.some(
-                md => md.machineId === m.machineId
+                md => md.key === m.machineId
               );
               return {
                 ...m,
@@ -234,7 +234,10 @@ export default class MachineInteractSampling extends PureComponent {
         if (res && res.code === 0) {
           this.setState(
             {
-              machineModalAddedData: machines
+              machineModalAddedData: [
+                ...this.state.machineModalAddedData,
+                ...machines
+              ]
             },
             () => {
               notification.success({ message: "添加成功" });
@@ -293,41 +296,49 @@ export default class MachineInteractSampling extends PureComponent {
   }
   handleSelectedGoodsChange(e) {
     const goods = [...this.state.goodsList];
-    goods.filter(g => g.id === e.target.value).forEach(good => {
-      good.checked = e.target.checked;
-    });
+    goods
+      .filter(g => g.id === e.target.value)
+      .forEach(good => {
+        good.checked = e.target.checked;
+      });
     this.setState({ goodsList: goods });
   }
   handleGoodsExpireChange(e) {
     const goods = [...this.state.goodsList];
-    goods.filter(g => g.id === e.target.value).forEach(good => {
-      good.secular = e.target.checked;
-      if (good.secular) {
-        good.startTime = moment();
-        good.startTimeStr = moment().format("YYYY-MM-DD 00:00:00");
-        good.endTime = null;
-        good.endTimeStr = null;
-      }
-    });
+    goods
+      .filter(g => g.id === e.target.value)
+      .forEach(good => {
+        good.secular = e.target.checked;
+        if (good.secular) {
+          good.startTime = moment();
+          good.startTimeStr = moment().format("YYYY-MM-DD 00:00:00");
+          good.endTime = null;
+          good.endTimeStr = null;
+        }
+      });
     this.setState({ goodsList: goods });
   }
   handleGoodsExpireDateChange(date, dateStr, good, typeCode) {
     const goods = [...this.state.goodsList];
     const type = typeCode === 0 ? "startTime" : "endTime";
     const time = typeCode === 0 ? "00:00:00" : "23:59:59";
-    goods.filter(g => g.id === good.id).forEach(good => {
-      good[type] = date;
-      good[`${type}Str`] = `${dateStr} ${time}`;
-    });
+    goods
+      .filter(g => g.id === good.id)
+      .forEach(good => {
+        good[type] = date;
+        good[`${type}Str`] = `${dateStr} ${time}`;
+      });
     this.setState({ goodsList: goods });
   }
   handleGoodsInputChange(value, type, good) {
     const reg = /^(0|[1-9][0-9]*)$/;
     if ((!isNaN(value) && reg.test(value)) || value === "") {
       const goods = [...this.state.goodsList];
-      goods.filter(g => g.id === good.id).forEach(good => {
-        good[type] = value;
-      });
+      goods
+        .filter(g => g.id === good.id)
+        .forEach(good => {
+          good[type] = value;
+        });
       this.setState({ goodsList: goods });
     }
   }
@@ -388,21 +399,23 @@ export default class MachineInteractSampling extends PureComponent {
                     machineGoodsResp.data.length > 0
                   ) {
                     machineGoodsResp.data.forEach(mg => {
-                      goodsList.filter(g => g.id === mg.goodsId).forEach(g => {
-                        g.checked = true;
-                        g.setCount = mg.number;
-                        g.setOrder = mg.seq;
-                        g.secular = mg.state === 1;
-                        g.startTime = mg.startTime && moment(mg.startTime);
-                        g.startTimeStr = mg.startTime;
-                        if (g.secular) {
-                          g.endTime = null;
-                          g.endTimeStr = "";
-                        } else {
-                          g.endTime = mg.endTime && moment(mg.endTime);
-                          g.endTimeStr = mg.endTime;
-                        }
-                      });
+                      goodsList
+                        .filter(g => g.id === mg.goodsId)
+                        .forEach(g => {
+                          g.checked = true;
+                          g.setCount = mg.number;
+                          g.setOrder = mg.seq;
+                          g.secular = mg.state === 1;
+                          g.startTime = mg.startTime && moment(mg.startTime);
+                          g.startTimeStr = mg.startTime;
+                          if (g.secular) {
+                            g.endTime = null;
+                            g.endTimeStr = "";
+                          } else {
+                            g.endTime = mg.endTime && moment(mg.endTime);
+                            g.endTimeStr = mg.endTime;
+                          }
+                        });
                     });
                   }
                   this.setState({
@@ -416,17 +429,19 @@ export default class MachineInteractSampling extends PureComponent {
     });
   }
   handleGoodsModalSave() {
-    const goods = this.state.goodsList.filter(g => g.checked).map(g => {
-      return {
-        goodsId: g.id,
-        number: g.setCount,
-        seq: g.setOrder,
-        state: g.secular ? 1 : 0,
-        startTimeStr: g.startTimeStr,
-        endTimeStr: g.endTimeStr,
-        type: g.type
-      };
-    });
+    const goods = this.state.goodsList
+      .filter(g => g.checked)
+      .map(g => {
+        return {
+          goodsId: g.id,
+          number: g.setCount,
+          seq: g.setOrder,
+          state: g.secular ? 1 : 0,
+          startTimeStr: g.startTimeStr,
+          endTimeStr: g.endTimeStr,
+          type: g.type
+        };
+      });
     if (
       goods.some(
         g =>

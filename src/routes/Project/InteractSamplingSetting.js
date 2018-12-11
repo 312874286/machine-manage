@@ -40,6 +40,12 @@ const sortOption = [
   { id: "real_day DESC", name: "按持续时长倒序" },
   { id: "real_day", name: "按持续时长正序" }
 ];
+const activityTypeOptions = [
+  '派样',
+  '互派',
+  '互动',
+  '新零售'
+]
 const WatchForm = Form.create()(props => {
   const {
     watchModalVisible,
@@ -670,29 +676,54 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading
     } = this.props;
-    const { selectedRows } = this.state;
+    const { selectedRows } = this. state;
     let columns = [
       {
-        title: "互派名称",
+        title: "创建时间",
+        dataIndex: "createTime",
+        key: "createTime",
+        width: "10%"
+      },
+      {
+        title: "活动名称",
         width: "10%",
         dataIndex: "name",
         key: "name"
       },
       {
-        title: "互动游戏",
+        title: "游戏名称",
         dataIndex: "gameName",
         key: "gameName",
         width: "10%"
       },
       {
-        title: "互派机器数",
-        dataIndex: "merchantNum",
-        key: "merchantNum",
-        width: "10%"
+        title: "所属渠道",
+        width: "10%",
+        dataIndex: "channel",
+        key: "channel"
       },
       {
-        title: "互派商品数",
+        title: "活动类型",
+        dataIndex: "paiyangType",
+        key: "paiyangType",
         width: "10%",
+        render: (text, item) => (
+          <Fragment>
+            <span>
+              {activityTypeOptions[item.paiyangType]}
+            </span>
+          </Fragment>
+        ),
+      },
+      {
+        title: "机器数",
+        dataIndex: "merchantNum",
+        key: "merchantNum",
+        width: "5%"
+      },
+      {
+        title: "商品数",
+        width: "5%",
         dataIndex: "goodsNum",
         key: "goodsNum",
         render: (text, item) => (
@@ -704,7 +735,7 @@ export default class areaSettingList extends PureComponent {
         ),
       },
       {
-        title: "互派持续时长/天",
+        title: "活动时长",
         dataIndex: "realDay",
         key: "realDay",
         render: (text, item) => (
@@ -714,34 +745,7 @@ export default class areaSettingList extends PureComponent {
             </span>
           </Fragment>
         ),
-        width: "15%"
-      },
-      {
-        title: "发放率",
-        dataIndex: "realNum",
-        key: "realNum",
-        render: (text, item) => (
-          <Fragment>
-            <span>
-              {item.realNum ? item.realNum : 0}/{item.number ? item.number : 0}
-            </span>
-          </Fragment>
-        ),
         width: "10%"
-      },
-      {
-        title: "负责人 创建时间",
-        dataIndex: "managerCreateTime",
-        key: "managerCreateTime",
-        render: (text, item) => (
-          <Fragment>
-            <span>
-              {item.manager}
-              {item.createTime}
-            </span>
-          </Fragment>
-        ),
-        width: "30%"
       },
       {
         title: "状态",
@@ -753,6 +757,24 @@ export default class areaSettingList extends PureComponent {
           }
         }
       },
+      {
+        title: "负责人",
+        dataIndex: "manager",
+        key: "manager",
+      },
+      // {
+      //   title: "发放率",
+      //   dataIndex: "realNum",
+      //   key: "realNum",
+      //   render: (text, item) => (
+      //     <Fragment>
+      //       <span>
+      //         {item.realNum ? item.realNum : 0}/{item.number ? item.number : 0}
+      //       </span>
+      //     </Fragment>
+      //   ),
+      //   width: "10%"
+      // },
       {
         fixed: "right",
         width: 200,
@@ -861,7 +883,7 @@ export default class areaSettingList extends PureComponent {
                 columns={columns}
                 onSelectRow={this.handleSelectRows}
                 onChange={this.handleStandardTableChange}
-                scrollX={1500}
+                scrollX={1800}
               />
             </div>
           </div>

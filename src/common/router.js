@@ -89,7 +89,7 @@ export const getRouterData = (app) => {
     // '/exception/trigger': {
     //   component: dynamicWrapper(app, [], () => import('../routes/Exception/triggerException')),
     // },
-    '/homePage': {
+    '/homePage/index': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/HomePage')),
     },
     '/offline': {
@@ -100,6 +100,12 @@ export const getRouterData = (app) => {
     },
     '/lock': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/Lock')),
+    },
+    '/flowWarn': {
+      component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/FlowWarn')),
+    },
+    '/RAMWarn': {
+      component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/RAMWarn')),
     },
     '/paiActivity': {
       component: dynamicWrapper(app, ['homePage/homePageSetting', 'log/log', 'common'], () => import('../routes/HomePage/PaiActivity')),
@@ -203,7 +209,7 @@ export const getRouterData = (app) => {
     '/machine/app-version': {
       component: dynamicWrapper(app, ['machine/appVersion', 'log/log', 'common'], () => import('../routes/Machine/AppVersion')),
     },
-    '/machine/flow-monitoring': {
+    '/machine/flow-monitor': {
       component: dynamicWrapper(app, ['machine/flowMonitoring', 'log/log', 'common'], () => import('../routes/Machine/FlowMonitoring')),
     },
     '/project/channel': {

@@ -1,33 +1,17 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Row,
   Col,
   Card,
   Form,
   Input,
-  Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
   InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Badge,
-  Divider,
-  Cascader,
-  Popconfirm,
-  Table
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './LabelSetting.less';
-import LogModal from '../../components/LogModal/index';
-import {getAccountMenus} from "../../utils/authority";
-
 
 const FormItem = Form.Item;
 @connect(({ common, loading, flowMonitoring, log }) => ({
@@ -49,7 +33,6 @@ export default class FlowMonitoring extends PureComponent {
     modalData: {},
     modalType: true,
     account: {},
-
   };
   componentDidMount() {
     this.getLists();
@@ -78,6 +61,7 @@ export default class FlowMonitoring extends PureComponent {
         restParams: {
           pageNo: this.state.pageNo,
           machineCode: this.state.machineCode,
+          allTraffic: this.state.allTraffic,
         },
       },
     });
@@ -133,7 +117,8 @@ export default class FlowMonitoring extends PureComponent {
       if (err) return;
       this.setState({
         pageNo: 1,
-        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : '',
+        allTraffic: fieldsValue.allTraffic >= 0 ? fieldsValue.allTraffic : '',
       }, () => {
         this.getLists();
       });
@@ -152,7 +137,7 @@ export default class FlowMonitoring extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem>
-              {getFieldDecorator('allTraffic')(<Input placeholder="请输入总流量搜索" />)}
+              {getFieldDecorator('allTraffic')(<InputNumber placeholder="请输入总流量搜索" min={0}/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -178,26 +163,32 @@ export default class FlowMonitoring extends PureComponent {
     } = this.props;
     let columns = [
       {
-        title: '机器Code',
-        width: '25%',
+        title: '时间',
+        width: '20%',
+        dataIndex: 'createTime',
+        key: 'createTime'
+      },
+      {
+        title: '机器编码',
+        width: '20%',
         dataIndex: 'machineId',
         key: 'machineId'
       },
       {
-        title: '当日总流量',
-        width: '25%',
+        title: '当日总流量（MB）',
+        width: '20%',
         dataIndex: 'thatdayTraffic',
         key: 'thatdayTraffic'
       },
       {
-        title: '当月流量',
-        width: '25%',
+        title: '当月流量（MB）',
+        width: '20%',
         dataIndex: 'monthTraffic',
         key: 'monthTraffic'
       },
       {
-        title: '总流量',
-        width: '25%',
+        title: '总流量（MB）',
+        width: '20%',
         dataIndex: 'allTraffic',
         key: 'allTraffic'
       },

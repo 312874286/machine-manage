@@ -251,3 +251,9 @@ export async function getBaseDict({ params }) {
     body: stringify(params),
   });
 }
+
+export async function getGameRuleList({ params }) {
+  return fetch.post(api.getGameRuleList, {
+    body: stringify(params),
+  });
+}

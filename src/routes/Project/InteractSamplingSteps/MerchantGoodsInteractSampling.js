@@ -25,6 +25,7 @@ import {getAccountMenus} from "../../../utils/authority";
 import {message, Radio} from "antd/lib/index";
 import domain from "../../../common/config/domain";
 import moment from "moment/moment";
+import {RegexTool} from "../../../utils/utils";
 
 const { Option } = Select;
 const RadioGroup = Radio.Group;
@@ -43,6 +44,15 @@ const menu = (
 );
 // , {id: 1, name: '优惠券'}
 const goodType = [{id: 0, name: '商品'}, {id: 1, name: '优惠券'}]
+const isFocusOptions = [
+  {id: '0', name: '不关注'},
+  {id: '1', name: '关注'},
+  {id: '2', name: '强制关注'}
+  ]
+const isVipOptions = [
+  {id: '0', name: '无入会'},
+  {id: '1', name: '入会'},
+]
 // 新建商户
 const CreateMerchantForm = Form.create()(
   (props) => {
@@ -52,7 +62,7 @@ const CreateMerchantForm = Form.create()(
       merchants, paiyangType, checkMerchantUserLists, handleChange,
       channelHandleChange,
       checkMerchantLists, checkSelectedMerchantLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightMerchantHandle,
-      selectedRowKeys, onSelectMerchantChange
+      selectedRowKeys, onSelectMerchantChange, merchantsRadioGroupChange
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -88,24 +98,41 @@ const CreateMerchantForm = Form.create()(
     const columnsRight = [{
       title: `${paiyangType ? '公众号AppID' : '商户ID'}`,
       dataIndex: 'merchantCode',
-      width: '30%',
+      width: '20%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: `${paiyangType ? '公众号名称' : '商户名称'}`,
-      width: '30%',
+      width: '20%',
       dataIndex: 'merchantName',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '操作',
-      width: 70,
+      width: 300,
       dataIndex: 'operation',
       render: (text, record) => {
         return (
           checkSelectedMerchantLists.length > 0
             ? (
+            <div style={{ display: 'flex' }}>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
-                <a href="javascript:;">删除</a>
+                <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
               </Popconfirm>
+              {/*<Select defaultValue='0' style={{ display: paiyangType ? 'none' : ''}}>*/}
+                {/*/!*{children2}*!/*/}
+                {/*{isFocusOptions.map((item) => {*/}
+                  {/*return (*/}
+                    {/*<Option key={item.id} value={item.id}>{item.name}</Option>*/}
+                  {/*);*/}
+                {/*})}*/}
+              {/*</Select>*/}
+              <RadioGroup defaultValue={`${record.id}-0`} onChange={merchantsRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
+                {isFocusOptions.map((item) => {
+                  return (
+                    <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
+                  );
+                })}
+              </RadioGroup>
+            </div>
             ) : null
         );
       }
@@ -122,7 +149,7 @@ const CreateMerchantForm = Form.create()(
         // onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-        width={1000}
+        width={1100}
         footer={null}>
         <div className="manageAppBox">
           <Table
@@ -212,7 +239,7 @@ const CreateMerchantForm = Form.create()(
                     columns={columnsRight}
                     dataSource={checkSelectedMerchantLists}
                     id="rightTable"
-                    style={{ width: '460px', marginTop: '10px' }}
+                    style={{ width: '560px', marginTop: '10px' }}
                     scroll={{ y: 200 }}
                     pagination={false} />
                 </div>
@@ -244,7 +271,7 @@ const CreateShopsForm = Form.create()(
       handleChange, sessionKey, RadioChange, mustIsVip, currentShopsData,
       paiyangType, checkMerchantUserLists,
       checkShopLists, checkSelectedShopLists, onLeftSelect, onLeftSelectAll, targetHandleDelete, toRightShopHandle,
-      selectedRowKeys, onSelectShopChange
+      selectedRowKeys, onSelectShopChange, shopRadioGroupChange
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -281,35 +308,37 @@ const CreateShopsForm = Form.create()(
     const columnsRight = [{
       title: '店铺ID',
       dataIndex: 'shopCode',
-      width: '30%',
+      width: '20%',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '店铺名称',
-      width: '30%',
+      width: '20%',
       dataIndex: 'shopName',
       render: text => <a href="javascript:;">{text}</a>,
     }, {
       title: '操作',
-      width: 70,
+      width: 300,
       dataIndex: 'operation',
       render: (text, record) => {
         return (
           checkSelectedShopLists.length > 0
             ? (
+            <div style={{ display: 'flex' }}>
               <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
-                <a href="javascript:;">删除</a>
+                 <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
               </Popconfirm>
+              <RadioGroup defaultValue={`${record.id}-0`} onChange={shopRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
+                {isVipOptions.map((item) => {
+                  return (
+                    <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
+                  );
+                })}
+              </RadioGroup>
+            </div>
             ) : null
         );
       }
     }];
-    {/*<Select placeholder="请选择">*/}
-    {/*{merchantLists.map((item) => {*/}
-    {/*return (*/}
-    {/*<Option value={item.id} key={item.id}>{item.merchantName}</Option>*/}
-    {/*);*/}
-    {/*})}*/}
-    {/*</Select>*/}
     return (
       <Modal
         title={
@@ -322,7 +351,7 @@ const CreateShopsForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-        width={1000}
+        width={1100}
         footer={null}>
         <div className="manageAppBox">
           <Table
@@ -339,7 +368,7 @@ const CreateShopsForm = Form.create()(
               })(
                 <Select
                 showSearch
-                placeholder="请输入客户名称或者客户编码"
+                placeholder="请输入商户名称"
                 optionFilterProp="children"
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 onChange={handleChange}
@@ -347,7 +376,7 @@ const CreateShopsForm = Form.create()(
               {
                 merchantLists.map((item) => {
                 return (
-                <Option value={`${item.merchantCode}-${item.id}`}>{item.merchantName}</Option>
+                <Option value={item.id} key={item.id}>{item.merchantName}</Option>
                 )
               })
               }
@@ -393,7 +422,7 @@ const CreateShopsForm = Form.create()(
                     columns={columnsRight}
                     dataSource={checkSelectedShopLists}
                     id="rightTable"
-                    style={{ width: '460px', marginTop: '10px' }}
+                    style={{ width: '560px', marginTop: '10px' }}
                     scroll={{ y: 200 }}
                     pagination={false} />
                 </div>
@@ -612,9 +641,9 @@ const CreateGoodsForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}` }],
               })(modalType ? (
                 <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`} />
-                ) : (
-                  <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`}/>
-                ))}
+              ) : (
+                <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`}/>
+              ))}
             </FormItem>
             <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}>
               {getFieldDecorator('name', {
@@ -763,6 +792,117 @@ const CreateGoodsForm = Form.create()(
     );
   });
 
+const FocusForm = Form.create()(
+  (props) => {
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 13 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">修改关注</span>
+          </div>
+        }
+        visible={modalVisible}
+        onOk={handleAdd}
+        onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('isFocus', {
+                rules: [{ required: true, message: '请选择修改关注' }],
+              })(
+                <RadioGroup>
+                  {isFocusOptions.map((item) => {
+                    return (
+                      <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                    );
+                  })}
+                </RadioGroup>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} style={{ display: 'none' }}>
+              {getFieldDecorator('merchantId', {
+                rules: [{ }],
+              })(<Input  />)}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+
+const VipForm = Form.create()(
+  (props) => {
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 13 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">修改入会</span>
+          </div>
+        }
+        visible={modalVisible}
+        onOk={handleAdd}
+        onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('isVip', {
+                rules: [{ required: true, message: '请选择修改入会' }],
+              })(
+                <RadioGroup>
+                  {isVipOptions.map((item) => {
+                    return (
+                      <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                    );
+                  })}
+                </RadioGroup>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} style={{ display: 'none' }}>
+              {getFieldDecorator('shopId', {
+                rules: [{ }],
+              })(<Input  />)}
+            </FormItem>
+            <FormItem {...formItemLayout} style={{ display: 'none' }}>
+              {getFieldDecorator('merchantId', {
+                rules: [{ }],
+              })(<Input  />)}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -836,6 +976,14 @@ export default class areaSettingList extends PureComponent {
     checkShopUserLists: [],
     checkShopLists: [],
     checkSelectedShopLists: [],
+
+    //FocusForm
+    modalFocusFormVisible: false,
+    editFocusFormModalConfirmLoading: false,
+
+    //VipForm
+    modalVipFormVisible: false,
+    editVipFormModalConfirmLoading: false
   };
   componentDidMount() {
     // console.log('this.props.params.id', this.props.match.params.id)
@@ -890,7 +1038,6 @@ export default class areaSettingList extends PureComponent {
   getInteractShopList = (merchantId) => {
     // getInteractMerchantList
     console.log('item.sellerId', merchantId)
-    const { paiyangType, GoodTypePlaceHolder } = this.state
     this.props.dispatch({
       type: 'interactSamplingSetting/getInteractShopsList',
       payload: {
@@ -902,12 +1049,8 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       this.setState({
         shops: res.data,
-        shopId: merchantId,
       })
     });
-    if (paiyangType) {
-      this.getGoodsByShops(GoodTypePlaceHolder, 'add')
-    }
   }
   selectMerchantHandleChange = (value) => {
     const { paiyangType } = this.state
@@ -1002,10 +1145,9 @@ export default class areaSettingList extends PureComponent {
   }
   //
   selectShopHandleChange = (value) => {
-    const { paiyangType } = this.state
-    this.getCheckShopLists(value && value.split('-')[1])
+    this.getCheckShopLists(value)
   }
-  getCheckShopLists = (sellerId, channel) => {
+  getCheckShopLists = (sellerId) => {
     this.props.dispatch({
       type: 'interactSamplingSetting/checkShop',
       payload: {
@@ -1050,7 +1192,14 @@ export default class areaSettingList extends PureComponent {
       list1.filter( a => isUnion === list2.some(b => a.id === b.id));
     this.setState({
       checkShopLists: operation(selectedShopRowsArr, checkSelectedShopListsArr),
-      checkSelectedShopLists: checkSelectedShopListsArr
+      checkSelectedShopLists: checkSelectedShopListsArr.map(i => {
+        return {
+          id: i.id,
+          shopName: i.shopName,
+          shopCode: i.shopCode,
+          isVip: '0',
+        }
+      })
     })
   }
   onLeftShopSelectAll = (selected, selectedRows, changeRows) => {
@@ -1058,21 +1207,61 @@ export default class areaSettingList extends PureComponent {
       selectedShopRows: selectedRows,
     })
   }
+  shopRadioGroupChange = (value) => {
+    // console.log('shopRadioGroupChange', value.target.value)
+    const shop = value.target.value.split('-')
+    const { checkSelectedShopLists } = this.state
+    const shopId = shop[0]
+    const isVip = shop[1]
+    checkSelectedShopLists.filter(i => {
+      if (i.id === shopId) {
+        i.isVip = isVip
+      }
+    })
+    this.setState({
+      checkSelectedShopLists,
+    })
+    // console.log('shopRadioGroupChange', checkSelectedShopLists)
+  }
+  merchantsRadioGroupChange = (value) => {
+    // console.log('shopRadioGroupChange', value.target.value)
+    const merchant = value.target.value.split('-')
+    const { checkSelectedMerchantLists } = this.state
+    const merchantId = merchant[0]
+    const isFoucs = merchant[1]
+    checkSelectedMerchantLists.filter(i => {
+      if (i.id === merchantId) {
+        i.isFocus = isFoucs
+      }
+    })
+    this.setState({
+      checkSelectedMerchantLists,
+    })
+    // console.log('shopRadioGroupChange', checkSelectedShopLists)
+  }
   // 新建商品开始
   // 新增modal确认事件 开始
   saveFormRef = (form) => {
     this.form = form;
   }
   onSelect = (value) => {
-    this.getInteractShopList(value)
-    this.form.setFieldsValue({
-      shopId: undefined,
-    });
+    const { paiyangType, GoodTypePlaceHolder } = this.state
+    if (paiyangType) {
+      this.setState({
+        shopId: value,
+      })
+      this.getGoodsByShops(GoodTypePlaceHolder, 'add', value)
+    } else {
+      this.getInteractShopList(value)
+      this.form.setFieldsValue({
+        shopId: undefined,
+      });
+    }
   }
   // 添加modal 添加事件
   handleModalVisible = async (flag, item, flag1) => {
     console.log('item', item, !flag1 ? flag1 : true)
-    const { saveAndAddModal } = this.state
+    const { saveAndAddModal, paiyangType } = this.state
     this.setState({
       modalVisible: !!flag,
       modalData: {},
@@ -1088,29 +1277,28 @@ export default class areaSettingList extends PureComponent {
       checkShopUserLists: [],
       checkShopLists: [],
       checkSelectedShopLists: [],
+      shopId: item ? item.id : '',
+    }, () => {
+      this.setModalData();
+      this.getAllGoods()
     });
-    this.setModalData();
-    this.getAllGoods()
-    // if (saveAndAddModal) {
-    //   if (saveAndAddModal.sellerId) {
-    //     await this.getInteractShopList(saveAndAddModal.sellerId)
-    //     await this.form.setFieldsValue({
-    //       sellerId: saveAndAddModal.sellerId,
-    //       shopId: saveAndAddModal.shopId,
-    //     });
-    //   }
-    // }
     if (item) {
-      if (item.sellerId) {
-        await this.getInteractShopList(item.sellerId, item.id)
-        console.log('item', item.id, item.sellerId, this.state.shops)
-        await this.form.setFieldsValue({
-          sellerId: item.sellerId,
-          shopId: item.id,
-        });
-        this.setState({
-          shopId: item.id
-        })
+      if (!paiyangType) {
+        if (item.sellerId) {
+          await this.getInteractShopList(item.sellerId, item.id)
+          console.log('item', item.id, item.sellerId, this.state.shops)
+          await this.form.setFieldsValue({
+            sellerId: item.sellerId,
+            shopId: item.id,
+          });
+        }
+      } else {
+        if (item.id) {
+          await this.form.setFieldsValue({
+            sellerId: item.id,
+            shopId: item.id,
+          });
+        }
       }
     }
   };
@@ -1249,14 +1437,15 @@ export default class areaSettingList extends PureComponent {
       selectedRows: selectedRow
     })
   }
-  getGoodsByShops = (value, flag) => {
+  getGoodsByShops = (value, flag, shopsId) => {
     const { interactSampling, shopId, couponId } = this.state
+    console.log('item22', interactSampling, shopId, couponId)
     let selectedRowKey = [], selectedRow = []
     if (value !== 0) {
       // 获取商品列表 couponGetList
       let restParams = {
         interactId: interactSampling,
-        shopsId: shopId,
+        shopsId: shopsId ? shopsId : shopId,
       }
       this.props.dispatch({
         type: 'interactSamplingSetting/couponGetList',
@@ -1514,6 +1703,7 @@ export default class areaSettingList extends PureComponent {
     });
   }
   onGoodTypeSelect = (value) => {
+    console.log('item33', this.state.shopId)
     this.getGoodsByShops(value, 'add')
     this.setState({
       GoodTypePlaceHolder: value,
@@ -1583,6 +1773,7 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       checkSelectedShopLists: dataSource.filter(item => item.id !== id),
       selectedShopRows: [],
+      selectedShopRowsKeys: [],
       checkShopLists: checkShopList
     });
   }
@@ -1688,6 +1879,8 @@ export default class areaSettingList extends PureComponent {
       checkShopLists: [],
       checkSelectedShopLists: [],
       selectedShopRows: [],
+      selectedMerchantRowsKeys: [],
+      selectedShopRowsKeys: [],
     }, () => {
       this.setShopsModalData();
       this.getAllShops()
@@ -1802,6 +1995,7 @@ export default class areaSettingList extends PureComponent {
     this.setState({
       checkSelectedMerchantLists: dataSource.filter(item => item.id !== id),
       selectedMerchantRows: [],
+      selectedMerchantRowsKeys: [],
       checkMerchantLists: checkMerchantList
     });
   }
@@ -1822,6 +2016,8 @@ export default class areaSettingList extends PureComponent {
       checkShopLists: [],
       checkSelectedShopLists: [],
       selectedShopRows: [],
+      selectedMerchantRowsKeys: [],
+      selectedShopRowsKeys: [],
     });
     this.setMerchantModalData();
   };
@@ -1980,10 +2176,10 @@ export default class areaSettingList extends PureComponent {
   }
   // 商户结束
   // 获取最新店铺开始
-  getShops = (flag) => {
+  getShops = (flag, merchantId) => {
     console.log('this.state.expandedRowKeys[0]', this.state.expandedRowKeys[0])
     let params = {
-      merchantId: this.state.expandedRowKeys[0],
+      merchantId: merchantId ? merchantId : this.state.expandedRowKeys[0],
       interactId: this.state.interactSampling,
     }
     this.props.dispatch({
@@ -1992,7 +2188,6 @@ export default class areaSettingList extends PureComponent {
         params,
       },
     }).then((res) => {
-      console.log('1111', res.data)
       if (res && res.code === 0) {
         this.setState({
           currentShopsData: res.data,
@@ -2072,6 +2267,97 @@ export default class areaSettingList extends PureComponent {
         })
       }
     });
+  }
+  // FocusForm
+  saveFocusFormRef = (form) => {
+    this.FocusForm = form;
+  }
+  handleFocusFormAdd = () => {
+    this.FocusForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.props.dispatch({
+        type: 'interactSamplingSetting/updateMerchant',
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            merchantId: values.merchantId,
+            isFocus: values.isFocus
+          },
+        },
+      }).then((res) => {
+        this.setState({
+          modalFocusFormVisible: false,
+        });
+        this.getInteractMerchantList(this.props.match.params.id)
+      });
+      // updateMerchant
+    })
+  }
+  handleFocusFormModalVisible = (data, flag) => {
+    this.setState({
+      modalFocusFormVisible: !!flag,
+    });
+    if (flag) {
+      if (data) {
+        this.FocusForm.setFieldsValue({
+          isFocus: data.isFocus && data.isFocus.toString() || '0',
+          merchantId: data.id
+        });
+      } else {
+        this.FocusForm.setFieldsValue({
+          isFocus: undefined,
+        });
+      }
+    }
+  }
+
+  // VipForm
+  saveVipFormRef = (form) => {
+    this.VipForm = form;
+  }
+  handleVipFormAdd = () => {
+    this.VipForm.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.props.dispatch({
+        type: 'interactSamplingSetting/updateShops',
+        payload: {
+          params: {
+            interactId: this.state.interactSampling,
+            shopsId: values.shopId,
+            isVip: values.isVip
+          },
+        },
+      }).then((res) => {
+        this.setState({
+          modalVipFormVisible: false,
+        });
+        this.getShops(2, values.merchantId)
+        // merchantId
+      });
+      // updateMerchant
+    })
+  }
+  handleVipFormModalVisible = (data, flag) => {
+    this.setState({
+      modalVipFormVisible: !!flag,
+    });
+    if (flag) {
+      if (data) {
+        this.VipForm.setFieldsValue({
+          isVip: data.isVip && data.isVip.toString() || '0',
+          shopId: data.id,
+          merchantId: data.sellerId,
+        });
+      } else {
+        this.FocusForm.setFieldsValue({
+          isVip: undefined,
+        });
+      }
+    }
   }
   next = (type) => {
     const { merchants, allGoodsLists } = this.state
@@ -2170,8 +2456,10 @@ export default class areaSettingList extends PureComponent {
           render: (text, item) => (
             <Fragment>
               <a onClick={() => this.handleModalVisible(true, item, false)}>添加商品</a>
-              {/*<Divider type="vertical"/>*/}
-              {/*<a onClick={() => this.handleShopsEditClick(item)}>修改</a>*/}
+              <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }} />
+              <a onClick={() => this.handleVipFormModalVisible(item, true)}>
+                {paiyangType ? '' : item.isVip === 2 ? '强制入会' : (item.isVip === 1 ? '入会' : '无入会')}
+              </a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleShopsDelClick(item)}>删除</a>
             </Fragment>
@@ -2208,8 +2496,10 @@ export default class areaSettingList extends PureComponent {
         render: (text, item) => (
           <Fragment>
             <a onClick={() => paiyangType ? this.handleModalVisible(true, item, false) : this.handleShopsModalVisible(true, item)}>{paiyangType ? '添加商品' : '添加店铺'}</a>
-            {/*<Divider type="vertical"/>*/}
-            {/*<a onClick={() => this.handleMerchantEditClick(item)}>{paiyangType ? '修改入会信息' : '修改商户'}</a>*/}
+            <Divider type="vertical" style={{ display: paiyangType ? 'none' : '' }}/>
+            <a onClick={() => this.handleFocusFormModalVisible(item, true)}>
+              {paiyangType ? '' : item.isFocus === 2 ? '强制关注' : (item.isFocus === 1 ? '关注' : '不关注')}
+            </a>
             <Divider type="vertical"/>
             <a onClick={() => this.handleMerchantDelClick(item)}>删除</a>
           </Fragment>
@@ -2286,6 +2576,8 @@ export default class areaSettingList extends PureComponent {
           targetHandleDelete={this.targetMerchantHandleDelete}
           selectedRowKeys={this.state.selectedMerchantRowsKeys}
           onSelectMerchantChange={this.onSelectMerchantChange}
+
+          merchantsRadioGroupChange={this.merchantsRadioGroupChange}
         />
         <CreateShopsForm
           handleAdd={this.handleShopsAdd}
@@ -2316,6 +2608,7 @@ export default class areaSettingList extends PureComponent {
 
           onSelectShopChange={this.onSelectShopChange}
 
+          shopRadioGroupChange={this.shopRadioGroupChange}
         />
         <CreateGoodsForm
           handleAdd={this.handleAdd}
@@ -2357,6 +2650,21 @@ export default class areaSettingList extends PureComponent {
           couponId={this.state.couponId}
 
           paiyangType={this.state.paiyangType}
+        />
+        <FocusForm
+          modalVisible={this.state.modalFocusFormVisible}
+          ref={this.saveFocusFormRef}
+          handleAdd={this.handleFocusFormAdd}
+          handleModalVisible={this.handleFocusFormModalVisible}
+          editModalConfirmLoading={this.state.editFocusFormModalConfirmLoading}
+        />
+
+        <VipForm
+          modalVisible={this.state.modalVipFormVisible}
+          ref={this.saveVipFormRef}
+          handleAdd={this.handleVipFormAdd}
+          handleModalVisible={this.handleVipFormModalVisible}
+          editModalConfirmLoading={this.state.editVipFormModalConfirmLoading}
         />
       </PageHeaderLayout>
     );

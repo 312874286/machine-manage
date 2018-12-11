@@ -115,14 +115,16 @@ export default class MachineConfigCard extends Component {
     };
     if (type === 0) {
       const machines = [...this.state.machineList];
-      machines.filter(m => m.machineId === machine.machineId).forEach(m => {
-        addMachineActivity(m, date);
-        if (m.machineActivity.some(mm => mm.isNew)) {
-          m.checked = true;
-        } else {
-          m.checked = false;
-        }
-      });
+      machines
+        .filter(m => m.machineId === machine.machineId)
+        .forEach(m => {
+          addMachineActivity(m, date);
+          if (m.machineActivity.some(mm => mm.isNew)) {
+            m.checked = true;
+          } else {
+            m.checked = false;
+          }
+        });
       this.setState({
         machineList: machines
       });
@@ -146,14 +148,16 @@ export default class MachineConfigCard extends Component {
     };
     if (type === 0) {
       const machines = [...this.state.machineList];
-      machines.filter(m => m.machineId === machine.machineId).forEach(m => {
-        removeMachineActivity(m, schedule);
-        if (m.machineActivity.some(mm => mm.isNew)) {
-          m.checked = true;
-        } else {
-          m.checked = false;
-        }
-      });
+      machines
+        .filter(m => m.machineId === machine.machineId)
+        .forEach(m => {
+          removeMachineActivity(m, schedule);
+          if (m.machineActivity.some(mm => mm.isNew)) {
+            m.checked = true;
+          } else {
+            m.checked = false;
+          }
+        });
       this.setState({ machineList: machines });
     } else {
       const machineEdit = this.state.machineEdit;
@@ -172,51 +176,55 @@ export default class MachineConfigCard extends Component {
     const machines = [...this.state.machineList];
     const interactId = this.state.interactInfo.id;
     const interactName = this.state.interactInfo.name;
-    machines.filter(m => m.machineId === e.target.value).forEach(machine => {
-      if (e.target.checked) {
-        this.state.dates.forEach(d => {
+    machines
+      .filter(m => m.machineId === e.target.value)
+      .forEach(machine => {
+        if (e.target.checked) {
+          this.state.dates.forEach(d => {
+            if (!machine.machineActivity) {
+              machine.machineActivity = [];
+            }
+            if (!moment(d).isBefore(moment().format(dateFormat))) {
+              if (
+                !machine.machineActivity.some(
+                  ma =>
+                    moment(d).isBetween(
+                      moment(ma.startTime),
+                      moment(ma.endTime)
+                    ) ||
+                    moment(d).isSame(ma.startTime) ||
+                    moment(d).isSame(ma.endTime)
+                )
+              ) {
+                machine.machineActivity.push({
+                  activityId: interactId,
+                  activityName: interactName,
+                  startTime: `${d} 00:00:00`,
+                  endTime: `${d} 23:59:59`,
+                  isNew: true
+                });
+              }
+            }
+          });
+        } else {
           if (!machine.machineActivity) {
             machine.machineActivity = [];
           }
-          if (!moment(d).isBefore(moment().format(dateFormat))) {
-            if (
-              !machine.machineActivity.some(
-                ma =>
-                  moment(d).isBetween(
-                    moment(ma.startTime),
-                    moment(ma.endTime)
-                  ) ||
-                  moment(d).isSame(ma.startTime) ||
-                  moment(d).isSame(ma.endTime)
-              )
-            ) {
-              machine.machineActivity.push({
-                activityId: interactId,
-                activityName: interactName,
-                startTime: `${d} 00:00:00`,
-                endTime: `${d} 23:59:59`,
-                isNew: true
-              });
-            }
-          }
-        });
-      } else {
-        if (!machine.machineActivity) {
-          machine.machineActivity = [];
+          machine.machineActivity = machine.machineActivity.filter(
+            ma => !ma.isNew
+          );
         }
-        machine.machineActivity = machine.machineActivity.filter(
-          ma => !ma.isNew
-        );
-      }
-      machine.checked = e.target.checked;
-    });
+        machine.checked = e.target.checked;
+      });
     this.setState({ machineList: machines });
   }
   handleMachineExpireChange(e) {
     const machines = [...this.state.machineList];
-    machines.filter(m => m.machineId === e.target.value).forEach(machine => {
-      machine.secular = e.target.checked;
-    });
+    machines
+      .filter(m => m.machineId === e.target.value)
+      .forEach(machine => {
+        machine.secular = e.target.checked;
+      });
     this.setState({ machineList: machines });
   }
   handleEditMachineExpireChange(e) {
@@ -284,9 +292,11 @@ export default class MachineConfigCard extends Component {
   }
   handleAddedMachineChange(e) {
     const machines = [...this.state.addedMachineList];
-    machines.filter(m => m.machineId === e.target.value).forEach(machine => {
-      machine.checked = e.target.checked;
-    });
+    machines
+      .filter(m => m.machineId === e.target.value)
+      .forEach(machine => {
+        machine.checked = e.target.checked;
+      });
     this.setState({ addedMachineList: machines });
   }
   handleAddedMachinesGoods() {
@@ -456,12 +466,6 @@ export default class MachineConfigCard extends Component {
                               <div key={date} className="scroll-item">
                                 {this.state.machineList.map(machine => {
                                   const props = { key: machine.machineId };
-                                  console.log(
-                                    date,
-                                    moment(date).isBefore(
-                                      moment().format(dateFormat)
-                                    )
-                                  );
                                   if (
                                     !machine.disabled &&
                                     !moment(date).isBefore(

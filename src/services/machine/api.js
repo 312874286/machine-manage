@@ -77,6 +77,7 @@ const api = map({
   machineLocaleDetail: '/machine/locale/detail/machineLocaleDetail?machineId={machineId}',
 
   searchAppVersion: '/machine/version/appVersion',
+  flowMonitoring: '/machine/traffic/list?pageNo={pageNo}&machineCode={machineCode}&allTraffic={allTraffic}',
   // 机器流量监控
   flowMonitoring: '/machine/traffic/list?pageNo={pageNo}&machineCode={machineCode}&allTraffic={allTraffic}',
 });
