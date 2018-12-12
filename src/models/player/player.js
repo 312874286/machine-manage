@@ -1,4 +1,4 @@
-import { getList } from '../../services/player/player';
+import { getList, getAreaList } from '../../services/player/player';
 
 export default {
   namespace: 'player',
@@ -16,6 +16,10 @@ export default {
         type: 'saveList',
         payload: response,
       });
+    },
+    *getAreaList({ payload: { restParams } }, { call }) {
+      const response = yield call(getAreaList, { restParams });
+      return response;
     },
   },
 
