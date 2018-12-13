@@ -174,6 +174,27 @@ const CreateForm = Form.create()(
                 </div>
               ) : ''
             }
+            {
+              channelCode == '002003' ? (
+                <div>
+                  <FormItem {...formItemLayout} label="商家ID">
+                    {getFieldDecorator('merchantCode', {
+                      rules: [{ required: true, whitespace: true, message: '请输入商家ID' }],
+                    })(<Input placeholder="请输入商家ID" />)}
+                  </FormItem>
+                  <FormItem {...formItemLayout} label="商家名称">
+                    {getFieldDecorator('merchantName', {
+                      rules: [{ required: true, whitespace: true, message: '请输入商家名称' }],
+                    })(<Input placeholder="请输入商家名称" />)}
+                  </FormItem>
+                  <FormItem {...formItemLayout} label="品牌名称">
+                    {getFieldDecorator('brandName', {
+                      rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
+                    })(<Input placeholder="请输入品牌名称" />)}
+                  </FormItem>
+                </div>
+              ) : ''
+            }
         </Form>
         </div>
       </Modal>
