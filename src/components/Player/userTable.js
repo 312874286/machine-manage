@@ -55,15 +55,6 @@ export default class userTable extends PureComponent {
         },
       },
       {
-        title: '用户昵称',
-        dataIndex: 'userNick',
-        key: 'userNick',
-        width: '100px',
-        render: (value) => {
-          return value ? value : '-';
-        },
-      },
-      {
         title: '手机号',
         dataIndex: 'phone',
         key: 'phone',
