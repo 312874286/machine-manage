@@ -54,18 +54,18 @@ export default class flowWarn extends PureComponent {
       },
       {
         align: 'center',
-        title: '总使用流量',
+        title: '总使用流量（MB）',
         width: '25%',
         dataIndex: 'allTraffic',
       },
       {
-        title: '本月使用流量',
+        title: '本月使用流量（MB）',
         dataIndex: 'monthTraffic',
         align: 'center',
         width: '25%',
       },
       {
-        title: '今日使用流量',
+        title: '今日使用流量（MB）',
         dataIndex: 'thatdayTraffic',
         align: 'center',
         width: '25%',
