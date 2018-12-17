@@ -307,7 +307,7 @@ export default class PlayerUser extends PureComponent {
                   <Col md={8} sm={24}>
                     <FormItem>
                       {getFieldDecorator('keyword')(
-                        <Input placeholder="请输入手机号码、用户id、openid、点位名称、标签" />
+                        <Input placeholder="请输入手机号码、点位名称、 标签" />
                       )}
                     </FormItem>
                   </Col>
