@@ -42,40 +42,107 @@ export default class userTable extends PureComponent {
       page,
       loading,
       unColumn,
+      getPoint,
     } = this.props;
     let columns = [
       {
         title: '用户Id',
         dataIndex: 'id',
-        key: 'id'
+        key: 'id',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
       },
       {
-        title: '用户昵称',
-        dataIndex: 'userNick',
-        key: 'userNick'
-      },
-      // {
-      //   title: '手机号',
-      //   dataIndex: 'phone',
-      // },
-      {
-        title: '渠道名称',
-        dataIndex: 'channelName',
-        key: 'channelName'
+        title: '手机号',
+        dataIndex: 'phone',
+        key: 'phone',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
       },
       {
-        title: '创建时间',
+        title: '用户性别',
+        dataIndex: 'sex',
+        key: 'sex',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
+      },
+      {
+        title: '用户年龄',
+        dataIndex: 'age',
+        key: 'age',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
+      },
+      {
+        title: '微信',
+        dataIndex: 'openId',
+        key: 'openId',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
+      },
+      {
+        title: '所在城市',
+        dataIndex: 'city',
+        key: 'city',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
+      },
+      {
+        title: '参与地点',
+        width: '100px',
+        render: (text, item) => (
+          <div style={{ color: '#5076FF', border: 0, background: 'transparent', cursor: 'pointer' }}
+               onClick={() => getPoint(item)} >查看</div>
+        ),
+      },
+      {
+        title: '标签',
+        dataIndex: 'tagName',
+        key: 'tagName',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
+      },
+      {
+        title: '注册时间',
         dataIndex: 'createTime',
-        key: 'createTime'
+        key: 'createTime',
+        width: '150px',
+        render: (value) => {
+          return value ? value : '-';
+        },
       },
-      // {
-      //   title: '操作',
-      //   render: (text, item) => (
-      //     <Fragment>
-      //       <a onClick={() => onLogClick(item)}>日志</a>
-      //     </Fragment>
-      //   ),
-      // },
+      {
+        title: '注册地点',
+        dataIndex: 'createArea',
+        key: 'createArea',
+        width: '100px',
+        render: (value) => {
+          return value ? value : '-';
+        },
+      },
+      {
+        title: '最后一次登陆时间',
+        dataIndex: 'lastTime',
+        key: 'lastTime',
+        width: '500px',
+        render: (value) => {
+          return value ? value : '-';
+        },
+      },
     ];
     if (unColumn) {
       let leg = columns.length
@@ -135,7 +202,7 @@ export default class userTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 30)}}
+          scroll={{ x: 1800, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 60)}}
         />
       </div>
     );

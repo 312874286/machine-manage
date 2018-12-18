@@ -7,4 +7,8 @@ export async function getList({ restParams }) {
     restParams,
   });
 }
-
+export async function getAreaList({ restParams }) {
+  return fetch.get(api.getAreaList, {
+    restParams,
+  });
+}

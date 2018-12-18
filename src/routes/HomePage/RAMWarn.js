@@ -54,12 +54,12 @@ export default class RAMWarn extends PureComponent {
       },
       {
         align: 'center',
-        title: 'SD卡总内存',
+        title: 'SD卡总内存（MB）',
         width: '33%',
         dataIndex: 'sdTotle',
       },
       {
-        title: '剩余内存',
+        title: '剩余内存（MB）',
         dataIndex: 'sdFree',
         align: 'center',
         width: '33%',

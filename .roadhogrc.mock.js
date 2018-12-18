@@ -7244,41 +7244,180 @@ const proxy = {
   },
   'GET /machine/traffic/list': (req, res) => {
     res.send({
-      "msg": "成功",
-      "code": 0,
-      "page": {
-        "pageSize": 20,
-        "currentResult": 0,
-        "totalPage": 1,
-        "pageNo": 1,
-        "totalCount": 1,
-        "list": null,
-        "firstResult": 0,
-        "firstPage": true,
-        "lastPage": true,
-        "nextPage": 1,
-        "prePage": 1
+        "msg": "成功",
+        "code": 0,
+        "page": {
+          "pageSize": 20,
+          "currentResult": 0,
+          "totalPage": 2,
+          "pageNo": 1,
+          "totalCount": 32,
+          "list": null,
+          "firstPage": true,
+          "lastPage": false,
+          "nextPage": 2,
+          "prePage": 1,
+          "firstResult": 0
+        },
+        "data": [
+          {
+            "lastTime": 1544438572000,
+            "phone": "18510248685",
+            "userNick": "小****帅",
+            "city": "天津市",
+            "createTime": 1530617229000,
+            "sex": "男",
+            "id": "05c34cac-7eb4-11e8-80ec-00163e0879d9",
+            "tagName": "大学生",
+            "createArea": "景山公园歪脖树下",
+            "age": "20"
+          },
+          {
+            "createTime": 1530687677000,
+            "id": "0e071e60-7f58-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1535371360000,
+            "id": "1a67fd39-a9f1-11e8-9cb0-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530690291000,
+            "id": "21f8ae4f-7f5e-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1531731392000,
+            "id": "2263dd6b-88d6-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530688183000,
+            "id": "3cb3e0f9-7f59-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530761648000,
+            "id": "5452937b-8047-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530762937000,
+            "id": "54c54294-804a-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530688240000,
+            "id": "5ba27eb0-7f59-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530688240000,
+            "id": "5ba9af70-7f59-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1531730629000,
+            "id": "5c18ed4a-88d4-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1532419141000,
+            "id": "6d3ca937-8f17-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530611817000,
+            "id": "7134ee09-7ea7-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1533864836000,
+            "id": "734d8e9f-9c3d-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1535163225000,
+            "id": "803a8361-a80c-11e8-9cb0-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1533551339000,
+            "id": "87f72f43-9963-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1532347471000,
+            "id": "8e72e779-8e70-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530765633000,
+            "id": "9b8c0514-8050-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1533701695000,
+            "id": "9c003076-9ac1-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          },
+          {
+            "createTime": 1530817603000,
+            "id": "9c3c840e-80c9-11e8-80ec-00163e0879d9",
+            "createArea": ""
+          }
+        ],
+        "unColumn": ""
+      })
+  },
+  'GET /game/user/list': (req, res) => {
+    res.send({
+      "msg":"成功",
+      "code":0,
+      "page":{
+        "pageSize":20,
+        "currentResult":0,
+        "totalPage":1,
+        "pageNo":1,
+        "totalCount":1,
+        "list":null,
+        "firstResult":0,
+        "firstPage":true,
+        "lastPage":true,
+        "nextPage":1,
+        "prePage":1
       },
-      "data": [
+      "data":[
         {
-          "machineId": "18941236",
-          "networkType": "4G",
-          "networkOperateName": "中国联通",
-          "accid": "89860617060059238915",
-          "memoryFree": 4628,
-          "memoryTotle": 5502,
-          "cpu": "0.0%",
-          "sdFree": 4628,
-          "sdTotle": 5502,
-          "ping": "87ms",
-          "allTraffic": 6.3,
-          "thatdayTraffic": 6.3,
-          "monthTraffic": 6.3,
-          "createTime": "2018-12-03 17:05:47"
+          "id":"ddddddd",
+          "userNick":"大姐姐",
+          "phone":"13454345656",
+          "gameUserId":"hjkjhghjkhjk",
+          "channelId":"hjjkklllll",
+          "channelName":"到年底",
+          "channelUserKey":"nnnmm",
+          "createTime":1531477140000
         }
-      ],
-      "unColumn": ""
+      ]
     })
+  },
+  'GET /game/user/areaList': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "code": 0,
+        "data": [
+          {
+            "area": "北京市北京市东城区278797987989899景山公园歪脖树下",
+            "loginTime": "2018-12-01 18:42:46"
+          },
+          {
+            "area": "天津市天津市河东区汉光百货45551111",
+            "loginTime": "2018-12-10 18:42:52"
+          }
+        ],
+        "unColumn": ""
+      })
   }
 };
 
