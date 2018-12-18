@@ -75,7 +75,7 @@ const CreateForm = Form.create()(
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="商户名称">
-              {getFieldDecorator('merchantAccountName', {
+              {getFieldDecorator('merchantAccountId', {
                 rules: [{ required: true, whitespace: true, message: '请选择商户' }],
               })(
                 <Select
@@ -231,7 +231,7 @@ export default class MerchantConsociation extends PureComponent {
     previewVisible: false,
     previewImage: '',
     addParams: {},
-    channelLists: []
+    channelLists: [],
   };
   componentDidMount() {
     this.getLists();
@@ -413,7 +413,7 @@ export default class MerchantConsociation extends PureComponent {
   setModalData = (data) => {
     if (data) {
       this.setState({
-        merchantAccountId: data.merchantAccountId,
+        merchantAccountName: data.merchantAccountName,
         channelId: data.channelId,
         channelCode: data.channelCode,
       })
@@ -424,25 +424,23 @@ export default class MerchantConsociation extends PureComponent {
         channelName: data.channelName || undefined,
         merchantAccountId: data.merchantAccountId || undefined,
         fileList: data.wechatQrcodeUrl || undefined,
-        wechatQrcodeUrl: data.wechatQrcodeUrl || undefined,
-        merchantAccountName: data.merchantAccountName || undefined
+        wechatQrcodeUrl: data.wechatQrcodeUrl || undefined
       });
 
     } else {
       this.setState({
-        merchantAccountId: undefined,
+        merchantAccountName: undefined,
         channelId: undefined,
         channelCode: undefined,
       })
       this.form.setFieldsValue({
         merchantCode: undefined,
         merchantName: undefined,
+        merchantAccountId: undefined,
         brandName: undefined,
         channelName: undefined,
-        merchantAccountId: undefined,
         fileList: undefined,
         wechatQrcodeUrl: undefined,
-        merchantAccountName: undefined
       });
     }
   }
@@ -453,7 +451,7 @@ export default class MerchantConsociation extends PureComponent {
   // 编辑modal 确认事件
   handleAdd = () => {
     this.form.validateFields((err, values) => {
-      const { merchantAccountId, channelId,  channelCode} = this.state
+      const { merchantAccountName, channelId,  channelCode} = this.state
 
       if (err) {
         return;
@@ -468,7 +466,7 @@ export default class MerchantConsociation extends PureComponent {
         url = 'merchantConsociation/editMerchantSetting';
         params = { ...values, id: this.state.modalData.id };
       }
-      params = Object.assign(params, {merchantAccountId, channelId, channelCode})
+      params = Object.assign(params, { merchantAccountName, channelId, channelCode})
       console.log('form--params==',params)
 
       this.props.dispatch({
@@ -482,7 +480,7 @@ export default class MerchantConsociation extends PureComponent {
           this.setState({
             modalData: {},
             modalVisible: false,
-            merchantAccountId: '',
+            merchantAccountName: '',
             channelId: '',
             channelCode: '',
             editModalConfirmLoading: false,
@@ -550,7 +548,7 @@ export default class MerchantConsociation extends PureComponent {
     sellerList.forEach(item => {
       if (item.id == val) {
         this.setState({
-          merchantAccountId: item.id
+          merchantAccountName: item.merchantName
         })
       }
     })
