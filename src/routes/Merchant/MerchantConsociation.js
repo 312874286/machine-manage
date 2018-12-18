@@ -85,7 +85,7 @@ const CreateForm = Form.create()(
                   onSelect={(val,option) => { handleSellerName(val, option)}}
                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
-                  {sellerList.map((item, index) => item.id && item.merchantName && <Option key={item.id} value={item.merchantName}>{item.merchantName}</Option>)}
+                  {sellerList.map((item, index) => item.id && item.merchantName && <Option key={item.id} value={item.id}>{item.merchantName}</Option>)}
                 </Select>
               )}
             </FormItem>
@@ -546,11 +546,14 @@ export default class MerchantConsociation extends PureComponent {
   handleSellerName = (val, option) => {
     const { sellerList } = this.state
     console.log(val,option)
-    const index = option.props.index
-    this.setState({
-      merchantAccountId: sellerList[index].id
+    // const index = option.props.index
+    sellerList.forEach(item => {
+      if (item.id == val) {
+        this.setState({
+          merchantAccountId: item.id
+        })
+      }
     })
-
   }
 
   // 选泽渠道
