@@ -6,6 +6,8 @@ const api = map({
   uploadFile: '/share/uploadImage?fileType={fileType}&type={type}',
   getProvinceCityAreaTradeArea: '/admin/area/list?code={code}',
   getUserArea: '/admin/area/list?code={code}',
+  // 渠道
+  getChannelsList: "/project/channel/getList",
 });
 
 export default api;

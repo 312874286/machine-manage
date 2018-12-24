@@ -9,6 +9,7 @@ import {
   Button,
   Cascader,
   Select,
+  Modal,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Order.less';
@@ -18,8 +19,188 @@ import {getAccountMenus} from "../../utils/authority";
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const payStatusLists = [{id: 0, name: '未支付'}, {id: 1, name: '支付成功'}]
+const payStatusLists = [{id: 0, name: '未支付'}, {id: 1, name: '支付成功'}, {id: 2, name: '支付失败'}]
 const goodsStatusLists = [{id: 0, name: '未出货'}, {id: 1, name: '已出货'}]
+const orderType = {
+  10: '点72订单',
+  20: '天猫订单',
+}
+const goodsStatus = {
+  0: '未掉落',
+  1: '已出货',
+}
+const orderStatus = {
+  10: '未支付',
+  20: '已支付',
+  30: '已完成',
+  40: '已退款',
+}
+const payType = {
+  1: '支付宝',
+  2: '微信'
+}
+const payStatus = {
+  0: '未支付',
+  1: '已支付'
+}
+const goodsType = {
+  1: '商品',
+  2: '优惠券'
+}
+const WatchForm = Form.create()(props => {
+  const { watchModalVisible, modalData, handleWatchModalVisible } = props;
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 }
+    }
+  };
+  return (
+    <Modal
+      title={
+        <div class="modalBox">
+          <span class="leftSpan" />
+          <span class="modalTitle">订单详情</span>
+        </div>
+      }
+      visible={watchModalVisible}
+      onCancel={() => handleWatchModalVisible()}
+      footer={null}
+      width={1000}
+    >
+      <div className="manageAppBox">
+        <Form onSubmit={this.handleSearch}>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单编号">
+                <span>{modalData.orderNum}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="用户ID">
+                <span>{modalData.userId ? modalData.userId : '---'}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="第三方单号">
+                <span>{modalData.refOrderId ? modalData.refOrderId : '---'}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="登录名">
+                <span>{modalData.loginName ? modalData.loginName : '---'}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="机器点位">
+                <span>{modalData.merPointAddress}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="机器编号">
+                <span>{modalData.machineCode}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="活动名称">
+                <span>{modalData.activityName}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="渠道名称">
+                <span>{modalData.channelName}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="商户名称">
+                <span>{modalData.merchantName}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="店铺名称">
+                <span>{modalData.shopsName}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="商品类型">
+                <span>{modalData.goodsType ? goodsType[modalData.goodsType] : '-'}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="商品名称">
+                <span>{modalData.orderGoodsList && modalData.orderGoodsList[0].goodsName}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="下单时间">
+                <span>{modalData.orderTime}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单类型">
+                <span>{modalData.orderType !== '999' ? orderType[modalData.orderType] : modalData.orderType}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单金额">
+                <span>{modalData.orderPrice}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="出货状态">
+                <span>{modalData.goodsStatus >= 0 ? goodsStatus[modalData.goodsStatus.toString()] : '---'}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单状态">
+                <span>{modalData.orderStatus ? orderStatus[modalData.orderStatus] : '---'}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="支付状态">
+                <span>{modalData.payStatus ? payStatus[modalData.payStatus] : '---'}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="支付方式">
+                <span>{modalData.payType ? payType[modalData.payType] : '---'}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="支付时间">
+                <span>{modalData.payTime}</span>
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    </Modal>
+  );
+});
 
 @connect(({ order, loading, log, common }) => ({
   order,
@@ -40,6 +221,9 @@ export default class Order extends PureComponent {
     areaList: [],
     payStatus: '',
     goodsStatus: '',
+    channelsLists: [],
+    modalData: {},
+    watchModalVisible: false,
 
     account: {},
   };
@@ -48,6 +232,7 @@ export default class Order extends PureComponent {
     this.getList();
     this.getArea('');
     this.getAccountMenus(getAccountMenus())
+    this.getChannelsList()
   }
   getAccountMenus = (setAccountMenusList) => {
     if (setAccountMenusList) {
@@ -81,7 +266,21 @@ export default class Order extends PureComponent {
       },
     });
   }
-
+  // getChannelsList
+  getChannelsList = () => {
+    this.props.dispatch({
+      type: 'common/getChannelsList',
+      payload: {
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        console.log('res.data', res.data)
+        this.setState({
+          channelsLists: res.data
+        })
+      }
+    });
+  }
   // 获取商圈信息
   getArea = (selectedOptions) => {
     let code = '';
@@ -210,11 +409,35 @@ export default class Order extends PureComponent {
       keyword: '',
     });
   };
-
+  onDetailClick = (item) => {
+    console.log('item', item)
+    // orderDetail
+    this.props.dispatch({
+      type: 'order/orderDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          watchModalVisible: true,
+          modalData: res.data,
+        });
+      }
+    });
+  }
+  handleWatchModalVisible = flag => {
+    this.setState({
+      watchModalVisible: !!flag,
+      modalData: {}
+    });
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     const { order: { list, page, unColumn }, log: { logList, logPage }, loading } = this.props;
-    const { areaCode, keyword, areaList, account } = this.state;
+    const { areaCode, keyword, areaList, account, channelsLists, watchModalVisible, modalData } = this.state;
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -247,7 +470,7 @@ export default class Order extends PureComponent {
                     </FormItem>
                   </Col>
                   <Col md={8} sm={12}>
-                    <FormItem>
+                    <FormItem label="选择支付状态">
                       {getFieldDecorator('payStatus')(
                         <Select placeholder="选择支付状态">
                           {payStatusLists.map((item) => {
@@ -261,13 +484,13 @@ export default class Order extends PureComponent {
                   </Col>
                 </Row>
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={9} sm={12}>
-                    <FormItem>
+                  <Col md={8} sm={12}>
+                    <FormItem label="选择渠道">
                       {getFieldDecorator('goodsStatus')(
-                        <Select placeholder="选择掉落状态">
-                          {goodsStatusLists.map((item) => {
+                        <Select placeholder="选择渠道">
+                          {channelsLists.map((item) => {
                             return (
-                              <Option key={item.id} value={item.id}>{item.name}</Option>
+                              <Option key={item.id} value={item.id}>{item.channelName}</Option>
                             );
                           })}
                         </Select>
@@ -297,10 +520,15 @@ export default class Order extends PureComponent {
               page={page}
               unColumn={unColumn}
               handleTableChange={this.handleTableChange}
-              onLogClick={this.handleLogClick}
+              onDetailClick={this.onDetailClick}
             />
           </div>
         </Card>
+        <WatchForm
+          modalData={modalData}
+          watchModalVisible={watchModalVisible}
+          handleWatchModalVisible={this.handleWatchModalVisible}
+        />
         <LogModal
           data={logList}
           page={logPage}

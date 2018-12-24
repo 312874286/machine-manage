@@ -5,7 +5,9 @@ const api = map({
   getOrdersList: '/order/list?pageNo={pageNo}&keyword={keyword}&areaCode={areaCode}&payStatus={payStatus}&goodsStatus={goodsStatus}',
 
   historydayGoodsCount: '/supply/channel/history/dayGoodsCount?pageNo={pageNo}&beginTime={beginTime}&endTime={endTime}&keyword={keyword}',
-  dayGoodsCountExcel: '/supply/channel/history/dayGoodsCountExcel'
+  dayGoodsCountExcel: '/supply/channel/history/dayGoodsCountExcel',
+
+  orderDetail: '/order/detail?id={id}',
 });
 
 export default api;

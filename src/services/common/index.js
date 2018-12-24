@@ -21,3 +21,9 @@ export async function getUserArea({ restParams }) {
     restParams,
   });
 }
+
+export async function getChannelsList({ restParams }) {
+  return fetch.get(api.getChannelsList, {
+    restParams
+  });
+}

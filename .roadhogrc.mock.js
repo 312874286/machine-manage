@@ -430,7 +430,7 @@ const proxy = {
             "parentName": null
           },
           {
-            id: 'a48',
+            id: 'a49',
             functionDepict: '首页',
             functionPath: 'index',
             parentId: '29',
@@ -535,6 +535,13 @@ const proxy = {
             id: 'a40',
             functionDepict: '商品统计',
             functionPath: 'commodityStatistics',
+            parentId: '12',
+            functionLevel: 2,
+          },
+          {
+            id: 'a50',
+            functionDepict: '退款审核',
+            functionPath: 'refundManage',
             parentId: '12',
             functionLevel: 2,
           },
@@ -7418,6 +7425,109 @@ const proxy = {
         ],
         "unColumn": ""
       })
+  },
+  'GET /order/detail': (req, res) => {
+    res.send({
+        "code":0,
+        "data":{
+          "id":"0036678f-898d-11e8-80ec-00163e0879d9",
+          "orderNum":"1000123123120180717000001",
+          "userId":"2263dd6b-88d6-11e8-80ec-00163e0879d9",
+          "channelId":"1dd77fc18f3a409196de23baedcf8ce1",
+          "machineId":"123",
+          "shopsId":null,
+          "shopsName":"33",
+          "merchantId":null,
+          "inno72ActivityId":null,
+          "inno72ActivityPlanId":null,
+          "orderTime":"2018-07-17 14:45:32",
+          "orderPrice":0,
+          "payPrice":null,
+          "orderType":"999",
+          "payStatus":"0",
+          "goodsStatus":null,
+          "payTime":null,
+          "refOrderStatus":null,
+          "refOrderId":"185533751181351460",
+          "repetition":0,
+          "orderStatus":0,
+          "channelCode":null,
+          "channelName":"天猫",
+          "machineCode":"1234",
+          "machineName":null,
+          "gameName":null,
+          "gameRemark":null,
+          "keyword":null,
+          "areaCode":null,
+          "num":null,
+          "code":null,
+          "gameId":null,
+          "activityName":"7夕欢乐秀",
+          "merPointAddress":"天津市天津市河东区汉光百货45551111",
+          "nickName":null,
+          "gameUserId":null,
+          "activityId":null,
+          "loginName":"1234543245",
+          "orderGoodsList":[
+            {
+              "id":null,
+              "orderId":null,
+              "orderNum":null,
+              "goodsType":0,
+              "goodsId":null,
+              "goodsName":"测试商品 别删除",
+              "goodsCode":null,
+              "goodsPrice":null,
+              "status":0
+            },
+            {
+              "id":null,
+              "orderId":null,
+              "orderNum":null,
+              "goodsType":0,
+              "goodsId":null,
+              "goodsName":"测试商品 别删除",
+              "goodsCode":null,
+              "goodsPrice":null,
+              "status":0
+            },
+            {
+              "id":null,
+              "orderId":null,
+              "orderNum":null,
+              "goodsType":0,
+              "goodsId":null,
+              "goodsName":"测试商品 别删除",
+              "goodsCode":null,
+              "goodsPrice":null,
+              "status":0
+            }
+          ],
+          "orderRefund":{
+            "id":null,
+            "orderId":null,
+            "userId":null,
+            "amount":0,
+            "reason":"哈哈哈",
+            "url":null,
+            "status":null,
+            "auditStatus":null,
+            "auditTime":null,
+            "auditUser":null,
+            "auditReason":null,
+            "remark":null,
+            "refundNum":"20181220",
+            "createTime":"2018-12-18 11:53:57",
+            "updateTime":null,
+            "refundTime":null
+          },
+          "merchantName":"阿里巴巴集团",
+          "pageNo":0,
+          "pageParam":0
+        },
+        "msg":"成功"
+      }
+    )
   }
 };
 
