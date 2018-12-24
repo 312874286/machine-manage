@@ -257,6 +257,9 @@ export const getRouterData = (app) => {
     '/order/commodityStatistics': {
       component: dynamicWrapper(app, ['order/commodityStatistics', 'log/log', 'common'], () => import('../routes/Order/CommodityStatisticsSetting')),
     },
+    '/order/orderReview': {
+      component: dynamicWrapper(app, ['order/orderReview', 'log/log', 'common'], () => import('../routes/Order/orderReview')),
+    },
     // '/order/refundManage': {
     //   component: dynamicWrapper(app, ['order/refundManage', 'log/log', 'common'], () => import('../routes/Order/RefundManage')),
     // },
