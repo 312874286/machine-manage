@@ -59,6 +59,7 @@ const WatchForm = Form.create()(props => {
       sm: { span: 18 }
     }
   };
+
   return (
     <Modal
       title={
@@ -70,8 +71,7 @@ const WatchForm = Form.create()(props => {
       visible={watchModalVisible}
       onCancel={() => handleWatchModalVisible()}
       footer={null}
-      width={1000}
-    >
+      width={1000}>
       <div className="manageAppBox">
         <Form onSubmit={this.handleSearch}>
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -99,8 +99,15 @@ const WatchForm = Form.create()(props => {
             </Col>
           </Row>
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="机器点位">
+            <Col md={23} sm={24}>
+              <FormItem labelCol = {{
+                xs: { span: 24 },
+                sm: { span: 3 }
+              }}
+              wrapperCol = {{
+                xs: { span: 24 },
+                sm: { span: 21 }
+              }}  label="机器点位">
                 <span>{modalData.merPointAddress}</span>
               </FormItem>
             </Col>
