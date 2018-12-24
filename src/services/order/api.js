@@ -11,7 +11,7 @@ const api = map({
   refundAudit: '/order/refund/refundAudit', // 审核
   refundUpdate: '/order/refund/update', // 编辑备注/线下退款/再次退款
   refundDetail: '/order/refund/detail', // 退款详情
-  getOrderDetail: '/order/detail?id={id}'
+  orderDetail: '/order/detail?id={id}',
 });
 
 export default api;

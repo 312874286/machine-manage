@@ -17,7 +17,7 @@ export async function getRefundList({ params }) {
 // 订单详情
 export async function getOrderDetail({ restParams }) {
   
-  return fetch.get(api.getOrderDetail, {
+  return fetch.get(api.orderDetail, {
     restParams,
   });
 }
