@@ -209,7 +209,7 @@ const WatchForm = Form.create()(props => {
               </FormItem>
             </Col>
           </Row>
-          <div style={{ display: status === 2 ? '' : 'none' }}>
+          <div style={{ display: modalData.status === 2 ? '' : 'none' }}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款详情">

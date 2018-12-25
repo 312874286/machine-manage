@@ -8,6 +8,12 @@ const status = [
   '退款成功',
   '退款失败'
 ]
+// const orderStatus = {
+//   10: '未支付',
+//   20: '已支付',
+//   30: '已完成',
+//   40: '已退款',
+// }
 // const status = [{ id: 0, name: '停用' }, { id: 1, name: '正常' }];
 export default class orderTable extends PureComponent {
   state = {
