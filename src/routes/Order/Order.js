@@ -19,7 +19,7 @@ import {getAccountMenus} from "../../utils/authority";
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const payStatusLists = [{id: 10, name: '未支付'}, {id: 20, name: '已支付'}, {id: 30, name: '已完成'}, {id: 40, name: '已退款'}]
+const payStatusLists = [{id: 10, name: '未支付'}, {id: 20, name: '已支付'}, {id: 30, name: '已完成'}]
 const goodsStatusLists = [{id: 0, name: '未出货'}, {id: 1, name: '已出货'}]
 const orderType = {
   10: '点72订单',
@@ -46,6 +46,12 @@ const payStatus = {
 const goodsType = {
   1: '商品',
   2: '优惠券'
+}
+const status = {
+  0: '新退款订单',
+  1: '退款中',
+  2: '退款成功',
+  3: '退款失败'
 }
 const WatchForm = Form.create()(props => {
   const { watchModalVisible, modalData, handleWatchModalVisible } = props;
@@ -203,6 +209,45 @@ const WatchForm = Form.create()(props => {
               </FormItem>
             </Col>
           </Row>
+          <div style={{ display: status === 2 ? '' : 'none' }}>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="退款详情">
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="退款编号">
+                  <span>{modalData.refundNum}</span>
+                </FormItem>
+              </Col>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="申请时间">
+                  <span>{modalData.createTime}</span>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="退款金额">
+                  <span>{modalData.amount}</span>
+                </FormItem>
+              </Col>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="退款说明">
+                  <span>{modalData.reason || '---'}</span>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="退款状态">
+                  <span>{status >= 0 && modalData.status[status] || '---'}</span>
+                </FormItem>
+              </Col>
+            </Row>
+          </div>
         </Form>
       </div>
     </Modal>

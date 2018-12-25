@@ -32,11 +32,13 @@ const goodsStatus = {
   0: '未掉落',
   1: '已出货',
 }
-const orderStatusArr = {
+const orderStatus = {
   10: '未支付',
   20: '已支付',
   30: '已完成',
-  40: '已退款',
+  40: '退款中',
+  50: '已退款',
+  60: '退款失败',
 }
 const payType = {
   1: '支付宝',
@@ -453,6 +455,7 @@ export default class OrderReview extends PureComponent {
     const { getFieldDecorator } = form;
     const { channelLists, tabKey } = this.state;
     const refundStatus = [
+      // { id: 0, name: '新退款订单' },
       { id: 1, name: "退款中" },
       { id: 2, name: "退款成功" },
       { id: 3, name: "退款异常" }

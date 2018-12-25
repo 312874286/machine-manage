@@ -2,7 +2,12 @@ import React, { PureComponent, Fragment } from 'react';
 import { Table, Alert, Divider, Popconfirm, Input, Button } from 'antd';
 import styles from './orderTable.less';
 import { orderStatusData, orderTypeData } from '../../common/config/order';
-
+const status = [
+  '新退款订单',
+  '退款中',
+  '退款成功',
+  '退款失败'
+]
 // const status = [{ id: 0, name: '停用' }, { id: 1, name: '正常' }];
 export default class orderTable extends PureComponent {
   state = {
@@ -149,12 +154,19 @@ export default class orderTable extends PureComponent {
         },
         key: 'payStatus'
       },
-      // {
-      //   title: '支付时间',
-      //   dataIndex: 'payTime',
-      //   width: 200,
-      //   key: 'payTime'
-      // },
+      {
+        title: '退款状态',
+        dataIndex: 'refundStatus',
+        width: 100,
+        render: (value) => {
+          if (value >= 0) {
+            return status[value];
+          } else {
+            return '-';
+          }
+        },
+        key: 'refundStatus'
+      },
       {
         title: '操作',
         width: 100,
