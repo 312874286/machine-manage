@@ -379,7 +379,7 @@ export default class OrderReview extends PureComponent {
     formValues: {}, // 搜索条件
     pageNo: 1, // 列表页码
     keyword: "", // 搜索关键字
-    tabKey: 0, // tab标签index
+    tabKey: '0', // tab标签index
     channelLists: [], // 渠道列表
     tableList: [],
     searchParams: {},
@@ -433,10 +433,9 @@ export default class OrderReview extends PureComponent {
     const { getFieldDecorator } = form;
     const { channelLists, tabKey } = this.state;
     const refundStatus = [
-      { id: 0, name: "新退款订单" },
       { id: 1, name: "退款中" },
       { id: 2, name: "退款成功" },
-      { id: 3, name: "退款失败" }
+      { id: 3, name: "退款异常" }
     ];
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
@@ -470,7 +469,7 @@ export default class OrderReview extends PureComponent {
           <Col md={8} sm={24} lg={8}>
             <FormItem label="退款状态">
               {getFieldDecorator("status")(
-                <Select disabled={tabKey == 1} placeholder="选择退款状态">
+                <Select disabled={tabKey === '0' || tabKey === '2'} placeholder="选择退款状态">
                   {refundStatus.map(item => {
                     return (
                       <Option value={item.id} key={item.id}>
@@ -654,21 +653,23 @@ export default class OrderReview extends PureComponent {
             title: "订单编号",
             dataIndex: "orderNum",
             key: "orderNum",
-            fixed: "left"
+            // fixed: "left"
+            width: '12%'
           },
-          { title: "手机号", dataIndex: "phone", key: "phone" },
-          { title: "机器点位", dataIndex: "local", key: "local" },
-          { title: "机器编号", dataIndex: "machineCode", key: "machineCode" },
-          { title: "渠道名称", dataIndex: "channelName", key: "channelName" },
-          { title: "活动名称", dataIndex: "activityName", key: "activityName" },
-          { title: "退款编号", dataIndex: "refundNum", key: "refundNum" },
-          { title: "申请时间", dataIndex: "createTime", key: "createTime" },
-          { title: "退款金额", dataIndex: "amount", key: "amount" },
-          { title: "退款说明", dataIndex: "reason", key: "reason" },
-          { title: "备注", dataIndex: "remark", key: "remark" },
+          { title: "手机号", dataIndex: "phone", key: "phone", width: '8%', },
+          { title: "机器点位", dataIndex: "local", key: "local", width: '12%', },
+          { title: "机器编号", dataIndex: "machineCode", key: "machineCode", width: '8%', },
+          { title: "渠道名称", dataIndex: "channelName", key: "channelName", width: '6%', },
+          { title: "活动名称", dataIndex: "activityName", key: "activityName", width: '5%', },
+          { title: "退款编号", dataIndex: "refundNum", key: "refundNum", width: '8%', },
+          { title: "申请时间", dataIndex: "createTime", key: "createTime", width: '10%', },
+          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', },
+          { title: "退款说明", dataIndex: "reason", key: "reason", width: '8%', },
+          { title: "备注", dataIndex: "remark", key: "remark"},
           {
             title: "操作",
             key: "action",
+            width: 100,
             fixed: "right",
             render: (text, record) => (
               <span className={styles.action}>
@@ -697,23 +698,25 @@ export default class OrderReview extends PureComponent {
             title: "订单编号",
             dataIndex: "orderNum",
             key: "orderNum",
-            fixed: "left"
+            width: '12%'
+            // fixed: "left"
           },
-          { title: "手机号", dataIndex: "phone", key: "phone" },
-          { title: "机器点位", dataIndex: "local", key: "local" },
-          { title: "机器编号", dataIndex: "machineCode", key: "machineCode" },
-          { title: "渠道名称", dataIndex: "channelName", key: "channelName" },
-          { title: "活动名称", dataIndex: "activityName", key: "activityName" },
-          { title: "退款编号", dataIndex: "refundNum", key: "refundNum" },
-          { title: "退款申请时间", dataIndex: "createTime", key: "createTime" },
-          { title: "退款金额", dataIndex: "amount", key: "amount" },
-          { title: "退款状态", dataIndex: "status", key: "status" },
-          { title: "异常原因", dataIndex: "auditReason", key: "auditReason" },
+          { title: "手机号", dataIndex: "phone", key: "phone", width: '8%', },
+          { title: "机器点位", dataIndex: "local", key: "local", width: '10%', },
+          { title: "机器编号", dataIndex: "machineCode", key: "machineCode", width: '6%', },
+          { title: "渠道名称", dataIndex: "channelName", key: "channelName", width: '6%', },
+          { title: "活动名称", dataIndex: "activityName", key: "activityName", width: '5%', },
+          { title: "退款编号", dataIndex: "refundNum", key: "refundNum", width: '8%', },
+          { title: "退款申请时间", dataIndex: "createTime", key: "createTime", width: '10%', },
+          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', },
+          { title: "退款状态", dataIndex: "status", key: "status", width: '8%', },
+          { title: "异常原因", dataIndex: "auditReason", key: "auditReason", width: '8%', },
           { title: "备注", dataIndex: "remark", key: "remark" },
           {
             title: "操作",
             key: "action",
             fixed: "right",
+            width: 100,
             render: (text, record) => (
               <span className={styles.action}>
                 <a
@@ -748,22 +751,24 @@ export default class OrderReview extends PureComponent {
             title: "订单编号",
             dataIndex: "orderNum",
             key: "orderNum",
-            fixed: "left"
+            width: '12%'
+            // fixed: "left"
           },
-          { title: "手机号", dataIndex: "phone", key: "phone" },
-          { title: "机器点位", dataIndex: "local", key: "local" },
-          { title: "机器编号", dataIndex: "machineCode", key: "machineCode" },
-          { title: "渠道名称", dataIndex: "channelName", key: "channelName" },
-          { title: "活动名称", dataIndex: "activityName", key: "activityName" },
-          { title: "退款编号", dataIndex: "refundNum", key: "refundNum" },
-          { title: "退款申请时间", dataIndex: "createTime", key: "createTime" },
-          { title: "退款金额", dataIndex: "amount", key: "amount" },
-          { title: "未通过原因", dataIndex: "auditReason", key: "auditReason" },
+          { title: "手机号", dataIndex: "phone", key: "phone", width: '8%', },
+          { title: "机器点位", dataIndex: "local", key: "local" , width: '10%',},
+          { title: "机器编号", dataIndex: "machineCode", key: "machineCode", width: '6%', },
+          { title: "渠道名称", dataIndex: "channelName", key: "channelName", width: '6%', },
+          { title: "活动名称", dataIndex: "activityName", key: "activityName", width: '6%', },
+          { title: "退款编号", dataIndex: "refundNum", key: "refundNum", width: '8%', },
+          { title: "退款申请时间", dataIndex: "createTime", key: "createTime", width: '10%', },
+          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', },
+          { title: "未通过原因", dataIndex: "auditReason", key: "auditReason", width: '10%', },
           { title: "备注", dataIndex: "remark", key: "remark" },
           {
             title: "操作",
             key: "action",
             fixed: "right",
+            width: 100,
             render: (text, record) => (
               <span className={styles.action}>
                 <a
@@ -919,7 +924,7 @@ export default class OrderReview extends PureComponent {
               columns={columns}
               pagination={false}
               onChange={this.handleTableChange}
-              scroll={{ x: 1600 }}
+              scroll={{ x: 1800 }}
             />
           </div>
         </Card>
