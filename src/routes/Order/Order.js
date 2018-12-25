@@ -243,7 +243,7 @@ const WatchForm = Form.create()(props => {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款状态">
-                  <span>{modalData.orderRefund && modalData.orderRefund.status >= 0 && modalData.status[modalData.orderRefund.status] || '---'}</span>
+                  <span>{modalData.orderRefund && modalData.orderRefund.status >= 0 && status[modalData.orderRefund.status] || '---'}</span>
                 </FormItem>
               </Col>
             </Row>
