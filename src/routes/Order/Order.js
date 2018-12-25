@@ -354,7 +354,7 @@ export default class Order extends PureComponent {
           keyword: fieldsValue.keyword,
           areaCode,
           orderStatus: fieldsValue.orderStatus >= 0 ? fieldsValue.orderStatus : '',
-          channelId: fieldsValue.channelId >= 0 ? fieldsValue.channelId : ''
+          channelId: fieldsValue.channelId ? fieldsValue.channelId : ''
         }, () => {
           this.getList();
         });

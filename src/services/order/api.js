@@ -2,7 +2,7 @@ import { map } from '../../utils/fetch/api';
 
 // API Doc: http://wiki.nblow.cn/pages/viewpage.action?pageId=11797216
 const api = map({
-  getOrdersList: '/order/list?pageNo={pageNo}&keyword={keyword}&areaCode={areaCode}&payStatus={payStatus}&orderStatus={orderStatus}',
+  getOrdersList: '/order/list?pageNo={pageNo}&keyword={keyword}&areaCode={areaCode}&orderStatus={orderStatus}&channelId={channelId}',
 
   historydayGoodsCount: '/supply/channel/history/dayGoodsCount?pageNo={pageNo}&beginTime={beginTime}&endTime={endTime}&keyword={keyword}',
   dayGoodsCountExcel: '/supply/channel/history/dayGoodsCountExcel',
