@@ -19,7 +19,7 @@ import {getAccountMenus} from "../../utils/authority";
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const payStatusLists = [{id: 0, name: '未支付'}, {id: 1, name: '支付成功'}, {id: 2, name: '支付失败'}]
+const payStatusLists = [{id: 10, name: '未支付'}, {id: 20, name: '已支付'}, {id: 30, name: '已完成'}, {id: 40, name: '已退款'}]
 const goodsStatusLists = [{id: 0, name: '未出货'}, {id: 1, name: '已出货'}]
 const orderType = {
   10: '点72订单',
@@ -226,8 +226,8 @@ export default class Order extends PureComponent {
     logId: '',
     logModalPageNo: 1,
     areaList: [],
-    payStatus: '',
-    goodsStatus: '',
+    orderStatus: '',
+    channelId: '',
     channelsLists: [],
     modalData: {},
     watchModalVisible: false,
@@ -267,8 +267,8 @@ export default class Order extends PureComponent {
           pageNo: this.state.pageNo,
           areaCode: this.state.areaCode,
           keyword: this.state.keyword,
-          payStatus: this.state.payStatus,
-          goodsStatus: this.state.goodsStatus
+          orderStatus: this.state.orderStatus,
+          channelId: this.state.channelId
         },
       },
     });
@@ -353,8 +353,8 @@ export default class Order extends PureComponent {
         this.setState({
           keyword: fieldsValue.keyword,
           areaCode,
-          payStatus: fieldsValue.payStatus >= 0 ? fieldsValue.payStatus : '',
-          goodsStatus: fieldsValue.goodsStatus >= 0 ? fieldsValue.goodsStatus : ''
+          orderStatus: fieldsValue.orderStatus >= 0 ? fieldsValue.orderStatus : '',
+          channelId: fieldsValue.channelId >= 0 ? fieldsValue.channelId : ''
         }, () => {
           this.getList();
         });
@@ -477,9 +477,9 @@ export default class Order extends PureComponent {
                     </FormItem>
                   </Col>
                   <Col md={8} sm={12}>
-                    <FormItem label="选择支付状态">
-                      {getFieldDecorator('payStatus')(
-                        <Select placeholder="选择支付状态">
+                    <FormItem label="选择订单状态">
+                      {getFieldDecorator('orderStatus')(
+                        <Select placeholder="选择订单状态">
                           {payStatusLists.map((item) => {
                             return (
                               <Option key={item.id} value={item.id}>{item.name}</Option>
@@ -493,7 +493,7 @@ export default class Order extends PureComponent {
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={8} sm={12}>
                     <FormItem label="选择渠道">
-                      {getFieldDecorator('goodsStatus')(
+                      {getFieldDecorator('channelId')(
                         <Select placeholder="选择渠道">
                           {channelsLists.map((item) => {
                             return (
