@@ -157,6 +157,8 @@ export default class orderTable extends PureComponent {
       // },
       {
         title: '操作',
+        width: 100,
+        fixed: "right",
         render: (text, item) => (
           <Fragment>
             <a onClick={() => onDetailClick(item)}>查看详情</a>
