@@ -539,6 +539,13 @@ const proxy = {
             functionLevel: 2,
           },
           {
+            id: 'a41',
+            functionDepict: '退款审核',
+            functionPath: 'orderReview',
+            parentId: '12',
+            functionLevel: 2,
+          },
+          {
             "id": "5",
             "functionDepict": "渠道管理",
             "functionPath": "channel",
@@ -7418,6 +7425,77 @@ const proxy = {
         ],
         "unColumn": ""
       })
+  },
+  'POST /order/refund/list': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "code": 0,
+        "page": {
+          "pageSize": 20,
+          "currentResult": 0,
+          "totalPage": 1,
+          "pageNo": 1,
+          "totalCount": 1,
+          "list": null,
+          "firstResult": 0,
+          "firstPage": true,
+          "lastPage": true,
+          "nextPage": 1,
+          "prePage": 1
+        },
+        "data": [
+          {
+            "refundNum": "20181220",
+            "reason": "哈哈哈",
+            "amount": 0,
+            "machineCode": "1234",
+            "phone": "12345678900",
+            "createTime": "2018-12-18 11:53:57",
+            "activityName": "派样活动",
+            "orderNum": "1000123123120180717000001",
+            "channelName": "天猫",
+            "remark": "啊啊啊",
+            "local": "天津市天津市河东区汉光百货45551111"
+          }
+        ],
+        "unColumn": ""
+      })
+  },
+  'POST /order/refund/refundAudit': (req, res) => {
+    res.send({
+        "code": 0,
+        "data": "操作成功",
+        "msg": "成功"
+      })
+  },
+  'POST /order/refund/update': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": "操作成功",
+      "msg": "成功"
+    })
+  },
+  'POST /order/refund/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        "orderType": "999",
+        "refundNum": "20181220",
+        "reason": "哈哈哈",
+        "amount": 0,
+        "machineCode": "1234",
+        "activityName": "派样活动",
+        "orderNum": "1000123123120180717000001",
+        "remark": "啊啊啊",
+        "userId": "哈哈哈哈",
+        "local": "天津市天津市河东区汉光百货45551111",
+        "orderTime": "2018-07-17 14:45:32",
+        "channelName": "天猫",
+        "orderPrice": 0,
+        "status": 0
+      },
+      "msg": "成功"
+    })
   }
 };
 

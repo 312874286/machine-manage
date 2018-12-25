@@ -24,14 +24,39 @@ const TabPane = Tabs.TabPane;
 const { Option } = Select;
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
+const orderType = {
+  10: '点72订单',
+  20: '天猫订单',
+}
+const goodsStatus = {
+  0: '未掉落',
+  1: '已出货',
+}
+const orderStatus = {
+  10: '未支付',
+  20: '已支付',
+  30: '已完成',
+  40: '已退款',
+}
+const payType = {
+  1: '支付宝',
+  2: '微信'
+}
+const payStatus = {
+  0: '未支付',
+  1: '已支付'
+}
+const goodsType = {
+  1: '商品',
+  2: '优惠券'
+}
 const RefundAuditForm = Form.create()(props => {
   const {
     watchRefundAuditForm,
-    approved,
-    rejected,
     tabKey,
     refundAuditModalVisible,
-    refundAuditModalData
+    refundAuditModalData,
+    orderStatus
   } = props;
   const formItemLayout = {
     labelCol: {
@@ -225,25 +250,122 @@ const RefundAuditForm = Form.create()(props => {
               </FormItem>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ display: tabKey === 0 ? '' : 'none'}}>
             <Col md={12} sm={12}>
-              <Button>不通过</Button>
-              <Button type="primary">通过</Button>
+              <Button onClick={() => orderStatus(2)}>不通过</Button>
+              <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
             </Col>
           </Row>
-          <Row>
-            <Col md={12} sm={12}>
-              <Button type="primary">线下退款</Button>
-              <Button type="primary">再次退款</Button>
-            </Col>
-          </Row>
+          {/*<Row style={{ display: tabKey === 1 ? '' : 'none'}}>*/}
+            {/*<Col md={12} sm={12}>*/}
+              {/*<Button type="primary">线下退款</Button>*/}
+              {/*<Button type="primary">再次退款</Button>*/}
+            {/*</Col>*/}
+          {/*</Row>*/}
         </Form>
       </div>
     </Modal>
   );
 });
-
-const EditRemark = "";
+const RefuseAuditForm = Form.create()(props => {
+  const {
+    handleModalVisible,
+    handleAdd,
+    refuseModalVisible,
+    refuseEditModalConfirmLoading,
+    form
+  } = props;
+  const { getFieldDecorator } = form;
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 }
+    }
+  };
+  return (
+    <Modal
+      title={
+        <div class="modalBox">
+          <span class="leftSpan" />
+          <span class="modalTitle">提示</span>
+        </div>
+      }
+      visible={refuseModalVisible}
+      onCancel={() => handleModalVisible()}
+      onOk={handleAdd}
+      confirmLoading={refuseEditModalConfirmLoading}
+      width={1000}
+    >
+      <div className="manageAppBox">
+        <Form>
+          {/*<Row gutter={{ md: 8, lg: 24, xl: 48 }}>*/}
+            {/*<Col md={12} sm={12}>*/}
+              {/*<FormItem {...formItemLayout} label="不通过原因" />*/}
+            {/*</Col>*/}
+          {/*</Row>*/}
+          <FormItem {...formItemLayout} label="不通过原因">
+            {getFieldDecorator('auditReason', {
+              rules: [{ required: true, whitespace: true, message: '请输入不通过原因' }],
+            })(
+              <TextArea placeholder="请填写不通过原因（50字内），填写内容将告知给用户" autosize={{ minRows: 2, maxRows: 6 }} />
+            )}
+          </FormItem>
+        </Form>
+      </div>
+    </Modal>
+  );
+});
+const EditRemarkForm = Form.create()(props => {
+  const {
+    handleModalVisible,
+    handleAdd,
+    refuseModalVisible,
+    refuseEditModalConfirmLoading,
+    form
+  } = props;
+  const { getFieldDecorator } = form;
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 }
+    }
+  };
+  return (
+    <Modal
+      title={
+        <div class="modalBox">
+          <span class="leftSpan" />
+          <span class="modalTitle">编辑备注</span>
+        </div>
+      }
+      visible={refuseModalVisible}
+      onCancel={() => handleModalVisible()}
+      onOk={handleAdd}
+      confirmLoading={refuseEditModalConfirmLoading}
+      width={1000}
+    >
+      <div className="manageAppBox">
+        <Form>
+          <FormItem {...formItemLayout} label="备注">
+            {getFieldDecorator('remark', {
+              rules: [{ required: true, whitespace: true, message: '请输入备注' }],
+            })(
+              <TextArea placeholder="请输入备注说明，不超过50字" autosize={{ minRows: 2, maxRows: 6 }} />
+            )}
+          </FormItem>
+        </Form>
+      </div>
+    </Modal>
+  );
+});
 
 @Form.create()
 @connect(({ orderReview, loading, log, common }) => ({
@@ -262,7 +384,13 @@ export default class OrderReview extends PureComponent {
     tableList: [],
     searchParams: {},
     refundAuditModalData: {},
-    watchRefundAuditForm: false
+    watchRefundAuditForm: false,
+
+    refuseModalVisible: false,
+    refuseEditModalConfirmLoading: false,
+
+    editRemarkModalVisible: false,
+    editRemarkModalConfirmLoading: false,
   };
 
   componentDidMount() {
@@ -391,7 +519,7 @@ export default class OrderReview extends PureComponent {
       if (err) return;
       const values = {
         ...fieldsValue,
-        time: fieldsValue["time"].format("YYYY-MM-DD")
+        time: fieldsValue.time ? fieldsValue.time.format("YYYY-MM-DD") : '',
       };
       this.setState(
         {
@@ -417,7 +545,7 @@ export default class OrderReview extends PureComponent {
       }
     }).then(res => {
       console.log(res);
-      if (res.code == 0) {
+      if (res && res.code == 0) {
         this.setState({
           tableList: res.data
         });
@@ -446,7 +574,7 @@ export default class OrderReview extends PureComponent {
   gotoReview = text => {
     console.log(text);
     this.getOrderDetail(text.id).then(res => {
-      if (res.code == 0) {
+      if (res && res.code == 0) {
         this.setState(
           {
             refundAuditModalData: res.data
@@ -460,14 +588,54 @@ export default class OrderReview extends PureComponent {
       }
     });
   };
-  // 审核不通过
-  rejected = () => {
-    console.log("审核不通过");
-  };
   // 审核通过
-  approved = () => {
-    console.log("审核通过");
-  };
+  orderStatus = (auditStatus) => {
+    // refundAudit
+    if (auditStatus === 2) {
+      this.setState({
+        refuseModalVisible: true,
+      });
+      return;
+    }
+    this.editRefundAudit(auditStatus)
+  }
+  editRefundAudit = (auditStatus, auditReason) => {
+    const { dispatch } = this.props;
+    const { refundAuditModalData } = this.state
+    console.log('refundAuditModalData', refundAuditModalData)
+    let params = {
+      id: refundAuditModalData.id,
+      auditStatus,
+    }
+    if (auditStatus === 2) {
+      params = {
+        ...params,
+        auditReason,
+      }
+    }
+    return new Promise((resolve, reject) => {
+      dispatch({
+        type: "orderReview/refundAudit",
+        payload: {
+          params: {
+            ...params,
+          }
+        }
+      }).then(res => {
+        if (res && res.code === 0) {
+          message.success('审核成功')
+          this.setState({
+            refuseModalVisible: false,
+            refuseEditModalConfirmLoading: false,
+            watchRefundAuditForm: false,
+          })
+        }
+      })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
   // 点击关闭Model
   refundAuditModalVisible = flag => {
     console.log(flag);
@@ -513,7 +681,7 @@ export default class OrderReview extends PureComponent {
                 </a>
                 <a
                   onClick={() => {
-                    this.editNote(text, record.key);
+                    this.editNote(text);
                   }}
                 >
                   编辑备注
@@ -550,21 +718,21 @@ export default class OrderReview extends PureComponent {
               <span className={styles.action}>
                 <a
                   onClick={() => {
-                    this.toView(text, record.key);
+                    this.gotoReview(text, record.key);
                   }}
                 >
                   查看
                 </a>
                 <a
                   onClick={() => {
-                    this.editNote(text, record.key);
+                    this.handRefundUpdate(2, '', text);
                   }}
                 >
                   线下退款
                 </a>
                 <a
                   onClick={() => {
-                    this.editNote(text, record.key);
+                    this.handRefundUpdate(3, '', text);
                   }}
                 >
                   再次退款
@@ -632,6 +800,98 @@ export default class OrderReview extends PureComponent {
       }
     );
   };
+  // 审核状态弹框
+  saveFormRef = (form) => {
+    this.form = form;
+  }
+  handleModalVisible = (flag) => {
+    this.setState({
+      refuseModalVisible: !!flag,
+      refuseEditModalConfirmLoading: false,
+    });
+  };
+  handleAdd = () => {
+    this.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      this.editRefundAudit(2, fieldsValue.auditReason)
+    })
+  }
+  // 编辑备注
+  saveEditRemarkFormRef = (form) => {
+    this.saveEditRemarkForm = form;
+  }
+  handleEditRemarkModalVisible = (flag) => {
+    this.setState({
+      editRemarkModalVisible: !!flag,
+      editRemarkModalConfirmLoading: false,
+      refundAuditModalData: ''
+    });
+  };
+  handleEditRemarkAdd = () => {
+    this.setState({
+      editRemarkModalConfirmLoading: true,
+    });
+    this.saveEditRemarkForm.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      // refundUpdate
+      this.handRefundUpdate(1, fieldsValue.remark)
+    })
+  }
+  editNote = (text) => {
+    this.setState({
+      editRemarkModalVisible: true,
+      editRemarkModalConfirmLoading: false,
+      refundAuditModalData: text
+    }, () => {
+      const { refundAuditModalData } = this.state
+      this.saveEditRemarkForm.setFieldsValue({
+        remark: refundAuditModalData.remark || '',
+      });
+    });
+  }
+  handRefundUpdate = (type, remark, record) => {
+    const { dispatch } = this.props;
+    const RefundUpdate = {
+      1: '编辑备注更新成功',
+      2: '线下付款成功',
+      3: '再次退款成功'
+    }
+    const { refundAuditModalData } = this.state
+    let params = {
+      id: refundAuditModalData.id || record.id,
+      type,
+    }
+    if (remark) {
+      params = {
+        ...params,
+        remark,
+      }
+    }
+    return new Promise((resolve, reject) => {
+      dispatch({
+        type: "orderReview/refundUpdate",
+        payload: {
+          params: {
+            ...params,
+          }
+        }
+      }).then(res => {
+        if (res && res.code === 0) {
+          message.success(RefundUpdate[type && type.toString()] || '更新成功')
+          this.setState({
+            editRemarkModalVisible: false,
+            editRemarkModalConfirmLoading: false,
+          });
+        }
+      }).catch(err => {
+          reject(err);
+        });
+    });
+  }
   render() {
     const { loading } = this.props;
     const { columns, tableList } = this.state;
@@ -665,11 +925,24 @@ export default class OrderReview extends PureComponent {
         </Card>
         <RefundAuditForm
           watchRefundAuditForm={this.state.watchRefundAuditForm}
-          rejected={this.rejected}
-          approved={this.approved}
           refundAuditModalVisible={this.refundAuditModalVisible}
           refundAuditModalData={this.state.refundAuditModalData}
           tabKey={this.state.tabKey}
+          orderStatus={this.orderStatus}
+        />
+        <RefuseAuditForm
+          ref={this.saveFormRef}
+          handleModalVisible={this.handleModalVisible}
+          handleAdd={this.handleAdd}
+          refuseModalVisible={this.state.refuseModalVisible}
+          refuseEditModalConfirmLoading={this.state.refuseEditModalConfirmLoading}
+        />
+        <EditRemarkForm
+          ref={this.saveEditRemarkFormRef}
+          handleModalVisible={this.handleEditRemarkModalVisible}
+          handleAdd={this.handleEditRemarkAdd}
+          refuseModalVisible={this.state.editRemarkModalVisible}
+          refuseEditModalConfirmLoading={this.state.editRemarkModalConfirmLoading}
         />
       </PageHeaderLayout>
     );

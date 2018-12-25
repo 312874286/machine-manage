@@ -144,21 +144,21 @@ export default class homePageSetting extends PureComponent {
                 <span className={styles.titleSpan}>(单位: 条)</span>
               </div>}>
               <div className={styles.gridCardBox}>
-                <a onClick={() => this.props.history.push('/paiActivity')}>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {active: 1}})}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/doing.png')}/>
                   </div>
                   <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.paiActivityCount === 0 ? "0" : MachinePortalDataList.paiActivityCount}</span>
+                    <span>{MachinePortalDataList.waitAudit === 0 ? "0" : MachinePortalDataList.waitAudit}</span>
                     <span>待审核</span>
                   </div>
                 </a>
-                <a onClick={() => this.props.history.push('/paiActivity')}>
+                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {active: 2, status: 3,}})}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/doing.png')}/>
                   </div>
                   <div className={styles.machineRightBox}>
-                    <span>{MachinePortalDataList.paiActivityCount === 0 ? "0" : MachinePortalDataList.paiActivityCount}</span>
+                    <span>{MachinePortalDataList.refundException === 0 ? "0" : MachinePortalDataList.refundException}</span>
                     <span>退款异常</span>
                   </div>
                 </a>
