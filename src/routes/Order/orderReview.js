@@ -183,7 +183,7 @@ const RefundAuditForm = Form.create()(props => {
               <FormItem {...formItemLayout} label="订单状态">
                 <span>
                   {refundAuditModalData.orderStatus
-                    ? orderStatusArr[refundAuditModalData.orderStatus]
+                    ? orderStatusArr[refundAuditModalData.orderStatus.toString()]
                     : "---"}
                 </span>
               </FormItem>
@@ -236,7 +236,7 @@ const RefundAuditForm = Form.create()(props => {
             </Col>
             <Col md={12} sm={12}>
               <FormItem {...formItemLayout} label="退款时间" style={{ display: tabKey === '1' ? '' : 'none'}}>
-                {refundAuditModalData.auditReason}
+                {refundAuditModalData.refundTime || '---'}
               </FormItem>
             </Col>
           </Row>
