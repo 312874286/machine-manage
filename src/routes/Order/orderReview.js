@@ -50,6 +50,10 @@ const goodsType = {
   1: '商品',
   2: '优惠券'
 }
+const auditStatus = {
+  0: '未通过',
+  1: '通过'
+}
 const RefundAuditForm = Form.create()(props => {
   const {
     watchRefundAuditForm,
@@ -134,30 +138,11 @@ const RefundAuditForm = Form.create()(props => {
               </FormItem>
             </Col>
             <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="商户名称">
-                <span>{refundAuditModalData.merchantName}</span>
+              <FormItem {...formItemLayout} label="商品名称">
+                <span>{refundAuditModalData.goodsName}</span>
               </FormItem>
             </Col>
           </Row>
-
-          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="店铺名称">
-                <span>{refundAuditModalData.shopsName}</span>
-              </FormItem>
-            </Col>
-            <Col md={12} sm={12}>
-              <Col md={12} sm={12}>
-                <FormItem {...formItemLayout} label="商品名称">
-                  <span>
-                    {refundAuditModalData.orderGoodsList &&
-                      refundAuditModalData.orderGoodsList[0].goodsName}
-                  </span>
-                </FormItem>
-              </Col>
-            </Col>
-          </Row>
-
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={12}>
               <FormItem {...formItemLayout} label="下单时间">
@@ -247,6 +232,41 @@ const RefundAuditForm = Form.create()(props => {
                 <span>{refundAuditModalData.status == 1 && "退款中"}</span>
                 <span>{refundAuditModalData.status == 2 && "退款成功"}</span>
                 <span>{refundAuditModalData.status == 3 && "退款失败"}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="退款时间" style={{ display: tabKey === '1' ? '' : 'none'}}>
+                {refundAuditModalData.auditReason}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="审核信息">
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="审核人">
+                {refundAuditModalData.auditUser}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="审核时间">
+                {refundAuditModalData.auditTime}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="审核结果">
+                {refundAuditModalData.auditStatus >= 0 && auditStatus[refundAuditModalData.auditStatus.toString()] || '---'}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="未通过原因" style={{ display: tabKey === '2' ? '' : 'none'}}>
+                {refundAuditModalData.auditReason}
               </FormItem>
             </Col>
           </Row>
