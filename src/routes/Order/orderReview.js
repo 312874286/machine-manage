@@ -32,7 +32,7 @@ const goodsStatus = {
   0: '未掉落',
   1: '已出货',
 }
-const orderStatus = {
+const orderStatusArr = {
   10: '未支付',
   20: '已支付',
   30: '已完成',
@@ -183,7 +183,7 @@ const RefundAuditForm = Form.create()(props => {
               <FormItem {...formItemLayout} label="订单状态">
                 <span>
                   {refundAuditModalData.orderStatus
-                    ? orderStatus[refundAuditModalData.orderStatus]
+                    ? orderStatusArr[refundAuditModalData.orderStatus]
                     : "---"}
                 </span>
               </FormItem>
