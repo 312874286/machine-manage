@@ -250,7 +250,7 @@ const RefundAuditForm = Form.create()(props => {
               </FormItem>
             </Col>
           </Row>
-          <Row style={{ display: tabKey === 0 ? '' : 'none'}}>
+          <Row style={{ display: tabKey === '0' ? '' : 'none'}}>
             <Col md={12} sm={12}>
               <Button onClick={() => orderStatus(2)}>不通过</Button>
               <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
@@ -513,6 +513,7 @@ export default class OrderReview extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
     const { form } = this.props;
+    // const { tabKey } = this.state
     form.validateFields((err, fieldsValue) => {
       console.log(fieldsValue);
       if (err) return;
@@ -534,8 +535,9 @@ export default class OrderReview extends PureComponent {
   getLists = (pageNo = 1) => {
     const { dispatch } = this.props;
     const { searchParams, tabKey } = this.state;
-    console.log("auditStatus", tabKey);
-    const params = Object.assign(searchParams, { pageNo, auditStatus: tabKey });
+    const params = Object.assign(tabKey === '1' ? searchParams : {
+      ...searchParams, status: ''
+    }, { pageNo, auditStatus: tabKey });
     console.log(params);
     dispatch({
       type: "orderReview/getRefundList",
