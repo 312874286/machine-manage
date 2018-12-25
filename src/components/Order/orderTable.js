@@ -165,7 +165,7 @@ export default class orderTable extends PureComponent {
         dataIndex: 'refundStatus',
         width: 100,
         render: (value) => {
-          if (value >= 0) {
+          if (value && value >= 0) {
             return status[value];
           } else {
             return '-';
