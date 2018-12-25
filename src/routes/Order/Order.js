@@ -209,7 +209,7 @@ const WatchForm = Form.create()(props => {
               </FormItem>
             </Col>
           </Row>
-          <div style={{ display: modalData.orderRefund.status === 2 ? '' : 'none' }}>
+          <div style={{ display: modalData.orderRefund && modalData.orderRefund.status === 2 ? '' : 'none' }}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款详情">
@@ -219,31 +219,31 @@ const WatchForm = Form.create()(props => {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款编号">
-                  <span>{modalData.orderRefund.refundNum}</span>
+                  <span>{modalData.orderRefund && modalData.orderRefund.refundNum}</span>
                 </FormItem>
               </Col>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="申请时间">
-                  <span>{modalData.orderRefund.createTime}</span>
+                  <span>{modalData.orderRefund && modalData.orderRefund.createTime}</span>
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款金额">
-                  <span>{modalData.amount}</span>
+                  <span>{modalData.orderRefund && modalData.orderRefund.amount}</span>
                 </FormItem>
               </Col>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款说明">
-                  <span>{modalData.orderRefund.reason || '---'}</span>
+                  <span>{modalData.orderRefund && modalData.orderRefund.reason || '---'}</span>
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款状态">
-                  <span>{modalData.orderRefund.status >= 0 && modalData.status[modalData.orderRefund.status] || '---'}</span>
+                  <span>{modalData.orderRefund && modalData.orderRefund.status >= 0 && modalData.status[modalData.orderRefund.status] || '---'}</span>
                 </FormItem>
               </Col>
             </Row>
