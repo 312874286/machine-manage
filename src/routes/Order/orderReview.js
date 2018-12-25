@@ -26,25 +26,225 @@ const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
 const RefundAuditForm = Form.create()(props => {
   const {
-    showRefundAuditForm,
+    watchRefundAuditForm,
     approved,
     rejected,
-    refundAuditModalVisible
+    tabKey,
+    refundAuditModalVisible,
+    refundAuditModalData
   } = props;
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 }
+    }
+  };
   return (
     <Modal
-      visible={showRefundAuditForm}
-      title="审核"
-      footer={null}
-      maskClosable={true}
+      title={
+        <div class="modalBox">
+          <span class="leftSpan" />
+          <span class="modalTitle">订单审核</span>
+        </div>
+      }
+      visible={watchRefundAuditForm}
       onCancel={() => refundAuditModalVisible()}
+      footer={null}
+      width={1000}
     >
-      <Row>
-        <Col />
-      </Row>
+      <div className="manageAppBox">
+        <Form onSubmit={this.handleSearch}>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单详情" />
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单编号">
+                <span>{refundAuditModalData.orderNum}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="用户ID">
+                <span>
+                  {refundAuditModalData.userId
+                    ? refundAuditModalData.userId
+                    : "---"}
+                </span>
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="机器点位">
+                <span>{refundAuditModalData.local}</span>
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="机器编号">
+                <span>{refundAuditModalData.machineCode}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="活动名称">
+                <span>{refundAuditModalData.activityName}</span>
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="渠道名称">
+                <span>{refundAuditModalData.channelName}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="商户名称">
+                <span>{refundAuditModalData.merchantName}</span>
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="店铺名称">
+                <span>{refundAuditModalData.shopsName}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="商品名称">
+                  <span>
+                    {refundAuditModalData.orderGoodsList &&
+                      refundAuditModalData.orderGoodsList[0].goodsName}
+                  </span>
+                </FormItem>
+              </Col>
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="下单时间">
+                <span>{refundAuditModalData.orderTime}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单类型">
+                <span>
+                  {refundAuditModalData.orderType &&
+                  refundAuditModalData.orderType !== "999"
+                    ? orderType[refundAuditModalData.orderType]
+                    : refundAuditModalData.orderType}
+                </span>
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单金额">
+                <span>{refundAuditModalData.orderPrice}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="出货状态">
+                <span>
+                  {refundAuditModalData.goodsStatus >= 0
+                    ? goodsStatus[refundAuditModalData.goodsStatus.toString()]
+                    : "---"}
+                </span>
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="订单状态">
+                <span>
+                  {refundAuditModalData.orderStatus
+                    ? orderStatus[refundAuditModalData.orderStatus]
+                    : "---"}
+                </span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="支付时间">
+                <span>{refundAuditModalData.payTime || '---'}</span>
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <FormItem label="退款详情：" />
+            </Col>
+          </Row>
+
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="退款编号">
+                <span>{refundAuditModalData.refundNum}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="申请时间">
+                <span>{refundAuditModalData.createTime}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="退款金额">
+                <span>{refundAuditModalData.amount}</span>
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="退款说明">
+                <span>{refundAuditModalData.reason}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={12} sm={12}>
+              <FormItem {...formItemLayout} label="退款状态">
+                <span>{refundAuditModalData.status == 0 && "新退款订单"}</span>
+                <span>{refundAuditModalData.status == 1 && "退款中"}</span>
+                <span>{refundAuditModalData.status == 2 && "退款成功"}</span>
+                <span>{refundAuditModalData.status == 3 && "退款失败"}</span>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12} sm={12}>
+              <Button>不通过</Button>
+              <Button type="primary">通过</Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12} sm={12}>
+              <Button type="primary">线下退款</Button>
+              <Button type="primary">再次退款</Button>
+            </Col>
+          </Row>
+        </Form>
+      </div>
     </Modal>
   );
 });
+
+const EditRemark = "";
+
 @Form.create()
 @connect(({ orderReview, loading, log, common }) => ({
   orderReview,
@@ -61,8 +261,8 @@ export default class OrderReview extends PureComponent {
     channelLists: [], // 渠道列表
     tableList: [],
     searchParams: {},
-    orderDetail: {},
-    showRefundAuditForm: false
+    refundAuditModalData: {},
+    watchRefundAuditForm: false
   };
 
   componentDidMount() {
@@ -70,7 +270,7 @@ export default class OrderReview extends PureComponent {
     this.setColumns();
     this.getBaseDictLists();
   }
-
+  // 获取渠道
   getBaseDictLists = () => {
     this.props
       .dispatch({
@@ -99,11 +299,11 @@ export default class OrderReview extends PureComponent {
       pageNo: 1
     });
   };
-
+  // 头部搜索
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
-    const { channelLists } = this.state;
+    const { channelLists, tabKey } = this.state;
     const refundStatus = [
       { id: 0, name: "新退款订单" },
       { id: 1, name: "退款中" },
@@ -113,16 +313,10 @@ export default class OrderReview extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24} lg={10}>
+          <Col md={8} sm={24} lg={8}>
             <FormItem label="渠道名称：">
               {getFieldDecorator("channel")(
-                <Select
-                  // onChange={selectChannel}
-                  placeholder="选择渠道"
-                  // onSelect={(val, option) => {
-                  //   saveChannelId(val, option);
-                  // }}
-                >
+                <Select placeholder="选择渠道">
                   {channelLists.map(item => {
                     return (
                       <Option value={item.code} key={item.code}>
@@ -134,7 +328,7 @@ export default class OrderReview extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24} lg={10}>
+          <Col md={8} sm={24} lg={8}>
             <FormItem label="申请时间：">
               {getFieldDecorator("time")(
                 <DatePicker
@@ -145,16 +339,10 @@ export default class OrderReview extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24} lg={10}>
+          <Col md={8} sm={24} lg={8}>
             <FormItem label="退款状态">
               {getFieldDecorator("status")(
-                <Select
-                  // onChange={selectChannel}
-                  placeholder="选择渠道"
-                  // onSelect={(val, option) => {
-                  //   saveChannelId(val, option);
-                  // }}
-                >
+                <Select disabled={tabKey == 1} placeholder="选择退款状态">
                   {refundStatus.map(item => {
                     return (
                       <Option value={item.id} key={item.id}>
@@ -190,11 +378,11 @@ export default class OrderReview extends PureComponent {
       </Form>
     );
   }
-
+  // 点击日期
   onDateChange = (date, dateString) => {
     console.log(date, dateString);
   };
-
+  // 点击搜索
   handleSearch = e => {
     e.preventDefault();
     const { form } = this.props;
@@ -241,9 +429,9 @@ export default class OrderReview extends PureComponent {
     const { dispatch } = this.props;
     return new Promise((resolve, reject) => {
       dispatch({
-        type: "orderReview/getOrderDetail",
+        type: "orderReview/refundDetail",
         payload: {
-          restParams: { id }
+          params: { id }
         }
       })
         .then(res => {
@@ -254,18 +442,18 @@ export default class OrderReview extends PureComponent {
         });
     });
   };
-  // 点击审核
+  // 点击表格中的审核
   gotoReview = text => {
     console.log(text);
-    this.getOrderDetail(text.orderNum).then(res => {
+    this.getOrderDetail(text.id).then(res => {
       if (res.code == 0) {
         this.setState(
           {
-            orderDetail: res.data
+            refundAuditModalData: res.data
           },
           () => {
             this.setState({
-              showRefundAuditForm: true
+              watchRefundAuditForm: true
             });
           }
         );
@@ -284,11 +472,11 @@ export default class OrderReview extends PureComponent {
   refundAuditModalVisible = flag => {
     console.log(flag);
     this.setState({
-      showRefundAuditForm: false,
-      orderDetail: {}
-    })
+      watchRefundAuditForm: false,
+      refundAuditModalData: {}
+    });
   };
-
+  // 根据tabKey来判断表头显示
   setColumns = (k = 0) => {
     let columns = [];
     switch (parseInt(k)) {
@@ -476,10 +664,12 @@ export default class OrderReview extends PureComponent {
           </div>
         </Card>
         <RefundAuditForm
-          showRefundAuditForm={this.state.showRefundAuditForm}
+          watchRefundAuditForm={this.state.watchRefundAuditForm}
           rejected={this.rejected}
           approved={this.approved}
           refundAuditModalVisible={this.refundAuditModalVisible}
+          refundAuditModalData={this.state.refundAuditModalData}
+          tabKey={this.state.tabKey}
         />
       </PageHeaderLayout>
     );
