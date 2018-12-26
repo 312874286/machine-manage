@@ -743,7 +743,14 @@ export default class OrderReview extends PureComponent {
           { title: "活动名称", dataIndex: "activityName", key: "activityName", width: '5%', },
           { title: "退款编号", dataIndex: "refundNum", key: "refundNum", width: '8%', },
           { title: "申请时间", dataIndex: "createTime", key: "createTime", width: '10%', },
-          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', },
+          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%',render: (value) => {
+              if (value >= 0) {
+                return `¥${value.toFixed(2)}`;
+              } else {
+                return '-';
+              }
+            }
+          },
           { title: "退款说明", dataIndex: "reason", key: "reason", width: '8%', },
           { title: "备注", dataIndex: "remark", key: "remark"},
           {
@@ -788,14 +795,21 @@ export default class OrderReview extends PureComponent {
           { title: "活动名称", dataIndex: "activityName", key: "activityName", width: '5%', },
           { title: "退款编号", dataIndex: "refundNum", key: "refundNum", width: '8%', },
           { title: "退款申请时间", dataIndex: "createTime", key: "createTime", width: '10%', },
-          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', },
+          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', render: (value) => {
+              if (value >= 0) {
+                return `¥${value.toFixed(2)}`;
+              } else {
+                return '-';
+              }
+            }},
           { title: "退款状态", dataIndex: "status", key: "status", width: '8%', render: (value) => {
               if (value >= 0) {
                 return status[value] || value;
               } else {
                 return '-';
               }
-            } },
+            }
+          },
           { title: "异常原因", dataIndex: "refundMsg", key: "refundMsg", width: '8%',  render: (value) => {
               return value || '-';
             }  },
@@ -851,7 +865,14 @@ export default class OrderReview extends PureComponent {
           { title: "活动名称", dataIndex: "activityName", key: "activityName", width: '6%', },
           { title: "退款编号", dataIndex: "refundNum", key: "refundNum", width: '8%', },
           { title: "退款申请时间", dataIndex: "createTime", key: "createTime", width: '10%', },
-          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', },
+          { title: "退款金额", dataIndex: "amount", key: "amount", width: '8%', render: (value) => {
+              if (value >= 0) {
+                return `¥${value.toFixed(2)}`;
+              } else {
+                return '-';
+              }
+            }
+          },
           { title: "未通过原因", dataIndex: "auditReason", key: "auditReason", width: '10%', },
           { title: "备注", dataIndex: "remark", key: "remark" },
           {
