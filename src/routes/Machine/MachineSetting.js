@@ -56,6 +56,7 @@ const getValue = obj =>
 const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位', '', '', '', '', '合作中']
 const appStatus = ['未启动', '前台运行', '后台运行']
 const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
+const teamworkLogOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}, {id: 5, name: '中吉日志'}]
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}, {id: 2, name: '合作机器'}]
 const pointStatusOptions = [
@@ -609,7 +610,7 @@ const EditMonitoringForm = Form.create()(
       handleMouseOver, handleMouseOut, mouseOver, onChange, excell, watchBtn,
       logRefresh, logUpdate, pointType, grabLogOnChange, machineLogLists, pointChange, machineId,
       appUpdate, appRefresh, returnBtn, machineDetail, monitorKey,
-      logStartTime, logEndTime,
+      logStartTime, logEndTime, modalData,
       customLogEndTime, customLogStartTime, getLogMessage, teamWorkMachineFlag
     } = props;
     const formItemLayout = {
@@ -751,13 +752,27 @@ const EditMonitoringForm = Form.create()(
               <Form onSubmit={this.handleSearch} style={{ marginTop: '10px' }}>
                 <FormItem {...formItemLayout} label="日志类型">
                   <div style={{ display: 'flex' }}>
-                    <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
-                      {logOptions.map((item) => {
-                        return (
-                          <Option key={item.id} value={item.id}>{item.name}</Option>
-                        );
-                      })}
-                    </Select>
+                    {
+                      modalData.machineType === 2 ?
+                        <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
+                          {logOptions.map((item) => {
+                          return (
+                            <Option key={item.id} value={item.id}>{item.name}</Option>
+                          );
+                        })}
+                        </Select>
+                        :
+                        <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
+                          {
+                            teamworkLogOptions.map((item) => {
+                              return (
+                                <Option key={item.id} value={item.id}>{item.name}</Option>
+                              );
+                            })
+                          }
+                        </Select>
+                    }
+
                     <Button style={{ width: '120px', marginLeft: '10px' }} type="Default" onClick={() => logRefresh(machineId)}>更新</Button>
                   </div>
                 </FormItem>
@@ -2710,6 +2725,7 @@ export default class machineSettingList extends PureComponent {
           customLogEndTime={this.state.customLogEndTime}
 
           getLogMessage={this.state.getLogMessage}
+          modalData={this.state.modalData}
         />
         <Modal
           title={
