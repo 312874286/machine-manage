@@ -245,7 +245,7 @@ const RefundAuditForm = Form.create()(props => {
                 {refundAuditModalData.refundTime || '---'}
               </FormItem>
               <FormItem {...formItemLayout} label="异常原因" style={{ display: refundAuditModalData.status === 3 ? '' : 'none'}}>
-                {refundAuditModalData.refund_msg || '---'}
+                {refundAuditModalData.refundMsg || '---'}
               </FormItem>
             </Col>
           </Row>
@@ -774,7 +774,7 @@ export default class OrderReview extends PureComponent {
                 return '-';
               }
             } },
-          { title: "异常原因", dataIndex: "auditReason", key: "auditReason", width: '8%', },
+          { title: "异常原因", dataIndex: "refundMsg", key: "refundMsg", width: '8%', },
           { title: "备注", dataIndex: "remark", key: "remark" },
           {
             title: "操作",
