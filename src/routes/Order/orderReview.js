@@ -233,20 +233,24 @@ const RefundAuditForm = Form.create()(props => {
           </Row>
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="退款状态">
-                <span>{refundAuditModalData.status == 0 && "新退款订单"}</span>
-                <span>{refundAuditModalData.status == 1 && "退款中"}</span>
-                <span>{refundAuditModalData.status == 2 && "退款成功"}</span>
-                <span>{refundAuditModalData.status == 3 && "退款失败"}</span>
-              </FormItem>
+              <div className={refundAuditModalData.status === 3 ? styles.red : ''}>
+                <FormItem {...formItemLayout} label="退款状态">
+                  <span>{refundAuditModalData.status == 0 && "新退款订单"}</span>
+                  <span>{refundAuditModalData.status == 1 && "退款中"}</span>
+                  <span>{refundAuditModalData.status == 2 && "退款成功"}</span>
+                  <span>{refundAuditModalData.status == 3 && "退款失败"}</span>
+                </FormItem>
+              </div>
             </Col>
             <Col md={12} sm={12}>
               <FormItem {...formItemLayout} label="退款时间" style={{ display: refundAuditModalData.status === 2 ? '' : 'none'}}>
                 {refundAuditModalData.refundTime || '---'}
               </FormItem>
-              <FormItem {...formItemLayout} label="异常原因" style={{ display: refundAuditModalData.status === 3 ? '' : 'none'}}>
-                {refundAuditModalData.refundMsg || '---'}
-              </FormItem>
+              <div className={refundAuditModalData.status === 3 ? styles.red : ''}>
+                <FormItem {...formItemLayout} label="异常原因" style={{ display: refundAuditModalData.status === 3 ? '' : 'none' }}>
+                  <span>{refundAuditModalData.refundMsg || '---'}</span>
+                </FormItem>
+              </div>
             </Col>
           </Row>
           <div style={{ display: tabKey === '0' ? 'none' : ''}}>
