@@ -755,7 +755,7 @@ const EditMonitoringForm = Form.create()(
                     {
                       modalData.machineType === 2 ?
                         <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
-                          {teamworkLogOptions.map((item) => {
+                          {logOptions.map((item) => {
                           return (
                             <Option key={item.id} value={item.id}>{item.name}</Option>
                           );
@@ -764,7 +764,7 @@ const EditMonitoringForm = Form.create()(
                         :
                         <Select placeholder="选择日志类型" value={ pointType } onChange={pointChange}>
                           {
-                            logOptions.map((item) => {
+                            teamworkLogOptions.map((item) => {
                               return (
                                 <Option key={item.id} value={item.id}>{item.name}</Option>
                               );
