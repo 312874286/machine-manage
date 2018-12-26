@@ -477,20 +477,24 @@ export default class OrderReview extends PureComponent {
       });
   };
   getByteLen = (rule, value, callback) => {
-    let len = 0;
-    for (let i = 0; i < value.length; i++) {
-      let length = value.charCodeAt(i);
-      if(length >= 0 && length <= 128)
-      {
-        len += 1;
+    if (value) {
+      let len = 0;
+      for (let i = 0; i < value.length; i++) {
+        let length = value.charCodeAt(i);
+        if(length >= 0 && length <= 128)
+        {
+          len += 1;
+        }
+        else
+        {
+          len += 2;
+        }
       }
-      else
-      {
-        len += 2;
+      if(len > 100){
+        callback('不能超过50汉字, 其中2个字符算一个中文')
       }
-    }
-    if(len > 100){
-      callback('不能超过50汉字, 其中2个字符算一个中文')
+    } else {
+      callback('不可为空')
     }
     callback()
   }
