@@ -682,6 +682,7 @@ export default class OrderReview extends PureComponent {
             refuseEditModalConfirmLoading: false,
             watchRefundAuditForm: false,
           })
+          this.getLists();
         }
       })
         .catch(err => {
