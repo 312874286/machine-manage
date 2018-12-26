@@ -209,7 +209,7 @@ const WatchForm = Form.create()(props => {
               </FormItem>
             </Col>
           </Row>
-          <div style={{ display: modalData.orderRefund && modalData.orderRefund.status === 2 ? '' : 'none' }}>
+          <div style={{ display: (modalData.orderRefund && modalData.orderRefund.status === 2) || (modalData.orderRefund && modalData.orderRefund.status === 3)? '' : 'none' }}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款详情">
@@ -244,6 +244,11 @@ const WatchForm = Form.create()(props => {
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款状态">
                   <span>{modalData.orderRefund && modalData.orderRefund.status >= 0 && status[modalData.orderRefund.status] || '---'}</span>
+                </FormItem>
+              </Col>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="退款时间" style={{ display: modalData.orderRefund && modalData.orderRefund.status === 2 ? '' : 'none'}}>
+                  <span>{modalData.orderRefund && modalData.orderRefund.refundTime  || '---'}</span>
                 </FormItem>
               </Col>
             </Row>
