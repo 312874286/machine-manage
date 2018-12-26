@@ -58,7 +58,7 @@ const status = [
   '新退款订单',
   '退款中',
   '退款成功',
-  '退款失败'
+  '退款异常'
 ]
 const RefundAuditForm = Form.create()(props => {
   const {
@@ -765,6 +765,7 @@ export default class OrderReview extends PureComponent {
                   onClick={() => {
                     this.handRefundUpdate(2, '', text);
                   }}
+                  style={{ display: text.status === 3 ? '' : 'none'}}
                 >
                   线下退款
                 </a>
@@ -772,6 +773,7 @@ export default class OrderReview extends PureComponent {
                   onClick={() => {
                     this.handRefundUpdate(3, '', text);
                   }}
+                  style={{ display: text.status === 3 ? '' : 'none'}}
                 >
                   再次退款
                 </a>
