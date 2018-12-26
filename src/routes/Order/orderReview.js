@@ -245,7 +245,7 @@ const RefundAuditForm = Form.create()(props => {
                 {refundAuditModalData.refundTime || '---'}
               </FormItem>
               <FormItem {...formItemLayout} label="异常原因" style={{ display: refundAuditModalData.status === 3 ? '' : 'none'}}>
-                {refundAuditModalData.auditReason || '---'}
+                {refundAuditModalData.refund_msg || '---'}
               </FormItem>
             </Col>
           </Row>
