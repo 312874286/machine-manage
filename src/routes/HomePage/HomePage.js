@@ -144,7 +144,7 @@ export default class homePageSetting extends PureComponent {
                 <span className={styles.titleSpan}>(单位: 条)</span>
               </div>}>
               <div className={styles.gridCardBox}>
-                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {active: 1}})}>
+                <a onClick={() => this.props.history.push({pathname: '/order/orderReview'})}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/doing.png')}/>
                   </div>
@@ -153,7 +153,7 @@ export default class homePageSetting extends PureComponent {
                     <span>待审核</span>
                   </div>
                 </a>
-                <a onClick={() => this.props.history.push({pathname: '/check/fault', query: {active: 2, status: 3,}})}>
+                <a onClick={() => this.props.history.push({pathname: '/order/orderReview', query: {active: '1', status: 3,}})}>
                   <div className={styles.machineLeftBox}>
                     <img src={require('../../assets/images/indexPage/doing.png')}/>
                   </div>

@@ -170,7 +170,7 @@ const RefundAuditForm = Form.create()(props => {
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={12}>
               <FormItem {...formItemLayout} label="订单金额">
-                <span>{refundAuditModalData.orderPrice}</span>
+                <span>{refundAuditModalData.orderPrice >= 0 && `¥${refundAuditModalData.orderPrice.toFixed(2)}`}</span>
               </FormItem>
             </Col>
             <Col md={12} sm={12}>
@@ -222,7 +222,7 @@ const RefundAuditForm = Form.create()(props => {
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={12}>
               <FormItem {...formItemLayout} label="退款金额">
-                <span>{refundAuditModalData.amount}</span>
+                <span>{refundAuditModalData.amount >= 0 && `¥${refundAuditModalData.amount.toFixed(2)}`}</span>
               </FormItem>
             </Col>
             <Col md={12} sm={12}>
@@ -286,9 +286,11 @@ const RefundAuditForm = Form.create()(props => {
             </Row>
           </div>
           <Row style={{ display: tabKey === '0' ? '' : 'none'}}>
-            <Col md={12} sm={12}>
-              <Button onClick={() => orderStatus(2)}>不通过</Button>
-              <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
+            <Col md={24} sm={24}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Button onClick={() => orderStatus(2)} style={{ marginRight: 20 }}>不通过</Button>
+                <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
+              </div>
             </Col>
           </Row>
           {/*<Row style={{ display: tabKey === 1 ? '' : 'none'}}>*/}
@@ -435,9 +437,25 @@ export default class OrderReview extends PureComponent {
   };
 
   componentDidMount() {
-    this.getLists();
-    this.setColumns();
     this.getBaseDictLists();
+    const { form } = this.props;
+    if (this.props.location.query) {
+      const { active, status } = this.props.location.query;
+      this.setState({
+        tabKey: active,
+        searchParams: {
+          status,
+        }
+      }, () => {
+        this.getLists();
+      })
+      form.setFieldsValue({
+        status,
+      });
+    } else {
+      this.getLists();
+    }
+    this.setColumns(this.props.location.query && this.props.location.query.active);
   }
   // 获取渠道
   getBaseDictLists = () => {
@@ -972,7 +990,7 @@ export default class OrderReview extends PureComponent {
   }
   render() {
     const { loading } = this.props;
-    const { columns, tableList } = this.state;
+    const { columns, tableList, tabKey } = this.state;
     return (
       <PageHeaderLayout>
         <Card
@@ -984,7 +1002,7 @@ export default class OrderReview extends PureComponent {
           </div>
         </Card>
         <Card>
-          <Tabs onChange={this.callback} type="card">
+          <Tabs onChange={this.callback} type="card" activeKey={tabKey}>
             <TabPane tab="待审核" key="0" />
             <TabPane tab="已通过" key="1" />
             <TabPane tab="未通过" key="2" />

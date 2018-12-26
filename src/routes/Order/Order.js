@@ -174,7 +174,7 @@ const WatchForm = Form.create()(props => {
             </Col>
             <Col md={12} sm={12}>
               <FormItem {...formItemLayout} label="订单金额">
-                <span>{modalData.orderPrice}</span>
+                <span>{modalData.orderPrice >= 0 && `¥${modalData.orderPrice.toFixed(2)}`}</span>
               </FormItem>
             </Col>
           </Row>
@@ -231,7 +231,7 @@ const WatchForm = Form.create()(props => {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
                 <FormItem {...formItemLayout} label="退款金额">
-                  <span>{modalData.orderRefund && modalData.orderRefund.amount}</span>
+                  <span>{modalData.orderRefund && modalData.orderRefund.amount >=  0 && `¥${modalData.orderRefund.amount.toFixed(2)}`}</span>
                 </FormItem>
               </Col>
               <Col md={12} sm={12}>
