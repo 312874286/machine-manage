@@ -407,6 +407,7 @@ export default class MerchantConsociation extends PureComponent {
       },
     }).then((res) => {
       this.setModalData(res);
+      this.getMerchantsList()
     });
   }
   // 设置modal 数据
