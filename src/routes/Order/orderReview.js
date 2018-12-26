@@ -774,7 +774,9 @@ export default class OrderReview extends PureComponent {
                 return '-';
               }
             } },
-          { title: "异常原因", dataIndex: "refundMsg", key: "refundMsg", width: '8%', },
+          { title: "异常原因", dataIndex: "refundMsg", key: "refundMsg", width: '8%',  render: (value) => {
+              return value || '-';
+            }  },
           { title: "备注", dataIndex: "remark", key: "remark" },
           {
             title: "操作",
