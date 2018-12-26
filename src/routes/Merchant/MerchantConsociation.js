@@ -79,11 +79,11 @@ const CreateForm = Form.create()(
                 rules: [{ required: true, whitespace: true, message: '请选择商户' }],
               })(
                 <Select
-                  showSearch
+                  // showSearch
                   placeholder="请选择"
-                  optionFilterProp="children"
+                  // optionFilterProp="children"
                   onSelect={(val,option) => { handleSellerName(val, option)}}
-                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  // filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
                   {sellerList.map((item, index) => item.id && item.merchantName && <Option key={item.id} value={item.id}>{item.merchantName}</Option>)}
                 </Select>
@@ -407,6 +407,7 @@ export default class MerchantConsociation extends PureComponent {
       },
     }).then((res) => {
       this.setModalData(res);
+      this.getMerchantsList()
     });
   }
   // 设置modal 数据
