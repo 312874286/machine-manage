@@ -241,8 +241,11 @@ const RefundAuditForm = Form.create()(props => {
               </FormItem>
             </Col>
             <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="退款时间" style={{ display: tabKey === '1' ? '' : 'none'}}>
+              <FormItem {...formItemLayout} label="退款时间" style={{ display: refundAuditModalData.status === 2 ? '' : 'none'}}>
                 {refundAuditModalData.refundTime || '---'}
+              </FormItem>
+              <FormItem {...formItemLayout} label="异常原因" style={{ display: refundAuditModalData.status === 3 ? '' : 'none'}}>
+                {refundAuditModalData.auditReason || '---'}
               </FormItem>
             </Col>
           </Row>
