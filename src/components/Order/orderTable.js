@@ -14,6 +14,10 @@ const orderStatus = {
   30: '已完成',
   40: '已退款',
 }
+const orderType = {
+  10: '点72订单',
+  20: '天猫订单',
+}
 // const status = [{ id: 0, name: '停用' }, { id: 1, name: '正常' }];
 export default class orderTable extends PureComponent {
   state = {
@@ -148,7 +152,7 @@ export default class orderTable extends PureComponent {
         key: 'orderType',
         render: (value) => {
           if (value) {
-            return orderStatus[value] || value;
+            return orderType[value] || value;
           } else {
             return '-';
           }
@@ -156,16 +160,16 @@ export default class orderTable extends PureComponent {
       },
       {
         title: '订单状态',
-        dataIndex: 'payStatus',
+        dataIndex: 'orderStatus',
         width: 100,
         render: (value) => {
-          if (value === '1') {
-            return '支付成功';
-          } else if (value === '0') {
-            return '支付失败';
+          if (value) {
+            return orderStatus[value.toString()] || value;
+          } else {
+            return '-';
           }
         },
-        key: 'payStatus'
+        key: 'orderStatus'
       },
       {
         title: '退款状态',
