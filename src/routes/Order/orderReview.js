@@ -277,13 +277,13 @@ const RefundAuditForm = Form.create()(props => {
                 </FormItem>
               </Col>
             </Row>
-            <Row style={{ display: tabKey === '0' ? '' : 'none'}}>
-              <Col md={12} sm={12}>
-                <Button onClick={() => orderStatus(2)}>不通过</Button>
-                <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
-              </Col>
-            </Row>
           </div>
+          <Row style={{ display: tabKey === '0' ? '' : 'none'}}>
+            <Col md={12} sm={12}>
+              <Button onClick={() => orderStatus(2)}>不通过</Button>
+              <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
+            </Col>
+          </Row>
           {/*<Row style={{ display: tabKey === 1 ? '' : 'none'}}>*/}
             {/*<Col md={12} sm={12}>*/}
               {/*<Button type="primary">线下退款</Button>*/}
@@ -301,7 +301,8 @@ const RefuseAuditForm = Form.create()(props => {
     handleAdd,
     refuseModalVisible,
     refuseEditModalConfirmLoading,
-    form
+    form,
+    getByteLen
   } = props;
   const { getFieldDecorator } = form;
   const formItemLayout = {
@@ -337,7 +338,9 @@ const RefuseAuditForm = Form.create()(props => {
           {/*</Row>*/}
           <FormItem {...formItemLayout} label="不通过原因">
             {getFieldDecorator('auditReason', {
-              rules: [{ required: true, whitespace: true, message: '请输入不通过原因' }],
+              rules: [{ required: true, whitespace: true, message: '请输入不通过原因' }, {
+                validator: getByteLen
+              }],
             })(
               <TextArea placeholder="请填写不通过原因（50字内），填写内容将告知给用户" autosize={{ minRows: 2, maxRows: 6 }} />
             )}
@@ -353,7 +356,8 @@ const EditRemarkForm = Form.create()(props => {
     handleAdd,
     refuseModalVisible,
     refuseEditModalConfirmLoading,
-    form
+    form,
+    getByteLen
   } = props;
   const { getFieldDecorator } = form;
   const formItemLayout = {
@@ -384,7 +388,9 @@ const EditRemarkForm = Form.create()(props => {
         <Form>
           <FormItem {...formItemLayout} label="备注">
             {getFieldDecorator('remark', {
-              rules: [{ required: true, whitespace: true, message: '请输入备注' }],
+              rules: [{ required: true, whitespace: true, message: '请输入备注' }, {
+                validator: getByteLen
+              }],
             })(
               <TextArea placeholder="请输入备注说明，不超过50字" autosize={{ minRows: 2, maxRows: 6 }} />
             )}
@@ -445,7 +451,24 @@ export default class OrderReview extends PureComponent {
         }
       });
   };
-
+  getByteLen = (rule, value, callback) => {
+    let len = 0;
+    for (let i = 0; i < value.length; i++) {
+      let length = value.charCodeAt(i);
+      if(length >= 0 && length <= 128)
+      {
+        len += 1;
+      }
+      else
+      {
+        len += 2;
+      }
+    }
+    if(len > 100){
+      callback('不能超过50汉字, 其中2个字符算一个中文')
+    }
+    callback()
+  }
   // 重置
   handleFormReset = () => {
     const { form } = this.props;
@@ -981,6 +1004,7 @@ export default class OrderReview extends PureComponent {
           handleAdd={this.handleAdd}
           refuseModalVisible={this.state.refuseModalVisible}
           refuseEditModalConfirmLoading={this.state.refuseEditModalConfirmLoading}
+          getByteLen={this.getByteLen}
         />
         <EditRemarkForm
           ref={this.saveEditRemarkFormRef}
@@ -988,6 +1012,7 @@ export default class OrderReview extends PureComponent {
           handleAdd={this.handleEditRemarkAdd}
           refuseModalVisible={this.state.editRemarkModalVisible}
           refuseEditModalConfirmLoading={this.state.editRemarkModalConfirmLoading}
+          getByteLen={this.getByteLen}
         />
       </PageHeaderLayout>
     );
