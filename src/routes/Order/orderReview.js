@@ -246,42 +246,44 @@ const RefundAuditForm = Form.create()(props => {
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="审核信息">
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="审核人">
-                {refundAuditModalData.auditUser}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="审核时间">
-                {refundAuditModalData.auditTime}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="审核结果">
-                {refundAuditModalData.auditStatus >= 0 && auditStatus[refundAuditModalData.auditStatus.toString()] || '---'}
-              </FormItem>
-            </Col>
-            <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="未通过原因" style={{ display: tabKey === '2' ? '' : 'none'}}>
-                {refundAuditModalData.auditReason}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row style={{ display: tabKey === '0' ? '' : 'none'}}>
-            <Col md={12} sm={12}>
-              <Button onClick={() => orderStatus(2)}>不通过</Button>
-              <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
-            </Col>
-          </Row>
+          <div style={{ display: tabKey === '0' ? 'none' : ''}}>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="审核信息">
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="审核人">
+                  {refundAuditModalData.auditUser}
+                </FormItem>
+              </Col>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="审核时间">
+                  {refundAuditModalData.auditTime}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="审核结果">
+                  {refundAuditModalData.auditStatus >= 0 && auditStatus[refundAuditModalData.auditStatus.toString()] || '---'}
+                </FormItem>
+              </Col>
+              <Col md={12} sm={12}>
+                <FormItem {...formItemLayout} label="未通过原因" style={{ display: tabKey === '2' ? '' : 'none'}}>
+                  {refundAuditModalData.auditReason}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row style={{ display: tabKey === '0' ? '' : 'none'}}>
+              <Col md={12} sm={12}>
+                <Button onClick={() => orderStatus(2)}>不通过</Button>
+                <Button type="primary" onClick={() => orderStatus(1)}>通过</Button>
+              </Col>
+            </Row>
+          </div>
           {/*<Row style={{ display: tabKey === 1 ? '' : 'none'}}>*/}
             {/*<Col md={12} sm={12}>*/}
               {/*<Button type="primary">线下退款</Button>*/}
@@ -928,6 +930,7 @@ export default class OrderReview extends PureComponent {
             editRemarkModalVisible: false,
             editRemarkModalConfirmLoading: false,
           });
+          this.getLists();
         }
       }).catch(err => {
           reject(err);
