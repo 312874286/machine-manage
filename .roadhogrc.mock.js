@@ -430,7 +430,7 @@ const proxy = {
             "parentName": null
           },
           {
-            id: 'a48',
+            id: 'a49',
             functionDepict: '首页',
             functionPath: 'index',
             parentId: '29',
@@ -454,6 +454,50 @@ const proxy = {
             parentId: '1',
             functionLevel: 2,
           },
+          {
+            "id": "a49",
+            "functionDepict": "商品管理",
+            "functionPath": "goods",
+            "parentId": null,
+            "functionLevel": 1,
+            "functionIcon": "project",
+            "color": "",
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "a50",
+            "functionDepict": "类目管理",
+            "functionPath": "goodsType",
+            "parentId": "a49",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": "",
+            "seq": 2,
+            "parentName": null
+          },
+          {
+            "id": "a51",
+            "functionDepict": "商品管理",
+            "functionPath": "goodsManage",
+            "parentId": "a49",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": "",
+            "seq": 2,
+            "parentName": null
+          },
+          // {
+          //   "id": "a52",
+          //   "functionDepict": "城市补货统计",
+          //   "functionPath": "project",
+          //   "parentId": null,
+          //   "functionLevel": 1,
+          //   "functionIcon": "project",
+          //   "color": "",
+          //   "seq": 2,
+          //   "parentName": null
+          // },
           {
             "id": "4",
             "functionDepict": "项目管理",

@@ -10,6 +10,11 @@ const api = map({
   getShopsList: '/project/shops/getList',
   getMerchantsList: '/project/merchant/getList',
   getActivityList: '/project/activity/getList',
+
+  // 类目管理
+  goodsTypeLists: '/goods/type/list?pageNo={pageNo}&keyword={keyword}&code={code} ',
+  addGoodsType: '/goods/type/add',
+  editGoodsType: '/goods/type/update',
 });
 
 export default api;
