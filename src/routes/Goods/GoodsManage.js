@@ -15,7 +15,8 @@ import {
   Popconfirm,
   Upload,
   Icon,
-  InputNumber
+  InputNumber,
+  Cascader
 } from 'antd';
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -52,7 +53,9 @@ const CreateForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
-      handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList, videoUrl, bannerHandleChange, handleUploadBanner } = props;
+      handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList, videoUrl, bannerHandleChange, handleUploadBanner,
+      options, onChange, verifyString, wechatChannel
+    } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -86,6 +89,43 @@ const CreateForm = Form.create()(
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="选择商户">
+              {getFieldDecorator('sellerId', {
+                rules: [{ required: true, message: '请选择商户' }],
+              })(
+                <Select placeholder="请选择" onSelect={onSelect}>
+                  {merchantLists.map((item) => {
+                    return (
+                      <Option value={item.id} data-channelCode={item.channelCode} key={item.id}>{item.merchantName}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+            <div style={{ display: wechatChannel ? '' : 'none' }}>
+              <FormItem {...formItemLayout} label="选择店铺" >
+                {getFieldDecorator('shopId', {
+                  rules: [{ required: wechatChannel, message: '请选择店铺' }],
+                })(
+                  <Select placeholder="请选择">
+                    {shopsLists.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id}>{item.shopName}</Option>
+                      );
+                    })}
+                  </Select>
+                )}
+              </FormItem>
+            </div>
+            <FormItem {...formItemLayout} label="选择类目">
+              {getFieldDecorator('goodsType', {
+                rules: [{ required: true, message: '请选择类目' }, {
+                  validator: verifyString, type: 'array'
+                }],
+              })(
+                <Cascader options={options} placeholder='请选择类目'/>,
+              )}
+            </FormItem>
             <FormItem {...formItemLayout} label="商品ID">
               {getFieldDecorator('code', {
                 rules: [{ required: true, whitespace: true, message: '请输入商品ID' }],
@@ -95,6 +135,11 @@ const CreateForm = Form.create()(
               {getFieldDecorator('name', {
                 rules: [{ required: true, whitespace: true, message: '请输入商品名称' }],
               })(<Input placeholder="请输入商品名称" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="品牌名称">
+              {getFieldDecorator('brandName', {
+                rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
+              })(<Input placeholder="请输入品牌名称" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="规格描述">
               {getFieldDecorator('specRemark', {
@@ -155,43 +200,17 @@ const CreateForm = Form.create()(
                 </div>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="商品价格">
+            <FormItem {...formItemLayout} label="市场价格">
               {getFieldDecorator('price', {
-                rules: [{ required: false, message: '请输入商品价格' }],
-              })(<InputNumber placeholder="请输入商品价格" />)}
+                rules: [{ required: true, message: '请输入市场价格' }],
+              })(<InputNumber placeholder="请输入市场价格" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="商品数量">
               {getFieldDecorator('number', {
                 rules: [{ required: false, message: '请输入商品数量' }],
               })(<InputNumber placeholder="请输入商品数量" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择商户">
-              {getFieldDecorator('sellerId', {
-                rules: [{ required: true, message: '请选择商户' }],
-              })(
-                <Select placeholder="请选择" onSelect={onSelect}>
-                  {merchantLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.merchantName}</Option>
-                    );
-                  })}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选择店铺">
-              {getFieldDecorator('shopId', {
-                rules: [{ required: true, message: '请选择店铺' }],
-              })(
-                <Select placeholder="请选择">
-                  {shopsLists.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.shopName}</Option>
-                    );
-                  })}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="备注描述">
+            <FormItem {...formItemLayout} label="详情描述">
               {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
             </FormItem>
           </Form>
@@ -229,14 +248,26 @@ const WatchForm = Form.create()(
         width={800}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
-            <FormItem {...formItemLayout} label="shop ID">
+            <FormItem {...formItemLayout} label="商品名称">
+              <span>{modalData.name}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="所属类目">
+              <span>{modalData.goodsType}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品ID">
               <span>{modalData.code}</span>
             </FormItem>
-            <FormItem {...formItemLayout} label="商品名称">
+            <FormItem {...formItemLayout} label="品牌名称">
               <span>{modalData.name}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="规格描述">
               <span>{modalData.specRemark}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="商户名称">
+              <span>{modalData.merchantName}</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="店铺名称">
+              <span>{modalData.shopName}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="商品图片">
               <div>
@@ -275,19 +306,13 @@ const WatchForm = Form.create()(
                 </video>
               </div>
             </FormItem>
-            <FormItem {...formItemLayout} label="所属商户">
-              <span>{modalData.merchantName}</span>
-            </FormItem>
-            <FormItem {...formItemLayout} label="所属店铺">
-              <span>{modalData.shopName}</span>
-            </FormItem>
-            <FormItem {...formItemLayout} label="商品价格">
+            <FormItem {...formItemLayout} label="市场价格">
               <span>{modalData.price}</span>
             </FormItem>
             <FormItem {...formItemLayout} label="商品数量">
               <span>{modalData.number}</span>
             </FormItem>
-            <FormItem {...formItemLayout} label="商品详情">
+            <FormItem {...formItemLayout} label="详情描述">
               <span>{modalData.remark}</span>
             </FormItem>
           </Form>
@@ -295,10 +320,10 @@ const WatchForm = Form.create()(
       </Modal>
     );
   });
-@connect(({ common, loading, goodsSetting, log }) => ({
+@connect(({ common, loading, goodsManage, log }) => ({
   common,
-  goodsSetting,
-  loading: loading.models.goodsSetting,
+  goodsManage,
+  loading: loading.models.goodsManage,
   log,
 }))
 @Form.create()
@@ -328,9 +353,20 @@ export default class goodsSettingList extends PureComponent {
     videoUrl: {},
 
     account: {},
+    options: [],
+    typeCode: [],
+    wechatChannel: false
   };
+  verifyString = (rule, value, callback) => {
+    if (value && value.length < 2) {
+      callback('请填写完整的类目');
+    } else {
+      callback();
+    }
+  }
   componentDidMount() {
     this.getLists();
+    this.getGoodsSelectTypeLists()
     // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = (setAccountMenusList) => {
@@ -351,7 +387,7 @@ export default class goodsSettingList extends PureComponent {
   // 获取列表
   getLists = () => {
     this.props.dispatch({
-      type: 'goodsSetting/getGoodsSettingList',
+      type: 'goodsManage/getGoodsSettingList',
       payload: {
         restParams: {
           pageNo: this.state.pageNo,
@@ -361,7 +397,7 @@ export default class goodsSettingList extends PureComponent {
       },
     });
     this.props.dispatch({
-      type: 'goodsSetting/getMerchantsList',
+      type: 'goodsManage/getMerchantsList',
       payload: {
         restParams: {},
       },
@@ -372,10 +408,24 @@ export default class goodsSettingList extends PureComponent {
     });
   }
   onSelect = (value, option) => {
-    this.getShopList(value)
-    this.form.setFieldsValue({
-      shopId: undefined,
-    });
+    console.log('option', option.props["data-channelCode"])
+    if (option.props["data-channelCode"] === '002002') {
+      this.setState({
+        wechatChannel: false
+      }, () => {
+        this.form.validateFields(['shopId'], { force: true });
+      })
+    } else {
+      this.setState({
+        wechatChannel: true
+      }, () => {
+        this.form.validateFields(['shopId'], { force: true });
+      })
+      this.getShopList(value)
+      this.form.setFieldsValue({
+        shopId: undefined,
+      });
+    }
   }
   getShopList = (value) => {
     this.props.dispatch({
@@ -547,31 +597,6 @@ export default class goodsSettingList extends PureComponent {
       expandForm: !expandForm,
     });
   };
-  // 批量
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-
-    if (!selectedRows) return;
-
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: '',
-          payload: {
-            no: selectedRows.map(row => row.no).join(','),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
 
   handleSelectRows = rows => {
     this.setState({
@@ -610,7 +635,7 @@ export default class goodsSettingList extends PureComponent {
     if (item) {
       const params = { id: item.id };
       this.props.dispatch({
-        type: 'goodsSetting/delGoodsSetting',
+        type: 'goodsManage/delGoodsSetting',
         payload: {
           params,
         },
@@ -629,9 +654,11 @@ export default class goodsSettingList extends PureComponent {
       modalVisible: true,
       modalData: item,
       modalType: true,
+    }, () => {
+
     });
     this.props.dispatch({
-      type: 'goodsSetting/getGoodsSettingDetail',
+      type: 'goodsManage/getGoodsSettingDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -642,43 +669,100 @@ export default class goodsSettingList extends PureComponent {
       this.setModalData(res);
     });
   }
+  getGoodsSelectTypeLists = () => {
+    //
+    this.props.dispatch({
+      type: 'goodsManage/goodsSelectTypeLists',
+      payload: {
+      },
+    }).then((res) => {
+      console.log('res', res)
+      if (res && res.code === 0) {
+        this.setState({
+          options: res.data.map((item) => {
+            return {
+              ...item,
+              value: item.code,
+              label: item.name,
+              children: item.children.map((i) => {
+                return {
+                  ...i,
+                  value: i.code,
+                  label: i.name,
+                }
+              })
+            }
+          })
+        })
+      }
+    });
+  }
+  onChange = (value) => {
+    // console.log('value', value);
+    this.setState({
+      typeCode: value
+    })
+  }
+  // getGoodsSettingDetail = (item) => {
+  //   return this.props.dispatch({
+  //     type: 'goodsManage/getGoodsSettingDetail',
+  //     payload: {
+  //       restParams: {
+  //         id: item.id,
+  //       },
+  //     },
+  //   });
+  // }
+  // getArea = (code) => {
+  //   return this.props.dispatch({
+  //     type: 'common/getUserArea',
+  //     payload: {
+  //       restParams: {
+  //         code,
+  //       },
+  //     },
+  //   });
+  // }
+  // getModalData = async (item) => {
+  //   this.setState({
+  //     modalVisible: true,
+  //     modalData: item,
+  //     modalType: false,
+  //     remark: item.remark,
+  //   });
+  //   const res = await this.getGoodsSettingDetail(item);
+  //   if (!res) {
+  //     return
+  //   }
+  //   this.getShopList(res.sellerId)
+  //   this.getModalData(res);
+  //   const { area } = res;
+  //   if (area) {
+  //     const provinceRes = await this.getArea('')
+  //     let province = provinceRes;
+  //     const cityRes = await this.getArea(res.province)
+  //     this.forIn(province, res.province, cityRes)
+  //     this.setState({
+  //       options: province,
+  //       defaultValue: [res.province, area],
+  //       lastAreaCode: res.province
+  //     }, () => {
+  //       this.setModalData(res);
+  //     });
+  //   } else {
+  //     this.areaList('')
+  //     this.setState({
+  //       defaultValue: [],
+  //     }, () => {
+  //       this.setModalData(res);
+  //     });
+  //   }
+  //   // 回显省市区商圈数据源
+  // }
   // 设置modal 数据
   setModalData = (data) => {
-    // if (data) {
-    //   this.setState({
-    //     fileList: [{
-    //       uid: -1,
-    //       name: 'xxx.png',
-    //       status: 'done',
-    //       url: data.img,
-    //     }],
-    //   });
-    //   this.form.setFieldsValue({
-    //     ...data,
-    //   });
-    // } else {
-    //   this.form.resetFields();
-    //   this.setState({
-    //     fileList: [],
-    //   });
-    // }
     if (data) {
       let flist = [], videoUrl = {}
-      // if (data.banner) {
-      //   if (this.imgFlag(data.banner)) {
-      //     flist = [{
-      //       uid: -3,
-      //       name: 'xxx.png',
-      //       status: 'done',
-      //       url: data.banner,
-      //     }]
-      //   } else {
-      //     flist = []
-      //     videoUrl = {
-      //       url: data.banner
-      //     }
-      //   }
-      // }
       if (data.banner) {
         if (this.imgFlag(data.banner)) {
           flist = [{
@@ -707,6 +791,7 @@ export default class goodsSettingList extends PureComponent {
         }] : [],
         bannerfileList: flist,
         videoUrl,
+        wechatChannel: data.channelCode === '002002' ? false : true
       });
       this.form.setFieldsValue({
         name: data.name || '',
@@ -718,6 +803,7 @@ export default class goodsSettingList extends PureComponent {
         shopId: data.shopId || undefined,
         specRemark: data.specRemark || undefined,
         number: data.number || undefined,
+        goodsType: data.goodsTypeParentCode ? [data.goodsTypeParentCode, data.goodsTypeCode] : undefined
       });
     } else {
       this.setState({
@@ -735,6 +821,7 @@ export default class goodsSettingList extends PureComponent {
         img: undefined,
         specRemark: undefined,
         number: undefined,
+        goodsType: undefined,
       });
     }
   }
@@ -760,6 +847,7 @@ export default class goodsSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
+    const { typeCode, modalData, fileList, bannerfileList, videoUrl } = this.state
     this.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
@@ -767,24 +855,25 @@ export default class goodsSettingList extends PureComponent {
       let params = {
         ...fieldsValue,
       };
+      console.log('fieldsValue', fieldsValue)
       this.setState({
         editModalConfirmLoading: true,
       });
       let messageTxt = '添加'
-      let url = 'goodsSetting/saveGoodsSetting';
-      if (this.state.modalData.id) {
-        url = 'goodsSetting/editGoodsSetting';
+      let url = 'goodsManage/saveGoodsSetting';
+      if (modalData.id) {
+        url = 'goodsManage/editGoodsSetting';
         messageTxt = '编辑'
-        params = { ...params, id: this.state.modalData.id };
+        params = { ...params, id: modalData.id };
       }
-      if (this.state.fileList.length > 0) {
-        params = { ...params, img: this.state.fileList[0].data };
+      if (fileList.length > 0) {
+        params = { ...params, img: fileList[0].data };
       }
-      if (this.state.bannerfileList.length > 0) {
-        params = { ...params, banner: this.state.bannerfileList[0].data };
+      if (bannerfileList.length > 0) {
+        params = { ...params, banner: bannerfileList[0].data };
       }
-      if (this.state.videoUrl.data) {
-        params = { ...params, banner: this.state.videoUrl.data };
+      if (videoUrl.data) {
+        params = { ...params, banner: videoUrl.data };
       }
       this.props.dispatch({
         type: url,
@@ -792,7 +881,8 @@ export default class goodsSettingList extends PureComponent {
           params: {
             ...params,
             price: fieldsValue.price && fieldsValue.price >= 0 ? fieldsValue.price : 0,
-            number: fieldsValue.number && fieldsValue.number >= 0 ? fieldsValue.number : 0,
+            number: fieldsValue.number && fieldsValue.number >= 0 ? fieldsValue.number : '',
+            goodsType: fieldsValue.goodsType[1],
           }
         },
       }).then((res) => {
@@ -829,7 +919,7 @@ export default class goodsSettingList extends PureComponent {
       modalType: 'watch',
     });
     this.props.dispatch({
-      type: 'goodsSetting/getGoodsSettingDetail',
+      type: 'goodsManage/getGoodsSettingDetail',
       payload: {
         restParams: {
           id: item.id,
@@ -928,6 +1018,7 @@ export default class goodsSettingList extends PureComponent {
       this.getLogList();
     });
   }
+
   renderAdvancedForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -981,7 +1072,7 @@ export default class goodsSettingList extends PureComponent {
   handleChange = ({ fileList }) => this.setState({ fileList })
   bannerHandleChange = ({ fileList }) => this.setState({ bannerfileList: fileList })
   render() {
-    const { goodsSetting: { list, page, unColumn }, loading, log: { logList, logPage }, } = this.props;
+    const { goodsManage: { list, page, unColumn }, loading, log: { logList, logPage }, } = this.props;
     const { selectedRows, modalVisible, editModalConfirmLoading, modalType, merchantLists, shopsLists, account } = this.state;
     const { previewVisible, previewImage, fileList } = this.state
     let columns = [
@@ -998,19 +1089,13 @@ export default class goodsSettingList extends PureComponent {
         key: 'name'
       },
       {
-        title: '规格描述',
-        width: '8%',
-        dataIndex: 'specRemark',
-        key: 'specRemark'
-      },
-      {
-        title: '所属商户',
+        title: '商户名称',
         width: '8%',
         dataIndex: 'sellerId',
         key: 'sellerId'
       },
       {
-        title: '所属店铺',
+        title: '店铺名称',
         width: '15%',
         dataIndex: 'shopId',
         key: 'shopId'
@@ -1046,19 +1131,25 @@ export default class goodsSettingList extends PureComponent {
         key: 'img'
       },
       {
+        title: '所属类目',
+        width: '10%',
+        dataIndex: 'goodsType',
+        key: 'goodsType'
+      },
+      {
+        title: '品牌名称',
+        width: '10%',
+        dataIndex: 'brandName',
+        key: 'brandName'
+      },
+      {
         title: '商品价格',
         width: '10%',
         dataIndex: 'price',
         key: 'price'
       },
       {
-        title: '商品数量',
-        width: '10%',
-        dataIndex: 'number',
-        key: 'number'
-      },
-      {
-        title: '备注',
+        title: '更新时间',
         dataIndex: 'remark',
         key: 'remark'
       },
@@ -1068,18 +1159,14 @@ export default class goodsSettingList extends PureComponent {
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleWatchClick(item)}
-               style={{ display: !account.detail ? 'none' : ''}}
-            >查看</a>
-            <Divider type="vertical" style={{ display: !account.detail ? 'none' : ''}}/>
-            <a onClick={() => this.handleEditClick(item)}
-               style={{ display: !account.update ? 'none' : ''}}
-            >编辑</a>
-            <Divider type="vertical" style={{ display: !account.update ? 'none' : ''}}/>
+            <a onClick={() => this.handleWatchClick(item)}>查看</a>
+            <Divider type="vertical"/>
+            <a onClick={() => this.handleEditClick(item)}>编辑</a>
+            <Divider type="vertical"/>
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
             <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete} style={{ display: !account.delete ? 'none' : ''}}>删除</a>
+              <a className={styles.delete}>删除</a>
             </Popconfirm>
           </Fragment>
         ),
@@ -1167,6 +1254,11 @@ export default class goodsSettingList extends PureComponent {
             videoUrl={this.state.videoUrl}
             bannerHandleChange={this.bannerHandleChange}
             handleUploadBanner={this.handleUploadBanner}
+
+            options={this.state.options}
+            onChange={this.onChange}
+            verifyString={this.verifyString}
+            wechatChannel={this.state.wechatChannel}
           />
           <WatchForm
             modalData={this.state.modalData}

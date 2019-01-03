@@ -4,12 +4,13 @@ import { map } from '../../utils/fetch/api';
 const api = map({
   getGoodsSettingList: '/goods/goods/list?pageNo={pageNo}&keyword={keyword}&code={code}',
   saveGoodsSetting: '/goods/goods/add',
-  updateGoodsSetting: '/goods/goods//update',
+  updateGoodsSetting: '/goods/goods/update',
   deleteGoodsSetting: '/goods/goods/delete',
   getGoodsSettingDetail: '/goods/goods/detail?id={id}',
   getShopsList: '/project/shops/getList',
   getMerchantsList: '/project/merchant/getList',
   getActivityList: '/project/activity/getList',
+  goodsSelectTypeLists: '/goods/type/getList',
 
   // 类目管理
   goodsTypeLists: '/goods/type/list?pageNo={pageNo}&keyword={keyword}&code={code} ',

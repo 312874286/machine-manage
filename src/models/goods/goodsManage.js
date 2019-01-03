@@ -1,4 +1,4 @@
-import { goodsTypeLists, addGoodsType, editGoodsType } from '../../services/goods/goodsType';
+import { getGoodsSettingList, getGoodsSettingDetail, getMerchantsList, getShopsList, getActivityList, saveGoodsSetting, editGoodsSetting, delGoodsSetting, goodsSelectTypeLists } from '../../services/goods/goodsSetting';
 
 export default {
   namespace: 'goodsManage',
@@ -7,21 +7,46 @@ export default {
     page: {},
     datas: {},
   },
+
   effects: {
-    *goodsTypeLists({ payload: { restParams } }, { call, put }) {
-      const response = yield call(goodsTypeLists, { restParams });
+    *getGoodsSettingList({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getGoodsSettingList, { restParams });
       yield put({
         type: 'saveList',
         payload: response,
       });
     },
-    *addGoodsType({ payload: { params } }, { call }) {
-      const response = yield call(addGoodsType, { params });
+    *goodsSelectTypeLists({ payload: {  } }, { call, put }) {
+      const response = yield call(goodsSelectTypeLists, {  });
+      return response;
+    },
+    *getGoodsSettingDetail({ payload: { restParams } }, { call }) {
+      const response = yield call(getGoodsSettingDetail, { restParams });
       return response.data;
     },
-    *editGoodsType({ payload: { restParams } }, { call }) {
-      const response = yield call(editGoodsType, { params });
+    *getMerchantsList({ payload: { restParams } }, { call }) {
+      const response = yield call(getMerchantsList, { restParams });
       return response.data;
+    },
+    *getShopsList({ payload: { restParams } }, { call }) {
+      const response = yield call(getShopsList, { restParams });
+      return response.data;
+    },
+    *getActivityList({ payload: { restParams } }, { call }) {
+      const response = yield call(getActivityList, { restParams });
+      return response.data;
+    },
+    *saveGoodsSetting({ payload: { params } }, { call }) {
+      const response = yield call(saveGoodsSetting, { params });
+      return response;
+    },
+    *editGoodsSetting({ payload: { params } }, { call }) {
+      const response = yield call(editGoodsSetting, { params });
+      return response;
+    },
+    *delGoodsSetting({ payload: { params } }, { call }) {
+      const response = yield call(delGoodsSetting, { params });
+      return response;
     },
   },
 

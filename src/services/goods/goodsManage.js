@@ -15,6 +15,12 @@ export async function getGoodsSettingList({ params, restParams }) {
   });
 }
 
+export async function goodsSelectTypeLists({  }) {
+  return fetch.get(api.goodsSelectTypeLists, {
+
+  });
+}
+
 export async function getGoodsSettingDetail({ restParams }) {
   return fetch.get(api.getGoodsSettingDetail, {
     restParams,
