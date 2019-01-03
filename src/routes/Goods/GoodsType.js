@@ -6,32 +6,16 @@ import {
   Card,
   Form,
   Button,
-  Select,
   Input,
-  DatePicker,
-  Steps,
-  Table, Badge,
-  Menu, Dropdown,
-  Icon, Divider,
-  Modal, Upload,
-  InputNumber,
-  Checkbox, Alert,
-  Popconfirm,
+  Table,
+  Divider,
+  Modal,
+  message,
 } from 'antd';
-import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './GoodsType.less';
-import {getAccountMenus} from "../../utils/authority";
-import {message, Radio} from "antd/lib/index";
-import domain from "../../common/config/domain";
-import moment from "moment/moment";
-import {RegexTool} from "../../utils/utils";
 
-const { Option } = Select;
-const RadioGroup = Radio.Group;
-const Step = Steps.Step;
 const FormItem = Form.Item;
-const { TextArea } = Input
 
 const CreateForm = Form.create()(
   (props) => {
@@ -149,6 +133,7 @@ export default class goodsType extends PureComponent {
             modalVisible: false,
             expandedRows: [],
           });
+          message.success('操作成功')
         }
         this.setState({
           editModalConfirmLoading: false,
@@ -303,6 +288,7 @@ export default class goodsType extends PureComponent {
           return item.children = null
       }
     })
+    console.log('list', list)
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
@@ -318,6 +304,7 @@ export default class goodsType extends PureComponent {
               dataSource={list}
               onExpandedRowsChange={this.onExpandedRowsChange}
               expandedRowKeys={expandedRows}
+              rowKey={record => record.code}
             />
           </div>
         </Card>

@@ -479,7 +479,7 @@ const proxy = {
           {
             "id": "a51",
             "functionDepict": "商品管理",
-            "functionPath": "goodsManage",
+            "functionPath": "goods",
             "parentId": "a49",
             "functionLevel": 2,
             "functionIcon": null,

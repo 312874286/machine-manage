@@ -389,7 +389,7 @@ export const getRouterData = (app) => {
     '/goods/goodsType': {
       component: dynamicWrapper(app, ['goods/goodsType'], () => import('../routes/Goods/GoodsType')),
     },
-    '/goods/goodsManage': {
+    '/goods/goods': {
       component: dynamicWrapper(app, ['goods/goodsManage'], () => import('../routes/Goods/GoodsManage')),
     },
   };
