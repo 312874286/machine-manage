@@ -54,7 +54,7 @@ const CreateForm = Form.create()(
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
       handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList, videoUrl, bannerHandleChange, handleUploadBanner,
-      options, onChange, verifyString, wechatChannel
+      options, onChange, verifyString, wechatChannel, getByteLen
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -133,17 +133,23 @@ const CreateForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="商品名称">
               {getFieldDecorator('name', {
-                rules: [{ required: true, whitespace: true, message: '请输入商品名称' }],
+                rules: [{ required: true, whitespace: true, message: '请输入商品名称'},  {
+                  validator: getByteLen
+                }],
               })(<Input placeholder="请输入商品名称" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="品牌名称">
               {getFieldDecorator('brandName', {
-                rules: [{ required: true, whitespace: true, message: '请输入品牌名称' }],
+                rules: [{ required: true, whitespace: true, message: '请输入品牌名称' },  {
+                  validator: getByteLen
+                }],
               })(<Input placeholder="请输入品牌名称" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="规格描述">
               {getFieldDecorator('specRemark', {
-                rules: [{ required: false, whitespace: true, message: '请输入规格描述' }],
+                rules: [{ required: false, whitespace: true, message: '请输入规格描述' }, {
+                  validator: getByteLen
+                }],
               })(<Input placeholder="请输入规格描述" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="商品图片">
@@ -211,7 +217,11 @@ const CreateForm = Form.create()(
               })(<InputNumber placeholder="请输入商品数量" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="详情描述">
-              {getFieldDecorator('remark')(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+              {getFieldDecorator('remark', {
+                rules: [{
+                  validator: getByteLen
+                }]
+              })(<TextArea placeholder="请输入备注描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
             </FormItem>
           </Form>
         </div>
@@ -406,6 +416,41 @@ export default class goodsSettingList extends PureComponent {
         merchantLists: res,
       });
     });
+  }
+  getByteLen = (rule, value, callback) => {
+    let no = 50
+    switch (rule.field) {
+      case 'name':
+        no = 50
+        break;
+      case 'brandName':
+        no = 30
+        break;
+      case 'specRemark':
+        no = 50
+        break;
+      case 'remark':
+        no = 400
+        break;
+    }
+    if (value) {
+      let len = 0;
+      for (let i = 0; i < value.length; i++) {
+        let length = value.charCodeAt(i);
+        if(length >= 0 && length <= 128)
+        {
+          len += 1;
+        }
+        else
+        {
+          len += 2;
+        }
+      }
+      if(len > no){
+        callback(`长度为最大${no}位，其中中文算两个字符！`)
+      }
+    }
+    callback()
   }
   onSelect = (value, option) => {
     console.log('option', option.props["data-channelCode"])
@@ -1148,7 +1193,10 @@ export default class goodsSettingList extends PureComponent {
         title: '商品价格',
         width: '10%',
         dataIndex: 'price',
-        key: 'price'
+        key: 'price',
+        render: (value) => {
+          return value === '' ? '' : Number(value).toFixed(2) ;
+        },
       },
       {
         title: '更新时间',
@@ -1261,6 +1309,7 @@ export default class goodsSettingList extends PureComponent {
             onChange={this.onChange}
             verifyString={this.verifyString}
             wechatChannel={this.state.wechatChannel}
+            getByteLen={this.getByteLen}
           />
           <WatchForm
             modalData={this.state.modalData}
