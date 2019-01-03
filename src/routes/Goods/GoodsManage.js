@@ -803,7 +803,8 @@ export default class goodsSettingList extends PureComponent {
         shopId: data.shopId || undefined,
         specRemark: data.specRemark || undefined,
         number: data.number || undefined,
-        goodsType: data.goodsTypeParentCode ? [data.goodsTypeParentCode, data.goodsTypeCode] : undefined
+        goodsType: data.goodsTypeParentCode ? [data.goodsTypeParentCode, data.goodsTypeCode] : undefined,
+        brandName: data.brandName
       });
     } else {
       this.setState({
@@ -822,6 +823,7 @@ export default class goodsSettingList extends PureComponent {
         specRemark: undefined,
         number: undefined,
         goodsType: undefined,
+        brandName: undefined,
       });
     }
   }
@@ -1150,8 +1152,8 @@ export default class goodsSettingList extends PureComponent {
       },
       {
         title: '更新时间',
-        dataIndex: 'remark',
-        key: 'remark'
+        dataIndex: 'updateTime',
+        key: 'updateTime'
       },
       {
         fixed: 'right',
@@ -1228,7 +1230,7 @@ export default class goodsSettingList extends PureComponent {
                   columns={columns}
                   onSelectRow={this.handleSelectRows}
                   onChange={this.handleStandardTableChange}
-                  scrollX={1200}
+                  scrollX={1300}
                 />
               </div>
             </div>
