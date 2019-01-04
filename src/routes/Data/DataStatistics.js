@@ -299,9 +299,9 @@ export default class DataStatistics extends PureComponent {
             restParams: {
               status: '',
               keyword: '',
-              pageNo: '',
+              pageNo: '1_2000',
               orderBy: '',
-              pageSize: '1_200',
+              pageSize: '2000',
             },
           },
         }).then((res) => {
