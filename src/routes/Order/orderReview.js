@@ -95,7 +95,9 @@ const RefundAuditForm = Form.create()(props => {
         <Form onSubmit={this.handleSearch}>
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={12}>
-              <FormItem {...formItemLayout} label="订单详情" />
+              <div className={styles.weight}>
+                <FormItem {...formItemLayout} label="订单详情" />
+              </div>
             </Col>
           </Row>
 
@@ -203,7 +205,9 @@ const RefundAuditForm = Form.create()(props => {
 
           <Row>
             <Col gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <FormItem label="退款详情：" />
+              <div className={styles.weight}>
+                <FormItem label="退款详情：" />
+              </div>
             </Col>
           </Row>
 
@@ -256,8 +260,10 @@ const RefundAuditForm = Form.create()(props => {
           <div style={{ display: tabKey === '0' ? 'none' : ''}}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={12}>
-                <FormItem {...formItemLayout} label="审核信息">
-                </FormItem>
+                <div className={styles.weight}>
+                  <FormItem {...formItemLayout} label="审核信息">
+                  </FormItem>
+                </div>
               </Col>
             </Row>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
