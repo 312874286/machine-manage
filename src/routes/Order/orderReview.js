@@ -51,8 +51,9 @@ const goodsType = {
   2: '优惠券'
 }
 const auditStatus = {
-  0: '未通过',
-  1: '通过'
+  0: '待审核',
+  1: '通过',
+  2: '未通过'
 }
 const status = [
   '新退款订单',
@@ -935,6 +936,9 @@ export default class OrderReview extends PureComponent {
       refuseModalVisible: !!flag,
       refuseEditModalConfirmLoading: false,
     });
+    this.form.setFieldsValue({
+      auditReason: undefined,
+    });
   };
   handleAdd = () => {
     this.form.validateFields((err, fieldsValue) => {
@@ -954,15 +958,18 @@ export default class OrderReview extends PureComponent {
       editRemarkModalConfirmLoading: false,
       refundAuditModalData: ''
     });
+    this.saveEditRemarkForm.setFieldsValue({
+      remark: undefined,
+    });
   };
   handleEditRemarkAdd = () => {
-    this.setState({
-      editRemarkModalConfirmLoading: true,
-    });
     this.saveEditRemarkForm.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
+      this.setState({
+        editRemarkModalConfirmLoading: true,
+      });
       // refundUpdate
       this.handRefundUpdate(1, fieldsValue.remark)
     })
@@ -1014,6 +1021,9 @@ export default class OrderReview extends PureComponent {
           });
           this.getLists();
         }
+        this.setState({
+          editRemarkModalConfirmLoading: false,
+        });
       }).catch(err => {
           reject(err);
         });
