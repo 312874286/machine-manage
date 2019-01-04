@@ -70,6 +70,15 @@ export default {
         payload: response
       });
     },
+    *interactDataLists(
+      {
+        payload: { restParams }
+      },
+      { call, put }
+    ) {
+      const response = yield call(interactLists, { restParams });
+      return response;
+    },
     *getGameList(
       {
         payload: { params }

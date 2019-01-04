@@ -215,8 +215,9 @@ const GoOnForm = Form.create()(
   });
 
 
-@connect(({ common, loading, dataStatistics }) => ({
+@connect(({ common, loading, dataStatistics, scheduleSetting }) => ({
   common,
+  scheduleSetting,
   dataStatistics,
   loading: loading.models.dataStatistics,
 }))
@@ -291,6 +292,28 @@ export default class DataStatistics extends PureComponent {
       })
       this.setState({
         activityLists: res,
+      }, () => {
+        this.props.dispatch({
+          type: 'interactSamplingSetting/interactDataLists',
+          payload: {
+            restParams: {
+              status: '',
+              keyword: '',
+              pageNo: '',
+              orderBy: '',
+              pageSize: '1_200',
+            },
+          },
+        }).then((res) => {
+          if (res && res.code === 0) {
+            res = res.data.map((item) => {
+              return { id: item.id, name: item.name }
+            })
+            this.setState({
+              activityLists: this.state.activityLists.concat(res),
+            });
+          }
+        });
       });
     });
   }

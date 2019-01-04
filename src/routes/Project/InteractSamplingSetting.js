@@ -289,7 +289,8 @@ export default class areaSettingList extends PureComponent {
           status: this.state.status,
           pageNo: this.state.pageNo,
           keyword: this.state.keyword,
-          orderBy: this.state.orderBy
+          orderBy: this.state.orderBy,
+          pageSize: 20,
         }
       }
     });

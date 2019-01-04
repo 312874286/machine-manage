@@ -387,7 +387,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['player/player'], () => import('../routes/Player/User')),
     },
     '/data/dataStatistics': {
-      component: dynamicWrapper(app, ['data/dataStatistics'], () => import('../routes/Data/DataStatistics')),
+      component: dynamicWrapper(app, ['data/dataStatistics', 'project/scheduleSetting'], () => import('../routes/Data/DataStatistics')),
     },
     '/merchant/merchantConsociation': {
       component: dynamicWrapper(app, ['merchant/merchantConsociation'], () => import('../routes/Merchant/MerchantConsociation')),
