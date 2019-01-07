@@ -511,7 +511,7 @@ const CreateGoodsForm = Form.create()(
       currentGoodsData, onShopsTypeSelect, selectGoodsType, relevanceCommodityChange, relevanceCommodity,
       sourceData, handleSave, selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll, selectAll, couponId,
       paiyangType,
-      handleAddClick, handleDeleteClick, handleDetailClick
+      handleAddClick, handleDeleteClick, handleDetailClick, goodsLists, selectGoodsLists
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -567,7 +567,7 @@ const CreateGoodsForm = Form.create()(
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleAddClick(item)}>添加</a>
+            <a onClick={() => handleAddClick(item)}>添加</a>
           </Fragment>
         ),
       }
@@ -591,8 +591,8 @@ const CreateGoodsForm = Form.create()(
         title: '操作',
         render: (text, item) => (
           <Fragment>
-            <a onClick={() => this.handleDeleteClick(item)}>移除</a>
-            <a onClick={() => this.handleDetailClick(item)}>编辑详情</a>
+            <a onClick={() => handleDeleteClick(item)}>移除</a>
+            <a onClick={() => handleDetailClick(item)}>编辑详情</a>
           </Fragment>
         ),
       }
@@ -842,7 +842,7 @@ const CreateGoodsForm = Form.create()(
                       rowKey={record => record.id}
                       rowSelection={rowSelection}
                       columns={goodsListsColumns}
-                      dataSource={sourceData}
+                      dataSource={goodsLists}
                       id="leftTable"
                       style={{
                         marginBottom: "20px",
@@ -873,7 +873,7 @@ const CreateGoodsForm = Form.create()(
                       rowKey={record => record.id}
                       rowSelection={rowSelection}
                       columns={selectedGoodsListsColumns}
-                      dataSource={sourceData}
+                      dataSource={selectGoodsLists}
                       id="leftTable"
                       style={{
                         marginBottom: "20px",
@@ -1095,7 +1095,10 @@ export default class areaSettingList extends PureComponent {
 
     //VipForm
     modalVipFormVisible: false,
-    editVipFormModalConfirmLoading: false
+    editVipFormModalConfirmLoading: false,
+
+    goodsLists: [],
+    selectGoodsLists: [],
   };
   componentDidMount() {
     // console.log('this.props.params.id', this.props.match.params.id)
@@ -1877,13 +1880,13 @@ export default class areaSettingList extends PureComponent {
     //
   }
   handleAddClick = () => {
-
+   // 添加
   }
   handleDeleteClick = () => {
-
+   // 移除
   }
   handleDetailClick = () => {
-
+   // 查看详情
   }
   // 商品结束
   // 店铺开始
