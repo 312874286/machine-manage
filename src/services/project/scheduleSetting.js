@@ -71,3 +71,10 @@ export async function getActivityShops({ restParams }) {
     restParams,
   });
 }
+
+// getInteractActivityList
+export async function interactLists({ restParams }) {
+  return fetch.get(api.interactLists, {
+    restParams,
+  });
+}

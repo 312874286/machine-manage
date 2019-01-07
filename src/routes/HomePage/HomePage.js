@@ -140,6 +140,32 @@ export default class homePageSetting extends PureComponent {
             </Card>
             <Card title={
               <div>
+                退款审核
+                <span className={styles.titleSpan}>(单位: 条)</span>
+              </div>}>
+              <div className={styles.gridCardBox}>
+                <a onClick={() => this.props.history.push({pathname: '/order/orderReview'})}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/doing.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.waitAudit === 0 ? "0" : MachinePortalDataList.waitAudit}</span>
+                    <span>待审核</span>
+                  </div>
+                </a>
+                <a onClick={() => this.props.history.push({pathname: '/order/orderReview', query: {active: '1', status: 3,}})}>
+                  <div className={styles.machineLeftBox}>
+                    <img src={require('../../assets/images/indexPage/doing.png')}/>
+                  </div>
+                  <div className={styles.machineRightBox}>
+                    <span>{MachinePortalDataList.refundException === 0 ? "0" : MachinePortalDataList.refundException}</span>
+                    <span>退款异常</span>
+                  </div>
+                </a>
+              </div>
+            </Card>
+            <Card title={
+              <div>
                 活动监控
                 <span className={styles.titleSpan}>(单位:个)</span>
               </div>}>

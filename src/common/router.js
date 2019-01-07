@@ -257,6 +257,12 @@ export const getRouterData = (app) => {
     '/order/commodityStatistics': {
       component: dynamicWrapper(app, ['order/commodityStatistics', 'log/log', 'common'], () => import('../routes/Order/CommodityStatisticsSetting')),
     },
+    '/order/orderReview': {
+      component: dynamicWrapper(app, ['order/orderReview', 'log/log', 'common'], () => import('../routes/Order/orderReview')),
+    },
+    // '/order/refundManage': {
+    //   component: dynamicWrapper(app, ['order/refundManage', 'log/log', 'common'], () => import('../routes/Order/RefundManage')),
+    // },
     '/check/user': {
       component: dynamicWrapper(app, ['polling/user', 'log/log', 'common'], () => import('../routes/Polling/User')),
     },
@@ -381,7 +387,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['player/player'], () => import('../routes/Player/User')),
     },
     '/data/dataStatistics': {
-      component: dynamicWrapper(app, ['data/dataStatistics'], () => import('../routes/Data/DataStatistics')),
+      component: dynamicWrapper(app, ['data/dataStatistics', 'project/scheduleSetting'], () => import('../routes/Data/DataStatistics')),
     },
     '/merchant/merchantConsociation': {
       component: dynamicWrapper(app, ['merchant/merchantConsociation'], () => import('../routes/Merchant/MerchantConsociation')),

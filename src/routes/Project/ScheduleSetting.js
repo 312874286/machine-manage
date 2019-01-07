@@ -1208,6 +1208,7 @@ export default class ScheduleSettingList extends PureComponent {
         modalVisible: !!flag,
         modalData: {},
         modalType: true,
+        targetData: [],
       });
       this.setModalData();
     })

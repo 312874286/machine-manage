@@ -1,4 +1,4 @@
-import { getOrderList } from '../../services/order/order';
+import { getOrderList, orderDetail } from '../../services/order/order';
 
 export default {
   namespace: 'order',
@@ -16,6 +16,10 @@ export default {
         type: 'saveList',
         payload: response,
       });
+    },
+    *orderDetail({ payload: { restParams } }, { call, put }) {
+      const response = yield call(orderDetail, { restParams });
+      return response;
     },
   },
 
