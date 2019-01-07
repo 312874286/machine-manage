@@ -48,7 +48,7 @@ const isFocusOptions = [
   {id: '0', name: '不关注'},
   {id: '1', name: '关注'},
   {id: '2', name: '强制关注'}
-  ]
+]
 const isVipOptions = [
   {id: '0', name: '无入会'},
   {id: '1', name: '入会'},
@@ -113,26 +113,26 @@ const CreateMerchantForm = Form.create()(
         return (
           checkSelectedMerchantLists.length > 0
             ? (
-            <div style={{ display: 'flex' }}>
-              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
-                <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
-              </Popconfirm>
-              {/*<Select defaultValue='0' style={{ display: paiyangType ? 'none' : ''}}>*/}
+              <div style={{ display: 'flex' }}>
+                <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
+                  <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
+                </Popconfirm>
+                {/*<Select defaultValue='0' style={{ display: paiyangType ? 'none' : ''}}>*/}
                 {/*/!*{children2}*!/*/}
                 {/*{isFocusOptions.map((item) => {*/}
-                  {/*return (*/}
-                    {/*<Option key={item.id} value={item.id}>{item.name}</Option>*/}
-                  {/*);*/}
+                {/*return (*/}
+                {/*<Option key={item.id} value={item.id}>{item.name}</Option>*/}
+                {/*);*/}
                 {/*})}*/}
-              {/*</Select>*/}
-              <RadioGroup defaultValue={`${record.id}-0`} onChange={merchantsRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
-                {isFocusOptions.map((item) => {
-                  return (
-                    <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
-                  );
-                })}
-              </RadioGroup>
-            </div>
+                {/*</Select>*/}
+                <RadioGroup defaultValue={`${record.id}-0`} onChange={merchantsRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
+                  {isFocusOptions.map((item) => {
+                    return (
+                      <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
+                    );
+                  })}
+                </RadioGroup>
+              </div>
             ) : null
         );
       }
@@ -182,23 +182,23 @@ const CreateMerchantForm = Form.create()(
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="客户编码">
-            {getFieldDecorator('merchantCode', {
-              rules: [{ required: true, whitespace: true, message: '请输入客户编码' }],
-            })(<Input placeholder="" disabled />)}
+              {getFieldDecorator('merchantCode', {
+                rules: [{ required: true, whitespace: true, message: '请输入客户编码' }],
+              })(<Input placeholder="" disabled />)}
             </FormItem>
             {/*<FormItem {...formItemLayout} label="所属渠道">*/}
-              {/*{getFieldDecorator('channelCode', {*/}
-                {/*rules: [{ required: true, whitespace: true, message: '请选择渠道' }],*/}
-                {/*initialValue: paiyangType ? '002002' : undefined*/}
-              {/*})(*/}
-                {/*<Select placeholder="请选择渠道" disabled={paiyangType}  onChange={channelHandleChange}>*/}
-                  {/*{channelLists.map((item) => {*/}
-                    {/*return (*/}
-                      {/*<Option value={item.channelListscode} key={item.code} disabled={paiyangType ? true : (item.code === '002002' ? true : false)}>{item.name}</Option>*/}
-                    {/*);*/}
-                  {/*})}*/}
-                {/*</Select>*/}
-              {/*)}*/}
+            {/*{getFieldDecorator('channelCode', {*/}
+            {/*rules: [{ required: true, whitespace: true, message: '请选择渠道' }],*/}
+            {/*initialValue: paiyangType ? '002002' : undefined*/}
+            {/*})(*/}
+            {/*<Select placeholder="请选择渠道" disabled={paiyangType}  onChange={channelHandleChange}>*/}
+            {/*{channelLists.map((item) => {*/}
+            {/*return (*/}
+            {/*<Option value={item.channelListscode} key={item.code} disabled={paiyangType ? true : (item.code === '002002' ? true : false)}>{item.name}</Option>*/}
+            {/*);*/}
+            {/*})}*/}
+            {/*</Select>*/}
+            {/*)}*/}
             {/*</FormItem>*/}
             <FormItem>
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -323,18 +323,18 @@ const CreateShopsForm = Form.create()(
         return (
           checkSelectedShopLists.length > 0
             ? (
-            <div style={{ display: 'flex' }}>
-              <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
-                 <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
-              </Popconfirm>
-              <RadioGroup defaultValue={`${record.id}-0`} onChange={shopRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
-                {isVipOptions.map((item) => {
-                  return (
-                    <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
-                  );
-                })}
-              </RadioGroup>
-            </div>
+              <div style={{ display: 'flex' }}>
+                <Popconfirm title="确认要删除吗?" onConfirm={() => targetHandleDelete(record.id)}>
+                  <a href="javascript:;" style={{ marginRight: 5 }}>删除</a>
+                </Popconfirm>
+                <RadioGroup defaultValue={`${record.id}-0`} onChange={shopRadioGroupChange} style={{ display: paiyangType ? 'none' : ''}}>
+                  {isVipOptions.map((item) => {
+                    return (
+                      <Radio key={item.id} value={`${record.id}-${item.id}`}>{item.name}</Radio>
+                    );
+                  })}
+                </RadioGroup>
+              </div>
             ) : null
         );
       }
@@ -367,19 +367,19 @@ const CreateShopsForm = Form.create()(
                 rules: [{ required: true, message: '请选择商户' }],
               })(
                 <Select
-                showSearch
-                placeholder="请输入商户名称"
-                optionFilterProp="children"
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                onChange={handleChange}
+                  showSearch
+                  placeholder="请输入商户名称"
+                  optionFilterProp="children"
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  onChange={handleChange}
                 >
-              {
-                merchantLists.map((item) => {
-                return (
-                <Option value={item.id} key={item.id}>{item.merchantName}</Option>
-                )
-              })
-              }
+                  {
+                    merchantLists.map((item) => {
+                      return (
+                        <Option value={item.id} key={item.id}>{item.merchantName}</Option>
+                      )
+                    })
+                  }
                 </Select>
               )}
             </FormItem>
@@ -429,48 +429,48 @@ const CreateShopsForm = Form.create()(
               </div>
             </FormItem>
             {/*<FormItem {...formItemLayout} label="Shop ID">*/}
-              {/*{getFieldDecorator('shopCode', {*/}
-                {/*rules: [{ required: true,whitespace: true,  message: '请输入Shop ID' }],*/}
-              {/*})(<Input placeholder="请输入Shop ID" />)}*/}
+            {/*{getFieldDecorator('shopCode', {*/}
+            {/*rules: [{ required: true,whitespace: true,  message: '请输入Shop ID' }],*/}
+            {/*})(<Input placeholder="请输入Shop ID" />)}*/}
             {/*</FormItem>*/}
             {/*<FormItem {...formItemLayout} label="店铺名称">*/}
-              {/*{getFieldDecorator('shopName', {*/}
-                {/*rules: [{ required: true, whitespace: true, message: '请输入店铺名称' }],*/}
-              {/*})(<Input placeholder="请输入店铺名称" />)}*/}
+            {/*{getFieldDecorator('shopName', {*/}
+            {/*rules: [{ required: true, whitespace: true, message: '请输入店铺名称' }],*/}
+            {/*})(<Input placeholder="请输入店铺名称" />)}*/}
             {/*</FormItem>*/}
             {/*<FormItem {...formItemLayout} label="是否入会">*/}
-              {/*{getFieldDecorator('isVip', {*/}
-                {/*rules: [{ required: true, message: '' }],*/}
-                {/*initialValue: 0,*/}
-              {/*})(*/}
-                {/*<RadioGroup onChange={RadioChange}>*/}
-                  {/*<Radio value={1}>是</Radio>*/}
-                  {/*<Radio value={0}>否</Radio>*/}
-                {/*</RadioGroup>*/}
-              {/*)}*/}
+            {/*{getFieldDecorator('isVip', {*/}
+            {/*rules: [{ required: true, message: '' }],*/}
+            {/*initialValue: 0,*/}
+            {/*})(*/}
+            {/*<RadioGroup onChange={RadioChange}>*/}
+            {/*<Radio value={1}>是</Radio>*/}
+            {/*<Radio value={0}>否</Radio>*/}
+            {/*</RadioGroup>*/}
+            {/*)}*/}
             {/*</FormItem>*/}
             {/*<FormItem {...formItemLayout} label="入会码">*/}
-              {/*/!*<Col span={14}>*!/*/}
-                {/*/!*<FormItem>*!/*/}
-                  {/*{getFieldDecorator('sessionKey', {*/}
-                    {/*// rules: [{ whitespace: true, message: '请输入入会码' }],*/}
-                  {/*})*/}
-                  {/*(<Input*/}
-                    {/*placeholder="请输入入会码"*/}
-                    {/*disabled={!sessionKey}*/}
-                  {/*/>)}*/}
-                {/*/!*</FormItem>*!/*/}
-              {/*/!*</Col>*!/*/}
-              {/*/!*<Col span={8}>*!/*/}
-                {/*/!*<FormItem>*!/*/}
-                  {/*/!*<Checkbox*!/*/}
-                    {/*/!*disabled={!sessionKey}*!/*/}
-                    {/*/!*checked={mustIsVip}*!/*/}
-                    {/*/!*onChange={handleChange}>*!/*/}
-                    {/*/!*强制入会*!/*/}
-                  {/*/!*</Checkbox>*!/*/}
-                {/*/!*</FormItem>*!/*/}
-              {/*/!*</Col>*!/*/}
+            {/*/!*<Col span={14}>*!/*/}
+            {/*/!*<FormItem>*!/*/}
+            {/*{getFieldDecorator('sessionKey', {*/}
+            {/*// rules: [{ whitespace: true, message: '请输入入会码' }],*/}
+            {/*})*/}
+            {/*(<Input*/}
+            {/*placeholder="请输入入会码"*/}
+            {/*disabled={!sessionKey}*/}
+            {/*/>)}*/}
+            {/*/!*</FormItem>*!/*/}
+            {/*/!*</Col>*!/*/}
+            {/*/!*<Col span={8}>*!/*/}
+            {/*/!*<FormItem>*!/*/}
+            {/*/!*<Checkbox*!/*/}
+            {/*/!*disabled={!sessionKey}*!/*/}
+            {/*/!*checked={mustIsVip}*!/*/}
+            {/*/!*onChange={handleChange}>*!/*/}
+            {/*/!*强制入会*!/*/}
+            {/*/!*</Checkbox>*!/*/}
+            {/*/!*</FormItem>*!/*/}
+            {/*/!*</Col>*!/*/}
             {/*</FormItem>*/}
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
@@ -511,7 +511,6 @@ const CreateGoodsForm = Form.create()(
       currentGoodsData, onShopsTypeSelect, selectGoodsType, relevanceCommodityChange, relevanceCommodity,
       sourceData, handleSave, selectedRowKeys, onChangeRowSelection, onLeftSelect, onSelectAll, selectAll, couponId,
       paiyangType,
-      handleAddClick, handleDeleteClick, handleDetailClick
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -541,60 +540,11 @@ const CreateGoodsForm = Form.create()(
         dataIndex: "name",
         width: '30%',
         render: text => <a href="javascript:;">{text}</a>
-      }, {
+      },  {
         title: "关联优惠券状态",
         dataIndex: "couponId",
         width: '70%',
         render: text => <a href="javascript:;">{text ? '已关联' : '未关联'}</a>
-      }
-    ];
-    const goodsListsColumns = [
-      {
-        title: "商品ID",
-        dataIndex: "goodId",
-        width: '30%',
-      }, {
-        title: "商品名称",
-        dataIndex: "goodName",
-        width: '20%',
-      },
-      {
-        title: "商品售价",
-        dataIndex: "price",
-        width: '20%',
-      }, {
-        width: 150,
-        title: '操作',
-        render: (text, item) => (
-          <Fragment>
-            <a onClick={() => this.handleAddClick(item)}>添加</a>
-          </Fragment>
-        ),
-      }
-    ];
-    const selectedGoodsListsColumns = [
-      {
-        title: "商品ID",
-        dataIndex: "goodId",
-        width: '30%',
-      }, {
-        title: "商品名称",
-        dataIndex: "goodName",
-        width: '20%',
-      },
-      {
-        title: "商品售价",
-        dataIndex: "price",
-        width: '20%',
-      }, {
-        width: 150,
-        title: '操作',
-        render: (text, item) => (
-          <Fragment>
-            <a onClick={() => this.handleDeleteClick(item)}>移除</a>
-            <a onClick={() => this.handleDetailClick(item)}>编辑详情</a>
-          </Fragment>
-        ),
       }
     ];
     const goodsColumns = this.goodsColumns.map(col => {
@@ -686,18 +636,18 @@ const CreateGoodsForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} style={{ display: GoodTypePlaceHolder === 0 ? 'none' : '' }} label={GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}>
+            <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}>
               {getFieldDecorator('code', {
-                rules: [{ required: GoodTypePlaceHolder === 0 ? false : true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}` }],
+                rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}` }],
               })(modalType ? (
                 <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`} />
               ) : (
                 <Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品ID' : '优惠券ID'}`}/>
               ))}
             </FormItem>
-            <FormItem {...formItemLayout} style={{ display: GoodTypePlaceHolder === 0 ? 'none' : '' }} label={GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}>
+            <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}>
               {getFieldDecorator('name', {
-                rules: [{ required: GoodTypePlaceHolder === 0 ? false : true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}` }],
+                rules: [{ required: true, whitespace: true, message: `请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}` }],
               })(<Input placeholder={`请输入${GoodTypePlaceHolder === 0 ? '商品名称' : '优惠券名称'}`} />)}
             </FormItem>
             <div className={styles.require}>
@@ -757,135 +707,73 @@ const CreateGoodsForm = Form.create()(
                 display: GoodTypePlaceHolder === 1 && relevanceCommodity && sourceData.length === 0  ? '' : 'none'
               }}
             >该店铺中暂时无商品，请先添加商品。</div>
-            {/*<FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品图片' : '优惠券图片'} style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>*/}
-              {/*{getFieldDecorator('img', {*/}
-                {/*rules: [{ required: false, message: `请输入${GoodTypePlaceHolder === 0 ? '请上传商品图片' : '请上传优惠券图片'}` }],*/}
-                {/*valuePropName: 'filelist',*/}
-              {/*})(*/}
-                {/*<div className="clearfix">*/}
-                  {/*<Upload*/}
-                    {/*customRequest={(params) => { handleUpload(params, 2, 'fileList'); }}*/}
-                    {/*listType="picture-card"*/}
-                    {/*fileList={fileList}*/}
-                    {/*onPreview={handlePreview}*/}
-                    {/*onChange={handleChange}*/}
-                    {/*accept="image/*">*/}
-                    {/*{fileList.length > 1 ? null : uploadButton}*/}
-                  {/*</Upload>*/}
-                  {/*<Modal visible={previewVisible} footer={null} onCancel={handleCancel}>*/}
-                    {/*<img alt="example" style={{ width: '100%' }} src={previewImage} />*/}
-                  {/*</Modal>*/}
-                {/*</div>*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
-            {/*<FormItem {...formItemLayout} label="宣传介绍（支持图片和视频)" style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>*/}
-              {/*{getFieldDecorator('banner', {*/}
-                {/*rules: [{ required: false, message: '' }],*/}
-                {/*valuePropName: 'filelist',*/}
-              {/*})(*/}
-                {/*<div className="clearfix">*/}
-                  {/*<Upload*/}
-                    {/*customRequest={(params) => { handleUploadBanner(params, 2, 'bannerfileList'); }}*/}
-                    {/*listType="picture-card"*/}
-                    {/*fileList={bannerfileList}*/}
-                    {/*onPreview={handlePreview}*/}
-                    {/*beforeUpload={beforeUpload}*/}
-                    {/*onChange={bannerHandleChange}*/}
-                    {/*accept="image/*, video/*"*/}
-                  {/*>*/}
-                    {/*{bannerfileList.length > 1 ? null : uploadButton}*/}
-                  {/*</Upload>*/}
-                  {/*<video id="videos" controls="controls"*/}
-                         {/*style={{ objectFit: 'fill', display:  videoUrl ? (videoUrl.url ? '' : 'none') : 'none', maxWidth: '600px', maxHeight: '500px'}}*/}
-                         {/*playsInline=""*/}
-                         {/*webkit-playsinline=""*/}
-                         {/*x5-video-player-fullscreen="true"*/}
-                         {/*x5-video-player-type="h5"*/}
-                         {/*x5-video-orientation="portraint"*/}
-                         {/*src={videoUrl ? videoUrl.url : ''}>*/}
-                    {/*Your browser does not support the Video tag.*/}
-                  {/*</video>*/}
-                  {/*<Modal visible={previewVisible} footer={null} onCancel={handleCancel}>*/}
-                    {/*<img alt="example" style={{ width: '100%', display:  bannerfileList.length > 0 ? '' : 'none'}} src={previewImage} />*/}
-                  {/*</Modal>*/}
-                {/*</div>*/}
-              {/*)}*/}
-            {/*</FormItem>*/}
-
-            {/*<FormItem {...formItemLayout} label="商品数量" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>*/}
-              {/*{getFieldDecorator('number', {*/}
-                {/*rules: [{ required: false, message: '请输入商品数量' }],*/}
-              {/*})(<InputNumber placeholder="请输入商品数量" max={10000000} min={0}/>)}*/}
-            {/*</FormItem>*/}
-            {/*<FormItem {...formItemLayout} label="商品价格" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>*/}
-              {/*{getFieldDecorator('price', {*/}
-                {/*rules: [{ required: false, message: '请输入商品价格' }],*/}
-              {/*})(<InputNumber placeholder="请输入商品价格" min={0}/>)}*/}
-            {/*</FormItem>*/}
-            {/*<FormItem {...formItemLayout} label="备注信息" style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>*/}
-              {/*{getFieldDecorator('remark')(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 6 }} />)}*/}
-            {/*</FormItem>*/}
-            {/*商品*/}
-            <div
-              style={{
-                padding: 0,
-                border: "1px solid #ececec",
-                paddingLeft: "10px",
-                marginBottom: "20px",
-                display: GoodTypePlaceHolder === 1  ? 'none' : ''
-              }}
-            >
-              <FormItem>
-                  <div style={{ display: "flex" }}>
-                    <div>
-                      <Table
-                        rowKey={record => record.id}
-                        rowSelection={rowSelection}
-                        columns={goodsListsColumns}
-                        dataSource={sourceData}
-                        id="leftTable"
-                        style={{
-                          marginBottom: "20px",
-                          marginTop: "10px"
-                        }}
-                        scroll={{ y: 200 }}
-                        pagination={false}
-                      />
-                    </div>
-                  </div>
-              </FormItem>
-            </div>
-            <FormItem {...formItemLayout} label="已添加商品">
-            </FormItem>
-            <div
-              style={{
-                padding: 0,
-                border: "1px solid #ececec",
-                paddingLeft: "10px",
-                marginBottom: "20px",
-                display: GoodTypePlaceHolder === 1  ? 'none' : ''
-              }}
-            >
-              <FormItem>
-                <div style={{ display: "flex" }}>
-                  <div>
-                    <Table
-                      rowKey={record => record.id}
-                      rowSelection={rowSelection}
-                      columns={selectedGoodsListsColumns}
-                      dataSource={sourceData}
-                      id="leftTable"
-                      style={{
-                        marginBottom: "20px",
-                        marginTop: "10px"
-                      }}
-                      scroll={{ y: 200 }}
-                      pagination={false}
-                    />
-                  </div>
+            <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品图片' : '优惠券图片'} style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>
+              {getFieldDecorator('img', {
+                rules: [{ required: false, message: `请输入${GoodTypePlaceHolder === 0 ? '请上传商品图片' : '请上传优惠券图片'}` }],
+                valuePropName: 'filelist',
+              })(
+                <div className="clearfix">
+                  <Upload
+                    customRequest={(params) => { handleUpload(params, 2, 'fileList'); }}
+                    listType="picture-card"
+                    fileList={fileList}
+                    onPreview={handlePreview}
+                    onChange={handleChange}
+                    accept="image/*">
+                    {fileList.length > 1 ? null : uploadButton}
+                  </Upload>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                  </Modal>
                 </div>
-              </FormItem>
-            </div>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="宣传介绍（支持图片和视频)" style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>
+              {getFieldDecorator('banner', {
+                rules: [{ required: false, message: '' }],
+                valuePropName: 'filelist',
+              })(
+                <div className="clearfix">
+                  <Upload
+                    customRequest={(params) => { handleUploadBanner(params, 2, 'bannerfileList'); }}
+                    listType="picture-card"
+                    fileList={bannerfileList}
+                    onPreview={handlePreview}
+                    beforeUpload={beforeUpload}
+                    onChange={bannerHandleChange}
+                    accept="image/*, video/*"
+                  >
+                    {bannerfileList.length > 1 ? null : uploadButton}
+                  </Upload>
+                  <video id="videos" controls="controls"
+                         style={{ objectFit: 'fill', display:  videoUrl ? (videoUrl.url ? '' : 'none') : 'none', maxWidth: '600px', maxHeight: '500px'}}
+                         playsInline=""
+                         webkit-playsinline=""
+                         x5-video-player-fullscreen="true"
+                         x5-video-player-type="h5"
+                         x5-video-orientation="portraint"
+                         src={videoUrl ? videoUrl.url : ''}>
+                    Your browser does not support the Video tag.
+                  </video>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                    <img alt="example" style={{ width: '100%', display:  bannerfileList.length > 0 ? '' : 'none'}} src={previewImage} />
+                  </Modal>
+                </div>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品数量" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
+              {getFieldDecorator('number', {
+                rules: [{ required: false, message: '请输入商品数量' }],
+              })(<InputNumber placeholder="请输入商品数量" max={10000000} min={0}/>)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品价格" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>
+              {getFieldDecorator('price', {
+                rules: [{ required: false, message: '请输入商品价格' }],
+              })(<InputNumber placeholder="请输入商品价格" min={0}/>)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="备注信息" style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>
+              {getFieldDecorator('remark')(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            </FormItem>
             <FormItem {...formItemLayout} style={{ display: modalType ? 'none' : ''}}>
               <Button style={{ width: '120px', marginRight: '10px' }}
                       onClick={() => handleAdd(0)}>继续添加商品</Button>
@@ -1235,14 +1123,14 @@ export default class areaSettingList extends PureComponent {
     let newArr = []
     // 遍历 左边选中的数组，检查 右边数组 filter，是否 和左边选中数组 有重复，放到新数组，提示重复信息，不重复的则 放到右边数组 移除左边数组，
     selectedMerchantRows.forEach((item, index) => {
-     if (checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode).length > 0) {
-       // message.error('已重复')
-       newArr = [...newArr, ...checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode)]
-       // return false
-     } else {
-       console.log('bbb', item, index, checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode))
-       checkSelectedMerchantListsArr = [...checkSelectedMerchantListsArr, item]
-     }
+      if (checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode).length > 0) {
+        // message.error('已重复')
+        newArr = [...newArr, ...checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode)]
+        // return false
+      } else {
+        console.log('bbb', item, index, checkSelectedMerchantListsArr.filter(i => i.merchantCode === item.merchantCode))
+        checkSelectedMerchantListsArr = [...checkSelectedMerchantListsArr, item]
+      }
     })
     const operation = (list1, list2, isUnion = false) =>
       list1.filter( a => isUnion === list2.some(b => a.id === b.id));
@@ -1534,8 +1422,8 @@ export default class areaSettingList extends PureComponent {
         name: undefined,
         code: undefined,
         price: undefined,
-       // sellerId: undefined,
-       // shopId: undefined,
+        // sellerId: undefined,
+        // shopId: undefined,
         remark: undefined,
         img: undefined,
         specRemark: undefined,
@@ -1876,15 +1764,6 @@ export default class areaSettingList extends PureComponent {
     })
     //
   }
-  handleAddClick = () => {
-
-  }
-  handleDeleteClick = () => {
-
-  }
-  handleDetailClick = () => {
-
-  }
   // 商品结束
   // 店铺开始
   targetShopHandleDelete = (id) => {
@@ -1906,80 +1785,80 @@ export default class areaSettingList extends PureComponent {
   handleShopsAdd = (flag) => {
     const { checkSelectedShopLists } = this.state
     this.shopsForm.validateFields((err, values) => {
-        if (err) {
-          return;
-        }
-        // if (values.isVip === 1) {
-        //   if (!values.sessionKey.trim()) {
-        //     message.info('请填写入会码')
-        //     return
-        //   }
-        // }
-        // sellSessionKey
-        if (checkSelectedShopLists.length === 0) {
-          message.info('请至少添加一个店铺')
-          return
-        }
-        this.setState({
-          editShopsModalConfirmLoading: true,
-        });
-        let url = 'interactSamplingSetting/shopsAdd';
-        let params = {
-          ...values,
-          interactId: this.state.interactSampling,
-          shops: checkSelectedShopLists,
-        };
-        // if (this.state.mustIsVip) {
-        //   params = { ...params, isVip: 2};
-        // }
-        if (this.state.modalShopsData.id) {
-          url = 'interactSamplingSetting/updateShops';
-          params = { ...params, id: this.state.modalShopsData.id };
-        }
-        this.props.dispatch({
-          type: url,
-          payload: {
-            params,
-          },
-        }).then((res) => {
-          if (res && res.code === 0) {
-            this.getShops(flag)
-            // setTimeout(() => {
-            //
-            // }, 0)
-            this.setState({
-              editShopsModalConfirmLoading: false,
-              modalShopsData: {},
-              saveAndAddModal: {
-                sellerId: params.sellerId,
-                shopId: undefined
-              }
-            });
-            if (flag === 0) {
-              this.setShopsModalData()
-            }
-            if (flag === 1) {
-              this.setState({
-                modalShopsVisible: false,
-                selectGoodsType: true
-              });
-            }
-            this.setState({
-              selectedMerchantRows: [],
-              checkSelectedMerchantLists: [],
-              checkMerchantLists: [],
-              merchantAccountId: '',
-              checkShopsLists: [],
-              // 初始化店铺
-              checkShopUserLists: [],
-              checkShopLists: [],
-              checkSelectedShopLists: [],
-
-              selectedShopRows: [],
-            })
-          }
-        });
+      if (err) {
+        return;
+      }
+      // if (values.isVip === 1) {
+      //   if (!values.sessionKey.trim()) {
+      //     message.info('请填写入会码')
+      //     return
+      //   }
+      // }
+      // sellSessionKey
+      if (checkSelectedShopLists.length === 0) {
+        message.info('请至少添加一个店铺')
+        return
+      }
+      this.setState({
+        editShopsModalConfirmLoading: true,
       });
+      let url = 'interactSamplingSetting/shopsAdd';
+      let params = {
+        ...values,
+        interactId: this.state.interactSampling,
+        shops: checkSelectedShopLists,
+      };
+      // if (this.state.mustIsVip) {
+      //   params = { ...params, isVip: 2};
+      // }
+      if (this.state.modalShopsData.id) {
+        url = 'interactSamplingSetting/updateShops';
+        params = { ...params, id: this.state.modalShopsData.id };
+      }
+      this.props.dispatch({
+        type: url,
+        payload: {
+          params,
+        },
+      }).then((res) => {
+        if (res && res.code === 0) {
+          this.getShops(flag)
+          // setTimeout(() => {
+          //
+          // }, 0)
+          this.setState({
+            editShopsModalConfirmLoading: false,
+            modalShopsData: {},
+            saveAndAddModal: {
+              sellerId: params.sellerId,
+              shopId: undefined
+            }
+          });
+          if (flag === 0) {
+            this.setShopsModalData()
+          }
+          if (flag === 1) {
+            this.setState({
+              modalShopsVisible: false,
+              selectGoodsType: true
+            });
+          }
+          this.setState({
+            selectedMerchantRows: [],
+            checkSelectedMerchantLists: [],
+            checkMerchantLists: [],
+            merchantAccountId: '',
+            checkShopsLists: [],
+            // 初始化店铺
+            checkShopUserLists: [],
+            checkShopLists: [],
+            checkSelectedShopLists: [],
+
+            selectedShopRows: [],
+          })
+        }
+      });
+    });
   }
   // 添加modal 添加事件
   handleShopsModalVisible = async (flag, item) => {
@@ -2519,19 +2398,19 @@ export default class areaSettingList extends PureComponent {
       },
     };
     const steps = [
-    {
-      title: '基本信息',
-      content: '',
-    }, {
-      title: '商户商品信息',
-      content: '',
-    }, {
-      title: '选择机器',
-      content: '',
-    }, {
-      title: '规则设置',
-      content: '',
-    }];
+      {
+        title: '基本信息',
+        content: '',
+      }, {
+        title: '商户商品信息',
+        content: '',
+      }, {
+        title: '选择机器',
+        content: '',
+      }, {
+        title: '规则设置',
+        content: '',
+      }];
     const expandedGoodsRowRender = () => {
       const columns = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
@@ -2630,48 +2509,48 @@ export default class areaSettingList extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false} bodyStyle={{ 'marginBottom': '10px', 'padding': '15px 32px 0'}}>
-            <Steps current={current}>
-              {steps.map(item => <Step key={item.title} title={item.title} />)}
-            </Steps>
-            <div className={styles.stepsContent}>
-              {
-                <Button type="primary" style={{ marginBottom: 8 }}  onClick={() => this.create()}>创建商户店铺商品</Button>
-              }
-              <Table
-                rowKey={record => record.id || record.code}
-                className="components-table-demo-nested"
-                columns={columns}
-                expandedRowRender={paiyangType ? expandedGoodsRowRender : expandedRowRender}
-                dataSource={merchants}
-                pagination={false}
-                // expandRowByClick={true}
-                onExpandedRowsChange={paiyangType ? onExpandedRowsShopsChange : onExpandedRowsChange}
-                expandedRowKeys={paiyangType ? expandedShopsRowKeys : expandedRowKeys}
-                scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 80)}}
-              />
-            </div>
-            <div className={styles.stepsAction}>
-              {
-                <Button onClick={() => this.props.history.push({pathname: '/project/sampling-setting'})}>关闭</Button>
-              }
-              {
-                <Button onClick={() => this.next(0)}>暂存</Button>
-              }
-              {
-                current > 0
-                && (
-                  <Button type="primary" style={{ marginLeft: 8 }}
-                          onClick={() => this.props.history.push({ pathname: `/project/addBasicInteractSampling/${this.state.interactSampling}` })}>
-                    上一步
-                  </Button>
-                )
-              }
-              {
-                current < steps.length - 1
-                && <Button type="primary"
-                           onClick={() => this.next(1)}>下一步</Button>
-              }
-            </div>
+          <Steps current={current}>
+            {steps.map(item => <Step key={item.title} title={item.title} />)}
+          </Steps>
+          <div className={styles.stepsContent}>
+            {
+              <Button type="primary" style={{ marginBottom: 8 }}  onClick={() => this.create()}>创建商户店铺商品</Button>
+            }
+            <Table
+              rowKey={record => record.id || record.code}
+              className="components-table-demo-nested"
+              columns={columns}
+              expandedRowRender={paiyangType ? expandedGoodsRowRender : expandedRowRender}
+              dataSource={merchants}
+              pagination={false}
+              // expandRowByClick={true}
+              onExpandedRowsChange={paiyangType ? onExpandedRowsShopsChange : onExpandedRowsChange}
+              expandedRowKeys={paiyangType ? expandedShopsRowKeys : expandedRowKeys}
+              scroll={{ y: (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 53 + 100 + 80)}}
+            />
+          </div>
+          <div className={styles.stepsAction}>
+            {
+              <Button onClick={() => this.props.history.push({pathname: '/project/sampling-setting'})}>关闭</Button>
+            }
+            {
+              <Button onClick={() => this.next(0)}>暂存</Button>
+            }
+            {
+              current > 0
+              && (
+                <Button type="primary" style={{ marginLeft: 8 }}
+                        onClick={() => this.props.history.push({ pathname: `/project/addBasicInteractSampling/${this.state.interactSampling}` })}>
+                  上一步
+                </Button>
+              )
+            }
+            {
+              current < steps.length - 1
+              && <Button type="primary"
+                         onClick={() => this.next(1)}>下一步</Button>
+            }
+          </div>
         </Card>
         <CreateMerchantForm
           handleAdd={this.handleMerchantAdd}
@@ -2771,9 +2650,6 @@ export default class areaSettingList extends PureComponent {
           couponId={this.state.couponId}
 
           paiyangType={this.state.paiyangType}
-          handleAddClick={this.handleAddClick}
-          handleDeleteClick={this.handleDeleteClick}
-          handleDetailClick={this.handleDetailClick}
         />
         <FocusForm
           modalVisible={this.state.modalFocusFormVisible}
