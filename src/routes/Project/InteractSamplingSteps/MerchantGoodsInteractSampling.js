@@ -1147,6 +1147,8 @@ export default class areaSettingList extends PureComponent {
     selectGoodsLists: [],
     modalWatchGoodsFormVisible: false,
     goodDetail: {},
+    sellerId: '',
+    sellerShopId: '',
   };
   componentDidMount() {
     // console.log('this.props.params.id', this.props.match.params.id)
@@ -1408,12 +1410,16 @@ export default class areaSettingList extends PureComponent {
     this.form = form;
   }
   onSelect = (value) => {
+    this.setState({
+      sellerId: value
+    })
     const { paiyangType, GoodTypePlaceHolder } = this.state
     if (paiyangType) {
       this.setState({
         shopId: value,
       })
       this.getGoodsByShops(GoodTypePlaceHolder, 'add', value)
+      this.getGoodsListsByShop(value)
     } else {
       this.getInteractShopList(value)
       this.form.setFieldsValue({
@@ -1441,6 +1447,7 @@ export default class areaSettingList extends PureComponent {
       checkShopLists: [],
       checkSelectedShopLists: [],
       shopId: item ? item.id : '',
+      sellerShopId: item ? item.id : '',
       selectGoodsLists: [],
     }, () => {
       this.setModalData();
@@ -1455,6 +1462,9 @@ export default class areaSettingList extends PureComponent {
             sellerId: item.sellerId,
             shopId: item.id,
           });
+          this.setState({
+            sellerId: item.sellerId,
+          })
           this.getGoodsListsByShop(item.sellerId, item.id)
         }
       } else {
@@ -1931,6 +1941,7 @@ export default class areaSettingList extends PureComponent {
       shopId: value
     }, () => {
       this.getGoodsByShops(value, 'add')
+      this.getGoodsListsByShop(this.state.sellerId, value)
     })
     //
   }
