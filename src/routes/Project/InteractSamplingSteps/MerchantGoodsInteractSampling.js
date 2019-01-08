@@ -813,11 +813,11 @@ const CreateGoodsForm = Form.create()(
             )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="优惠券数量" style={{ display: GoodTypePlaceHolder === 1 ? '' : 'none' }}>
-            {getFieldDecorator('number', {
-            rules: [{ required: false, message: '请输入优惠券数量' }],
-            })(<InputNumber placeholder="请输入优惠券数量" max={10000000} min={0}/>)}
-            </FormItem>
+            {/*<FormItem {...formItemLayout} label="优惠券数量" style={{ display: GoodTypePlaceHolder === 1 ? '' : 'none' }}>*/}
+            {/*{getFieldDecorator('number', {*/}
+            {/*rules: [{ required: false, message: '请输入优惠券数量' }],*/}
+            {/*})(<InputNumber placeholder="请输入优惠券数量" max={10000000} min={0}/>)}*/}
+            {/*</FormItem>*/}
             {/*<FormItem {...formItemLayout} label="商品价格" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>*/}
             {/*{getFieldDecorator('price', {*/}
             {/*rules: [{ required: false, message: '请输入商品价格' }],*/}
