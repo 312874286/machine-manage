@@ -856,7 +856,9 @@ const CreateGoodsForm = Form.create()(
                 </div>
               </FormItem>
             </div>
-            <FormItem {...formItemLayout} label="已添加商品">
+            <FormItem {...formItemLayout} label="已添加商品"    style={{
+              display: GoodTypePlaceHolder === 1  ? 'none' : ''
+            }}>
             </FormItem>
             <div
               style={{
@@ -1724,15 +1726,15 @@ export default class areaSettingList extends PureComponent {
         })
         params = {...params, goodsList,}
       }
-      console.log('params', goodsList, selectedRows)
+      console.log('params', goodsList, selectedRows, fieldsValue.type, fieldsValue.type === 1)
       this.setState({
         editModalConfirmLoading: true,
       });
       // addCoupon console.log('this.state.bannerfileList', this.state.bannerfileList, this.state.videoUrl.data)
       let messageTxt = '添加'
       let url = 'interactSamplingSetting/goodsAdd';
-      if (fieldsValue.type === '1') {
-        url = 'interactSamplingSetting/addCoupon'
+      if (fieldsValue.type === 1) {
+        url = 'interactSamplingSetting/addCoupon';
       } else {
         params = {
           ...params,

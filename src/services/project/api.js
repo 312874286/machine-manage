@@ -82,7 +82,7 @@ const api = map({
   merchantAdd: "/project/interact/merchant/add",
   shopsAdd: "/project/interact/shops/add",
   goodsAdd: "/project/interact/goods/addGoods",
-  addCoupon: "/project/interact/goods/addGoods",
+  addCoupon: "/project/interact/goods/addCoupon",
   updateCoupon: "/project/interact/goods/updateCoupon",
   getToAddList: "/project/interact/goods/getToAddList",
 
