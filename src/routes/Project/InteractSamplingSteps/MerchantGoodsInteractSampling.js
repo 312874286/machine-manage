@@ -1411,7 +1411,8 @@ export default class areaSettingList extends PureComponent {
   }
   onSelect = (value) => {
     this.setState({
-      sellerId: value
+      sellerId: value,
+      selectGoodsLists: [],
     })
     const { paiyangType, GoodTypePlaceHolder } = this.state
     if (paiyangType) {
@@ -1938,7 +1939,8 @@ export default class areaSettingList extends PureComponent {
   onShopsTypeSelect = (value) => {
     this.setState({
       selectGoodsType: value ? false : true,
-      shopId: value
+      shopId: value,
+      selectGoodsLists: [],
     }, () => {
       this.getGoodsByShops(value, 'add')
       this.getGoodsListsByShop(this.state.sellerId, value)
