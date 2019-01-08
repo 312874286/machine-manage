@@ -2479,6 +2479,7 @@ export default class areaSettingList extends PureComponent {
   getGoods = () => {
     let params = {
       shopsId: this.state.expandedShopsRowKeys[0],
+      merchantId: this.state.expandedRowKeys[0],
       interactId: this.state.interactSampling
     }
     this.props.dispatch({
@@ -2669,7 +2670,7 @@ export default class areaSettingList extends PureComponent {
           key: 'operation',
           render: (text, item) => (
             <Fragment>
-              <a onClick={() => this.handleEditClick(item)}>修改</a>
+              <a disabled={item.goodsType === 0 ? true : false} onClick={() => this.handleEditClick(item)}>修改</a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleDelClick(item)}>删除</a>
             </Fragment>
@@ -2686,9 +2687,9 @@ export default class areaSettingList extends PureComponent {
       );
     };
     const onExpandedRowsShopsChange = (expandedRows) => {
-      console.log('expandedShopsRows', expandedRows)
+      console.log('expandedShopsRows', expandedRows, this.state.expandedRowKeys)
       this.setState({
-        expandedShopsRowKeys: expandedRows.splice(expandedRows.length - 1, 1)
+        expandedShopsRowKeys: expandedRows.splice(expandedRows.length - 1, 1),
       }, () => {
         if (this.state.expandedShopsRowKeys.length > 0) {
           this.getGoods()
