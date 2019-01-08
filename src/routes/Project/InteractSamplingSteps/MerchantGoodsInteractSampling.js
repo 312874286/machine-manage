@@ -551,7 +551,7 @@ const CreateGoodsForm = Form.create()(
     const goodsListsColumns = [
       {
         title: "商品ID",
-        dataIndex: "id",
+        dataIndex: "code",
         width: '30%',
       }, {
         title: "商品名称",
@@ -575,7 +575,7 @@ const CreateGoodsForm = Form.create()(
     const selectedGoodsListsColumns = [
       {
         title: "商品ID",
-        dataIndex: "id",
+        dataIndex: "code",
         width: '30%',
       }, {
         title: "商品名称",
