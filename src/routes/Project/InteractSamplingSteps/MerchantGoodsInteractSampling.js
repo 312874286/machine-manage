@@ -1043,7 +1043,7 @@ const WatchGoodsForm = Form.create()(
         <div className="manageAppBox">
           <Form>
             <FormItem {...formItemLayout} label="商品ID">
-              {goodDetail.id}
+              {goodDetail.code}
             </FormItem>
             <FormItem {...formItemLayout} label="商品名称">
               {goodDetail.name}
