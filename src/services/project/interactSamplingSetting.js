@@ -28,6 +28,23 @@ export async function goodsAdd({ params }) {
     body: JSON.stringify(params)
   });
 }
+export async function addCoupon({ params }) {
+  return fetch.postJSON(api.addCoupon, {
+    body: JSON.stringify(params)
+  });
+}
+export async function updateCoupon({ params }) {
+  return fetch.postJSON(api.updateCoupon, {
+    body: JSON.stringify(params)
+  });
+}
+export async function getToAddList({ params }) {
+  return fetch.post(api.getToAddList, {
+    body: stringify(params)
+  });
+}
+
+
 export async function interactNext({ restParams }) {
   return fetch.get(api.interactNext, {
     restParams

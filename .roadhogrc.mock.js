@@ -5733,12 +5733,74 @@ const proxy = {
       "msg": "成功"
     })
   },
-  'post /project/interact/goods/add': (req, res) => {
+  'post /project/interact/goods/addGoods': (req, res) => {
     res.send({
       "code": 0,
       "data": null,
       "msg": "成功"
     })
+  },
+  'POST /project/interact/goods/addCoupon': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/goods/updateCoupon': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": null,
+      "msg": "成功"
+    })
+  },
+  'POST /project/interact/goods/getToAddList': (req, res) => {
+    res.send({
+        "msg": "成功",
+        "code": 0,
+        "data": [
+          {
+          "id": "1111111",
+          "name": "怡宝款泉水",
+          "code": "10000222XXX",
+          "price": 0.99,
+          "sellerId": "111111",
+          "img": "111111",
+          "state": 0,
+          "remark": "0.99",
+          "createId": null,
+          "createTime": "2018-07-03 14:51:05",
+          "updateId": null,
+          "updateTime": "2018-07-03 14:51:05"
+        }, {
+          "id": "88511198f5214404beb1cd8a3a29359e",
+          "name": "来一桶shui",
+          "code": "10000222XXX",
+          "price": 0.99,
+          "sellerId": "111111",
+          "img": "111111",
+          "state": 0,
+          "remark": "0.99",
+          "createId": "",
+          "createTime": "2018-07-03 10:55:28",
+          "updateId": "",
+          "updateTime": "2018-07-03 10:55:28"
+        }],
+        "inno72Goods": {
+          "id": null,
+          "name": null,
+          "code": null,
+          "price": null,
+          "sellerId": null,
+          "img": null,
+          "state": 0,
+          "remark": null,
+          "createId": null,
+          "createTime": null,
+          "updateId": null,
+          "updateTime": null
+        }
+      })
   },
   'get /project/interact/next': (req, res) => {
     res.send({
@@ -5860,8 +5922,8 @@ const proxy = {
       "data": [
         {
           "id": "3",
-          "merchantCode": "2",
-          "merchantName": "天猫",
+          "sellerId": "2",
+          "sellerName": "天猫",
           "createId": "12",
           "updateId": null,
           "createTime": 1530499549000,

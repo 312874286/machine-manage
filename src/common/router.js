@@ -234,7 +234,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/BasicInteractSampling.js')),
     },
     '/project/addMerchantGoodsInteractSampling/:id': {
-      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MerchantGoodsInteractSampling.js')),
+      component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log', 'goods/goodsManage'], () => import('../routes/Project/InteractSamplingSteps/MerchantGoodsInteractSampling.js')),
     },
     '/project/addMachineInteractSampling/:id': {
       component: dynamicWrapper(app, ['project/interactSamplingSetting', 'log/log'], () => import('../routes/Project/InteractSamplingSteps/MachineInteractSampling.js')),

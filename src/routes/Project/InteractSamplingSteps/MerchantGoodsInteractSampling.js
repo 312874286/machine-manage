@@ -551,11 +551,11 @@ const CreateGoodsForm = Form.create()(
     const goodsListsColumns = [
       {
         title: "商品ID",
-        dataIndex: "goodId",
+        dataIndex: "id",
         width: '30%',
       }, {
         title: "商品名称",
-        dataIndex: "goodName",
+        dataIndex: "name",
         width: '20%',
       },
       {
@@ -575,11 +575,11 @@ const CreateGoodsForm = Form.create()(
     const selectedGoodsListsColumns = [
       {
         title: "商品ID",
-        dataIndex: "goodId",
+        dataIndex: "id",
         width: '30%',
       }, {
         title: "商品名称",
-        dataIndex: "goodName",
+        dataIndex: "name",
         width: '20%',
       },
       {
@@ -592,7 +592,8 @@ const CreateGoodsForm = Form.create()(
         render: (text, item) => (
           <Fragment>
             <a onClick={() => handleDeleteClick(item)}>移除</a>
-            <a onClick={() => handleDetailClick(item)}>编辑详情</a>
+            <Divider type="vertical" />
+            <a onClick={() => handleDetailClick(item, true)}>查看</a>
           </Fragment>
         ),
       }
@@ -840,7 +841,7 @@ const CreateGoodsForm = Form.create()(
                   <div>
                     <Table
                       rowKey={record => record.id}
-                      rowSelection={rowSelection}
+                      // rowSelection={rowSelection}
                       columns={goodsListsColumns}
                       dataSource={goodsLists}
                       id="leftTable"
@@ -871,7 +872,7 @@ const CreateGoodsForm = Form.create()(
                   <div>
                     <Table
                       rowKey={record => record.id}
-                      rowSelection={rowSelection}
+                      // rowSelection={rowSelection}
                       columns={selectedGoodsListsColumns}
                       dataSource={selectGoodsLists}
                       id="leftTable"
@@ -1015,10 +1016,55 @@ const VipForm = Form.create()(
     );
   });
 
-@connect(({ common, loading, interactSamplingSetting }) => ({
+const WatchGoodsForm = Form.create()(
+  (props) => {
+    const { modalWatchGoodsFormVisible, handleModalWatchGoodsFormVisible, goodDetail } = props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">商品详情</span>
+          </div>
+        }
+        visible={modalWatchGoodsFormVisible}
+        onCancel={() => handleModalWatchGoodsFormVisible(false)}
+        footer={null}>
+        <div className="manageAppBox">
+          <Form>
+            <FormItem {...formItemLayout} label="商品ID">
+              {goodDetail.id}
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品名称">
+              {goodDetail.name}
+            </FormItem>
+            <FormItem {...formItemLayout} label="商品售价">
+              {goodDetail.price}
+            </FormItem>
+            <FormItem {...formItemLayout} label="宣传图片">
+              <img src={goodDetail.img} style={{ width: 300 }}/>
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
+
+@connect(({ common, loading, interactSamplingSetting, goodsManage }) => ({
   common,
   interactSamplingSetting,
   loading: loading.models.interactSamplingSetting,
+  goodsManage,
 }))
 @Form.create()
 export default class areaSettingList extends PureComponent {
@@ -1099,6 +1145,8 @@ export default class areaSettingList extends PureComponent {
 
     goodsLists: [],
     selectGoodsLists: [],
+    modalWatchGoodsFormVisible: false,
+    goodDetail: {},
   };
   componentDidMount() {
     // console.log('this.props.params.id', this.props.match.params.id)
@@ -1393,6 +1441,7 @@ export default class areaSettingList extends PureComponent {
       checkShopLists: [],
       checkSelectedShopLists: [],
       shopId: item ? item.id : '',
+      selectGoodsLists: [],
     }, () => {
       this.setModalData();
       this.getAllGoods()
@@ -1401,11 +1450,12 @@ export default class areaSettingList extends PureComponent {
       if (!paiyangType) {
         if (item.sellerId) {
           await this.getInteractShopList(item.sellerId, item.id)
-          console.log('item', item.id, item.sellerId, this.state.shops)
+          console.log('item222', item.id, item.sellerId, this.state.shops)
           await this.form.setFieldsValue({
             sellerId: item.sellerId,
             shopId: item.id,
           });
+          this.getGoodsListsByShop(item.sellerId, item.id)
         }
       } else {
         if (item.id) {
@@ -1413,6 +1463,7 @@ export default class areaSettingList extends PureComponent {
             sellerId: item.id,
             shopId: item.id,
           });
+          this.getGoodsListsByShop(item.id)
         }
       }
     }
@@ -1623,7 +1674,7 @@ export default class areaSettingList extends PureComponent {
       duration: 2,
       maxCount: 1,
     });
-    const { GoodTypePlaceHolder, fileList, bannerfileList, selectedRows, relevanceCommodity, modalData, videoUrl } = this.state
+    const { selectGoodsLists, GoodTypePlaceHolder, fileList, bannerfileList, selectedRows, relevanceCommodity, modalData, videoUrl } = this.state
     this.form.validateFields((err, fieldsValue) => {
       if (fileList.length > 0) {
         this.form.setFieldsValue({
@@ -1633,27 +1684,18 @@ export default class areaSettingList extends PureComponent {
       if (err) {
         return;
       }
-      if (GoodTypePlaceHolder === 0 || !relevanceCommodity) {
-        if (fileList.length === 0) {
-          message.warn('请添加图片')
-          return;
-        }
-        if (!relevanceCommodity) {
-          if (bannerfileList.length === 0 && !videoUrl.url) {
-            message.warn('请添加宣传介绍')
-            return;
-          }
-        }
-        // console.log('fieldsValue.number', fieldsValue.number)
-        // if (fieldsValue.number.trim()) {
-        //   message.warn('请填写商品数量')
-        //   return;
-        // }
-        // if (fieldsValue.price.trim()) {
-        //   message.warn('请填写商品价格')
-        //   return;
-        // }
-      }
+      // if (GoodTypePlaceHolder === 0 || !relevanceCommodity) {
+      //   if (fileList.length === 0) {
+      //     message.warn('请添加图片')
+      //     return;
+      //   }
+      //   if (!relevanceCommodity) {
+      //     if (bannerfileList.length === 0 && !videoUrl.url) {
+      //       message.warn('请添加宣传介绍')
+      //       return;
+      //     }
+      //   }
+      // }
       let goodsList = []
       let params = {
         ...fieldsValue,
@@ -1675,11 +1717,23 @@ export default class areaSettingList extends PureComponent {
       this.setState({
         editModalConfirmLoading: true,
       });
-      // console.log('this.state.bannerfileList', this.state.bannerfileList, this.state.videoUrl.data)
+      // addCoupon console.log('this.state.bannerfileList', this.state.bannerfileList, this.state.videoUrl.data)
       let messageTxt = '添加'
       let url = 'interactSamplingSetting/goodsAdd';
+      if (fieldsValue.type === '1') {
+        url = 'interactSamplingSetting/addCoupon'
+      } else {
+        params = {
+          ...params,
+          goodsList: selectGoodsLists.map((item) => {
+            return {
+              goodsId: item.id
+            }
+          })
+        }
+      }
       if (modalData.id) {
-        url = 'interactSamplingSetting/updateGoods';
+        url = 'interactSamplingSetting/updateCoupon';
         messageTxt = '编辑'
         params = { ...params, id: modalData.id };
       }
@@ -1705,6 +1759,7 @@ export default class areaSettingList extends PureComponent {
             modalData: {},
             editModalConfirmLoading: false,
             GoodTypePlaceHolder: 0,
+            selectGoodsLists: [],
           });
           if (flag === 0) {
             this.setModalData()
@@ -1879,14 +1934,73 @@ export default class areaSettingList extends PureComponent {
     })
     //
   }
-  handleAddClick = () => {
+  getGoodsListsByShop = (sellerId, shopsId) => {
+    const { paiyangType, interactSampling } = this.state
+    let params = {
+      sellerId,
+      interactId: interactSampling
+    }
+    if (!paiyangType) {
+      params = {
+        ...params,
+        shopsId,
+      }
+    }
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getToAddList',
+      payload: {
+        params,
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          goodsLists: res.data,
+        })
+      }
+    })
+  }
+  handleAddClick = (item) => {
    // 添加
+    const { selectGoodsLists, goodsLists } = this.state
+    const index = goodsLists.findIndex(i => item.id === i.id);
+    goodsLists.splice(index, 1)
+    this.setState({
+      selectGoodsLists: selectGoodsLists.concat(item),
+    })
   }
-  handleDeleteClick = () => {
+  handleDeleteClick = (item) => {
    // 移除
+    const { selectGoodsLists, goodsLists } = this.state
+    const index = selectGoodsLists.findIndex(i => item.id === i.id);
+    selectGoodsLists.splice(index, 1)
+    this.setState({
+      goodsLists: goodsLists.concat(item)
+    })
   }
-  handleDetailClick = () => {
+  handleDetailClick = (item, flag) => {
    // 查看详情
+    if (flag) {
+      this.getGoodsSettingDetail(item, true)
+    } else {
+      this.setState({
+        modalWatchGoodsFormVisible: flag
+      })
+    }
+  }
+  getGoodsSettingDetail = (item, flag) => {
+    this.props.dispatch({
+      type: 'goodsManage/getGoodsSettingDetail',
+      payload: {
+        restParams: {
+          id: item.id,
+        },
+      },
+    }).then((res) => {
+      this.setState({
+        goodDetail: res,
+        modalWatchGoodsFormVisible: flag
+      })
+    });
   }
   // 商品结束
   // 店铺开始
@@ -2774,9 +2888,12 @@ export default class areaSettingList extends PureComponent {
           couponId={this.state.couponId}
 
           paiyangType={this.state.paiyangType}
+          goodsLists={this.state.goodsLists}
+          selectGoodsLists={this.state.selectGoodsLists}
           handleAddClick={this.handleAddClick}
           handleDeleteClick={this.handleDeleteClick}
           handleDetailClick={this.handleDetailClick}
+          handleModalWatchGoodsFormVisible={this.handleModalWatchGoodsFormVisible}
         />
         <FocusForm
           modalVisible={this.state.modalFocusFormVisible}
@@ -2792,6 +2909,12 @@ export default class areaSettingList extends PureComponent {
           handleAdd={this.handleVipFormAdd}
           handleModalVisible={this.handleVipFormModalVisible}
           editModalConfirmLoading={this.state.editVipFormModalConfirmLoading}
+        />
+
+        <WatchGoodsForm
+          modalWatchGoodsFormVisible={this.state.modalWatchGoodsFormVisible}
+          handleModalWatchGoodsFormVisible={this.handleDetailClick}
+          goodDetail={this.state.goodDetail}
         />
       </PageHeaderLayout>
     );

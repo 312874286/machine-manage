@@ -81,7 +81,11 @@ const api = map({
   // 第二步 商户商品信息
   merchantAdd: "/project/interact/merchant/add",
   shopsAdd: "/project/interact/shops/add",
-  goodsAdd: "/project/interact/goods/add",
+  goodsAdd: "/project/interact/goods/addGoods",
+  addCoupon: "/project/interact/goods/addGoods",
+  updateCoupon: "/project/interact/goods/updateCoupon",
+  getToAddList: "/project/interact/goods/getToAddList",
+
   interactNext: "/project/interact/next",
   updateGoods: "/project/interact/goods/update",
   updateMerchant: "/project/interact/merchant/update",

@@ -46,6 +46,11 @@ import {
   checkShops,
   getBaseDict,
   getGameRuleList,
+
+
+  addCoupon,
+  updateCoupon,
+  getToAddList,
 } from "../../services/project/interactSamplingSetting";
 
 export default {
@@ -122,6 +127,33 @@ export default {
       { call, put }
     ) {
       const response = yield call(goodsAdd, { params });
+      return response;
+    },
+    *addCoupon(
+      {
+        payload: { params }
+      },
+      { call, put }
+    ) {
+      const response = yield call(addCoupon, { params });
+      return response;
+    },
+    *updateCoupon(
+      {
+        payload: { params }
+      },
+      { call, put }
+    ) {
+      const response = yield call(updateCoupon, { params });
+      return response;
+    },
+    *getToAddList(
+      {
+        payload: { params }
+      },
+      { call, put }
+    ) {
+      const response = yield call(getToAddList, { params });
       return response;
     },
     *interactNext(
