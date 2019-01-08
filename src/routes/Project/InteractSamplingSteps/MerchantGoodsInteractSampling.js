@@ -758,66 +758,66 @@ const CreateGoodsForm = Form.create()(
                 display: GoodTypePlaceHolder === 1 && relevanceCommodity && sourceData.length === 0  ? '' : 'none'
               }}
             >该店铺中暂时无商品，请先添加商品。</div>
-            {/*<FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品图片' : '优惠券图片'} style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>*/}
-            {/*{getFieldDecorator('img', {*/}
-            {/*rules: [{ required: false, message: `请输入${GoodTypePlaceHolder === 0 ? '请上传商品图片' : '请上传优惠券图片'}` }],*/}
-            {/*valuePropName: 'filelist',*/}
-            {/*})(*/}
-            {/*<div className="clearfix">*/}
-            {/*<Upload*/}
-            {/*customRequest={(params) => { handleUpload(params, 2, 'fileList'); }}*/}
-            {/*listType="picture-card"*/}
-            {/*fileList={fileList}*/}
-            {/*onPreview={handlePreview}*/}
-            {/*onChange={handleChange}*/}
-            {/*accept="image/*">*/}
-            {/*{fileList.length > 1 ? null : uploadButton}*/}
-            {/*</Upload>*/}
-            {/*<Modal visible={previewVisible} footer={null} onCancel={handleCancel}>*/}
-            {/*<img alt="example" style={{ width: '100%' }} src={previewImage} />*/}
-            {/*</Modal>*/}
-            {/*</div>*/}
-            {/*)}*/}
-            {/*</FormItem>*/}
-            {/*<FormItem {...formItemLayout} label="宣传介绍（支持图片和视频)" style={{ display: GoodTypePlaceHolder === 0 || !relevanceCommodity ? '' : 'none' }}>*/}
-            {/*{getFieldDecorator('banner', {*/}
-            {/*rules: [{ required: false, message: '' }],*/}
-            {/*valuePropName: 'filelist',*/}
-            {/*})(*/}
-            {/*<div className="clearfix">*/}
-            {/*<Upload*/}
-            {/*customRequest={(params) => { handleUploadBanner(params, 2, 'bannerfileList'); }}*/}
-            {/*listType="picture-card"*/}
-            {/*fileList={bannerfileList}*/}
-            {/*onPreview={handlePreview}*/}
-            {/*beforeUpload={beforeUpload}*/}
-            {/*onChange={bannerHandleChange}*/}
-            {/*accept="image/*, video/*"*/}
-            {/*>*/}
-            {/*{bannerfileList.length > 1 ? null : uploadButton}*/}
-            {/*</Upload>*/}
-            {/*<video id="videos" controls="controls"*/}
-            {/*style={{ objectFit: 'fill', display:  videoUrl ? (videoUrl.url ? '' : 'none') : 'none', maxWidth: '600px', maxHeight: '500px'}}*/}
-            {/*playsInline=""*/}
-            {/*webkit-playsinline=""*/}
-            {/*x5-video-player-fullscreen="true"*/}
-            {/*x5-video-player-type="h5"*/}
-            {/*x5-video-orientation="portraint"*/}
-            {/*src={videoUrl ? videoUrl.url : ''}>*/}
-            {/*Your browser does not support the Video tag.*/}
-            {/*</video>*/}
-            {/*<Modal visible={previewVisible} footer={null} onCancel={handleCancel}>*/}
-            {/*<img alt="example" style={{ width: '100%', display:  bannerfileList.length > 0 ? '' : 'none'}} src={previewImage} />*/}
-            {/*</Modal>*/}
-            {/*</div>*/}
-            {/*)}*/}
-            {/*</FormItem>*/}
+            <FormItem {...formItemLayout} label={GoodTypePlaceHolder === 0 ? '商品图片' : '优惠券图片'} style={{ display: !relevanceCommodity ? '' : 'none' }}>
+            {getFieldDecorator('img', {
+            rules: [{ required: false, message: `请输入${GoodTypePlaceHolder === 0 ? '请上传商品图片' : '请上传优惠券图片'}` }],
+            valuePropName: 'filelist',
+            })(
+            <div className="clearfix">
+            <Upload
+            customRequest={(params) => { handleUpload(params, 2, 'fileList'); }}
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+            accept="image/*">
+            {fileList.length > 1 ? null : uploadButton}
+            </Upload>
+            <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+            </div>
+            )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="宣传介绍（支持图片和视频)" style={{ display: !relevanceCommodity ? '' : 'none' }}>
+            {getFieldDecorator('banner', {
+            rules: [{ required: false, message: '' }],
+            valuePropName: 'filelist',
+            })(
+            <div className="clearfix">
+            <Upload
+            customRequest={(params) => { handleUploadBanner(params, 2, 'bannerfileList'); }}
+            listType="picture-card"
+            fileList={bannerfileList}
+            onPreview={handlePreview}
+            beforeUpload={beforeUpload}
+            onChange={bannerHandleChange}
+            accept="image/*, video/*"
+            >
+            {bannerfileList.length > 1 ? null : uploadButton}
+            </Upload>
+            <video id="videos" controls="controls"
+            style={{ objectFit: 'fill', display:  videoUrl ? (videoUrl.url ? '' : 'none') : 'none', maxWidth: '600px', maxHeight: '500px'}}
+            playsInline=""
+            webkit-playsinline=""
+            x5-video-player-fullscreen="true"
+            x5-video-player-type="h5"
+            x5-video-orientation="portraint"
+            src={videoUrl ? videoUrl.url : ''}>
+            Your browser does not support the Video tag.
+            </video>
+            <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+            <img alt="example" style={{ width: '100%', display:  bannerfileList.length > 0 ? '' : 'none'}} src={previewImage} />
+            </Modal>
+            </div>
+            )}
+            </FormItem>
 
-            {/*<FormItem {...formItemLayout} label="商品数量" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>*/}
-            {/*{getFieldDecorator('number', {*/}
-            {/*rules: [{ required: false, message: '请输入商品数量' }],*/}
-            {/*})(<InputNumber placeholder="请输入商品数量" max={10000000} min={0}/>)}*/}
-            {/*</FormItem>*/}
+            <FormItem {...formItemLayout} label="优惠券数量" style={{ display: GoodTypePlaceHolder === 1 ? '' : 'none' }}>
+            {getFieldDecorator('number', {
+            rules: [{ required: false, message: '请输入优惠券数量' }],
+            })(<InputNumber placeholder="请输入优惠券数量" max={10000000} min={0}/>)}
+            </FormItem>
             {/*<FormItem {...formItemLayout} label="商品价格" style={{ display: GoodTypePlaceHolder === 0 ? '' : 'none' }}>*/}
             {/*{getFieldDecorator('price', {*/}
             {/*rules: [{ required: false, message: '请输入商品价格' }],*/}
