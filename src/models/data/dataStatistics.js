@@ -1,4 +1,4 @@
-import { templateDelete, templateExecute, templateInsert, templateUpdate, templateQuery, templateList, getActivityList, getUserInfo } from '../../services/data/dataStatistics';
+import { templateDelete, templateExecute, templateInsert, templateUpdate, templateQuery, templateList, getActivityList, getUserInfo, interactLists } from '../../services/data/dataStatistics';
 
 export default {
   namespace: 'dataStatistics',
@@ -38,6 +38,10 @@ export default {
     },
     *activityList({ payload: { restParams } }, { call }) {
       const response = yield call(getActivityList, { restParams });
+      return response.data;
+    },
+    *getInteractActivityList({ payload: { restParams } }, { call }) {
+      const response = yield call(interactLists, { restParams });
       return response.data;
     },
     *getUserInfo({}, { call }){

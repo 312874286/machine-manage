@@ -74,7 +74,7 @@ const api = map({
 
   // 互派活动
   interactLists:
-    "/project/interact/list?status={status}&keyword={keyword}&pageNo={pageNo}&orderBy={orderBy}",
+    "/project/interact/list?status={status}&keyword={keyword}&pageNo={pageNo}&orderBy={orderBy}&pageSize={pageSize}",
   interactAdd: "/project/interact/add",
   interactDetail: "/project/interact/detail",
   interactUpdate: "/project/interact/update",

@@ -1,5 +1,5 @@
 
-import { uploadFile, getProvinceCityAreaTradeArea, getUserArea } from '../../services/common';
+import { uploadFile, getProvinceCityAreaTradeArea, getUserArea, getChannelsList } from '../../services/common';
 
 export default {
   namespace: 'common',
@@ -106,6 +106,15 @@ export default {
         }
       }
       return arr;
+    },
+    *getChannelsList(
+      {
+        payload: { restParams }
+      },
+      { call }
+    ) {
+      const response = yield call(getChannelsList, { restParams });
+      return response;
     },
   },
   reducers: {

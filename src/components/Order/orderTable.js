@@ -2,7 +2,22 @@ import React, { PureComponent, Fragment } from 'react';
 import { Table, Alert, Divider, Popconfirm, Input, Button } from 'antd';
 import styles from './orderTable.less';
 import { orderStatusData, orderTypeData } from '../../common/config/order';
-
+const status = [
+  '新退款订单',
+  '退款中',
+  '退款成功',
+  '退款失败'
+]
+const orderStatus = {
+  10: '未支付',
+  20: '已支付',
+  30: '已完成',
+  40: '已退款',
+}
+const orderType = {
+  10: '点72订单',
+  20: '天猫订单',
+}
 // const status = [{ id: 0, name: '停用' }, { id: 1, name: '正常' }];
 export default class orderTable extends PureComponent {
   state = {
@@ -44,11 +59,12 @@ export default class orderTable extends PureComponent {
       data,
       page,
       loading,
-      unColumn
+      unColumn,
+      onDetailClick
     } = this.props;
     const columns = [
       {
-        title: '订单号',
+        title: '订单编号',
         dataIndex: 'orderNum',
         width: 200,
         key: 'orderNum'
@@ -58,18 +74,6 @@ export default class orderTable extends PureComponent {
         dataIndex: 'userId',
         width: 300,
         key: 'userId'
-      },
-      {
-        title: '用户姓名',
-        dataIndex: 'nickName',
-        width: 100,
-        key: 'nickName'
-      },
-      {
-        title: '店铺',
-        dataIndex: 'shopsName',
-        width: 100,
-        key: 'shopsName'
       },
       {
         title: '机器点位',
@@ -84,6 +88,12 @@ export default class orderTable extends PureComponent {
         key: 'machineCode'
       },
       {
+        title: '渠道名称',
+        dataIndex: 'channelName',
+        width: 100,
+        key: 'channelName'
+      },
+      {
         title: '活动名称',
         dataIndex: 'activityName',
         width: 100,
@@ -95,28 +105,28 @@ export default class orderTable extends PureComponent {
         width: 100,
         key: 'gameName'
       },
-      {
-        title: '是否掉货',
-        dataIndex: 'goodsStatus',
-        width: 100,
-        render: (value) => {
-          return value === 1 ? '已出货' : '未出货';
-        },
-        key: 'goodsStatus'
-      },
-      {
-        title: '商品名称',
-        dataIndex: 'orderGoodsList',
-        width: 200,
-        render: (value) => {
-          if (!value) return '';
-          const nameList = value.map((item) => {
-            return item.goodsName;
-          });
-          return nameList.join('、');
-        },
-        key: 'orderGoodsList'
-      },
+      // {
+      //   title: '是否掉货',
+      //   dataIndex: 'goodsStatus',
+      //   width: 100,
+      //   render: (value) => {
+      //     return value === 1 ? '已出货' : '未出货';
+      //   },
+      //   key: 'goodsStatus'
+      // },
+      // {
+      //   title: '商品名称',
+      //   dataIndex: 'orderGoodsList',
+      //   width: 200,
+      //   render: (value) => {
+      //     if (!value) return '';
+      //     const nameList = value.map((item) => {
+      //       return item.goodsName;
+      //     });
+      //     return nameList.join('、');
+      //   },
+      //   key: 'orderGoodsList'
+      // },
       // {
       //   title: '掉货数量',
       //   // dataIndex: 'orderGoodsList',
@@ -134,40 +144,56 @@ export default class orderTable extends PureComponent {
       // {
       //   title: '订单金额',
       //   dataIndex: 'orderPrice',
-      // },
+      // },orderStatus
       {
         title: '订单类型',
         dataIndex: 'orderType',
         width: 100,
-        key: 'orderType'
-      },
-      {
-        title: '支付状态',
-        dataIndex: 'payStatus',
-        width: 100,
+        key: 'orderType',
         render: (value) => {
-          if (value === '1') {
-            return '支付成功';
-          } else if (value === '0') {
-            return '支付失败';
+          if (value) {
+            return orderType[value] || value;
+          } else {
+            return '-';
           }
         },
-        key: 'payStatus'
       },
       {
-        title: '支付时间',
-        dataIndex: 'payTime',
-        width: 200,
-        key: 'payTime'
+        title: '订单状态',
+        dataIndex: 'orderStatus',
+        width: 100,
+        render: (value) => {
+          if (value) {
+            return orderStatus[value.toString()] || value;
+          } else {
+            return '-';
+          }
+        },
+        key: 'orderStatus'
       },
-      // {
-      //   title: '操作',
-      //   render: (text, item) => (
-      //     <Fragment>
-      //       <a onClick={() => onLogClick(item)}>日志</a>
-      //     </Fragment>
-      //   ),
-      // },
+      {
+        title: '退款状态',
+        dataIndex: 'refundStatus',
+        width: 100,
+        render: (value) => {
+          if (value && value >= 0) {
+            return status[value];
+          } else {
+            return '-';
+          }
+        },
+        key: 'refundStatus'
+      },
+      {
+        title: '操作',
+        width: 100,
+        fixed: "right",
+        render: (text, item) => (
+          <Fragment>
+            <a onClick={() => onDetailClick(item)}>查看详情</a>
+          </Fragment>
+        ),
+      }
     ];
     if (unColumn) {
       let leg = columns.length
@@ -224,7 +250,7 @@ export default class orderTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
-          scroll={{ x: 2300, y: (document.documentElement.offsetHeight || document.body.offsetHeight) - (68 + 62 + 24 + 53 + 100 + 30) }}
+          scroll={{ x: 1600, y: (document.documentElement.offsetHeight || document.body.offsetHeight) - (68 + 62 + 24 + 53 + 100 + 30) }}
           // showHeader={false}
         />
       </div>
