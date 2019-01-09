@@ -2674,7 +2674,7 @@ export default class areaSettingList extends PureComponent {
           key: 'operation',
           render: (text, item) => (
             <Fragment>
-              <a disabled={item.goodsType === 0 ? true : false} onClick={() => this.handleEditClick(item)}>修改</a>
+              <a disabled={item.type === 0 ? true : false} onClick={() => this.handleEditClick(item)}>修改</a>
               <Divider type="vertical"/>
               <a onClick={() => this.handleDelClick(item)}>删除</a>
             </Fragment>
