@@ -1212,12 +1212,12 @@ export default class goodsSettingList extends PureComponent {
             <a onClick={() => this.handleWatchClick(item)}>查看</a>
             <Divider type="vertical"/>
             <a onClick={() => this.handleEditClick(item)}>编辑</a>
-            <Divider type="vertical"/>
+            {/*<Divider type="vertical"/>*/}
             {/*<a onClick={() => this.handleLogClick(item)}>日志</a>*/}
             {/*<Divider type="vertical" />*/}
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">
-              <a className={styles.delete}>删除</a>
-            </Popconfirm>
+            {/*<Popconfirm title="确定要删除吗" onConfirm={() => this.handleDelClick(item)} okText="Yes" cancelText="No">*/}
+              {/*<a className={styles.delete}>删除</a>*/}
+            {/*</Popconfirm>*/}
           </Fragment>
         ),
       },
