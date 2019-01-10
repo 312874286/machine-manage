@@ -1,4 +1,4 @@
-import { getGoodsSettingList, getGoodsSettingDetail, getMerchantsList, getShopsList, getActivityList, saveGoodsSetting, editGoodsSetting, delGoodsSetting, goodsSelectTypeLists } from '../../services/goods/goodsSetting';
+import { getGoodsSettingList, getGoodsSettingDetail, getMerchantsList, getShopsList, getActivityList, saveGoodsSetting, editGoodsSetting, delGoodsSetting, goodsSelectTypeLists, checkGoodsName } from '../../services/goods/goodsSetting';
 
 export default {
   namespace: 'goodsManage',
@@ -46,6 +46,11 @@ export default {
     },
     *delGoodsSetting({ payload: { params } }, { call }) {
       const response = yield call(delGoodsSetting, { params });
+      return response;
+    },
+    *checkGoodsName({ payload: { params } }, { call }) {
+      const response = yield call(checkGoodsName, { params });
+      console.log('response', response)
       return response;
     },
   },

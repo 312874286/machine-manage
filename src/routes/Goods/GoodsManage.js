@@ -54,7 +54,7 @@ const CreateForm = Form.create()(
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, modalType,
       merchantLists, previewImage, handleUpload, previewVisible, fileList, handlePreview,
       handleChange, handleCancel, normFile, onSelect, shopsLists, bannerfileList, videoUrl, bannerHandleChange, handleUploadBanner,
-      options, onChange, verifyString, wechatChannel, getByteLen
+      options, onChange, verifyString, wechatChannel, getByteLen, verifyGoodsName, disabledCheckGoods, msg, msgGoodsId, modalData
     } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -85,8 +85,7 @@ const CreateForm = Form.create()(
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
-        width={800}
-      >
+        width={800}>
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="选择商户">
@@ -129,14 +128,22 @@ const CreateForm = Form.create()(
             <FormItem {...formItemLayout} label="商品ID">
               {getFieldDecorator('code', {
                 rules: [{ required: true, whitespace: true, message: '请输入商品ID' }],
-              })(modalType ? (<Input placeholder="请输入商品ID" disabled/>) : (<Input placeholder="请输入商品ID" />))}
+              })(modalType ? (
+                <Input placeholder="请输入商品ID" disabled />
+              ) : (
+                <Input placeholder="请输入商品ID" disabled={disabledCheckGoods} onBlur={() => verifyGoodsName('',0, 'goodId')} />
+              ))}
+              <label style={{position: 'absolute', width: '100px', right: '-120px', color: 'red', display: msg.msg !== '成功' ? '' : 'none' }}>{msgGoodsId.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="商品名称">
               {getFieldDecorator('name', {
-                rules: [{ required: true, whitespace: true, message: '请输入商品名称'},  {
-                  validator: getByteLen
+                rules: [{ required: true, whitespace: true, message: '请输入商品名称'}, {
+                  // validator: verifyGoodsName
                 }],
-              })(<Input placeholder="请输入商品名称" />)}
+              })(<Input placeholder="请输入商品名称"
+                        onBlur={() => verifyGoodsName(modalData.id ? modalData.id : '', 1, '')}
+                        disabled={disabledCheckGoods}/>)}
+              <label style={{position: 'absolute', width: '100px', right: '-120px', color: 'red', display: msg.msg !== '成功' ? '' : 'none' }}>{msg.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="品牌名称">
               {getFieldDecorator('brandName', {
@@ -365,7 +372,10 @@ export default class goodsSettingList extends PureComponent {
     account: {},
     options: [],
     typeCode: [],
-    wechatChannel: false
+    wechatChannel: false,
+    disabledCheckGoods: true,
+    msg: '',
+    msgGoodsId: '',
   };
   verifyString = (rule, value, callback) => {
     if (value && value.length < 2) {
@@ -373,6 +383,55 @@ export default class goodsSettingList extends PureComponent {
     } else {
       callback();
     }
+  }
+  verifyGoodsName = (id, type, flag) => {
+    this.checkIsExist(id, type, flag)
+  }
+  checkIsExist = (id, type, flag) => {
+     this.form.validateFields(['sellerId', 'name', 'code'], { force: true }, (err, values) => {
+       let value = ''
+       if (values.name || values.code) {
+         let len = 0;
+         value = (type === 0 ? values.code : values.name)
+         if (value) {
+           for (let i = 0; i < value.length; i++) {
+             let length = value.charCodeAt(i);
+             if(length >= 0 && length <= 128)
+             {
+               len += 1;
+             }
+             else
+             {
+               len += 2;
+             }
+           }
+           if(len > 50) {
+             return `长度为最大50位，其中中文算两个字符！`
+           }
+         }
+       } else {
+         return false
+       }
+       let params = {
+         code: value, sellerId: values.sellerId, type
+       }
+       this.props.dispatch({
+         type: 'goodsManage/checkGoodsName',
+         payload: {
+           params: id ? {...params, id} : params,
+         },
+       }).then((res) => {
+         if (flag === 'goodId') {
+           this.setState({
+             msgGoodsId: res
+           })
+         } else {
+           this.setState({
+             msg: res
+           })
+         }
+       })
+     });
   }
   componentDidMount() {
     this.getLists();
@@ -454,6 +513,9 @@ export default class goodsSettingList extends PureComponent {
   }
   onSelect = (value, option) => {
     console.log('option', option.props["data-channelCode"])
+    this.setState({
+      disabledCheckGoods: false
+    })
     if (option.props["data-channelCode"] === '002002') {
       this.setState({
         wechatChannel: false
@@ -669,6 +731,7 @@ export default class goodsSettingList extends PureComponent {
       modalVisible: !!flag,
       modalData: {},
       modalType: false,
+      disabledCheckGoods: true,
     });
     this.setModalData();
   };
@@ -699,6 +762,7 @@ export default class goodsSettingList extends PureComponent {
       modalVisible: true,
       modalData: item,
       modalType: true,
+      disabledCheckGoods: false,
     }, () => {
 
     });
@@ -1310,6 +1374,11 @@ export default class goodsSettingList extends PureComponent {
             verifyString={this.verifyString}
             wechatChannel={this.state.wechatChannel}
             getByteLen={this.getByteLen}
+            verifyGoodsName={this.verifyGoodsName}
+            disabledCheckGoods={this.state.disabledCheckGoods}
+            msg={this.state.msg}
+            msgGoodsId={this.state.msgGoodsId}
+            modalData={this.state.modalData}
           />
           <WatchForm
             modalData={this.state.modalData}

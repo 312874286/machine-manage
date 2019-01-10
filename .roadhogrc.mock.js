@@ -7602,6 +7602,15 @@ const proxy = {
       },
       "msg": "成功"
     })
+  },
+  'POST /goods/goods/isExist': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": {
+        false
+      },
+      "msg": "已存在"
+    })
   }
 };
 

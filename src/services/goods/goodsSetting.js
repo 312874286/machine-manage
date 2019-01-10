@@ -56,3 +56,9 @@ export async function delGoodsSetting({ params }) {
     body: stringify(params),
   });
 }
+
+export async function checkGoodsName({ params }) {
+  return fetch.post(api.checkGoodsName, {
+    body: stringify(params),
+  });
+}

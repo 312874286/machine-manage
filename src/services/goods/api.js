@@ -16,6 +16,8 @@ const api = map({
   goodsTypeLists: '/goods/type/list?pageNo={pageNo}&keyword={keyword}&code={code} ',
   addGoodsType: '/goods/type/add',
   editGoodsType: '/goods/type/update',
+
+  checkGoodsName: '/goods/goods/isExist'
 });
 
 export default api;
