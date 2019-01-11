@@ -133,7 +133,7 @@ const CreateForm = Form.create()(
               ) : (
                 <Input placeholder="请输入商品ID" disabled={disabledCheckGoods} onBlur={() => verifyGoodsName('',0, 'goodId')} />
               ))}
-              <label style={{position: 'absolute', width: '100px', right: '-120px', color: 'red'}}>{msgGoodsId.msg}</label>
+              <label style={{ position: 'absolute', width: '100px', left: '0px', color: 'red', top: '28px' }}>{msgGoodsId.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="商品名称">
               {getFieldDecorator('name', {
@@ -143,7 +143,7 @@ const CreateForm = Form.create()(
               })(<Input placeholder="请输入商品名称"
                         onBlur={() => verifyGoodsName(modalData.id ? modalData.id : '', 1, '')}
                         disabled={disabledCheckGoods}/>)}
-              <label style={{position: 'absolute', width: '100px', right: '-120px', color: 'red' }}>{msg.msg}</label>
+              <label style={{ position: 'absolute', width: '100px', left: '0px', color: 'red', top: '28px' }}>{msg.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="品牌名称">
               {getFieldDecorator('brandName', {
@@ -388,7 +388,7 @@ export default class goodsSettingList extends PureComponent {
     this.checkIsExist(id, type, flag)
   }
   checkIsExist = (id, type, flag) => {
-     this.form.validateFields(['sellerId', 'name', 'code'], { force: true }, (err, values) => {
+     this.form.validateFields(['sellerId', 'name', 'code'], (err, values) => {
        let value = ''
        if (values.name || values.code) {
          let len = 0;
@@ -408,29 +408,29 @@ export default class goodsSettingList extends PureComponent {
            if(len > 50) {
              return `长度为最大50位，其中中文算两个字符！`
            }
+           let params = {
+             code: value, sellerId: values.sellerId, type
+           }
+           this.props.dispatch({
+             type: 'goodsManage/checkGoodsName',
+             payload: {
+               params: id ? {...params, id} : params,
+             },
+           }).then((res) => {
+             if (type === 0) {
+               this.setState({
+                 msgGoodsId: res
+               })
+             } else {
+               this.setState({
+                 msg: res
+               })
+             }
+           })
          }
        } else {
          return false
        }
-       let params = {
-         code: value, sellerId: values.sellerId, type
-       }
-       this.props.dispatch({
-         type: 'goodsManage/checkGoodsName',
-         payload: {
-           params: id ? {...params, id} : params,
-         },
-       }).then((res) => {
-         if (flag === 'goodId') {
-           this.setState({
-             msgGoodsId: res
-           })
-         } else {
-           this.setState({
-             msg: res
-           })
-         }
-       })
      });
   }
   componentDidMount() {
@@ -732,6 +732,8 @@ export default class goodsSettingList extends PureComponent {
       modalData: {},
       modalType: false,
       disabledCheckGoods: true,
+      msg: '',
+      msgGoodsId: '',
     });
     this.setModalData();
   };
