@@ -133,7 +133,7 @@ const CreateForm = Form.create()(
               ) : (
                 <Input placeholder="请输入商品ID" disabled={disabledCheckGoods} onBlur={() => verifyGoodsName('',0, 'goodId')} />
               ))}
-              <label style={{ position: 'absolute', width: '100px', left: '0px', color: 'red', top: '28px' }}>{msgGoodsId.msg}</label>
+              <label style={{ position: 'absolute', left: '0px', color: 'red', top: '28px' }}>{msgGoodsId.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="商品名称">
               {getFieldDecorator('name', {
@@ -143,7 +143,7 @@ const CreateForm = Form.create()(
               })(<Input placeholder="请输入商品名称"
                         onBlur={() => verifyGoodsName(modalData.id ? modalData.id : '', 1, '')}
                         disabled={disabledCheckGoods}/>)}
-              <label style={{ position: 'absolute', width: '100px', left: '0px', color: 'red', top: '28px' }}>{msg.msg}</label>
+              <label style={{ position: 'absolute', left: '0px', color: 'red', top: '28px' }}>{msg.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="品牌名称">
               {getFieldDecorator('brandName', {
