@@ -487,17 +487,17 @@ const proxy = {
             "seq": 2,
             "parentName": null
           },
-          // {
-          //   "id": "a52",
-          //   "functionDepict": "城市补货统计",
-          //   "functionPath": "project",
-          //   "parentId": null,
-          //   "functionLevel": 1,
-          //   "functionIcon": "project",
-          //   "color": "",
-          //   "seq": 2,
-          //   "parentName": null
-          // },
+          {
+            "id": "a52",
+            "functionDepict": "城市补货统计",
+            "functionPath": "cityReplenishment",
+            "parentId": "a49",
+            "functionLevel": 2,
+            "functionIcon": null,
+            "color": "",
+            "seq": 2,
+            "parentName": null
+          },
           {
             "id": "4",
             "functionDepict": "项目管理",
@@ -7611,7 +7611,38 @@ const proxy = {
       },
       "msg": "已存在"
     })
-  }
+  },
+  'GET /supply/data/list': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [],
+      "msg": "已存在"
+    })
+  },
+  'GET /supply/data/detail': (req, res) => {
+    res.send({
+      "code": 0,
+      "data": [
+        {
+          "id": "5678",
+          "goodsNumId": "111111111111111",
+          "receiveCount": 0,
+          "supplyCount": 20,
+          "differCount": -20,
+          "createTime": "2019-01-14 16:00:17"
+        },
+        {
+          "id": "456789",
+          "goodsNumId": "111111111111111",
+          "receiveCount": 100,
+          "supplyCount": 0,
+          "differCount": 100,
+          "createTime": "2019-01-14 15:27:44"
+        }
+      ],
+      "msg": "成功"
+    })
+  },
 };
 
 // export default noProxy ? {
