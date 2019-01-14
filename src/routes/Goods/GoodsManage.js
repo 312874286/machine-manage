@@ -965,9 +965,6 @@ export default class goodsSettingList extends PureComponent {
       if (err) {
         return;
       }
-      if (msgGoodsId.msg !== '成功' || msg.msg !== '成功') {
-        return;
-      }
       let params = {
         ...fieldsValue,
       };
@@ -981,6 +978,10 @@ export default class goodsSettingList extends PureComponent {
         url = 'goodsManage/editGoodsSetting';
         messageTxt = '编辑'
         params = { ...params, id: modalData.id };
+      } else {
+        if (msgGoodsId.msg !== '成功' || msg.msg !== '成功') {
+          return;
+        }
       }
       if (fileList.length > 0) {
         params = { ...params, img: fileList[0].data };
