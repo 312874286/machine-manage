@@ -133,7 +133,7 @@ const CreateForm = Form.create()(
               ) : (
                 <Input placeholder="请输入商品ID" disabled={disabledCheckGoods} onBlur={() => verifyGoodsName('',0, 'goodId')} />
               ))}
-              <label style={{ position: 'absolute', left: '0px', color: 'red', top: '28px' }}>{msgGoodsId.msg}</label>
+              <label style={{ position: 'absolute', left: '0px', color: 'red', top: '28px', display: msgGoodsId.msg === '成功' ? 'none' : '' }}>{msgGoodsId.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="商品名称">
               {getFieldDecorator('name', {
@@ -143,7 +143,7 @@ const CreateForm = Form.create()(
               })(<Input placeholder="请输入商品名称"
                         onBlur={() => verifyGoodsName(modalData.id ? modalData.id : '', 1, '')}
                         disabled={disabledCheckGoods}/>)}
-              <label style={{ position: 'absolute', left: '0px', color: 'red', top: '28px' }}>{msg.msg}</label>
+              <label style={{ position: 'absolute', left: '0px', color: 'red', top: '28px', display: msg.msg === '成功' ? 'none' : '' }}>{msg.msg}</label>
             </FormItem>
             <FormItem {...formItemLayout} label="品牌名称">
               {getFieldDecorator('brandName', {
@@ -960,9 +960,12 @@ export default class goodsSettingList extends PureComponent {
   }
   // 编辑modal 确认事件
   handleAdd = () => {
-    const { typeCode, modalData, fileList, bannerfileList, videoUrl } = this.state
+    const { typeCode, modalData, fileList, bannerfileList, videoUrl, msgGoodsId, msg } = this.state
     this.form.validateFields((err, fieldsValue) => {
       if (err) {
+        return;
+      }
+      if (msgGoodsId.msg !== '成功' || msg.msg !== '成功') {
         return;
       }
       let params = {
