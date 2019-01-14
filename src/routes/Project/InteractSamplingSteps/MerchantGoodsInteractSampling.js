@@ -1452,6 +1452,8 @@ export default class areaSettingList extends PureComponent {
       shopId: item ? item.id : '',
       sellerShopId: item ? item.id : '',
       selectGoodsLists: [],
+
+      relevanceCommodity: true,
     }, () => {
       this.setModalData();
       this.getAllGoods()
