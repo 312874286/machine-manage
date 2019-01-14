@@ -55,8 +55,8 @@ const getValue = obj =>
 
 const machineStatus = ['未知', '已开机', '已初始化', '已通过测试', '已在点位', '', '', '', '', '合作中']
 const appStatus = ['未启动', '前台运行', '后台运行']
-const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}, {id: 5, name: '中吉日志'}]
-const teamworkLogOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
+const logOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}]
+const teamworkLogOptions = [{id: 1, name: '系统日志'}, {id: 2, name: '产品日志'}, {id: 3, name: '业务日志'}, {id: 5, name: '中吉日志'}]
 const TemperatureOptions = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 const pointTypeOptions = [{id: 0, name: '渠道机器 '}, {id: 1, name: '活动机器'}, {id: 2, name: '合作机器'}]
 const pointStatusOptions = [
