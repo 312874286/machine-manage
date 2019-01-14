@@ -969,9 +969,6 @@ export default class goodsSettingList extends PureComponent {
         ...fieldsValue,
       };
       console.log('fieldsValue', fieldsValue)
-      this.setState({
-        editModalConfirmLoading: true,
-      });
       let messageTxt = '添加'
       let url = 'goodsManage/saveGoodsSetting';
       if (modalData.id) {
@@ -983,6 +980,9 @@ export default class goodsSettingList extends PureComponent {
           return;
         }
       }
+      this.setState({
+        editModalConfirmLoading: true,
+      });
       if (fileList.length > 0) {
         params = { ...params, img: fileList[0].data };
       }
