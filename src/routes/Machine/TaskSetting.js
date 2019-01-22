@@ -14,7 +14,8 @@ import {
   Divider,
   Cascader,
   Alert,
-  Popconfirm
+  Popconfirm,
+  Radio
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TaskSetting.less'
@@ -26,6 +27,7 @@ import {getAccountMenus} from "../../utils/authority";
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const RadioGroup = Radio.Group;
 const taskTypeOptions = [{id: 1, name: '升级App'}, {id: 2, name: '卸载App'}, {id: 3, name: '合并货道'}, {id: 4, name: '拆分货道'}]
 const taskTypeLists = ['', '升级App', '卸载App', '合并货道', '拆分货道']
 const taskStatusOptions = [{id: 1, name: '未执行'}, {id: 2, name: '已执行'} ]
@@ -33,7 +35,8 @@ const taskStatus = ['未执行', '未执行', '已执行', '待执行']
 const doType = [{id: 1, name: 'socket'}, {id: 2, name: 'push'}]
 const doTypeLists = ['', 'socket', 'push']
 const doStatus = ['未执行', '成功', '失败']
-
+const upgradeOptions = [{id: 0, name: '是'}, {id: 1, name: '否'}]
+const upgrade = ['是', '否']
 const  TaskForm = Form.create()(
   (props) => {
     const {
@@ -201,6 +204,19 @@ const UpgradeAppForm = Form.create(
                 </Select>
               )}
             </FormItem>
+          <FormItem {...formItemLayout} label="强制执行">
+            {getFieldDecorator('isForce', {
+              rules: [{ required: true, message: '请选择是否强制执行' }],
+            })(
+              <RadioGroup placeholder="请选择是否强制执行">
+                {upgradeOptions.map((item) => {
+                  return (
+                    <Radio key={item.id} value={item.id} >{item.name}</Radio>
+                  );
+                })}
+              </RadioGroup>
+            )}
+          </FormItem>
       </Form>
     );
   });
@@ -269,6 +285,19 @@ const UnloadAppForm = Form.create(
                 );
               })}
             </Select>
+          )}
+        </FormItem>
+        <FormItem {...formItemLayout} label="强制执行">
+          {getFieldDecorator('isForce', {
+            rules: [{ required: true, message: '请选择是否强制执行' }],
+          })(
+            <RadioGroup placeholder="请选择是否强制执行">
+              {upgradeOptions.map((item) => {
+                return (
+                  <Radio key={item.id} value={item.id} >{item.name}</Radio>
+                );
+              })}
+            </RadioGroup>
           )}
         </FormItem>
       </Form>
@@ -591,11 +620,14 @@ const WatchUpgradeAppForm = Form.create()(
         {/*<FormItem {...formItemLayout} label="升级链接">*/}
           {/*<span>{modalData.appUrl}</span>*/}
         {/*</FormItem>*/}
-        <FormItem {...formItemLayout} label="执行时间">
-          <span>{modalData.doTime}</span>
-        </FormItem>
         <FormItem {...formItemLayout} label="执行方式">
           <span>{doTypeLists[modalData.doType]}</span>
+        </FormItem>
+        <FormItem {...formItemLayout} label="是否强制">
+          <span>{upgrade[modalData.isForce] || '-'}</span>
+        </FormItem>
+        <FormItem {...formItemLayout} label="执行时间">
+          <span>{modalData.doTime}</span>
         </FormItem>
         <FormItem {...formItemLayout} label="任务进度">
           <Table
@@ -633,11 +665,14 @@ const WatchUnloadAppForm = Form.create()(
         <FormItem {...formItemLayout} label="APP名称">
           <span>{modalData.appName}</span>
         </FormItem>
-        <FormItem {...formItemLayout} label="执行时间">
-          <span>{modalData.doTime}</span>
-        </FormItem>
         <FormItem {...formItemLayout} label="执行方式">
           <span>{doTypeLists[modalData.doType]}</span>
+        </FormItem>
+        <FormItem {...formItemLayout} label="是否强制">
+          <span>{upgrade[modalData.isForce] || '-'}</span>
+        </FormItem>
+        <FormItem {...formItemLayout} label="执行时间">
+          <span>{modalData.doTime}</span>
         </FormItem>
         <FormItem {...formItemLayout} label="任务进度">
           <Table
