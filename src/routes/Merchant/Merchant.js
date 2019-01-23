@@ -282,7 +282,7 @@ const ActivityMsgForm = Form.create()(
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="活动">
-              {getFieldDecorator('industryCode', {
+              {getFieldDecorator('activityId', {
                 rules: [{ required: true, whitespace: true, message: '请选择活动' }],
               })(
                 <Select placeholder="请选择" onChange={activityInfo}>
@@ -675,6 +675,9 @@ export default class merchant extends PureComponent {
   }
   activityMsgHandler = (item) => {
     // activityLists
+    this.ActivityMsgForm.setFieldsValue({
+      activityId: undefined
+    });
     this.setState({
       merchantId: item.merchantId,
     })
@@ -682,7 +685,7 @@ export default class merchant extends PureComponent {
       type: 'merchant/activityLists',
       payload: {
         restParams: {
-          merchantId:  '201811210009' || item.merchantId,
+          merchantId: item.merchantId,
         },
       },
     }).then((res) => {
@@ -695,6 +698,17 @@ export default class merchant extends PureComponent {
     this.setState({
       ActivityMsgModalVisible: true,
     });
+    this.ActivityMsgForm.setFieldsValue({
+      activityIndex1: undefined,
+      activityIndex2: undefined,
+      activityIndex3: undefined,
+    });
+    this.setState({
+      modalActivityData: {},
+      activityIndex1: false,
+      activityIndex2: false,
+      activityIndex3: false,
+    })
   }
   handleActivityMsgAdd = () => {
     const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3 } = this.state

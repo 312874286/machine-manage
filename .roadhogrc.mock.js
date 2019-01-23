@@ -7671,13 +7671,13 @@ const proxy = {
       }
     )
   },
-  'POST /inno72/activity/info/delete': (req, res) => {
+  'POST /inno72/activity/info/desc/delete': (req, res) => {
     res.send({
       "code":0,
       "data":null
     })
   },
-  'POST /inno72/activity/info/add': (req, res) => {
+  'POST /inno72/activity/info/desc/add': (req, res) => {
     res.send({
       "code":0,
       "data":null
