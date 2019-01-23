@@ -139,7 +139,17 @@ const ActivityMsgForm = Form.create()(
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 13 },
+        sm: { span: 15 },
+      },
+    };
+    const formItemLayout1 = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
       },
     };
     const modalColumns = [
@@ -217,7 +227,7 @@ const ActivityMsgForm = Form.create()(
         {/*<Col sm={24}>*/}
           {/*<span style={{ color: "rgba(0, 0, 0, 0.85)" }}>物流单{index + 1}</span>*/}
         {/*</Col>*/}
-        <Col offset={1} sm={24}>
+        <Col offset={0} sm={24}>
           <FormItem {...formItemLayout} label="类型">
             {getFieldDecorator(`infoType[${k}]`, {
               rules: [
@@ -281,6 +291,7 @@ const ActivityMsgForm = Form.create()(
         onCancel={() => handleModalVisible()}
         confirmLoading={editModalConfirmLoading}
         width={680}
+        className={styles.modal}
       >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
@@ -297,16 +308,16 @@ const ActivityMsgForm = Form.create()(
                 </Select>
               )}
             </FormItem>
-            <div>
+
               <FormItem {...formItemLayout} label="活动核心指标"></FormItem>
-              <div style={{ display: 'flex' }}>
-                <div style={{ marginTop: '10px', marginRight: '10px' }}>
+              <div style={{ display: 'flex' }} className={styles.index}>
+                <div style={{ marginTop: '10px', marginRight: '15px' }}>
                   <Checkbox
                     checked={activityIndex1}
                     onChange={handleActivityIndexChange1}>
                   </Checkbox>
                 </div>
-                <FormItem {...formItemLayout} label="参与人数">
+                <FormItem {...formItemLayout1} label="参与人数">
                   {getFieldDecorator('activityIndex1', {
                     rules: [{ required: activityIndex1, message: '请输入参与人数' }],
                   })(
@@ -317,14 +328,14 @@ const ActivityMsgForm = Form.create()(
                   )}
                 </FormItem>
               </div>
-              <div  style={{ display: 'flex' }}>
-                <div style={{ marginTop: '10px', marginRight: '10px' }}>
+              <div  style={{ display: 'flex' }} className={styles.index}>
+                <div style={{ marginTop: '10px', marginRight: '15px' }}>
                   <Checkbox
                     checked={activityIndex2}
                     onChange={handleActivityIndexChange2}>
                   </Checkbox>
                 </div>
-                <FormItem {...formItemLayout} label="商品订单数">
+                <FormItem {...formItemLayout1} label="商品订单数">
                   {getFieldDecorator('activityIndex2', {
                     rules: [{ required: activityIndex2, message: '请输入商品订单数' }],
                   })(
@@ -335,14 +346,14 @@ const ActivityMsgForm = Form.create()(
                   )}
                 </FormItem>
               </div>
-              <div  style={{ display: 'flex' }}>
-                <div style={{ marginTop: '10px', marginRight: '10px' }}>
+              <div  style={{ display: 'flex' }} className={styles.index}>
+                <div style={{ marginTop: '10px', marginRight: '15px' }}>
                   <Checkbox
                     checked={activityIndex3}
                     onChange={handleActivityIndexChange3}>
                   </Checkbox>
                 </div>
-                <FormItem {...formItemLayout} label="商品掉货数">
+                <FormItem {...formItemLayout1} label="商品掉货数">
                   {getFieldDecorator('activityIndex3', {
                     rules: [{ required: activityIndex3, message: '请输入商品掉货数' }],
                   })(
@@ -363,7 +374,7 @@ const ActivityMsgForm = Form.create()(
                 scroll={{ y: 500 }}
               />
               {formItems}
-            </div>
+
           </Form>
         </div>
       </Modal>
