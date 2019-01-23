@@ -837,7 +837,7 @@ export default class merchant extends PureComponent {
       type: 'merchant/deleteActivityInfo',
       payload: {
         params: {
-          id:  item.activityId,
+          id:  item.id,
         },
       },
     }).then((res) => {
