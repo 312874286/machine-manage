@@ -225,7 +225,8 @@ const ActivityMsgForm = Form.create()(
               ]
             })(
               <Select placeholder="请选择">
-                <Option value={1} key={1}>机器新增</Option>
+                <Option value={1} key={1}>新增</Option>
+                <Option value={2} key={2}>变更</Option>
               </Select>
             )}
           </FormItem>
