@@ -145,10 +145,10 @@ const ActivityMsgForm = Form.create()(
     const modalColumns = [
       {
         title: "操作",
-        dataIndex: "type",
-        key: "type",
+        dataIndex: "infoType",
+        key: "infoType",
         width: "20%",
-        render: (text, record) => <span style={{ color: "#666" }}>{text}</span>,
+        render: (text, record) => <span style={{ color: "#666" }}>{text === 1 ? '新增' : '变更'}</span>,
         align: "center",
       },
       {
@@ -279,7 +279,9 @@ const ActivityMsgForm = Form.create()(
         visible={modalVisible}
         onOk={handleAdd}
         onCancel={() => handleModalVisible()}
-        confirmLoading={editModalConfirmLoading}>
+        confirmLoading={editModalConfirmLoading}
+        width={680}
+      >
         <div className="manageAppBox">
           <Form onSubmit={this.handleSearch}>
             <FormItem {...formItemLayout} label="活动">
@@ -761,12 +763,15 @@ export default class merchant extends PureComponent {
     });
   }
   activityInfo = (value) => {
-    const { merchantId, activityId } = this.state
     if (value) {
       this.setState({
         activityId: value,
       })
     }
+    this.getDetail(0, value)
+  }
+  getDetail = (flag, value) => {
+    const { merchantId, activityId } = this.state
     this.props.dispatch({
       type: 'merchant/activityInfo',
       payload: {
@@ -777,28 +782,32 @@ export default class merchant extends PureComponent {
       },
     }).then((res) => {
       if (res && res.code === 0) {
-        let activityIndex1, activityIndex2, activityIndex3;
-        res.data.indexList.forEach((item) => {
-          if (item.activityIndexType === 1) {
-            activityIndex1 = item.activityIndex
-          }
-          if (item.activityIndexType === 2) {
-            activityIndex2 = item.activityIndex
-          }
-          if (item.activityIndexType === 3) {
-            activityIndex3 = item.activityIndex
-          }
-        })
-        this.ActivityMsgForm.setFieldsValue({
-          activityIndex1: activityIndex1 || undefined,
-          activityIndex2: activityIndex2 || undefined,
-          activityIndex3: activityIndex3 || undefined,
-        });
+        if (flag === 1) {
+          let activityIndex1, activityIndex2, activityIndex3;
+          res.data.indexList.forEach((item) => {
+            if (item.activityIndexType === 1) {
+              activityIndex1 = item.activityIndex
+            }
+            if (item.activityIndexType === 2) {
+              activityIndex2 = item.activityIndex
+            }
+            if (item.activityIndexType === 3) {
+              activityIndex3 = item.activityIndex
+            }
+          })
+          this.ActivityMsgForm.setFieldsValue({
+            activityIndex1: activityIndex1 || undefined,
+            activityIndex2: activityIndex2 || undefined,
+            activityIndex3: activityIndex3 || undefined,
+          });
+          this.setState({
+            activityIndex1: activityIndex1 ? true : false,
+            activityIndex2: activityIndex2 ? true : false,
+            activityIndex3: activityIndex3 ? true : false,
+          })
+        }
         this.setState({
           modalActivityData: res.data,
-          activityIndex1: activityIndex1 ? true : false,
-          activityIndex2: activityIndex2 ? true : false,
-          activityIndex3: activityIndex3 ? true : false,
         })
       }
     });
@@ -831,6 +840,8 @@ export default class merchant extends PureComponent {
           id:  item.activityId,
         },
       },
+    }).then((res) => {
+      this.getDetail(1);
     })
   }
   handleActivityIndexChange1 = (e) => {
