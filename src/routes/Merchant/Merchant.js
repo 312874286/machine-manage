@@ -796,13 +796,13 @@ export default class merchant extends PureComponent {
         if (flag === 1) {
           let activityIndex1, activityIndex2, activityIndex3;
           res.data.indexList.forEach((item) => {
-            if (item.activityIndexType === 1) {
+            if (parseInt(item.activityIndexType) === 1) {
               activityIndex1 = item.activityIndex
             }
-            if (item.activityIndexType === 2) {
+            if (parseInt(item.activityIndexType) === 2) {
               activityIndex2 = item.activityIndex
             }
-            if (item.activityIndexType === 3) {
+            if (parseInt(item.activityIndexType) === 3) {
               activityIndex3 = item.activityIndex
             }
           })
