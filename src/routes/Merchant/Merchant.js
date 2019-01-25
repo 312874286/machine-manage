@@ -766,7 +766,9 @@ export default class merchant extends PureComponent {
         },
       }).then((res) => {
         if (res && res.code === 0) {
-
+          this.setState({
+            ActivityMsgModalVisible: false,
+          });
         }
       });
       // deleteActivityInfo
