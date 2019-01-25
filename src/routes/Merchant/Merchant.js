@@ -129,7 +129,7 @@ const ActivityMsgForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, ActivityLists,
       activityIndex1, activityIndex2, activityIndex3, handleActivityIndexChange1, handleActivityIndexChange2, handleActivityIndexChange3,
-      activityInfo, modalActivityData, saveMsgLogs, handleDeleteClick
+      activityInfo, modalActivityData, saveMsgLogs, handleDeleteClick, getDetail
     } = props;
     const { getFieldDecorator, getFieldValue } = form;
     const formItemLayout = {
@@ -216,7 +216,7 @@ const ActivityMsgForm = Form.create()(
         form.setFieldsValue({
           keys: keys.filter(key => key !== k),
         });
-        activityInfo()
+        getDetail(0)
       }
     }
     getFieldDecorator("keys", { initialValue: [] });
@@ -1025,6 +1025,7 @@ export default class merchant extends PureComponent {
           handleActivityIndexChange2={this.handleActivityIndexChange2}
           handleActivityIndexChange3={this.handleActivityIndexChange3}
           activityInfo={this.activityInfo}
+          getDetail={this.getDetail}
           modalActivityData={this.state.modalActivityData}
           saveMsgLogs={this.saveMsgLogs}
           handleDeleteClick={this.handleDeleteClick}
