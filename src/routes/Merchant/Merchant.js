@@ -416,6 +416,7 @@ export default class merchant extends PureComponent {
     modalActivityData: {},
     activityId: '',
     merchantId: '',
+    id: '',
   };
   componentDidMount() {
     this.getLists();
@@ -725,13 +726,14 @@ export default class merchant extends PureComponent {
     })
   }
   handleActivityMsgAdd = () => {
-    const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3 } = this.state
+    const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3, id } = this.state
     this.ActivityMsgForm.validateFields((err, val) => {
       if (err) return;
       // addActivityInfo
       let arr = []
       if (activityIndex1) {
         arr = [{
+          id,
           merchantId,
           activityId,
           activityIndexType: 1,
@@ -740,6 +742,7 @@ export default class merchant extends PureComponent {
       }
       if (activityIndex2) {
         arr = [...arr, {
+          id,
           merchantId,
           activityId,
           activityIndexType: 2,
@@ -748,6 +751,7 @@ export default class merchant extends PureComponent {
       }
       if (activityIndex3) {
         arr = [...arr, {
+          id,
           merchantId,
           activityId,
           activityIndexType: 3,
@@ -779,7 +783,7 @@ export default class merchant extends PureComponent {
         activityId: value,
       })
     }
-    this.getDetail(0, value)
+    this.getDetail(1, value)
   }
   getDetail = (flag, value) => {
     const { merchantId, activityId } = this.state
@@ -819,6 +823,7 @@ export default class merchant extends PureComponent {
         }
         this.setState({
           modalActivityData: res.data,
+          id: res.data.id
         })
       }
     });
@@ -852,7 +857,7 @@ export default class merchant extends PureComponent {
         },
       },
     }).then((res) => {
-      this.getDetail(1);
+      this.getDetail(0);
     })
   }
   handleActivityIndexChange1 = (e) => {
