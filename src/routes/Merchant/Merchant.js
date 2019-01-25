@@ -726,37 +726,50 @@ export default class merchant extends PureComponent {
     })
   }
   handleActivityMsgAdd = () => {
-    const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3, id } = this.state
+    const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3, id, modalActivityData } = this.state
     this.ActivityMsgForm.validateFields((err, val) => {
       if (err) return;
       // addActivityInfo
       let arr = []
       if (activityIndex1) {
         arr = [{
-          id,
+          ...id,
           merchantId,
           activityId,
           activityIndexType: 1,
           activityIndex: val.activityIndex1
         }]
+        if (modalActivityData.length > 0) {
+          arr = [...arr, {
+            id: modalActivityData.filter((i) => i.activityIndexType === '1')[0].id
+          }]
+        }
       }
       if (activityIndex2) {
         arr = [...arr, {
-          id,
           merchantId,
           activityId,
           activityIndexType: 2,
           activityIndex: val.activityIndex2
         }]
+        if (modalActivityData.length > 0) {
+          arr = [...arr, {
+            id: modalActivityData.filter((i) => i.activityIndexType === '2')[0].id
+          }]
+        }
       }
       if (activityIndex3) {
         arr = [...arr, {
-          id,
           merchantId,
           activityId,
           activityIndexType: 3,
           activityIndex: val.activityIndex3
         }]
+        if (modalActivityData.length > 0) {
+          arr = [...arr, {
+            id: modalActivityData.filter((i) => i.activityIndexType === '3')[0].id
+          }]
+        }
       }
 
       this.props.dispatch({
@@ -824,7 +837,7 @@ export default class merchant extends PureComponent {
           })
         }
         this.setState({
-          modalActivityData: res.data,
+          modalActivityData: res.data || [],
           id: res.data.id
         })
       }
