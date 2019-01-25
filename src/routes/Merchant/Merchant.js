@@ -163,13 +163,13 @@ const ActivityMsgForm = Form.create()(
       },
       {
         title: "时间",
-        dataIndex: "time",
-        key: "time",
+        dataIndex: "infoDate",
+        key: "infoDate",
         width: "20%",
         align: "center",
         render: (text, record) => (
           <span style={{ color: "#666" }}>
-            {moment(text).format("YYYY-MM-DD")}
+            {text}
           </span>
         ),
       },
@@ -732,43 +732,51 @@ export default class merchant extends PureComponent {
       // addActivityInfo
       let arr = []
       if (activityIndex1) {
-        arr = [{
-          ...id,
+        let a = {
           merchantId,
           activityId,
           activityIndexType: 1,
           activityIndex: val.activityIndex1
-        }]
-        if (modalActivityData.length > 0) {
-          arr = [...arr, {
-            id: modalActivityData.filter((i) => i.activityIndexType === '1')[0].id
+        }
+        if (modalActivityData.indexList.length > 0) {
+          arr = [{
+            ...a,
+            id: modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0].id
           }]
+        } else {
+          arr = [a]
         }
       }
       if (activityIndex2) {
-        arr = [...arr, {
+        let a = {
           merchantId,
           activityId,
           activityIndexType: 2,
           activityIndex: val.activityIndex2
-        }]
-        if (modalActivityData.length > 0) {
+        }
+        if (modalActivityData.indexList.length > 0) {
           arr = [...arr, {
-            id: modalActivityData.filter((i) => i.activityIndexType === '2')[0].id
+            ...a,
+            id: modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0].id
           }]
+        } else {
+          arr = [...arr, a]
         }
       }
       if (activityIndex3) {
-        arr = [...arr, {
+        let a = {
           merchantId,
           activityId,
           activityIndexType: 3,
           activityIndex: val.activityIndex3
-        }]
-        if (modalActivityData.length > 0) {
+        }
+        if (modalActivityData.indexList.length > 0) {
           arr = [...arr, {
-            id: modalActivityData.filter((i) => i.activityIndexType === '3')[0].id
+            ...a,
+            id: modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0].id
           }]
+        } else {
+          arr = [...arr, a]
         }
       }
 
