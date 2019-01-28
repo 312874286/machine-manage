@@ -46,7 +46,7 @@ const api = map({
   getGameList: "/project/game/getList",
   getPlanMachineDetailList:
     "/project/activityPlan/planMachineDetailList?id={id}",
-  getGoodsList: "/project/goods/getList?shopId={shopId}",
+  getGoodsList: "/goods/goods/getList?shopId={shopId}",
   getDefaultActivity: "/project/activity/getDefaultActivity",
 
   getGameSettingList:
