@@ -278,6 +278,12 @@ const ActivityMsgForm = Form.create()(
         </Col>
       </Row>
     ));
+    const emptyForm = () => {
+      // can use data-binding to get
+      form.setFieldsValue({
+        keys: [],
+      });
+    }
     return (
       <Modal
         title={
@@ -691,8 +697,10 @@ export default class merchant extends PureComponent {
   activityMsgHandler = (item) => {
     // activityLists
     this.ActivityMsgForm.setFieldsValue({
-      activityId: undefined
+      activityId: undefined,
+      keys: []
     });
+    deliveryFormId = 0
     this.setState({
       merchantId: item.merchantId,
     })
