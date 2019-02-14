@@ -17,7 +17,10 @@ const api = map({
   addGoodsType: '/goods/type/add',
   editGoodsType: '/goods/type/update',
 
-  checkGoodsName: '/goods/goods/isExist'
+  checkGoodsName: '/goods/goods/isExist',
+
+  replenishList: '/supply/data/list?pageNo={pageNo}&keyword={keyword}',
+  replenishDetail: '/supply/data/detail?id={id}',
 });
 
 export default api;
