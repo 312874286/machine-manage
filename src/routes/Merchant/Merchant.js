@@ -129,7 +129,7 @@ const ActivityMsgForm = Form.create()(
   (props) => {
     const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, ActivityLists,
       activityIndex1, activityIndex2, activityIndex3, handleActivityIndexChange1, handleActivityIndexChange2, handleActivityIndexChange3,
-      activityInfo, modalActivityData, saveMsgLogs, handleDeleteClick, getDetail
+      activityInfo, modalActivityData, saveMsgLogs, handleDeleteClick, getDetail, activityDisabled
     } = props;
     const { getFieldDecorator, getFieldValue } = form;
     const formItemLayout = {
@@ -320,6 +320,7 @@ const ActivityMsgForm = Form.create()(
                 <div style={{ marginTop: '10px', marginRight: '15px' }}>
                   <Checkbox
                     checked={activityIndex1}
+                    disabled={activityDisabled}
                     onChange={handleActivityIndexChange1}>
                   </Checkbox>
                 </div>
@@ -337,6 +338,7 @@ const ActivityMsgForm = Form.create()(
               <div  style={{ display: 'flex' }} className={styles.index}>
                 <div style={{ marginTop: '10px', marginRight: '15px' }}>
                   <Checkbox
+                    disabled={activityDisabled}
                     checked={activityIndex2}
                     onChange={handleActivityIndexChange2}>
                   </Checkbox>
@@ -355,6 +357,7 @@ const ActivityMsgForm = Form.create()(
               <div  style={{ display: 'flex' }} className={styles.index}>
                 <div style={{ marginTop: '10px', marginRight: '15px' }}>
                   <Checkbox
+                    disabled={activityDisabled}
                     checked={activityIndex3}
                     onChange={handleActivityIndexChange3}>
                   </Checkbox>
@@ -423,6 +426,7 @@ export default class merchant extends PureComponent {
     activityId: '',
     merchantId: '',
     id: '',
+    activityDisabled: true,
   };
   componentDidMount() {
     this.getLists();
@@ -812,6 +816,7 @@ export default class merchant extends PureComponent {
     if (value) {
       this.setState({
         activityId: value,
+        activityDisabled: false,
       })
     }
     this.getDetail(1, value)
@@ -1058,6 +1063,7 @@ export default class merchant extends PureComponent {
           modalActivityData={this.state.modalActivityData}
           saveMsgLogs={this.saveMsgLogs}
           handleDeleteClick={this.handleDeleteClick}
+          activityDisabled={this.state.activityDisabled}
         />
       </PageHeaderLayout>
     );
