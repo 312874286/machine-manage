@@ -1764,6 +1764,14 @@ const proxy = {
             functionLevel: 2,
           },
           {
+            id: 'a36',
+            functionDepict: '数据报表',
+            functionPath: 'dataStatement',
+            parentId: 'a34',
+            functionLevel: 2,
+          },
+
+          {
             id: 'a42',
             functionDepict: '商户管理',
             functionPath: 'merchant',
