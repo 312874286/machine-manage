@@ -707,6 +707,7 @@ export default class merchant extends PureComponent {
     deliveryFormId = 0
     this.setState({
       merchantId: item.merchantId,
+      activityDisabled: true,
     })
     this.props.dispatch({
       type: 'merchant/activityLists',
