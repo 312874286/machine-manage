@@ -673,37 +673,63 @@ export default class DataStatistics extends PureComponent {
     const { modalVisible, editModalConfirmLoading, selectedRows, modalData } = this.state
     const columns = [
       {
-        title: '名称',
-        dataIndex: 'name',
-        width: '50%',
+        title: '时间',
+        dataIndex: 'time',
+        width: '10%',
       },
       {
-        title: '类型',
-        dataIndex: 'opType',
-        render(val) {
-          return <span>{opTypeLists[val]}</span>;
-        }
-      },{
-        fixed: 'right',
-        width: 150,
-        title: '操作',
-        render: (text, item) => {
-          let isCanEdit = true;
-          if(item.owner && getUser().userId !== item.owner){
-            isCanEdit = false
-          }
-          return (
-            <Fragment>
-              <a onClick={() => this.goOn(item)}>执行</a>
-              <Divider type="vertical"/>
-              <a onClick={() => this.edit(item)} style={{ display: isCanEdit ? '': 'none'}}>编辑</a>
-              <Divider type="vertical" style={{ display: isCanEdit ? '': 'none'}} />
-              <Popconfirm title="确定要删除吗" style={{ display: isCanEdit ? '': 'none'}} onConfirm={() => this.delete(item)} okText="Yes" cancelText="No">
-                <a style={{ display: isCanEdit ? '': 'none'}}>删除</a>
-              </Popconfirm>
-            </Fragment>
-          )},
+        title: '活动名称',
+        dataIndex: 'activityName',
+        width: '10%',
+      }, {
+        title: '地区',
+        dataIndex: 'name',
+        width: '10%',
       },
+      {
+        title: '点位信息',
+        dataIndex: 'opType',
+        width: '10%',
+      }, {
+        title: '机器编号',
+        dataIndex: 'name',
+        width: '7%',
+      },
+      {
+        title: '商户名称',
+        dataIndex: 'opType',
+        width: '8%',
+      }, {
+        title: '商品名称',
+        dataIndex: 'name',
+        width: '8%',
+      },
+      {
+        title: '客流量',
+        dataIndex: 'opType',
+        width: '5%',
+      }, {
+        title: '互动次数',
+        dataIndex: 'name',
+        width: '7%',
+      },
+      {
+        title: '互动人数',
+        dataIndex: 'opType',
+        width: '7%',
+      }, {
+        title: '订单数',
+        dataIndex: 'name',
+        width: '5%',
+      }, {
+        title: '掉货数',
+        dataIndex: 'name',
+        width: '5%',
+      }, {
+        title: '关注数',
+        dataIndex: 'name',
+        width: '5%',
+      }
     ];
     const formItemLayout = {
       labelCol: {
@@ -746,7 +772,7 @@ export default class DataStatistics extends PureComponent {
                 columns={columns}
                 pagination={false}
                 onChange={this.handleStandardTableChange}
-                scroll={{ x: scrollX ? scrollX : 1050, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}
+                scroll={{ x: scrollX ? scrollX : 1650, y: scrollY ? scrollY : (document.documentElement.clientHeight || document.body.clientHeight) - (68 + 62 + 24 + 34)}}
               />
             </div>
           </div>
