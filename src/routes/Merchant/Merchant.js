@@ -744,10 +744,13 @@ export default class merchant extends PureComponent {
       if (err) return;
       // addActivityInfo
       let arr = []
+<<<<<<< HEAD
       if (!activityIndex1 || !activityIndex2 || !activityIndex3) {
         message.error('当前页面无活动核心指标数据，不需要提交')
         return false
       }
+=======
+>>>>>>> c1246d9597eb56a0b84049ae9e4154079166305f
       if (activityIndex1) {
         let a = {
           merchantId,

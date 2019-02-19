@@ -7240,11 +7240,24 @@ const proxy = {
   'GET /inno72/merchant/user/list': (req, res) => {
     res.send({
       "code":0,
+      "page": {
+        "pageSize": 20,
+        "currentResult": 0,
+        "totalPage": 1,
+        "pageNo": 1,
+        "totalCount": 5,
+        "list": null,
+        "firstResult": 0,
+        "firstPage": true,
+        "lastPage": true,
+        "nextPage": 1,
+        "prePage": 1
+      },
       "data":[
         {
           "id":"",
           "loginName":"",
-          "merchantId":"",
+          "merchantId":"33333",
           "merchantName":"",
           "phone":"手机号",
           "industry":"行业",
@@ -7607,6 +7620,7 @@ const proxy = {
     res.send({
       "code": 0,
       "data": false,
+<<<<<<< HEAD
       "msg": "已存在"
     })
   },
@@ -7724,6 +7738,94 @@ const proxy = {
       "msg": "成功"
     })
   },
+=======
+      "msg": "已存在"
+    })
+  },
+  'GET /inno72/merchant/user/activity': (req, res) => {
+    res.send({
+      "code":0,
+      "data":[
+        {
+          "actId":"1",
+          "actName":"1"
+        },
+        {
+          "actId":"2",
+          "actName":"2"
+        },
+        {
+          "actId":"3",
+          "actName":"3"
+        }
+      ]
+    })
+  },
+  'GET /inno72/activity/index/activityInfo': (req, res) => {
+    res.send({
+        "code":0,
+        "data":{
+          "id": "1716b679157343ac967cb8fad32f211e",
+          "indexList":[
+            {
+              "activityId":"b04e41fbfa0c4bf19c4d2a2493cc0d6d",
+              "activityIndex":1000,
+              "activityIndexType":"1",
+              "activityName":"焕能举铁",
+              "id":"1",
+              "merchantId":"201812130002"
+            },
+            {
+              "activityId":"b04e41fbfa0c4bf19c4d2a2493cc0d6d",
+              "activityIndex":2000,
+              "activityIndexType":"2",
+              "activityName":"焕能举铁2",
+              "id":"2",
+              "merchantId":"201812130002"
+            },
+            {
+              "activityId":"b04e41fbfa0c4bf19c4d2a2493cc0d6d",
+              "activityIndex":3000,
+              "activityIndexType":"3",
+              "activityName":"焕能举铁1",
+              "id":"3",
+              "merchantId":"201812130002"
+            }
+          ],
+          "infoList":[
+            {
+              "activityId":"b04e41fbfa0c4bf19c4d2a2493cc0d6d",
+              "activityName":"焕能举铁",
+              "id":"8d36891e193411e98fa600163e06e859",
+              "infoDate":"2019-01-16",
+              "infoDesc":"新增 265 台机器",
+              "infoType":1,
+              "merchantId":"201812130002"
+            }
+          ]
+        }
+      }
+    )
+  },
+  'POST /inno72/activity/info/desc/delete': (req, res) => {
+    res.send({
+      "code":0,
+      "data":null
+    })
+  },
+  'POST /inno72/activity/info/desc/add': (req, res) => {
+    res.send({
+      "code":0,
+      "data":null
+    })
+  },
+  'POST /inno72/activity/index/saveIndex': (req, res) => {
+    res.send({
+      "code":0,
+      "data":null
+    })
+  }
+>>>>>>> c1246d9597eb56a0b84049ae9e4154079166305f
 };
 
 // export default noProxy ? {
