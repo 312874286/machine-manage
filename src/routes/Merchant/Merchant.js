@@ -778,7 +778,7 @@ export default class merchant extends PureComponent {
       if (modalActivityData.indexList.length > 0) {
         arr = [{
           ...a,
-          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0].id
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0] && modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0].id
         }]
       } else {
         arr = [a]
@@ -794,7 +794,7 @@ export default class merchant extends PureComponent {
       if (modalActivityData.indexList.length > 0) {
         arr = [...arr, {
           ...a,
-          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0].id
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0] && modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0].id
         }]
       } else {
         arr = [...arr, a]
@@ -810,7 +810,7 @@ export default class merchant extends PureComponent {
       if (modalActivityData.indexList.length > 0) {
         arr = [...arr, {
           ...a,
-          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0].id
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0] && modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0].id
         }]
       } else {
         arr = [...arr, a]
