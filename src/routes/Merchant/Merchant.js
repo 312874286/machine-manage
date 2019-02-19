@@ -24,6 +24,7 @@ import {
   Table,
   DatePicker,
 } from 'antd';
+const confirm = Modal.confirm;
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Merchant.less';
@@ -745,7 +746,19 @@ export default class merchant extends PureComponent {
       // addActivityInfo
       let arr = []
       if (!activityIndex1 || !activityIndex2 || !activityIndex3) {
-        message.error('当前页面无活动核心指标数据，不需要提交')
+        let that = this
+        confirm({
+          title: '提示',
+          content: '当前页面未保存指标，是否确认退出',
+          onOk() {
+            that.setState({
+              ActivityMsgModalVisible: false,
+            });
+          },
+          onCancel() {
+
+          },
+        });
         return false
       }
       if (activityIndex1) {
