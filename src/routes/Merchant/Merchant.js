@@ -745,7 +745,7 @@ export default class merchant extends PureComponent {
       if (err) return;
       // addActivityInfo
       let arr = []
-      if (!activityIndex1 || !activityIndex2 || !activityIndex3) {
+      if (!activityIndex1 && !activityIndex2 && !activityIndex3) {
         let that = this
         confirm({
           title: '提示',
