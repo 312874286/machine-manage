@@ -744,9 +744,8 @@ export default class merchant extends PureComponent {
     this.ActivityMsgForm.validateFields((err, val) => {
       if (err) return;
       // addActivityInfo
-      let arr = []
+      let that = this
       if (!activityIndex1 && !activityIndex2 && !activityIndex3) {
-        let that = this
         confirm({
           title: '提示',
           content: '当前页面未保存指标，是否确认退出',
@@ -754,74 +753,81 @@ export default class merchant extends PureComponent {
             // that.setState({
             //   ActivityMsgModalVisible: false,
             // });
-            if (activityIndex1) {
-              let a = {
-                merchantId,
-                activityId,
-                activityIndexType: 1,
-                activityIndex: val.activityIndex1
-              }
-              if (modalActivityData.indexList.length > 0) {
-                arr = [{
-                  ...a,
-                  id: modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0].id
-                }]
-              } else {
-                arr = [a]
-              }
-            }
-            if (activityIndex2) {
-              let a = {
-                merchantId,
-                activityId,
-                activityIndexType: 2,
-                activityIndex: val.activityIndex2
-              }
-              if (modalActivityData.indexList.length > 0) {
-                arr = [...arr, {
-                  ...a,
-                  id: modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0].id
-                }]
-              } else {
-                arr = [...arr, a]
-              }
-            }
-            if (activityIndex3) {
-              let a = {
-                merchantId,
-                activityId,
-                activityIndexType: 3,
-                activityIndex: val.activityIndex3
-              }
-              if (modalActivityData.indexList.length > 0) {
-                arr = [...arr, {
-                  ...a,
-                  id: modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0].id
-                }]
-              } else {
-                arr = [...arr, a]
-              }
-            }
-            that.props.dispatch({
-              type: 'merchant/saveIndex',
-              payload: {
-                params: arr,
-              },
-            }).then((res) => {
-              if (res && res.code === 0) {
-                that.setState({
-                  ActivityMsgModalVisible: false,
-                });
-              }
-            });
+            that.submitActivity(val)
           },
           onCancel() {
             return false
           },
         });
+      } else {
+        that.submitActivity(val)
       }
       // deleteActivityInfo
     })
+  }
+  submitActivity = (val) => {
+    const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3, id, modalActivityData } = this.state
+    let arr = []
+    if (activityIndex1) {
+      let a = {
+        merchantId,
+        activityId,
+        activityIndexType: 1,
+        activityIndex: val.activityIndex1
+      }
+      if (modalActivityData.indexList.length > 0) {
+        arr = [{
+          ...a,
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0].id
+        }]
+      } else {
+        arr = [a]
+      }
+    }
+    if (activityIndex2) {
+      let a = {
+        merchantId,
+        activityId,
+        activityIndexType: 2,
+        activityIndex: val.activityIndex2
+      }
+      if (modalActivityData.indexList.length > 0) {
+        arr = [...arr, {
+          ...a,
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0].id
+        }]
+      } else {
+        arr = [...arr, a]
+      }
+    }
+    if (activityIndex3) {
+      let a = {
+        merchantId,
+        activityId,
+        activityIndexType: 3,
+        activityIndex: val.activityIndex3
+      }
+      if (modalActivityData.indexList.length > 0) {
+        arr = [...arr, {
+          ...a,
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0].id
+        }]
+      } else {
+        arr = [...arr, a]
+      }
+    }
+    this.props.dispatch({
+      type: 'merchant/saveIndex',
+      payload: {
+        params: arr,
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          ActivityMsgModalVisible: false,
+        });
+      }
+    });
   }
   handleActivityMsgModalVisible = (flag) => {
     this.setState({
