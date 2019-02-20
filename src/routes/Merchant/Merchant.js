@@ -750,15 +750,16 @@ export default class merchant extends PureComponent {
           title: '提示',
           content: '当前页面未保存指标，是否确认退出',
           onOk() {
-            // that.setState({
-            //   ActivityMsgModalVisible: false,
-            // });
-            that.submitActivity(val)
+            that.setState({
+              ActivityMsgModalVisible: false,
+            });
+            // that.submitActivity(val)
           },
           onCancel() {
-            return false
+
           },
         });
+        return false
       } else {
         that.submitActivity(val)
       }
