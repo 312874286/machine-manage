@@ -381,7 +381,7 @@ const ActivityMsgForm = Form.create()(
                 columns={modalColumns}
                 dataSource={modalActivityData.infoList}
                 pagination={false}
-                scroll={{ y: 500 }}
+                scroll={{ y: 225 }}
               />
               {formItems}
 
