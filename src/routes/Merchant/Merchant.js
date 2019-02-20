@@ -919,7 +919,7 @@ export default class merchant extends PureComponent {
       this.getDetail(0);
     })
   }
-  deleteActivityTarget = async (activityIndexType, index) => {
+  deleteActivityTarget = async (activityIndexType) => {
     const { modalActivityData } = this.state
     let obj = 0
     if (modalActivityData) {
@@ -952,7 +952,7 @@ export default class merchant extends PureComponent {
   handleActivityIndexChange1 = (e) => {
     const { modalActivityData } = this.state
     if (!e.target.checked) {
-      const flag = this.deleteActivityTarget(1, 1)
+      const flag = this.deleteActivityTarget(1)
       Promise.resolve(flag).then((result) => {
         if (result && result.code === 0) {
           message.success('删除成功')
@@ -976,6 +976,25 @@ export default class merchant extends PureComponent {
     });
   }
   handleActivityIndexChange2 = (e) => {
+    const { modalActivityData } = this.state
+    if (!e.target.checked) {
+      const flag = this.deleteActivityTarget(2)
+      Promise.resolve(flag).then((result) => {
+        if (result && result.code === 0) {
+          message.success('删除成功')
+          let indexList = modalActivityData.indexList.filter(i => result.id !== i.id)
+          this.setState({
+            modalActivityData: {
+              ...modalActivityData,
+              indexList,
+            }
+          })
+        } else if (result !== 'done' && result !== 0) {
+          message.error('删除失败')
+          return false
+        }
+      })
+    }
     this.setState({
       activityIndex2: e.target.checked,
     }, () => {
@@ -983,6 +1002,25 @@ export default class merchant extends PureComponent {
     });
   }
   handleActivityIndexChange3 = (e) => {
+    const { modalActivityData } = this.state
+    if (!e.target.checked) {
+      const flag = this.deleteActivityTarget(3)
+      Promise.resolve(flag).then((result) => {
+        if (result && result.code === 0) {
+          message.success('删除成功')
+          let indexList = modalActivityData.indexList.filter(i => result.id !== i.id)
+          this.setState({
+            modalActivityData: {
+              ...modalActivityData,
+              indexList,
+            }
+          })
+        } else if (result !== 'done' && result !== 0) {
+          message.error('删除失败')
+          return false
+        }
+      })
+    }
     this.setState({
       activityIndex3: e.target.checked,
     }, () => {
