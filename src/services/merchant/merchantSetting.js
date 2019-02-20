@@ -81,3 +81,9 @@ export async function saveIndex({ params }) {
     body: JSON.stringify(params),
   });
 }
+
+export async function deleteActivityIndex({ params }) {
+  return fetch.post(api.deleteActivityIndex, {
+    body: stringify(params),
+  });
+}

@@ -918,7 +918,56 @@ export default class merchant extends PureComponent {
       this.getDetail(0);
     })
   }
+  deleteActivityTarget = async (activityIndexType, index) => {
+    const { modalActivityData } = this.state
+    let obj = 0
+    if (modalActivityData) {
+      const id = modalActivityData.indexList.filter(i => parseInt(i.activityIndexType) === parseInt(activityIndexType))[0].id
+      if (id) {
+        obj = await Promise.resolve(
+          this.deleteActivityTargetRequest(id)
+        )
+        obj = {
+          ...obj, id,
+        }
+      } else {
+        obj = 0
+      }
+    } else {
+      obj = 'done'
+    }
+    return obj
+  }
+  deleteActivityTargetRequest = (id) => {
+    return this.props.dispatch({
+      type: 'merchant/deleteActivityIndex',
+      payload: {
+        params: {
+          id,
+        },
+      },
+    })
+  }
   handleActivityIndexChange1 = (e) => {
+    const { modalActivityData } = this.state
+    if (!e.target.checked) {
+      const flag = this.deleteActivityTarget(1, 1)
+      Promise.resolve(flag).then((result) => {
+        if (result && result.code === 0) {
+          message.success('删除成功')
+          let indexList = modalActivityData.indexList.filter(i => result.id !== i.id)
+          this.setState({
+            modalActivityData: {
+              ...modalActivityData,
+              indexList,
+            }
+          })
+        } else if (result !== 'done' && result !== 0) {
+          message.error('删除失败')
+          return false
+        }
+      })
+    }
     this.setState({
       activityIndex1: e.target.checked,
     }, () => {

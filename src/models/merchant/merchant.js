@@ -1,7 +1,7 @@
 import { getMerchantList, getMerchantDetail,
   getChannelsList, saveMerchant, editMerchantSetting,
   getBaseDict, alterStatus, resetPwd, activityLists, activityInfo,
-  addActivityInfo, deleteActivityInfo, saveIndex
+  addActivityInfo, deleteActivityInfo, saveIndex, deleteActivityIndex
 } from '../../services/merchant/merchantSetting';
 
 export default {
@@ -67,6 +67,10 @@ export default {
     },
     *saveIndex({ payload: { params } }, { call }) {
       const response = yield call(saveIndex, { params });
+      return response;
+    },
+    *deleteActivityIndex({ payload: { params } }, { call }) {
+      const response = yield call(deleteActivityIndex, { params });
       return response;
     },
   },

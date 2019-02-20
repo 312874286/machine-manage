@@ -32,6 +32,8 @@ const api = map({
   addActivityInfo: '/inno72/activity/info/desc/add',
   deleteActivityInfo: '/inno72/activity/info/desc/delete',
   saveIndex: '/inno72/activity/index/saveIndex',
+
+  deleteActivityIndex: '/inno72/activity/index/delete',
 });
 
 
