@@ -155,7 +155,6 @@ class StandardTable extends PureComponent {
     // console.log('selectedRows', selectedPointRows)
     const paginationProps = {
       showTotal: (total) => {
-        // console.log(total, page)
         return (
           <div className="paginationBox">
             <span>当前显示{page.pageSize}条/页，共{page.total}条</span>

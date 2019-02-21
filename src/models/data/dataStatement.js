@@ -1,4 +1,4 @@
-import { templateDelete, templateExecute, templateInsert, templateUpdate, templateQuery, templateList, getActivityList, getUserInfo, interactLists } from '../../services/data/dataStatistics';
+import { getReportActivity, getActivitySearchParams } from '../../services/data/dataStatement';
 
 export default {
   namespace: 'dataStatement',
@@ -9,51 +9,31 @@ export default {
   },
 
   effects: {
-    *templateQuery({ payload: { restParams } }, { call, put }) {
-      const response = yield call(templateQuery, { restParams });
-      yield put({
-        type: 'saveList',
-        payload: response,
-      });
+    *getReportActivity({ payload: { restParams } }, { call, put }) {
+      const response = yield call(getReportActivity, { restParams });
+      if (response) {
+        yield put({
+          type: 'saveList',
+          payload: response,
+        });
+      }
     },
-    *templateList({ payload: { restParams } }, { call }) {
-      const response = yield call(templateList, { restParams });
+    *getActivitySearchParams({ payload: { params } }, { call }) {
+      const response = yield call(getActivitySearchParams, { params });
       return response
-    },
-    *templateDelete({ payload: { restParams } }, { call }) {
-      const response = yield call(templateDelete, { restParams });
-      return response;
-    },
-    *templateExecute({ payload: { restParams } }, { call }) {
-      const response = yield call(templateExecute, { restParams });
-      return response;
-    },
-    *templateInsert({ payload: { params } }, { call }) {
-      const response = yield call(templateInsert, { params });
-      return response;
-    },
-    *templateUpdate({ payload: { params } }, { call }) {
-      const response = yield call(templateUpdate, { params });
-      return response;
-    },
-    *activityList({ payload: { restParams } }, { call }) {
-      const response = yield call(getActivityList, { restParams });
-      return response.data;
-    },
-    *getInteractActivityList({ payload: { restParams } }, { call }) {
-      const response = yield call(interactLists, { restParams });
-      return response.data;
-    },
-    *getUserInfo({}, { call }){
-      const response = yield call(getUserInfo);
-      return response.data;
     },
   },
   reducers: {
     saveList(state, { payload: { data, page } }) {
       return {
         ...state,
-        list: data
+        list: data.list,
+        totalinfo: data.totalinfo,
+        page: {
+          total: page.totalCount,
+          pageSize: page.pageSize,
+          current: page.pageNo,
+        },
       };
     },
   },
