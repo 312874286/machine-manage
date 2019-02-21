@@ -168,7 +168,10 @@ export default class DataStatistics extends PureComponent {
       this.getSearch(fieldsValue.activityId ? fieldsValue.activityId : '', v ? v : '')
     });
   }
-
+  disabledDate(current) {
+    // Can not select days before today and today
+    return current && current > moment().endOf('day');
+  }
   renderAdvancedForm() {
     const { form } = this.props;
     const { activityLists, merchantLists, cityLists, goodsLists } = this.state
@@ -204,6 +207,7 @@ export default class DataStatistics extends PureComponent {
               {getFieldDecorator('rangeTime')(
                 <RangePicker
                   placeholder={['开始时间', '结束时间']}
+                  disabledDate={this.disabledDate}
                 />
               )}
             </FormItem>
@@ -339,10 +343,7 @@ export default class DataStatistics extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button>
-              <Button icon="export" type="primary" style={{marginLeft: 10}} onClick={() => this.handleSearch('', 0)}>
+              <Button icon="export" type="primary" onClick={() => this.handleSearch('', 0)}>
                 导出
               </Button>
             </div>
