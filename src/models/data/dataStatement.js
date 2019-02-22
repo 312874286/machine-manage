@@ -32,7 +32,14 @@ export default {
         page: {
           total: page.totalCount,
           pageSize: page.pageSize,
-          current: page.pageNo,
+          current: parseInt(page.pageNo),
+          currentResult: 0,
+          firstPage: false,
+          firstResult: 0,
+          lastPage: false,
+          nextPage: page.pageNo + 1,
+          prePage: page.pageNo,
+          totalPage: page.totalPage,
         },
       };
     },

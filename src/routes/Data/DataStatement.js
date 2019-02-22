@@ -161,8 +161,8 @@ export default class DataStatistics extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       this.setState({
-        startTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[0].format('YYYY-MM-DD') : '',
-        endTime: fieldsValue.rangeTime ? fieldsValue.rangeTime[1].format('YYYY-MM-DD') : '',
+        startTime: fieldsValue.rangeTime && fieldsValue.rangeTime.length > 0  ? fieldsValue.rangeTime[0].format('YYYY-MM-DD') : '',
+        endTime: fieldsValue.rangeTime && fieldsValue.rangeTime.length > 0 ? fieldsValue.rangeTime[1].format('YYYY-MM-DD') : '',
         activityId: fieldsValue.activityId ? fieldsValue.activityId : '',
         goodsId: fieldsValue.goodsId ? fieldsValue.goodsId : '',
         merchantId: fieldsValue.merchantId ? fieldsValue.merchantId : '',
