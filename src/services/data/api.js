@@ -12,7 +12,7 @@ const api = map({
   userInfo:'/extra/UserInfos',
   getActivityList: '/project/activity/getList',
 
-  getReportActivity: '/report/Activity?activityId={activityId}&goodsId={goodsId}&merchantId={merchantId}&city={city}&startTime={startTime}&endTime={endTime}&pageNo={pageNo}&pageSize=20&outputType={outputType}',
+  getReportActivity: '/report/Activity?activityId={activityId}&goodsId={goodsId}&merchantId={merchantId}&city={city}&startTime={startTime}&endTime={endTime}&pageNo={pageNo}&pageSize=20&outputType={outputType}&keyword={keyword}',
   getActivitySearchParams: '/report/ActivitySearchParams',
   getReportActivityExcel: '/report/Activity'
 });

@@ -46,6 +46,7 @@ export default class DataStatistics extends PureComponent {
     pageNo: 1,
     pageSize: 20,
     outputType: 1,
+    keyword: '',
 
     activityLists: [],
     merchantLists: [{
@@ -79,7 +80,10 @@ export default class DataStatistics extends PureComponent {
           activityLists: res.data.activity,
           merchantLists: activityId ? res.data.merchant : this.state.merchantLists,
           cityLists: res.data.city,
-          goodsLists: merchantId ? res.data.goods : this.state.goodsLists,
+          goodsLists: merchantId ? res.data.goods : [{
+            id: '',
+            name: '全部'
+          }],
         })
       }
     });
@@ -99,6 +103,7 @@ export default class DataStatistics extends PureComponent {
           pageNo: this.state.pageNo,
           pageSize: this.state.pageSize,
           outputType: this.state.outputType,
+          keyword: this.state.keyword,
         },
       },
     });
@@ -163,6 +168,7 @@ export default class DataStatistics extends PureComponent {
         merchantId: fieldsValue.merchantId ? fieldsValue.merchantId : '',
         city: fieldsValue.city ? fieldsValue.city : '',
         outputType: flag === 0 ? 0 : flag,
+        keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
       }, () => {
         this.getLists();
       });
@@ -170,6 +176,11 @@ export default class DataStatistics extends PureComponent {
   };
   changeMerchants = (v) => {
     this.getSearch(v ? v : '', '')
+    const { form } = this.props;
+    form.setFieldsValue({
+      goodsId: undefined,
+      merchantId: undefined,
+    });
   }
   changeGoods = (v) => {
     const { form } = this.props;
