@@ -44,7 +44,7 @@ export default class DataStatistics extends PureComponent {
     startTime: '',
     endTime: '',
     pageNo: 1,
-    pageSize: '',
+    pageSize: 20,
     outputType: 1,
 
     activityLists: [],
@@ -126,6 +126,7 @@ export default class DataStatistics extends PureComponent {
     // console.log('params', params)
     this.setState({
       pageNo: current,
+      outputType: 1,
     }, () => {
       this.getLists('');
     });
@@ -170,7 +171,7 @@ export default class DataStatistics extends PureComponent {
   }
   disabledDate(current) {
     // Can not select days before today and today
-    return current && current > moment().endOf('day');
+    return current && current > moment().endOf('day') - 1;
   }
   renderAdvancedForm() {
     const { form } = this.props;
