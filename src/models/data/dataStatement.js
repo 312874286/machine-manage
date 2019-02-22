@@ -28,7 +28,7 @@ export default {
       return {
         ...state,
         list: data.list,
-        totalinfo: data.totalinfo,
+        totalinfo: data.totalInfo,
         page: {
           total: page.totalCount,
           pageSize: page.pageSize,

@@ -16,7 +16,7 @@ import {
   message,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './DataStatistics.less'
+import styles from './DataStatement.less'
 import StandardTable from '../../components/StandardTable';
 import EditableTagGroup from '../../components/Tag';
 import {templateQuery} from "../../services/data/dataStatement";
@@ -293,7 +293,7 @@ export default class DataStatistics extends PureComponent {
   }
   render() {
     const {
-      dataStatement: { list, page },
+      dataStatement: { list, page, totalinfo },
       loading,
     } = this.props;
     const columns = [
@@ -369,6 +369,9 @@ export default class DataStatistics extends PureComponent {
               </Button>
             </div>
             <div className={styles.tableList}>
+              <div style={{margin: '10px 0'}}>
+                合计：<span className={styles.totalI}>客流量：</span>{totalinfo && totalinfo.vistor} <i className={styles.totalI}>互动次数：</i>{totalinfo && totalinfo.pv} <i className={styles.totalI}>互动人数：</i>{totalinfo && totalinfo.uv} <i className={styles.totalI}>订单数：</i>{totalinfo && totalinfo.orders} <i className={styles.totalI}>掉货数：</i>{totalinfo && totalinfo.shipment} <i className={styles.totalI}>关注数：</i>{totalinfo && totalinfo.follow}
+              </div>
               <StandardTable
                 loading={loading}
                 data={list}
