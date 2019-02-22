@@ -137,7 +137,16 @@ export default class DataStatistics extends PureComponent {
     form.resetFields();
     this.setState({
       formValues: {},
-      name: ''
+      name: '',
+      merchantLists: [{
+        id: '',
+        name: '全部'
+      }],
+      cityLists: [],
+      goodsLists: [{
+        id: '',
+        name: '全部'
+      }],
     });
   };
   // 搜索

@@ -66,6 +66,15 @@ class StandardTable extends PureComponent {
       No: e.target.value
     })
   }
+  itemRender(current, type, originalElement) {
+    console.log('current, type, originalElement', current, type, originalElement)
+    if (type === 'prev') {
+      return <a>Previous</a>;
+    } if (type === 'next') {
+      return <a>Next</a>;
+    }
+    return originalElement;
+  }
   render() {
     const { selectedRowKeys, totalCallNo, No } = this.state;
     const { data, page, loading, scrollX, columns, scrollY, selectedPointRows, showFooter } = this.props;
@@ -169,6 +178,8 @@ class StandardTable extends PureComponent {
         )
       },
       ...page,
+      // total: 500,
+      // itemRender: this.itemRender,
       showQuickJumper: true,
     };
     const rowSelection = {
