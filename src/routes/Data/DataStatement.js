@@ -169,6 +169,7 @@ export default class DataStatistics extends PureComponent {
         city: fieldsValue.city ? fieldsValue.city : '',
         outputType: flag === 0 ? 0 : flag,
         keyword: fieldsValue.keyword ? fieldsValue.keyword : '',
+        pageNo: 1,
       }, () => {
         this.getLists();
       });
