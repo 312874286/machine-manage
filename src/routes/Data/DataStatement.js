@@ -201,17 +201,17 @@ export default class DataStatistics extends PureComponent {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 1 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 20 },
+        sm: { span: 23 },
       },
     };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
-          <Col md={7} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label="选择活动">
               {getFieldDecorator('activityId', {
                 rules: [{ required: false, message: '请选择活动' }],
@@ -224,8 +224,8 @@ export default class DataStatistics extends PureComponent {
               </Select>)}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
-            <FormItem {...formItemLayout} label="时间">
+          <Col md={8} sm={24}>
+            <FormItem {...formItemLayout} label="选择时间">
               {getFieldDecorator('rangeTime')(
                 <RangePicker
                   placeholder={['开始时间', '结束时间']}
@@ -234,7 +234,7 @@ export default class DataStatistics extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem {...formItemLayout} label="选择地区">
               {getFieldDecorator('city', {
                 rules: [{ required: false, message: '请选择地区' }],
