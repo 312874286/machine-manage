@@ -79,7 +79,7 @@ export default class DataStatistics extends PureComponent {
         this.setState({
           activityLists: res.data.activity,
           merchantLists: activityId ? res.data.merchant : this.state.merchantLists,
-          cityLists: res.data.city,
+          cityLists: activityId ? res.data.city : res.data.city,
           goodsLists: merchantId ? res.data.goods : [{
             id: '',
             name: '全部'
@@ -181,6 +181,7 @@ export default class DataStatistics extends PureComponent {
     form.setFieldsValue({
       goodsId: undefined,
       merchantId: undefined,
+      city: undefined,
     });
   }
   changeGoods = (v) => {
