@@ -66,6 +66,15 @@ class StandardTable extends PureComponent {
       No: e.target.value
     })
   }
+  itemRender(current, type, originalElement) {
+    console.log('current, type, originalElement', current, type, originalElement)
+    if (type === 'prev') {
+      return <a>Previous</a>;
+    } if (type === 'next') {
+      return <a>Next</a>;
+    }
+    return originalElement;
+  }
   render() {
     const { selectedRowKeys, totalCallNo, No } = this.state;
     const { data, page, loading, scrollX, columns, scrollY, selectedPointRows, showFooter } = this.props;
@@ -155,7 +164,6 @@ class StandardTable extends PureComponent {
     // console.log('selectedRows', selectedPointRows)
     const paginationProps = {
       showTotal: (total) => {
-        // console.log(total, page)
         return (
           <div className="paginationBox">
             <span>当前显示{page.pageSize}条/页，共{page.total}条</span>
@@ -170,6 +178,8 @@ class StandardTable extends PureComponent {
         )
       },
       ...page,
+      // total: 500,
+      // itemRender: this.itemRender,
       showQuickJumper: true,
     };
     const rowSelection = {
