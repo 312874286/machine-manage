@@ -752,15 +752,8 @@ export default class troubleBill extends PureComponent {
 
   download = () => {
     // downloadCheckFault
-    // type: this.state.type,
-    //   startTime: this.state.startDateString,
-    //   endTime: this.state.endDateString,
-    //   keyword: this.state.userName,
-    //   status: this.state.statusValue,
-    //   pageNo: this.state.pageNo,
-    //   source: this.state.sourceValue,
     this.props.dispatch({
-      type: 'user/downloadCheckFault',
+      type: 'troubleBill/downloadCheckFault',
       payload: {
         type: this.state.type,
         startTime: this.state.startDateString,
