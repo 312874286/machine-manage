@@ -755,13 +755,15 @@ export default class troubleBill extends PureComponent {
     this.props.dispatch({
       type: 'troubleBill/downloadCheckFault',
       payload: {
-        type: this.state.type,
-        startTime: this.state.startDateString,
-        endTime: this.state.endDateString,
-        keyword: this.state.userName,
-        status: this.state.statusValue,
-        pageNo: this.state.pageNo,
-        source: this.state.sourceValue,
+        params: {
+          type: this.state.type,
+          startTime: this.state.startDateString,
+          endTime: this.state.endDateString,
+          keyword: this.state.userName,
+          status: this.state.statusValue,
+          pageNo: this.state.pageNo,
+          source: this.state.sourceValue,
+        },
       },
     }).then((res) => {
 
