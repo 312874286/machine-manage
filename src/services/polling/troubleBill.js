@@ -4,7 +4,8 @@ import api from './api';
 
 //downloadCheckFault
 export async function downloadCheckFault({ params }) {
-  window.location.href = `${api.downloadCheckFault}?type=${params.type}&startTime=${params.startTime}&endTime=${params.endTime}&keyword=${params.keyword}&keyword=${params.keyword}&status=${params.status}&pageNo=${params.pageNo}&source=${params.source}`;
+  console.log('params', params)
+  window.location.href = `${api.downloadCheckFault}?type=${params.type}&startTime=${params.startTime}&endTime=${params.endTime}&keyword=${params.keyword}&status=${params.status}&pageNo=${params.pageNo}&source=${params.source}`;
 }
 
 export async function getCheckFaultList({ params }) {

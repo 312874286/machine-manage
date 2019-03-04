@@ -760,9 +760,9 @@ export default class troubleBill extends PureComponent {
           startTime: this.state.startDateString,
           endTime: this.state.endDateString,
           keyword: this.state.userName,
-          status: this.state.statusValue,
+          status: this.state.statusValue ? this.state.statusValue : '',
           pageNo: this.state.pageNo,
-          source: this.state.sourceValue,
+          source: this.state.sourceValue ? this.state.sourceValue : '',
         },
       },
     }).then((res) => {
