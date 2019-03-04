@@ -2,6 +2,11 @@ import { stringify } from 'qs';
 import fetch from '../../utils/fetch';
 import api from './api';
 
+//downloadCheckFault
+export async function downloadCheckFault({ params }) {
+  window.location.href = `${api.downloadCheckFault}?type=${params.type}&startTime=${params.startTime}&endTime=${params.endTime}&keyword=${params.keyword}&keyword=${params.keyword}&status=${params.status}&pageNo=${params.pageNo}&source=${params.source}`;
+}
+
 export async function getCheckFaultList({ params }) {
   return fetch.post(api.getCheckFaultList, {
     body: stringify(params),

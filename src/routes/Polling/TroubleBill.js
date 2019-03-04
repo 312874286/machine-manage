@@ -15,7 +15,7 @@ const { RangePicker } = DatePicker;
 const workType = ['故障', '报警', '补货', '其他']
 const workTypeOption = [{id: 1, name: '故障'}, {id: 2, name: '报警'}, {id: 3, name: '补货'}, {id: 4, name: '其他'}]
 const source = ['巡检上报', '运营派单', '报警派单']
-const sourceOption = [{id: 1, name: '巡检上报'}, {id: 2, name: '运营派单'}, {id: 3, name: '报警派单'}]
+const sourceOption = [{id: 1, name: '巡检上报'}, {id: 2, name: '运营派单'}, {id: 3, name: '报警派单'}, {id: 4, name: '系统派单'}]
 const urgentStatusOption = [{id: 1, name: '日常'}, {id: 2, name: '紧急'}]
 const urgentStatus = ['日常', '紧急']
 const status = ['待接单', '处理中', '已完成', '已确认', '已关闭']
@@ -749,6 +749,31 @@ export default class troubleBill extends PureComponent {
       No: e.target.value
     })
   }
+
+  download = () => {
+    // downloadCheckFault
+    // type: this.state.type,
+    //   startTime: this.state.startDateString,
+    //   endTime: this.state.endDateString,
+    //   keyword: this.state.userName,
+    //   status: this.state.statusValue,
+    //   pageNo: this.state.pageNo,
+    //   source: this.state.sourceValue,
+    this.props.dispatch({
+      type: 'user/downloadCheckFault',
+      payload: {
+        type: this.state.type,
+        startTime: this.state.startDateString,
+        endTime: this.state.endDateString,
+        keyword: this.state.userName,
+        status: this.state.statusValue,
+        pageNo: this.state.pageNo,
+        source: this.state.sourceValue,
+      },
+    }).then((res) => {
+
+    });
+  }
   render() {
     const { seeVisible, replyVisible, seeData, currentRecord, textAreaVal, type, userName, startDateString, endDateString, previewVisible, previewImage, statusValue, sourceValue, getMachineUserList, userId, No, account } = this.state;
     const { troubleBill: { list, page, totalNo, unColumn } } = this.props;
@@ -984,6 +1009,9 @@ export default class troubleBill extends PureComponent {
                       onClick={() => this.handleModalVisible(true)}
                       style={{ display: !account.add ? 'none' : ''}}
               >派单</Button>
+              <Button icon="download" type="primary" style={{marginLeft: 10}}
+                      onClick={() => this.download(true)}
+              >下载</Button>
             </div>
             <div style={{ display: !account.list ? 'none' : ''}}>
               <Table
