@@ -1463,22 +1463,30 @@ export default class areaSettingList extends PureComponent {
         if (item.sellerId) {
           await this.getInteractShopList(item.sellerId, item.id)
           console.log('item222', item.id, item.sellerId, this.state.shops)
+          // await this.form.setFieldsValue({
+          //   sellerId: item.sellerId,
+          //   shopId: item.id,
+          // });
           await this.form.setFieldsValue({
-            sellerId: item.sellerId,
-            shopId: item.id,
+            sellerId: undefined,
+            shopId: undefined,
           });
           this.setState({
             sellerId: item.sellerId,
           })
-          this.getGoodsListsByShop(item.sellerId, item.id)
+          // this.getGoodsListsByShop(item.sellerId, item.id)
         }
       } else {
         if (item.id) {
+          // await this.form.setFieldsValue({
+          //   sellerId: item.id,
+          //   shopId: item.id,
+          // });
           await this.form.setFieldsValue({
-            sellerId: item.id,
-            shopId: item.id,
+            sellerId: undefined,
+            shopId: undefined,
           });
-          this.getGoodsListsByShop(item.id)
+          // this.getGoodsListsByShop(item.id)
         }
       }
     }
