@@ -1602,6 +1602,7 @@ export default class areaSettingList extends PureComponent {
       });
     } else {
       this.setState({
+        goodsLists: [],
         fileList: [],
         bannerfileList: [],
         videoUrl: {},
@@ -1896,7 +1897,6 @@ export default class areaSettingList extends PureComponent {
     });
   }
   onGoodTypeSelect = (value) => {
-    console.log('item33', this.state.shopId)
     this.getGoodsByShops(value, 'add')
     this.setState({
       GoodTypePlaceHolder: value,
