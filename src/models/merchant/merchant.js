@@ -1,6 +1,8 @@
 import { getMerchantList, getMerchantDetail,
   getChannelsList, saveMerchant, editMerchantSetting,
-  getBaseDict, alterStatus, resetPwd } from '../../services/merchant/merchantSetting';
+  getBaseDict, alterStatus, resetPwd, activityLists, activityInfo,
+  addActivityInfo, deleteActivityInfo, saveIndex, deleteActivityIndex
+} from '../../services/merchant/merchantSetting';
 
 export default {
   namespace: 'merchant',
@@ -45,6 +47,30 @@ export default {
     },
     *resetPwd({ payload: { params } }, { call }) {
       const response = yield call(resetPwd, { params });
+      return response;
+    },
+    *activityLists({ payload: { restParams } }, { call }) {
+      const response = yield call(activityLists, { restParams });
+      return response;
+    },
+    *activityInfo({ payload: { restParams } }, { call }) {
+      const response = yield call(activityInfo, { restParams });
+      return response;
+    },
+    *addActivityInfo({ payload: { params } }, { call }) {
+      const response = yield call(addActivityInfo, { params });
+      return response;
+    },
+    *deleteActivityInfo({ payload: { params } }, { call }) {
+      const response = yield call(deleteActivityInfo, { params });
+      return response;
+    },
+    *saveIndex({ payload: { params } }, { call }) {
+      const response = yield call(saveIndex, { params });
+      return response;
+    },
+    *deleteActivityIndex({ payload: { params } }, { call }) {
+      const response = yield call(deleteActivityIndex, { params });
       return response;
     },
   },

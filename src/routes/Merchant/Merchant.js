@@ -13,7 +13,6 @@ import {
   Dropdown,
   Menu,
   InputNumber,
-  DatePicker,
   Modal,
   message,
   Badge,
@@ -21,7 +20,11 @@ import {
   Cascader,
   Popconfirm,
   Radio,
+  Checkbox,
+  Table,
+  DatePicker,
 } from 'antd';
+const confirm = Modal.confirm;
 import StandardTable from '../../components/StandardTable/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Merchant.less';
@@ -122,6 +125,271 @@ const CreateForm = Form.create()(
       </Modal>
     );
   });
+let deliveryFormId = 0;
+const ActivityMsgForm = Form.create()(
+  (props) => {
+    const { modalVisible, form, handleAdd, handleModalVisible, editModalConfirmLoading, ActivityLists,
+      activityIndex1, activityIndex2, activityIndex3, handleActivityIndexChange1, handleActivityIndexChange2, handleActivityIndexChange3,
+      activityInfo, modalActivityData, saveMsgLogs, handleDeleteClick, getDetail, activityDisabled
+    } = props;
+    const { getFieldDecorator, getFieldValue } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 15 },
+      },
+    };
+    const formItemLayout1 = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    const modalColumns = [
+      {
+        title: "操作",
+        dataIndex: "infoType",
+        key: "infoType",
+        width: "20%",
+        render: (text, record) => <span style={{ color: "#666" }}>{text === 1 ? '新增' : '变更'}</span>,
+        align: "center",
+      },
+      {
+        title: "时间",
+        dataIndex: "infoDate",
+        key: "infoDate",
+        width: "20%",
+        align: "center",
+        render: (text, record) => (
+          <span style={{ color: "#666" }}>
+            {text}
+          </span>
+        ),
+      },
+      {
+        title: "操作描述",
+        dataIndex: "infoDesc",
+        key: "infoDesc",
+        align: "center",
+      },
+      {
+        title: "操作",
+        key: "edit",
+        align: "center",
+        render: (text, item) => (
+          <Fragment>
+            <a onClick={() => handleDeleteClick(item)}>删除</a>
+          </Fragment>
+        ),
+      },
+    ];
+    const add = () => {
+      form.validateFields((err, val) => {
+        if (!err) {
+          const keys = form.getFieldValue("keys");
+          const nextKeys = keys.concat(++deliveryFormId);
+          console.log(keys, nextKeys);
+          form.setFieldsValue({
+            keys: nextKeys
+          });
+        }
+      });
+    };
+    const remove = (k) => {
+      // can use data-binding to get
+      const keys = form.getFieldValue('keys');
+      form.setFieldsValue({
+        keys: keys.filter(key => key !== k),
+      });
+    }
+    const saveMsg = async (k) => {
+      const res = await saveMsgLogs(k)
+      if (res && res.code === 0) {
+        const keys = form.getFieldValue('keys');
+        form.setFieldsValue({
+          keys: keys.filter(key => key !== k),
+        });
+        getDetail(0)
+      }
+    }
+    getFieldDecorator("keys", { initialValue: [] });
+    const keys = getFieldValue("keys");
+
+    const formItems = keys.map((k, index) => (
+      <Row key={k} gutter={{ sm: 24 }}>
+        {/*<Col sm={24}>*/}
+          {/*<span style={{ color: "rgba(0, 0, 0, 0.85)" }}>物流单{index + 1}</span>*/}
+        {/*</Col>*/}
+        <Col offset={0} sm={24}>
+          <FormItem {...formItemLayout} label="类型">
+            {getFieldDecorator(`infoType[${k}]`, {
+              rules: [
+                { required: true, message: "请选择类型" }
+              ]
+            })(
+              <Select placeholder="请选择">
+                <Option value={1} key={1}>新增</Option>
+                <Option value={2} key={2}>变更</Option>
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="变更信息日期">
+            {getFieldDecorator(`infoDate[${k}]`, {
+              rules: [
+                { required: true, message: "请输入变更信息日期" }
+              ]
+            })(<DatePicker />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="描述">
+            {getFieldDecorator(`infoDesc[${k}]`, {
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: "请输入变更描述"
+                  // validator: (rule, value, callback) => {
+                  //   if (!/^[0-9]*$/.test(value)) {
+                  //     callback("请输入正确的商品数量");
+                  //   } else if (value === "") {
+                  //     callback("请输入商品数量");
+                  //   } else {
+                  //     callback();
+                  //   }
+                  // }
+                }
+              ]
+            })(
+              <div>
+                <Input placeholder="请输入描述" />
+              </div>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout}>
+            <button className={styles.buttonStyle} onClick={() => saveMsg(k)}>保存</button>
+            <button className={styles.buttonStyle} onClick={() => remove(k)}>删除</button>
+          </FormItem>
+        </Col>
+      </Row>
+    ));
+    const emptyForm = () => {
+      // can use data-binding to get
+      form.setFieldsValue({
+        keys: [],
+      });
+    }
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan"></span>
+            <span class="modalTitle">活动信息</span>
+          </div>
+        }
+        visible={modalVisible}
+        onOk={handleAdd}
+        onCancel={() => handleModalVisible()}
+        confirmLoading={editModalConfirmLoading}
+        width={680}
+        className={styles.modal}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout} label="活动">
+              {getFieldDecorator('activityId', {
+                rules: [{ required: true, whitespace: true, message: '请选择活动' }],
+              })(
+                <Select placeholder="请选择" onChange={activityInfo}>
+                  {ActivityLists.map((item) => {
+                    return (
+                      <Option value={item.actId} key={item.actId}>{item.actName}</Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+
+              <FormItem {...formItemLayout} label="活动核心指标"></FormItem>
+              <div style={{ display: 'flex' }} className={styles.index}>
+                <div style={{ marginTop: '10px', marginRight: '15px' }}>
+                  <Checkbox
+                    checked={activityIndex1}
+                    disabled={activityDisabled}
+                    onChange={handleActivityIndexChange1}>
+                  </Checkbox>
+                </div>
+                <FormItem {...formItemLayout1} label="参与人数">
+                  {getFieldDecorator('activityIndex1', {
+                    rules: [{ required: activityIndex1, message: '请输入参与人数' }],
+                  })(
+                    <InputNumber
+                      placeholder="请输入参与人数"
+                      disabled={!activityIndex1}
+                    />
+                  )}
+                </FormItem>
+              </div>
+              <div  style={{ display: 'flex' }} className={styles.index}>
+                <div style={{ marginTop: '10px', marginRight: '15px' }}>
+                  <Checkbox
+                    disabled={activityDisabled}
+                    checked={activityIndex2}
+                    onChange={handleActivityIndexChange2}>
+                  </Checkbox>
+                </div>
+                <FormItem {...formItemLayout1} label="商品订单数">
+                  {getFieldDecorator('activityIndex2', {
+                    rules: [{ required: activityIndex2, message: '请输入商品订单数' }],
+                  })(
+                    <InputNumber
+                      placeholder="请输入商品订单数"
+                      disabled={!activityIndex2}
+                    />
+                  )}
+                </FormItem>
+              </div>
+              <div  style={{ display: 'flex' }} className={styles.index}>
+                <div style={{ marginTop: '10px', marginRight: '15px' }}>
+                  <Checkbox
+                    disabled={activityDisabled}
+                    checked={activityIndex3}
+                    onChange={handleActivityIndexChange3}>
+                  </Checkbox>
+                </div>
+                <FormItem {...formItemLayout1} label="商品掉货数">
+                  {getFieldDecorator('activityIndex3', {
+                    rules: [{ required: activityIndex3, message: '请输入商品掉货数' }],
+                  })(
+                    <InputNumber
+                      placeholder="请输入商品掉货数"
+                      disabled={!activityIndex3}
+                    />
+                  )}
+                </FormItem>
+              </div>
+              <FormItem {...formItemLayout} label="活动信息变更">
+                <a onClick={add}>新增</a>
+              </FormItem>
+              <Table
+                columns={modalColumns}
+                dataSource={modalActivityData.infoList}
+                pagination={false}
+                scroll={{ y: 225 }}
+              />
+              {formItems}
+
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, merchant }) => ({
   common,
   merchant,
@@ -147,6 +415,19 @@ export default class merchant extends PureComponent {
 
     account: {},
     BaseDictLists: [],
+
+    ActivityMsgModalVisible: false,
+    editActivityMsgModalConfirmLoading: false,
+    ActivityLists: [],
+
+    activityIndex1: false,
+    activityIndex2: false,
+    activityIndex3: false,
+    modalActivityData: {},
+    activityId: '',
+    merchantId: '',
+    id: '',
+    activityDisabled: true,
   };
   componentDidMount() {
     this.getLists();
@@ -415,6 +696,337 @@ export default class merchant extends PureComponent {
       </Form>
     );
   }
+  saveActivityMsgFormRef = (form) => {
+    this.ActivityMsgForm = form;
+  }
+  activityMsgHandler = (item) => {
+    // activityLists
+    this.ActivityMsgForm.setFieldsValue({
+      activityId: undefined,
+      keys: []
+    });
+    deliveryFormId = 0
+    this.setState({
+      merchantId: item.merchantId,
+      activityDisabled: true,
+    })
+    this.props.dispatch({
+      type: 'merchant/activityLists',
+      payload: {
+        restParams: {
+          merchantId: item.merchantId,
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          ActivityLists: res.data
+        })
+      }
+    });
+    this.setState({
+      ActivityMsgModalVisible: true,
+    });
+    this.ActivityMsgForm.setFieldsValue({
+      activityIndex1: undefined,
+      activityIndex2: undefined,
+      activityIndex3: undefined,
+    });
+    this.setState({
+      modalActivityData: {},
+      activityIndex1: false,
+      activityIndex2: false,
+      activityIndex3: false,
+    })
+  }
+  handleActivityMsgAdd = () => {
+    const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3, id, modalActivityData } = this.state
+    this.ActivityMsgForm.validateFields((err, val) => {
+      if (err) return;
+      // addActivityInfo
+      let that = this
+      if (!activityIndex1 && !activityIndex2 && !activityIndex3) {
+        confirm({
+          title: '提示',
+          content: '当前页面未保存指标，是否确认退出',
+          onOk() {
+            that.setState({
+              ActivityMsgModalVisible: false,
+            });
+            // that.submitActivity(val)
+          },
+          onCancel() {
+
+          },
+        });
+        return false
+      } else {
+        that.submitActivity(val)
+      }
+      // deleteActivityInfo
+    })
+  }
+  submitActivity = (val) => {
+    const { merchantId, activityId, activityIndex1, activityIndex2, activityIndex3, id, modalActivityData } = this.state
+    let arr = []
+    if (activityIndex1) {
+      let a = {
+        merchantId,
+        activityId,
+        activityIndexType: 1,
+        activityIndex: val.activityIndex1
+      }
+      if (modalActivityData.indexList.length > 0) {
+        arr = [{
+          ...a,
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0] && modalActivityData.indexList.filter((i) => i.activityIndexType === '1')[0].id
+        }]
+      } else {
+        arr = [a]
+      }
+    }
+    if (activityIndex2) {
+      let a = {
+        merchantId,
+        activityId,
+        activityIndexType: 2,
+        activityIndex: val.activityIndex2
+      }
+      if (modalActivityData.indexList.length > 0) {
+        arr = [...arr, {
+          ...a,
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0] && modalActivityData.indexList.filter((i) => i.activityIndexType === '2')[0].id
+        }]
+      } else {
+        arr = [...arr, a]
+      }
+    }
+    if (activityIndex3) {
+      let a = {
+        merchantId,
+        activityId,
+        activityIndexType: 3,
+        activityIndex: val.activityIndex3
+      }
+      if (modalActivityData.indexList.length > 0) {
+        arr = [...arr, {
+          ...a,
+          id: modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0] && modalActivityData.indexList.filter((i) => i.activityIndexType === '3')[0].id
+        }]
+      } else {
+        arr = [...arr, a]
+      }
+    }
+    this.props.dispatch({
+      type: 'merchant/saveIndex',
+      payload: {
+        params: arr,
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          ActivityMsgModalVisible: false,
+        });
+      }
+    });
+  }
+  handleActivityMsgModalVisible = (flag) => {
+    this.setState({
+      ActivityMsgModalVisible: !!flag,
+    });
+  }
+  activityInfo = (value) => {
+    if (value) {
+      this.setState({
+        activityId: value,
+        activityDisabled: false,
+      })
+    }
+    this.getDetail(1, value)
+  }
+  getDetail = (flag, value) => {
+    const { merchantId, activityId } = this.state
+    this.props.dispatch({
+      type: 'merchant/activityInfo',
+      payload: {
+        restParams: {
+          merchantId:  merchantId,
+          activityId: value || activityId
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        if (flag === 1) {
+          let activityIndex1, activityIndex2, activityIndex3;
+          res.data.indexList.forEach((item) => {
+            if (parseInt(item.activityIndexType) === 1) {
+              activityIndex1 = item.activityIndex
+            }
+            if (parseInt(item.activityIndexType) === 2) {
+              activityIndex2 = item.activityIndex
+            }
+            if (parseInt(item.activityIndexType) === 3) {
+              activityIndex3 = item.activityIndex
+            }
+          })
+          this.ActivityMsgForm.setFieldsValue({
+            activityIndex1: activityIndex1 || undefined,
+            activityIndex2: activityIndex2 || undefined,
+            activityIndex3: activityIndex3 || undefined,
+          });
+          this.setState({
+            activityIndex1: activityIndex1 ? true : false,
+            activityIndex2: activityIndex2 ? true : false,
+            activityIndex3: activityIndex3 ? true : false,
+          })
+        }
+        this.setState({
+          modalActivityData: res.data || [],
+          id: res.data.id
+        })
+      }
+    });
+  }
+  saveMsgLogs = async (index) => {
+    const { merchantId, activityId } = this.state
+    let vals = {}
+    await this.ActivityMsgForm.validateFields((err, val) => {
+      if (err) return;
+      vals = val
+    })
+    return await this.props.dispatch({
+      type: 'merchant/addActivityInfo',
+      payload: {
+        params: {
+          merchantId:  merchantId,
+          activityId,
+          infoType: vals.infoType[index],
+          infoDate: vals.infoDate[index].format('YYYY-MM-DD'),
+          infoDesc: vals.infoDesc[index]
+        },
+      },
+    })
+  }
+  handleDeleteClick = (item) => {
+    this.props.dispatch({
+      type: 'merchant/deleteActivityInfo',
+      payload: {
+        params: {
+          id:  item.id,
+        },
+      },
+    }).then((res) => {
+      this.getDetail(0);
+    })
+  }
+  deleteActivityTarget = async (activityIndexType) => {
+    const { modalActivityData } = this.state
+    let obj = 0
+    if (modalActivityData) {
+      const id = modalActivityData.indexList.filter(i => parseInt(i.activityIndexType) === parseInt(activityIndexType))[0].id
+      if (id) {
+        obj = await Promise.resolve(
+          this.deleteActivityTargetRequest(id)
+        )
+        obj = {
+          ...obj, id,
+        }
+      } else {
+        obj = 0
+      }
+    } else {
+      obj = 'done'
+    }
+    return obj
+  }
+  deleteActivityTargetRequest = (id) => {
+    return this.props.dispatch({
+      type: 'merchant/deleteActivityIndex',
+      payload: {
+        params: {
+          id,
+        },
+      },
+    })
+  }
+  handleActivityIndexChange1 = (e) => {
+    const { modalActivityData } = this.state
+    if (!e.target.checked) {
+      const flag = this.deleteActivityTarget(1)
+      Promise.resolve(flag).then((result) => {
+        if (result && result.code === 0) {
+          message.success('删除成功')
+          let indexList = modalActivityData.indexList.filter(i => result.id !== i.id)
+          this.setState({
+            modalActivityData: {
+              ...modalActivityData,
+              indexList,
+            }
+          })
+        } else if (result !== 'done' && result !== 0) {
+          message.error('删除失败')
+          return false
+        }
+      })
+    }
+    this.setState({
+      activityIndex1: e.target.checked,
+    }, () => {
+      this.ActivityMsgForm.validateFields(['activityIndex1'], { force: true });
+    });
+  }
+  handleActivityIndexChange2 = (e) => {
+    const { modalActivityData } = this.state
+    if (!e.target.checked) {
+      const flag = this.deleteActivityTarget(2)
+      Promise.resolve(flag).then((result) => {
+        if (result && result.code === 0) {
+          message.success('删除成功')
+          let indexList = modalActivityData.indexList.filter(i => result.id !== i.id)
+          this.setState({
+            modalActivityData: {
+              ...modalActivityData,
+              indexList,
+            }
+          })
+        } else if (result !== 'done' && result !== 0) {
+          message.error('删除失败')
+          return false
+        }
+      })
+    }
+    this.setState({
+      activityIndex2: e.target.checked,
+    }, () => {
+      this.ActivityMsgForm.validateFields(['activityIndex2'], { force: true });
+    });
+  }
+  handleActivityIndexChange3 = (e) => {
+    const { modalActivityData } = this.state
+    if (!e.target.checked) {
+      const flag = this.deleteActivityTarget(3)
+      Promise.resolve(flag).then((result) => {
+        if (result && result.code === 0) {
+          message.success('删除成功')
+          let indexList = modalActivityData.indexList.filter(i => result.id !== i.id)
+          this.setState({
+            modalActivityData: {
+              ...modalActivityData,
+              indexList,
+            }
+          })
+        } else if (result !== 'done' && result !== 0) {
+          message.error('删除失败')
+          return false
+        }
+      })
+    }
+    this.setState({
+      activityIndex3: e.target.checked,
+    }, () => {
+      this.ActivityMsgForm.validateFields(['activityIndex3'], { force: true });
+    });
+  }
   render() {
     const {
       merchant: { list, page, unColumn },
@@ -453,7 +1065,7 @@ export default class merchant extends PureComponent {
       },
       {
         fixed: 'right',
-        width: 150,
+        width: 160,
         title: '操作',
         render: (text, item) => (
           <Fragment>
@@ -465,7 +1077,9 @@ export default class merchant extends PureComponent {
               <a className={styles.delete} onClick={() => this.handleDelClick(item)}>{parseInt(item.loginStatus) === 0 ? '启用账号' : '停用账号'}</a>
             {/*</Popconfirm>*/}
             <Divider type="vertical" />
-            <a onClick={() => this.resetPwd(item)}>重置密码</a>
+            <a onClick={() => this.resetPwd(item)} style={{ display: 'inline-block' }}>重置密码</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.activityMsgHandler(item)}>活动信息</a>
           </Fragment>
         ),
       },
@@ -538,6 +1152,28 @@ export default class merchant extends PureComponent {
           modalType={modalType}
           channelLists={channelLists}
           BaseDictLists={this.state.BaseDictLists}
+        />
+        <ActivityMsgForm
+          ref={this.saveActivityMsgFormRef}
+          modalVisible={this.state.ActivityMsgModalVisible}
+          editModalConfirmLoading={this.state.editActivityMsgModalConfirmLoading}
+
+          handleAdd={this.handleActivityMsgAdd}
+          handleModalVisible={this.handleActivityMsgModalVisible}
+          ActivityLists={this.state.ActivityLists}
+
+          activityIndex1={this.state.activityIndex1}
+          activityIndex2={this.state.activityIndex2}
+          activityIndex3={this.state.activityIndex3}
+          handleActivityIndexChange1={this.handleActivityIndexChange1}
+          handleActivityIndexChange2={this.handleActivityIndexChange2}
+          handleActivityIndexChange3={this.handleActivityIndexChange3}
+          activityInfo={this.activityInfo}
+          getDetail={this.getDetail}
+          modalActivityData={this.state.modalActivityData}
+          saveMsgLogs={this.saveMsgLogs}
+          handleDeleteClick={this.handleDeleteClick}
+          activityDisabled={this.state.activityDisabled}
         />
       </PageHeaderLayout>
     );

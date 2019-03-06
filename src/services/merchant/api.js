@@ -25,7 +25,15 @@ const api = map({
   resetPwd: '/inno72/merchant/user/resetPwd',
   getChannelList: '/project/channel/getList',
   updateMerchantSetting: "/project/merchant/update",
-  uploadFile: '/project/merchant/uploadImage'
+  uploadFile: '/project/merchant/uploadImage',
+
+  activityLists: '/inno72/merchant/user/activity?merchantId={merchantId}',
+  activityInfo: '/inno72/activity/index/activityInfo?merchantId={merchantId}&activityId={activityId}',
+  addActivityInfo: '/inno72/activity/info/desc/add',
+  deleteActivityInfo: '/inno72/activity/info/desc/delete',
+  saveIndex: '/inno72/activity/index/saveIndex',
+
+  deleteActivityIndex: '/inno72/activity/index/delete',
 });
 
 

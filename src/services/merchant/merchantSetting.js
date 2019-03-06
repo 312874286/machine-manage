@@ -51,4 +51,39 @@ export async function resetPwd({ params }) {
   });
 }
 
+// merchant
+export async function activityLists({ restParams }) {
+  return fetch.get(api.activityLists, {
+    restParams,
+  });
+}
+// activityInfo
+export async function activityInfo({ restParams }) {
+  return fetch.get(api.activityInfo, {
+    restParams,
+  });
+}
 
+export async function addActivityInfo({ params }) {
+  return fetch.post(api.addActivityInfo, {
+    body: stringify(params),
+  });
+}
+
+export async function deleteActivityInfo({ params }) {
+  return fetch.post(api.deleteActivityInfo, {
+    body: stringify(params),
+  });
+}
+
+export async function saveIndex({ params }) {
+  return fetch.postJSON(api.saveIndex, {
+    body: JSON.stringify(params),
+  });
+}
+
+export async function deleteActivityIndex({ params }) {
+  return fetch.post(api.deleteActivityIndex, {
+    body: stringify(params),
+  });
+}

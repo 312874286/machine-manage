@@ -14,7 +14,8 @@ import {
   Table,
   Modal,
   notification,
-  Checkbox
+  Checkbox,
+  Collapse
 } from "antd";
 import MachinePlanTable from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachinePlanTable";
 import MachineConfigCard from "../../../components/Project/InteractSamplingSteps/MachinePlan/MachineConfigCard";
@@ -23,7 +24,7 @@ import styles from "./BasicInteractSampling.less";
 import { cloneByJSON } from "../../../utils/utils.js";
 
 const Step = Steps.Step;
-
+const Panel = Collapse.Panel;
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -837,10 +838,16 @@ export default class MachineInteractSampling extends PureComponent {
         >
           <div style={{ margin: 10 }}>
             <div style={{ margin: "0 0 15px" }}>
-              机器编号：
-              {this.state.goodsModalMachineData.map(m => (
-                <span style={{ margin: "0 5px" }}>{m.machineCode}</span>
-              ))}
+              <Collapse accordion>
+                <Panel header="机器编号" key="1">
+                  <p style={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>
+                    {this.state.goodsModalMachineData.map(m => (
+                      <span style={{ margin: "0 5px" }}>{m.machineCode}</span>
+                    ))}
+                  </p>
+                </Panel>
+              </Collapse>
+
             </div>
             {this.renderGoods()}
           </div>
