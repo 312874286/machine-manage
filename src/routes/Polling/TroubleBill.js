@@ -822,7 +822,7 @@ export default class troubleBill extends PureComponent {
       width: '10%',
       render: (text, record) => (
         <span>
-          { record.remark.indexOf('：') > 0 ? record.remark.split('：')[1] : record.remark}
+          { parseInt(record.source === 3) ? (record.remark.indexOf('：') > 0 ? record.remark.split('：')[1] : record.remark) : record.remark}
         </span>
       )
     }, {
