@@ -819,7 +819,12 @@ export default class troubleBill extends PureComponent {
       title: '工单描述',
       dataIndex: 'remark',
       key: 'remark',
-      width: '10%'
+      width: '10%',
+      render: (text, record) => (
+        <span>
+          { record.remark.indexOf('：') > 0 ? record.remark.split('：')[1] : record.remark}
+        </span>
+      )
     }, {
       title: '派单时间',
       dataIndex: 'submitTime',
