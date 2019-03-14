@@ -908,7 +908,7 @@ export default class goodsSettingList extends PureComponent {
         name: data.name || '',
         code: data.code || undefined,
         sellerId: data.sellerId || undefined,
-        price: data.price || undefined,
+        price: data.price >= 0 ? data.price : undefined,
         remark: data.remark || undefined,
         img: data.img || undefined,
         shopId: data.shopId || undefined,
