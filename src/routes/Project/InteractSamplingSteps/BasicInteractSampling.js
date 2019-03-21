@@ -41,7 +41,7 @@ export default class areaSettingList extends PureComponent {
     id: '',
     channelLists: [],
     merchants: [],
-    enyer: [],
+    enter: [],
   };
   componentDidMount() {
     this.getGameList()
@@ -100,7 +100,7 @@ export default class areaSettingList extends PureComponent {
       if (res && res.code === 0) {
         this.setState({
           channelLists: res.data.channel,
-          enyer: res.data.enyer.map((i) => {
+          enter: res.data.enyer.map((i) => {
             return {
               label: i.name,
               value: i.code,
@@ -151,7 +151,7 @@ export default class areaSettingList extends PureComponent {
         manager: data.manager || undefined,
         paiyangType: data.paiyangType,
         channel: data.channel || undefined,
-        enyerType: data.enterType && data.enterType.split(',') || undefined,
+        enterType: data.enterType && data.enterType.split(',') || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
@@ -162,7 +162,7 @@ export default class areaSettingList extends PureComponent {
         manager: undefined,
         paiyangType: undefined,
         channel: undefined,
-        enyerType: undefined,
+        enterType: undefined,
       });
     }
   }
@@ -178,11 +178,10 @@ export default class areaSettingList extends PureComponent {
         if (err) {
           return false
         }
-        console.log('fieldsValue', fieldsValue, fieldsValue.enyerType.join(','))
         let params = {
           ...fieldsValue,
           type,
-          enyerType: fieldsValue.enyerType.valueOf()
+          enterType: fieldsValue.enterType.toString()
         };
         if (this.state.id) {
           url = 'interactSamplingSetting/interactUpdate',
@@ -220,7 +219,7 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current, GameList, type, channelLists, merchants, enyer } = this.state
+    const { current, GameList, type, channelLists, merchants, enter } = this.state
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -309,10 +308,10 @@ export default class areaSettingList extends PureComponent {
                   })(<Input placeholder="请输入预计的天数" />)}
                 </FormItem>
                 <FormItem {...formItemLayout} label="选择入驻平台">
-                  {getFieldDecorator('enyerType', {
+                  {getFieldDecorator('enterType', {
                     rules: [{ required: false, message: '请选择入驻平台' }],
                   })(
-                    <CheckboxGroup options={enyer} />
+                    <CheckboxGroup options={enter} />
                   )}
                 </FormItem>
                 <FormItem {...formItemLayout} label="负责人">

@@ -482,6 +482,7 @@ export default class areaSettingList extends PureComponent {
     enyer: [],
     enyerList: [],
     machineId: '',
+    enterTypeFlag: '',
   };
   componentDidMount() {
     this.getLists();
@@ -625,7 +626,8 @@ export default class areaSettingList extends PureComponent {
             watchModalVisible: true,
             modalData: res,
             interactId: item.id,
-            enyer: res.enterTypeList || []
+            enyer: res.enterTypeList || [],
+            enterTypeFlag: res.enterType
           });
         }
       });
@@ -919,6 +921,11 @@ export default class areaSettingList extends PureComponent {
   }
   // 入驻平台form
   handleEnterPlatFormVisible = (flag = false) => {
+    const { enterTypeFlag } = this.state
+    if (!enterTypeFlag) {
+      message.warn('当前活动暂无入驻平台信息')
+      return false
+    }
     if (flag) {
       this.getEnterList()
     }
