@@ -181,7 +181,7 @@ export default class areaSettingList extends PureComponent {
         let params = {
           ...fieldsValue,
           type,
-          enterType: fieldsValue.enterType.toString()
+          enterType: fieldsValue.enterType && fieldsValue.enterType.length > 0 && fieldsValue.enterType.toString()
         };
         if (this.state.id) {
           url = 'interactSamplingSetting/interactUpdate',
