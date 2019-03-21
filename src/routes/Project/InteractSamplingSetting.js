@@ -229,7 +229,7 @@ const WatchMachineGoodsForm = Form.create()(props => {
   );
 });
 const EnterPlatForm = Form.create()(props => {
-  const { form, EnterPlatFormVisible, handleEnterPlatFormVisible, enyer,
+  const { form, EnterPlatFormVisible, handleEnterPlatFormVisible, enter,
     loading, list, page, handleStandardTableChange, handleEditEnterModalVisible, updateBatchEnter,
     handleSearchEnterAdd, handleEnterFormReset
   } = props;
@@ -288,7 +288,7 @@ const EnterPlatForm = Form.create()(props => {
           <a
             disabled={
               item.enterList.length > 0
-            && item.enterList.filter(i => i.enterStatus === 1).length === enterStatusOptions.length
+            && item.enterList.filter(i => i.enterStatus === 1).length === enter.length
                 ? true : false}
             onClick={() => handleEditEnterModalVisible(true, item)}>
             入驻
@@ -351,7 +351,7 @@ const EnterPlatForm = Form.create()(props => {
               <FormItem label="请选择入驻平台" {...formItemLayout}>
                 {getFieldDecorator("enterType")(
                   <Select placeholder="请选择入驻平台">
-                    {enyer.map(item => {
+                    {enter.map(item => {
                       return (
                         <Option value={item.enterType} key={item.enterType}>
                           {item.name}
@@ -390,7 +390,7 @@ const EnterPlatForm = Form.create()(props => {
   );
 })
 const EnterForm = Form.create()((props) => {
-    const { enterModalVisible, form, handleUpdateEnterAdd, handleEditEnterModalVisible, editModalConfirmLoading, enyerList } = props;
+    const { enterModalVisible, form, handleUpdateEnterAdd, handleEditEnterModalVisible, editModalConfirmLoading, enterList } = props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -422,7 +422,7 @@ const EnterForm = Form.create()((props) => {
                 rules: [{ required: true, message: '请选择入驻平台' }],
               })(
                 <CheckboxGroup>
-                  {enyerList.map((item) => {
+                  {enterList.map((item) => {
                     return (
                       <Checkbox key={item.enterType} value={item.enterType}>{item.name}</Checkbox>
                     );
@@ -479,8 +479,8 @@ export default class areaSettingList extends PureComponent {
 
     enterModalVisible: false,
     enterType: '',
-    enyer: [],
-    enyerList: [],
+    enter: [],
+    enterList: [],
     machineId: '',
     enterTypeFlag: '',
   };
@@ -620,13 +620,13 @@ export default class areaSettingList extends PureComponent {
         }
       })
       .then(res => {
-         console.log('enyerres', res, res.enterTypeList)
+         console.log('enterres', res, res.enterTypeList)
         if (res) {
           this.setState({
             watchModalVisible: true,
             modalData: res,
             interactId: item.id,
-            enyer: res.enterTypeList || [],
+            enter: res.enterTypeList || [],
             enterTypeFlag: res.enterType
           });
         }
@@ -914,7 +914,7 @@ export default class areaSettingList extends PureComponent {
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
-          enyer: res.data.enyer
+          enter: res.data.enter
         });
       }
     });
@@ -1082,10 +1082,10 @@ export default class areaSettingList extends PureComponent {
       enterModalVisible: flag,
     })
     if (item) {
-      const { enyer } = this.state
-     let enyerList = enyer.filter(a => true === item.enterList.some(b => (a.enterType === b.enterType) && b.enterStatus === 0))
+      const { enter } = this.state
+     let enterList = enter.filter(a => true === item.enterList.some(b => (a.enterType === b.enterType) && b.enterStatus === 0))
       this.setState({
-        enyerList,
+        enterList,
         machineId: item.machineId
       })
     }
@@ -1383,7 +1383,7 @@ export default class areaSettingList extends PureComponent {
           handleStandardTableChange={this.handleStandardEnterTableChange}
           handleEditEnterModalVisible={this.handleEditEnterModalVisible}
           updateBatchEnter={this.updateBatchEnter}
-          enyer={this.state.enyer}
+          enter={this.state.enter}
           handleSearchEnterAdd={this.handleSearchEnterAdd}
           handleEnterFormReset={this.handleEnterFormReset}
         />
@@ -1392,7 +1392,7 @@ export default class areaSettingList extends PureComponent {
           enterModalVisible={this.state.enterModalVisible}
           handleUpdateEnterAdd={this.handleUpdateEnterAdd}
           handleEditEnterModalVisible={this.handleEditEnterModalVisible}
-          enyerList={this.state.enyerList}
+          enterList={this.state.enterList}
         />
       </PageHeaderLayout>
     );
