@@ -151,7 +151,7 @@ export default class areaSettingList extends PureComponent {
         manager: data.manager || undefined,
         paiyangType: data.paiyangType,
         channel: data.channel || undefined,
-        enterType: data.enterType && data.enterType.split(',') || undefined,
+        enterType: data.enterType.indexOf('false') > 1 && data.enterType.split(',') || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
@@ -178,10 +178,11 @@ export default class areaSettingList extends PureComponent {
         if (err) {
           return false
         }
+        console.log('fieldsValue.enterType', fieldsValue.enterType)
         let params = {
           ...fieldsValue,
           type,
-          enterType: fieldsValue.enterType && fieldsValue.enterType.length > 0 && fieldsValue.enterType.toString()
+          enterType: fieldsValue.enterType && fieldsValue.enterType.length > 0 && fieldsValue.enterType.join(',')
         };
         if (this.state.id) {
           url = 'interactSamplingSetting/interactUpdate',
