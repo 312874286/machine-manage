@@ -100,7 +100,7 @@ export default class areaSettingList extends PureComponent {
       if (res && res.code === 0) {
         this.setState({
           channelLists: res.data.channel,
-          enter: res.data.enyer.map((i) => {
+          enter: res.data.enter.map((i) => {
             return {
               label: i.name,
               value: i.code,
