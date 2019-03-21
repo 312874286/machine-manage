@@ -151,7 +151,7 @@ export default class areaSettingList extends PureComponent {
         manager: data.manager || undefined,
         paiyangType: data.paiyangType,
         channel: data.channel || undefined,
-        enterType: data.enterType.indexOf('false') > 1 && data.enterType.split(',') || undefined,
+        enterType: data.enterType.indexOf('false') === -1 && data.enterType.split(',') || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
