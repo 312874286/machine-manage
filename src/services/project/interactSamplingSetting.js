@@ -274,3 +274,23 @@ export async function getGameRuleList({ params }) {
     body: stringify(params),
   });
 }
+//  入驻平台
+export async function enterLists({ restParams }) {
+  return fetch.get(api.enterLists, {
+    restParams
+  });
+}
+
+export async function updateEnter({ params }) {
+  return fetch.post(api.updateEnter, {
+    body: stringify(params),
+  });
+}
+
+export async function updateBatchEnter({ params }) {
+  return fetch.post(api.updateBatchEnter, {
+    body: stringify(params),
+  });
+}
+
+

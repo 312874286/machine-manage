@@ -13,7 +13,9 @@ import {
   Modal,
   Table,
   Tree,
-  Tabs
+  Tabs,
+  Radio,
+  message
 } from "antd";
 import StandardTable from "../../components/StandardTable/index";
 import PageHeaderLayout from "../../layouts/PageHeaderLayout";
@@ -21,11 +23,13 @@ import styles from "./InteractSamplingSetting.less";
 import { getAccountMenus } from "../../utils/authority";
 import GoodsStatistics from "../../components/Project/Activity/GoodsStatistics";
 import OrderStatistics from "../../components/Project/Activity/OrderStatistics";
+import {Checkbox} from "antd/lib/index";
 
 const TabPane = Tabs.TabPane;
 const TreeNode = Tree.TreeNode;
 const FormItem = Form.Item;
 const { Option } = Select;
+const CheckboxGroup = Checkbox.Group;
 const status = ["未提交", "未开始", "进行中", "已结束", "已超时"];
 const statusOption = [
   { id: 0, name: "未提交" },
@@ -46,6 +50,7 @@ const activityTypeOptions = [
   '互动',
   '新零售'
 ]
+const RadioGroup = Radio.Group;
 const WatchForm = Form.create()(props => {
   const {
     watchModalVisible,
@@ -53,7 +58,8 @@ const WatchForm = Form.create()(props => {
     handleWatchModalVisible,
     allGoods,
     watchDetailClick,
-    watchMachineDetailClick
+    watchMachineDetailClick,
+    handleEnterPlatFormVisible,
   } = props;
   const formItemLayout = {
     labelCol: {
@@ -122,6 +128,9 @@ const WatchForm = Form.create()(props => {
           <FormItem {...formItemLayout} label="3.选择机器">
             <a onClick={() => watchMachineDetailClick(modalData.id)}>
               查看详情
+            </a>
+            <a style={{ marginLeft: 30 }} onClick={() => handleEnterPlatFormVisible(true)}>
+              查看入驻平台
             </a>
           </FormItem>
           <FormItem {...formItemLayout} label="4.规则设置" />
@@ -200,16 +209,6 @@ const WatchMachineGoodsForm = Form.create()(props => {
     handleMerchantTreeModalVisible,
     renderTreeNodes
   } = props;
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 6 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 18 }
-    }
-  };
   return (
     <Modal
       title={
@@ -229,6 +228,213 @@ const WatchMachineGoodsForm = Form.create()(props => {
     </Modal>
   );
 });
+const EnterPlatForm = Form.create()(props => {
+  const { form, EnterPlatFormVisible, handleEnterPlatFormVisible, enyer,
+    loading, list, page, handleStandardTableChange, handleEditEnterModalVisible, updateBatchEnter,
+    handleSearchEnterAdd, handleEnterFormReset
+  } = props;
+  const { getFieldDecorator } = form;
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 }
+    }
+  };
+  const enterTypeOptions = {'1': '蚂蚁金服', '2': '京东金融'}
+  const enterStatusOptions = ['未入驻', '入驻']
+  const enterStatus = [{
+    id: '0',
+    name: '未入驻'
+  }, {
+    id: '1',
+    name: '入驻'
+  }]
+  const columns = [
+    {
+      title: "机器编号",
+      dataIndex: "machineCode",
+      key: "machineCode",
+      width: "30%"
+    },
+    {
+      title: "点位",
+      width: "40%",
+      dataIndex: "localDesc",
+      key: "localDesc"
+    },
+    {
+      title: "入驻平台",
+      dataIndex: "enterList",
+      key: "enterList",
+      render: (text, item) => (
+        <Fragment>
+          {
+            item.enterList.map((i) => {
+              return (<span>{enterTypeOptions[i.enterType]}:{enterStatusOptions[i.enterStatus]}<br/></span>)
+            })
+          }
+        </Fragment>
+      ),
+    },
+    {
+      width: 100,
+      title: "操作",
+      render: (text, item) => (
+        <Fragment>
+          <a
+            disabled={
+              item.enterList.length > 0
+            && item.enterList.filter(i => i.enterStatus === 1).length === enterStatusOptions.length
+                ? true : false}
+            onClick={() => handleEditEnterModalVisible(true, item)}>
+            入驻
+          </a>
+        </Fragment>
+      )
+    }
+  ];
+  return (
+    <Modal
+      title={
+        <div class="modalBox">
+          <span class="leftSpan" />
+          <span class="modalTitle">入驻平台</span>
+        </div>
+      }
+      visible={EnterPlatFormVisible}
+      onCancel={() => handleEnterPlatFormVisible(false)}
+      footer={null}
+      width={1000}
+      className={styles.enterPlatModal}>
+      <div className="manageAppBox">
+        <Form onSubmit={handleSearchEnterAdd} >
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={10} sm={24}>
+              <FormItem label="状态" {...formItemLayout}>
+                {getFieldDecorator("enterStatus")(
+                  <Select placeholder="请选择入驻状态">
+                    {enterStatus.map(item => {
+                      return (
+                        <Option value={item.id} key={item.id}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+            <Col md={8} sm={24}>
+              <FormItem {...formItemLayout}>
+                {getFieldDecorator('machineCode')(<Input placeholder="请输入机器编号" />)}
+              </FormItem>
+            </Col>
+            <Col md={6} sm={24}>
+              <span>
+                 <FormItem {...formItemLayout}>
+                    <Button onClick={handleEnterFormReset} style={{ width: '45%' }}>
+                      重置
+                    </Button>
+                    <Button className={styles.serach} style={{ marginLeft: 8, width: '45%' }} type="primary" htmlType="submit">
+                      查询
+                    </Button>
+                 </FormItem>
+              </span>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={10} sm={24}>
+              <FormItem label="请选择入驻平台" {...formItemLayout}>
+                {getFieldDecorator("enterType")(
+                  <Select placeholder="请选择入驻平台">
+                    {enyer.map(item => {
+                      return (
+                        <Option value={item.enterType} key={item.enterType}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+            <Col md={6} sm={24}>
+              <span>
+                 <FormItem {...formItemLayout}>
+                    <Button onClick={() => updateBatchEnter()} className={styles.serach} style={{ marginLeft: 8, width: '100%'}} type="primary" htmlType="submit">
+                      批量入驻
+                    </Button>
+                 </FormItem>
+              </span>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
+            <Col md={24} sm={24}>
+                <StandardTable
+                  loading={loading}
+                  data={list}
+                  page={page}
+                  columns={columns}
+                  onChange={handleStandardTableChange}
+                  scrollX={800}
+                />
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    </Modal>
+  );
+})
+const EnterForm = Form.create()((props) => {
+    const { enterModalVisible, form, handleUpdateEnterAdd, handleEditEnterModalVisible, editModalConfirmLoading, enyerList } = props;
+    const { getFieldDecorator } = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 13 },
+      },
+    };
+    return (
+      <Modal
+        title={
+          <div class="modalBox">
+            <span class="leftSpan">{enterModalVisible}</span>
+            <span class="modalTitle"></span>
+          </div>
+        }
+        visible={enterModalVisible}
+        onOk={handleUpdateEnterAdd}
+        onCancel={() => handleEditEnterModalVisible(false)}
+        confirmLoading={editModalConfirmLoading}
+      >
+        <div className="manageAppBox">
+          <Form onSubmit={this.handleSearch}>
+            <FormItem {...formItemLayout}>
+              {getFieldDecorator('enterType', {
+                rules: [{ required: true, message: '请选择入驻平台' }],
+              })(
+                <CheckboxGroup>
+                  {enyerList.map((item) => {
+                    return (
+                      <Checkbox key={item.enterType} value={item.enterType}>{item.name}</Checkbox>
+                    );
+                  })}
+                </CheckboxGroup>
+              )}
+            </FormItem>
+          </Form>
+        </div>
+      </Modal>
+    );
+  });
 @connect(({ common, loading, interactSamplingSetting }) => ({
   common,
   interactSamplingSetting,
@@ -258,10 +464,28 @@ export default class areaSettingList extends PureComponent {
     StatisticsActivityKey: "1",
     StatisticsTabsLoading: false,
     OrderStatistics: [],
-    GoodsStatistics: []
+    GoodsStatistics: [],
+
+    EnterPlatFormVisible: false,
+
+    enterLoading: false,
+    enterLists: [],
+    enterPage: 0,
+    enterPageNo: 1,
+
+    interactId: '',
+    enterStatus: '',
+    machineCode: '',
+
+    enterModalVisible: false,
+    enterType: '',
+    enyer: [],
+    enyerList: [],
+    machineId: '',
   };
   componentDidMount() {
     this.getLists();
+    // this.getChannelList()
     // this.getAccountMenus(getAccountMenus())
   }
   getAccountMenus = setAccountMenusList => {
@@ -395,10 +619,13 @@ export default class areaSettingList extends PureComponent {
         }
       })
       .then(res => {
+         console.log('enyerres', res, res.enterTypeList)
         if (res) {
           this.setState({
             watchModalVisible: true,
-            modalData: res
+            modalData: res,
+            interactId: item.id,
+            enyer: res.enterTypeList || []
           });
         }
       });
@@ -436,7 +663,8 @@ export default class areaSettingList extends PureComponent {
         if (res && res.code === 0) {
           this.setState({
             watchModalMerchantTreeVisible: true,
-            treeData: res.data
+            treeData: res.data,
+            interactId,
           });
         }
       });
@@ -672,6 +900,189 @@ export default class areaSettingList extends PureComponent {
       </Form>
     );
   }
+  // 获取入驻平台列表
+  getChannelList = () => {
+    this.props.dispatch({
+      type: 'interactSamplingSetting/getBaseDict',
+      payload: {
+        params: {
+          type: ''
+        },
+      },
+    }).then((res) => {
+      if (res && res.code === 0) {
+        this.setState({
+          enyer: res.data.enyer
+        });
+      }
+    });
+  }
+  // 入驻平台form
+  handleEnterPlatFormVisible = (flag = false) => {
+    if (flag) {
+      this.getEnterList()
+    }
+    this.setState({
+      EnterPlatFormVisible: flag,
+    })
+  }
+  getEnterList = () => {
+    //  enterLoading: false,
+    //     enterLists: [],
+    //     enterPage: 0,
+    // enterLists,
+    //   updateEnter,
+    //   updateBatchEnter,
+    this.props.dispatch({
+      type: "interactSamplingSetting/enterLists",
+      payload: {
+        restParams: {
+          interactId: this.state.interactId,
+          status: this.state.enterStatus,
+          machineCode: this.state.machineCode,
+          pageSize: 20,
+          pageNo: this.state.enterPageNo,
+        }
+      }
+    }).then((res) => {
+      console.log('res', res)
+      this.setState({
+        enterLists: res.data,
+        enterPage: {
+          total: res.page.totalCount,
+          pageSize: res.page.pageSize,
+          current: res.page.pageNo,
+         },
+      })
+    });
+  }
+  handleStandardEnterTableChange = (pagination, filtersArg, sorter) => {
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    const { current } = pagination;
+    // console.log('params', params)
+    this.setState(
+      {
+        pageNo: current
+      },
+      () => {
+        this.getEnterList();
+      }
+    );
+  };
+  saveEnterFormRef = form => {
+    this.saveEnterForm = form;
+  }
+  // 重置
+  handleEnterFormReset = () => {
+    this.saveEnterForm.resetFields();
+    this.setState({
+      formValues: {},
+      pageNo: 1,
+    });
+  };
+  handleSearchEnterAdd = () => {
+    this.saveEnterForm.validateFields((err, fieldsValue) => {
+      console.log('form', fieldsValue)
+      const { interactId } = this.state
+      if (err) {
+        return false
+      }
+      this.setState(
+        {
+          enterPageNo: 1,
+          machineCode: fieldsValue.machineCode ? fieldsValue.machineCode : "",
+          enterStatus: fieldsValue.enterStatus >= 0 ? fieldsValue.enterStatus : "",
+        },
+        () => {
+          this.getEnterList();
+        }
+      );
+    })
+  }
+  updateBatchEnter = () => {
+    this.saveEnterForm.validateFields((err, fieldsValue) => {
+      console.log('form', fieldsValue)
+      const { interactId } = this.state
+      if (err) {
+        return false
+      }
+      this.props.dispatch({
+        type: "interactSamplingSetting/updateBatchEnter",
+        payload: {
+          params: {
+            interactId,
+            enterType: fieldsValue.enterType,
+          }
+        }
+      }).then((res) => {
+        if (res && res.code === 0) {
+          message.success('入驻成功')
+          this.getEnterList()
+        } else {
+          message.error('入驻失败')
+        }
+      });
+    })
+  }
+  saveFormRef = form => {
+    this.form = form;
+  };
+  handleUpdateEnterAdd = () => {
+    this.form.validateFields((err, fieldsValue) => {
+      console.log('form', fieldsValue)
+      const { machineId, interactId } = this.state
+      if (err) {
+        return false
+      }
+      this.props.dispatch({
+        type: "interactSamplingSetting/updateEnter",
+        payload: {
+          params: {
+            interactId,
+            machineId,
+            enterType: fieldsValue.enterType.join(','),
+          }
+        }
+      }).then((res) => {
+        if (res && res.code === 0) {
+          message.success('入驻成功')
+          this.handleEditEnterModalVisible()
+          this.getEnterList()
+        } else {
+          message.error('入驻失败')
+        }
+      });
+    })
+  }
+  handleEditEnterModalVisible = (flag = false, item) => {
+    this.setState({
+      enterModalVisible: flag,
+    })
+    if (item) {
+      const { enyer } = this.state
+     let enyerList = enyer.filter(a => true === item.enterList.some(b => (a.enterType === b.enterType) && b.enterStatus === 0))
+      this.setState({
+        enyerList,
+        machineId: item.machineId
+      })
+    }
+  }
   render() {
     const {
       interactSamplingSetting: { list, page, unColumn },
@@ -896,6 +1307,7 @@ export default class areaSettingList extends PureComponent {
           allGoods={this.state.allGoods}
           watchDetailClick={this.watchDetailClick}
           watchMachineDetailClick={this.watchMachineDetailClick}
+          handleEnterPlatFormVisible={this.handleEnterPlatFormVisible}
         />
         <WatchMerchantGoodsForm
           watchModalMerchantTreeVisible={
@@ -954,6 +1366,27 @@ export default class areaSettingList extends PureComponent {
             </TabPane>
           </Tabs>
         </Modal>
+        <EnterPlatForm
+          ref={this.saveEnterFormRef}
+          EnterPlatFormVisible={this.state.EnterPlatFormVisible}
+          handleEnterPlatFormVisible={this.handleEnterPlatFormVisible}
+          loading={this.state.enterLoading}
+          list={this.state.enterLists}
+          page={this.state.enterPage}
+          handleStandardTableChange={this.handleStandardEnterTableChange}
+          handleEditEnterModalVisible={this.handleEditEnterModalVisible}
+          updateBatchEnter={this.updateBatchEnter}
+          enyer={this.state.enyer}
+          handleSearchEnterAdd={this.handleSearchEnterAdd}
+          handleEnterFormReset={this.handleEnterFormReset}
+        />
+        <EnterForm
+          ref={this.saveFormRef}
+          enterModalVisible={this.state.enterModalVisible}
+          handleUpdateEnterAdd={this.handleUpdateEnterAdd}
+          handleEditEnterModalVisible={this.handleEditEnterModalVisible}
+          enyerList={this.state.enyerList}
+        />
       </PageHeaderLayout>
     );
   }

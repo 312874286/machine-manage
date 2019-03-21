@@ -51,6 +51,10 @@ import {
   addCoupon,
   updateCoupon,
   getToAddList,
+
+  enterLists,
+  updateEnter,
+  updateBatchEnter,
 } from "../../services/project/interactSamplingSetting";
 
 export default {
@@ -494,6 +498,33 @@ export default {
       { call }
     ) {
       const response = yield call(getGameRuleList, { params });
+      return response;
+    },
+    *enterLists(
+      {
+        payload: { restParams }
+      },
+      { call }
+    ) {
+      const response = yield call(enterLists, { restParams });
+      return response;
+    },
+    *updateEnter(
+      {
+        payload: { params }
+      },
+      { call }
+    ) {
+      const response = yield call(updateEnter, { params });
+      return response;
+    },
+    *updateBatchEnter(
+      {
+        payload: { params }
+      },
+      { call }
+    ) {
+      const response = yield call(updateBatchEnter, { params });
       return response;
     }
   },

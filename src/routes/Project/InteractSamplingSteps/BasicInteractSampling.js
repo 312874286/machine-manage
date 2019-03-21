@@ -9,13 +9,15 @@ import {
   Select,
   Input,
   DatePicker,
-  Steps
+  Steps,
+  Checkbox,
 } from 'antd';
 import StandardTable from '../../../components/StandardTable/index';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import styles from './BasicInteractSampling.less';
 import {getAccountMenus} from "../../../utils/authority";
 
+const CheckboxGroup = Checkbox.Group;
 const Step = Steps.Step;
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -38,7 +40,8 @@ export default class areaSettingList extends PureComponent {
     type: true,
     id: '',
     channelLists: [],
-    merchants: []
+    merchants: [],
+    enyer: [],
   };
   componentDidMount() {
     this.getGameList()
@@ -90,13 +93,19 @@ export default class areaSettingList extends PureComponent {
       type: 'interactSamplingSetting/getBaseDict',
       payload: {
         params: {
-          type: '002'
+          type: ''
         },
       },
     }).then((res) => {
       if (res && res.code === 0) {
         this.setState({
           channelLists: res.data.channel,
+          enyer: res.data.enyer.map((i) => {
+            return {
+              label: i.name,
+              value: i.code,
+            }
+          }),
         });
       } else {
         this.setState({
@@ -118,6 +127,7 @@ export default class areaSettingList extends PureComponent {
       }
     });
   }
+
   // interactDetail
   getInteractDetail = () => {
     this.props.dispatch({
@@ -141,6 +151,7 @@ export default class areaSettingList extends PureComponent {
         manager: data.manager || undefined,
         paiyangType: data.paiyangType,
         channel: data.channel || undefined,
+        enyerType: data.enterType && data.enterType.split(',') || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
@@ -151,6 +162,7 @@ export default class areaSettingList extends PureComponent {
         manager: undefined,
         paiyangType: undefined,
         channel: undefined,
+        enyerType: undefined,
       });
     }
   }
@@ -166,15 +178,16 @@ export default class areaSettingList extends PureComponent {
         if (err) {
           return false
         }
+        console.log('fieldsValue', fieldsValue, fieldsValue.enyerType.join(','))
         let params = {
           ...fieldsValue,
           type,
+          enyerType: fieldsValue.enyerType.valueOf()
         };
         if (this.state.id) {
           url = 'interactSamplingSetting/interactUpdate',
           params = {
-            ...fieldsValue,
-            type,
+            ...params,
             id: this.state.id,
           };
         }
@@ -207,7 +220,7 @@ export default class areaSettingList extends PureComponent {
       interactSamplingSetting: { list, page, unColumn },
       loading,
     } = this.props;
-    const { current, GameList, type, channelLists, merchants } = this.state
+    const { current, GameList, type, channelLists, merchants, enyer } = this.state
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -294,6 +307,13 @@ export default class areaSettingList extends PureComponent {
                   {getFieldDecorator('day', {
                     rules: [{ required: false, whitespace: true, message: '请输入预计的天数' }],
                   })(<Input placeholder="请输入预计的天数" />)}
+                </FormItem>
+                <FormItem {...formItemLayout} label="选择入驻平台">
+                  {getFieldDecorator('enyerType', {
+                    rules: [{ required: false, message: '请选择入驻平台' }],
+                  })(
+                    <CheckboxGroup options={enyer} />
+                  )}
                 </FormItem>
                 <FormItem {...formItemLayout} label="负责人">
                   {getFieldDecorator('manager', {
