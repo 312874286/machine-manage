@@ -1334,7 +1334,7 @@ export default class user extends PureComponent {
             <a onClick={() => this.stopClick(item)} style={{display: (item.status !== 1 && account.btn) ? '' : 'none'}}>停用</a>
             <a onClick={() => this.startClick(item)} style={{display: (item.status !== 0 && account.btn) ? '' : 'none'}}>启用</a>
             <Divider type="vertical" style={{display: (item.status && account.btn) ? '' : 'none'}} />
-            <Popconfirm title="确定要删除吗" onConfirm={() => this.deleteClick(item)} okText="Yes" cancelText="No">
+            <Popconfirm title="删除后巡检人员信息用不可再恢复请确认是否删除" onConfirm={() => this.deleteClick(item)} okText="Yes" cancelText="No">
               <a style={{display: (item.status !== 0 && account.delete) ? '' : 'none'}}>删除</a>
             </Popconfirm>
           </Fragment>

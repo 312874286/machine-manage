@@ -491,14 +491,20 @@ const WatchForm = Form.create()(
                     <div className={styles.statusBox}>
                       <span>ACC ID</span>
                       <span>
-                    {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}
-                  </span>
+                        {machineDetail.systemStatus ? (machineDetail.systemStatus.accid ? machineDetail.systemStatus.accid : '') : ''}
+                      </span>
                     </div>
                     <div className={styles.statusBox}>
                       <span>更新时间</span>
                       <span>
-                    {machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}
-                  </span>
+                        {machineDetail.machineStatus ? machineDetail.machineStatus.createTime : '暂无'}
+                      </span>
+                    </div>
+                    <div className={styles.statusBox}>
+                      <span>系统版本号</span>
+                      <span>
+                        {machineDetail.machineStatus ? machineDetail.machineStatus.systemVersion : '暂无'}
+                      </span>
                     </div>
                   </Card>
                 </div>
@@ -2837,13 +2843,15 @@ export default class machineSettingList extends PureComponent {
                   <span>{parseInt(this.state.Temperature) === -1 ? '暂无' : this.state.Temperature}</span>
                 </FormItem>
                 <FormItem {...formItemLayout} label="机器温度">
-                  <Select placeholder="请选择" value={ this.state.TemperatureSelected } onChange={this.onTemperatureSelected}>
-                    {TemperatureOptions.map((item) => {
-                      return (
-                        <Option value={item} key={item}>{item}</Option>
-                      );
-                    })}
-                  </Select>
+                  {/*<Select placeholder="请选择" value={ this.state.TemperatureSelected } onChange={this.onTemperatureSelected}>*/}
+                    {/*{TemperatureOptions.map((item) => {*/}
+                      {/*return (*/}
+                        {/*<Option value={item} key={item}>{item}</Option>*/}
+                      {/*);*/}
+                    {/*})}*/}
+                  {/*</Select>*/}
+                  <InputNumber min={-5} max={25}  onChange={this.onTemperatureSelected} />
+                  <label style={{color: 'red'}}>请输入-5到25之间的数字</label>
                 </FormItem>
                 <FormItem {...formItemLayout}>
                   <Button style={{ width: '120px', marginRight: '10px' }} type="primary" onClick={() => this.editManageHandleModalVisibleClick()}>取消</Button>
