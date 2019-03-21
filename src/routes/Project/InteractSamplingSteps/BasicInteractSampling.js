@@ -151,7 +151,7 @@ export default class areaSettingList extends PureComponent {
         manager: data.manager || undefined,
         paiyangType: data.paiyangType,
         channel: data.channel || undefined,
-        enterType: data.enterType && data.enterType.split(',') || undefined,
+        enterType: data.enterType && data.enterType.split(',').map(i => i) || undefined,
       });
     } else {
       this.props.form.setFieldsValue({
@@ -178,7 +178,7 @@ export default class areaSettingList extends PureComponent {
         if (err) {
           return false
         }
-        console.log('fieldsValue.enterType', fieldsValue.enterType)
+        console.log('fieldsValue.enterType', fieldsValue.enterType.filter(i => i !== 'false'))
         let params = {
           ...fieldsValue,
           type,
