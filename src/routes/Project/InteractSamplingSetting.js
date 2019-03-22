@@ -1071,8 +1071,6 @@ export default class areaSettingList extends PureComponent {
           message.success('入驻成功')
           this.handleEditEnterModalVisible()
           this.getEnterList()
-        } else {
-          message.error('入驻失败')
         }
       });
     })
