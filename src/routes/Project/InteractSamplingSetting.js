@@ -348,7 +348,7 @@ const EnterPlatForm = Form.create()(props => {
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={10} sm={24}>
-              <FormItem label="请选择入驻平台" {...formItemLayout}>
+              <FormItem label="入驻平台" {...formItemLayout}>
                 {getFieldDecorator("enterType")(
                   <Select placeholder="请选择入驻平台">
                     {enter.map(item => {

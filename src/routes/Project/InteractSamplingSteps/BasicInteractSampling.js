@@ -174,11 +174,9 @@ export default class areaSettingList extends PureComponent {
     }, () => {
       this.props.form.validateFields(['planCode', 'gameId', 'paiyangType', 'manager'], { force: true });
       this.props.form.validateFields((err, fieldsValue) => {
-        console.log('(err && type === 1)', (err && type === 1), fieldsValue.paiyangType, fieldsValue.gameId)
         if (err) {
           return false
         }
-        console.log('fieldsValue.enterType', fieldsValue.enterType.filter(i => i !== 'false'))
         let params = {
           ...fieldsValue,
           type,
