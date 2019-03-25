@@ -230,7 +230,7 @@ const WatchMachineGoodsForm = Form.create()(props => {
 });
 const EnterPlatForm = Form.create()(props => {
   const { form, EnterPlatFormVisible, handleEnterPlatFormVisible, enter,
-    loading, list, page, handleStandardTableChange, handleEditEnterModalVisible, updateBatchEnter,
+    loading, list, page, handleStandardEnterTableChange, handleEditEnterModalVisible, updateBatchEnter,
     handleSearchEnterAdd, handleEnterFormReset
   } = props;
   const { getFieldDecorator } = form;
@@ -311,7 +311,7 @@ const EnterPlatForm = Form.create()(props => {
       width={1000}
       className={styles.enterPlatModal}>
       <div className="manageAppBox">
-        <Form onSubmit={handleSearchEnterAdd} >
+        <Form>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={10} sm={24}>
               <FormItem label="状态" {...formItemLayout}>
@@ -339,7 +339,7 @@ const EnterPlatForm = Form.create()(props => {
                     <Button onClick={handleEnterFormReset} style={{ width: '45%' }}>
                       重置
                     </Button>
-                    <Button className={styles.serach} style={{ marginLeft: 8, width: '45%' }} type="primary" htmlType="submit">
+                    <Button onClick={handleSearchEnterAdd} className={styles.serach} style={{ marginLeft: 8, width: '45%' }} type="primary" htmlType="submit">
                       查询
                     </Button>
                  </FormItem>
@@ -349,9 +349,7 @@ const EnterPlatForm = Form.create()(props => {
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={10} sm={24}>
               <FormItem label="入驻平台" {...formItemLayout}>
-                {getFieldDecorator("enterType", {
-                  rules: [{ required: true, message: '请选择入驻平台' }],
-                })(
+                {getFieldDecorator("enterType")(
                   <Select placeholder="请选择入驻平台">
                     {enter.map(item => {
                       return (
@@ -381,7 +379,7 @@ const EnterPlatForm = Form.create()(props => {
                   data={list}
                   page={page}
                   columns={columns}
-                  onChange={handleStandardTableChange}
+                  onChange={handleStandardEnterTableChange}
                   scrollX={800}
                 />
             </Col>
@@ -977,7 +975,6 @@ export default class areaSettingList extends PureComponent {
   }
   handleStandardEnterTableChange = (pagination, filtersArg, sorter) => {
     const { formValues } = this.state;
-
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
@@ -997,7 +994,7 @@ export default class areaSettingList extends PureComponent {
     // console.log('params', params)
     this.setState(
       {
-        pageNo: current
+        enterPageNo: current
       },
       () => {
         this.getEnterList();
@@ -1012,7 +1009,7 @@ export default class areaSettingList extends PureComponent {
     this.saveEnterForm.resetFields();
     this.setState({
       formValues: {},
-      pageNo: 1,
+      enterPageNo: 1,
     });
   };
   handleSearchEnterAdd = () => {
@@ -1037,6 +1034,10 @@ export default class areaSettingList extends PureComponent {
   updateBatchEnter = () => {
     this.saveEnterForm.validateFields((err, fieldsValue) => {
       console.log('form', fieldsValue)
+      if (!fieldsValue.enterType) {
+        message.warn('请先选择入驻平台')
+        return false
+      }
       const { interactId } = this.state
       if (err) {
         return false
@@ -1390,7 +1391,7 @@ export default class areaSettingList extends PureComponent {
           loading={this.state.enterLoading}
           list={this.state.enterLists}
           page={this.state.enterPage}
-          handleStandardTableChange={this.handleStandardEnterTableChange}
+          handleStandardEnterTableChange={this.handleStandardEnterTableChange}
           handleEditEnterModalVisible={this.handleEditEnterModalVisible}
           updateBatchEnter={this.updateBatchEnter}
           enter={this.state.enter}
