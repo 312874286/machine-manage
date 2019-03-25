@@ -2850,7 +2850,7 @@ export default class machineSettingList extends PureComponent {
                       {/*);*/}
                     {/*})}*/}
                   {/*</Select>*/}
-                  <InputNumber min={-5} max={25}  onChange={this.onTemperatureSelected} />
+                  <InputNumber min={-5} max={25}  onChange={this.onTemperatureSelected} value={ this.state.TemperatureSelected}/>
                   <label style={{color: 'red'}}>请输入-5到25之间的数字</label>
                 </FormItem>
                 <FormItem {...formItemLayout}>

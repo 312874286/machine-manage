@@ -362,7 +362,7 @@ const EnterPlatForm = Form.create()(props => {
                 )}
               </FormItem>
             </Col>
-            <Col md={6} sm={24}>
+            <Col md={4} sm={24}>
               <span>
                  <FormItem {...formItemLayout}>
                     <Button onClick={() => updateBatchEnter()} className={styles.serach} style={{ marginLeft: 8, width: '100%'}} type="primary" htmlType="submit">
@@ -370,6 +370,11 @@ const EnterPlatForm = Form.create()(props => {
                     </Button>
                  </FormItem>
               </span>
+            </Col>
+            <Col md={10} sm={24}>
+              <FormItem {...formItemLayout}>
+                <span style={{color: 'red'}}>注：未入驻平台的机器可批量入驻</span>
+              </FormItem>
             </Col>
           </Row>
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
@@ -406,8 +411,8 @@ const EnterForm = Form.create()((props) => {
       <Modal
         title={
           <div class="modalBox">
-            <span class="leftSpan">选择入驻平台</span>
-            <span class="modalTitle"></span>
+            <span class="leftSpan"></span>
+            <span class="modalTitle">选择入驻平台</span>
           </div>
         }
         visible={enterModalVisible}
