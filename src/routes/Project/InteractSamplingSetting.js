@@ -259,11 +259,11 @@ const EnterPlatForm = Form.create()(props => {
       title: "机器编号",
       dataIndex: "machineCode",
       key: "machineCode",
-      width: "30%"
+      width: "10%"
     },
     {
       title: "点位",
-      width: "40%",
+      width: "60%",
       dataIndex: "localDesc",
       key: "localDesc"
     },
