@@ -503,7 +503,7 @@ const WatchForm = Form.create()(
                     <div className={styles.statusBox}>
                       <span>系统版本号</span>
                       <span>
-                        {machineDetail.SystemStatus ? machineDetail.SystemStatus.systemVersion : '暂无'}
+                        {machineDetail.systemStatus ? machineDetail.systemStatus.systemVersion : '暂无'}
                       </span>
                     </div>
                   </Card>

@@ -349,7 +349,9 @@ const EnterPlatForm = Form.create()(props => {
           <Row gutter={{ md: 24, lg: 24, xl: 48 }}>
             <Col md={10} sm={24}>
               <FormItem label="入驻平台" {...formItemLayout}>
-                {getFieldDecorator("enterType")(
+                {getFieldDecorator("enterType", {
+                  rules: [{ required: true, message: '请选择入驻平台' }],
+                })(
                   <Select placeholder="请选择入驻平台">
                     {enter.map(item => {
                       return (
@@ -921,13 +923,23 @@ export default class areaSettingList extends PureComponent {
   }
   // 入驻平台form
   handleEnterPlatFormVisible = (flag = false) => {
+    this.handleEnterFormReset()
+    this.saveEnterForm.setFieldsValue({
+      enterType: undefined
+    });
+    this.setState({
+      enterPageNo: 1,
+      machineCode: '',
+      enterStatus: '',
+    }, () => {
+      if (flag) {
+        this.getEnterList()
+      }
+    })
     const { enterTypeFlag } = this.state
     if (!enterTypeFlag) {
       message.warn('当前活动暂无入驻平台信息')
       return false
-    }
-    if (flag) {
-      this.getEnterList()
     }
     this.setState({
       EnterPlatFormVisible: flag,
