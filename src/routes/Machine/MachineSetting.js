@@ -2239,7 +2239,7 @@ export default class machineSettingList extends PureComponent {
   // 温度提交
   temperatureSubmit = () => {
     const { TemperatureSelected } = this.state
-    if (!TemperatureSelected) {
+    if (!TemperatureSelected && TemperatureSelected !== 0) {
       message.config({
         top: 100,
         duration: 2,
@@ -2253,7 +2253,7 @@ export default class machineSettingList extends PureComponent {
       payload: {
         params: {
           machineId: this.state.modalData.id,
-          temperature: this.state.TemperatureSelected
+          temperature: TemperatureSelected.toString()
         },
       },
     }).then((res) => {
