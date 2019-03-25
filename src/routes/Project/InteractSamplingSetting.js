@@ -408,7 +408,7 @@ const EnterForm = Form.create()((props) => {
       <Modal
         title={
           <div class="modalBox">
-            <span class="leftSpan">{enterModalVisible}</span>
+            <span class="leftSpan">选择入驻平台</span>
             <span class="modalTitle"></span>
           </div>
         }
