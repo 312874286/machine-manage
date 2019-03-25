@@ -957,8 +957,7 @@ export default class areaSettingList extends PureComponent {
           interactId: this.state.interactId,
           status: this.state.enterStatus,
           machineCode: this.state.machineCode,
-          pageSize: 20,
-          pageNo: this.state.enterPageNo,
+          pageNo: `${this.state.enterPageNo}_10`,
         }
       }
     }).then((res) => {

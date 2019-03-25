@@ -133,7 +133,7 @@ const api = map({
   // 商户修改是否关注
 
   // 入驻平台
-  enterLists: '/machine/enter/list?interactId={interactId}&status={status}&pageNo={pageNo}&pageSize={pageSize}&machineCode={machineCode}',
+  enterLists: '/machine/enter/list?interactId={interactId}&status={status}&pageNo={pageNo}&machineCode={machineCode}',
   // updateEnter
   updateEnter: '/machine/enter/updateEnter',
   // updateBatchEnter
