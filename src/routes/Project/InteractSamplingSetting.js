@@ -15,7 +15,8 @@ import {
   Tree,
   Tabs,
   Radio,
-  message
+  message,
+  Spin
 } from "antd";
 import StandardTable from "../../components/StandardTable/index";
 import PageHeaderLayout from "../../layouts/PageHeaderLayout";
@@ -231,7 +232,7 @@ const WatchMachineGoodsForm = Form.create()(props => {
 const EnterPlatForm = Form.create()(props => {
   const { form, EnterPlatFormVisible, handleEnterPlatFormVisible, enter,
     loading, list, page, handleStandardEnterTableChange, handleEditEnterModalVisible, updateBatchEnter,
-    handleSearchEnterAdd, handleEnterFormReset
+    handleSearchEnterAdd, handleEnterFormReset, spinLoading
   } = props;
   const { getFieldDecorator } = form;
   const formItemLayout = {
@@ -363,13 +364,13 @@ const EnterPlatForm = Form.create()(props => {
               </FormItem>
             </Col>
             <Col md={4} sm={24}>
-              <span>
+              <Spin spinning={spinLoading}>
                  <FormItem {...formItemLayout}>
                     <Button onClick={() => updateBatchEnter()} className={styles.serach} style={{ marginLeft: 8, width: '100%'}} type="primary" htmlType="submit">
-                      批量入驻
+                       批量入驻
                     </Button>
                  </FormItem>
-              </span>
+              </Spin>
             </Col>
             <Col md={10} sm={24}>
               <FormItem {...formItemLayout}>
@@ -488,6 +489,7 @@ export default class areaSettingList extends PureComponent {
     enterList: [],
     machineId: '',
     enterTypeFlag: '',
+    spinLoading: false,
   };
   componentDidMount() {
     this.getLists();
@@ -1037,11 +1039,13 @@ export default class areaSettingList extends PureComponent {
   }
   updateBatchEnter = () => {
     this.saveEnterForm.validateFields((err, fieldsValue) => {
-      console.log('form', fieldsValue)
       if (!fieldsValue.enterType) {
         message.warn('请先选择入驻平台')
         return false
       }
+      this.setState({
+        spinLoading: true
+      })
       const { interactId } = this.state
       if (err) {
         return false
@@ -1061,6 +1065,9 @@ export default class areaSettingList extends PureComponent {
         } else {
           message.error('入驻失败')
         }
+        this.setState({
+          spinLoading: false
+        })
       });
     })
   }
@@ -1401,6 +1408,7 @@ export default class areaSettingList extends PureComponent {
           enter={this.state.enter}
           handleSearchEnterAdd={this.handleSearchEnterAdd}
           handleEnterFormReset={this.handleEnterFormReset}
+          spinLoading={this.state.spinLoading}
         />
         <EnterForm
           ref={this.saveFormRef}
