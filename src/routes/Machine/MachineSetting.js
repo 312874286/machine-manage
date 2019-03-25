@@ -2263,9 +2263,10 @@ export default class machineSettingList extends PureComponent {
           duration: 2,
           maxCount: 1,
         });
-        this.setState({
-          Temperature: this.state.TemperatureSelected
-        })
+        this.getTemperature(this.state.modalData.id)
+        // this.setState({
+        //   Temperature: this.state.TemperatureSelected
+        // })
         message.success('修改成功')
       }
     })
