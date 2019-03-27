@@ -1063,7 +1063,7 @@ export default class areaSettingList extends PureComponent {
           message.success('入驻成功')
           this.getEnterList()
         } else {
-          message.error('入驻失败')
+          //message.error('入驻失败')
         }
         this.setState({
           spinLoading: false
